@@ -1,0 +1,58 @@
+.swiper {
+  width: 360px;
+  height: 550px;
+}
+
+.swiper-slide.coverflow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #fff;
+
+  background-color: #fff;
+}
+
+.swiper-button-prev {
+  margin-left: -50px !important;
+  background: #fff;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  font-size: 20px !important;
+}
+
+.swiper-button-next {
+  margin-right: -50px !important;
+  background: #fff;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  font-size: 20px !important;
+}
+
+.swiper-button-prev.features {
+  margin-left: -20px !important;
+  background: #fff;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  font-size: 20px !important;
+}
+
+.swiper-button-next.features {
+  margin-right: -20px !important;
+  background: #fff;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+  font-size: 20px !important;
+}
+
+.swiper-button-prev:after,
+.swiper-button-next:after {
+  font-size: 20px !important;
+  font-weight: 500;
+}

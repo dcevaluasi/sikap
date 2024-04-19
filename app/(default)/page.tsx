@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Home - Simple',
+  title: 'E-LAUT Kementerian Kelautan dan Perikanan RI',
   description: 'Page description',
 }
 
@@ -14,9 +14,9 @@ export default function Home() {
     <>
       <Hero />
       <Features />
-      <FeaturesBlocks />
-      <Testimonials />
-      <Newsletter />
+      {/* <FeaturesBlocks /> */}
+      {/* <Testimonials />
+      <Newsletter /> */}
     </>
   )
 }
