@@ -69,7 +69,19 @@ export default function Hero() {
         {/* Hero content */}
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
           {/* Section header */}
-          <div className="text-center pb-12 md:pb-16">
+          
+
+          <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center">
+          <Image
+            src={'/elaut-logo.png'}
+            alt=""
+            width={0}
+            height={0}
+            className=" w-[250px] z-50 -mb-20 -mt-16 h-fit block duration-1000"
+
+            priority
+          />
+
             <h1
               className="text-4xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-3 text-white font-calsans"
               data-aos="zoom-y-out"
