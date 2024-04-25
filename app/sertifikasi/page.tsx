@@ -9,7 +9,7 @@ import { FiSearch, FiSlack } from "react-icons/fi";
 import { TbClockHour2 } from "react-icons/tb";
 import { GrLocation } from "react-icons/gr";
 import { Input } from "@/components/ui/input";
-import { FaPlaceOfWorship } from "react-icons/fa6";
+import { FaPlaceOfWorship, FaRupiahSign } from "react-icons/fa6";
 
 import { Button } from "@/components/ui/button";
 
@@ -37,7 +37,7 @@ function page() {
       <Tab />
 
       <div className="flex flex-row gap-3 flex-wrap w-full items-center justify-evenly  max-w-6xl mx-auto">
-        <div className="coverflow flex shadow-custom flex-col relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex shadow-custom flex-col relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -50,14 +50,14 @@ function page() {
           <Image
             className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
             alt=""
-            src="/images/hero-img3.jpg"
+            src="/images/hero-img4.jpg"
             width={0}
             height={0}
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
-                Pelatihan Budidaya Ikan Lobster
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
+                Sertifikasi Cara Pembenihan Ikan Yang Baik
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
                 <TbClockHour2 />
@@ -71,14 +71,14 @@ function page() {
               <Link
                 target="_blank"
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
-                className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
+                className="w-full mt-6 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
                 Daftar
               </Link>
             </div>
           </div>
         </div>
-        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -91,14 +91,14 @@ function page() {
           <Image
             className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
             alt=""
-            src="/images/hero-img3.jpg"
+            src="/images/hero-img4.jpg"
             width={0}
             height={0}
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
-                Pelatihan Budidaya Ikan Lobster
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
+                Sertifikasi Cara Pembenihan Ikan Yang Baik
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
                 <TbClockHour2 />
@@ -112,14 +112,14 @@ function page() {
               <Link
                 target="_blank"
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
-                className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
+                className="w-full mt-6 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
                 Daftar
               </Link>
             </div>
           </div>
         </div>
-        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -132,14 +132,14 @@ function page() {
           <Image
             className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
             alt=""
-            src="/images/hero-img3.jpg"
+            src="/images/hero-img4.jpg"
             width={0}
             height={0}
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
-                Pelatihan Budidaya Ikan Lobster
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
+                Sertifikasi Cara Pembenihan Ikan Yang Baik
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
                 <TbClockHour2 />
@@ -153,14 +153,14 @@ function page() {
               <Link
                 target="_blank"
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
-                className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
+                className="w-full mt-6 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
                 Daftar
               </Link>
             </div>
           </div>
         </div>
-        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -173,14 +173,14 @@ function page() {
           <Image
             className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
             alt=""
-            src="/images/hero-img3.jpg"
+            src="/images/hero-img4.jpg"
             width={0}
             height={0}
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
-                Pelatihan Budidaya Ikan Lobster
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
+                Sertifikasi Cara Pembenihan Ikan Yang Baik
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
                 <TbClockHour2 />
@@ -194,14 +194,14 @@ function page() {
               <Link
                 target="_blank"
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
-                className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
+                className="w-full mt-6 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
                 Daftar
               </Link>
             </div>
           </div>
         </div>
-        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -214,14 +214,14 @@ function page() {
           <Image
             className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
             alt=""
-            src="/images/hero-img3.jpg"
+            src="/images/hero-img4.jpg"
             width={0}
             height={0}
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
-                Pelatihan Budidaya Ikan Lobster
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
+                Sertifikasi Cara Pembenihan Ikan Yang Baik
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
                 <TbClockHour2 />
@@ -235,14 +235,14 @@ function page() {
               <Link
                 target="_blank"
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
-                className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
+                className="w-full mt-6 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
                 Daftar
               </Link>
             </div>
           </div>
         </div>
-        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -255,14 +255,14 @@ function page() {
           <Image
             className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
             alt=""
-            src="/images/hero-img3.jpg"
+            src="/images/hero-img4.jpg"
             width={0}
             height={0}
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
-                Pelatihan Budidaya Ikan Lobster
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
+                Sertifikasi Cara Pembenihan Ikan Yang Baik
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
                 <TbClockHour2 />
@@ -276,7 +276,7 @@ function page() {
               <Link
                 target="_blank"
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
-                className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
+                className="w-full mt-6 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
                 Daftar
               </Link>
@@ -294,11 +294,11 @@ const Tab = () => {
   return (<section className="flex flex-row gap-3 w-full items-center max-w-6xl mb-5 px-3 mx-auto">
     <Select>
       <SelectTrigger className="w-fit rounded-3xl py-2">
-        <p className="mr-3 flex items-center gap-1 text-sm"><FiSlack />Pilih Jenis Sertifikasi</p>
+        <p className="mr-3 flex items-center gap-1 text-sm"><FiSlack />Pilih Bidang Sertifikasi</p>
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Jenis Sertifikasi</SelectLabel>
+          <SelectLabel>Bidang Sertifikasi</SelectLabel>
           <SelectItem value="apple">Budidaya</SelectItem>
           <SelectItem value="banana">Penangkapan</SelectItem>
           <SelectItem value="blueberry">Pengolahan dan Pemasaran</SelectItem>
@@ -313,11 +313,11 @@ const Tab = () => {
 
     <Select>
       <SelectTrigger className="w-fit rounded-3xl py-2">
-        <p className="mr-3 flex items-center gap-1 text-sm"><FaPlaceOfWorship />Pilih Penyelenggara Pelatihan</p>
+        <p className="mr-3 flex items-center gap-1 text-sm"><FaPlaceOfWorship />Pilih Penyelenggara Sertifikasi</p>
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Penyelenggara Pelatihan</SelectLabel>
+          <SelectLabel>Penyelenggara Sertifikasi</SelectLabel>
           <SelectItem value="apple">BPPP Tegal</SelectItem>
           <SelectItem value="banana">BPPP Medan</SelectItem>
           <SelectItem value="blueberry">BPPP Banyuwangi</SelectItem>
@@ -328,15 +328,16 @@ const Tab = () => {
 
     <Select>
       <SelectTrigger className="w-fit rounded-3xl py-2">
-        <p className="mr-3 flex items-center gap-1 text-sm"><GrLocation />Pilih Pelaksanaan Pelatihan</p>
+        <p className="mr-3 flex items-center gap-1 text-sm"><FaRupiahSign />Harga Sertifikasi</p>
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
-          <SelectLabel>Pelaksanaan Pelatihan</SelectLabel>
-          <SelectItem value="apple">Blended (Onsite + Online)</SelectItem>
-          <SelectItem value="banana">On Site</SelectItem>
-          <SelectItem value="blueberry">Online</SelectItem>
-
+          <SelectLabel>Harga Sertifikasi</SelectLabel>
+          <SelectItem value="apple">Rp 0 - Rp 100.000</SelectItem>
+          <SelectItem value="banana">Rp 100.000 - Rp 500.000</SelectItem>
+          <SelectItem value="blueberry">Rp 500.000 - Rp 1.000.000</SelectItem>
+          <SelectItem value="blueberry">Rp 1.000.000 - Rp 2.000.000</SelectItem>
+          <SelectItem value="blueberry">{'>'} Rp 2.000.000</SelectItem>
         </SelectGroup>
       </SelectContent>
     </Select>

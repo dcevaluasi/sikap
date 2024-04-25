@@ -37,7 +37,7 @@ function page() {
       <Tab />
 
       <div className="flex flex-row gap-3 flex-wrap w-full items-center justify-evenly  max-w-6xl mx-auto">
-        <div className="coverflow flex shadow-custom flex-col relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex shadow-custom flex-col relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -56,7 +56,7 @@ function page() {
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
                 Pelatihan Budidaya Ikan Lobster
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
@@ -78,7 +78,7 @@ function page() {
             </div>
           </div>
         </div>
-        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -97,7 +97,7 @@ function page() {
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
                 Pelatihan Budidaya Ikan Lobster
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
@@ -119,7 +119,7 @@ function page() {
             </div>
           </div>
         </div>
-        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -138,7 +138,7 @@ function page() {
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
                 Pelatihan Budidaya Ikan Lobster
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
@@ -160,7 +160,7 @@ function page() {
             </div>
           </div>
         </div>
-        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -179,7 +179,7 @@ function page() {
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
                 Pelatihan Budidaya Ikan Lobster
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
@@ -201,7 +201,7 @@ function page() {
             </div>
           </div>
         </div>
-        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -220,7 +220,7 @@ function page() {
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
                 Pelatihan Budidaya Ikan Lobster
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
@@ -242,7 +242,7 @@ function page() {
             </div>
           </div>
         </div>
-        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-[500px] rounded-3xl">
+        <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
           <div className="w-fit absolute top-4 right-4 flex gap-1">
             <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
               Gratis
@@ -261,7 +261,7 @@ function page() {
           />
           <div className="px-6 py-3">
             <div className="w-full pb-4 gap-3">
-              <h2 className="font-calsans text-xl duration-1000 text-black">
+              <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
                 Pelatihan Budidaya Ikan Lobster
               </h2>
               <div className="flex gap-1 text-gray-600 text-sm items-center">
