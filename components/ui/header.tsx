@@ -6,6 +6,7 @@ import Link from "next/link";
 import Logo from "./logo";
 import Dropdown from "@/components/utils/dropdown";
 import MobileMenu from "./mobile-menu";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [top, setTop] = useState<boolean>(true);
@@ -23,9 +24,8 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${
-        !top ? "bg-white backdrop-blur-sm shadow-lg" : ""
-      }`}
+      className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${!top ? "bg-white backdrop-blur-sm shadow-lg" : usePathname().includes('pelatihan') ? 'bg-white backdrop-blur-sm shadow-lg' : ''
+        }`}
     >
       <div className="max-w-6xl mx-auto px-5 sm:px-6">
         <div className="flex items-center justify-between h-24 md:h-24 py-3">
@@ -41,9 +41,8 @@ export default function Header() {
               <li>
                 <Link
                   href="/pelatihan"
-                  className={`font-medium ${
-                    !top ? "text-gray-600" : "text-gray-200"
-                  } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') ? 'text-gray-600' : "text-gray-200"
+                    } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Pelatihan
                 </Link>
@@ -51,9 +50,8 @@ export default function Header() {
               <li>
                 <Link
                   href="/sertifikasi"
-                  className={`font-medium ${
-                    !top ? "text-gray-600" : "text-gray-200"
-                  } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') ? 'text-gray-600' : "text-gray-200"
+                    } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Sertifikasi
                 </Link>
@@ -61,9 +59,8 @@ export default function Header() {
               <li>
                 <Link
                   href="/pelatihan-sertifikasi"
-                  className={`font-medium ${
-                    !top ? "text-gray-600" : "text-gray-200"
-                  } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') ? 'text-gray-600' : "text-gray-200"
+                    } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Pelatihan & Sertifikasi
                 </Link>
@@ -71,9 +68,8 @@ export default function Header() {
               <li>
                 <Link
                   href="/signin"
-                  className={`font-medium ${
-                    !top ? "text-gray-600" : "text-gray-200"
-                  } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') ? 'text-gray-600' : "text-gray-200"
+                    } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Sign in
                 </Link>

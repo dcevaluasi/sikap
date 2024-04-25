@@ -100,6 +100,7 @@ module.exports = {
         // xl:
         //   '0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
         // '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.15)',
+        custom: '0px 8px 24px rgba(149, 157, 165, 0.2) ',
         inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)',
         outline: '0 0 0 3px rgba(66, 153, 225, 0.5)',
         none: 'none',
