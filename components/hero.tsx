@@ -69,17 +69,23 @@ export default function Hero() {
         {/* Hero content */}
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
           {/* Section header */}
-          
+
 
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center">
-          
+            {/* <Image
+              className="w-20 md:w-20 z-[9999]"
+              width={0}
+              height={0}
+              src={"/elaut-logo.png"}
+              alt="Kementrian Kelautan dan Perikanan RI Logo"
+            /> */}
             <h1
-              className="text-4xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-3 text-white font-calsans"
+              className="text-3xl md:text-[3.9rem] font-extrabold leading-tighter tracking-tighter mb-3 text-white font-calsans"
               data-aos="zoom-y-out"
             >
-              Elektronik Layanan <br />
+              Elektronik Layanan Pelatihan <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                Pelatihan Umum Terpadu
+                Kelautan dan Perikanan Terpadu
               </span>
             </h1>
             <div className="max-w-3xl mx-auto">

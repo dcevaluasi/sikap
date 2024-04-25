@@ -21,6 +21,7 @@ import {
 import { IoMdSchool } from "react-icons/io";
 import { ArrowDown } from "lucide-react";
 import { HiMiniChevronDown } from "react-icons/hi2";
+import { TbCalendarSearch } from "react-icons/tb";
 
 export default function Header() {
   const [top, setTop] = useState<boolean>(true);
@@ -55,7 +56,7 @@ export default function Header() {
               <li>
                 <Link
                   href="/"
-                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') || usePathname().includes('cek-sertifikat') ? 'text-gray-600' : "text-gray-200"
                     } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Beranda
@@ -68,7 +69,7 @@ export default function Header() {
                 <PopoverTrigger asChild>
                   <li className="cursor-pointer">
                     <div
-                      className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
+                      className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') || usePathname().includes('cek-sertifikat') ? 'text-gray-600' : "text-gray-200"
                         } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                     >
                       Layanan <HiMiniChevronDown className="text-lg" />
@@ -80,7 +81,7 @@ export default function Header() {
                     <li className="">
                       <Link
                         href="/pelatihan"
-                        className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
+                        className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') || usePathname().includes('cek-sertifikat') ? 'text-gray-600' : "text-gray-200"
                           } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
                       >
                         <IoMdSchool />Pelatihan
@@ -89,7 +90,7 @@ export default function Header() {
                     <li>
                       <Link
                         href="/sertifikasi"
-                        className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
+                        className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') || usePathname().includes('cek-sertifikat') ? 'text-gray-600' : "text-gray-200"
                           } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
                       >
                         <PiCertificate />
@@ -99,7 +100,7 @@ export default function Header() {
                     <li>
                       <Link
                         href="/pelatihan-sertifikasi"
-                        className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
+                        className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') || usePathname().includes('cek-sertifikat') ? 'text-gray-600' : "text-gray-200"
                           } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
                       >
                         <RiVerifiedBadgeFill />
@@ -107,16 +108,27 @@ export default function Header() {
                         Pelatihan & Sertifikasi
                       </Link>
                     </li>
+
+                    <li>
+                      <Link
+                        href="/pelatihan-sertifikasi"
+                        className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') || usePathname().includes('cek-sertifikat') ? 'text-gray-600' : "text-gray-200"
+                          } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
+                      >
+                        <TbCalendarSearch />
+
+                        Jadwal Pelatihan & Sertifikasi
+                      </Link>
+                    </li>
                   </ul>
 
                 </PopoverContent>
               </Popover>
 
-
               <li>
                 <Link
-                  href="/signin"
-                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
+                  href="/cek-sertifikat"
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') || usePathname().includes('cek-sertifikat') ? 'text-gray-600' : "text-gray-200"
                     } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Cek Sertifikat
@@ -126,7 +138,7 @@ export default function Header() {
               <li>
                 <Link
                   href="/signin"
-                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') || usePathname().includes('cek-sertifikat') ? 'text-gray-600' : "text-gray-200"
                     } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Sign in

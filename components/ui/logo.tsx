@@ -12,8 +12,8 @@ export default function Logo() {
         className="w-16 md:w-16"
         width={0}
         height={0}
-        src={"/logo-elaut.png"}
-        alt="ELAUT Logo"
+        src={"/logo-kkp.png"}
+        alt="Kementrian Kelautan dan Perikanan RI Logo"
       />
       <Image
         className="w-20 md:w-20"

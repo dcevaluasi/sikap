@@ -27,9 +27,9 @@ function page() {
   return (
     <section className="relative w-full mt-36">
 
-      <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
-        <h1 className="h2 text-5xl mb-2 font-calsans leading-[100%]">Pelatihan Masyarakat <br />Kelautan & Perikanan</h1>
-        <p className="text-base text-gray-600">
+      <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8" >
+        <h1 className="h2 text-5xl mb-2 font-calsans leading-[100%]" data-aos="zoom-y-out">Pelatihan Masyarakat <br />Kelautan & Perikanan</h1>
+        <p className="text-base text-gray-600" data-aos="zoom-y-out">
           Optimalkan potensi sumber daya laut. Bergabunglah dalam pelatihan masyarakat kelautan dan perikanan untuk masa depan yang berkelanjutan dan produktif.
         </p>
       </div>
@@ -73,7 +73,7 @@ function page() {
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
                 className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
-                Daftar
+                Lihat Informasi
               </Link>
             </div>
           </div>
@@ -114,7 +114,7 @@ function page() {
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
                 className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
-                Daftar
+                Lihat Informasi
               </Link>
             </div>
           </div>
@@ -155,7 +155,7 @@ function page() {
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
                 className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
-                Daftar
+                Lihat Informasi
               </Link>
             </div>
           </div>
@@ -196,7 +196,7 @@ function page() {
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
                 className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
-                Daftar
+                Lihat Informasi
               </Link>
             </div>
           </div>
@@ -237,7 +237,7 @@ function page() {
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
                 className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
-                Daftar
+                Lihat Informasi
               </Link>
             </div>
           </div>
@@ -278,7 +278,7 @@ function page() {
                 href="/pelatihan/konservasi-kelautan-berbasis-kelestarian-lingkungan"
                 className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
               >
-                Daftar
+                Lihat Informasi
               </Link>
             </div>
           </div>
