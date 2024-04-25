@@ -24,7 +24,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${!top ? "bg-white backdrop-blur-sm shadow-lg" : usePathname().includes('pelatihan') ? 'bg-white backdrop-blur-sm shadow-lg' : ''
+      className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${!top ? "bg-white backdrop-blur-sm shadow-lg" : usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'bg-white backdrop-blur-sm shadow-lg' : ''
         }`}
     >
       <div className="max-w-6xl mx-auto px-5 sm:px-6">
@@ -41,7 +41,7 @@ export default function Header() {
               <li>
                 <Link
                   href="/pelatihan"
-                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') ? 'text-gray-600' : "text-gray-200"
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
                     } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Pelatihan
@@ -50,7 +50,7 @@ export default function Header() {
               <li>
                 <Link
                   href="/sertifikasi"
-                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') ? 'text-gray-600' : "text-gray-200"
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
                     } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Sertifikasi
@@ -59,7 +59,7 @@ export default function Header() {
               <li>
                 <Link
                   href="/pelatihan-sertifikasi"
-                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') ? 'text-gray-600' : "text-gray-200"
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
                     } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Pelatihan & Sertifikasi
@@ -68,7 +68,7 @@ export default function Header() {
               <li>
                 <Link
                   href="/signin"
-                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') ? 'text-gray-600' : "text-gray-200"
+                  className={`font-medium ${!top ? "text-gray-600" : top && usePathname().includes('pelatihan') || usePathname().includes('sertifikasi') ? 'text-gray-600' : "text-gray-200"
                     } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
                   Sign in
