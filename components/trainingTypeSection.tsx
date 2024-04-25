@@ -114,7 +114,7 @@ export default function TrainingTypeSection() {
         <div className="pt-12 md:pt-20">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
-            <h1 className="text-3xl font-calsans leading-[110%]">Macam Bidang <br />Kelautan dan Perikanan</h1>
+            <h1 className="text-3xl font-calsans leading-[110%]">Ragam Bidang <br />Kelautan dan Perikanan</h1>
             <p className="text-base text-gray-600">
               Pilih bidang kepelautan dan perikanan yang untuk pelatihan dan sertifikasi yang ingin kamu ikuti!
             </p>
@@ -132,49 +132,17 @@ export default function TrainingTypeSection() {
             className="mySwiper flex gap-5 features"
           >
             {tabMenus.map((tabMenu, index) => (
-              <SwiperSlide key={index} className="h-fit w-full features ">
-                <div
-                  className={`rounded-3xl w-full cursor-pointer relative overflow-hidden hover:scale-105 duration-700 ${!menuSelected ? "h-[200px]" : "h-[100px]"
-                    } ${indexMenuSelected + 1 == tabMenu.id && menuSelected
-                      ? "border-spacing-1 border-4 border-blue-500"
-                      : ""
-                    } group `}
-                  key={index}
-                  // data-aos="zoom-y-out"
-                  onClick={(e) => handleSelectedMenu(index)}
-                >
-                  <Image
-                    style={{
-                      filter: "brightness(80%) saturate(140%)",
-                    }}
-                    className="mx-auto block w-full object-cover"
-                    src={`/images/${tabMenu.image}`}
-                    width={0}
-                    height={0}
-                    alt="Masyarakat KP"
-                    priority
-                  />
-                  <div
-                    className="flex-col absolute flex top-0 bottom-auto left-0 right-0 text-white text-left"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(rgba(0,0,0,.6),transparent)",
-                      padding: "20px 20px",
-                    }}
-                  >
-                    <h2 className="font-calsans text-2xl duration-1000">
-                      {tabMenu.name}
-                    </h2>
-                    {menuSelected ? null : (
-                      <p className="hidden text-base group-hover:block group-hover:text-xs group-hover:duration-1000">
-                        {tabMenu.description}
-                      </p>
-                    )}
-                  </div>
-
-                  {tabMenu.icon}
-                </div>
-              </SwiperSlide>
+            <div className='flex flex-col items-center'>
+              <div className='flex items-center justify-center'>
+              <Image
+        className="w-16 md:w-16"
+        width={0}
+        height={0}
+        src={"/images/bidangPelatihan/budidaya.png"}
+        alt="Kementrian Kelautan dan Perikanan RI Logo"
+      />
+              </div>
+            </div>
             ))}
           </Swiper>
 
