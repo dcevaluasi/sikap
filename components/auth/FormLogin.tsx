@@ -50,12 +50,12 @@ function FormLogin() {
 
       <div className="absolute w-full h-full bg-black bg-opacity-50 -z-30"></div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-3">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
           {/* Page header */}
           <div className="max-w-3xl mx-auto text-center pb-0 md:pb-0">
             <h1 className="font-bold text-4xl leading-[100%] md:text-4xl text-gray-200 font-calsans">
-              Login dan Temukan <br />
+              Login dan Ikuti <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
                 Pelatihan serta Sertifikasi
               </span>{" "}

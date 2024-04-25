@@ -28,13 +28,7 @@ function FormRegistrasi() {
   };
 
   const [imageIndex, setImageIndex] = React.useState(0);
-  const images = [
-    "/images/hero-img.jpg",
-    "/images/hero-img2.jpg",
-    "/images/hero-img3.jpg",
-    "/images/hero-img4.jpg",
-    "/images/hero-img5.jpg",
-  ];
+  const images = ["/images/hero-img2.jpg"];
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -61,11 +55,10 @@ function FormRegistrasi() {
           {/* Page header */}
           <div className="max-w-3xl mx-auto text-center pb-0 md:pb-0">
             <h1 className="font-bold text-4xl leading-[100%] md:text-4xl text-gray-200 font-calsans">
-              Temukan dan Ikuti{" "}
+              Registrasi dan Temukan <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                Pelatihan serta Sertifikasi
+                Pelatihan serta Sertifikasi Menarik
               </span>{" "}
-              Menarik
             </h1>
           </div>
 

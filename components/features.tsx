@@ -1,104 +1,105 @@
-'use client'
+"use client";
 
-import React, { useState, useRef, useEffect } from 'react'
-import { Transition } from '@headlessui/react'
-import Image from 'next/image'
-import FeaturesBg from '@/public/images/features-bg.png'
-import FeaturesElement from '@/public/images/features-element.png'
-import { GiLuckyFisherman, GiWaterSplash } from 'react-icons/gi'
-import { HiUserGroup } from 'react-icons/hi2'
-import { TbFileCertificate } from 'react-icons/tb'
-import { FaBuildingColumns } from 'react-icons/fa6'
-import { FaUserGraduate } from 'react-icons/fa'
+import React, { useState, useRef, useEffect } from "react";
+import { Transition } from "@headlessui/react";
+import Image from "next/image";
+import FeaturesBg from "@/public/images/features-bg.png";
+import FeaturesElement from "@/public/images/features-element.png";
+import { GiLuckyFisherman, GiWaterSplash } from "react-icons/gi";
+import { HiUserGroup } from "react-icons/hi2";
+import { TbFileCertificate } from "react-icons/tb";
+import { FaBuildingColumns } from "react-icons/fa6";
+import { FaUserGraduate } from "react-icons/fa";
 
-import { FaUserTie } from 'react-icons/fa6'
+import { FaUserTie } from "react-icons/fa6";
 
-import { Swiper, SwiperSlide } from 'swiper/react'
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import 'swiper/css'
-import 'swiper/css/pagination'
+import "swiper/css";
+import "swiper/css/pagination";
 
-import './../app/css/additional-styles/features-slider.css'
+import "./../app/css/additional-styles/features-slider.css";
 
 // import required modules
-import 'swiper/css/navigation'
-import { Pagination, Navigation } from 'swiper/modules'
-import ListProgram from './lists'
+import "swiper/css/navigation";
+import { Pagination, Navigation } from "swiper/modules";
+import ListProgram from "./lists";
+import Link from "next/link";
 
 export default function Features() {
   const tabMenus = [
     {
       id: 1,
-      name: 'Pelatihan Masyarakat KP',
+      name: "Pelatihan Masyarakat KP",
       description:
-        'Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan',
-      image: '/masyarakat.jpg',
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/masyarakat.jpg",
       icon: (
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
     {
       id: 2,
-      name: 'Pelatihan Aparatur KP',
+      name: "Pelatihan Aparatur KP",
       description:
-        'Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan',
-      image: '/aparatur.jpg',
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/aparatur.jpg",
       icon: (
         <FaUserTie className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
     {
       id: 3,
-      name: 'Sertifikasi Masyarakat KP',
+      name: "Sertifikasi Masyarakat KP",
       description:
-        'Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan',
-      image: '/aparatur.jpg',
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/aparatur.jpg",
       icon: (
         <TbFileCertificate className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
     {
       id: 4,
-      name: 'Sertifikasi Aparatur KP',
+      name: "Sertifikasi Aparatur KP",
       description:
-        'Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan',
-      image: '/aparatur.jpg',
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/aparatur.jpg",
       icon: (
         <FaBuildingColumns className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
     {
       id: 5,
-      name: 'Sertifikasi Peserta Didik',
+      name: "Sertifikasi Peserta Didik",
       description:
-        'Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan',
-      image: '/aparatur.jpg',
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/aparatur.jpg",
       icon: (
         <FaUserGraduate className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
-  ]
+  ];
 
-  const [tab, setTab] = useState<number>(1)
+  const [tab, setTab] = useState<number>(1);
 
-  const tabs = useRef<HTMLDivElement>(null)
+  const tabs = useRef<HTMLDivElement>(null);
 
   const heightFix = () => {
     if (tabs.current && tabs.current.parentElement)
-      tabs.current.parentElement.style.height = `${tabs.current.clientHeight}px`
-  }
+      tabs.current.parentElement.style.height = `${tabs.current.clientHeight}px`;
+  };
 
   useEffect(() => {
-    heightFix()
-  }, [])
+    heightFix();
+  }, []);
 
-  const [menuSelected, setMenuSelected] = React.useState(false)
-  const [indexMenuSelected, setIndexMenuSelected] = React.useState(0)
+  const [menuSelected, setMenuSelected] = React.useState(false);
+  const [indexMenuSelected, setIndexMenuSelected] = React.useState(0);
   const handleSelectedMenu = (index: number) => {
-    setMenuSelected(!menuSelected)
-    setIndexMenuSelected(index)
-  }
+    setMenuSelected(!menuSelected);
+    setIndexMenuSelected(index);
+  };
 
   return (
     <section className="relative h-fit pb-10" id="explore">
@@ -136,11 +137,11 @@ export default function Features() {
               <SwiperSlide key={index} className="h-fit w-full features ">
                 <div
                   className={`rounded-3xl w-full cursor-pointer relative overflow-hidden hover:scale-105 duration-700 ${
-                    !menuSelected ? 'h-[200px]' : 'h-[100px]'
+                    !menuSelected ? "h-[200px]" : "h-[100px]"
                   } ${
                     indexMenuSelected + 1 == tabMenu.id && menuSelected
-                      ? 'border-spacing-1 border-4 border-blue-500'
-                      : ''
+                      ? "border-spacing-1 border-4 border-blue-500"
+                      : ""
                   } group `}
                   key={index}
                   // data-aos="zoom-y-out"
@@ -148,7 +149,7 @@ export default function Features() {
                 >
                   <Image
                     style={{
-                      filter: 'brightness(80%) saturate(140%)',
+                      filter: "brightness(80%) saturate(140%)",
                     }}
                     className="mx-auto block w-full object-cover"
                     src={`/images/${tabMenu.image}`}
@@ -161,8 +162,8 @@ export default function Features() {
                     className="flex-col absolute flex top-0 bottom-auto left-0 right-0 text-white text-left"
                     style={{
                       backgroundImage:
-                        'linear-gradient(rgba(0,0,0,.6),transparent)',
-                      padding: '20px 20px',
+                        "linear-gradient(rgba(0,0,0,.6),transparent)",
+                      padding: "20px 20px",
                     }}
                   >
                     <h2 className="font-calsans text-2xl duration-1000">
@@ -200,5 +201,5 @@ export default function Features() {
         </div>
       </div>
     </section>
-  )
+  );
 }

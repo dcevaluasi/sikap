@@ -40,6 +40,36 @@ export default function Header() {
             <ul className="flex grow justify-end flex-wrap items-center">
               <li>
                 <Link
+                  href="/pelatihan"
+                  className={`font-medium ${
+                    !top ? "text-gray-600" : "text-gray-200"
+                  } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+                >
+                  Pelatihan
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/sertifikasi"
+                  className={`font-medium ${
+                    !top ? "text-gray-600" : "text-gray-200"
+                  } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+                >
+                  Sertifikasi
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/pelatihan-sertifikasi"
+                  className={`font-medium ${
+                    !top ? "text-gray-600" : "text-gray-200"
+                  } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+                >
+                  Pelatihan & Sertifikasi
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/signin"
                   className={`font-medium ${
                     !top ? "text-gray-600" : "text-gray-200"
