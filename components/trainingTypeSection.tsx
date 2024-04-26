@@ -147,39 +147,39 @@ export default function TrainingTypeSection() {
           </div>
 
           {/* Section content */}
-          <Swiper
+          {/* <Swiper
             navigation={true}
             slidesPerView={7}
             spaceBetween={0}
             modules={[Navigation]}
             className="mySwiper flex gap-5 features flex-row -mt-7"
-          >
-            <div className="flex flex-row items-center justify-center gap-7">
-              {tabMenus.map((tabMenu, index) => (
-                <SwiperSlide className="gap-4 max-w-4xl w-full">
-                  <Slide direction="up" duration={500 * index}>
-                    <div
-                      key={index}
-                      className="flex flex-col gap-2 cursor-pointer items-center duration-1000 hover:scale-105 text-center"
-                    >
-                      <div className="flex items-center justify-center  bg-white shadow-custom rounded-full w-28 h-28 p-6">
-                        <Image
-                          className="w-16 md:w-16"
-                          width={0}
-                          height={0}
-                          src={tabMenu.image}
-                          alt="Kementrian Kelautan dan Perikanan RI Logo"
-                        />
-                      </div>
-                      <p className="text-sm text-black font-semibold">
-                        {tabMenu.name}
-                      </p>
+          > */}
+          <div className="flex flex-row items-center justify-center gap-9">
+            {tabMenus.map((tabMenu, index) => (
+              <div className="gap-4 w-fit">
+                <Slide direction="up" duration={500 * index}>
+                  <div
+                    key={index}
+                    className="flex flex-col gap-2 cursor-pointer items-center duration-1000 hover:scale-105 text-center"
+                  >
+                    <div className="flex items-center justify-center  bg-white shadow-custom rounded-full w-28 h-28 p-6">
+                      <Image
+                        className="w-16 md:w-16"
+                        width={0}
+                        height={0}
+                        src={tabMenu.image}
+                        alt="Kementrian Kelautan dan Perikanan RI Logo"
+                      />
                     </div>
-                  </Slide>
-                </SwiperSlide>
-              ))}
-            </div>
-          </Swiper>
+                    <p className="text-sm text-black font-semibold">
+                      {tabMenu.name}
+                    </p>
+                  </div>
+                </Slide>
+              </div>
+            ))}
+          </div>
+          {/* </Swiper> */}
 
           {menuSelected && (
             <div className="mt-6 w-full max-w-8xl justify-evenly mx-auto flex">
