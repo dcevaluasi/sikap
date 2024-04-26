@@ -18,15 +18,13 @@ import {
 
 function page() {
     return (
-        <section className="relative w-full mt-[25%]">
-
+        <section className="relative w-full mt-[20%]">
             <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
                 <h1 className="h2 text-5xl mb-2 font-calsans leading-[100%]">Cek Validitas <br />Sertifikat Pelatihan & Kompetensi</h1>
                 <p className="text-base text-gray-600">
                     Pastikan keaslian dan nilai sertifikat pelatihan serta kompetensi Anda dengan layanan cek validitas kami. Percayakan masa depan Anda pada sertifikasi yang terpercaya dan diakui secara luas. Cek sekarang untuk memastikan langkah Anda menuju kesuksesan yang terjamin!
                 </p>
             </div>
-
             <Tab />
         </section>
     );
