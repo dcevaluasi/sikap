@@ -119,9 +119,7 @@ export default function Features() {
               Pelatihan Masyarakat Umum KP
             </h1>
             <p className="text-base text-gray-600">
-              Duis aute irure dolor in reprehenderit in voluptate velit esse
-              cillum dolore eu fugiat nulla pariatur excepteur sint occaecat
-              cupidatat.
+              Optimalkan potensi sumber daya laut. Bergabunglah dalam pelatihan masyarakat kelautan dan perikanan untuk masa depan yang berkelanjutan dan produktif.
             </p>
           </div>
 

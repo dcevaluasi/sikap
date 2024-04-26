@@ -32,7 +32,7 @@ export default function Hero() {
         priority
       />
 
-      <div className="absolute w-full h-screen bg-black bg-opacity-50"></div>
+      <div className="absolute w-full h-full bg-black bg-opacity-50"></div>
 
       {/* Illustration behind hero content */}
       <div
