@@ -72,13 +72,13 @@ export default function Hero() {
 
 
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center">
-            {/* <Image
+            <Image
               className="w-20 md:w-20 z-[9999]"
               width={0}
               height={0}
-              src={"/elaut-logo.png"}
+              src={"/logo-elaut.png"}
               alt="Kementrian Kelautan dan Perikanan RI Logo"
-            /> */}
+            />
             <h1
               className="text-3xl md:text-[3.9rem] font-extrabold leading-tighter tracking-tighter mb-3 text-white font-calsans"
               data-aos="zoom-y-out"
