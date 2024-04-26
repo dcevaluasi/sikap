@@ -145,7 +145,7 @@ export default function FeaturesASN() {
                 </div>
 
                 <Image
-                  className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
+                  className="w-full rounded-tl-3xl rounded-tr-3xl h-[250px] object-cover"
                   alt=""
                   src="/images/asn.jpeg"
                   width={0}
@@ -187,7 +187,7 @@ export default function FeaturesASN() {
                 </div>
 
                 <Image
-                  className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
+                  className="w-full rounded-tl-3xl rounded-tr-3xl h-[250px] object-cover"
                   alt=""
                   src="/images/asn2.jpg"
                   width={0}
@@ -229,7 +229,7 @@ export default function FeaturesASN() {
                 </div>
 
                 <Image
-                  className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
+                  className="w-full rounded-tl-3xl rounded-tr-3xl h-[250px] object-cover"
                   alt=""
                   src="/images/asn.jpeg"
                   width={0}
@@ -270,7 +270,7 @@ export default function FeaturesASN() {
                 </div>
 
                 <Image
-                  className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
+                  className="w-full rounded-tl-3xl rounded-tr-3xl h-[250px] object-cover"
                   alt=""
                   src="/images/asn2.jpg"
                   width={0}
@@ -314,7 +314,7 @@ export default function FeaturesASN() {
                 </div>
 
                 <Image
-                  className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
+                  className="w-full rounded-tl-3xl rounded-tr-3xl h-[250px] object-cover"
                   alt=""
                   src="/images/asn.jpeg"
                   width={0}
