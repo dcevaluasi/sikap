@@ -231,7 +231,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 "text-white"
                               }`}
                             >
-                              Ajukan Pelatihan
+                              Database Pelatihan
                             </Link>
                           </li>
                           <li>
@@ -242,18 +242,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 "text-white"
                               }`}
                             >
-                              List Pelatihan Tersedia
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/forms/form-elements"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/forms/form-elements" &&
-                                "text-white"
-                              }`}
-                            >
-                              Peserta Pelatihan
+                              Database Peserta Pelatihan
                             </Link>
                           </li>
                         </ul>

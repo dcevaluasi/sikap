@@ -5,7 +5,14 @@ function page() {
   return (
     <>
       <DefaultLayout>
-        <div>AJUKAN PELATIHAN</div>
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-medium leading-[100%]">
+            DATABASE PELATIHAN
+          </h1>
+          <p className="font-medium text-gray-400 text-base">
+            Elektronik Layanan Pelatihan Umum Terpadu BPPSDM KP
+          </p>
+        </div>
       </DefaultLayout>
     </>
   );
