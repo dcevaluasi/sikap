@@ -113,9 +113,12 @@ export default function Features() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         <div className="pt-12 md:pt-20">
           {/* Section header */}
-          <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
-            <h1 className="h2 mb-4 font-calsans">Pelatihan & Sertifikasi KP</h1>
-            <p className="text-xl text-gray-600">
+
+          <div className="max-w-2xl mx-auto text-center pb-5 md:pb-8">
+            <h1 className="text-3xl font-calsans leading-[110%]">
+              Pelatihan Masyarakat Umum KP
+            </h1>
+            <p className="text-base text-gray-600">
               Duis aute irure dolor in reprehenderit in voluptate velit esse
               cillum dolore eu fugiat nulla pariatur excepteur sint occaecat
               cupidatat.
@@ -123,7 +126,7 @@ export default function Features() {
           </div>
 
           {/* Section content */}
-          <Swiper
+          {/* <Swiper
             navigation={true}
             slidesPerView={3}
             spaceBetween={30}
@@ -180,9 +183,9 @@ export default function Features() {
                 </div>
               </SwiperSlide>
             ))}
-          </Swiper>
+          </Swiper> */}
 
-          {menuSelected && (
+          {/* {menuSelected && (
             <div className="mt-6 w-full max-w-8xl justify-evenly mx-auto flex">
               <div className="w-[450px] -ml-10" data-aos="zoom-y-out">
                 <h2 className="font-calsans text-3xl duration-1000">
@@ -197,7 +200,9 @@ export default function Features() {
               </div>
               <ListProgram />
             </div>
-          )}
+          )} */}
+
+          <ListProgram />
         </div>
       </div>
     </section>

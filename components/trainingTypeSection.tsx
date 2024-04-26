@@ -26,57 +26,79 @@ import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 import ListProgram from "./lists";
 import Link from "next/link";
+import { Slide } from "react-awesome-reveal";
 
 export default function TrainingTypeSection() {
   const tabMenus = [
     {
       id: 1,
-      name: "Pelatihan Masyarakat KP",
+      name: "Budidaya",
       description:
         "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/masyarakat.jpg",
+      image: "/images/bidangPelatihan/budidaya.png",
       icon: (
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
     {
       id: 2,
-      name: "Pelatihan Aparatur KP",
+      name: "Konservasi",
       description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/images/bidangPelatihan/konservasi.png",
       icon: (
-        <FaUserTie className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
+        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
+
     {
       id: 3,
-      name: "Sertifikasi Masyarakat KP",
+      name: "SD Perikanan",
       description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/images/bidangPelatihan/sd-perikanan.png",
       icon: (
-        <TbFileCertificate className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
+        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
     {
       id: 4,
-      name: "Sertifikasi Aparatur KP",
+      name: "Kepelautan",
       description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/images/bidangPelatihan/kepelautan.png",
       icon: (
-        <FaBuildingColumns className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
+        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
     {
       id: 5,
-      name: "Sertifikasi Peserta Didik",
+      name: "Penangkapan",
       description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/images/bidangPelatihan/penangkapan.png",
       icon: (
-        <FaUserGraduate className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
+        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
+      ),
+    },
+    {
+      id: 6,
+      name: "Mesin Perikanan",
+      description:
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/images/bidangPelatihan/mesin-perikanan.png",
+      icon: (
+        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
+      ),
+    },
+    {
+      id: 7,
+      name: "Pengolahan & Pemasaran",
+      description:
+        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+      image: "/images/bidangPelatihan/pengolahan-pemasaran.png",
+      icon: (
+        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
   ];
@@ -105,45 +127,58 @@ export default function TrainingTypeSection() {
     <section className="relative h-fit pb-10" id="explore">
       {/* Section background (needs .relative class on parent and next sibling elements) */}
       <div
-        className="absolute inset-0 bg-gray-100 pointer-events-none mb-16 pb-10 h-full"
+        className="absolute inset-0  pointer-events-none mb-16 pb-10 h-full"
         aria-hidden="true"
       ></div>
       <div className="absolute left-0 right-0 m-auto w-px p-px h-28 bg-gray-200 transform -translate-y-1/2"></div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="relative max-w-7xl w-full mx-auto px-4 sm:px-6">
         <div className="pt-12 md:pt-20">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
-            <h1 className="text-3xl font-calsans leading-[110%]">Ragam Bidang <br />Kelautan dan Perikanan</h1>
+            <h1 className="text-3xl font-calsans leading-[110%]">
+              Ragam Bidang <br />
+              Kelautan dan Perikanan
+            </h1>
             <p className="text-base text-gray-600">
-              Pilih bidang kepelautan dan perikanan yang untuk pelatihan dan sertifikasi yang ingin kamu ikuti!
+              Pilih bidang kepelautan dan perikanan yang untuk pelatihan dan
+              sertifikasi yang ingin kamu ikuti!
             </p>
           </div>
 
           {/* Section content */}
           <Swiper
             navigation={true}
-            slidesPerView={3}
-            spaceBetween={30}
-            pagination={{
-              clickable: true,
-            }}
+            slidesPerView={7}
+            spaceBetween={0}
             modules={[Navigation]}
-            className="mySwiper flex gap-5 features"
+            className="mySwiper flex gap-5 features flex-row -mt-7"
           >
-            {tabMenus.map((tabMenu, index) => (
-            <div className='flex flex-col items-center'>
-              <div className='flex items-center justify-center'>
-              <Image
-        className="w-16 md:w-16"
-        width={0}
-        height={0}
-        src={"/images/bidangPelatihan/budidaya.png"}
-        alt="Kementrian Kelautan dan Perikanan RI Logo"
-      />
-              </div>
+            <div className="flex flex-row items-center justify-center gap-7">
+              {tabMenus.map((tabMenu, index) => (
+                <SwiperSlide className="gap-4 max-w-4xl w-full">
+                  <Slide direction="up" duration={500 * index}>
+                    <div
+                      key={index}
+                      className="flex flex-col gap-2 cursor-pointer items-center duration-1000 hover:scale-105 text-center"
+                    >
+                      <div className="flex items-center justify-center  bg-white shadow-custom rounded-full w-28 h-28 p-6">
+                        <Image
+                          className="w-16 md:w-16"
+                          width={0}
+                          height={0}
+                          src={tabMenu.image}
+                          alt="Kementrian Kelautan dan Perikanan RI Logo"
+                        />
+                      </div>
+                      <p className="text-sm text-black font-semibold">
+                        {tabMenu.name}
+                      </p>
+                    </div>
+                  </Slide>
+                </SwiperSlide>
+              ))}
             </div>
-            ))}
           </Swiper>
 
           {menuSelected && (
