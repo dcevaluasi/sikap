@@ -25,6 +25,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Sertif, SertifPenilaian } from "../sertifikat-valid/page";
+import { MdVerified } from "react-icons/md";
 
 function page() {
   return (
@@ -54,7 +56,7 @@ const Tab = () => {
           <Button
             type="button"
             variant={"outline"}
-            className="flex items-center justify-center rounded-full bg-black w-fit hover:bg-black-2 h-fit absolute right-1"
+            className="flex items-center justify-center rounded-full bg-black-2 w-fit hover:bg-black h-fit absolute right-1"
           >
             {" "}
             <FiSearch className="text-gray-200 text-base" />
@@ -74,15 +76,25 @@ function DialogSertifikat({ children }: { children: ReactElement }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[1225px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
-          <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DialogDescription>
+          <div className="flex gap-2 items-center">
+            <MdVerified className="text-3xl text-blue-500" />
+            <div className="flex flex-col">
+              <DialogTitle>B.45/BPPP.BYW/RSDM.510/I/2024</DialogTitle>
+              <DialogDescription>
+                No. Sertifikasi terdaftar dan dinyatakan valid telah mengikuti
+                pelatihan!
+              </DialogDescription>
+            </div>
+          </div>
         </DialogHeader>
+        <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
+          <Sertif />
+          <SertifPenilaian />
+        </div>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit">Download</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

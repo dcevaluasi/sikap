@@ -222,6 +222,8 @@ module.exports = {
       fontFamily: {
         inter: ['var(--font-inter)', 'sans-serif'],
         calsans: ['var(--font-calsans)', 'sans-serif'],
+        cambria: ['var(--font-cambria)', 'sans-serif'],
+
       },
       fontSize: {
         xs: '0.75rem',

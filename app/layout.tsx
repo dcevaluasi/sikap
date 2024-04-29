@@ -12,6 +12,11 @@ const myFont = localFont({
   variable: "--font-calsans",
 });
 
+const cambria = localFont({
+  src: "./font/cambria.ttf",
+  variable: "--font-cambria",
+});
+
 const inter = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -32,7 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${myFont.variable} antialiased bg-white text-gray-900 tracking-tight`}
+        className={`${inter.className} ${myFont.variable} ${cambria.variable} antialiased bg-white text-gray-900 tracking-tight`}
       >
         <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip">
           <Header />
