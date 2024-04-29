@@ -2,9 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { FormEvent } from "react";
+import { useRouter } from "next/navigation";
+import React, { FormEvent, MouseEventHandler } from "react";
 
 function FormRegistrasi() {
+  const router = useRouter();
+
   /* state variable to store basic user information to register */
   const [name, setName] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
@@ -29,6 +32,15 @@ function FormRegistrasi() {
 
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = ["/images/hero-img2.jpg"];
+
+  const handleDummySignUp = (e: any) => {
+    e.preventDefault();
+    localStorage.setItem("nameDummy", name);
+    localStorage.setItem("emailDummy", email);
+    localStorage.setItem("passwordDummy", password);
+    localStorage.setItem("isRegisteredDummy", "true");
+    router.push("/users/dashboard");
+  };
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -127,6 +139,7 @@ function FormRegistrasi() {
                   <button
                     type="submit"
                     className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                    onClick={(e) => handleDummySignUp(e)}
                   >
                     Registrasi
                   </button>

@@ -124,10 +124,9 @@ export default function TrainingTypeSection() {
   };
 
   return (
-    <section className="relative h-fit pb-10" id="explore">
-      {/* Section background (needs .relative class on parent and next sibling elements) */}
+    <section className="relative h-fit pb-20" id="explore">
       <div
-        className="absolute inset-0  pointer-events-none mb-16 pb-10 h-full"
+        className="absolute inset-0 pointer-events-none mb-16 pb-10 h-full"
         aria-hidden="true"
       ></div>
       <div className="absolute left-0 right-0 m-auto w-px p-px h-28 bg-gray-200 transform -translate-y-1/2"></div>
@@ -146,14 +145,6 @@ export default function TrainingTypeSection() {
             </p>
           </div>
 
-          {/* Section content */}
-          {/* <Swiper
-            navigation={true}
-            slidesPerView={7}
-            spaceBetween={0}
-            modules={[Navigation]}
-            className="mySwiper flex gap-5 features flex-row -mt-7"
-          > */}
           <div className="flex flex-row items-center justify-center gap-9">
             {tabMenus.map((tabMenu, index) => (
               <div className="gap-4 w-fit">

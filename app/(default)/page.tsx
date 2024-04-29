@@ -1,16 +1,11 @@
-export const metadata = {
-  title: 'E-LAUT Kementerian Kelautan dan Perikanan RI',
-  description: 'Page description',
-}
-
-import Hero from '@/components/hero'
-import Features from '@/components/features'
-import FeaturesBlocks from '@/components/features-blocks'
-import Testimonials from '@/components/testimonials'
-import Newsletter from '@/components/newsletter'
-import TrainingTypeSection from '@/components/trainingTypeSection'
-import FeatureCertificates from '@/components/features-certificates'
-import FeaturesASN from '@/components/features-asn'
+import Hero from "@/components/hero";
+import Features from "@/components/features";
+import FeaturesBlocks from "@/components/features-blocks";
+import Testimonials from "@/components/testimonials";
+import Newsletter from "@/components/newsletter";
+import TrainingTypeSection from "@/components/trainingTypeSection";
+import FeatureCertificates from "@/components/features-certificates";
+import FeaturesASN from "@/components/features-asn";
 
 export default function Home() {
   return (
@@ -19,7 +14,7 @@ export default function Home() {
       <TrainingTypeSection />
       <Features />
       <FeatureCertificates />
-      <FeaturesASN />
+      {/* <FeaturesASN /> */}
     </>
-  )
+  );
 }

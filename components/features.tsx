@@ -119,87 +119,11 @@ export default function Features() {
               Pelatihan Masyarakat Umum KP
             </h1>
             <p className="text-base text-gray-600">
-              Optimalkan potensi sumber daya laut. Bergabunglah dalam pelatihan masyarakat kelautan dan perikanan untuk masa depan yang berkelanjutan dan produktif.
+              Optimalkan potensi sumber daya laut. Bergabunglah dalam pelatihan
+              masyarakat kelautan dan perikanan untuk masa depan yang
+              berkelanjutan dan produktif.
             </p>
           </div>
-
-          {/* Section content */}
-          {/* <Swiper
-            navigation={true}
-            slidesPerView={3}
-            spaceBetween={30}
-            pagination={{
-              clickable: true,
-            }}
-            modules={[Navigation]}
-            className="mySwiper flex gap-5 features"
-          >
-            {tabMenus.map((tabMenu, index) => (
-              <SwiperSlide key={index} className="h-fit w-full features ">
-                <div
-                  className={`rounded-3xl w-full cursor-pointer relative overflow-hidden hover:scale-105 duration-700 ${
-                    !menuSelected ? "h-[200px]" : "h-[100px]"
-                  } ${
-                    indexMenuSelected + 1 == tabMenu.id && menuSelected
-                      ? "border-spacing-1 border-4 border-blue-500"
-                      : ""
-                  } group `}
-                  key={index}
-                  // data-aos="zoom-y-out"
-                  onClick={(e) => handleSelectedMenu(index)}
-                >
-                  <Image
-                    style={{
-                      filter: "brightness(80%) saturate(140%)",
-                    }}
-                    className="mx-auto block w-full object-cover"
-                    src={`/images/${tabMenu.image}`}
-                    width={0}
-                    height={0}
-                    alt="Masyarakat KP"
-                    priority
-                  />
-                  <div
-                    className="flex-col absolute flex top-0 bottom-auto left-0 right-0 text-white text-left"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(rgba(0,0,0,.6),transparent)",
-                      padding: "20px 20px",
-                    }}
-                  >
-                    <h2 className="font-calsans text-2xl duration-1000">
-                      {tabMenu.name}
-                    </h2>
-                    {menuSelected ? null : (
-                      <p className="hidden text-base group-hover:block group-hover:text-xs group-hover:duration-1000">
-                        {tabMenu.description}
-                      </p>
-                    )}
-                  </div>
-
-                  {tabMenu.icon}
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper> */}
-
-          {/* {menuSelected && (
-            <div className="mt-6 w-full max-w-8xl justify-evenly mx-auto flex">
-              <div className="w-[450px] -ml-10" data-aos="zoom-y-out">
-                <h2 className="font-calsans text-3xl duration-1000">
-                  Pelatihan Masyarakat KP
-                </h2>
-                <p className="text-base group-hover:text-xs text-gray-600 group-hover:duration-1000">
-                  Pelatihan yang diselenggaran BPPSDM KP untuk menjaring
-                  masyarakat kelautan perikanan yang ingin mengasah skill nya
-                  dibidang kelautan dan perikanan
-                </p>
-                <div className="w-[100px] h-2 rounded-sm bg-blue-500 mt-3"></div>
-              </div>
-              <ListProgram />
-            </div>
-          )} */}
-
           <ListProgram />
         </div>
       </div>

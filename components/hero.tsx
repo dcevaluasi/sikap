@@ -1,26 +1,26 @@
-'use client'
+"use client";
 
-import Image from 'next/image'
-import ScrollDown from './scroll-down'
-import React from 'react'
+import Image from "next/image";
+import ScrollDown from "./scroll-down";
+import React from "react";
 
 export default function Hero() {
-  const [imageIndex, setImageIndex] = React.useState(0)
+  const [imageIndex, setImageIndex] = React.useState(0);
   const images = [
-    '/images/hero-img.jpg',
-    '/images/hero-img2.jpg',
-    '/images/hero-img3.jpg',
-    '/images/hero-img4.jpg',
-    '/images/hero-img5.jpg',
-  ]
+    "/images/hero-img.jpg",
+    "/images/hero-img2.jpg",
+    "/images/hero-img3.jpg",
+    "/images/hero-img4.jpg",
+    "/images/hero-img5.jpg",
+  ];
 
   React.useEffect(() => {
     const interval = setInterval(() => {
-      setImageIndex((prevIndex) => (prevIndex + 1) % images.length)
-    }, 10000)
+      setImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 10000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <section className="relative h-[85vh] flex items-center justify-center">
@@ -70,15 +70,14 @@ export default function Hero() {
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
           {/* Section header */}
 
-
-          <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center -mt-8">
-            <Image
+          <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
+            {/* <Image
               className="w-32 md:w-32 z-[9999]"
               width={0}
               height={0}
               src={"/logo-elaut.png"}
               alt="Kementrian Kelautan dan Perikanan RI Logo"
-            />
+            /> */}
             <h1
               className="text-3xl md:text-[3.9rem] font-extrabold leading-tighter tracking-tighter mb-3 -mt-4 text-white font-calsans"
               data-aos="zoom-y-out"
@@ -107,5 +106,5 @@ export default function Hero() {
         </div>
       </div>
     </section>
-  )
+  );
 }
