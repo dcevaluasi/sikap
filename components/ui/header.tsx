@@ -21,6 +21,8 @@ import { ArrowDown } from "lucide-react";
 import { HiMiniChevronDown } from "react-icons/hi2";
 import { TbCalendarSearch } from "react-icons/tb";
 import Image from "next/image";
+import { FaAnchor, FaUserTie } from "react-icons/fa6";
+import { GiDoubleFish } from "react-icons/gi";
 
 export default function Header() {
   const [top, setTop] = useState<boolean>(true);
@@ -30,7 +32,7 @@ export default function Header() {
     window.pageYOffset > 10 ? setTop(false) : setTop(true);
   };
 
-  const isRegisteredDummy = localStorage.getItem("isRegisteredDummy");
+  const isRegisteredDummy = false;
 
   useEffect(() => {
     scrollHandler();
@@ -94,7 +96,7 @@ export default function Header() {
                           : "text-gray-200"
                       } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                     >
-                      Layanan <HiMiniChevronDown className="text-lg" />
+                      Pelatihan <HiMiniChevronDown className="text-lg" />
                     </div>
                   </li>
                 </PopoverTrigger>
@@ -115,10 +117,53 @@ export default function Header() {
                         } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
                       >
                         <IoMdSchool />
-                        Pelatihan
+                        Pelatihan Masyarakat
                       </Link>
                     </li>
                     <li>
+                      <Link
+                        href="https://elearning.kkp.go.id/"
+                        className={`font-medium ${
+                          !top
+                            ? "text-gray-600"
+                            : (top && usePathname().includes("pelatihan")) ||
+                              usePathname().includes("sertifikasi") ||
+                              usePathname().includes("cek-sertifikat") ||
+                              usePathname().includes("users")
+                            ? "text-gray-600"
+                            : "text-gray-200"
+                        } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
+                      >
+                        <FaUserTie />
+                        Pelatihan ASN
+                      </Link>
+                    </li>
+                  </ul>
+                </PopoverContent>
+              </Popover>
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <li className="cursor-pointer">
+                    <div
+                      className={`font-medium ${
+                        !top
+                          ? "text-gray-600"
+                          : (top && usePathname().includes("pelatihan")) ||
+                            usePathname().includes("sertifikasi") ||
+                            usePathname().includes("cek-sertifikat") ||
+                            usePathname().includes("users")
+                          ? "text-gray-600"
+                          : "text-gray-200"
+                      } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+                    >
+                      Sertifikasi <HiMiniChevronDown className="text-lg" />
+                    </div>
+                  </li>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 flex flex-col gap-1 ">
+                  <ul className="">
+                    <li className="">
                       <Link
                         href="/sertifikasi"
                         className={`font-medium ${
@@ -132,13 +177,13 @@ export default function Header() {
                             : "text-gray-200"
                         } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
                       >
-                        <PiCertificate />
-                        Sertifikasi
+                        <GiDoubleFish />
+                        Sertifikasi Non-Konvensi
                       </Link>
                     </li>
                     <li>
                       <Link
-                        href="/pelatihan-sertifikasi"
+                        href="https://akapi.kkp.go.id/"
                         className={`font-medium ${
                           !top
                             ? "text-gray-600"
@@ -150,27 +195,8 @@ export default function Header() {
                             : "text-gray-200"
                         } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
                       >
-                        <RiVerifiedBadgeFill />
-                        Pelatihan & Sertifikasi
-                      </Link>
-                    </li>
-
-                    <li>
-                      <Link
-                        href="/pelatihan-sertifikasi"
-                        className={`font-medium ${
-                          !top
-                            ? "text-gray-600"
-                            : (top && usePathname().includes("pelatihan")) ||
-                              usePathname().includes("sertifikasi") ||
-                              usePathname().includes("cek-sertifikat") ||
-                              usePathname().includes("users")
-                            ? "text-gray-600"
-                            : "text-gray-200"
-                        } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
-                      >
-                        <TbCalendarSearch />
-                        Jadwal Pelatihan & Sertifikasi
+                        <FaAnchor />
+                        Sertifikasi Konvensi Kepelautan
                       </Link>
                     </li>
                   </ul>
@@ -195,7 +221,7 @@ export default function Header() {
                 </Link>
               </li>
 
-              {isRegisteredDummy == "true" && (
+              {isRegisteredDummy ? (
                 <li className="w-fit">
                   <Link
                     href="/signin"
@@ -210,9 +236,7 @@ export default function Header() {
                     />
                   </Link>
                 </li>
-              )}
-
-              {isRegisteredDummy == "false" && (
+              ) : (
                 <>
                   {" "}
                   <li>

@@ -25,13 +25,16 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Sertif, SertifPenilaian } from "../sertifikat-valid/page";
 import { MdVerified } from "react-icons/md";
+import { TbCloudDownload, TbLink } from "react-icons/tb";
+import Image from "next/image";
+import SertifikatPage1 from "@/components/sertifikat/sertifikatPage1";
+import SertifikatPage2 from "@/components/sertifikat/sertifikatPage2";
 
 function page() {
   return (
-    <section className="relative w-full mt-[17%]">
-      <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
+    <section className="relative w-full mt-[17%] h-screen">
+      <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 relative">
         <h1 className="h2 text-5xl mb-2 font-calsans leading-[100%]">
           Cek Validitas <br />
           Sertifikat Pelatihan & Kompetensi
@@ -44,6 +47,14 @@ function page() {
         </p>
       </div>
       <Tab />
+
+      {/* <Image
+        className="w-[200px] my-3 absolute bottom-0 right-1/2"
+        width={0}
+        height={0}
+        alt="Logo Kementrian Kelautan dan Perikanan RI"
+        src={"/book.png"}
+      /> */}
     </section>
   );
 }
@@ -90,11 +101,21 @@ function DialogSertifikat({ children }: { children: ReactElement }) {
           </div>
         </DialogHeader>
         <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
-          <Sertif />
-          <SertifPenilaian />
+          <SertifikatPage1 />
+          <SertifikatPage2 />
         </div>
         <DialogFooter>
-          <Button type="submit">Download</Button>
+          <Button
+            type="submit"
+            className="flex items-center gap-1 bg-blue-500 hover:bg-blue-500"
+          >
+            <TbLink />
+            Salin Tautan
+          </Button>
+          <Button type="submit" className="flex items-center gap-1">
+            <TbCloudDownload />
+            Download
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

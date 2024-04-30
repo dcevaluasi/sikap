@@ -10,15 +10,27 @@ import {
   SelectLabel,
 } from "@/components/ui/select";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { ReactElement } from "react";
 import { FiSearch, FiSlack } from "react-icons/fi";
 import {
   TbBroadcast,
   TbBuildingBank,
   TbCalendarUser,
   TbClockHour2,
+  TbCloudDownload,
+  TbLink,
   TbMap2,
 } from "react-icons/tb";
 import { GrLocation } from "react-icons/gr";
@@ -38,7 +50,9 @@ import {
 } from "@/components/ui/pagination";
 import { PELATIHAN } from "@/dummies/pelatihan";
 import Footer from "@/components/ui/footer";
-import { MdOutlineAppRegistration } from "react-icons/md";
+import { MdOutlineAppRegistration, MdVerified } from "react-icons/md";
+import SertifikatPage1 from "@/components/sertifikat/sertifikatPage1";
+import SertifikatPage2 from "@/components/sertifikat/sertifikatPage2";
 
 function page() {
   return (
@@ -179,9 +193,12 @@ function page() {
                 <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
               </div>
               <div className="flex flex-col gap-2">
-                <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white">
-                  <MdOutlineAppRegistration /> Daftar Pelatihan
-                </div>
+                <DialogFormRegistrasi>
+                  <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white">
+                    <MdOutlineAppRegistration /> Daftar Pelatihan
+                  </div>
+                </DialogFormRegistrasi>
+
                 <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white">
                   <FaFilePdf /> Unduh Silabus Pelatihan
                 </div>
@@ -356,6 +373,45 @@ function PaginationPage() {
         </PaginationItem>
       </PaginationContent>
     </Pagination>
+  );
+}
+
+function DialogFormRegistrasi({ children }: { children: ReactElement }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="sm:max-w-[1225px]">
+        <DialogHeader>
+          <div className="flex gap-2 items-center">
+            <MdVerified className="text-3xl text-blue-500" />
+            <div className="flex flex-col">
+              <DialogTitle>Form Daftar Pelatihan</DialogTitle>
+              <DialogDescription>
+                Lengkapi Datamu dan lakukan pembayaran untuk mengikuti pelatihan
+                ini!
+              </DialogDescription>
+            </div>
+          </div>
+        </DialogHeader>
+        <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
+          <SertifikatPage1 />
+          <SertifikatPage2 />
+        </div>
+        <DialogFooter>
+          <Button
+            type="submit"
+            className="flex items-center gap-1 bg-blue-500 hover:bg-blue-500"
+          >
+            <TbLink />
+            Salin Tautan
+          </Button>
+          <Button type="submit" className="flex items-center gap-1">
+            <TbCloudDownload />
+            Download
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
