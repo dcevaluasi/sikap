@@ -83,7 +83,7 @@ const Tab = () => {
   );
 };
 
-export function DialogSertifikat({ children }: { children: ReactElement }) {
+function DialogSertifikat({ children }: { children: ReactElement }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>

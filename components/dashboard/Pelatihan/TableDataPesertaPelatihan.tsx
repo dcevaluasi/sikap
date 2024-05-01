@@ -47,7 +47,7 @@ import {
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { MdOutlinePaid } from "react-icons/md";
-import { DialogSertifikat } from "@/app/cek-sertifikat/page";
+import { DialogSertifikat } from "@/components/sertifikat/dialogSertifikat";
 
 const TableDataPesertaPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
