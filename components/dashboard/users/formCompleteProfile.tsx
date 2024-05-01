@@ -26,6 +26,8 @@ import {
 import Image from "next/image";
 import { TbFileStack, TbMapPinSearch, TbUserEdit } from "react-icons/tb";
 
+import { Progress } from "@/components/ui/progress";
+
 function FormCompleteProfile() {
   const router = useRouter();
 
@@ -77,13 +79,7 @@ function FormCompleteProfile() {
     router.push("/users/dashboard");
   };
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, []);
+  React.useEffect(() => {}, []);
 
   const [formTab, setFormTab] = React.useState("FormDataUtamaUser");
   const [indexFormTab, setIndexFormTab] = React.useState(0);
@@ -696,6 +692,9 @@ function FormCompleteProfile() {
                 )}{" "}
                 of 3
               </p>
+            </div>
+            <div className="flex w-full -mt-2 mb-4">
+              <Progress value={(indexFormTab + 1) * 33.33} max={3} />
             </div>
             <FormDataUtamaUser />
             <FormDataAlamatUser />
