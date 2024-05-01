@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { Transition } from "@headlessui/react";
 import Link from "next/link";
 
-export default function MobileMenu() {
+export default function MobileMenu({ isTop }: { isTop: boolean }) {
   const [mobileNavOpen, setMobileNavOpen] = useState<boolean>(false);
 
   const trigger = useRef<HTMLButtonElement>(null);
@@ -48,7 +48,9 @@ export default function MobileMenu() {
       >
         <span className="sr-only">Menu</span>
         <svg
-          className="w-6 h-6 fill-current text-gray-900"
+          className={`w-6 h-6 fill-current ${
+            isTop ? "text-white" : "text-gray-900"
+          }`}
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -97,7 +99,7 @@ export default function MobileMenu() {
                 className="flex font-medium w-full text-gray-600 hover:text-gray-900 py-2 justify-center"
                 onClick={() => setMobileNavOpen(false)}
               >
-                Pelatihian & Sertifikasi
+                Pelatihan & Sertifikasi
               </Link>
             </li>
             <li>
@@ -106,16 +108,16 @@ export default function MobileMenu() {
                 className="flex font-medium w-full text-gray-600 hover:text-gray-900 py-2 justify-center"
                 onClick={() => setMobileNavOpen(false)}
               >
-                Sign in
+                Masuk
               </Link>
             </li>
             <li>
               <Link
-                href="/signup"
+                href="/registrasi"
                 className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 w-full my-2"
                 onClick={() => setMobileNavOpen(false)}
               >
-                <span>Sign up</span>
+                <span>Buat Akun</span>
                 <svg
                   className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
                   viewBox="0 0 12 12"

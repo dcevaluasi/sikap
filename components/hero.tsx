@@ -65,7 +65,7 @@ export default function Hero() {
         </svg>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 z-[9999]">
         {/* Hero content */}
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
           {/* Section header */}
@@ -79,7 +79,7 @@ export default function Hero() {
               alt="Kementrian Kelautan dan Perikanan RI Logo"
             /> */}
             <h1
-              className="text-3xl md:text-[3.9rem] font-extrabold leading-tighter tracking-tighter mb-3 -mt-4 text-white font-calsans"
+              className="text-4xl md:text-[3.9rem] font-extrabold leading-tighter tracking-tighter mb-3 -mt-4 text-white font-calsans"
               data-aos="zoom-y-out"
             >
               Elektronik Layanan Pelatihan <br />

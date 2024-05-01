@@ -35,9 +35,10 @@ function ListProgram() {
         pagination={{
           clickable: true,
         }}
+        draggable
         navigation={true}
         modules={[FreeMode, Navigation]}
-        className="mySwiper max-w-6xl"
+        className="mySwiper w-full md:max-w-6xl"
       >
         {PELATIHAN.map((pelatihan: Pelatihan, index: number) => (
           <SwiperSlide key={index}>

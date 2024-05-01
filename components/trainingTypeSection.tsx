@@ -145,7 +145,7 @@ export default function TrainingTypeSection() {
             </p>
           </div>
 
-          <div className="flex flex-row items-center justify-center gap-9">
+          <div className="flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-5 md:gap-9">
             {tabMenus.map((tabMenu, index) => (
               <div className="gap-4 w-fit">
                 <Slide direction="up" duration={500 * index}>
@@ -153,7 +153,7 @@ export default function TrainingTypeSection() {
                     key={index}
                     className="flex flex-col gap-2 cursor-pointer items-center duration-1000 hover:scale-105 text-center"
                   >
-                    <div className="flex items-center justify-center  bg-white shadow-custom rounded-full w-28 h-28 p-6">
+                    <div className="flex items-center justify-center  bg-white shadow-custom rounded-full w-24 h-24 md:w-28 md:h-28 p-6">
                       <Image
                         className="w-16 md:w-16"
                         width={0}

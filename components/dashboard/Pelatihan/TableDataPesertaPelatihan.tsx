@@ -16,7 +16,12 @@ import {
 import { ArrowUpDown, Edit3Icon, Trash, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
-import { TbBroadcast, TbTargetArrow } from "react-icons/tb";
+import {
+  TbBroadcast,
+  TbFileCertificate,
+  TbFileStack,
+  TbTargetArrow,
+} from "react-icons/tb";
 import { IoIosInformationCircle } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
 import {
@@ -41,8 +46,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+import { MdOutlinePaid } from "react-icons/md";
+import { DialogSertifikat } from "@/app/cek-sertifikat/page";
 
-const TableDataPelatihan: React.FC = () => {
+const TableDataPesertaPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
 
@@ -153,16 +160,11 @@ const TableDataPelatihan: React.FC = () => {
           <Button variant="outline" className="ml-auto">
             <IoIosInformationCircle className="h-4 w-4" />
           </Button>
-
-          <Button variant="outline" className="ml-auto border border-rose-600">
-            <Trash className="h-4 w-4 text-rose-600" />
-          </Button>
-
           <Button
             variant="outline"
             className="ml-auto border border-yellow-500"
           >
-            <Edit3Icon className="h-4 w-4 text-yellow-500" />
+            <TbFileStack className="h-4 w-4 text-yellow-500" />
           </Button>
 
           <Button
@@ -176,19 +178,40 @@ const TableDataPelatihan: React.FC = () => {
             variant="outline"
             className="ml-auto border border-green-500"
           >
-            <HiUserGroup className="h-4 w-4 text-green-500" />
-          </Button>
-          <Button
-            variant="outline"
-            className="ml-auto border border-purple-600"
-          >
-            <TbBroadcast className="h-4 w-4 text-purple-600" />
+            <MdOutlinePaid className="h-4 w-4 text-green-500" />
           </Button>
         </div>
       ),
     },
     {
-      accessorKey: "KodePelatihan",
+      accessorKey: "KodePelatithan",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={`${"flex"} w-full`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sertifikat
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <DialogSertifikat>
+          <div className={`${"flex"} flex items-center justify-center gap-1`}>
+            <Button
+              variant="outline"
+              className="border border-gray-600 text-gray-600"
+            >
+              <TbFileCertificate className="h-4 w-4" /> <span>Generate</span>
+            </Button>
+          </div>
+        </DialogSertifikat>
+      ),
+    },
+    {
+      accessorKey: "KodeRegistrasi",
       header: ({ column }) => {
         return (
           <Button
@@ -196,15 +219,13 @@ const TableDataPelatihan: React.FC = () => {
             className={``}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Kode Pelatihan
+            Kode Registrasi
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`text-center uppercase`}>
-          {row.getValue("KodePelatihan")}
-        </div>
+        <div className={`text-center uppercase`}>KWIDIKUV10930001</div>
       ),
     },
 
@@ -217,14 +238,14 @@ const TableDataPelatihan: React.FC = () => {
             className={`${"ml-0 text-center w-full"}`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Diklat Pelatihan
+            Nama Lengkap
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-center capitalize`}>
-          {row.getValue("DiklatPelatihan")}
+          Farhan Agustiansyah
         </div>
       ),
     },
@@ -237,14 +258,14 @@ const TableDataPelatihan: React.FC = () => {
             className={`${"ml-0 text-center w-full"}`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Tanggal Pelaksanaan
+            NIK
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-center capitalize`}>
-          {row.getValue("TanggalPelaksanaan")}
+          1603070408020001
         </div>
       ),
     },
@@ -256,12 +277,14 @@ const TableDataPelatihan: React.FC = () => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Jumlah Pendaftar
+            No Telpon
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      cell: ({ row }) => <div className="text-center uppercase">1</div>,
+      cell: ({ row }) => (
+        <div className="text-center uppercase">082123104078</div>
+      ),
     },
     {
       accessorKey: "KuotaPeserta",
@@ -269,17 +292,16 @@ const TableDataPelatihan: React.FC = () => {
         return (
           <Button
             variant="ghost"
+            className="w-full flex items-center"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Kuota Peserta
+            Email
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className="text-center uppercase">
-          {row.getValue("KuotaPeserta")}
-        </div>
+        <div className="text-center capitalize">farhantsyh@icloud.com</div>
       ),
     },
     {
@@ -288,18 +310,19 @@ const TableDataPelatihan: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
+            className={`${"ml-0 text-center w-[250px]"}`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Dengan <br />
-            Fasilitas Menginap
+            Tempat
+            <br />
+            Tanggal Lahir
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className="text-center uppercase">
-          {row.getValue("DenganFasilitasMenginap")}
+        <div className="text-center capitalize w-[250px]">
+          Jakarta Selatan, 4 Augustus 2002
         </div>
       ),
     },
@@ -312,16 +335,12 @@ const TableDataPelatihan: React.FC = () => {
             className={`${"ml-0 text-center w-full"}`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Dengan <br /> Paket Konsumsi
+            Jenis Kelamin
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="text-center uppercase">
-          {row.getValue("DenganPaketKonsumsi")}
-        </div>
-      ),
+      cell: ({ row }) => <div className="text-center uppercase">Laki-Laki</div>,
     },
     {
       accessorKey: "DenganPaketKonsumsi",
@@ -332,13 +351,13 @@ const TableDataPelatihan: React.FC = () => {
             className={`${"ml-0 text-center w-full"}`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            TTD Sertifikat
+            Pendidikan Terakhir
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className="text-center capitalize">Kepala Badan</div>
+        <div className="text-center capitalize">S1/Sederajatt</div>
       ),
     },
   ];
@@ -369,16 +388,16 @@ const TableDataPelatihan: React.FC = () => {
       ) : (
         <>
           {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
+          <div className="flex items-center mb-3 justify-between gap-3 ">
             {/* Statistik Pelatihan */}
-            <div className="flex w-full flex-wrap gap-3 sm:gap-5">
+            <div className="flex w-full gap-3 sm:gap-5">
               <div className="flex min-w-47.5">
                 <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-primary">Total Pelatihan</p>
-                  <p className="text-sm font-medium">1 pelatihan</p>
+                  <p className="font-semibold text-primary">Total Pendaftar</p>
+                  <p className="text-sm font-medium">1 orang</p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -387,9 +406,20 @@ const TableDataPelatihan: React.FC = () => {
                 </span>
                 <div className="w-full">
                   <p className="font-semibold text-secondary">
-                    Total Publish Umum
+                    Total Telah Bayar
                   </p>
-                  <p className="text-sm font-medium">1 pelatihan</p>
+                  <p className="text-sm font-medium">1 orang</p>
+                </div>
+              </div>
+              <div className="flex min-w-47.5">
+                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-green-400">
+                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-500"></span>
+                </span>
+                <div className="w-full">
+                  <p className="font-semibold text-green-500">
+                    Total Verifikasi
+                  </p>
+                  <p className="text-sm font-medium">1 orang</p>
                 </div>
               </div>
             </div>
@@ -422,4 +452,4 @@ const TableDataPelatihan: React.FC = () => {
   );
 };
 
-export default TableDataPelatihan;
+export default TableDataPesertaPelatihan;

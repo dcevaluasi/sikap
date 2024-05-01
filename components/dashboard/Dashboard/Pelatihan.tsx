@@ -1,10 +1,5 @@
 "use client";
 import React from "react";
-import ChartOne from "../Charts/ChartOne";
-import ChartThree from "../Charts/ChartThree";
-import ChartTwo from "../Charts/ChartTwo";
-import ChatCard from "../Chat/ChatCard";
-import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
 // import MapOne from "../Maps/MapOne";
 import TableDataPelatihan from "../Pelatihan/TableDataPelatihan";
@@ -12,8 +7,13 @@ import TableDataPelatihan from "../Pelatihan/TableDataPelatihan";
 const Pelatihan: React.FC = () => {
   return (
     <>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardDataStats title="Total Kelas Pelatihan" total="$3.456K" rate="0.43%" levelUp>
+      {/* <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
+        <CardDataStats
+          title="Total Kelas Pelatihan"
+          total="$3.456K"
+          rate="0.43%"
+          levelUp
+        >
           <svg
             className="fill-primary dark:fill-white"
             width="22"
@@ -32,7 +32,12 @@ const Pelatihan: React.FC = () => {
             />
           </svg>
         </CardDataStats>
-        <CardDataStats title="Total Pengajuan" total="$45,2K" rate="4.35%" levelUp>
+        <CardDataStats
+          title="Total Pengajuan"
+          total="$45,2K"
+          rate="4.35%"
+          levelUp
+        >
           <svg
             className="fill-primary dark:fill-white"
             width="20"
@@ -74,7 +79,12 @@ const Pelatihan: React.FC = () => {
             />
           </svg>
         </CardDataStats>
-        <CardDataStats title="Total Peserta" total="3.456" rate="0.95%" levelDown>
+        <CardDataStats
+          title="Total Peserta"
+          total="3.456"
+          rate="0.95%"
+          levelDown
+        >
           <svg
             className="fill-primary dark:fill-white"
             width="22"
@@ -97,16 +107,19 @@ const Pelatihan: React.FC = () => {
             />
           </svg>
         </CardDataStats>
+      </div> */}
+
+      <div className="flex flex-col">
+        <h1 className="text-3xl font-medium leading-[100%] font-calsans">
+          Database Pelatihan
+        </h1>
+        <p className="font-medium text-gray-400 text-base">
+          Tambahkan data pelatihan yang ada di lembaga diklat mu!
+        </p>
       </div>
 
       <div className="mt-4 md:mt-6 2xl:mt-7.5">
         <TableDataPelatihan />
-        {/* <ChartThree />
-        <MapOne />
-        <div className="col-span-12 xl:col-span-8">
-          <TableOne />
-        </div>
-        <ChatCard /> */}
       </div>
     </>
   );

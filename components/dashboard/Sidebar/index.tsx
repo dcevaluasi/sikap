@@ -10,7 +10,6 @@ import { Rubik } from "next/font/google";
 import { FaBoxOpen, FaRupiahSign } from "react-icons/fa6";
 import { IoMdSchool } from "react-icons/io";
 import { TbDatabaseCog, TbFileCertificate } from "react-icons/tb";
-import Logo from "@/components/ui/logo";
 import LogoFooter from "@/components/ui/logo-footer";
 
 interface SidebarProps {
@@ -225,7 +224,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
-                              href="/admin/lemdiklat/pelatihan/ajukan-pelatihan"
+                              href="/admin/lemdiklat/pelatihan"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                 pathname === "/forms/form-elements" &&
                                 "text-white"

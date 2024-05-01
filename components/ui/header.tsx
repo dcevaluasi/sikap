@@ -42,7 +42,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed w-full z-30 md:bg-opacity-90 transition duration-300 ease-in-out ${
+      className={`fixed w-full z-[50] md:bg-opacity-90 transition duration-300 ease-in-out ${
         !top
           ? "bg-white backdrop-blur-sm shadow-lg"
           : usePathname().includes("pelatihan") ||
@@ -253,7 +253,7 @@ export default function Header() {
                           : "text-gray-200"
                       } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                     >
-                      Sign in
+                      Masuk
                     </Link>
                   </li>
                   <li>
@@ -261,7 +261,7 @@ export default function Header() {
                       href="/signup"
                       className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
                     >
-                      <span>Sign up</span>
+                      <span>Buat Akun</span>
                       <svg
                         className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
                         viewBox="0 0 12 12"
@@ -279,7 +279,7 @@ export default function Header() {
             </ul>
           </nav>
 
-          <MobileMenu />
+          <MobileMenu isTop={top} />
         </div>
       </div>
     </header>
