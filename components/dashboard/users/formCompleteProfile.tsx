@@ -24,6 +24,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Image from "next/image";
+import { TbFileStack, TbMapPinSearch, TbUserEdit } from "react-icons/tb";
 
 function FormCompleteProfile() {
   const router = useRouter();
@@ -661,6 +662,41 @@ function FormCompleteProfile() {
 
           {/* Form */}
           <div className="max-w-sm mx-auto mt-5">
+            <div className="flex items-center justify-between">
+              {indexFormTab == 0 ? (
+                <h2 className="font-bold text-2xl leading-[100%] my-6 md:text-2xl text-black font-calsans flex items-center gap-1">
+                  <TbUserEdit />
+                  <span className="mt-2">Lengkapi Data Pribadi</span>
+                </h2>
+              ) : indexFormTab == 1 ? (
+                <h2 className="font-bold text-2xl leading-[100%] my-6 md:text-2xl text-black font-calsans flex items-center gap-1">
+                  <TbMapPinSearch />
+                  <span className="mt-2">Lengkapi Alamat</span>
+                </h2>
+              ) : (
+                <h2 className="font-bold text-2xl leading-[100%] my-6 md:text-2xl text-black font-calsans flex items-center gap-1">
+                  <TbFileStack />
+                  <span className="mt-2">Lengkapi Berkas</span>
+                </h2>
+              )}
+
+              <p className="text-base">
+                {indexFormTab == 0 ? (
+                  <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                    1
+                  </span>
+                ) : indexFormTab == 1 ? (
+                  <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                    2
+                  </span>
+                ) : (
+                  <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                    3
+                  </span>
+                )}{" "}
+                of 3
+              </p>
+            </div>
             <FormDataUtamaUser />
             <FormDataAlamatUser />
             <FormPemberkasanUser />
