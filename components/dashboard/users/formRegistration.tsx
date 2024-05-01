@@ -1,12 +1,12 @@
 "use client";
 
+import Toast from "@/components/toast";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, MouseEventHandler } from "react";
-import Toast from "../toast";
 
-function FormRegistrasi() {
+function FormRegistration() {
   const router = useRouter();
 
   /* state variable to store basic user information to register */
@@ -256,4 +256,4 @@ function FormRegistrasi() {
   );
 }
 
-export default FormRegistrasi;
+export default FormRegistration;

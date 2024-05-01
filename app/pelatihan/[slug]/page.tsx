@@ -64,7 +64,7 @@ function page() {
           </h1>
 
           <div className="w-full flex gap-10">
-            <div className="flex flex-col w-[70%]">
+            <div className="flex flex-col w-full md:w-[70%]">
               <div className="relative w-full">
                 <Image
                   className="w-full rounded-3xl h-[350px] object-cover"
@@ -85,7 +85,59 @@ function page() {
                 </div>
               </div>
 
-              <p className="text-base text-gray-600 max-w-4xl mt-3">
+              <div className="flex md:hidden flex-col gap-3 w-full my-3">
+                <div className="flex flex-col gap-1 ">
+                  <table>
+                    <tr>
+                      <td className="text-gray-600">
+                        <TbCalendarUser className="text-lg w-6" />
+                      </td>
+                      <td>
+                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                          Tanggal Pelaksanaan :{" "}
+                          {PELATIHAN[3].TanggalPendaftaran}
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-gray-600">
+                        <TbMap2 className="text-lg w-6" />
+                      </td>
+                      <td>
+                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                          Lokasi Pelatihan : {PELATIHAN[3].LokasiPelatihan}{" "}
+                          (Balai Pelatihan Pengembangan dan Penyuluhan Tegal)
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-gray-600">
+                        <TbBroadcast className="text-lg w-6" />
+                      </td>
+                      <td>
+                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                          Pelaksanaan Pelatihan :{" "}
+                          {PELATIHAN[3].PelaksanaanPelatihan}
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Link
+                    href={"/registrasi"}
+                    className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
+                  >
+                    <MdOutlineAppRegistration /> Daftar Pelatihan
+                  </Link>
+
+                  <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white">
+                    <FaFilePdf /> Unduh Silabus Pelatihan
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-base text-gray-600 max-w-4xl mt-3 text-justify hidden md:flex">
                 Dapatkan keunggulan kompetitif dengan sertifikasi masyarakat
                 kelautan dan perikanan. Tingkatkan kredibilitas dan peluang
                 karier Anda dalam industri yang dinamis dan berkelanjutan.
@@ -94,7 +146,7 @@ function page() {
 
               {/* <Tab /> */}
 
-              <div className="w-full text-gray-600 text-left mt-9 text-base">
+              <div className="w-full text-gray-600 text-left mt-2 md:mt-9 text-base">
                 <h1 className="text-black font-bold text-lg">
                   Deskripsi Program Pelatihan
                 </h1>
@@ -181,7 +233,7 @@ function page() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-6 w-[30%]">
+            <div className="md:flex hidden flex-col gap-6 w-[30%]">
               <div className="flex flex-col gap-2 -mt-1">
                 <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
                   Ikuti Pelatihan
@@ -193,11 +245,12 @@ function page() {
                 <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
               </div>
               <div className="flex flex-col gap-2">
-                <DialogFormRegistrasi>
-                  <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white">
-                    <MdOutlineAppRegistration /> Daftar Pelatihan
-                  </div>
-                </DialogFormRegistrasi>
+                <Link
+                  href={"/registrasi"}
+                  className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
+                >
+                  <MdOutlineAppRegistration /> Daftar Pelatihan
+                </Link>
 
                 <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white">
                   <FaFilePdf /> Unduh Silabus Pelatihan
