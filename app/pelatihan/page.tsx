@@ -37,8 +37,8 @@ import { createSlug } from "@/utils";
 function page() {
   return (
     <section className="relative w-full mt-36">
-      <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
-        <h1 className="h2 text-5xl mb-2 font-calsans leading-[100%] text-black">
+      <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 px-3 md:px-0">
+        <h1 className="h2 text-4xl md:text-5xl mb-2 font-calsans leading-[100%] text-black">
           Pelatihan Masyarakat <br />
           Kelautan & Perikanan
         </h1>
@@ -98,7 +98,6 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: Pelatihan }) => {
             dan perikanan...
           </p>
           <Link
-            target="_blank"
             href={`/pelatihan/${createSlug(pelatihan.JudulPelatihan)}`}
             className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
           >
@@ -112,9 +111,9 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: Pelatihan }) => {
 
 const Tab = () => {
   return (
-    <section className="flex flex-row gap-3 w-full items-center max-w-6xl mb-5 px-3 mx-auto">
+    <section className="flex flex-col md:flex-row gap-3 w-full items-center max-w-6xl mb-5 px-6 md:px-3 mx-auto">
       <Select>
-        <SelectTrigger className="w-fit rounded-3xl py-2">
+        <SelectTrigger className="w-full md:w-fit rounded-3xl py-5 md:py-2">
           <p className="mr-3 flex items-center gap-1 text-sm">
             <FiSlack />
             Pilih Bidang Pelatihan
@@ -123,19 +122,22 @@ const Tab = () => {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Bidang Pelatihan</SelectLabel>
-            <SelectItem value="apple">Budidaya</SelectItem>
-            <SelectItem value="banana">Penangkapan</SelectItem>
-            <SelectItem value="blueberry">Pengolahan dan Pemasaran</SelectItem>
-            <SelectItem value="grapes">Mesin Perikanan</SelectItem>
-            <SelectItem value="pineapple">Konservasi</SelectItem>
-            <SelectItem value="pineapple">SD Perikanan</SelectItem>
-            <SelectItem value="pineapple">Wisata Bahari</SelectItem>
+            <SelectItem value="Budidaya">Budidaya</SelectItem>
+            <SelectItem value="Penangkapan">Penangkapan</SelectItem>
+            <SelectItem value="Kepelautan">Kepelautan</SelectItem>
+            <SelectItem value="Pengolahan dan Pemasaran">
+              Pengolahan dan Pemasaran
+            </SelectItem>
+            <SelectItem value="Mesin Perikanan">Mesin Perikanan</SelectItem>
+            <SelectItem value="Konservasi">Konservasi</SelectItem>
+            <SelectItem value="SD Perikanan">SD Perikanan</SelectItem>
+            <SelectItem value="Wisata Bahari">Wisata Bahari</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
 
       <Select>
-        <SelectTrigger className="w-fit rounded-3xl py-2">
+        <SelectTrigger className="w-full md:w-fit rounded-3xl py-5 md:py-2">
           <p className="mr-3 flex items-center gap-1 text-sm">
             <FaPlaceOfWorship />
             Pilih Penyelenggara Pelatihan
@@ -152,7 +154,7 @@ const Tab = () => {
       </Select>
 
       <Select>
-        <SelectTrigger className="w-fit rounded-3xl py-2">
+        <SelectTrigger className="w-full md:w-fit rounded-3xl py-5 md:py-2">
           <p className="mr-3 flex items-center gap-1 text-sm">
             <GrLocation />
             Pilih Pelaksanaan Pelatihan

@@ -53,13 +53,16 @@ import Footer from "@/components/ui/footer";
 import { MdOutlineAppRegistration, MdVerified } from "react-icons/md";
 import SertifikatPage1 from "@/components/sertifikat/sertifikatPage1";
 import SertifikatPage2 from "@/components/sertifikat/sertifikatPage2";
+import FormRegistrationTraining from "@/components/dashboard/users/formRegistrationTraining";
 
 function page() {
+  const [isRegistrasi, setIsRegistrasi] = React.useState(false);
+
   return (
     <section className="relative w-full mt-36">
       <div className="flex gap-2 max-w-6xl mx-auto px-5">
         <div className="w-full pb-5 md:pb-8 flex flex-col ">
-          <h1 className="h2 text-5xl mb-2 font-calsans leading-[100%] max-w-3xl">
+          <h1 className="h2 text-4xl md:text-5xl mb-2 font-calsans leading-[100%] max-w-3xl">
             {PELATIHAN[3].JudulPelatihan}
           </h1>
 
@@ -67,7 +70,7 @@ function page() {
             <div className="flex flex-col w-full md:w-[70%]">
               <div className="relative w-full">
                 <Image
-                  className="w-full rounded-3xl h-[350px] object-cover"
+                  className="w-full rounded-3xl h-[250px] md:h-[350px] object-cover"
                   alt=""
                   src={`/images/hero-img4-preview.jpg`}
                   width={0}
@@ -85,226 +88,239 @@ function page() {
                 </div>
               </div>
 
-              <div className="flex md:hidden flex-col gap-3 w-full my-3">
-                <div className="flex flex-col gap-1 ">
-                  <table>
-                    <tr>
-                      <td className="text-gray-600">
-                        <TbCalendarUser className="text-lg w-6" />
-                      </td>
-                      <td>
-                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                          Tanggal Pelaksanaan :{" "}
-                          {PELATIHAN[3].TanggalPendaftaran}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-gray-600">
-                        <TbMap2 className="text-lg w-6" />
-                      </td>
-                      <td>
-                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                          Lokasi Pelatihan : {PELATIHAN[3].LokasiPelatihan}{" "}
-                          (Balai Pelatihan Pengembangan dan Penyuluhan Tegal)
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-gray-600">
-                        <TbBroadcast className="text-lg w-6" />
-                      </td>
-                      <td>
-                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                          Pelaksanaan Pelatihan :{" "}
-                          {PELATIHAN[3].PelaksanaanPelatihan}
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
+              {isRegistrasi ? (
+                <></>
+              ) : (
+                <>
+                  <div className="flex md:hidden flex-col gap-3 w-full my-3">
+                    <div className="flex flex-col gap-1 ">
+                      <table>
+                        <tr>
+                          <td className="text-gray-600">
+                            <TbCalendarUser className="text-lg w-6" />
+                          </td>
+                          <td>
+                            <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                              Tanggal Pelaksanaan :{" "}
+                              {PELATIHAN[3].TanggalPendaftaran}
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="text-gray-600">
+                            <TbMap2 className="text-lg w-6" />
+                          </td>
+                          <td>
+                            <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                              Lokasi Pelatihan : {PELATIHAN[3].LokasiPelatihan}{" "}
+                              (Balai Pelatihan Pengembangan dan Penyuluhan
+                              Tegal)
+                            </p>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="text-gray-600">
+                            <TbBroadcast className="text-lg w-6" />
+                          </td>
+                          <td>
+                            <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                              Pelaksanaan Pelatihan :{" "}
+                              {PELATIHAN[3].PelaksanaanPelatihan}
+                            </p>
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <button
+                        onClick={(e) => setIsRegistrasi(true)}
+                        className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
+                      >
+                        <MdOutlineAppRegistration /> Daftar Pelatihan
+                      </button>
+
+                      <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white">
+                        <FaFilePdf /> Unduh Silabus Pelatihan
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-base text-gray-600 max-w-4xl mt-3 text-justify hidden md:flex">
+                    Dapatkan keunggulan kompetitif dengan sertifikasi masyarakat
+                    kelautan dan perikanan. Tingkatkan kredibilitas dan peluang
+                    karier Anda dalam industri yang dinamis dan berkelanjutan.
+                    Bergabunglah hari ini untuk langkah menuju kesuksesan!
+                  </p>
+
+                  {/* <Tab /> */}
+
+                  <div className="w-full text-gray-600 text-left mt-2 md:mt-9 text-base">
+                    <h1 className="text-black font-bold text-lg">
+                      Deskripsi Program Pelatihan
+                    </h1>
+                    <p>
+                      Setelah mengikuti pelatihan ini, diharapkan peserta akan
+                      memiliki keterampilan berikut:
+                    </p>
+                    <ol className="list-disc ml-7">
+                      <li>
+                        Membuat dan merawat lingkungan pembesaran udang vaname
+                        yang optimal.
+                      </li>
+                      <li>
+                        Memahami prinsip-prinsip dasar manajemen air dan
+                        kualitas air dalam pembesaran udang.
+                      </li>
+                      <li>
+                        Mengidentifikasi penyakit dan hama pada udang vaname
+                        serta mengambil tindakan pencegahan dan penanggulangan
+                        yang tepat.
+                      </li>
+                      <li>
+                        Memahami teknik pemberian pakan yang sesuai dan efisien.
+                      </li>
+                      <li>
+                        Melakukan pemantauan dan pengukuran parameter lingkungan
+                        secara berkala.
+                      </li>
+                      <li>
+                        Memahami konsep dasar pengelolaan limbah budidaya udang
+                        vaname.
+                      </li>
+                    </ol>
+
+                    <h1 className="text-black font-bold text-lg mt-5">
+                      Persyaratan Peserta
+                    </h1>
+                    <p>
+                      Untuk menjadi peserta pelatihan ini, peserta harus
+                      memenuhi syarat-syarat berikut:
+                    </p>
+                    <ul className="list-disc ml-7">
+                      <li>Warga Negara Indonesia.</li>
+                      <li>Usia maksimal 30 tahun pada saat mendaftar.</li>
+                      <li>Minimal lulusan SMA atau sederajat.</li>
+                      <li>
+                        Belum memiliki pekerjaan tetap atau sedang tidak
+                        bekerja.
+                      </li>
+                      <li>Lulus seleksi administrasi dan tes substansi.</li>
+                      <li>
+                        Memiliki minat dan motivasi yang tinggi dalam bidang
+                        budidaya udang vaname.
+                      </li>
+                    </ul>
+
+                    <h1 className="text-black font-bold text-lg mt-5">
+                      Sarana Peserta yang Disarankan
+                    </h1>
+                    <p>
+                      Untuk mendukung kelancaran pelatihan, peserta disarankan
+                      untuk memiliki sarana sebagai berikut:
+                    </p>
+                    <ol className="list-disc ml-7">
+                      <li>
+                        Laptop atau perangkat komputer dengan spesifikasi
+                        minimal sebagai berikut:
+                      </li>
+                      <ul className="list-disc ml-7">
+                        <li>RAM minimal 4 GB.</li>
+                        <li>Prosesor 64-bit.</li>
+                        <li>Sistem Operasi Windows 10.</li>
+                        <li>Koneksi internet yang stabil.</li>
+                        <li>Kamera web (webcam).</li>
+                      </ul>
+                      <li>
+                        Akses internet yang stabil dan cukup untuk mengakses
+                        materi pembelajaran secara online.
+                      </li>
+                      <li>
+                        Terinstall aplikasi atau perangkat lunak yang diperlukan
+                        untuk simulasi dan pembelajaran, seperti perangkat lunak
+                        simulasi budidaya udang vaname.
+                      </li>
+                    </ol>
+                  </div>
+                </>
+              )}
+            </div>
+
+            {!isRegistrasi && (
+              <div className="md:flex hidden flex-col gap-6 w-[30%]">
+                <div className="flex flex-col gap-2 -mt-1">
+                  <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
+                    Ikuti Pelatihan
+                  </h1>
+                  <p className="text-base text-gray-600 max-w-4xl -mt-3">
+                    Segera daftarkan dirimu dan jadilah SDM Kelautan dan
+                    Perikanan Unggul!
+                  </p>
+                  <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <Link
-                    href={"/registrasi"}
+                  <button
+                    onClick={(e) => setIsRegistrasi(true)}
                     className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
                   >
                     <MdOutlineAppRegistration /> Daftar Pelatihan
-                  </Link>
+                  </button>
 
                   <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white">
                     <FaFilePdf /> Unduh Silabus Pelatihan
                   </div>
+                  <div className="flex flex-col gap-1 mt-2">
+                    <table>
+                      <tr>
+                        <td className="text-gray-600">
+                          <TbCalendarUser className="text-lg w-6" />
+                        </td>
+                        <td>
+                          <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                            Tanggal Pelaksanaan :{" "}
+                            {PELATIHAN[3].TanggalPendaftaran}
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="text-gray-600">
+                          <TbMap2 className="text-lg w-6" />
+                        </td>
+                        <td>
+                          <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                            Lokasi Pelatihan : {PELATIHAN[3].LokasiPelatihan}{" "}
+                            (Balai Pelatihan Pengembangan dan Penyuluhan Tegal)
+                          </p>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="text-gray-600">
+                          <TbBroadcast className="text-lg w-6" />
+                        </td>
+                        <td>
+                          <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                            Pelaksanaan Pelatihan :{" "}
+                            {PELATIHAN[3].PelaksanaanPelatihan}
+                          </p>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 mt-3">
+                  <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
+                    Pelatihan Terbaru
+                  </h1>
+                  <p className="text-base text-gray-600 max-w-4xl -mt-3">
+                    Lihat pelatihan terbaru serupa disini!
+                  </p>
+                  <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
                 </div>
               </div>
-
-              <p className="text-base text-gray-600 max-w-4xl mt-3 text-justify hidden md:flex">
-                Dapatkan keunggulan kompetitif dengan sertifikasi masyarakat
-                kelautan dan perikanan. Tingkatkan kredibilitas dan peluang
-                karier Anda dalam industri yang dinamis dan berkelanjutan.
-                Bergabunglah hari ini untuk langkah menuju kesuksesan!
-              </p>
-
-              {/* <Tab /> */}
-
-              <div className="w-full text-gray-600 text-left mt-2 md:mt-9 text-base">
-                <h1 className="text-black font-bold text-lg">
-                  Deskripsi Program Pelatihan
-                </h1>
-                <p>
-                  Setelah mengikuti pelatihan ini, diharapkan peserta akan
-                  memiliki keterampilan berikut:
-                </p>
-                <ol className="list-disc ml-7">
-                  <li>
-                    Membuat dan merawat lingkungan pembesaran udang vaname yang
-                    optimal.
-                  </li>
-                  <li>
-                    Memahami prinsip-prinsip dasar manajemen air dan kualitas
-                    air dalam pembesaran udang.
-                  </li>
-                  <li>
-                    Mengidentifikasi penyakit dan hama pada udang vaname serta
-                    mengambil tindakan pencegahan dan penanggulangan yang tepat.
-                  </li>
-                  <li>
-                    Memahami teknik pemberian pakan yang sesuai dan efisien.
-                  </li>
-                  <li>
-                    Melakukan pemantauan dan pengukuran parameter lingkungan
-                    secara berkala.
-                  </li>
-                  <li>
-                    Memahami konsep dasar pengelolaan limbah budidaya udang
-                    vaname.
-                  </li>
-                </ol>
-
-                <h1 className="text-black font-bold text-lg mt-5">
-                  Persyaratan Peserta
-                </h1>
-                <p>
-                  Untuk menjadi peserta pelatihan ini, peserta harus memenuhi
-                  syarat-syarat berikut:
-                </p>
-                <ul className="list-disc ml-7">
-                  <li>Warga Negara Indonesia.</li>
-                  <li>Usia maksimal 30 tahun pada saat mendaftar.</li>
-                  <li>Minimal lulusan SMA atau sederajat.</li>
-                  <li>
-                    Belum memiliki pekerjaan tetap atau sedang tidak bekerja.
-                  </li>
-                  <li>Lulus seleksi administrasi dan tes substansi.</li>
-                  <li>
-                    Memiliki minat dan motivasi yang tinggi dalam bidang
-                    budidaya udang vaname.
-                  </li>
-                </ul>
-
-                <h1 className="text-black font-bold text-lg mt-5">
-                  Sarana Peserta yang Disarankan
-                </h1>
-                <p>
-                  Untuk mendukung kelancaran pelatihan, peserta disarankan untuk
-                  memiliki sarana sebagai berikut:
-                </p>
-                <ol className="list-disc ml-7">
-                  <li>
-                    Laptop atau perangkat komputer dengan spesifikasi minimal
-                    sebagai berikut:
-                  </li>
-                  <ul className="list-disc ml-7">
-                    <li>RAM minimal 4 GB.</li>
-                    <li>Prosesor 64-bit.</li>
-                    <li>Sistem Operasi Windows 10.</li>
-                    <li>Koneksi internet yang stabil.</li>
-                    <li>Kamera web (webcam).</li>
-                  </ul>
-                  <li>
-                    Akses internet yang stabil dan cukup untuk mengakses materi
-                    pembelajaran secara online.
-                  </li>
-                  <li>
-                    Terinstall aplikasi atau perangkat lunak yang diperlukan
-                    untuk simulasi dan pembelajaran, seperti perangkat lunak
-                    simulasi budidaya udang vaname.
-                  </li>
-                </ol>
-              </div>
-            </div>
-
-            <div className="md:flex hidden flex-col gap-6 w-[30%]">
-              <div className="flex flex-col gap-2 -mt-1">
-                <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
-                  Ikuti Pelatihan
-                </h1>
-                <p className="text-base text-gray-600 max-w-4xl -mt-3">
-                  Segera daftarkan dirimu dan jadilah SDM Kelautan dan Perikanan
-                  Unggul!
-                </p>
-                <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
-              </div>
-              <div className="flex flex-col gap-2">
-                <Link
-                  href={"/registrasi"}
-                  className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
-                >
-                  <MdOutlineAppRegistration /> Daftar Pelatihan
-                </Link>
-
-                <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white">
-                  <FaFilePdf /> Unduh Silabus Pelatihan
-                </div>
-                <div className="flex flex-col gap-1 mt-2">
-                  <table>
-                    <tr>
-                      <td className="text-gray-600">
-                        <TbCalendarUser className="text-lg w-6" />
-                      </td>
-                      <td>
-                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                          Tanggal Pelaksanaan :{" "}
-                          {PELATIHAN[3].TanggalPendaftaran}
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-gray-600">
-                        <TbMap2 className="text-lg w-6" />
-                      </td>
-                      <td>
-                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                          Lokasi Pelatihan : {PELATIHAN[3].LokasiPelatihan}{" "}
-                          (Balai Pelatihan Pengembangan dan Penyuluhan Tegal)
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td className="text-gray-600">
-                        <TbBroadcast className="text-lg w-6" />
-                      </td>
-                      <td>
-                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                          Pelaksanaan Pelatihan :{" "}
-                          {PELATIHAN[3].PelaksanaanPelatihan}
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2 mt-3">
-                <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
-                  Pelatihan Terbaru
-                </h1>
-                <p className="text-base text-gray-600 max-w-4xl -mt-3">
-                  Lihat pelatihan terbaru serupa disini!
-                </p>
-                <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
-              </div>
-            </div>
+            )}
           </div>
+
+          {isRegistrasi && <FormRegistrationTraining />}
         </div>
       </div>
 

@@ -30,6 +30,7 @@ function FormRegistrasi() {
   const [isInputError, setIsInputError] = React.useState(false);
 
   const handleRegistrasiAkun = (e: FormEvent) => {
+    e.preventDefault();
     if (name == "" || nik == "" || phoneNumber == "" || password == "") {
       Toast.fire({
         icon: "error",
@@ -41,7 +42,7 @@ function FormRegistrasi() {
         icon: "success",
         title: `Berhasil melakukan registrasi akun!`,
       });
-      router.push("/dashbord/profile");
+      router.push("/dashboard/complete-profile");
     }
   };
 
@@ -212,7 +213,6 @@ function FormRegistrasi() {
                   <button
                     type="submit"
                     className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
-                    onClick={(e) => handleRegistrasiAkun(e)}
                   >
                     Registrasi
                   </button>

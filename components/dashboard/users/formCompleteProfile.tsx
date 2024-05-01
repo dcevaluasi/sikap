@@ -113,7 +113,6 @@ function FormCompleteProfile() {
               className="form-input w-full text-black"
               placeholder="Masukkan nama lengkap"
               value={"Farhan Agustiansyah"}
-              onChange={(e) => setName(e.target.value)}
               required
               readOnly
             />
@@ -133,7 +132,6 @@ function FormCompleteProfile() {
               className="form-input w-full text-black"
               placeholder="Masukkan NIK"
               value={"1603070408020001"}
-              onChange={(e) => setNik(e.target.value)}
               required
               readOnly
             />
@@ -153,7 +151,6 @@ function FormCompleteProfile() {
               className="form-input w-full text-black"
               placeholder="Masukkan no telpon"
               value={"082123104078"}
-              onChange={(e) => setPhoneNumber(e.target.value)}
               required
               readOnly
             />
@@ -172,7 +169,6 @@ function FormCompleteProfile() {
               type="phone number"
               className="form-input w-full text-black"
               placeholder="Masukkan alamat email"
-              onChange={(e) => setPhoneNumber(e.target.value)}
               required
             />
           </div>
@@ -190,7 +186,6 @@ function FormCompleteProfile() {
               type="date"
               className="form-input w-full text-black"
               placeholder="Masukkan tanggal lahir"
-              onChange={(e) => setPhoneNumber(e.target.value)}
               required
             />
           </div>
@@ -208,7 +203,6 @@ function FormCompleteProfile() {
               type="text"
               className="form-input w-full text-black"
               placeholder="Masukkan tempat lahir"
-              onChange={(e) => setPhoneNumber(e.target.value)}
               required
             />
           </div>
@@ -246,7 +240,6 @@ function FormCompleteProfile() {
               type="text"
               className="form-input w-full text-black"
               placeholder="Masukkan pekerjaan"
-              onChange={(e) => setPhoneNumber(e.target.value)}
               required
             />
           </div>
@@ -360,7 +353,6 @@ function FormCompleteProfile() {
               type="text"
               className="form-input w-full text-black"
               placeholder="Masukkan ibu kandung"
-              onChange={(e) => setPhoneNumber(e.target.value)}
               required
             />
           </div>
@@ -381,7 +373,6 @@ function FormCompleteProfile() {
               type="text"
               className="form-input w-full text-black"
               placeholder="Masukkan negara tujuan"
-              onChange={(e) => setPhoneNumber(e.target.value)}
               required
               readOnly
             />
@@ -939,6 +930,7 @@ function FormCompleteProfile() {
                           icon: "success",
                           title: `Berhasil melengkapi data diri & berkas!`,
                         });
+                        router.push("/pelatihan");
                       }}
                     >
                       Upload
