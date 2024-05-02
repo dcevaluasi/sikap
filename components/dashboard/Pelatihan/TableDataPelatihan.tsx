@@ -41,6 +41,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
+import { MdOutlineSaveAlt } from "react-icons/md";
+import FormPelatihan from "../admin/formPelatihan";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -365,7 +367,26 @@ const TableDataPelatihan: React.FC = () => {
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       {showFormAjukanPelatihan ? (
-        <h1>TEST</h1>
+        <>
+          {/* Header Tabel Data Pelatihan */}
+          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
+            {/* Button Ajukan Permohonan Buka Pelatihan */}
+            <div className="flex w-full gap-2 justify-end">
+              <div
+                onClick={(e) => setShowFormAjukanPelatihan(true)}
+                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+              >
+                <MdOutlineSaveAlt />
+                Simpan ke Database
+              </div>
+            </div>
+          </div>
+
+          {/* List Data Pelatihan */}
+          <div>
+            <FormPelatihan />
+          </div>
+        </>
       ) : (
         <>
           {/* Header Tabel Data Pelatihan */}
