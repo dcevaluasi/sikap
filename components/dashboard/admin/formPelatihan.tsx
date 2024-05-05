@@ -38,6 +38,8 @@ import { MdOutlineFastfood, MdWorkOutline } from "react-icons/md";
 import { Editor } from "@tinymce/tinymce-react";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
+import { HiUserGroup } from "react-icons/hi2";
+import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
@@ -295,6 +297,26 @@ function FormPelatihan() {
           </div>
         </div>
 
+        <div className="w-full">
+          <label
+            className="block text-gray-800 text-sm font-medium mb-1"
+            htmlFor="name"
+          >
+            Dengan Uji Kompetensi <span className="text-red-600">*</span>
+          </label>
+          <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+            <div>
+              <Checkbox />
+            </div>
+            <div className="space-y-1 leading-none">
+              <label>Uji Kompetensi Pelatihan</label>
+              <p className="text-xs text-gray-600">
+                You can manage your mobile notifications in the page.
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div className="flex flex-wrap mb-1 w-full">
           <div className="w-full">
             <label
@@ -353,7 +375,7 @@ function FormPelatihan() {
       <form
         onSubmit={(e) => handleRegistrasiAkun(e)}
         autoComplete="off"
-        className={`${indexFormTab == 2 ? "block" : "hidden"}`}
+        className={`${indexFormTab == 3 ? "block" : "hidden"}`}
       >
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
@@ -415,12 +437,100 @@ function FormPelatihan() {
     );
   };
 
-  const FormDataRiwayatPekerjaanUser = () => {
+  const FormPesertaPelatihan = () => {
     return (
       <form
         onSubmit={(e) => handleRegistrasiAkun(e)}
         autoComplete="off"
         className={`${indexFormTab == 1 ? "block" : "hidden"}`}
+      >
+        <div className="flex gap-1 w-full">
+          <div className="flex w-full flex-wrap -mx-3 mb-1">
+            <div className="w-full px-3">
+              <label
+                className="block text-gray-800 text-sm font-medium mb-1"
+                htmlFor="email"
+              >
+                Asal Peserta Pelatihan <span className="text-red-600">*</span>
+              </label>
+              <Select>
+                <SelectTrigger className="w-full text-base py-6">
+                  <SelectValue placeholder="Pilih asal peserta" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Jawa Tengah">Masyarakat Umum</SelectItem>
+                  <SelectItem value="Jakarta">
+                    Karyawan/Pegawai dari
+                    PT/Mitra/Kelompok/Instansi/Sekolah/Universitas
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flexw w-full flex-wrap -mx-3 mb-1">
+            <div className="w-full px-3">
+              <label
+                className="block text-gray-800 text-sm font-medium mb-1"
+                htmlFor="email"
+              >
+                Kuota Peserta <span className="text-red-600">*</span>
+              </label>
+              <input
+                id="name"
+                type="number"
+                className="form-input w-full text-black border-gray-300 rounded-md py-3"
+                placeholder="(Orang)"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap -mx-3 mb-1">
+          <div className="w-full px-3">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-1"
+              htmlFor="email"
+            >
+              Data by Name by Address Peserta Pelatihan{" "}
+              <span className="text-red-600">*</span>
+            </label>
+            <div className="flex gap-1">
+              <Input
+                id="phone number"
+                type="file"
+                className="w-full text-black h-10 text-base flex items-center"
+                placeholder="Masukkan desa"
+                required
+              />
+              <button
+                type="submit"
+                className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
+                onClick={(e) => {
+                  setIndexFormTab(indexFormTab + 1);
+                  scrollToTop();
+                }}
+              >
+                <PiMicrosoftExcelLogoFill />
+                Unduh Template
+              </button>
+            </div>
+            <p className="text-gray-700 text-xs mt-1">
+              *Jika asal peserta merupakan Karyawan/Pegawai dari
+              PT/Mitra/Kelompok/Instansi/Sekolah/Universitas
+            </p>
+          </div>
+        </div>
+      </form>
+    );
+  };
+
+  const FormDataRiwayatPekerjaanUser = () => {
+    return (
+      <form
+        onSubmit={(e) => handleRegistrasiAkun(e)}
+        autoComplete="off"
+        className={`${indexFormTab == 2 ? "block" : "hidden"}`}
       >
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
@@ -492,7 +602,7 @@ function FormPelatihan() {
       <form
         onSubmit={(e) => handleRegistrasiAkun(e)}
         autoComplete="off"
-        className={`${indexFormTab == 3 ? "block" : "hidden"}`}
+        className={`${indexFormTab == 4 ? "block" : "hidden"}`}
       >
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
@@ -590,10 +700,15 @@ function FormPelatihan() {
                 </div>
               ) : indexFormTab == 1 ? (
                 <h2 className="font-bold text-2xl leading-[100%] my-6 md:text-2xl text-black font-calsans flex items-center gap-1">
+                  <HiUserGroup />
+                  <span className="mt-2">Peserta Pelatihan</span>
+                </h2>
+              ) : indexFormTab == 2 ? (
+                <h2 className="font-bold text-2xl leading-[100%] my-6 md:text-2xl text-black font-calsans flex items-center gap-1">
                   <TbFileStack />
                   <span className="mt-2">Sertifikat</span>
                 </h2>
-              ) : indexFormTab == 2 ? (
+              ) : indexFormTab == 3 ? (
                 <h2 className="font-bold text-2xl leading-[100%] my-6 md:text-2xl text-black font-calsans flex items-center gap-1">
                   <BiBed />
                   <span className="mt-1">Fasilitas Penginapan</span>
@@ -618,18 +733,23 @@ function FormPelatihan() {
                   <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
                     3
                   </span>
-                ) : (
+                ) : indexFormTab == 3 ? (
                   <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
                     4
                   </span>
+                ) : (
+                  <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                    5
+                  </span>
                 )}{" "}
-                of 4
+                of 5
               </p>
             </div>
             <div className="flex w-full -mt-2 mb-4">
-              <Progress value={(indexFormTab + 1) * 25} max={4} />
+              <Progress value={(indexFormTab + 1) * 20} max={100} />
             </div>
             <FormDataPelatihan />
+            <FormPesertaPelatihan />
             <FormDataAlamatUser />
             <FormDataRiwayatPekerjaanUser />
             <FormPemberkasanUser />
@@ -647,7 +767,7 @@ function FormPelatihan() {
                 </button>
               </div>
               <div
-                className={`w-full ${indexFormTab == 3 ? "hidden" : "block"}`}
+                className={`w-full ${indexFormTab == 4 ? "hidden" : "block"}`}
               >
                 <button
                   type="submit"
