@@ -36,6 +36,10 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { MdOutlineFastfood, MdWorkOutline } from "react-icons/md";
 import { Editor } from "@tinymce/tinymce-react";
+import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
+import { Checkbox } from "@/components/ui/checkbox";
+
+type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 function FormPelatihan() {
   const router = useRouter();
@@ -46,6 +50,10 @@ function FormPelatihan() {
   const [phoneNumber, setPhoneNumber] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
+
+  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true);
+  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false);
+  const [showPanel, setShowPanel] = React.useState<Checked>(false);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -121,7 +129,7 @@ function FormPelatihan() {
               <input
                 id="name"
                 type="text"
-                className="form-input w-full text-black border-gray-600"
+                className="form-input w-full text-black border-gray-300 rounded-md"
                 placeholder="Masukkan kode pelatihan"
                 required
               />
@@ -138,10 +146,51 @@ function FormPelatihan() {
               <input
                 id="name"
                 type="text"
-                className="form-input w-full text-black border-gray-600"
+                className="form-input w-full text-black border-gray-300 rounded-md"
                 placeholder="Masukkan judul pelatihan"
                 required
               />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex gap-2 w-full">
+          <div className="flex flex-wrap -mx-3 mb-1 w-full">
+            <div className="w-full px-3">
+              <label
+                className="block text-gray-800 text-sm font-medium mb-1"
+                htmlFor="name"
+              >
+                Penyelenggara Pelatihan <span className="text-red-600">*</span>
+              </label>
+              <input
+                id="name"
+                type="text"
+                className="form-input w-full text-black border-gray-300 rounded-md"
+                placeholder="BPPP Tegal"
+                required
+                readOnly
+              />
+            </div>
+          </div>
+          <div className="flex flex-wrap -mx-3 mb-1 w-full">
+            <div className="w-full px-3">
+              <label
+                className="block text-gray-800 text-sm font-medium mb-1"
+                htmlFor="name"
+              >
+                Jenis Pelatihan <span className="text-red-600">*</span>
+              </label>
+              <Select>
+                <SelectTrigger className="w-full text-base py-5">
+                  <SelectValue placeholder="Pilih jenis pelatihan" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Aspirasi">Aspirasi</SelectItem>
+                  <SelectItem value="PNBP/BLU">PNBP/BLU</SelectItem>
+                  <SelectItem value="Reguler">Reguler</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
@@ -158,7 +207,7 @@ function FormPelatihan() {
               <input
                 id="name"
                 type="text"
-                className="form-input w-full text-black border-gray-600"
+                className="form-input w-full text-black border-gray-300 rounded-md"
                 placeholder="Masukkan lokasi pelatihan"
                 required
               />
@@ -223,7 +272,7 @@ function FormPelatihan() {
                 className="block text-gray-800 text-sm font-medium mb-1"
                 htmlFor="email"
               >
-                Dukungan Program Terobosan{" "}
+                Dukungan Program Prioritas{" "}
                 <span className="text-red-600">*</span>
               </label>
               <Select>
@@ -231,14 +280,36 @@ function FormPelatihan() {
                   <SelectValue placeholder="Pilih dukungan program" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Online">Online</SelectItem>
-                  <SelectItem value="Offline/Klasikal">Klasikal</SelectItem>
-                  <SelectItem value="Online+Offline/Blended">
-                    Blended
+                  <SelectItem value="Non Terobosan">Non Terobosan</SelectItem>
+                  <SelectItem value="Offline/Klasikal">Konservasi</SelectItem>
+                  <SelectItem value="PIT">PIT</SelectItem>
+                  <SelectItem value="Kalaju/Kalamo">Kalaju/Kalamo</SelectItem>
+                  <SelectItem value="Budidaya">Budidaya</SelectItem>
+                  <SelectItem value="Pengawasan Pesisir">
+                    Pengawasan Pesisir
                   </SelectItem>
+                  <SelectItem value="BCL">BCL</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap mb-1 w-full">
+          <div className="w-full">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-1"
+              htmlFor="name"
+            >
+              Harga Pelatihan <span className="text-red-600">*</span>
+            </label>
+            <input
+              id="name"
+              type="number"
+              className="form-input w-full text-black border-gray-300 rounded-md"
+              placeholder="Rp"
+              required
+            />
           </div>
         </div>
 
@@ -282,7 +353,7 @@ function FormPelatihan() {
       <form
         onSubmit={(e) => handleRegistrasiAkun(e)}
         autoComplete="off"
-        className={`${indexFormTab == 1 ? "block" : "hidden"}`}
+        className={`${indexFormTab == 2 ? "block" : "hidden"}`}
       >
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
@@ -290,15 +361,17 @@ function FormPelatihan() {
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              Provinsi <span className="text-red-600">*</span>
+              Sediakan Fasilitas Penginapan{" "}
+              <span className="text-red-600">*</span>
             </label>
             <Select>
               <SelectTrigger className="w-full text-base py-6">
-                <SelectValue placeholder="Pilih provinsi" />
+                <SelectValue placeholder="Sediakan fasilitas" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Jakarta">DKI Jakarta</SelectItem>
-                <SelectItem value="Jawa Tengah">Jawa Tengah</SelectItem>
+                <SelectItem value="Ya">Ya</SelectItem>
+                <SelectItem value="Tidak">Tidak</SelectItem>
+                <SelectItem value="Gratis">Gratis</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -309,128 +382,33 @@ function FormPelatihan() {
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              Kabupaten/Kota <span className="text-red-600">*</span>
+              Pilih Paket Fasilitas Penginapan{" "}
+              <span className="text-red-600">*</span>
             </label>
-            <Select>
-              <SelectTrigger className="w-full text-base py-6">
-                <SelectValue placeholder="Pilih kabupaten/kota" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Jakarta Utara">Jakarta Utara</SelectItem>
-                <SelectItem value="Jakarta Timur">Jakarta Timur</SelectItem>
-                <SelectItem value="Jakarta Selatan">Jakarta Selatan</SelectItem>
-                <SelectItem value="Jakarta Barat">Jakarta Barat</SelectItem>
-                <SelectItem value="Jakarta Pusat">Jakarta Pusat</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              Kecamatan <span className="text-red-600">*</span>
-            </label>
-            <Select>
-              <SelectTrigger className="w-full text-base py-6">
-                <SelectValue placeholder="Pilih kecamatan" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Menteng">Menteng</SelectItem>
-                <SelectItem value="Gambir">Gambir</SelectItem>
-                <SelectItem value="Glodok">Glodok</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              Desa <span className="text-red-600">*</span>
-            </label>
-            <input
-              id="phone number"
-              type="text"
-              className="form-input w-full text-black border-gray-600"
-              placeholder="Masukkan desa"
-              required
-            />
-          </div>
-        </div>
-        <div className="flex gap-2">
-          <div className="flex flex-wrap -mx-3 mb-1">
-            <div className="w-full px-3">
-              <label
-                className="block text-gray-800 text-sm font-medium mb-1"
-                htmlFor="email"
-              >
-                RT <span className="text-red-600">*</span>
-              </label>
-              <input
-                id="phone number"
-                type="text"
-                className="form-input w-full text-black border-gray-600"
-                placeholder="Masukkan RT"
-                required
-              />
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                <div>
+                  <Checkbox />
+                </div>
+                <div className="space-y-1 leading-none">
+                  <label>Paket Residance Bahari Tipe A Rp. 215.000</label>
+                  <p className="text-xs text-gray-600">
+                    You can manage your mobile notifications in the page.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                <div>
+                  <Checkbox />
+                </div>
+                <div className="space-y-1 leading-none">
+                  <label>Paket Residance Bahari Tipe B Rp. 110.000</label>
+                  <p className="text-xs text-gray-600">
+                    You can manage your mobile notifications in the page.
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="flex flex-wrap -mx-3 mb-1">
-            <div className="w-full px-3">
-              <label
-                className="block text-gray-800 text-sm font-medium mb-1"
-                htmlFor="email"
-              >
-                RW <span className="text-red-600">*</span>
-              </label>
-              <input
-                id="phone number"
-                type="text"
-                className="form-input w-full text-black border-gray-600"
-                placeholder="Masukkan RW"
-                required
-              />
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              Alamat Domisili <span className="text-red-600">*</span>
-            </label>
-            <textarea
-              id="phone number"
-              rows={4}
-              className="form-input w-full text-black border-gray-600"
-              placeholder="Masukkan alamat domisili"
-              required
-            />
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              Kode Pos <span className="text-red-600">*</span>
-            </label>
-            <input
-              id="phone number"
-              type="text"
-              className="form-input w-full text-black border-gray-600"
-              placeholder="Masukkan Kode Pos"
-              required
-            />
           </div>
         </div>
       </form>
@@ -442,7 +420,7 @@ function FormPelatihan() {
       <form
         onSubmit={(e) => handleRegistrasiAkun(e)}
         autoComplete="off"
-        className={`${indexFormTab == 2 ? "block" : "hidden"}`}
+        className={`${indexFormTab == 1 ? "block" : "hidden"}`}
       >
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
@@ -450,57 +428,20 @@ function FormPelatihan() {
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              Nama Perusahaan Tempat Kerja/Kelompok{" "}
-              <span className="text-red-600">*</span> <br />
-              <span className="text-gray-500">Jika tidak ada isi (-)</span>
-            </label>
-            <input
-              id="phone number"
-              type="text"
-              className="form-input w-full text-black border-gray-600"
-              placeholder="Masukkan Nama Perusahaan/Tempat Kerja"
-              required
-            />
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              Lokasi Perusahaan Tempat Kerja/Kelompok{" "}
-              <span className="text-red-600">*</span> <br />
-              <span className="text-gray-500">Jika tidak ada isi (-)</span>
-            </label>
-            <input
-              id="phone number"
-              type="text"
-              className="form-input w-full text-black border-gray-600"
-              placeholder="Masukkan Lokasi Perusahaan/Tempat Kerja"
-              required
-            />
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              Jenis Usaha <span className="text-red-600">*</span>
-              <br />
-              <span className="text-gray-500">Jika tidak ada isi Lainnya</span>
+              Asal Sertifikat <span className="text-red-600">*</span>
             </label>
             <Select>
               <SelectTrigger className="w-full text-base py-6">
-                <SelectValue placeholder="Pilih Jenis Usaha" />
+                <SelectValue placeholder="Pilih asal sertifikat" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Budidaya">Budidaya</SelectItem>
-                <SelectItem value="Penangkapan">Penangkapan</SelectItem>
-                <SelectItem value="Pengolahan">Pengolahan</SelectItem>
-                <SelectItem value="Lainnya">Lainnya</SelectItem>
+                <SelectItem value="Jawa Tengah">
+                  Badan Pengembangan dan Penyuluhan Sumber Daya Manusia,
+                  Kementerian Kelautan dan Perikanan
+                </SelectItem>
+                <SelectItem value="Jakarta">
+                  Direktorat Jendral Perhubungan Laut, Kementerian Perhubungan
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -511,19 +452,17 @@ function FormPelatihan() {
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              Kapasitas Produksi <span className="text-red-600">*</span>
-              <br />
-              <span className="text-gray-500">
-                Isi dalam satuan KG, Jika tidak ada isi (0)
-              </span>
+              Tanda Tangan Sertifikat <span className="text-red-600">*</span>
             </label>
-            <input
-              id="phone number"
-              type="number"
-              className="form-input w-full text-black border-gray-600"
-              placeholder="Masukkan kapasitas produksi"
-              required
-            />
+            <Select>
+              <SelectTrigger className="w-full text-base py-6">
+                <SelectValue placeholder="Pilih tanda tangan sertifikat" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Kepala BPPSDM">Kepala BPPSDM</SelectItem>
+                <SelectItem value="Kepala Balai">Kepala Balai</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-1">
@@ -532,57 +471,16 @@ function FormPelatihan() {
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              Gaji <span className="text-red-600">*</span> <br />
-              <span className="text-gray-500">Jika tidak ada isi (-)</span>
-            </label>
-            <input
-              id="phone number"
-              type="number"
-              className="form-input w-full text-black border-gray-600"
-              placeholder="Masukkan gaji"
-              required
-            />
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              Nama Kapal <span className="text-red-600">*</span> <br />
-              <span className="text-gray-500">Jika tidak ada isi (-)</span>
+              No Sertifikat <span className="text-red-600">*</span>
             </label>
             <input
               id="phone number"
               type="text"
-              className="form-input w-full text-black border-gray-600"
-              placeholder="Masukkan nama kapal"
+              className="form-input w-full text-black border-gray-300 rounded-md"
+              placeholder="B.494/BPPP.TGL/RDSM.510/I/2024/XXXPESERTA"
               required
+              readOnly
             />
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              Jenis Alat Tangkap <span className="text-red-600">*</span>
-              <br />
-              <span className="text-gray-500">Jika tidak ada isi Lainnya</span>
-            </label>
-            <Select>
-              <SelectTrigger className="w-full text-base py-6">
-                <SelectValue placeholder="Pilih Jenis Usaha" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Pancing">Pancing</SelectItem>
-                <SelectItem value="Jaring">Jaring</SelectItem>
-                <SelectItem value="Perangkap">Perangkap</SelectItem>
-                <SelectItem value="Lainnya">Lainnya</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
         </div>
       </form>
@@ -597,88 +495,73 @@ function FormPelatihan() {
         className={`${indexFormTab == 3 ? "block" : "hidden"}`}
       >
         <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3 ">
+          <div className="w-full px-3">
             <label
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              File Surat Kesehatan <span className="text-red-600">*</span>
-              <br />
-              <span className="text-gray-600">
-                Anda wajib mengisi dokumen ini karena mempunya surat kesehatan
-              </span>
+              Sediakan Paket Konsumsi <span className="text-red-600">*</span>
             </label>
-            <Input
-              id="phone number"
-              type="file"
-              className="w-full text-black"
-              placeholder="Masukkan desa"
-              required
-            />
+            <Select>
+              <SelectTrigger className="w-full text-base py-6">
+                <SelectValue placeholder="Sediakan paket konsumsi" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Ya">Ya</SelectItem>
+                <SelectItem value="Tidak">Tidak</SelectItem>
+                <SelectItem value="Gratis">Gratis</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
-
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3 ">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              File KTP <span className="text-red-600">*</span>
-            </label>
-            <Input
-              id="phone number"
-              type="file"
-              className="w-full text-black"
-              placeholder="Masukkan desa"
-              required
-            />
-          </div>
-        </div>
-
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
             <label
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              File Kartu Keluarga <span className="text-red-600">*</span>
+              Pilih Paket Konsumsi <span className="text-red-600">*</span>
             </label>
-            <Input
-              id="phone number"
-              type="file"
-              className="w-full text-black"
-              placeholder="Masukkan desa"
-              required
-            />
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                <div>
+                  <Checkbox />
+                </div>
+                <div className="space-y-1 leading-none">
+                  <label>
+                    (Menginap) Full Pack 1x Makan & 3x Snack Rp. 110.000
+                  </label>
+                  <p className="text-xs text-gray-600">
+                    You can manage your mobile notifications in the page.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                <div>
+                  <Checkbox />
+                </div>
+                <div className="space-y-1 leading-none">
+                  <label>
+                    (Tidak Mengginap) Full Pack 1x Makan & 1x Snack Rp. 60.000
+                  </label>
+                  <p className="text-xs text-gray-600">
+                    You can manage your mobile notifications in the page.
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                <div>
+                  <Checkbox />
+                </div>
+                <div className="space-y-1 leading-none">
+                  <label>Only Snack 2x Snack Rp. 60.000</label>
+                  <p className="text-xs text-gray-600">
+                    You can manage your mobile notifications in the page.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3 ">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              Ijazah <span className="text-red-600">*</span>
-            </label>
-            <Input
-              id="phone number"
-              type="file"
-              className="w-full text-black h-10 text-base flex items-center"
-              placeholder="Masukkan desa"
-              required
-            />
-          </div>
-        </div>
-
-        <div className="text-sm text-gray-800 text-left mt-3">
-          Demi alasan keamanan maka Anda wajib mengisi foto/file
-          <span className="underline text-blue-500 font-medium">
-            {" "}
-            KTP, KK, Akta, Ijazah
-          </span>{" "}
-          untuk memvalidasi kepemilikan KTP.
         </div>
       </form>
     );
@@ -708,7 +591,7 @@ function FormPelatihan() {
               ) : indexFormTab == 1 ? (
                 <h2 className="font-bold text-2xl leading-[100%] my-6 md:text-2xl text-black font-calsans flex items-center gap-1">
                   <TbFileStack />
-                  <span className="mt-2">Administrasi</span>
+                  <span className="mt-2">Sertifikat</span>
                 </h2>
               ) : indexFormTab == 2 ? (
                 <h2 className="font-bold text-2xl leading-[100%] my-6 md:text-2xl text-black font-calsans flex items-center gap-1">
@@ -777,57 +660,6 @@ function FormPelatihan() {
                   Selanjutnya
                 </button>
               </div>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <div
-                    className={`w-full ${
-                      indexFormTab == 3 ? "block" : "hidden"
-                    }`}
-                  >
-                    <button
-                      type="submit"
-                      className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
-                    >
-                      Upload
-                    </button>
-                  </div>
-                </AlertDialogTrigger>
-                <AlertDialogContent className="rounded-lg">
-                  <AlertDialogHeader className="flex items-center">
-                    <AlertDialogTitle className="text-2xl">
-                      Apakah anda yakin?
-                    </AlertDialogTitle>
-                    <Image
-                      className="w-[40%] py-4 animate-float"
-                      src={"/illustrations/doubt.png"}
-                      width={0}
-                      height={0}
-                      alt="Apakah anda yakin?"
-                    />
-                    <AlertDialogDescription className="text-base leading-[130%]">
-                      Pastikan data anda terisi dengan sesuai dan berkas yang
-                      diupload valid dan bener sesuai identitas diri!
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className=" py-6 text-base">
-                      Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                      className="bg-blue-500 py-6 text-base"
-                      onClick={(e) => {
-                        Toast.fire({
-                          icon: "success",
-                          title: `Berhasil melengkapi data diri & berkas!`,
-                        });
-                        router.push("/pelatihan");
-                      }}
-                    >
-                      Upload
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
             </div>
           </div>
         </div>

@@ -6,6 +6,7 @@ import Newsletter from "@/components/newsletter";
 import TrainingTypeSection from "@/components/trainingTypeSection";
 import FeatureCertificates from "@/components/features-certificates";
 import FeaturesASN from "@/components/features-asn";
+import PelatihanAspirasi from "@/components/pelatihan-aspirasi";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <Hero />
       <TrainingTypeSection />
       <Features />
+      <PelatihanAspirasi />
       <FeatureCertificates />
       {/* <FeaturesASN /> */}
     </>

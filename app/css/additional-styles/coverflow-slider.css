@@ -65,6 +65,7 @@
 .swiper-slide {
   font-size: 18px;
   background: #fff;
+  border-radius: 1.5rem;
 
   /* Center slide text vertically */
   display: flex;

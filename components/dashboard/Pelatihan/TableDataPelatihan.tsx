@@ -43,6 +43,7 @@ import {
 import { useRouter } from "next/navigation";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
+import Toast from "@/components/toast";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -373,7 +374,13 @@ const TableDataPelatihan: React.FC = () => {
             {/* Button Ajukan Permohonan Buka Pelatihan */}
             <div className="flex w-full gap-2 justify-end">
               <div
-                onClick={(e) => setShowFormAjukanPelatihan(true)}
+                onClick={(e) => {
+                  Toast.fire({
+                    icon: "success",
+                    title: `Berhasil membuat pelatihan baru!`,
+                  });
+                  setShowFormAjukanPelatihan(!showFormAjukanPelatihan);
+                }}
                 className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
               >
                 <MdOutlineSaveAlt />
