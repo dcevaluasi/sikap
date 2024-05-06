@@ -11,6 +11,13 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -39,7 +46,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
-import { MdOutlineSaveAlt } from "react-icons/md";
+import { MdOutlineFileUpload, MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
@@ -458,7 +465,7 @@ const TableDataPengajuanPelatihan: React.FC = () => {
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-primary">Total Pelatihan</p>
+                  <p className="font-semibold text-primary">Total Pengajuan</p>
                   <p className="text-sm font-medium">1 pelatihan</p>
                 </div>
               </div>
@@ -577,13 +584,106 @@ const TableDataPengajuanPelatihan: React.FC = () => {
 
             {/* Button Ajukan Permohonan Buka Pelatihan */}
             <div className="flex w-full gap-2 justify-end">
-              <div
-                onClick={(e) => setShowFormAjukanPelatihan(true)}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
-              >
-                <FiUploadCloud />
-                Ajukan Pelatihan
-              </div>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                    <FiUploadCloud />
+                    Ajukan Pelatihan
+                  </div>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Ajukan pelatihan ke pusat
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="-mt-2">
+                      Dalam penyelenggaran pelatihan, diharapkan dapat
+                      mengajukan pelatihan yang sudah dibuat dan dikumpulkan
+                      pesertanya ke Pusat Pelatihan KP untuk dilakukan approval!
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <form autoComplete="off">
+                    <div className="flex flex-wrap mb-1 w-full">
+                      <div className="w-full">
+                        <label
+                          className="block text-gray-800 text-sm font-medium mb-1"
+                          htmlFor="name"
+                        >
+                          Pelatihan Tersedia{" "}
+                          <span className="text-red-600">*</span>
+                        </label>
+                        <Select>
+                          <SelectTrigger className="w-full text-base py-6">
+                            <SelectValue placeholder="Pilih pelatihan yang diajukan" />
+                          </SelectTrigger>
+                          <SelectContent className="w-fit">
+                            <SelectItem
+                              className="w-[450px]"
+                              value="Jawa Tengah"
+                            >
+                              Badan Pengembangan dan Penyuluhan Sumber Daya
+                              Manusia, Kementerian Kelautan dan Perikanan
+                            </SelectItem>
+                            <SelectItem className="w-[450px]" value="Jakarta">
+                              Direktorat Jendral Perhubungan Laut, Kementerian
+                              Perhubungan
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 space-y-2">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Surat Pemberitahuna ke Pusat{" "}
+                        <span className="text-red-600">*</span>
+                      </label>
+                      <div className="flex items-center justify-center w-full">
+                        <label className="flex flex-col rounded-lg border-4 border-dashed w-full h-40 p-10 group text-center">
+                          <div className="h-full w-full text-center flex flex-col items-center justify-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                              />
+                            </svg>
+                            <p className="pointer-none text-gray-500 text-sm">
+                              <span className="text-sm">Drag and drop</span>{" "}
+                              files here <br /> or{" "}
+                              <a
+                                href=""
+                                id=""
+                                className="text-blue-600 hover:underline"
+                              >
+                                select a file
+                              </a>{" "}
+                              from your computer
+                            </p>
+                          </div>
+                          <input type="file" className="hidden" />
+                        </label>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-300">
+                      <span>File type: doc,pdf,types of images</span>
+                    </p>
+                  </form>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>Continue</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
 
