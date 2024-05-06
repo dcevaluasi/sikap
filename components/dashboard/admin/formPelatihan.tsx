@@ -532,30 +532,57 @@ function FormPelatihan() {
         autoComplete="off"
         className={`${indexFormTab == 2 ? "block" : "hidden"}`}
       >
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
+        <div className="w-full gap-1 flex">
+          <div className="flex flex-wrap -mx-3 mb-1 w-full">
+            <div className="w-full px-3">
+              <label
+                className="block text-gray-800 text-sm font-medium mb-1"
+                htmlFor="email"
+              >
+                Asal Sertifikat <span className="text-red-600">*</span>
+              </label>
+              <Select>
+                <SelectTrigger className="w-full text-base py-6">
+                  <SelectValue placeholder="Pilih asal sertifikat" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Jawa Tengah">
+                    Badan Pengembangan dan Penyuluhan Sumber Daya Manusia,
+                    Kementerian Kelautan dan Perikanan
+                  </SelectItem>
+                  <SelectItem value="Jakarta">
+                    Direktorat Jendral Perhubungan Laut, Kementerian Perhubungan
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="w-full">
             <label
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              Asal Sertifikat <span className="text-red-600">*</span>
+              Jenis Sertifikat <span className="text-red-600">*</span>
             </label>
             <Select>
               <SelectTrigger className="w-full text-base py-6">
-                <SelectValue placeholder="Pilih asal sertifikat" />
+                <SelectValue placeholder="Pilih jenis sertifikat" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Jawa Tengah">
-                  Badan Pengembangan dan Penyuluhan Sumber Daya Manusia,
-                  Kementerian Kelautan dan Perikanan
+                  Sertifikat Pelatihan Teknis
                 </SelectItem>
                 <SelectItem value="Jakarta">
-                  Direktorat Jendral Perhubungan Laut, Kementerian Perhubungan
+                  Sertifikat Pelatihan Umum
+                </SelectItem>
+                <SelectItem value="Jakarta">
+                  Sertifikat Pelatihan Kepelautan
                 </SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
+
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
             <label

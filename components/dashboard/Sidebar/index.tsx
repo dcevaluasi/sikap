@@ -230,7 +230,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 "text-white"
                               }`}
                             >
-                              Database Pelatihan
+                              • Database Pelatihan
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/admin/lemdiklat/pelatihan/ajukan-pelatihan"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname ===
+                                  "/admin/lemdiklat/pelatihan/ajukan-pelatihan" &&
+                                "text-white"
+                              }`}
+                            >
+                              • Ajukan Pelatihan ke Pusat
                             </Link>
                           </li>
                           <li>
@@ -241,7 +253,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 "text-white"
                               }`}
                             >
-                              Database Peserta Pelatihan
+                              • Database Peserta Pelatihan
                             </Link>
                           </li>
                         </ul>
@@ -393,13 +405,26 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                           <li>
                             <Link
-                              href="/forms/form-elements"
+                              href="/admin/lemdiklat/fasilitas/penginapan"
                               className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/forms/form-elements" &&
+                                pathname ===
+                                  "/admin/lemdiklat/fasilitas/penginapan" &&
                                 "text-white"
                               }`}
                             >
-                              Fasilitas Penginapan
+                              • Fasilitas Penginapan
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              href="/admin/lemdiklat/fasilitas/konsumsi"
+                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                pathname ===
+                                  "/admin/lemdiklat/fasilitas/konsumsi" &&
+                                "text-white"
+                              }`}
+                            >
+                              • Fasilitas Konsumsi
                             </Link>
                           </li>
                           <li>
@@ -410,18 +435,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 "text-white"
                               }`}
                             >
-                              Fasilitas Peralatan dll
-                            </Link>
-                          </li>
-                          <li>
-                            <Link
-                              href="/forms/form-elements"
-                              className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                pathname === "/forms/form-elements" &&
-                                "text-white"
-                              }`}
-                            >
-                              Fasilitas Konsumsi
+                              • Fasilitas Peralatan dll
                             </Link>
                           </li>
                         </ul>

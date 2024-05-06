@@ -204,7 +204,8 @@ const TableDataPesertaPelatihan: React.FC = () => {
               variant="outline"
               className="border border-gray-600 text-gray-600"
             >
-              <TbFileCertificate className="h-4 w-4" /> <span>Generate</span>
+              <TbFileCertificate className="h-4 w-4" />{" "}
+              <span>Lihat Sertifikat</span>
             </Button>
           </div>
         </DialogSertifikat>
@@ -431,7 +432,7 @@ const TableDataPesertaPelatihan: React.FC = () => {
                 className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
               >
                 <FiUploadCloud />
-                Tambah Database Pelatihan
+                Tambah Peserta Pelatihan
               </div>
             </div>
           </div>

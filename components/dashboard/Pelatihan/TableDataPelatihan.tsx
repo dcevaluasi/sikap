@@ -3,6 +3,16 @@ import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import TableData from "../Tables/TableData";
 import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -13,10 +23,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Edit3Icon, Trash, X } from "lucide-react";
+import { ArrowUpDown, Edit3Icon, LucidePrinter, Trash, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
-import { TbBroadcast, TbTargetArrow } from "react-icons/tb";
+import { TbBroadcast, TbFileCertificate, TbTargetArrow } from "react-icons/tb";
 import { IoIosInformationCircle } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
 import {
@@ -45,9 +55,18 @@ import { useRouter } from "next/navigation";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
+import SertifikatPage1 from "@/components/sertifikat/sertifikatPage1";
+import SertifikatPage2 from "@/components/sertifikat/sertifikatPage2";
+import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
+import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
+import { PiStampLight } from "react-icons/pi";
+import { Label } from "@/components/ui/label";
+import Image from "next/image";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
+    React.useState<boolean>(false);
+  const [showCertificateSetting, setShowCertificateSetting] =
     React.useState<boolean>(false);
 
   type Pelatihan = {
@@ -208,6 +227,13 @@ const TableDataPelatihan: React.FC = () => {
           >
             <TbBroadcast className="h-4 w-4 text-purple-600" />
           </Button>
+          <Button
+            onClick={(e) => setShowCertificateSetting(!showCertificateSetting)}
+            variant="outline"
+            className="ml-auto border border-gray-600"
+          >
+            <TbFileCertificate className="h-4 w-4 text-gray-600" />
+          </Button>
         </div>
       ),
     },
@@ -303,6 +329,28 @@ const TableDataPelatihan: React.FC = () => {
       cell: ({ row }) => (
         <div className="text-center uppercase">
           {row.getValue("KuotaPeserta")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "KuotaPeserta",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Jumlah Peserta Lulus
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="text-center uppercase">
+          <span className="text-green-500 font-semibold">
+            {row.getValue("KuotaPeserta")}
+          </span>
+          /{row.getValue("KuotaPeserta")}
         </div>
       ),
     },
@@ -413,6 +461,106 @@ const TableDataPelatihan: React.FC = () => {
           {/* List Data Pelatihan */}
           <div>
             <FormPelatihan />
+          </div>
+        </>
+      ) : showCertificateSetting ? (
+        <>
+          {/* Header Tabel Data Pelatihan */}
+          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
+            {/* Statistik Pelatihan */}
+            <div className="hidden w-full flex-wrap gap-3 sm:gap-5">
+              <div className="flex min-w-47.5">
+                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
+                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
+                </span>
+                <div className="w-full">
+                  <p className="font-semibold text-primary">Total Pelatihan</p>
+                  <p className="text-sm font-medium">1 pelatihan</p>
+                </div>
+              </div>
+              <div className="flex min-w-47.5">
+                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
+                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
+                </span>
+                <div className="w-full">
+                  <p className="font-semibold text-secondary">
+                    Total Publish Umum
+                  </p>
+                  <p className="text-sm font-medium">1 pelatihan</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Button Ajukan Permohonan Buka Pelatihan */}
+            <div className="flex w-full gap-2 justify-end">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                    <PiStampLight />
+                    Add Stempel
+                  </div>
+                </SheetTrigger>
+                <SheetContent>
+                  <SheetHeader>
+                    <div className="flex flex-row items-center gap-2">
+                      {/* <Image
+                        src={"/logo-kkp.png"}
+                        width={0}
+                        height={0}
+                        alt="KKP Logo"
+                        className="w-12 h-12"
+                      /> */}
+                      <div className="flex flex-col gap-1">
+                        <SheetTitle>Pilih Stempel</SheetTitle>
+                        <SheetDescription>
+                          Pilih stempel tanda tangan elektronik yang ingin anda
+                          taukan ke file sertifikat yang akan digenerate!
+                        </SheetDescription>
+                      </div>
+                    </div>
+                  </SheetHeader>
+                  <div className="w-full mt-5 mb-10">
+                    <div className="w-full border-2 rounded-md hover:cursor-pointer hover:border-blue-500 duration-700 flex items-center flex-col px-3 py-5 text-center justify-center border-dashed">
+                      <p className="-mt-1 text-sm">
+                        Kepala Balai Pelatihan dan Penyuluhan Perikanan
+                        Banyuwangi
+                      </p>
+                      <Image
+                        className="w-[200px] my-3"
+                        width={0}
+                        height={0}
+                        alt="Logo Kementrian Kelautan dan Perikanan RI"
+                        src={"/ttd-elektronik.png"}
+                      />
+                      <p className="-mt-1 font-extrabold text-sm">
+                        MOCH. MUCHLISIN, A.Pi, M.P
+                      </p>
+                      <p className="font-extrabold text-sm -mt-1">
+                        NIP. 197509161999031003
+                      </p>
+                    </div>
+                  </div>
+                  <SheetFooter>
+                    <SheetClose asChild>
+                      <Button type="submit">Sematkan Stempel</Button>
+                    </SheetClose>
+                  </SheetFooter>
+                </SheetContent>
+              </Sheet>
+
+              <div
+                onClick={(e) => setShowFormAjukanPelatihan(true)}
+                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+              >
+                <TbFileCertificate />
+                Generate Sertifikat Peserta
+              </div>
+            </div>
+          </div>
+
+          <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
+            <SertifikatSettingPage1 />
+            <SertifikatSettingPage2 />
           </div>
         </>
       ) : (
