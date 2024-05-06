@@ -47,7 +47,7 @@ import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPag
 import { PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 
-const TableDataPelatihan: React.FC = () => {
+const TableDataPengajuanPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
   const [showCertificateSetting, setShowCertificateSetting] =
@@ -582,7 +582,7 @@ const TableDataPelatihan: React.FC = () => {
                 className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
               >
                 <FiUploadCloud />
-                Tambah Database Pelatihan
+                Ajukan Pelatihan
               </div>
             </div>
           </div>
@@ -603,4 +603,4 @@ const TableDataPelatihan: React.FC = () => {
   );
 };
 
-export default TableDataPelatihan;
+export default TableDataPengajuanPelatihan;

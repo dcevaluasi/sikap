@@ -81,7 +81,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <div className="flex mt-3 flex-col gap-1 w-full items-center justify-center">
             <p className="font-bold text-4xl text-white">E-LAUT</p>
             <p className="font-medium text-white text-sm text-center">
-              Elektronik Layanan Pelatihan Umum Terpadu BPPSDM KP
+              Elektronik Layanan Pelatihan Kelautan dan Perikanan Terpadu BPPSDM
+              KP
             </p>
           </div>
         </Link>

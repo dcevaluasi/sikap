@@ -1,7 +1,6 @@
 "use client";
+
 import React from "react";
-import CardDataStats from "../CardDataStats";
-// import MapOne from "../Maps/MapOne";
 import TableDataPelatihan from "../Pelatihan/TableDataPelatihan";
 import { TbSchool } from "react-icons/tb";
 
