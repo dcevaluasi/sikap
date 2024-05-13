@@ -4,12 +4,9 @@ import { useState, useEffect } from "react";
 
 import Link from "next/link";
 import Logo from "./logo";
-import Dropdown from "@/components/utils/dropdown";
 import MobileMenu from "./mobile-menu";
 import { usePathname } from "next/navigation";
 
-import { PiCertificate } from "react-icons/pi";
-import { RiVerifiedBadgeFill } from "react-icons/ri";
 
 import {
   Popover,

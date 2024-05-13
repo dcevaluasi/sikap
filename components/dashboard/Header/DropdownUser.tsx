@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const pathname = usePathname();
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
@@ -44,9 +46,15 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Bagja Lazwardi
+            {pathname.includes("lemdiklat")
+              ? " Bagja Lazwardi"
+              : "Farhan Augustiansyah"}
           </span>
-          <span className="block text-xs">BPPP Tegal</span>
+          <span className="block text-xs">
+            {pathname.includes("lemdiklat")
+              ? " BPPP Tegal"
+              : "Pusat Pelatihan KP"}
+          </span>
         </span>
 
         <span className="h-12 w-12 rounded-full">

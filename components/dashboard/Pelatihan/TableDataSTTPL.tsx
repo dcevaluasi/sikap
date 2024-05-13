@@ -38,7 +38,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
@@ -47,12 +47,23 @@ import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPag
 import { PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Link from "next/link";
+import { Checkbox } from "@/components/ui/checkbox";
 
-const TableDataPelatihan: React.FC = () => {
+const TableDataSTTPL: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
   const [showCertificateSetting, setShowCertificateSetting] =
     React.useState<boolean>(false);
+
+  const pathname = usePathname();
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   type Pelatihan = {
@@ -88,6 +99,7 @@ const TableDataPelatihan: React.FC = () => {
   };
 
   const [data, setData] = React.useState<Pelatihan[]>([]);
+  const [pelatihan, setPelatihan] = React.useState<Pelatihan[]>([]);
 
   const handleFetchingPublicTrainingData = async () => {
     try {
@@ -96,6 +108,7 @@ const TableDataPelatihan: React.FC = () => {
       );
       console.log({ response });
       setData(response.data.data);
+      setPelatihan(response.data.data);
     } catch (error) {
       console.error("Error posting training data:", error);
       throw error;
@@ -150,36 +163,95 @@ const TableDataPelatihan: React.FC = () => {
             <IoIosInformationCircle className="h-4 w-4" />
           </Button>
 
+          {pathname.includes("lemdiklat") && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="ml-auto border border-rose-600"
+                >
+                  <Trash className="h-4 w-4 text-rose-600" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
+
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
                 variant="outline"
-                className="ml-auto border border-rose-600"
+                className="ml-auto border border-yellow-500"
               >
-                <Trash className="h-4 w-4 text-rose-600" />
+                <Edit3Icon className="h-4 w-4 text-yellow-500" />
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                <AlertDialogTitle>Penerbitan STTPL Pelatihan</AlertDialogTitle>
+                <AlertDialogDescription className="-mt-2">
+                  Lakukan approval pemberitahuan penerbitan STTPL yang dilakukan
+                  oleh Balai/Lemdiklat!
                 </AlertDialogDescription>
               </AlertDialogHeader>
+              <form autoComplete="off">
+                <div className="flex flex-wrap  mb-1 w-full">
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="noSertifikat"
+                    >
+                      No Sertifikat <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="noSertifikat"
+                      type="text"
+                      className="form-input w-full text-black border-gray-300 rounded-md"
+                      placeholder="B.45/BPPP.BYW/RSDM.510/I/2024/XXXXX"
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                  <div>
+                    <Checkbox />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>Approve penerbitan STTPL</label>
+                    <p className="text-xs leading-[110%] text-gray-600">
+                      Dengan ini sebagai pihak pusat saya menyetujui pengajuan
+                      penerbitan STTPL oleh balai/lemdiklat.
+                    </p>
+                  </div>
+                </div>
+              </form>
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
+                <AlertDialogAction
+                  onClick={(e) =>
+                    Toast.fire({
+                      icon: "success",
+                      title: `Berhasil mengapprove pengajuan penerbitan STTPL!`,
+                    })
+                  }
+                >
+                  Approve
+                </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-
-          <Button
-            variant="outline"
-            className="ml-auto border border-yellow-500"
-          >
-            <Edit3Icon className="h-4 w-4 text-yellow-500" />
-          </Button>
 
           <Button
             onClick={(e) =>
@@ -194,19 +266,39 @@ const TableDataPelatihan: React.FC = () => {
           >
             <HiUserGroup className="h-4 w-4 text-green-500" />
           </Button>
+
+          {pathname.includes("lemdiklat") && (
+            <Button
+              onClick={(e) =>
+                setShowCertificateSetting(!showCertificateSetting)
+              }
+              variant="outline"
+              className="ml-auto border border-gray-600"
+            >
+              <TbFileCertificate className="h-4 w-4 text-gray-600" />
+            </Button>
+          )}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "NoSertifikat",
+      header: ({ column }) => {
+        return (
           <Button
-            variant="outline"
-            className="ml-auto border border-purple-600"
+            variant="ghost"
+            className={`w-full flex items-center justify-center`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            <TbBroadcast className="h-4 w-4 text-purple-600" />
+            No Sertifikat
+            <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
-          <Button
-            onClick={(e) => setShowCertificateSetting(!showCertificateSetting)}
-            variant="outline"
-            className="ml-auto border border-gray-600"
-          >
-            <TbFileCertificate className="h-4 w-4 text-gray-600" />
-          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`text-center uppercase`}>
+          {/* {row.getValue("NoSertifikat")} */}
+          B.45/BPPP.BYW/RSDM.510/I/2024/XXXXX
         </div>
       ),
     },
@@ -247,8 +339,33 @@ const TableDataPelatihan: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-center capitalize`}>
-          {row.getValue("DiklatPelatihan")}
+          {/* {row.getValue("DiklatPelatihan")} */}
+          Pelatihan Diversifikasi Usaha Produk Perikanan/Rumput Laut Bagi
+          Masyarakat Kabupaten Alor
         </div>
+      ),
+    },
+    {
+      accessorKey: "KodePelatihan",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={`w-full items-center flex justify-center`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Berita Acara
+            <ArrowUpDown className="ml-2 h-4 flex w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <Link
+          href={"https://elaut.kkp.go.id/storage/lj843jkcj0jdlfaaw2200lp.pdf"}
+          className={`text-center underline text-blue-500 w-fit`}
+        >
+          https://elaut.kkp.go.id/storage/lj843jkcj0jdlfaaw2200lp.pdf
+        </Link>
       ),
     },
     {
@@ -279,40 +396,6 @@ const TableDataPelatihan: React.FC = () => {
             variant="ghost"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Jumlah Pendaftar
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => <div className="text-center uppercase">1</div>,
-    },
-    {
-      accessorKey: "KuotaPelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Kuota Peserta
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-center uppercase">
-          {row.getValue("KuotaPelatihan")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "KuotaPeserta",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
             Jumlah Peserta Lulus
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
@@ -324,47 +407,6 @@ const TableDataPelatihan: React.FC = () => {
             {row.getValue("KuotaPeserta")}
           </span>
           /{row.getValue("KuotaPelatihan")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "DenganFasilitasMenginap",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Dengan <br />
-            Fasilitas Menginap
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-center uppercase">
-          {row.getValue("DenganFasilitasMenginap")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "DenganPaketKonsumsi",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Dengan <br /> Paket Konsumsi
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-center uppercase">
-          {row.getValue("DenganPaketKonsumsi")}
         </div>
       ),
     },
@@ -436,8 +478,8 @@ const TableDataPelatihan: React.FC = () => {
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-primary">Total Pelatihan</p>
-                  <p className="text-sm font-medium">1 pelatihan</p>
+                  <p className="font-semibold text-primary">Total Pengajuan</p>
+                  <p className="text-sm font-medium">10 pelatihan</p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -445,9 +487,7 @@ const TableDataPelatihan: React.FC = () => {
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-secondary">
-                    Total Publish Umum
-                  </p>
+                  <p className="font-semibold text-secondary">Total Approved</p>
                   <p className="text-sm font-medium">1 pelatihan</p>
                 </div>
               </div>
@@ -511,7 +551,12 @@ const TableDataPelatihan: React.FC = () => {
               </Sheet>
 
               <div
-                onClick={(e) => setShowFormAjukanPelatihan(true)}
+                onClick={(e) => {
+                  Toast.fire({
+                    icon: "success",
+                    title: `Berhasil mengenerate STTPL peserta pelatihan!`,
+                  });
+                }}
                 className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
               >
                 <TbFileCertificate />
@@ -536,8 +581,8 @@ const TableDataPelatihan: React.FC = () => {
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-primary">Total Pelatihan</p>
-                  <p className="text-sm font-medium">1 pelatihan</p>
+                  <p className="font-semibold text-primary">Total Pengajuan</p>
+                  <p className="text-sm font-medium">10 pelatihan</p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -545,26 +590,167 @@ const TableDataPelatihan: React.FC = () => {
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-secondary">
-                    Total Publish Umum
-                  </p>
+                  <p className="font-semibold text-secondary">Total Approved</p>
                   <p className="text-sm font-medium">1 pelatihan</p>
                 </div>
               </div>
             </div>
 
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-            <div className="flex w-full gap-2 justify-end">
-              <div
-                onClick={(e) => {
-                  router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
-                }}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
-              >
-                <FiUploadCloud />
-                Tambah Database Pelatihan
+            {pathname.includes("lemdiklat") && (
+              <div className="flex w-full gap-2 justify-end">
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                      <FiUploadCloud />
+                      Pemberitahuan Penerbitan STTPL
+                    </div>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Pemberitahuan Penerbitan STTPL ke Pusat
+                      </AlertDialogTitle>
+                      <AlertDialogDescription className="-mt-2">
+                        Dalam penerbitan STTPL, diharapkan dapat memberitahu
+                        nomor sertifikat yang akan diajukan beserta berita acara
+                        ke Pusat Pelatihan KP untuk dilakukan approval!
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <form autoComplete="off">
+                      <div className="flex flex-wrap mb-1 w-full">
+                        <div className="w-full">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="name"
+                          >
+                            Pelatihan Tersedia{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <Select>
+                            <SelectTrigger className="w-full text-base py-6">
+                              <SelectValue placeholder="Pilih pelatihan yang diajukan" />
+                            </SelectTrigger>
+                            <SelectContent className="w-fit">
+                              {pelatihan.map((item: Pelatihan, index) => (
+                                <SelectItem
+                                  className="w-[450px]"
+                                  value={item.NamaPelatihan}
+                                >
+                                  {item.NamaPelatihan}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap  mb-1 w-full">
+                        <div className="w-full">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="noSertifikat"
+                          >
+                            No Sertifikat{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="noSertifikat"
+                            type="text"
+                            className="form-input w-full text-black border-gray-300 rounded-md"
+                            placeholder="B.45/BPPP.BYW/RSDM.510/I/2024/XXXXX"
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap mb-1 w-full">
+                        <div className="w-full">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="name"
+                          >
+                            TTD Sertifikat{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <Select>
+                            <SelectTrigger className="w-full text-base py-6">
+                              <SelectValue placeholder="Pilih pelatihan yang diajukan" />
+                            </SelectTrigger>
+                            <SelectContent className="w-fit">
+                              <SelectItem
+                                className="w-[450px]"
+                                value={"Kepala BPPSDM"}
+                              >
+                                Kepala BPPSDM
+                              </SelectItem>
+                              <SelectItem
+                                className="w-[450px]"
+                                value={"Kepala BPPSDM"}
+                              >
+                                Kepala Balai
+                              </SelectItem>
+                              <SelectItem
+                                className="w-[450px]"
+                                value={"DJPL Kemenhub"}
+                              >
+                                DJPL Kemenhub
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 space-y-2">
+                        <label
+                          className="block text-gray-800 text-sm font-medium mb-1"
+                          htmlFor="name"
+                        >
+                          Berita Acara <span className="text-red-600">*</span>
+                        </label>
+                        <div className="flex items-center justify-center w-full">
+                          <label className="flex flex-col rounded-lg border-2 border-dashed w-full h-40 p-10 group text-center">
+                            <div className="h-full w-full text-center flex flex-col items-center justify-center">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                />
+                              </svg>
+                              <p className="pointer-none text-gray-500 text-sm">
+                                <span className="text-sm">Drag and drop</span>{" "}
+                                files here <br /> or{" "}
+                                <a
+                                  href=""
+                                  id=""
+                                  className="text-blue-600 hover:underline"
+                                >
+                                  select a file
+                                </a>{" "}
+                                from your computer
+                              </p>
+                            </div>
+                            <input type="file" className="hidden" />
+                          </label>
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-300">
+                        <span>File type: doc,pdf,types of images</span>
+                      </p>
+                    </form>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction>Continue</AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
-            </div>
+            )}
           </div>
 
           {/* List Data Pelatihan */}
@@ -583,4 +769,4 @@ const TableDataPelatihan: React.FC = () => {
   );
 };
 
-export default TableDataPelatihan;
+export default TableDataSTTPL;

@@ -15,13 +15,6 @@ export default function Logo() {
         src={"/logo-kkp.png"}
         alt="Kementrian Kelautan dan Perikanan RI Logo"
       />
-      <Image
-        className="w-20 md:w-20"
-        width={0}
-        height={0}
-        src={"/images/logo-bppsdm.png"}
-        alt="BPPSDM Logo"
-      />
     </Link>
   );
 }

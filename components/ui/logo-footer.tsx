@@ -9,7 +9,7 @@ export default function LogoFooter() {
       aria-label="Cruip"
     >
       <Image
-        className="w-16 md:w-16"
+        className="w-16 md:w-20"
         width={0}
         height={0}
         src={"/logo-kkp-white.png"}
