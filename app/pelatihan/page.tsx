@@ -131,7 +131,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: Pelatihan }) => {
       <Image
         className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
         alt=""
-        src={`${addPortToURL(pelatihan?.FotoPelatihan)}`}
+        src={pelatihan?.FotoPelatihan}
         width={0}
         height={0}
       />

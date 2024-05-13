@@ -24,7 +24,16 @@ import {
 import { ArrowUpDown, Edit3Icon, LucidePrinter, Trash, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
-import { TbBroadcast, TbFileCertificate, TbTargetArrow } from "react-icons/tb";
+import {
+  TbBroadcast,
+  TbBuildingCommunity,
+  TbCalendarStats,
+  TbFileCertificate,
+  TbFishChristianity,
+  TbMoneybag,
+  TbQrcode,
+  TbTargetArrow,
+} from "react-icons/tb";
 import { IoIosInformationCircle } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
 import {
@@ -49,6 +58,7 @@ import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PelatihanMasyarakat } from "@/types/product";
+import { FaRupiahSign } from "react-icons/fa6";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -633,7 +643,7 @@ const SheetInfoPelatihan = ({
   return (
     <Sheet>
       <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent>
+      <SheetContent className="w-[500px]">
         <SheetHeader>
           <SheetTitle className="leading-[110%]">
             Pelatihan Diversifikasi Usaha Produk Perikanan/Rumput Laut Bagi
@@ -643,11 +653,13 @@ const SheetInfoPelatihan = ({
             Make changes to your profile here. Click save when you're done.
           </SheetDescription>
         </SheetHeader>
-        <div className="flex w-full">
+        <div className="flex w-full mt-4">
           <table>
             <tr>
               <td>
-                <SheetDescription>Kode Pelatihan</SheetDescription>
+                <SheetDescription className="flex items-center gap-1 text-black font-medium">
+                  <TbQrcode /> Kode Pelatihan
+                </SheetDescription>
               </td>
               <td className="mx-5">:</td>
               <td>
@@ -655,13 +667,117 @@ const SheetInfoPelatihan = ({
               </td>
             </tr>
             <tr>
-              <td>Test</td>
-              <td>:</td>
+              <td>
+                <SheetDescription className="flex items-center gap-1 text-black font-medium">
+                  <TbBuildingCommunity className="text-lg" /> Penyelenggara
+                  Pelatihan
+                </SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
+              <td>
+                <SheetDescription>BPPP Tegal</SheetDescription>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <SheetDescription className="flex items-center gap-1 text-black font-medium">
+                  <TbMoneybag className="text-sm" /> Jenis Pelatihan
+                </SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
+              <td>
+                <SheetDescription>Aspirasi</SheetDescription>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <SheetDescription className="flex items-center gap-1 text-black font-medium">
+                  <TbFishChristianity className="text-sm" /> Bidang Pelatihan
+                </SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
+              <td>
+                <SheetDescription>Pengolahan/Pemasaran</SheetDescription>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <SheetDescription className="flex items-center gap-1 text-black font-medium">
+                  <TbTargetArrow className="text-2xl" /> Dukungan Program
+                  Terobosan
+                </SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
+              <td>
+                <SheetDescription>Kalamu/Kalaju</SheetDescription>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <SheetDescription className="flex items-center gap-1 text-black font-medium">
+                  <TbCalendarStats className="text-sm" /> Tanggal Pelatihan
+                </SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
+              <td>
+                <SheetDescription>18 Mei 2024 - 20 Mei 2024</SheetDescription>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <SheetDescription className="flex items-center gap-1 text-black font-medium">
+                  <FaRupiahSign className="text-xs" /> Harga Pelatihan
+                </SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
+              <td>
+                <SheetDescription>Rp. 0</SheetDescription>
+              </td>
+            </tr>
+            <tr>
+            <td>
+                <SheetDescription className="flex items-center gap-1 text-black font-medium">
+                  <FaRupiahSign className="text-xs" /> Harga Pelatihan
+                </SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
+              <td>
+                <SheetDescription>Published to E-LAUT</SheetDescription>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <SheetDescription className="text-black font-medium">
+                  Lokasi Pelatihan
+                </SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
               <td>
                 <SheetDescription>
-                  Make changes to your profile here. Click save when you're
-                  done.
+                  Desan Karang Anyar Sambo, Jawa Timur - Klasikal
                 </SheetDescription>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <SheetDescription className="text-black font-medium">
+                  Kuota Peserta
+                </SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
+              <td>
+                <SheetDescription>250 Orang</SheetDescription>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <SheetDescription className="text-black font-medium">
+                  Asal Peserta
+                </SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
+              <td>
+                <SheetDescription>Dinas Kota Anyar</SheetDescription>
               </td>
             </tr>
           </table>
