@@ -3,6 +3,17 @@ import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import TableData from "../Tables/TableData";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -24,30 +35,12 @@ import {
 } from "react-icons/tb";
 import { IoIosInformationCircle } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { useRouter } from "next/navigation";
 import { MdOutlinePaid } from "react-icons/md";
 import { DialogSertifikat } from "@/components/sertifikat/dialogSertifikat";
+import { Checkbox } from "@/components/ui/checkbox";
+import Toast from "@/components/toast";
 
 const TableDataPesertaPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -157,15 +150,40 @@ const TableDataPesertaPelatihan: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className={`${"flex"} flex items-center justify-center gap-1`}>
-          <Button variant="outline" className="ml-auto">
-            <IoIosInformationCircle className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="ml-auto border border-yellow-500"
-          >
-            <TbFileStack className="h-4 w-4 text-yellow-500" />
-          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" className="ml-auto">
+                <IoIosInformationCircle className="h-4 w-4" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
+                <AlertDialogDescription className="-mt-2">
+                  Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh
+                  masyarakat umum lakukan checklist agar tampil di website
+                  E-LAUT!
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <form autoComplete="off">
+                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                  <div>
+                    <Checkbox />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>Publish Website E-LAUT</label>
+                    <p className="text-xs leading-[110%] text-gray-600">
+                      Dengan ini sebagai pihak lemdiklat saya mempublish
+                      informasi pelatihan terbuka untuk masyarakat umum!
+                    </p>
+                  </div>
+                </div>
+              </form>
+              <AlertDialogFooter>
+                <AlertDialogCancel>OK</AlertDialogCancel>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
 
           <Button
             onClick={(e) =>

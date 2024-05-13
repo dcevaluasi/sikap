@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactElement, useState } from "react";
 import TableData from "../Tables/TableData";
 import {
   Sheet,
@@ -47,6 +47,8 @@ import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPag
 import { PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
+import { Checkbox } from "@/components/ui/checkbox";
+import { PelatihanMasyarakat } from "@/types/product";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -146,9 +148,11 @@ const TableDataPelatihan: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className={`${"flex"} flex items-center justify-center gap-1`}>
-          <Button variant="outline" className="ml-auto">
-            <IoIosInformationCircle className="h-4 w-4" />
-          </Button>
+          <SheetInfoPelatihan>
+            <Button variant="outline" className="ml-auto">
+              <IoIosInformationCircle className="h-4 w-4" />
+            </Button>
+          </SheetInfoPelatihan>
 
           <AlertDialog>
             <AlertDialogTrigger asChild>
@@ -194,19 +198,54 @@ const TableDataPelatihan: React.FC = () => {
           >
             <HiUserGroup className="h-4 w-4 text-green-500" />
           </Button>
-          <Button
-            variant="outline"
-            className="ml-auto border border-purple-600"
-          >
-            <TbBroadcast className="h-4 w-4 text-purple-600" />
-          </Button>
-          <Button
-            onClick={(e) => setShowCertificateSetting(!showCertificateSetting)}
-            variant="outline"
-            className="ml-auto border border-gray-600"
-          >
-            <TbFileCertificate className="h-4 w-4 text-gray-600" />
-          </Button>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="outline"
+                className="ml-auto border border-purple-600"
+              >
+                <TbBroadcast className="h-4 w-4 text-purple-600" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
+                <AlertDialogDescription className="-mt-2">
+                  Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh
+                  masyarakat umum lakukan checklist agar tampil di website
+                  E-LAUT!
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <form autoComplete="off">
+                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                  <div>
+                    <Checkbox />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>Publish Website E-LAUT</label>
+                    <p className="text-xs leading-[110%] text-gray-600">
+                      Dengan ini sebagai pihak lemdiklat saya mempublish
+                      informasi pelatihan terbuka untuk masyarakat umum!
+                    </p>
+                  </div>
+                </div>
+              </form>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={(e) =>
+                    Toast.fire({
+                      icon: "success",
+                      title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+                    })
+                  }
+                >
+                  Publish
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       ),
     },
@@ -247,7 +286,8 @@ const TableDataPelatihan: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-center capitalize`}>
-          {row.getValue("DiklatPelatihan")}
+          Pelatihan Diversifikasi Usaha Produk Perikanan/Rumput Laut Bagi
+          Masyarakat Kabupaten Alor
         </div>
       ),
     },
@@ -580,6 +620,59 @@ const TableDataPelatihan: React.FC = () => {
         </>
       )}
     </div>
+  );
+};
+
+const SheetInfoPelatihan = ({
+  children,
+  pelatihan,
+}: {
+  children: ReactElement;
+  pelatihan?: any;
+}) => {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>{children}</SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle className="leading-[110%]">
+            Pelatihan Diversifikasi Usaha Produk Perikanan/Rumput Laut Bagi
+            Masyarakat Kabupaten Alor
+          </SheetTitle>
+          <SheetDescription>
+            Make changes to your profile here. Click save when you're done.
+          </SheetDescription>
+        </SheetHeader>
+        <div className="flex w-full">
+          <table>
+            <tr>
+              <td>
+                <SheetDescription>Kode Pelatihan</SheetDescription>
+              </td>
+              <td className="mx-5">:</td>
+              <td>
+                <SheetDescription>PDUP923</SheetDescription>
+              </td>
+            </tr>
+            <tr>
+              <td>Test</td>
+              <td>:</td>
+              <td>
+                <SheetDescription>
+                  Make changes to your profile here. Click save when you're
+                  done.
+                </SheetDescription>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <SheetFooter>
+          <SheetClose asChild>
+            <Button type="submit">Save changes</Button>
+          </SheetClose>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 };
 

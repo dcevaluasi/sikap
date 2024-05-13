@@ -45,7 +45,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { MdOutlineFileUpload, MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
@@ -62,6 +62,7 @@ const TableDataPengajuanPelatihan: React.FC = () => {
     React.useState<boolean>(false);
   const [showCertificateSetting, setShowCertificateSetting] =
     React.useState<boolean>(false);
+  const pathname = usePathname();
 
   type Pelatihan = {
     No: number;
@@ -171,29 +172,31 @@ const TableDataPengajuanPelatihan: React.FC = () => {
             <IoIosInformationCircle className="h-4 w-4" />
           </Button>
 
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="ml-auto border border-rose-600"
-              >
-                <Trash className="h-4 w-4 text-rose-600" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          {pathname.includes("lemdiklat") && (
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="ml-auto border border-rose-600"
+                >
+                  <Trash className="h-4 w-4 text-rose-600" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your account and remove your data from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction>Continue</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
 
           <Button
             variant="outline"
@@ -487,7 +490,7 @@ const TableDataPengajuanPelatihan: React.FC = () => {
                 </span>
                 <div className="w-full">
                   <p className="font-semibold text-primary">
-                    Total Ajuan Pelatihan
+                    Total Pemberitahuan Pelatihan
                   </p>
                   <p className="text-sm font-medium">1 pelatihan</p>
                 </div>
@@ -498,7 +501,7 @@ const TableDataPengajuanPelatihan: React.FC = () => {
                 </span>
                 <div className="w-full">
                   <p className="font-semibold text-green-500">
-                    Total Ajuan Diterima
+                    Total Pemberitahuan Diterima
                   </p>
                   <p className="text-sm font-medium">1 pelatihan</p>
                 </div>
