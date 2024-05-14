@@ -72,7 +72,7 @@ export default function Hero() {
 
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
             <Image
-              className="w-[250px] z-[9999] -mb-11"
+              className="w-[250px] z-[9999] -mb-11 -mt-20"
               width={0}
               height={0}
               src={"/logo-elaut.png"}
@@ -93,10 +93,9 @@ export default function Hero() {
                 data-aos="zoom-y-out"
                 data-aos-delay="150"
               >
-                Pelatihan serta sertifikasi yang diselenggarakan oleh BPPSDM KP
-                untuk menjaring masyarakat KP, aparatur KP, dll dalam mengasah
-                skill <br />
-                serta kompetensi di bidang KP
+                Aplikasi Pelatihan serta sertifikasi KP yang dikembangkan oleh
+                BPPSDMKP untuk menjaring masyarakat KP, aparatur KP, dll untuk
+                meningkatkan kompetensi di bidang KP
               </p>
               <div className="flex items-center justify-center w-full">
                 <ScrollDown />
