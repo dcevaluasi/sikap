@@ -13,9 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { IoMdSchool } from "react-icons/io";
-import { ArrowDown } from "lucide-react";
 import { HiMiniChevronDown } from "react-icons/hi2";
-import { TbCalendarSearch } from "react-icons/tb";
 import Image from "next/image";
 import { FaAnchor, FaUserTie } from "react-icons/fa6";
 import { GiDoubleFish } from "react-icons/gi";
@@ -76,6 +74,120 @@ export default function Header() {
                   Beranda
                 </Link>
               </li>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <li className="cursor-pointer">
+                    <div
+                      className={`font-medium ${
+                        !top
+                          ? "text-gray-600"
+                          : (top && usePathname().includes("pelatihan")) ||
+                            usePathname().includes("sertifikasi") ||
+                            usePathname().includes("cek-sertifikat") ||
+                            usePathname().includes("users")
+                          ? "text-gray-600"
+                          : "text-gray-200"
+                      } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+                    >
+                      Balai Pelatihan <HiMiniChevronDown className="text-lg" />
+                    </div>
+                  </li>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 flex flex-col gap-1 ">
+                  <ul className="">
+                    <li className="">
+                      <Link
+                        href="#"
+                        className={`font-medium ${
+                          !top
+                            ? "text-gray-600"
+                            : (top && usePathname().includes("pelatihan")) ||
+                              usePathname().includes("sertifikasi") ||
+                              usePathname().includes("cek-sertifikat") ||
+                              usePathname().includes("users")
+                            ? "text-gray-600"
+                            : "text-gray-200"
+                        } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
+                      >
+                        <IoMdSchool />
+                        BPPP Tegal
+                      </Link>
+                    </li>
+                    <li className="">
+                      <Link
+                        href="#"
+                        className={`font-medium ${
+                          !top
+                            ? "text-gray-600"
+                            : (top && usePathname().includes("pelatihan")) ||
+                              usePathname().includes("sertifikasi") ||
+                              usePathname().includes("cek-sertifikat") ||
+                              usePathname().includes("users")
+                            ? "text-gray-600"
+                            : "text-gray-200"
+                        } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
+                      >
+                        <IoMdSchool />
+                        BPPP Banyuwangi
+                      </Link>
+                    </li>
+                    <li className="">
+                      <Link
+                        href="#"
+                        className={`font-medium ${
+                          !top
+                            ? "text-gray-600"
+                            : (top && usePathname().includes("pelatihan")) ||
+                              usePathname().includes("sertifikasi") ||
+                              usePathname().includes("cek-sertifikat") ||
+                              usePathname().includes("users")
+                            ? "text-gray-600"
+                            : "text-gray-200"
+                        } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
+                      >
+                        <IoMdSchool />
+                        BPPP Medan
+                      </Link>
+                    </li>
+                    <li className="">
+                      <Link
+                        href="#"
+                        className={`font-medium ${
+                          !top
+                            ? "text-gray-600"
+                            : (top && usePathname().includes("pelatihan")) ||
+                              usePathname().includes("sertifikasi") ||
+                              usePathname().includes("cek-sertifikat") ||
+                              usePathname().includes("users")
+                            ? "text-gray-600"
+                            : "text-gray-200"
+                        } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
+                      >
+                        <IoMdSchool />
+                        BPPP Ambon
+                      </Link>
+                    </li>
+                    <li className="">
+                      <Link
+                        href="#"
+                        className={`font-medium ${
+                          !top
+                            ? "text-gray-600"
+                            : (top && usePathname().includes("pelatihan")) ||
+                              usePathname().includes("sertifikasi") ||
+                              usePathname().includes("cek-sertifikat") ||
+                              usePathname().includes("users")
+                            ? "text-gray-600"
+                            : "text-gray-200"
+                        } hover:text-gray-900 px-5 py-3 gap-2 flex items-center transition duration-150 ease-in-out`}
+                      >
+                        <IoMdSchool />
+                        BPPP Bitung
+                      </Link>
+                    </li>
+                  </ul>
+                </PopoverContent>
+              </Popover>
 
               <Popover>
                 <PopoverTrigger asChild>
@@ -92,7 +204,8 @@ export default function Header() {
                           : "text-gray-200"
                       } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                     >
-                      Pelatihan <HiMiniChevronDown className="text-lg" />
+                      Pelatihan & Seritifikasi{" "}
+                      <HiMiniChevronDown className="text-lg" />
                     </div>
                   </li>
                 </PopoverTrigger>
@@ -134,31 +247,6 @@ export default function Header() {
                         Pelatihan ASN
                       </Link>
                     </li>
-                  </ul>
-                </PopoverContent>
-              </Popover>
-
-              <Popover>
-                <PopoverTrigger asChild>
-                  <li className="cursor-pointer">
-                    <div
-                      className={`font-medium ${
-                        !top
-                          ? "text-gray-600"
-                          : (top && usePathname().includes("pelatihan")) ||
-                            usePathname().includes("sertifikasi") ||
-                            usePathname().includes("cek-sertifikat") ||
-                            usePathname().includes("users")
-                          ? "text-gray-600"
-                          : "text-gray-200"
-                      } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
-                    >
-                      Sertifikasi <HiMiniChevronDown className="text-lg" />
-                    </div>
-                  </li>
-                </PopoverTrigger>
-                <PopoverContent className="w-80 flex flex-col gap-1 ">
-                  <ul className="">
                     <li className="">
                       <Link
                         href="/sertifikasi"

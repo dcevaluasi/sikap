@@ -112,7 +112,7 @@ function FormRegistrationTraining() {
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
             <label
-              className="block text-gray-800 text-sm font-medium mb-1"
+              className="block text-gray-800 text-sm md:text-lg font-medium mb-1"
               htmlFor="email"
             >
               Pilih Paket Penginapan <span className="text-red-600">*</span>
@@ -125,7 +125,7 @@ function FormRegistrationTraining() {
               />
               <label
                 htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm md:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 Ambil Fasilitas Penginapan
               </label>
@@ -150,7 +150,7 @@ function FormRegistrationTraining() {
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
             <label
-              className="block text-gray-800 text-sm font-medium mb-1"
+              className="block text-gray-800 text-sm md:text-lg font-medium mb-1"
               htmlFor="email"
             >
               Pilih Paket Konsumsi <span className="text-red-600">*</span>
@@ -163,7 +163,7 @@ function FormRegistrationTraining() {
               />
               <label
                 htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm md:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 Ambil Paket Konsumsi
               </label>
@@ -217,7 +217,6 @@ function FormRegistrationTraining() {
                 <SelectValue placeholder="Pilih metode pembayaran" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Bayar Cash">Bayar Cash</SelectItem>
                 <SelectItem value="Bayar Dengan Transfer">
                   Bayar Dengan Transfer
                 </SelectItem>
@@ -248,7 +247,7 @@ function FormRegistrationTraining() {
               </SelectTrigger>
             </Select>
             <Select>
-              <SelectTrigger className="w-full text-base py-16 mt-2">
+              <SelectTrigger className="w-full text-base  py-16 mt-2">
                 <div className="flex flex-col items-start gap-1">
                   <p className="font-medium font-calsans text-lg text-left">
                     Penginapan
@@ -277,7 +276,7 @@ function FormRegistrationTraining() {
             <div className="h-1 w-full rounded-full my-2 bg-blue-500"></div>
             <div className="flex items-center justify-between">
               <p className="font-bold text-lg">Total</p>
-              <p className="font-bold text-blue-500 text-2xl">Rp. 1.260.000</p>
+              <p className="font-bold text-blue-500 text-3xl">Rp. 1.260.000</p>
             </div>
             <div className="flex items-center space-x-2 py-3 mt-5">
               <Checkbox id="terms" />
@@ -301,13 +300,13 @@ function FormRegistrationTraining() {
 
   return (
     <section className="relative w-full -mt-5">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
+      <div className="max-w-6xl md:max-w-7xl mx-auto px-4 sm:px-6 md:-mt-8">
         <div className="pb-12  md:pb-20">
           {/* Form */}
-          <div className="max-w-sm mx-auto mt-5">
+          <div className="max-w-sm md:max-w-7xl mx-auto mt-5 md:mt-10">
             <div className="flex items-center justify-between">
               {indexFormTab == 0 ? (
-                <h2 className="font-bold text-2xl leading-[100%] my-6 md:text-2xl text-black font-calsans flex items-center gap-1">
+                <h2 className="font-bold text-2xl md:text-3xl leading-[100%] my-6 text-black font-calsans flex items-center gap-1">
                   <TbBox />
                   <span className="mt-2">Pilih Fasilitas</span>
                 </h2>
