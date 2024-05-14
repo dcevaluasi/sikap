@@ -71,13 +71,13 @@ export default function Hero() {
           {/* Section header */}
 
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
-            {/* <Image
+            <Image
               className="w-32 md:w-32 z-[9999]"
               width={0}
               height={0}
               src={"/logo-elaut.png"}
               alt="Kementrian Kelautan dan Perikanan RI Logo"
-            /> */}
+            />
             <h1
               className="text-4xl md:text-[3.9rem] font-extrabold leading-tighter tracking-tighter mb-3 -mt-4 text-white font-calsans"
               data-aos="zoom-y-out"
