@@ -72,7 +72,7 @@ export default function Hero() {
 
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
             <Image
-              className="w-32 md:w-48 z-[9999]"
+              className="w-[80px] z-[9999]"
               width={0}
               height={0}
               src={"/logo-elaut.png"}
