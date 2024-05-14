@@ -32,7 +32,7 @@ export default function Hero() {
         priority
       />
 
-      <div className="absolute w-full h-full bg-black bg-opacity-70"></div>
+      <div className="absolute w-full h-full bg-black bg-opacity-80"></div>
 
       {/* Illustration behind hero content */}
       <div
@@ -72,14 +72,14 @@ export default function Hero() {
 
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
             <Image
-              className="w-[140px] z-[9999]"
+              className="w-[250px] z-[9999] -mb-11"
               width={0}
               height={0}
               src={"/logo-elaut.png"}
               alt="Kementrian Kelautan dan Perikanan RI Logo"
             />
             <h1
-              className="text-4xl md:text-[3.9rem] font-extrabold leading-tighter tracking-tighter mb-3 -mt-4 text-white font-calsans"
+              className="text-4xl md:text-[3.9rem] font-extrabold leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
               data-aos="zoom-y-out"
             >
               Elektronik Layanan Pelatihan <br />
