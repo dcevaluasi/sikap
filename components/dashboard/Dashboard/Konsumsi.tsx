@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import TableDataKonsumsi from "../Fasilitas/TableDataKonsumsi";
 import { MdOutlineFastfood } from "react-icons/md";
+import TableDataFasilitas from "../Fasilitas/TableDataFasilitas";
 
 const Konsumsi: React.FC = () => {
   return (
@@ -23,7 +23,7 @@ const Konsumsi: React.FC = () => {
       </div>
 
       <div className="mt-4 md:mt-6 2xl:mt-7.5">
-        <TableDataKonsumsi />
+        <TableDataFasilitas />
       </div>
     </>
   );

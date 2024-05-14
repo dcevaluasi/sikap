@@ -32,7 +32,7 @@ export default function Hero() {
         priority
       />
 
-      <div className="absolute w-full h-full bg-black bg-opacity-50"></div>
+      <div className="absolute w-full h-full bg-black bg-opacity-70"></div>
 
       {/* Illustration behind hero content */}
       <div
@@ -65,7 +65,7 @@ export default function Hero() {
         </svg>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 z-[9999]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 z-[40]">
         {/* Hero content */}
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
           {/* Section header */}

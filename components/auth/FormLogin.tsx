@@ -3,28 +3,73 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { FormEvent } from "react";
+import Toast from "../toast";
+import { useRouter } from "next/navigation";
+import axios, { AxiosResponse } from "axios";
 
 function FormLogin() {
   /* state variable to store basic user information to register */
-  const [name, setName] = React.useState<string>("");
-  const [email, setEmail] = React.useState<string>("");
+  const [nik, setNik] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
 
-  /* function to generate data in type FormData */
-  const convertDataToFormData = () => {
-    const data = new FormData();
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const router = useRouter();
 
-    data.append("name", name);
-    data.append("email", email);
-    data.append("password", password);
-
-    return data;
-  };
-
-  const handleRegistrasiAkun = (e: FormEvent) => {
+  const handleLoginAkun = async (e: FormEvent) => {
     e.preventDefault();
-    const data = convertDataToFormData();
-    console.log({ data });
+    if (nik == "" || password == "") {
+      Toast.fire({
+        icon: "error",
+        title: `Tolong lengkapi data login!`,
+      });
+    } else {
+      try {
+        const response: AxiosResponse = await axios.post(
+          `${baseUrl}/users/login`,
+          JSON.stringify({
+            nik: nik,
+            password: password,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log({ response });
+        localStorage.setItem("XSRF081", response.data.t); // token user
+        localStorage.setItem("XSRF082", "true"); // islogged in user
+        Toast.fire({
+          icon: "success",
+          title: `Berhasil melakukan login!`,
+        });
+
+        if (localStorage.getItem("XSRF083")) {
+          router.push("/dashboard/complete-profile");
+        } else {
+          router.push("/dashboard");
+        }
+      } catch (error: any) {
+        console.error({ error });
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.Message
+        ) {
+          const errorMsg = error.response.data.Message;
+          Toast.fire({
+            icon: "error",
+            title: `Gagal melakukan login, ${errorMsg}!`,
+          });
+        } else {
+          const errorMsg = error.response.data.Message;
+          Toast.fire({
+            icon: "error",
+            title: `Gagal melakukan login. ${errorMsg}!`,
+          });
+        }
+      }
+    }
   };
 
   const [imageIndex, setImageIndex] = React.useState(0);
@@ -64,22 +109,22 @@ function FormLogin() {
 
           {/* Form */}
           <div className="max-w-sm mx-auto mt-10">
-            <form onSubmit={(e) => handleRegistrasiAkun(e)}>
+            <form onSubmit={(e) => handleLoginAkun(e)}>
               <div className="flex flex-wrap -mx-3 mb-4">
                 <div className="w-full px-3">
                   <label
                     className="block text-gray-200 text-sm font-medium mb-1"
                     htmlFor="name"
                   >
-                    Name <span className="text-red-600">*</span>
+                    NIK <span className="text-red-600">*</span>
                   </label>
                   <input
                     id="name"
                     type="text"
                     className="form-input w-full text-black"
-                    placeholder="Enter your name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Masukkan nik"
+                    value={nik}
+                    onChange={(e) => setNik(e.target.value)}
                     required
                   />
                 </div>
@@ -96,7 +141,7 @@ function FormLogin() {
                     id="password"
                     type="password"
                     className="form-input w-full text-black"
-                    placeholder="Enter your password"
+                    placeholder="Masukkan password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -138,7 +183,7 @@ function FormLogin() {
             <div className="text-gray-200 text-center mt-6">
               Belum punya akun sebelumnya?{" "}
               <Link
-                href="/signup"
+                href="/registrasi"
                 className="text-blue-600 hover:underline transition duration-150 ease-in-out"
               >
                 Registrasi

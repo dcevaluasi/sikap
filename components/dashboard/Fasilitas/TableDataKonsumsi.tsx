@@ -1,6 +1,4 @@
-import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
-import ReactApexChart from "react-apexcharts";
+import React from "react";
 import TableData from "../Tables/TableData";
 import {
   ColumnDef,
@@ -28,22 +26,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useRouter } from "next/navigation";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
-import { Checkbox } from "@/components/ui/checkbox";
+import axios, { AxiosResponse } from "axios";
 
 const TableDataKonsumsi: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -262,6 +249,88 @@ const TableDataKonsumsi: React.FC = () => {
       rowSelection,
     },
   });
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const token = "";
+
+  const [sarpras, setSarpras] = React.useState([]);
+  const handleFetchingSarpras = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/lemdik/getSarpras`
+      );
+      console.log({ response });
+      setData(response.data.data);
+    } catch (error) {
+      console.error("Error get sarpras:", error);
+      throw error;
+    }
+  };
+
+  /*
+    state variables for posting & updating sarana prasarana
+  */
+  const [namaSarpras, setNamaSarpras] = React.useState("");
+  const [harga, setHarga] = React.useState("");
+  const [deskripsi, setDeskripsi] = React.useState("");
+  const [jenis, setJenis] = React.useState("");
+
+  /*
+      method for resting all state data sarana prasarana (LOG)
+    */
+  const logAllStates = () => {
+    console.log("namaSarpras:", namaSarpras);
+    console.log("harga:", harga);
+    console.log("deskripsi:", deskripsi);
+    console.log("jenis:", jenis);
+  };
+
+  const resetAllStateToEmptyString = () => {
+    setNamaSarpras("");
+    setHarga("");
+    setDeskripsi("");
+    setJenis("");
+  };
+
+  /*
+      method for processing posting data sarana prasarana (POST)
+    */
+  const handlePostingSaranaPrasaranaData = async (e: any) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("nama_sarpras", namaSarpras);
+    data.append("harga", harga);
+    data.append("deskripsi", deskripsi);
+    data.append("jenis", jenis);
+
+    try {
+      const response: AxiosResponse = await axios.post(
+        `${baseUrl}/lemdik/createSarpras`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log({ data });
+      console.log("Sarana prasarana data posted successfully:", response.data);
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil menambahkan sarana/prasarana baru!`,
+      });
+      resetAllStateToEmptyString();
+      router.push("/admin/lemdiklat/pelatihan");
+    } catch (error) {
+      console.error("Error posting sarana prasarana data:", error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal menambahkan sarana prasarana baru!`,
+      });
+      throw error;
+    }
+  };
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">

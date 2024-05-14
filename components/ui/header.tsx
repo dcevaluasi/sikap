@@ -7,7 +7,6 @@ import Logo from "./logo";
 import MobileMenu from "./mobile-menu";
 import { usePathname } from "next/navigation";
 
-
 import {
   Popover,
   PopoverContent,
@@ -39,7 +38,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed w-full z-[999999] md:bg-opacity-90 transition duration-300 ease-in-out ${
+      className={`fixed w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
         !top
           ? "bg-white backdrop-blur-sm shadow-lg"
           : usePathname().includes("pelatihan") ||
@@ -70,7 +69,7 @@ export default function Header() {
                         usePathname().includes("sertifikasi") ||
                         usePathname().includes("cek-sertifikat") ||
                         usePathname().includes("users")
-                      ? "text-gray-600"
+                      ? "text-gray-900"
                       : "text-gray-200"
                   } hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out`}
                 >
@@ -221,7 +220,7 @@ export default function Header() {
               {isRegisteredDummy ? (
                 <li className="w-fit">
                   <Link
-                    href="/signin"
+                    href="/login"
                     className={`font-medium hover:text-gray-900 px-5 py-3 flex items-center justify-center`}
                   >
                     <Image
@@ -238,7 +237,7 @@ export default function Header() {
                   {" "}
                   <li>
                     <Link
-                      href="/signin"
+                      href="/login"
                       className={`font-medium ${
                         !top
                           ? "text-gray-600"
@@ -255,7 +254,7 @@ export default function Header() {
                   </li>
                   <li>
                     <Link
-                      href="/signup"
+                      href="/registrasi"
                       className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
                     >
                       <span>Buat Akun</span>

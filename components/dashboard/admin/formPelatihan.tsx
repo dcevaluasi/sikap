@@ -255,6 +255,66 @@ function FormPelatihan() {
   console.log({ indexFormTab });
   console.log({ formTab });
 
+  type Sarpras = {
+    IdSarpras: number;
+    IdLemdik: number;
+    NamaSarpras: string;
+    Harga: number;
+    Deskripsi: string;
+    Jenis: string;
+    CreatedAt: string;
+    UpdatedAt: string;
+  };
+
+  const [isFacility, setIsFacility] = React.useState("Tidak");
+  const [isConsume, setIsConsume] = React.useState("Tidak");
+
+  const [sarpras, setSarpras] = React.useState<Sarpras[]>([]);
+  const [konsumsi, setKonsumsi] = React.useState<Sarpras[]>([]);
+
+  const token = localStorage.getItem("XSRF091");
+
+  const handleFetchingSarprasData = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/lemdik/getSarpras?jenis=Penginapan`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log({ response });
+      setSarpras(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data sarpras:", error);
+      throw error;
+    }
+  };
+
+  const handleFetchingKonsumsiData = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/lemdik/getSarpras?jenis=Konsumsi`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log({ response });
+      setKonsumsi(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data konsumsi:", error);
+      throw error;
+    }
+  };
+
+  React.useEffect(() => {
+    handleFetchingSarprasData();
+    handleFetchingKonsumsiData();
+  }, []);
+
   return (
     <section className="relative w-full">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
@@ -765,7 +825,7 @@ function FormPelatihan() {
                           Sediakan Fasilitas Penginapan{" "}
                           <span className="text-red-600">*</span>
                         </label>
-                        <Select>
+                        <Select onValueChange={(value) => setIsFacility(value)}>
                           <SelectTrigger className="w-full text-base py-6">
                             <SelectValue placeholder="Sediakan fasilitas" />
                           </SelectTrigger>
@@ -777,47 +837,36 @@ function FormPelatihan() {
                         </Select>
                       </div>
                     </div>
-                    <div className="flex flex-wrap -mx-3 mb-1">
-                      <div className="w-full px-3">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="email"
-                        >
-                          Pilih Paket Fasilitas Penginapan{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <div className="flex flex-col gap-2">
-                          <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                            <div>
-                              <Checkbox />
-                            </div>
-                            <div className="space-y-1 leading-none">
-                              <label>
-                                Paket Residance Bahari Tipe A Rp. 215.000
-                              </label>
-                              <p className="text-xs text-gray-600">
-                                You can manage your mobile notifications in the
-                                page.
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                            <div>
-                              <Checkbox />
-                            </div>
-                            <div className="space-y-1 leading-none">
-                              <label>
-                                Paket Residance Bahari Tipe B Rp. 110.000
-                              </label>
-                              <p className="text-xs text-gray-600">
-                                You can manage your mobile notifications in the
-                                page.
-                              </p>
-                            </div>
+                    {isFacility != "Tidak" && (
+                      <div className="flex flex-wrap -mx-3 mb-1">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="email"
+                          >
+                            Pilih Paket Fasilitas Penginapan{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <div className="flex flex-col gap-2">
+                            {sarpras.map((item, index) => (
+                              <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                                <div>
+                                  <Checkbox />
+                                </div>
+                                <div className="space-y-1 leading-none">
+                                  <label>
+                                    {item.NamaSarpras} Rp. {item.Harga}
+                                  </label>
+                                  <p className="text-xs text-gray-600">
+                                    {item.Deskripsi}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </>
               )}
@@ -845,61 +894,36 @@ function FormPelatihan() {
                         </Select>
                       </div>
                     </div>
-                    <div className="flex flex-wrap -mx-3 mb-1">
-                      <div className="w-full px-3">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="email"
-                        >
-                          Pilih Paket Konsumsi{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <div className="flex flex-col gap-2">
-                          <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                            <div>
-                              <Checkbox />
-                            </div>
-                            <div className="space-y-1 leading-none">
-                              <label>
-                                (Menginap) Full Pack 1x Makan & 3x Snack Rp.
-                                110.000
-                              </label>
-                              <p className="text-xs text-gray-600">
-                                You can manage your mobile notifications in the
-                                page.
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                            <div>
-                              <Checkbox />
-                            </div>
-                            <div className="space-y-1 leading-none">
-                              <label>
-                                (Tidak Mengginap) Full Pack 1x Makan & 1x Snack
-                                Rp. 60.000
-                              </label>
-                              <p className="text-xs text-gray-600">
-                                You can manage your mobile notifications in the
-                                page.
-                              </p>
-                            </div>
-                          </div>
-                          <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                            <div>
-                              <Checkbox />
-                            </div>
-                            <div className="space-y-1 leading-none">
-                              <label>Only Snack 2x Snack Rp. 60.000</label>
-                              <p className="text-xs text-gray-600">
-                                You can manage your mobile notifications in the
-                                page.
-                              </p>
-                            </div>
+                    {isConsume !== "Tidak" && (
+                      <div className="flex flex-wrap -mx-3 mb-1">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="email"
+                          >
+                            Pilih Paket Konsumsi{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <div className="flex flex-col gap-2">
+                            {konsumsi.map((item, index) => (
+                              <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                                <div>
+                                  <Checkbox />
+                                </div>
+                                <div className="space-y-1 leading-none">
+                                  <label>
+                                    {item.NamaSarpras} Rp. {item.Harga}
+                                  </label>
+                                  <p className="text-xs text-gray-600">
+                                    {item.Deskripsi}
+                                  </p>
+                                </div>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </>
               )}

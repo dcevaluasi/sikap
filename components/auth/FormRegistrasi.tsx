@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, MouseEventHandler } from "react";
 import Toast from "../toast";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { error } from "console";
 
 function FormRegistrasi() {
   const router = useRouter();
@@ -27,9 +29,10 @@ function FormRegistrasi() {
     return data;
   };
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [isInputError, setIsInputError] = React.useState(false);
 
-  const handleRegistrasiAkun = (e: FormEvent) => {
+  const handleRegistrasiAkun = async (e: FormEvent) => {
     e.preventDefault();
     if (name == "" || nik == "" || phoneNumber == "" || password == "") {
       Toast.fire({
@@ -38,11 +41,47 @@ function FormRegistrasi() {
       });
       setIsInputError(true);
     } else {
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil melakukan registrasi akun!`,
-      });
-      router.push("/dashboard/complete-profile");
+      try {
+        const response: AxiosResponse = await axios.post(
+          `${baseUrl}/users/registerUser`,
+          JSON.stringify({
+            nik: nik,
+            nama: name,
+            password: password,
+            no_number: phoneNumber,
+          }),
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        console.log({ response });
+        localStorage.setItem("XSRF083", "true"); // isregistered user
+        Toast.fire({
+          icon: "success",
+          title: `Berhasil melakukan registrasi akun, silahkan untuk login terlebih dahulu!`,
+        });
+        router.push("/login");
+      } catch (error: any) {
+        console.error({ error });
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.Message
+        ) {
+          const errorMsg = error.response.data.Message;
+          Toast.fire({
+            icon: "error",
+            title: `Gagal melakukan registrasi akun, ${errorMsg}!`,
+          });
+        } else {
+          Toast.fire({
+            icon: "error",
+            title: `Gagal melakukan registrasi akun. Terjadi kesalahan tidak diketahui.`,
+          });
+        }
+      }
     }
   };
 
