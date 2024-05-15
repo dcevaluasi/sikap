@@ -281,7 +281,7 @@ const TableDataPelatihan: React.FC = () => {
     },
 
     {
-      accessorKey: "DiklatPelatihan",
+      accessorKey: "NamaPelatihan",
       header: ({ column }) => {
         return (
           <Button
@@ -289,15 +289,14 @@ const TableDataPelatihan: React.FC = () => {
             className={`${"ml-0 text-center w-full"}`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Diklat Pelatihan
+            NamaPelatihan
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-center capitalize`}>
-          Pelatihan Diversifikasi Usaha Produk Perikanan/Rumput Laut Bagi
-          Masyarakat Kabupaten Alor
+          {row.getValue("NamaPelatihan")}
         </div>
       ),
     },

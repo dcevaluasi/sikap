@@ -8,6 +8,7 @@ import Loader from "@/components/dashboard/common/Loader";
 import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 
 import localFont from "next/font/local";
+import axios from "axios";
 
 const myFont = localFont({
   src: "../font/calsans.ttf",
@@ -27,8 +28,6 @@ export default function RootLayout({
 }>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(true);
-
-  // const pathname = usePathname();
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);

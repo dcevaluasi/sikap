@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 import Link from "next/link";
 import Logo from "./logo";
@@ -12,23 +12,17 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { IoMdSchool } from "react-icons/io";
+
 import { HiMiniChevronDown } from "react-icons/hi2";
-import Image from "next/image";
-import { FaAnchor, FaUserTie } from "react-icons/fa6";
-import { GiDoubleFish } from "react-icons/gi";
 
 export default function Header() {
-  const [top, setTop] = useState<boolean>(true);
+  const [top, setTop] = React.useState<boolean>(true);
 
-  // detect whether user has scrolled the page down by 10px
   const scrollHandler = () => {
     window.pageYOffset > 10 ? setTop(false) : setTop(true);
   };
 
-  const isRegisteredDummy = false;
-
-  useEffect(() => {
+  React.useEffect(() => {
     scrollHandler();
     window.addEventListener("scroll", scrollHandler);
     return () => window.removeEventListener("scroll", scrollHandler);

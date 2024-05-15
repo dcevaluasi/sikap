@@ -41,12 +41,12 @@ function ListProgram({ pelatihan }: { pelatihan: PelatihanMasyarakat[] }) {
         modules={[FreeMode, Navigation]}
         className="mySwiper w-full md:max-w-6xl"
       >
-        {pelatihan.length != 0 &&
+        {/* {pelatihan.length != 0 &&
           pelatihan?.map((pelatihan: PelatihanMasyarakat, index: number) => (
             <SwiperSlide key={index}>
               <CardPelatihanMasyarakat pelatihan={pelatihan} />
             </SwiperSlide>
-          ))}
+          ))} */}
         {PELATIHAN.map((pelatihan: Pelatihan, index: number) => (
           <SwiperSlide key={index}>
             <CardPelatihan pelatihan={pelatihan} />
@@ -78,7 +78,7 @@ const CardPelatihanMasyarakat = ({
       <Image
         className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
         alt=""
-        src={`https://optika.id/wp-content/uploads/202210/komisi-b-dprd-dukung-budidaya-ikan-lokal-buat-ketahanan-pangan-di-jatim.jpeg`}
+        src={pelatihan.FotoPelatihan}
         width={0}
         height={0}
       />
@@ -87,10 +87,10 @@ const CardPelatihanMasyarakat = ({
           <h2 className="font-calsans text-xl duration-1000 text-black mt-2 leading-[110%]">
             {pelatihan.NamaPelatihan}
           </h2>
-          {/* <div className="flex gap-1 text-gray-600 text-sm items-center">
+          <div className="flex gap-1 text-gray-600 text-sm items-center">
             <TbClockHour2 />
-            <p>{pelatihan.TanggalPendaftaran}</p>
-          </div> */}
+            <p>Pendaftaran : 25 April - 01 Mei 2024</p>
+          </div>
           <p className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000">
             Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat
             kelautan perikanan yang ingin mengasah skill nya dibidang kelautan
@@ -103,7 +103,7 @@ const CardPelatihanMasyarakat = ({
             }`}
             className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
           >
-            Registrasi
+            Lihat Detail
           </Link>
         </div>
       </div>

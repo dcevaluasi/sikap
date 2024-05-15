@@ -14,9 +14,11 @@ export default function Home() {
       <Hero />
       <TrainingTypeSection />
       <Features />
-      <PelatihanAspirasi />
-      <FeatureCertificates />
-      {/* <FeaturesASN /> */}
+      <FeaturesBlocks />
+      <Testimonials />
+      {/* <PelatihanAspirasi /> */}
+      <Newsletter />
+      {/* <FeatureCertificates /> */}
     </>
   );
 }
