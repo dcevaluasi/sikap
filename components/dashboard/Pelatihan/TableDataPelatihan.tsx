@@ -143,7 +143,7 @@ const TableDataPelatihan: React.FC = () => {
       ),
     },
     {
-      accessorKey: "KodePelatithan",
+      accessorKey: "KodePelatihan2",
       header: ({ column }) => {
         return (
           <Button
@@ -260,7 +260,7 @@ const TableDataPelatihan: React.FC = () => {
       ),
     },
     {
-      accessorKey: "KodePelatihan",
+      accessorKey: "KodePelatihan3",
       header: ({ column }) => {
         return (
           <Button
@@ -322,7 +322,7 @@ const TableDataPelatihan: React.FC = () => {
       ),
     },
     {
-      accessorKey: "KuotaPeserta",
+      accessorKey: "KoutaPelatihan",
       header: ({ column }) => {
         return (
           <Button
@@ -334,10 +334,10 @@ const TableDataPelatihan: React.FC = () => {
           </Button>
         );
       },
-      cell: ({ row }) => <div className="text-center uppercase">1</div>,
+      cell: ({ row }) => <div className="text-center uppercase">0</div>,
     },
     {
-      accessorKey: "KuotaPelatihan",
+      accessorKey: "KoutaPelatihan",
       header: ({ column }) => {
         return (
           <Button
@@ -351,12 +351,12 @@ const TableDataPelatihan: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className="text-center uppercase">
-          {row.getValue("KuotaPelatihan")}
+          {row.getValue("KoutaPelatihan")}
         </div>
       ),
     },
     {
-      accessorKey: "KuotaPeserta",
+      accessorKey: "KoutaPelatihan3",
       header: ({ column }) => {
         return (
           <Button
@@ -370,10 +370,8 @@ const TableDataPelatihan: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className="text-center uppercase">
-          <span className="text-green-500 font-semibold">
-            {row.getValue("KuotaPeserta")}
-          </span>
-          /{row.getValue("KuotaPelatihan")}
+          <span className="text-green-500 font-semibold">0</span>/
+          {row.getValue("KoutaPelatihan")}
         </div>
       ),
     },
@@ -392,11 +390,7 @@ const TableDataPelatihan: React.FC = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="text-center uppercase">
-          {row.getValue("DenganFasilitasMenginap")}
-        </div>
-      ),
+      cell: ({ row }) => <div className="text-center uppercase">Ya</div>,
     },
     {
       accessorKey: "DenganPaketKonsumsi",
@@ -412,11 +406,7 @@ const TableDataPelatihan: React.FC = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className="text-center uppercase">
-          {row.getValue("DenganPaketKonsumsi")}
-        </div>
-      ),
+      cell: ({ row }) => <div className="text-center uppercase">Ya</div>,
     },
     {
       accessorKey: "DenganPaketKonsumsi",
@@ -735,7 +725,7 @@ const SheetInfoPelatihan = ({
               </td>
             </tr>
             <tr>
-            <td>
+              <td>
                 <SheetDescription className="flex items-center gap-1 text-black font-medium">
                   <FaRupiahSign className="text-xs" /> Harga Pelatihan
                 </SheetDescription>

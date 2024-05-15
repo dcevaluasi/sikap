@@ -16,3 +16,14 @@ export function addPortToURL(url: string){
     return parts.join('://');
   };
   
+  export function generateRandomString(): string {
+    const lettersAndDigits: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let randomString: string = '';
+
+    for (let i = 0; i < 10; i++) {
+        const randomIndex: number = Math.floor(Math.random() * lettersAndDigits.length);
+        randomString += lettersAndDigits.charAt(randomIndex);
+    }
+
+    return randomString.toUpperCase();
+}

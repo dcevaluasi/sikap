@@ -124,7 +124,7 @@ export default function PelatihanAspirasi() {
               berkelanjutan dan produktif.
             </p>
           </div>
-          <ListProgram />
+          <ListProgram pelatihan={[]} />
         </div>
       </div>
     </section>

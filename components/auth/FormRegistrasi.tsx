@@ -282,7 +282,7 @@ function FormRegistrasi() {
             <div className="text-gray-200 text-center mt-6">
               Sudah punya akun sebelumnya?{" "}
               <Link
-                href="/signin"
+                href="/login"
                 className="text-blue-600 hover:underline transition duration-150 ease-in-out"
               >
                 Log In

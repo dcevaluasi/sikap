@@ -54,8 +54,35 @@ import { MdOutlineAppRegistration, MdVerified } from "react-icons/md";
 import SertifikatPage1 from "@/components/sertifikat/sertifikatPage1";
 import SertifikatPage2 from "@/components/sertifikat/sertifikatPage2";
 import FormRegistrationTraining from "@/components/dashboard/users/formRegistrationTraining";
+import { useSearchParams } from "next/navigation";
+import { PelatihanMasyarakat } from "@/types/product";
+import axios, { AxiosResponse } from "axios";
 
 function page() {
+  const searchParams = useSearchParams();
+  const search = searchParams.get("id");
+
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+  const [data, setData] = React.useState<PelatihanMasyarakat>();
+
+  const handleFetchingPublicTrainingData = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/lemdik/getPelatihan?id=${search}`
+      );
+      console.log({ response });
+      setData(response.data.data);
+    } catch (error) {
+      console.error("Error posting training data:", error);
+      throw error;
+    }
+  };
+
+  React.useEffect(() => {
+    handleFetchingPublicTrainingData();
+  }, []);
+
   const [isRegistrasi, setIsRegistrasi] = React.useState(false);
 
   return (
@@ -63,16 +90,20 @@ function page() {
       <div className="flex gap-2 max-w-6xl mx-auto px-5">
         <div className="w-full pb-5 md:pb-8 flex flex-col ">
           <h1 className="h2 text-4xl md:text-5xl mb-2 font-calsans leading-[100%] max-w-3xl">
-            {PELATIHAN[3].JudulPelatihan}
+            Pelatihan Broodstok Budidaya Ikan Lokal
           </h1>
 
           <div className="w-full flex gap-10">
-            <div className="flex flex-col w-full md:w-[70%]">
+            <div
+              className={`flex flex-col w-full md:w-[70%] ${
+                isRegistrasi && "md:w-[100%]"
+              }`}
+            >
               <div className="relative w-full">
                 <Image
                   className="w-full rounded-3xl h-[250px] md:h-[350px] object-cover"
                   alt=""
-                  src={`/images/hero-img4-preview.jpg`}
+                  src={`https://optika.id/wp-content/uploads/202210/komisi-b-dprd-dukung-budidaya-ikan-lokal-buat-ketahanan-pangan-di-jatim.jpeg`}
                   width={0}
                   height={0}
                 />
@@ -80,7 +111,7 @@ function page() {
                   <div className="text-sm font-medium px-4 py-3 bg-blue-500 rounded-3xl text-white">
                     {PELATIHAN[3].HargaPelatihan == 0
                       ? "Gratis"
-                      : "Rp. " + PELATIHAN[3].HargaPelatihan}
+                      : "Rp. " + 100000}
                   </div>
                   <div className="text-sm font-medium px-4 py-3 bg-blue-500 rounded-3xl text-white">
                     {PELATIHAN[3].BidangPelatihan}
@@ -99,12 +130,12 @@ function page() {
                           <td className="text-gray-600">
                             <TbCalendarUser className="text-lg w-6" />
                           </td>
-                          <td>
+                          {/* <td>
                             <p className="text-base text-gray-600 flex w-full items-center gap-1">
                               Tanggal Pelaksanaan :{" "}
                               {PELATIHAN[3].TanggalPendaftaran}
                             </p>
-                          </td>
+                          </td> */}
                         </tr>
                         <tr>
                           <td className="text-gray-600">
@@ -245,68 +276,69 @@ function page() {
               )}
             </div>
 
-            {!isRegistrasi && (
-              <div className="md:flex hidden flex-col gap-6 w-[30%]">
-                <div className="flex flex-col gap-2 -mt-1">
-                  <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
-                    Ikuti Pelatihan
-                  </h1>
-                  <p className="text-base text-gray-600 max-w-4xl -mt-3">
-                    Segera daftarkan dirimu dan jadilah SDM Kelautan dan
-                    Perikanan Unggul!
-                  </p>
-                  <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <button
-                    onClick={(e) => setIsRegistrasi(true)}
-                    className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
-                  >
-                    <MdOutlineAppRegistration /> Daftar Pelatihan
-                  </button>
+            {/* {isRegistrasi && ( */}
+            <div className="md:flex hidden flex-col gap-6 w-[30%]">
+              <div className="flex flex-col gap-2 -mt-1">
+                <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
+                  Ikuti Pelatihan
+                </h1>
+                <p className="text-base text-gray-600 max-w-4xl -mt-3">
+                  Segera daftarkan dirimu dan jadilah SDM Kelautan dan Perikanan
+                  Unggul!
+                </p>
+                <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <button
+                  onClick={(e) => setIsRegistrasi(true)}
+                  className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
+                >
+                  <MdOutlineAppRegistration /> Daftar Pelatihan
+                </button>
 
-                  <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white">
-                    <FaFilePdf /> Unduh Silabus Pelatihan
-                  </div>
-                  <div className="flex flex-col gap-1 mt-2">
-                    <table>
-                      <tr>
-                        <td className="text-gray-600">
-                          <TbCalendarUser className="text-lg w-6" />
-                        </td>
-                        <td>
-                          <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                            Tanggal Pelaksanaan :{" "}
-                            {PELATIHAN[3].TanggalPendaftaran}
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-gray-600">
-                          <TbMap2 className="text-lg w-6" />
-                        </td>
-                        <td>
-                          <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                            Lokasi Pelatihan : {PELATIHAN[3].LokasiPelatihan}{" "}
-                            (Balai Pelatihan Pengembangan dan Penyuluhan Tegal)
-                          </p>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td className="text-gray-600">
-                          <TbBroadcast className="text-lg w-6" />
-                        </td>
-                        <td>
-                          <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                            Pelaksanaan Pelatihan :{" "}
-                            {PELATIHAN[3].PelaksanaanPelatihan}
-                          </p>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
+                <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white">
+                  <FaFilePdf /> Unduh Silabus Pelatihan
                 </div>
+                <div className="flex flex-col gap-1 mt-2">
+                  <table>
+                    <tr>
+                      {/* <td className="text-gray-600">
+                        <TbCalendarUser className="text-lg w-6" />
+                      </td> */}
+                      {/* <td>
+                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                          Tanggal Pelaksanaan :{" "}
+                          {PELATIHAN[3].TanggalPendaftaran}
+                        </p>
+                      </td> */}
+                    </tr>
+                    <tr>
+                      <td className="text-gray-600">
+                        <TbMap2 className="text-lg w-6" />
+                      </td>
+                      <td>
+                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                          Lokasi Pelatihan : {PELATIHAN[3].LokasiPelatihan}{" "}
+                          (Balai Pelatihan Pengembangan dan Penyuluhan Tegal)
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="text-gray-600">
+                        <TbBroadcast className="text-lg w-6" />
+                      </td>
+                      <td>
+                        <p className="text-base text-gray-600 flex w-full items-center gap-1">
+                          Pelaksanaan Pelatihan :{" "}
+                          {PELATIHAN[3].PelaksanaanPelatihan}
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
 
+              {!isRegistrasi && (
                 <div className="flex flex-col gap-2 mt-3">
                   <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
                     Pelatihan Terbaru
@@ -316,8 +348,8 @@ function page() {
                   </p>
                   <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
           {isRegistrasi && <FormRegistrationTraining />}

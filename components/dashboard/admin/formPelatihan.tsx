@@ -26,6 +26,7 @@ import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import axios, { AxiosResponse } from "axios";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { refresh } from "aos";
+import { generateRandomString } from "@/utils";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
@@ -89,7 +90,9 @@ function FormPelatihan() {
     state variables for posting & updating public training data
   */
   const [idLemdik, setIdLemdik] = React.useState("");
-  const [kodePelatihan, setKodePelatihan] = React.useState("");
+  const [kodePelatihan, setKodePelatihan] = React.useState(
+    generateRandomString()
+  );
   const [namaPelatihan, setNamaPelatihan] = React.useState("");
   const [penyelenggaraPelatihan, setPenyelenggaraPelatihan] =
     React.useState("");
@@ -223,6 +226,7 @@ function FormPelatihan() {
         data,
         {
           headers: {
+            Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
         }
@@ -277,7 +281,7 @@ function FormPelatihan() {
   const handleFetchingSarprasData = async () => {
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getSarpras?jenis=Penginapan`,
+        `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Penginapan`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -295,7 +299,7 @@ function FormPelatihan() {
   const handleFetchingKonsumsiData = async () => {
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getSarpras?jenis=Konsumsi`,
+        `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Konsumsi`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -309,6 +313,8 @@ function FormPelatihan() {
       throw error;
     }
   };
+
+  console.log({ konsumsi });
 
   React.useEffect(() => {
     handleFetchingSarprasData();
@@ -396,9 +402,7 @@ function FormPelatihan() {
                             placeholder="Masukkan kode pelatihan"
                             required
                             value={kodePelatihan}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                              setKodePelatihan(e.target.value)
-                            }
+                            readOnly
                           />
                         </div>
                       </div>
@@ -849,7 +853,10 @@ function FormPelatihan() {
                           </label>
                           <div className="flex flex-col gap-2">
                             {sarpras.map((item, index) => (
-                              <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                              <div
+                                key={index}
+                                className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                              >
                                 <div>
                                   <Checkbox />
                                 </div>
@@ -882,7 +889,7 @@ function FormPelatihan() {
                           Sediakan Paket Konsumsi{" "}
                           <span className="text-red-600">*</span>
                         </label>
-                        <Select>
+                        <Select onValueChange={(value) => setIsConsume(value)}>
                           <SelectTrigger className="w-full text-base py-6">
                             <SelectValue placeholder="Sediakan paket konsumsi" />
                           </SelectTrigger>
@@ -906,7 +913,10 @@ function FormPelatihan() {
                           </label>
                           <div className="flex flex-col gap-2">
                             {konsumsi.map((item, index) => (
-                              <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                              <div
+                                key={index}
+                                className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                              >
                                 <div>
                                   <Checkbox />
                                 </div>

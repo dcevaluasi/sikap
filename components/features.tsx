@@ -26,6 +26,8 @@ import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
 import ListProgram from "./lists";
 import Link from "next/link";
+import axios, { AxiosResponse } from "axios";
+import { PelatihanMasyarakat } from "@/types/product";
 
 export default function Features() {
   const tabMenus = [
@@ -90,7 +92,25 @@ export default function Features() {
       tabs.current.parentElement.style.height = `${tabs.current.clientHeight}px`;
   };
 
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+  const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
+
+  const handleFetchingPublicTrainingData = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/lemdik/getPelatihan`
+      );
+      console.log({ response });
+      setData(response.data.data);
+    } catch (error) {
+      console.error("Error posting training data:", error);
+      throw error;
+    }
+  };
+
   useEffect(() => {
+    handleFetchingPublicTrainingData();
     heightFix();
   }, []);
 
@@ -124,7 +144,7 @@ export default function Features() {
               berkelanjutan dan produktif.
             </p>
           </div>
-          <ListProgram />
+          <ListProgram pelatihan={data} />
         </div>
       </div>
     </section>

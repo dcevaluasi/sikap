@@ -114,7 +114,6 @@ const TableDataFasilitas: React.FC = () => {
 
   const [data, setData] = React.useState<Sarpras[]>([]);
   const pathname = usePathname();
-  const typeSarpras = pathname.includes("konsumsi") ? "Konsumsi" : "Penginapan";
 
   const handleFetchingSarprasData = async () => {
     try {
@@ -270,23 +269,6 @@ const TableDataFasilitas: React.FC = () => {
       ),
     },
     {
-      accessorKey: "Jenis",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Kapasitas
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-center uppercase">{row.getValue("Jenis")}</div>
-      ),
-    },
-    {
       accessorKey: "Deskripsi",
       header: ({ column }) => {
         return (
@@ -399,12 +381,10 @@ const TableDataFasilitas: React.FC = () => {
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Tambah data fasilitas penginapan
-                  </AlertDialogTitle>
+                  <AlertDialogTitle>Tambah data fasilitas</AlertDialogTitle>
                   <AlertDialogDescription className="-mt-2">
-                    Daftarkan data fasilitas penginapan di lemdiklat/balai mu
-                    sebagai penunjang kegiatan pelatihan dan sertifikasi!
+                    Daftarkan data fasilitas di lemdiklat/balai mu sebagai
+                    penunjang kegiatan pelatihan dan sertifikasi!
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <form autoComplete="off">
@@ -455,14 +435,14 @@ const TableDataFasilitas: React.FC = () => {
                           className="block text-gray-800 text-sm font-medium mb-1"
                           htmlFor="name"
                         >
-                          Jenis Pelatihan{" "}
+                          Jenis Fasilitas{" "}
                           <span className="text-red-600">*</span>
                         </label>
                         <input
                           id="name"
                           type="text"
                           className="form-input w-full text-black border-gray-300 rounded-md"
-                          placeholder="Jenis pelatihan"
+                          placeholder="Jenis fasilitas"
                           required
                           value={jenis}
                           onChange={(e) => setJenis(e.target.value)}
