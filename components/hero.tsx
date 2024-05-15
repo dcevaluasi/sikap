@@ -7,11 +7,11 @@ import React from "react";
 export default function Hero() {
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = [
-    "/images/hero-img.jpg",
-    "/images/hero-img2.jpg",
-    "/images/hero-img3.jpg",
     "/images/hero-img4.jpg",
-    "/images/hero-img5.jpg",
+    "/images/hero-img4.jpg",
+    "/images/hero-img4.jpg",
+    "/images/hero-img4.jpg",
+    "/images/hero-img4.jpg",
   ];
 
   React.useEffect(() => {
