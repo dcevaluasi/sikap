@@ -115,7 +115,7 @@ function FormRegistrasi() {
         priority
       />
 
-      <div className="absolute w-full h-full bg-black bg-opacity-50 -z-30"></div>
+      <div className="absolute w-full h-full bg-black bg-opacity-70 -z-30"></div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">

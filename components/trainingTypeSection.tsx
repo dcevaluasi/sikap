@@ -148,7 +148,7 @@ export default function TrainingTypeSection() {
 
           <div className="flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-5 md:gap-9">
             {tabMenus.map((tabMenu, index) => (
-              <div className="gap-4 w-fit">
+              <div key={index} className="gap-4 w-fit">
                 <Slide direction="up" duration={500 * index}>
                   <div
                     key={index}

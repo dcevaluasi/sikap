@@ -73,7 +73,7 @@ function FormLogin() {
   };
 
   const [imageIndex, setImageIndex] = React.useState(0);
-  const images = ["/images/hero-img4.jpg", "/images/hero-img5.jpg"];
+  const images = ["/images/hero-img3.jpg"];
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -84,7 +84,7 @@ function FormLogin() {
   }, []);
 
   return (
-    <section className="relative w-full">
+    <section className="relative w-full h-full">
       <Image
         src={images[imageIndex]}
         className="absolute w-full h-full object-cover duration-1000 -z-40"
@@ -93,10 +93,10 @@ function FormLogin() {
         priority
       />
 
-      <div className="absolute w-full h-full bg-black bg-opacity-50 -z-30"></div>
+      <div className="absolute w-full h-full bg-black bg-opacity-70 -z-30"></div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
-        <div className="pt-32 pb-12 md:pt-40 md:pb-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8 h-screen">
+        <div className="pt-32  md:pt-40 md:pb-20 h-screen">
           {/* Page header */}
           <div className="max-w-3xl mx-auto text-center pb-0 md:pb-0">
             <h1 className="font-bold text-4xl leading-[100%] md:text-4xl text-gray-200 font-calsans">
@@ -108,7 +108,7 @@ function FormLogin() {
           </div>
 
           {/* Form */}
-          <div className="max-w-sm mx-auto mt-10">
+          <div className="max-w-sm mx-auto mt-4">
             <form onSubmit={(e) => handleLoginAkun(e)}>
               <div className="flex flex-wrap -mx-3 mb-4">
                 <div className="w-full px-3">

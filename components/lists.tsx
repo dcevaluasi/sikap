@@ -83,11 +83,11 @@ const CardPelatihanMasyarakat = ({
         height={0}
       />
       <div className="px-6 py-3">
-        <div className="w-full pb-4 gap-3">
+        <div className="w-full pb-4">
           <h2 className="font-calsans text-xl duration-1000 text-black mt-2 leading-[110%]">
             {pelatihan.NamaPelatihan}
           </h2>
-          <div className="flex gap-1 text-gray-600 text-sm items-center">
+          <div className="flex gap-1 my-5 text-gray-600 text-sm items-center">
             <TbClockHour2 />
             <p>Pendaftaran : 25 April - 01 Mei 2024</p>
           </div>
@@ -98,9 +98,8 @@ const CardPelatihanMasyarakat = ({
           </p>
           <Link
             target="_blank"
-            href={`/pelatihan/${createSlug(pelatihan.NamaPelatihan)}?id=${
-              pelatihan.IdPelatihan
-            }`}
+            href={`/pelatihan/${createSlug(pelatihan.NamaPelatihan)}?id=${pelatihan.IdPelatihan
+              }`}
             className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
           >
             Lihat Detail
@@ -133,12 +132,12 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: Pelatihan }) => {
         height={0}
       />
       <div className="px-6 py-3">
-        <div className="w-full pb-4 gap-3">
+        <div className="w-full pb-4">
           <h2 className="font-calsans text-xl duration-1000 text-black mt-2 leading-[110%]">
             {pelatihan.JudulPelatihan}
           </h2>
-          <div className="flex gap-1 text-gray-600 text-sm items-center">
-            <TbClockHour2 />
+          <div className="flex gap-1 my-1 text-gray-600 text-xs items-center">
+            <TbClockHour2 />Pendaftaran :
             <p>{pelatihan.TanggalPendaftaran}</p>
           </div>
           <p className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000">
@@ -151,7 +150,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: Pelatihan }) => {
             href={`/pelatihan/${createSlug(pelatihan.JudulPelatihan)}`}
             className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
           >
-            Registrasi
+            Lihat Detail
           </Link>
         </div>
       </div>

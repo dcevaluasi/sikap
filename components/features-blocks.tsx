@@ -89,11 +89,11 @@ export default function FeaturesBlocks() {
         <div className="py-12 md:py-20">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-            <h2 className="h2 mb-4 font-calsans">
-              Tersedianya Pelatihan dan Uji Kompetensi Non-Kepelautan
-            </h2>
+            <h1 className="text-3xl font-calsans leading-[110%]">
+              Tersedianya Pelatihan dan Uji Kompetensi <br />Non-Kepelautan
+            </h1>
 
-            <p className="text-xl text-gray-600">
+            <p className="text-base text-gray-600">
               Jelajahi Peluang Baru dengan Pelatihan dan Uji Kompetensi
               Inovatif, bergabunglah dengan Program Kami untuk Mengasah
               Kompetensi-mu di Dunia Non-Kepelautan!
@@ -104,16 +104,16 @@ export default function FeaturesBlocks() {
           <div className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
             {competenceFields?.map((competenceItem, index) => (
               <Bounce key={index} duration={500 * index}>
-                <div className="relative flex flex-col items-center px-6 py-9 bg-white rounded shadow-xl">
-                  {competenceItem?.icon}
-                  {/* <Image
-                    className="w-16 md:w-20 mb-3"
+                <div className="relative flex flex-col items-center px-6 py-7 bg-white rounded shadow-xl">
+                  {/* {competenceItem?.icon} */}
+                  <Image
+                    className="w-16 md:w-20"
                     width={0}
                     height={0}
                     src={`/images/bidangPelatihan/${competenceItem?.img}`}
                     alt="Kementrian Kelautan dan Perikanan RI Logo"
-                  /> */}
-                  <h4 className="text-2xl font-bold leading-snug tracking-tight mb-1">
+                  />
+                  <h4 className="text-3xl font-bold leading-snug font-calsans mt-1 tracking-tight mb-1">
                     {competenceItem?.name}
                   </h4>
                   <p className="text-sm -mt-2 text-black font-semibold text-center">

@@ -2,9 +2,12 @@
 
 import Toast from "@/components/toast";
 import axios, { AxiosResponse } from "axios";
+import { request } from "https";
+import Cookies from "js-cookie";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
+
 
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -62,6 +65,9 @@ function page() {
       });
       localStorage.setItem("XSRF091", response.data.t);
       localStorage.setItem("XSRF092", "true");
+
+      Cookies.set('XSRF092', 'true')
+
       resetAllStateToEmptyString();
       router.push("/admin/lemdiklat/pelatihan");
     } catch (error) {

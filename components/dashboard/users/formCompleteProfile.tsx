@@ -87,7 +87,7 @@ function FormCompleteProfile() {
     router.push("/users/dashboard");
   };
 
-  React.useEffect(() => {}, []);
+  React.useEffect(() => { }, []);
 
   const [formTab, setFormTab] = React.useState("FormDataUtamaUser");
   const [indexFormTab, setIndexFormTab] = React.useState(0);
@@ -854,7 +854,7 @@ function FormCompleteProfile() {
               </p>
             </div>
             <div className="flex w-full -mt-2 mb-4">
-              <Progress value={(indexFormTab + 1) * 25} max={4} />
+              <Progress value={(indexFormTab + 1) * 25} className="text-blue-500" max={4} />
             </div>
             <FormDataUtamaUser />
             <FormDataAlamatUser />
@@ -890,9 +890,8 @@ function FormCompleteProfile() {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <div
-                    className={`w-full ${
-                      indexFormTab == 3 ? "block" : "hidden"
-                    }`}
+                    className={`w-full ${indexFormTab == 3 ? "block" : "hidden"
+                      }`}
                   >
                     <button
                       type="submit"
