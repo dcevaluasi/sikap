@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Bounce } from "react-awesome-reveal";
 import { FaBiohazard } from "react-icons/fa6";
 import { GiCirclingFish, GiFishEggs, GiFoodChain } from "react-icons/gi";
@@ -15,8 +16,9 @@ export default function FeaturesBlocks() {
       description:
         "Kompetensi mengamankan pangan dengan identifikasi bahaya dan penerapan kontrol",
       icon: (
-        <FaBiohazard className="text-6xl text-gray-400 group-hover:text-sky-500 duration-700" />
+        <FaBiohazard className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
       ),
+      img: "haccp.png",
     },
     {
       id: 2,
@@ -25,8 +27,9 @@ export default function FeaturesBlocks() {
       description:
         "Pengawasan organisasi untuk tujuan efektif dan kepatuhan, melalui kegiatan berkelanjutan",
       icon: (
-        <TbTargetArrow className="text-6xl text-gray-400 group-hover:text-sky-500 duration-700" />
+        <TbTargetArrow className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
       ),
+      img: "spi.png",
     },
     {
       id: 3,
@@ -35,8 +38,9 @@ export default function FeaturesBlocks() {
       description:
         "Menyertifikasi profesional membangun sistem anti-korupsi sesuai standar nasional",
       icon: (
-        <MdAssuredWorkload className="text-6xl text-gray-400 group-hover:text-sky-500 duration-700" />
+        <MdAssuredWorkload className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
       ),
+      img: "apiq.png",
     },
     {
       id: 4,
@@ -45,18 +49,20 @@ export default function FeaturesBlocks() {
       description:
         "Sertifikasi Produsen Pakan Ikan Mandiri: Validasi produksi pakan ikan lokal secara independen oleh individu atau instansi",
       icon: (
-        <GiFishEggs className="text-6xl text-gray-400 group-hover:text-sky-500 duration-700" />
+        <GiFishEggs className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
       ),
+      img: "cppib.png",
     },
     {
       id: 5,
       name: "CPIB",
-      fullName: "Cara Pembeninah Ikan yang Baik",
+      fullName: "Cara Pembenihan Ikan yang Baik",
       description:
         "Panduan praktis manajemen pemijahan, penetasan telur, dan pemeliharaan benih ikan dalam lingkungan terkontrol",
       icon: (
-        <GiFoodChain className="text-6xl text-gray-400 group-hover:text-sky-500 duration-700" />
+        <GiFoodChain className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
       ),
+      img: "cpib.png",
     },
     {
       id: 6,
@@ -65,8 +71,9 @@ export default function FeaturesBlocks() {
       description:
         "Metode pemeliharaan, pembesaran, dan panen ikan dalam lingkungan terkontrol untuk mutu dan keamanan pangan",
       icon: (
-        <GiCirclingFish className="text-6xl text-gray-400 group-hover:text-sky-500 duration-700" />
+        <GiCirclingFish className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
       ),
+      img: "budidaya.png",
     },
   ];
   return (
@@ -97,12 +104,19 @@ export default function FeaturesBlocks() {
           <div className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
             {competenceFields?.map((competenceItem, index) => (
               <Bounce key={index} duration={500 * index}>
-                <div className="relative flex flex-col items-center p-6 bg-white rounded shadow-xl">
+                <div className="relative flex flex-col items-center px-6 py-9 bg-white rounded shadow-xl">
                   {competenceItem?.icon}
-                  <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                  {/* <Image
+                    className="w-16 md:w-20 mb-3"
+                    width={0}
+                    height={0}
+                    src={`/images/bidangPelatihan/${competenceItem?.img}`}
+                    alt="Kementrian Kelautan dan Perikanan RI Logo"
+                  /> */}
+                  <h4 className="text-2xl font-bold leading-snug tracking-tight mb-1">
                     {competenceItem?.name}
                   </h4>
-                  <p className="text-sm text-black font-semibold text-center">
+                  <p className="text-sm -mt-2 text-black font-semibold text-center">
                     {competenceItem?.fullName}
                   </p>
                   <p className="text-gray-600 text-center text-sm">

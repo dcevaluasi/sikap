@@ -136,7 +136,8 @@ export default function TrainingTypeSection() {
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
             <h1 className="text-3xl font-calsans leading-[110%]">
-              Ragam Bidang <br />
+              Ragam Bidang
+              <br />
               Kelautan dan Perikanan
             </h1>
             <p className="text-base text-gray-600">

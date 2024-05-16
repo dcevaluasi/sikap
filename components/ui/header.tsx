@@ -51,12 +51,36 @@ export default function Header() {
               <NavLink href="/" name="Beranda" top={top} />
 
               <NavDropDown href="#" name="Balai Pelatihan" top={top}>
-                <NavLink href="/" name="BPPP Medan" top={top} />
-                <NavLink href="/" name="BPPP Tegal" top={top} />
-                <NavLink href="/" name="BPPP Banyuwangi" top={top} />
-                <NavLink href="/" name="BPPP Bitung" top={top} />
-                <NavLink href="/" name="BPPP Ambon" top={top} />
-                <NavLink href="/" name="BDA Sukamandi" top={top} />
+                <NavLink
+                  href="/bppp?location=medan"
+                  name="BPPP Medan"
+                  top={top}
+                />
+                <NavLink
+                  href="/bppp?location=tegal"
+                  name="BPPP Tegal"
+                  top={top}
+                />
+                <NavLink
+                  href="/bppp?location=banyuwangi"
+                  name="BPPP Banyuwangi"
+                  top={top}
+                />
+                <NavLink
+                  href="/bppp?location=bitung"
+                  name="BPPP Bitung"
+                  top={top}
+                />
+                <NavLink
+                  href="/bppp?location=ambon"
+                  name="BPPP Ambon"
+                  top={top}
+                />
+                <NavLink
+                  href="/bda?location=sukamandi"
+                  name="BDA Sukamandi"
+                  top={top}
+                />
               </NavDropDown>
 
               <NavDropDown href="#" name="Layanan" top={top}>

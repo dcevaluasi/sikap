@@ -104,7 +104,7 @@ function FormPelatihan() {
   const [tanggalMulaiPelatihan, setTanggalMulaiPelatihan] = React.useState("");
   const [tanggalBerakhirPelatihan, setTanggalBerakhirPelatihan] =
     React.useState("");
-  const [hargaPelatihan, setHargaPelatihan] = React.useState("");
+  const [hargaPelatihan, setHargaPelatihan] = React.useState<number>(0);
   const [instruktur, setInstruktur] = React.useState("");
   const [fotoPelatihan, setFotoPelatihan] = React.useState(null);
   const [status, setStatus] = React.useState("");
@@ -164,7 +164,7 @@ function FormPelatihan() {
     setDukunganProgramTerobosan("");
     setTanggalMulaiPelatihan("");
     setTanggalBerakhirPelatihan("");
-    setHargaPelatihan("");
+    setHargaPelatihan(0);
     setInstruktur("");
     setFotoPelatihan(null);
     setStatus("");
@@ -201,7 +201,7 @@ function FormPelatihan() {
     data.append("DukunganProgramTerobosan", dukunganProgramTerobosan);
     data.append("TanggalMulaiPelatihan", tanggalMulaiPelatihan);
     data.append("TanggalBerakhirPelatihan", tanggalBerakhirPelatihan);
-    data.append("HargaPelatihan", hargaPelatihan);
+    data.append("HargaPelatihan", hargaPelatihan.toString());
     data.append("Instruktur", instruktur);
     if (fotoPelatihan !== null) {
       data.append("photo_pelatihan", fotoPelatihan);
@@ -675,7 +675,7 @@ function FormPelatihan() {
                           className="form-input w-full text-black border-gray-300 rounded-md"
                           placeholder="Rp"
                           required
-                          value={hargaPelatihan.toString()}
+                          value={hargaPelatihan}
                           onChange={(e: ChangeEvent<HTMLInputElement>) =>
                             setHargaPelatihan(e.target.value)
                           }
