@@ -27,6 +27,7 @@ import axios, { AxiosResponse } from "axios";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { refresh } from "aos";
 import { generateRandomString } from "@/utils";
+import Cookies from "js-cookie";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
@@ -189,6 +190,8 @@ function FormPelatihan() {
     e.preventDefault();
     console.log({ fotoPelatihan });
 
+    logAllStates();
+
     const data = new FormData();
 
     data.append("IdLemdik", idLemdik);
@@ -276,7 +279,7 @@ function FormPelatihan() {
   const [sarpras, setSarpras] = React.useState<Sarpras[]>([]);
   const [konsumsi, setKonsumsi] = React.useState<Sarpras[]>([]);
 
-  const token = localStorage.getItem("XSRF091");
+  const token = Cookies.get("XSRF091");
 
   const handleFetchingSarprasData = async () => {
     try {
@@ -464,7 +467,6 @@ function FormPelatihan() {
                             className="form-input w-full text-black border-gray-300 rounded-md"
                             placeholder="BPPP Tegal"
                             required
-                            readOnly
                             value={"BPPP Tegal"}
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                               setPenyelenggaraPelatihan(e.target.value)
@@ -677,7 +679,7 @@ function FormPelatihan() {
                           required
                           value={hargaPelatihan}
                           onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            setHargaPelatihan(e.target.value)
+                            setHargaPelatihan(parseInt(e.target.value))
                           }
                         />
                       </div>

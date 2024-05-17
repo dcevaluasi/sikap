@@ -10,7 +10,6 @@ function ListBPPP({ pelatihan }: { pelatihan: PelatihanMasyarakat[] }) {
   return (
     <div className="w-full grid grid-cols-3 gap-y-6">
       {pelatihan.map((pelatihan: PelatihanMasyarakat, index: number) => (
-
         <CardPelatihan key={index} pelatihan={pelatihan} />
       ))}
     </div>
@@ -22,7 +21,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
     <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
       <div className="w-fit absolute top-4 right-4 flex gap-1">
         <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
-          {pelatihan.HargaPelatihan == '0'
+          {pelatihan.HargaPelatihan == "0"
             ? "Gratis"
             : "Rp. " + pelatihan.HargaPelatihan}
         </div>
@@ -44,14 +43,21 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
             {pelatihan.NamaPelatihan}
           </h2>
           <div className="flex gap-1 my-1 text-gray-600 text-xs items-center">
-            <TbClockHour2 />Pendaftaran :
-            <p>{pelatihan.TanggalMulaiPelatihan}</p>
+            <TbClockHour2 />
+            Pendaftaran :<p>{pelatihan.TanggalMulaiPelatihan}</p>
           </div>
-          <p dangerouslySetInnerHTML={{ __html: pelatihan && pelatihan?.DetailPelatihan }} className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000" />
+          <p
+            dangerouslySetInnerHTML={{
+              __html: pelatihan && pelatihan?.DetailPelatihan,
+            }}
+            className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000"
+          />
 
           <Link
             target="_blank"
-            href={`/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${pelatian?.IdPelatihan}`}
+            href={`/pelatihan/${createSlug(pelatihan.NamaPelatihan)}?XSRF084=${
+              pelatihan?.IdPelatihan
+            }`}
             className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
           >
             Registrasi

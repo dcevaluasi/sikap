@@ -14,32 +14,11 @@ import ListBPPP from "./list-bppp";
 import { useSearchParams } from "next/navigation";
 import { getPenyeleggara } from "@/utils/pelatihan";
 
-export default function FeaturesBPPP() {
-  const searchParams = useSearchParams();
-  const location = searchParams.get('location')
-  const penyelenggara = getPenyeleggara(location!)
-
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-  const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
-
-  const handleFetchingPublicTrainingDataByPenyelenggara = async () => {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getPelatihan?penyelenggara=${penyelenggara}`
-      );
-      console.log({ response });
-      setData(response.data.data);
-    } catch (error) {
-      console.error("Error posting training data:", error);
-      throw error;
-    }
-  };
-
-  React.useEffect(() => {
-    handleFetchingPublicTrainingDataByPenyelenggara()
-  }, [])
-
+export default function FeaturesBPPP({
+  data,
+}: {
+  data: PelatihanMasyarakat[];
+}) {
   return (
     <section className="relative h-fit pb-10" id="explore">
       {/* Section background (needs .relative class on parent and next sibling elements) */}

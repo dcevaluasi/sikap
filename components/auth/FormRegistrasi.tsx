@@ -7,6 +7,7 @@ import React, { FormEvent, MouseEventHandler } from "react";
 import Toast from "../toast";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { error } from "console";
+import Cookies from "js-cookie";
 
 function FormRegistrasi() {
   const router = useRouter();
@@ -57,7 +58,9 @@ function FormRegistrasi() {
           }
         );
         console.log({ response });
-        localStorage.setItem("XSRF083", "true"); // isregistered user
+
+        Cookies.set("XSRF083", "true");
+
         Toast.fire({
           icon: "success",
           title: `Berhasil melakukan registrasi akun, silahkan untuk login terlebih dahulu!`,
@@ -87,15 +90,6 @@ function FormRegistrasi() {
 
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = ["/images/hero-img2.jpg"];
-
-  const handleDummySignUp = (e: any) => {
-    e.preventDefault();
-    localStorage.setItem("nameDummy", name);
-    localStorage.setItem("emailDummy", email);
-    localStorage.setItem("passwordDummy", password);
-    localStorage.setItem("isRegisteredDummy", "true");
-    router.push("/users/dashboard");
-  };
 
   React.useEffect(() => {
     const interval = setInterval(() => {

@@ -50,10 +50,6 @@ function FormRegistration() {
 
   const handleDummySignUp = (e: any) => {
     e.preventDefault();
-    localStorage.setItem("nameDummy", name);
-    localStorage.setItem("emailDummy", email);
-    localStorage.setItem("passwordDummy", password);
-    localStorage.setItem("isRegisteredDummy", "true");
     router.push("/users/dashboard");
   };
 

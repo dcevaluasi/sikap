@@ -35,17 +35,10 @@ import {
 import { Progress } from "@/components/ui/progress";
 import { MdWorkOutline } from "react-icons/md";
 import { Checkbox } from "@/components/ui/checkbox";
+import axios, { AxiosResponse } from "axios";
+import Cookies from "js-cookie";
 
-function FormRegistrationTraining() {
-  const router = useRouter();
-
-  /* state variable to store basic user information to register */
-  const [name, setName] = React.useState<string>("");
-  const [nik, setNik] = React.useState<string>("");
-  const [phoneNumber, setPhoneNumber] = React.useState<string>("");
-  const [email, setEmail] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
-
+function FormRegistrationTraining({ id }: { id: number }) {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -53,45 +46,31 @@ function FormRegistrationTraining() {
     });
   };
 
-  /* function to generate data in type FormData */
-  const convertDataToFormData = () => {
-    const data = new FormData();
-
-    data.append("name", name);
-    data.append("email", email);
-    data.append("password", password);
-
-    return data;
-  };
-
   const [isInputError, setIsInputError] = React.useState(false);
 
-  const handleRegistrasiAkun = (e: FormEvent) => {
-    if (name == "" || nik == "" || phoneNumber == "" || password == "") {
-      Toast.fire({
-        icon: "error",
-        title: `Tolong lengkapi data registrasi!`,
-      });
-      setIsInputError(true);
-    } else {
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil melakukan registrasi akun!`,
-      });
-      router.push("/dashbord/profile");
-    }
-  };
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const token = Cookies.get("XSRF081");
 
-  const [imageIndex, setImageIndex] = React.useState(0);
-  const images = ["/images/hero-img2.jpg"];
-
-  const handleDummySignUp = (e: any) => {
+  const handleRegistrationTrainingForPeople = async (e: any) => {
     e.preventDefault();
-    localStorage.setItem("nameDummy", name);
-    localStorage.setItem("emailDummy", email);
-    localStorage.setItem("passwordDummy", password);
-    localStorage.setItem("isRegisteredDummy", "true");
-    router.push("/users/dashboard");
+    try {
+      const response: AxiosResponse = await axios.post(
+        `${baseUrl}/users/addPelatihan`,
+        JSON.stringify({
+          id_pelatihan: id.toString(),
+        }),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log({ response });
+    } catch (error) {
+      console.error({ error });
+    }
   };
 
   React.useEffect(() => {}, []);
@@ -105,7 +84,6 @@ function FormRegistrationTraining() {
   const FormFasilitas = () => {
     return (
       <form
-        onSubmit={(e) => handleRegistrasiAkun(e)}
         autoComplete="off"
         className={`${indexFormTab == 0 ? "block" : "hidden"}`}
       >
@@ -200,7 +178,6 @@ function FormRegistrationTraining() {
   const FormPembayaran = () => {
     return (
       <form
-        onSubmit={(e) => handleRegistrasiAkun(e)}
         autoComplete="off"
         className={`${indexFormTab == 1 ? "block" : "hidden"}`}
       >
@@ -370,6 +347,7 @@ function FormRegistrationTraining() {
                     }`}
                   >
                     <button
+                      onClick={(e) => handleRegistrationTrainingForPeople(e)}
                       type="submit"
                       className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
                     >
@@ -395,10 +373,7 @@ function FormRegistrationTraining() {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel
-                      onClick={(e) => router.push("/pelatihan")}
-                      className=" py-6 text-base"
-                    >
+                    <AlertDialogCancel className=" py-6 text-base">
                       Oke
                     </AlertDialogCancel>
                   </AlertDialogFooter>

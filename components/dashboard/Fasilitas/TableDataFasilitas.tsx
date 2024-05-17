@@ -34,10 +34,11 @@ import { MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import axios, { AxiosResponse } from "axios";
+import Cookies from "js-cookie";
 
 const TableDataFasilitas: React.FC = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const token = localStorage.getItem("XSRF091");
+  const token = Cookies.get("XSRF091");
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
 

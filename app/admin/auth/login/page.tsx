@@ -8,7 +8,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
@@ -63,10 +62,9 @@ function page() {
         icon: "success",
         title: `Berhasil login ke admin E-LAUT!`,
       });
-      localStorage.setItem("XSRF091", response.data.t);
-      localStorage.setItem("XSRF092", "true");
 
-      Cookies.set('XSRF092', 'true')
+      Cookies.set("XSRF091", response.data.t);
+      Cookies.set("XSRF092", "true");
 
       resetAllStateToEmptyString();
       router.push("/admin/lemdiklat/pelatihan");

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/popover";
 
 import { HiMiniChevronDown } from "react-icons/hi2";
+import Cookies from "js-cookie";
 
 export default function Header() {
   const [top, setTop] = React.useState<boolean>(true);
@@ -30,14 +31,15 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${!top
-        ? "bg-white backdrop-blur-sm shadow-lg"
-        : usePathname().includes("pelatihan") ||
-          usePathname().includes("sertifikasi") ||
-          usePathname().includes("users")
+      className={`fixed w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
+        !top
+          ? "bg-white backdrop-blur-sm shadow-lg"
+          : usePathname().includes("pelatihan") ||
+            usePathname().includes("sertifikasi") ||
+            usePathname().includes("users")
           ? "bg-white backdrop-blur-sm shadow-lg"
           : ""
-        }`}
+      }`}
     >
       <div className="max-w-6xl mx-auto px-5 sm:px-6">
         <div className="flex items-center justify-between h-24 md:h-24 py-3">
@@ -89,8 +91,8 @@ export default function Header() {
 
               <NavLink href="/" name="Cek Sertifikat" top={top} />
 
-              {
-                localStorage.getItem('XSRF082') == 'true' ? <li>
+              {Cookies.get("XSRF082") == "true" ? (
+                <li>
                   <Link
                     href="/user/dashboard"
                     className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
@@ -107,7 +109,9 @@ export default function Header() {
                       />
                     </svg>
                   </Link>
-                </li> : <li>
+                </li>
+              ) : (
+                <li>
                   <Link
                     href="/login"
                     className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
@@ -125,9 +129,7 @@ export default function Header() {
                     </svg>
                   </Link>
                 </li>
-              }
-
-
+              )}
             </ul>
           </nav>
 
@@ -154,15 +156,16 @@ const NavDropDown = ({
       <PopoverTrigger asChild>
         <li className="cursor-pointer">
           <div
-            className={`font-medium ${!top || usePathname().includes('bppp')
-              ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-              : (top && usePathname().includes("pelatihan")) ||
-                usePathname().includes("sertifikasi") ||
-                usePathname().includes("cek-sertifikat") ||
-                usePathname().includes("users")
+            className={`font-medium ${
+              !top || usePathname().includes("bppp")
+                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+                : (top && usePathname().includes("pelatihan")) ||
+                  usePathname().includes("sertifikasi") ||
+                  usePathname().includes("cek-sertifikat") ||
+                  usePathname().includes("users")
                 ? "text-gray-900 hover:text-gray-900 hover:scale-105"
                 : "text-gray-200 hover:text-white hover:scale-105"
-              }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+            }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
           >
             {name} <HiMiniChevronDown className="text-lg" />
           </div>
@@ -188,15 +191,16 @@ const NavLink = ({
     <li>
       <Link
         href={href}
-        className={`font-medium ${!top || usePathname().includes('bppp')
-          ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-          : (top && usePathname().includes("pelatihan")) ||
-            usePathname().includes("sertifikasi") ||
-            usePathname().includes("cek-sertifikat") ||
-            usePathname().includes("users")
+        className={`font-medium ${
+          !top || usePathname().includes("bppp")
+            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+            : (top && usePathname().includes("pelatihan")) ||
+              usePathname().includes("sertifikasi") ||
+              usePathname().includes("cek-sertifikat") ||
+              usePathname().includes("users")
             ? "text-gray-900 hover:text-gray-900 hover:scale-105"
             : "text-gray-200 hover:text-white hover:scale-105"
-          }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+        }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
       >
         {name}
       </Link>

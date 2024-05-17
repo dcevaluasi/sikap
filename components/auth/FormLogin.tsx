@@ -6,6 +6,7 @@ import React, { FormEvent } from "react";
 import Toast from "../toast";
 import { useRouter } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
+import Cookies from "js-cookie";
 
 function FormLogin() {
   /* state variable to store basic user information to register */
@@ -37,14 +38,16 @@ function FormLogin() {
           }
         );
         console.log({ response });
-        localStorage.setItem("XSRF081", response.data.t); // token user
-        localStorage.setItem("XSRF082", "true"); // islogged in user
+
+        Cookies.set("XSRF081", response.data.t);
+        Cookies.set("XSRF082", "true");
+
         Toast.fire({
           icon: "success",
           title: `Berhasil melakukan login!`,
         });
 
-        if (localStorage.getItem("XSRF083")) {
+        if (Cookies.get("XSRF083")) {
           router.push("/dashboard/complete-profile");
         } else {
           router.push("/dashboard");
