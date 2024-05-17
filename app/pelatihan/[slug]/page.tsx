@@ -78,6 +78,30 @@ function page() {
       throw error;
     }
   };
+
+  const token = Cookies.get("XSRF081");
+
+  const handleRegistrationTrainingForPeople = async () => {
+    try {
+      const response: AxiosResponse = await axios.post(
+        `${baseUrl}/users/addPelatihan`,
+        JSON.stringify({
+          id_pelatihan: data[0]?.IdPelatihan,
+        }),
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log({ response });
+    } catch (error) {
+      console.error({ error });
+    }
+  };
+
   React.useEffect(() => {
     handleFetchingPublicTrainingDataById();
   }, []);

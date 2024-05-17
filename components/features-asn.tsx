@@ -11,77 +11,25 @@ import { TbClockHour2, TbFileCertificate } from "react-icons/tb";
 import { FaBuildingColumns } from "react-icons/fa6";
 import { FaUserGraduate } from "react-icons/fa";
 
+import CountUp from "react-countup";
+
 import { FaUserTie } from "react-icons/fa6";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
+import "swiper/css/effect-coverflow";
 import "swiper/css/pagination";
 
-import "./../app/css/additional-styles/features-slider.css";
+// import "./coverflow.css";
 
 // import required modules
-import "swiper/css/navigation";
-import { Pagination, Navigation, FreeMode } from "swiper/modules";
+import { EffectCoverflow, Pagination } from "swiper/modules";
+
 import Link from "next/link";
 
 export default function FeaturesASN() {
-  const tabMenus = [
-    {
-      id: 1,
-      name: "Pelatihan Masyarakat KP",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/masyarakat.jpg",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 2,
-      name: "Pelatihan Aparatur KP",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
-      icon: (
-        <FaUserTie className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 3,
-      name: "Sertifikasi Masyarakat KP",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
-      icon: (
-        <TbFileCertificate className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 4,
-      name: "Sertifikasi Aparatur KP",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
-      icon: (
-        <FaBuildingColumns className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 5,
-      name: "Sertifikasi Peserta Didik",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
-      icon: (
-        <FaUserGraduate className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-  ];
-
-  const [tab, setTab] = useState<number>(1);
-
   const tabs = useRef<HTMLDivElement>(null);
 
   const heightFix = () => {
@@ -115,7 +63,7 @@ export default function FeaturesASN() {
 
           <div className="max-w-2xl mx-auto text-center pb-5 md:pb-8">
             <h1 className="text-3xl font-calsans leading-[110%]">
-              Pelatihan ASN <br /> Kelautan dan Perikanan
+              Statistik Diklat <br /> Kelautan dan Perikanan
             </h1>
             <p className="text-base text-gray-600">
               Dapatkan keunggulan kompetitif dengan sertifikasi masyarakat
@@ -124,229 +72,64 @@ export default function FeaturesASN() {
             </p>
           </div>
 
-          <Swiper
-            slidesPerView={3}
-            spaceBetween={10}
-            freeMode={true}
-            pagination={{
-              clickable: true,
-            }}
-            navigation={true}
-            modules={[FreeMode, Navigation]}
-            className="mySwiper max-w-6xl"
-          >
-            <SwiperSlide>
-              <div className="coverflow flex shadow-custom flex-col relative w-[360px] h-fit rounded-3xl">
-                <div className="w-fit absolute top-4 right-4 flex gap-1">
-
-                  <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
-                    Teknis Umum
-                  </div>
-                </div>
-
-                <Image
-                  className="w-full rounded-tl-3xl rounded-tr-3xl h-[250px] object-cover"
-                  alt=""
-                  src="/images/asn.jpeg"
-                  width={0}
-                  height={0}
-                />
-                <div className="px-6 py-3">
-                  <div className="w-full pb-4 gap-3">
-                    <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
-                      Seri Pelatihan Identifikasi Ikan Hiu dan Pari "Biologi dan ...
-
-                    </h2>
-                    <div className="flex gap-1 text-gray-600 text-sm items-center">
-                      <TbClockHour2 />
-                      <p>Pendaftaran : 25 April - 01 Mei 2024</p>
-                    </div>
-                    <p className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000">
-                      Pelatihan yang diselenggaran BPPSDM KP untuk menjaring
-                      masyarakat kelautan perikanan yang ingin mengasah skill nya
-                      dibidang kelautan dan perikanan...
-                    </p>
-                    <Link
-                      target="_blank"
-                      href="https://elearning.kkp.go.id"
-                      className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
-                    >
-                      Registrasi
-                    </Link>
-                  </div>
-                </div>
+          <div className="p-6">
+            <div className="mx-auto grid justify-center text-center grid-cols-1 lg:grid-cols-3 gap-10 md:gap-0">
+              <div className="flex flex-col justify-start m-2 lg:m-6">
+                <p className="text-5xl font-bold leading-none lg:text-[6rem]">
+                  <CountUp end={40.6} duration={5} />
+                  <span>K</span>
+                </p>
+                <p className="text-sm sm:text-base">Lulusan</p>
               </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="coverflow flex shadow-custom flex-col relative w-[360px] h-fit rounded-3xl">
-                <div className="w-fit absolute top-4 right-4 flex gap-1">
-
-                  <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
-                    Teknis Fungsional
-                  </div>
-                </div>
-
-                <Image
-                  className="w-full rounded-tl-3xl rounded-tr-3xl h-[250px] object-cover"
-                  alt=""
-                  src="/images/asn2.jpg"
-                  width={0}
-                  height={0}
-                />
-                <div className="px-6 py-3">
-                  <div className="w-full pb-4 gap-3">
-                    <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
-                      Pelatihan ToT HACCP Bagi Guru dan Dosen Tahun 2024
-
-                    </h2>
-                    <div className="flex gap-1 text-gray-600 text-sm items-center">
-                      <TbClockHour2 />
-                      <p>Pendaftaran : 25 April - 01 Mei 2024</p>
-                    </div>
-                    <p className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000">
-                      Pelatihan yang diselenggaran BPPSDM KP untuk menjaring
-                      masyarakat kelautan perikanan yang ingin mengasah skill nya
-                      dibidang kelautan dan perikanan...
-                    </p>
-                    <Link
-                      target="_blank"
-                      href="https://elearning.kkp.go.id"
-                      className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
-                    >
-                      Registrasi
-                    </Link>
-                  </div>
-                </div>
+              <div className="flex flex-col justify-start m-2 lg:m-6">
+                <p className="text-5xl font-bold leading-none lg:text-[6rem]">
+                  <CountUp end={200} duration={5} />
+                  <span>+</span>
+                </p>
+                <p className="text-sm sm:text-base">Pelatihan</p>
               </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="coverflow flex shadow-custom flex-col relative w-[360px] h-fit rounded-3xl">
-                <div className="w-fit absolute top-4 right-4 flex gap-1">
-
-                  <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
-                    Microlearning
-                  </div>
-                </div>
-
-                <Image
-                  className="w-full rounded-tl-3xl rounded-tr-3xl h-[250px] object-cover"
-                  alt=""
-                  src="/images/asn.jpeg"
-                  width={0}
-                  height={0}
-                />
-                <div className="px-6 py-3">
-                  <div className="w-full pb-4 gap-3">
-                    <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
-                      Pelatihan Budidaya Ikan Lobster
-                    </h2>
-                    <div className="flex gap-1 text-gray-600 text-sm items-center">
-                      <TbClockHour2 />
-                      <p>Pendaftaran : 25 April - 01 Mei 2024</p>
-                    </div>
-                    <p className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000">
-                      Pelatihan yang diselenggaran BPPSDM KP untuk menjaring
-                      masyarakat kelautan perikanan yang ingin mengasah skill nya
-                      dibidang kelautan dan perikanan...
-                    </p>
-                    <Link
-                      target="_blank"
-                      href="https://elearning.kkp.go.id"
-                      className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
-                    >
-                      Registrasi
-                    </Link>
-                  </div>
-                </div>
+              <div className="flex flex-col justify-start m-2 lg:m-6">
+                <p className="text-5xl font-bold leading-none lg:text-[6rem]">
+                  <CountUp end={14} duration={5} />
+                  <span>K</span>
+                </p>
+                <p className="text-sm sm:text-base">
+                  Terserap DUDI/Membangun Startup
+                </p>
               </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="coverflow flex shadow-custom flex-col relative w-[360px] h-fit rounded-3xl">
-                <div className="w-fit absolute top-4 right-4 flex gap-1">
-
-                  <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
-                    Microlearning
-                  </div>
-                </div>
-
-                <Image
-                  className="w-full rounded-tl-3xl rounded-tr-3xl h-[250px] object-cover"
-                  alt=""
-                  src="/images/asn2.jpg"
-                  width={0}
-                  height={0}
-                />
-                <div className="px-6 py-3">
-                  <div className="w-full pb-4 gap-3">
-                    <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
-                      Blended Learning 5C for Smart ASN KKP 2024 PPS Nizam Zachman
-
-                    </h2>
-                    <div className="flex gap-1 text-gray-600 text-sm items-center">
-                      <TbClockHour2 />
-                      <p>Pendaftaran : 25 April - 01 Mei 2024</p>
-                    </div>
-                    <p className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000">
-                      Pelatihan yang diselenggaran BPPSDM KP untuk menjaring
-                      masyarakat kelautan perikanan yang ingin mengasah skill nya
-                      dibidang kelautan dan perikanan...
-                    </p>
-                    <Link
-                      target="_blank"
-                      href="https://elearning.kkp.go.id"
-                      className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
-                    >
-                      Registrasi
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
-            <SwiperSlide>
-              <div className="coverflow flex shadow-custom flex-col relative w-[360px] h-fit rounded-3xl">
-                <div className="w-fit absolute top-4 right-4 flex gap-1">
-                  <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
-                    Rp 500.000
-                  </div>
-                  <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
-                    Budidaya
-                  </div>
-                </div>
-
-                <Image
-                  className="w-full rounded-tl-3xl rounded-tr-3xl h-[250px] object-cover"
-                  alt=""
-                  src="/images/asn.jpeg"
-                  width={0}
-                  height={0}
-                />
-                <div className="px-6 py-3">
-                  <div className="w-full pb-4 gap-3">
-                    <h2 className="font-calsans text-xl duration-1000 text-black mt-2">
-                      Pelatihan Budidaya Ikan Lobster
-                    </h2>
-                    <div className="flex gap-1 text-gray-600 text-sm items-center">
-                      <TbClockHour2 />
-                      <p>Pendaftaran : 25 April - 01 Mei 2024</p>
-                    </div>
-                    <p className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000">
-                      Pelatihan yang diselenggaran BPPSDM KP untuk menjaring
-                      masyarakat kelautan perikanan yang ingin mengasah skill nya
-                      dibidang kelautan dan perikanan...
-                    </p>
-                    <Link
-                      target="_blank"
-                      href="https://elearning.kkp.go.id"
-                      className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
-                    >
-                      Registrasi
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </SwiperSlide>
-
-          </Swiper>
+            </div>
+          </div>
+          {/* 
+          <iframe
+            width="100%"
+            height="600px"
+            src={`https://www.youtube.com/embed/Rfvc8mJrZ3I?si=civx1npwRDADFaQQ`}
+            title="YouTube video player"
+            className="rounded-2xl"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
+          <iframe
+            width="100%"
+            height="400"
+            src={`https://www.youtube.com/embed/FKt90_kh75k?si=7vyX7VvKOdpk_hv9`}
+            title="YouTube video player"
+            className="rounded-2xl"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe>
+          <iframe
+            width="100%"
+            height="400"
+            src={`https://www.youtube.com/embed/nz6xjOwOVTc?si=HXLaILmK2RojgOsB`}
+            title="YouTube video player"
+            className="rounded-2xl"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          ></iframe> */}
         </div>
       </div>
     </section>

@@ -7,78 +7,44 @@ import { GiCirclingFish, GiFishEggs, GiFoodChain } from "react-icons/gi";
 import { MdAssuredWorkload } from "react-icons/md";
 import { TbTargetArrow } from "react-icons/tb";
 
-export default function FeaturesBlocks() {
+export default function FeaturesKepelautan() {
   const competenceFields = [
     {
       id: 1,
-      name: "HCCP",
-      fullName: "Hazard Analysis and Critical Control Points",
+      name: "COC",
+      fullName: "Certificate Of Competency",
       description:
         "Kompetensi mengamankan pangan dengan identifikasi bahaya dan penerapan kontrol",
       icon: (
         <FaBiohazard className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
       ),
-      img: "haccp.png",
+      img: "coc.png",
     },
     {
       id: 2,
-      name: "SPI",
-      fullName: "Sertifikasi Pengolah Ikan",
+      name: "COP",
+      fullName: "Certificate Of Proficiency",
       description:
         "Pengawasan organisasi untuk tujuan efektif dan kepatuhan, melalui kegiatan berkelanjutan",
       icon: (
         <TbTargetArrow className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
       ),
-      img: "spi.png",
+      img: "cop.png",
     },
     {
       id: 3,
-      name: "API",
-      fullName: "Ahli Pengolah Ikan",
+      name: "DPM",
+      fullName: "Diklat Pemberdayaan Masyarakat",
       description:
-        "Menyertifikasi profesional membangun sistem anti-korupsi sesuai standar nasional",
+        "Pengawasan organisasi untuk tujuan efektif dan kepatuhan, melalui kegiatan berkelanjutan",
       icon: (
-        <MdAssuredWorkload className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
+        <TbTargetArrow className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
       ),
-      img: "apiq.png",
-    },
-    {
-      id: 4,
-      name: "CPPIB",
-      fullName: "Cara Pembuatan Pakan Ikan yang Baik",
-      description:
-        "Sertifikasi Produsen Pakan Ikan Mandiri: Validasi produksi pakan ikan lokal secara independen oleh individu atau instansi",
-      icon: (
-        <GiFishEggs className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
-      ),
-      img: "cppib.png",
-    },
-    {
-      id: 5,
-      name: "CPIB",
-      fullName: "Cara Pembenihan Ikan yang Baik",
-      description:
-        "Panduan praktis manajemen pemijahan, penetasan telur, dan pemeliharaan benih ikan dalam lingkungan terkontrol",
-      icon: (
-        <GiFoodChain className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
-      ),
-      img: "cpib.png",
-    },
-    {
-      id: 6,
-      name: "CBIB",
-      fullName: "Cara Budidaya Ikan yang Baik",
-      description:
-        "Metode pemeliharaan, pembesaran, dan panen ikan dalam lingkungan terkontrol untuk mutu dan keamanan pangan",
-      icon: (
-        <GiCirclingFish className="text-6xl text-sky-500 group-hover:text-sky-500 duration-700" />
-      ),
-      img: "budidaya.png",
+      img: "dpm.png",
     },
   ];
   return (
     <section className="relative mb-24">
-      {/* Section background (needs .relative class on parent and next sibling elements) */}
       <div
         className="absolute inset-0 top-1/2 md:mt-24 lg:mt-0 bg-gray-900 pointer-events-none"
         aria-hidden="true"
@@ -87,11 +53,10 @@ export default function FeaturesBlocks() {
 
       <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
         <div className="py-12 md:py-20">
-          {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
             <h1 className="text-3xl font-calsans leading-[110%]">
-              Pelatihan dan Uji Kompetensi <br />
-              Non-Kepelautan
+              Pelatihan dan Uji Kompetensi <br className="hidden md:block" />
+              Kepelautan
             </h1>
 
             <p className="text-base text-gray-600">
@@ -102,10 +67,10 @@ export default function FeaturesBlocks() {
           </div>
 
           {/* Items */}
-          <div className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
+          <div className="max-w-md mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
             {competenceFields?.map((competenceItem, index) => (
               <Bounce key={index} duration={500 * index}>
-                <div className="relative hover:cursor-pointer hover:scale-105 duration-1000 flex flex-col items-center px-6 py-7 bg-white rounded shadow-xl w-2/3 mx-auto md:mx-0 md:w-full">
+                <div className="relative flex flex-col items-center px-6 py-7 bg-white rounded shadow-xl hover:cursor-pointer hover:scale-105 duration-1000 w-2/3 mx-auto md:mx-0 md:w-full">
                   {/* {competenceItem?.icon} */}
                   <Image
                     className="w-16 md:w-20"

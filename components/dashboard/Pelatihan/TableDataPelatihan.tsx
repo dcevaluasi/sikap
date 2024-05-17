@@ -143,7 +143,7 @@ const TableDataPelatihan: React.FC = () => {
       ),
     },
     {
-      accessorKey: "KodePelatihan2",
+      accessorKey: "IdPelatihan",
       header: ({ column }) => {
         return (
           <Button
@@ -200,7 +200,7 @@ const TableDataPelatihan: React.FC = () => {
               router.push(
                 `/admin/lemdiklat/pelatihan/${row.getValue(
                   "KodePelatihan"
-                )}/peserta-pelatihan`
+                )}/peserta-pelatihan?XSRF084=${row.getValue("IdPelatihan")}`
               )
             }
             variant="outline"

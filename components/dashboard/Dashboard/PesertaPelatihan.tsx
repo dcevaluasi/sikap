@@ -5,8 +5,32 @@ import CardDataStats from "../CardDataStats";
 import TableDataPelatihan from "../Pelatihan/TableDataPelatihan";
 import TableDataPesertaPelatihan from "../Pelatihan/TableDataPesertaPelatihan";
 import { HiUserGroup } from "react-icons/hi2";
+import { useSearchParams } from "next/navigation";
+import axios, { AxiosResponse } from "axios";
+import { PelatihanMasyarakat } from "@/types/product";
 
 const PesertaPelatihan: React.FC = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const params = useSearchParams();
+  const id = params.get("XSRF084");
+
+  const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
+  const handleFetchingPublicTrainingDataById = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/getPelatihanUser?idPelatihan=${id}`
+      );
+      console.log({ response });
+      setData(response.data.data);
+    } catch (error) {
+      console.error("Error posting training data:", error);
+      throw error;
+    }
+  };
+  React.useEffect(() => {
+    handleFetchingPublicTrainingDataById();
+  }, []);
+
   return (
     <>
       <div className="flex flex-col">

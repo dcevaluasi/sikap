@@ -29,7 +29,7 @@ import Link from "next/link";
 import axios, { AxiosResponse } from "axios";
 import { PelatihanMasyarakat } from "@/types/product";
 
-export default function Features() {
+export default function FeaturesDiklatKepelautan() {
   const tabMenus = [
     {
       id: 1,
@@ -136,7 +136,8 @@ export default function Features() {
 
           <div className="max-w-2xl mx-auto text-center pb-5 md:pb-8">
             <h1 className="text-3xl font-calsans leading-[110%]">
-              Pelatihan Kompetensi dan Teknis <br /> Non-Kepelautan
+              Diklat & Uji Kompetensi <br />
+              Kepelautan
             </h1>
             <p className="text-base text-gray-600">
               Optimalkan potensi sumber daya laut. Bergabunglah dalam pelatihan

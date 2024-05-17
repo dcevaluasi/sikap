@@ -96,7 +96,7 @@ function FormPelatihan() {
   );
   const [namaPelatihan, setNamaPelatihan] = React.useState("");
   const [penyelenggaraPelatihan, setPenyelenggaraPelatihan] =
-    React.useState("");
+    React.useState("BPPP Tegal");
   const [detailPelatihan, setDetailPelatihan] = React.useState("");
   const [jenisPelatihan, setJenisPelatihan] = React.useState("");
   const [bidangPelatihan, setBidangPelatihan] = React.useState("");
@@ -467,7 +467,7 @@ function FormPelatihan() {
                             className="form-input w-full text-black border-gray-300 rounded-md"
                             placeholder="BPPP Tegal"
                             required
-                            value={"BPPP Tegal"}
+                            value={penyelenggaraPelatihan}
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                               setPenyelenggaraPelatihan(e.target.value)
                             }
