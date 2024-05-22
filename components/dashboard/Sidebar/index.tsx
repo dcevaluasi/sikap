@@ -67,19 +67,19 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 scrollbar-hide ${
+      className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-900 duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 scrollbar-hide ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+      <div className="flex items-center justify-between gap-2 px-6 pb-5.5 lg:pb-6.5">
         <Link
           href="/"
           className="flex gap-2 mt-10 flex-col items-center justify-center"
         >
           <LogoFooter />
-          <div className="flex flex-col gap-1 w-full items-center justify-center">
-            <p className="font-bold text-4xl text-white">E-LAUT</p>
+          <div className="flex flex-col gap-0 w-full items-center justify-center">
+            <p className="font-bold text-4xl !font-delius text-white">E-LAUT</p>
             <p className="font-medium text-white text-sm text-center">
               Elektronik Layanan Pelatihan Kelautan dan Perikanan Terpadu BPPSDM
               KP

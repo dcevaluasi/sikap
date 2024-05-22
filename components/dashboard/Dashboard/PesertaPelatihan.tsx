@@ -1,8 +1,5 @@
 "use client";
 import React from "react";
-import CardDataStats from "../CardDataStats";
-// import MapOne from "../Maps/MapOne";
-import TableDataPelatihan from "../Pelatihan/TableDataPelatihan";
 import TableDataPesertaPelatihan from "../Pelatihan/TableDataPesertaPelatihan";
 import { HiUserGroup } from "react-icons/hi2";
 import { useSearchParams } from "next/navigation";

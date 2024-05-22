@@ -1,6 +1,6 @@
 import "./css/style.css";
 
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Delius_Unicase, Inter, Plus_Jakarta_Sans } from "next/font/google";
 
 import localFont from "next/font/local";
 
@@ -15,6 +15,12 @@ const myFont = localFont({
 const cambria = localFont({
   src: "./font/cambria.ttf",
   variable: "--font-cambria",
+});
+
+const delius = Delius_Unicase({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-delius",
 });
 
 const inter = Plus_Jakarta_Sans({
@@ -37,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${myFont.variable} ${cambria.variable} antialiased bg-white text-gray-900 tracking-tight`}
+        className={`${inter.className} ${myFont.variable} ${delius.variable} ${cambria.variable} antialiased bg-white text-gray-900 tracking-tight`}
       >
         <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip">
           <Header />

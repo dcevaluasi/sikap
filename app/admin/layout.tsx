@@ -5,7 +5,7 @@ import "@/components/styles/style.css";
 import React, { useEffect, useState } from "react";
 import Loader from "@/components/dashboard/common/Loader";
 
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Delius_Unicase, Inter, Plus_Jakarta_Sans } from "next/font/google";
 
 import localFont from "next/font/local";
 import axios from "axios";
@@ -19,6 +19,12 @@ const inter = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
+});
+
+const delius = Delius_Unicase({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-delius",
 });
 
 export default function RootLayout({
@@ -37,7 +43,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning={true}
-        className={`${inter.className} ${myFont.variable}`}
+        className={`${inter.className} ${myFont.variable} ${delius.variable}`}
       >
         <div>{loading ? <Loader /> : children}</div>
       </body>

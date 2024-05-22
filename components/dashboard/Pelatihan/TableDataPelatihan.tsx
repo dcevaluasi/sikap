@@ -1,5 +1,7 @@
 import React, { ReactElement, useState } from "react";
 import TableData from "../Tables/TableData";
+import { RiShipLine } from "react-icons/ri";
+
 import {
   Sheet,
   SheetClose,
@@ -27,11 +29,18 @@ import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
 import {
   TbBroadcast,
   TbBuildingCommunity,
+  TbCalendarCheck,
+  TbCalendarExclamation,
+  TbCalendarSearch,
   TbCalendarStats,
+  TbChartBubble,
+  TbChartDonut,
+  TbDatabaseEdit,
   TbFileCertificate,
   TbFishChristianity,
   TbMoneybag,
   TbQrcode,
+  TbSchool,
   TbTargetArrow,
 } from "react-icons/tb";
 import { IoIosInformationCircle } from "react-icons/io";
@@ -59,6 +68,15 @@ import axios, { AxiosResponse } from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PelatihanMasyarakat } from "@/types/product";
 import { FaRupiahSign } from "react-icons/fa6";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+} from "@/components/ui/select";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -101,15 +119,20 @@ const TableDataPelatihan: React.FC = () => {
 
   const [data, setData] = React.useState<Pelatihan[]>([]);
 
+  const [isFetching, setIsFetching] = React.useState<boolean>(false);
+
   const handleFetchingPublicTrainingData = async () => {
+    setIsFetching(true);
     try {
       const response: AxiosResponse = await axios.get(
         `${baseUrl}/lemdik/getPelatihan`
       );
       console.log({ response });
       setData(response.data.data);
+      setIsFetching(false);
     } catch (error) {
       console.error("Error posting training data:", error);
+      setIsFetching(false);
       throw error;
     }
   };
@@ -130,11 +153,11 @@ const TableDataPelatihan: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className={``}
+            className={`text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             No
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown className="ml-1 h-4 w-4" />
           </Button>
         );
       },
@@ -148,11 +171,11 @@ const TableDataPelatihan: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className={`${"flex"} w-full`}
+            className={`${"flex"} w-full text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Action
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <TbDatabaseEdit className="ml-1 h-4 w-4" />
           </Button>
         );
       },
@@ -260,169 +283,82 @@ const TableDataPelatihan: React.FC = () => {
       ),
     },
     {
-      accessorKey: "KodePelatihan3",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={``}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Kode Pelatihan
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`text-center uppercase`}>
-          {row.getValue("KodePelatihan")}
-        </div>
-      ),
-    },
-
-    {
       accessorKey: "NamaPelatihan",
+
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
+            className={`p-0 !text-left w-[270px] flex items-center justify-start text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            NamaPelatihan
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            Pelatihan
+            <TbSchool className="ml-1 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`${"ml-0"} text-center capitalize`}>
-          {row.getValue("NamaPelatihan")}
+        <div className={`${"ml-0"} text-left capitalize`}>
+          <p className="text-xs text-gray-400">
+            {" "}
+            {row.getValue("KodePelatihan")} • {row.original.BidangPelatihan}
+          </p>
+          <p className="text-base font-semibold tracking-tight leading-none">
+            {row.getValue("NamaPelatihan")}
+          </p>
         </div>
       ),
     },
     {
-      accessorKey: "TanggalPelaksanaan",
+      accessorKey: "TanggalMulaiPelatihan",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
+            className={`p-0 !text-left w-fit flex items-center justify-start text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Tanggal Pelaksanaan
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <TbCalendarCheck className="ml-2 h-4 w-4 text-xl" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`${"ml-0"} text-center capitalize`}>
-          {row.getValue("TanggalPelaksanaan")}
+        <div className={`${"ml-0"} text-left capitalize`}>
+          <p className="text-xs text-gray-400 capitalize"> Dilaksanakan pada</p>
+          <p className="text-base font-semibold tracking-tight leading-none">
+            {row.getValue("TanggalMulaiPelatihan")}{" "}
+            <span className="lowercase">s.d</span>{" "}
+            {row.original.TanggalBerakhirPelatihan}
+          </p>
         </div>
       ),
     },
     {
-      accessorKey: "KoutaPelatihan",
+      accessorKey: "AsalPelatihan",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
+            className="p-0 !text-left w-[150px] flex items-center justify-start text-gray-900 font-semibold"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Jumlah Pendaftar
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => <div className="text-center uppercase">0</div>,
-    },
-    {
-      accessorKey: "KoutaPelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Kuota Peserta
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            Peserta
+            <HiUserGroup className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className="text-center uppercase">
-          {row.getValue("KoutaPelatihan")}
+        <div className={`${"ml-0"} text-left capitalize`}>
+          <p className="text-xs text-gray-400 capitalize">
+            {" "}
+            Asal dan Kuota Peserta
+          </p>
+          <p className="text-base font-semibold tracking-tight leading-none">
+            {row.getValue("AsalPelatihan")} • {row.original.KoutaPelatihan}{" "}
+            Orang
+          </p>
         </div>
-      ),
-    },
-    {
-      accessorKey: "KoutaPelatihan3",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Jumlah Peserta Lulus
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-center uppercase">
-          <span className="text-green-500 font-semibold">0</span>/
-          {row.getValue("KoutaPelatihan")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "DenganFasilitasMenginap",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Dengan <br />
-            Fasilitas Menginap
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => <div className="text-center uppercase">Ya</div>,
-    },
-    {
-      accessorKey: "DenganPaketKonsumsi",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Dengan <br /> Paket Konsumsi
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => <div className="text-center uppercase">Ya</div>,
-    },
-    {
-      accessorKey: "DenganPaketKonsumsi",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            TTD Sertifikat
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-center capitalize">Kepala Badan</div>
       ),
     },
   ];
@@ -476,7 +412,7 @@ const TableDataPelatihan: React.FC = () => {
                 </span>
                 <div className="w-full">
                   <p className="font-semibold text-primary">Total Pelatihan</p>
-                  <p className="text-sm font-medium">1 pelatihan</p>
+                  <p className="text-sm font-medium">{data.length} pelatihan</p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -576,7 +512,7 @@ const TableDataPelatihan: React.FC = () => {
                 </span>
                 <div className="w-full">
                   <p className="font-semibold text-primary">Total Pelatihan</p>
-                  <p className="text-sm font-medium">1 pelatihan</p>
+                  <p className="text-sm font-medium">{data.length} pelatihan</p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -591,30 +527,176 @@ const TableDataPelatihan: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-            <div className="flex w-full gap-2 justify-end">
-              <div
-                onClick={(e) => {
-                  router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
-                }}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
-              >
-                <FiUploadCloud />
-                Tambah Database Pelatihan
-              </div>
-            </div>
           </div>
 
           {/* List Data Pelatihan */}
           <div>
             <div id="chartOne" className="-ml-5"></div>
+            <div className="flex w-full items-center mb-2">
+              {/* <Input
+                placeholder="Cari Nama Pelatihan..."
+                value={
+                  (table
+                    .getColumn("NamaPelatihan")
+                    ?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event: any) =>
+                  table
+                    .getColumn("NamaPelatihan")
+                    ?.setFilterValue(event.target.value)
+                }
+                className="max-w-xs py-1 px-4 h-9 text-sm"
+              /> */}
+              <div className="flex w-full gap-1 items-start">
+                <Select>
+                  <SelectTrigger className="w-[160px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                    <div
+                      onClick={(e) => {
+                        router.push(
+                          "/admin/lemdiklat/pelatihan/tambah-pelatihan"
+                        );
+                      }}
+                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                    >
+                      <FaRupiahSign />
+                      Jenis Pelatihan
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Jenis</SelectLabel>
+                      <SelectItem value="pendaftaran">Reguler</SelectItem>
+                      <SelectItem value="pelaksanaan">Aspirasi</SelectItem>
+                      <SelectItem value="selesai">PNBP/BLU</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Select>
+                  <SelectTrigger className="w-[170px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                    <div
+                      onClick={(e) => {
+                        router.push(
+                          "/admin/lemdiklat/pelatihan/tambah-pelatihan"
+                        );
+                      }}
+                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                    >
+                      <TbChartBubble />
+                      Status Pelatihan
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Status</SelectLabel>
+                      <SelectItem value="pendaftaran">Pendaftaran</SelectItem>
+                      <SelectItem value="pelaksanaan">Pelaksanaan</SelectItem>
+                      <SelectItem value="selesai">Selesai</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Select>
+                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                    <div
+                      onClick={(e) => {
+                        router.push(
+                          "/admin/lemdiklat/pelatihan/tambah-pelatihan"
+                        );
+                      }}
+                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                    >
+                      <RiShipLine />
+                      Bidang Pelatihan
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Bidang</SelectLabel>
+                      <SelectItem value="apple">Kepelautan</SelectItem>
+                      <SelectItem value="banana">Non-Kepelautan</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Select>
+                  <SelectTrigger className="w-[110px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                    <div
+                      onClick={(e) => {
+                        router.push(
+                          "/admin/lemdiklat/pelatihan/tambah-pelatihan"
+                        );
+                      }}
+                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                    >
+                      <TbBroadcast />
+                      Publish
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Bidang</SelectLabel>
+                      <SelectItem value="apple">Publish E-LAUT</SelectItem>
+                      <SelectItem value="banana">Unpublish E-LAUT</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="w-full flex justify-end gap-2">
+                <div
+                  onClick={(e) => {
+                    router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
+                  }}
+                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer w-fit"
+                >
+                  <TbChartDonut />
+                  Statistik
+                </div>
+                <div
+                  onClick={(e) => {
+                    router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
+                  }}
+                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer w-fit"
+                >
+                  <FiUploadCloud />
+                  Tambah Database Pelatihan
+                </div>
+              </div>
+            </div>
+
             <TableData
-              isLoading={false}
+              isLoading={isFetching}
               columns={columns}
               table={table}
               type={"short"}
             />
+            <div className="flex items-center justify-end space-x-2 py-4">
+              <div className="text-muted-foreground flex-1 text-sm">
+                {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                {table.getFilteredRowModel().rows.length} row(s) selected.
+              </div>
+              <div className="space-x-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="font-inter"
+                  onClick={() => table.previousPage()}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="font-inter"
+                  onClick={() => table.nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  Next
+                </Button>
+              </div>
+            </div>
           </div>
         </>
       )}
