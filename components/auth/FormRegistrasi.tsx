@@ -14,12 +14,11 @@ function FormRegistrasi() {
 
   const [noKusuka, setNoKusuka] = React.useState("");
 
-  const handleCheckingNoKusuka = async (e) => {
+  const handleCheckingNoKusuka = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
+      const response = await axios.get(
         `${process.env.NEXT_PUBLIC_KUSUKA_URL}?nomor_kusuka=${noKusuka}`,
-        {},
         {
           headers: {
             Token: `HX1PnieKT9qjUE6SvzFFBSonLjzggZpY`,
