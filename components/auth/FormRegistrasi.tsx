@@ -14,7 +14,8 @@ function FormRegistrasi() {
 
   const [noKusuka, setNoKusuka] = React.useState("");
 
-  const handleCheckingNoKusuka = async () => {
+  const handleCheckingNoKusuka = async (e) => {
+    e.preventDefault();
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_KUSUKA_URL}?nomor_kusuka=${noKusuka}`,
@@ -25,7 +26,10 @@ function FormRegistrasi() {
           },
         }
       );
-    } catch {}
+      console.log({ response });
+    } catch (error) {
+      console.error({ error });
+    }
   };
 
   /* state variable to store basic user information to register */
@@ -154,15 +158,16 @@ function FormRegistrasi() {
                   type="text"
                   className="form-input w-full text-black"
                   placeholder="Masukkan nomor KUSUKA"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={noKusuka}
+                  onChange={(e) => setNoKusuka(e.target.value)}
                   required
                 />
               </div>
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3">
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={(e) => handleCheckingNoKusuka(e)}
                     className="btn text-white py-3 bg-blue-600 hover:bg-blue-700 w-full"
                   >
                     Cek
