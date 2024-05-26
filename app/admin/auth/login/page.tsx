@@ -8,6 +8,18 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectLabel,
+} from "@/components/ui/select";
+import { FiSlack } from "react-icons/fi";
+import { HiMiniUserGroup } from "react-icons/hi2";
+
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
@@ -17,6 +29,7 @@ function page() {
     */
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [role, setRole] = React.useState("");
 
   /*
     method for resting all state data login (LOG)
@@ -45,7 +58,7 @@ function page() {
 
     try {
       const response: AxiosResponse = await axios.post(
-        `${baseUrl}/lemdik/login`,
+        `${baseUrl}/${role}/login`,
         JSON.stringify({
           email: email,
           password: password,
@@ -65,9 +78,12 @@ function page() {
 
       Cookies.set("XSRF091", response.data.t);
       Cookies.set("XSRF092", "true");
+      Cookies.set("XSRF093", role == "lemdik" ? "lemdiklat" : "pusat");
 
       resetAllStateToEmptyString();
-      router.push("/admin/lemdiklat/pelatihan");
+      router.push(
+        `/admin/${role == "lemdik" ? "lemdiklat" : "pusat"}/dashboard`
+      );
     } catch (error) {
       console.error("Error saat melakukan login", error);
       Toast.fire({
@@ -87,7 +103,7 @@ function page() {
         }}
       >
         <Image
-          src={"/images/hero-img4.jpg"}
+          src={"/images/hero-img3.jpg"}
           className="absolute w-full h-screen object-cover duration-1000"
           alt=""
           layout="fill"
@@ -133,14 +149,14 @@ function page() {
                 name="email"
                 id="email"
                 placeholder="Email"
-                className="block w-full p-4 text-lg rounded-sm bg-black"
+                className="block w-full p-4 text-base bg-black rounded-3xl border-white border"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="pb-2 pt-4">
               <input
-                className="block w-full p-4 text-lg rounded-sm bg-black"
+                className="block w-full p-4 text-base bg-black rounded-3xl border-white border"
                 type="password"
                 name="password"
                 id="password"
@@ -148,6 +164,30 @@ function page() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+            </div>
+            <div className="pb-2 pt-4 w-full">
+              <Select
+                value={role}
+                onValueChange={(value: string) => setRole(value)}
+              >
+                <SelectTrigger className="w-full rounded-3xl p-4 h-14">
+                  <p className="mr-3 flex items-center gap-1 text-base">
+                    <HiMiniUserGroup />
+                    {role != ""
+                      ? role == "adminPusat"
+                        ? "Admin Pusat"
+                        : "Lemdiklat"
+                      : "Pilih Role"}
+                  </p>
+                </SelectTrigger>
+                <SelectContent side="top">
+                  <SelectGroup>
+                    <SelectLabel>Role</SelectLabel>
+                    <SelectItem value="adminPusat">Admin Pusat</SelectItem>
+                    <SelectItem value="lemdik">Admin Balai</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
             <div className="pb-2 pt-4">
               <button

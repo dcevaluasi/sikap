@@ -1,14 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import Cookies from "js-cookie";
+import Toast from "@/components/toast";
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+
+  const handleLogOut = async () => {
+    Cookies.remove("XSRF091");
+    Cookies.remove("XSRF092");
+    Toast.fire({
+      icon: "success",
+      title: `Berhasil logout dari dashboard Admin!`,
+    });
+    router.replace("/admin/auth/login");
+  };
 
   // close on click outside
   useEffect(() => {
@@ -170,7 +183,10 @@ const DropdownUser = () => {
             </Link>
           </li>
         </ul>
-        <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+        <button
+          onClick={(e) => handleLogOut()}
+          className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+        >
           <svg
             className="fill-current"
             width="22"
