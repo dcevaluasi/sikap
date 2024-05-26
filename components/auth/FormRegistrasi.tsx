@@ -12,6 +12,16 @@ import Cookies from "js-cookie";
 function FormRegistrasi() {
   const router = useRouter();
 
+  const [noKusuka, setNoKusuka] = React.useState("");
+
+  const handleCheckingNoKusuka = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_KUSUKA_URL}?nomor_kusuka=${noKusuka}`
+      );
+    } catch {}
+  };
+
   /* state variable to store basic user information to register */
   const [name, setName] = React.useState<string>("");
   const [nik, setNik] = React.useState<string>("");
@@ -125,6 +135,46 @@ function FormRegistrasi() {
 
           {/* Form */}
           <div className="max-w-sm mx-auto mt-5">
+            <div className="w-full flex gap-1">
+              <div className="w-full">
+                <label
+                  className="block text-gray-200 text-sm font-medium mb-1"
+                  htmlFor="name"
+                >
+                  No KUSUKA <span className="text-red-600">*</span>
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  className="form-input w-full text-black"
+                  placeholder="Masukkan nomor KUSUKA"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="flex flex-wrap -mx-3 mt-6">
+                <div className="w-full px-3">
+                  <button
+                    type="submit"
+                    className="btn text-white py-3 bg-blue-600 hover:bg-blue-700 w-full"
+                  >
+                    Cek
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center my-6">
+              <div
+                className="border-t border-gray-300 grow mr-3"
+                aria-hidden="true"
+              ></div>
+              <div
+                className="border-t border-gray-300 grow ml-3"
+                aria-hidden="true"
+              ></div>
+            </div>
             <form onSubmit={(e) => handleRegistrasiAkun(e)} autoComplete="off">
               <div className="flex flex-wrap -mx-3 mb-1">
                 <div className="w-full px-3">
