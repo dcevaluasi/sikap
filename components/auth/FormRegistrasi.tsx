@@ -17,17 +17,27 @@ function FormRegistrasi() {
   const handleCheckingNoKusuka = async (e: any) => {
     e.preventDefault();
     try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_KUSUKA_URL}?nomor_kusuka=${noKusuka}`,
-        {
-          headers: {
-            Token: `HX1PnieKT9qjUE6SvzFFBSonLjzggZpY`,
-          },
-        }
-      );
+      const url = `${process.env.NEXT_PUBLIC_KUSUKA_URL}/Kusuka?nomor_kusuka=${noKusuka}`;
+      console.log("Request URL:", url);
+
+      const response = await axios.get(url, {
+        headers: {
+          Token: "HX1PnieKT9qjUE6SvzFFBSonLjzggZpY",
+        },
+      });
+
       console.log({ response });
-    } catch (error) {
-      console.error({ error });
+    } catch (error: any) {
+      if (error.response) {
+        console.error("Response data:", error.response.data);
+        console.error("Response status:", error.response.status);
+        console.error("Response headers:", error.response.headers);
+      } else if (error.request) {
+        console.error("Request data:", error.request);
+      } else {
+        console.error("Error message:", error.message);
+      }
+      console.error("Error config:", error.config);
     }
   };
 
