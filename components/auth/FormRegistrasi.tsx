@@ -145,7 +145,10 @@ function FormRegistrasi() {
 
           {/* Form */}
           <div className="max-w-sm mx-auto mt-5">
-            <div className="w-full flex gap-1">
+            <form
+              onSubmit={(e) => handleCheckingNoKusuka(e)}
+              className="w-full flex gap-1"
+            >
               <div className="w-full">
                 <label
                   className="block text-gray-200 text-sm font-medium mb-1"
@@ -166,15 +169,14 @@ function FormRegistrasi() {
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3">
                   <button
-                    type="button"
-                    onClick={(e) => handleCheckingNoKusuka(e)}
+                    type="submit"
                     className="btn text-white py-3 bg-blue-600 hover:bg-blue-700 w-full"
                   >
                     Cek
                   </button>
                 </div>
               </div>
-            </div>
+            </form>
 
             <div className="flex items-center my-6">
               <div
