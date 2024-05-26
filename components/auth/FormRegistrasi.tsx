@@ -17,7 +17,13 @@ function FormRegistrasi() {
   const handleCheckingNoKusuka = async () => {
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_KUSUKA_URL}?nomor_kusuka=${noKusuka}`
+        `${process.env.NEXT_PUBLIC_KUSUKA_URL}?nomor_kusuka=${noKusuka}`,
+        {},
+        {
+          headers: {
+            Token: `HX1PnieKT9qjUE6SvzFFBSonLjzggZpY`,
+          },
+        }
       );
     } catch {}
   };
