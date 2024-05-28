@@ -1,6 +1,4 @@
-import { ApexOptions } from "apexcharts";
 import React, { useState } from "react";
-import ReactApexChart from "react-apexcharts";
 import TableData from "../Tables/TableData";
 import {
   AlertDialog,
@@ -24,9 +22,8 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Edit3Icon, Trash, X } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
 import {
   TbBroadcast,
   TbFileCertificate,
@@ -36,39 +33,104 @@ import {
 import { IoIosInformationCircle } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { MdOutlinePaid } from "react-icons/md";
 import { DialogSertifikat } from "@/components/sertifikat/dialogSertifikat";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Pelatihan, UserPelatihan } from "@/types/product";
+import axios, { AxiosResponse } from "axios";
+import { extractLastSegment } from "@/utils";
 
-const TableDataPesertaPelatihan = ({ data }: { data: Pelatihan | null }) => {
-  
+const TableDataPesertaPelatihan = () => {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const pathname = usePathname();
+  const id = extractLastSegment(pathname);
+
+  const [dataPelatihan, setDataPelatihan] = React.useState<any>({
+    IdPelatihan: 0,
+    IdLemdik: 0,
+    KodePelatihan: "",
+    NamaPelatihan: "",
+    PenyelenggaraPelatihan: "",
+    DetailPelatihan: "",
+    FotoPelatihan: "",
+    JenisPelatihan: "",
+    BidangPelatihan: "",
+    DukunganProgramTerobosan: "",
+    TanggalMulaiTerobosan: "",
+    TanggalBerakhirTerobosan: "",
+    HargaPelatihan: 0,
+    Instruktur: "",
+    Status: "",
+    MemoPusat: "",
+    SilabusPelatihan: "",
+    PelaksanaanPelatihan: "",
+    UjiKompotensi: 0,
+    KoutaPelatihan: 0,
+    AsalPelatihan: "",
+    AsalSertifikat: "",
+    JenisSertifikat: "",
+    TtdSertifikat: "",
+    NoSertifikat: "",
+    StatusApproval: "",
+    IdSaranaPrasarana: 0,
+    IdKonsumsi: "",
+    ModuleMateri: "",
+    CreateAt: "",
+    UpdateAt: "",
+    PemberitahuanDiterima: "",
+    SuratPemberitahuan: "",
+    CatatanPemberitahuanByPusat: "",
+    PenerbitanSertifikatDiterima: "",
+    BeritaAcara: "",
+    CatatanPenerbitanByPusat: "",
+    SarprasPelatihan: "",
+    MateriPelatihan: "",
+    UserPelatihan: [],
+  });
+
+  const [data, setData] = React.useState<UserPelatihan[]>([
+    {
+      CreatedAt: "",
+      IdUserPelatihan: 0,
+      IdPelatihan: 0,
+      IdUsers: 0,
+      IsActive: "",
+      IsKeterangan: "",
+      MetodoPembayaran: "",
+      NilaiPraktek: 0,
+      NilaiTeory: 0,
+      NoRegistrasi: "",
+      NoSertifikat: "",
+      PostTest: 0,
+      PreTest: 0,
+      StatusPembayaran: "",
+      UpdateAt: "",
+      WaktuPembayaran: "",
+    },
+  ]);
+  const handleFetchingPublicTrainingDataById = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/getPelatihanUser?idPelatihan=${id}`
+      );
+      console.log({ response });
+      setDataPelatihan(response.data);
+      setData(response.data.UserPelatihan);
+    } catch (error) {
+      console.error("Error posting training data:", error);
+      throw error;
+    }
+  };
+  React.useEffect(() => {
+    handleFetchingPublicTrainingDataById();
+  }, []);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
-  type UserPelatihan = {
-    CreatedAt: string;
-    IdPelatihan: number;
-    IdUsers: number;
-    IsActive: string;
-    IsKeterangan: string;
-    MetodoPembayaran: string;
-    NilaiPraktek: number;
-    NilaiTeory: number;
-    NoRegistrasi: string;
-    NoSertifikat: string;
-    PostTest: number;
-    PreTest: number;
-    StatusPembayaran: string;
-    UpdateAt: string;
-    WaktuPembayaran: string;
-  };
-
-  const router = useRouter();
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -92,102 +154,7 @@ const TableDataPesertaPelatihan = ({ data }: { data: Pelatihan | null }) => {
       ),
     },
     {
-      accessorKey: "IdPelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"flex"} w-full`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Action
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`${"flex"} flex items-center justify-center gap-1`}>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="outline" className="ml-auto">
-                <IoIosInformationCircle className="h-4 w-4" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
-                <AlertDialogDescription className="-mt-2">
-                  Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh
-                  masyarakat umum lakukan checklist agar tampil di website
-                  E-LAUT!
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <form autoComplete="off">
-                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                  <div>
-                    <Checkbox />
-                  </div>
-                  <div className="space-y-1 leading-none">
-                    <label>Publish Website E-LAUT</label>
-                    <p className="text-xs leading-[110%] text-gray-600">
-                      Dengan ini sebagai pihak lemdiklat saya mempublish
-                      informasi pelatihan terbuka untuk masyarakat umum!
-                    </p>
-                  </div>
-                </div>
-              </form>
-              <AlertDialogFooter>
-                <AlertDialogCancel>OK</AlertDialogCancel>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-          <Button
-            onClick={(e) =>
-              router.push(
-                `/admin/lemdiklat/pelatihan/${row.getValue(
-                  "KodePelatihan"
-                )}/peserta-pelatihan`
-              )
-            }
-            variant="outline"
-            className="ml-auto border border-green-500"
-          >
-            <MdOutlinePaid className="h-4 w-4 text-green-500" />
-          </Button>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "KodePelatithan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"flex"} w-full`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Sertifikat
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <DialogSertifikat>
-          <div className={`${"flex"} flex items-center justify-center gap-1`}>
-            <Button
-              variant="outline"
-              className="border border-gray-600 text-gray-600"
-            >
-              <TbFileCertificate className="h-4 w-4" />{" "}
-              <span>Lihat Sertifikat</span>
-            </Button>
-          </div>
-        </DialogSertifikat>
-      ),
-    },
-    {
-      accessorKey: "KodeRegistrasi",
+      accessorKey: "IdUsers",
       header: ({ column }) => {
         return (
           <Button
@@ -195,155 +162,142 @@ const TableDataPesertaPelatihan = ({ data }: { data: Pelatihan | null }) => {
             className={``}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Kode Registrasi
+            Id User
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`text-center uppercase`}>KWIDIKUV10930001</div>
+        <div className={`text-center uppercase`}>{row.getValue("IdUsers")}</div>
       ),
     },
-
     {
-      accessorKey: "DiklatPelatihan",
+      accessorKey: "IdPelatihan",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
+            className={``}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Nama Lengkap
+            Id Pelatihan
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`${"ml-0"} text-center capitalize`}>
-          Farhan Agustiansyah
+        <div className={`text-center uppercase`}>
+          {row.getValue("IdPelatihan")}
         </div>
       ),
     },
     {
-      accessorKey: "TanggalPelaksanaan",
+      accessorKey: "NoSertifikat",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
+            className={``}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            NIK
+            No Sertifikat
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`${"ml-0"} text-center capitalize`}>
-          1603070408020001
+        <div className={`text-center uppercase`}>
+          {row.getValue("NoSertifikat")}
         </div>
       ),
     },
     {
-      accessorKey: "KuotaPeserta",
+      accessorKey: "NoRegistrasi",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
+            className={``}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            No Telpon
+            No Registrasi
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className="text-center uppercase">082123104078</div>
-      ),
-    },
-    {
-      accessorKey: "KuotaPeserta",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="w-full flex items-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Email
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-center capitalize">farhantsyh@icloud.com</div>
-      ),
-    },
-    {
-      accessorKey: "DenganFasilitasMenginap",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"ml-0 text-center w-[250px]"}`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Tempat
-            <br />
-            Tanggal Lahir
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-center capitalize w-[250px]">
-          Jakarta Selatan, 4 Augustus 2002
+        <div className={`text-center uppercase`}>
+          {row.getValue("NoRegistrasi")}
         </div>
       ),
     },
     {
-      accessorKey: "DenganPaketKonsumsi",
+      accessorKey: "PreTest",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
+            className={``}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Jenis Kelamin
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => <div className="text-center uppercase">Laki-Laki</div>,
-    },
-    {
-      accessorKey: "DenganPaketKonsumsi",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Pendidikan Terakhir
+            Pre Test
             <ArrowUpDown className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className="text-center capitalize">S1/Sederajatt</div>
+        <div className={`text-center uppercase`}>{row.getValue("PreTest")}</div>
+      ),
+    },
+    {
+      accessorKey: "PostTest",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={``}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Post Test
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`text-center uppercase`}>
+          {row.getValue("PostTest")}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Keterangan",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={``}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Keterangan
+            <ArrowUpDown className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`text-center uppercase`}>
+          {row.getValue("Keterangan")}
+        </div>
       ),
     },
   ];
 
-  const pendaftar: UserPelatihan[] = data!.UserPelatihan!;
+  console.log({ dataPelatihan });
+  console.log({ data });
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
 
   const table = useReactTable({
-    pendaftar,
+    data,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -377,7 +331,9 @@ const TableDataPesertaPelatihan = ({ data }: { data: Pelatihan | null }) => {
                 </span>
                 <div className="w-full">
                   <p className="font-semibold text-primary">Total Pendaftar</p>
-                  <p className="text-sm font-medium">1 orang</p>
+                  <p className="text-sm font-medium">
+                    {dataPelatihan?.UserPelatihan.length} orang
+                  </p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -388,7 +344,10 @@ const TableDataPesertaPelatihan = ({ data }: { data: Pelatihan | null }) => {
                   <p className="font-semibold text-secondary">
                     Total Telah Bayar
                   </p>
-                  <p className="text-sm font-medium">1 orang</p>
+                  <p className="text-sm font-medium">
+                    {" "}
+                    {dataPelatihan?.UserPelatihan.length} orang
+                  </p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -399,7 +358,10 @@ const TableDataPesertaPelatihan = ({ data }: { data: Pelatihan | null }) => {
                   <p className="font-semibold text-green-500">
                     Total Verifikasi
                   </p>
-                  <p className="text-sm font-medium">1 orang</p>
+                  <p className="text-sm font-medium">
+                    {" "}
+                    {dataPelatihan?.UserPelatihan.length} orang
+                  </p>
                 </div>
               </div>
             </div>

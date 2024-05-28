@@ -41,6 +41,7 @@ export type PelatihanMasyarakat =  {
 
 export type UserPelatihan = {
   CreatedAt: string;
+  IdUserPelatihan: number;
   IdPelatihan: number;
   IdUsers: number;
   IsActive: string;
@@ -55,7 +56,7 @@ export type UserPelatihan = {
   StatusPembayaran: string;
   UpdateAt: string;
   WaktuPembayaran: string;
-}
+};
 
 export type Pelatihan = {
   IdPelatihan: number;

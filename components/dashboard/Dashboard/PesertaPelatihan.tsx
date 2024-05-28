@@ -8,28 +8,6 @@ import { Pelatihan, PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 import { extractLastSegment } from "@/utils";
 
 const PesertaPelatihan: React.FC = () => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const params = useSearchParams();
-  const pathname = usePathname();
-  const id = extractLastSegment(pathname);
-
-  const [data, setData] = React.useState<Pelatihan | null>(null);
-  const handleFetchingPublicTrainingDataById = async () => {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${baseUrl}/getPelatihanUser?idPelatihan=${id}`
-      );
-      console.log({ response });
-      setData(response.data.data);
-    } catch (error) {
-      console.error("Error posting training data:", error);
-      throw error;
-    }
-  };
-  React.useEffect(() => {
-    handleFetchingPublicTrainingDataById();
-  }, []);
-
   return (
     <>
       <div className="flex flex-col">
@@ -47,7 +25,7 @@ const PesertaPelatihan: React.FC = () => {
       </div>
 
       <div className="mt-4 md:mt-6 2xl:mt-7.5">
-        <TableDataPesertaPelatihan data={data} />
+        <TableDataPesertaPelatihan />
       </div>
     </>
   );
