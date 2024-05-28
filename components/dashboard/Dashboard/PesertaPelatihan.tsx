@@ -4,7 +4,7 @@ import TableDataPesertaPelatihan from "../Pelatihan/TableDataPesertaPelatihan";
 import { HiUserGroup } from "react-icons/hi2";
 import { usePathname, useSearchParams } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
-import { PelatihanMasyarakat, UserPelatihan } from "@/types/product";
+import { Pelatihan, PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 import { extractLastSegment } from "@/utils";
 
 const PesertaPelatihan: React.FC = () => {
@@ -13,14 +13,14 @@ const PesertaPelatihan: React.FC = () => {
   const pathname = usePathname();
   const id = extractLastSegment(pathname);
 
-  const [data, setData] = React.useState<UserPelatihan[]>([]);
+  const [data, setData] = React.useState<Pelatihan | null>(null);
   const handleFetchingPublicTrainingDataById = async () => {
     try {
       const response: AxiosResponse = await axios.get(
         `${baseUrl}/getPelatihanUser?idPelatihan=${id}`
       );
       console.log({ response });
-      setData(response.data.data.UserPelatihan!);
+      setData(response.data.data);
     } catch (error) {
       console.error("Error posting training data:", error);
       throw error;

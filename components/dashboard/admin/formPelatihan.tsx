@@ -742,7 +742,7 @@ function FormPelatihan() {
                           <span className="text-red-600">*</span>
                         </label>
                         <Editor
-                          apiKey="k57su57nca9wkw2nfu648b5qu33298cwdclx5wwbdji2djbl"
+                          apiKey="3iks15ku1opgl6rw13vgbcijulz9ajw2muuon534xraretcy"
                           value={detailPelatihan}
                           onEditorChange={(content: string, editor: any) =>
                             setDetailPelatihan(content)

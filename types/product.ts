@@ -56,3 +56,46 @@ export type UserPelatihan = {
   UpdateAt: string;
   WaktuPembayaran: string;
 }
+
+export type Pelatihan = {
+  IdPelatihan: number;
+  IdLemdik: number;
+  KodePelatihan: string;
+  NamaPelatihan: string;
+  PenyelenggaraPelatihan: string;
+  DetailPelatihan: string;
+  FotoPelatihan: string;
+  JenisPelatihan: string;
+  BidangPelatihan: string;
+  DukunganProgramTerobosan: string;
+  TanggalMulaiTerobosan: string;
+  TanggalBerakhirTerobosan: string;
+  HargaPelatihan: number;
+  Instruktur: string;
+  Status: string;
+  MemoPusat: string;
+  SilabusPelatihan: string;
+  PelaksanaanPelatihan: string;
+  UjiKompotensi: number;
+  KoutaPelatihan: number;
+  AsalPelatihan: string;
+  AsalSertifikat: string;
+  JenisSertifikat: string;
+  TtdSertifikat: string;
+  NoSertifikat: string;
+  StatusApproval: string;
+  IdSaranaPrasarana: number;
+  IdKonsumsi: string;
+  ModuleMateri: string;
+  CreateAt: string;
+  UpdateAt: string;
+  PemberitahuanDiterima: string;
+  SuratPemberitahuan: string;
+  CatatanPemberitahuanByPusat: string;
+  PenerbitanSertifikatDiterima: string;
+  BeritaAcara: string;
+  CatatanPenerbitanByPusat: string;
+  SarprasPelatihan: string;
+  MateriPelatihan: string;
+  UserPelatihan: UserPelatihan[];
+};

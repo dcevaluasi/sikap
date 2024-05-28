@@ -40,17 +40,33 @@ import { useRouter } from "next/navigation";
 import { MdOutlinePaid } from "react-icons/md";
 import { DialogSertifikat } from "@/components/sertifikat/dialogSertifikat";
 import { Checkbox } from "@/components/ui/checkbox";
-import Toast from "@/components/toast";
-import { UserPelatihan } from "@/types/product";
+import { Pelatihan, UserPelatihan } from "@/types/product";
 
-const TableDataPesertaPelatihan = ({ data }: { data: UserPelatihan[] }) => {
-  const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
-    React.useState<boolean>(false);
+const TableDataPesertaPelatihan = ({ data }: { data: Pelatihan | null }) => {
+  
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
+  type UserPelatihan = {
+    CreatedAt: string;
+    IdPelatihan: number;
+    IdUsers: number;
+    IsActive: string;
+    IsKeterangan: string;
+    MetodoPembayaran: string;
+    NilaiPraktek: number;
+    NilaiTeory: number;
+    NoRegistrasi: string;
+    NoSertifikat: string;
+    PostTest: number;
+    PreTest: number;
+    StatusPembayaran: string;
+    UpdateAt: string;
+    WaktuPembayaran: string;
+  };
 
   const router = useRouter();
   const [columnVisibility, setColumnVisibility] =
@@ -322,8 +338,12 @@ const TableDataPesertaPelatihan = ({ data }: { data: UserPelatihan[] }) => {
     },
   ];
 
+  const pendaftar: UserPelatihan[] = data!.UserPelatihan!;
+  const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
+    React.useState<boolean>(false);
+
   const table = useReactTable({
-    data,
+    pendaftar,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
