@@ -2,11 +2,13 @@
 
 import { usePathname, useSearchParams } from "next/navigation";
 import HeroBPPP from "@/components/hero-bppp";
-import FeaturesBPPP from "@/components/features-bppp";
 import React from "react";
 import { PelatihanMasyarakat } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
 import { extractPathAfterBppp, getPenyeleggara } from "@/utils/pelatihan";
+import TrainingTypeSection from "@/components/trainingTypeSection";
+import BPPPServices from "@/components/bppp-services";
+import BPPPTrainings from "@/components/bppp-trainings";
 
 export default function Page() {
   const pathname = usePathname();
@@ -43,7 +45,7 @@ export default function Page() {
   return (
     <>
       <HeroBPPP bppp={location!} />
-      <FeaturesBPPP data={data} />
+      <BPPPServices />
     </>
   );
 }
