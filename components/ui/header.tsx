@@ -57,31 +57,15 @@ export default function Header() {
                   name="BPPP Medan"
                   top={top}
                 />
+                <NavLink href="/bppp/tegal" name="BPPP Tegal" top={top} />
                 <NavLink
-                  href="/bppp?location=tegal"
-                  name="BPPP Tegal"
-                  top={top}
-                />
-                <NavLink
-                  href="/bppp?location=banyuwangi"
+                  href="/bppp/banyuwangi"
                   name="BPPP Banyuwangi"
                   top={top}
                 />
-                <NavLink
-                  href="/bppp?location=bitung"
-                  name="BPPP Bitung"
-                  top={top}
-                />
-                <NavLink
-                  href="/bppp?location=ambon"
-                  name="BPPP Ambon"
-                  top={top}
-                />
-                <NavLink
-                  href="/bda?location=sukamandi"
-                  name="BDA Sukamandi"
-                  top={top}
-                />
+                <NavLink href="/bppp/bitung" name="BPPP Bitung" top={top} />
+                <NavLink href="/bppp/ambon" name="BPPP Ambon" top={top} />
+                <NavLink href="/bda/sukamandi" name="BDA Sukamandi" top={top} />
               </NavDropDown>
 
               <NavDropDown href="#" name="Layanan" top={top}>
@@ -91,7 +75,7 @@ export default function Header() {
 
               <NavLink href="/" name="Cek Sertifikat" top={top} />
 
-              {Cookies.get("XSRF082") == "true" ? (
+              {Cookies.get("XSRF081") ? (
                 <li>
                   <Link
                     href="/user/dashboard"

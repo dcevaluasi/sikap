@@ -42,14 +42,17 @@ function FormLogin() {
         Cookies.set("XSRF081", response.data.t);
         Cookies.set("XSRF082", "true");
 
-        Toast.fire({
-          icon: "success",
-          title: `Berhasil melakukan login!`,
-        });
-
-        if (Cookies.get("XSRF083")) {
-          router.push("/dashboard/complete-profile");
+        if (Cookies.get("XSRF085")) {
+          Toast.fire({
+            icon: "success",
+            title: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
+          });
+          router.push(Cookies.get("XSRF085")!);
         } else {
+          Toast.fire({
+            icon: "success",
+            title: `Berhasil melakukan login!`,
+          });
           router.push("/dashboard");
         }
       } catch (error: any) {
@@ -125,7 +128,7 @@ function FormLogin() {
                     id="name"
                     type="text"
                     className="form-input w-full text-black"
-                    placeholder="Masukkan nik"
+                    placeholder="Masukkan NIK"
                     value={nik}
                     onChange={(e) => setNik(e.target.value)}
                     required

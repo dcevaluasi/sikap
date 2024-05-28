@@ -433,6 +433,53 @@ function FormPelatihan() {
                       </div>
                     </div>
 
+                    <div className="flex gap-2 w-full">
+                      <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="kodePelatihan"
+                          >
+                            Tanggal Mulai Pelatihan{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="kodePelatihan"
+                            type="date"
+                            className="form-input w-full text-black border-gray-300 rounded-md"
+                            placeholder="Masukkan kode pelatihan"
+                            required
+                            value={tanggalMulaiPelatihan}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                              setTanggalMulaiPelatihan(e.target.value)
+                            }
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="namaPelatihan"
+                          >
+                            Tanggal Berakhir Pelatihan{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="namaPelatihan"
+                            type="date"
+                            className="form-input w-full text-black border-gray-300 rounded-md"
+                            placeholder="Masukkan nama pelatihan"
+                            required
+                            value={tanggalBerakhirPelatihan}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                              setTanggalBerakhirPelatihan(e.target.value)
+                            }
+                          />
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="flex flex-wrap  mb-1 w-full">
                       <div className="w-full">
                         <label

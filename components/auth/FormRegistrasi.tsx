@@ -9,6 +9,23 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { error } from "console";
 import Cookies from "js-cookie";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
+import { Button } from "@/components/ui/button";
+import { TbNumber } from "react-icons/tb";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { IoMdCloseCircle } from "react-icons/io";
+
 function FormRegistrasi() {
   const router = useRouter();
 
@@ -17,17 +34,40 @@ function FormRegistrasi() {
   const handleCheckingNoKusuka = async (e: any) => {
     e.preventDefault();
     try {
-      const url = `${process.env.NEXT_PUBLIC_KUSUKA_URL}/Kusuka?nomor_kusuka=${noKusuka}`;
+      const url = `${process.env.NEXT_PUBLIC_BASE_URL}/getDataKusuka?nomor_kusuka=${noKusuka}`;
       console.log("Request URL:", url);
 
-      const response = await axios.get(url, {
-        headers: {
-          Token: "HX1PnieKT9qjUE6SvzFFBSonLjzggZpY",
-        },
-      });
+      const response = await axios.get(url);
+      setOpenInfoKusuka(false);
+      if (response.data.data == "Anda tidak memiliki akses") {
+        Toast.fire({
+          icon: "error",
+          title: `Internal server error, token tidak memiliki akses!`,
+        });
+        setOpenInfoKusuka(false);
+      }
 
-      console.log({ response });
+      if (Array.isArray(response.data.data) && response.data.data.length > 0) {
+        const data = response.data.data[0];
+        console.log({ response });
+        setIsKusukaUser(true);
+        setName(data.NamaPelakuUtama);
+        setEmail("");
+        setNik(data.NomorKUSUKA);
+        setPhoneNumber("");
+        setOpenInfoKusuka(true);
+      } else {
+        console.log({ response });
+        setOpenInfoKusuka(true);
+        setIsKusukaUser(false);
+      }
     } catch (error: any) {
+      setOpenInfoKusuka(false);
+      setIsKusukaUser(false);
+      Toast.fire({
+        icon: "error",
+        title: `Internal server error, hubungi helpdesk!`,
+      });
       if (error.response) {
         console.error("Response data:", error.response.data);
         console.error("Response status:", error.response.status);
@@ -48,15 +88,12 @@ function FormRegistrasi() {
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
 
-  /* function to generate data in type FormData */
-  const convertDataToFormData = () => {
-    const data = new FormData();
-
-    data.append("name", name);
-    data.append("email", email);
-    data.append("password", password);
-
-    return data;
+  const clearForm = () => {
+    setName("");
+    setNik("");
+    setPhoneNumber("");
+    setEmail("");
+    setPassword("");
   };
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -117,6 +154,9 @@ function FormRegistrasi() {
     }
   };
 
+  const [openInfoKusuka, setOpenInfoKusuka] = React.useState(false);
+  const [isKusukaUser, setIsKusukaUser] = React.useState(false);
+
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = ["/images/hero-img2.jpg"];
 
@@ -130,6 +170,49 @@ function FormRegistrasi() {
 
   return (
     <section className="relative w-full">
+      <AlertDialog open={openInfoKusuka}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {isKusukaUser
+                ? "No KUSUKA Tersedia!"
+                : "No KUSUKA Tidak Tersedia"}
+            </AlertDialogTitle>
+            <AlertDialogTitle>
+              <div className="flex w-full items-center justify-center gap-1 text-3xl border border-gray-300 rounded-xl py-3">
+                {isKusukaUser ? (
+                  <RiVerifiedBadgeFill className="text-green-500 text-3xl" />
+                ) : (
+                  <IoMdCloseCircle className="text-rose-600 text-3xl" />
+                )}
+
+                <span className="font-semibold">{noKusuka}</span>
+              </div>
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {isKusukaUser
+                ? "Selamat karena anda merupakan pelaku utama dan memiliki nomor KUSUKA, klik lanjutkan untuk mengisi data secara otomatis"
+                : "Maaf nomor KUSUKA tidak tersedia, kamu dapat registrasi manual kedalam ELAUT!"}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={(e) => {
+                setOpenInfoKusuka(false);
+                clearForm();
+              }}
+            >
+              {isKusukaUser ? "Batal" : "Oke"}
+            </AlertDialogCancel>
+            {isKusukaUser && (
+              <AlertDialogAction onClick={(e) => {setOpenInfoKusuka(false); Cookies.set('IsUsedKusuka', 'true')}}>
+                Lanjutkan
+              </AlertDialogAction>
+            )}
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <Image
         src={images[imageIndex]}
         className="absolute w-full h-full object-cover duration-1000 -z-40"

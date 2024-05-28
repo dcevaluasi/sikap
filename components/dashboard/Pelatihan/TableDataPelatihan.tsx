@@ -77,6 +77,7 @@ import {
   SelectLabel,
   SelectTrigger,
 } from "@/components/ui/select";
+import { convertDate } from "@/utils";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -223,7 +224,7 @@ const TableDataPelatihan: React.FC = () => {
               router.push(
                 `/admin/lemdiklat/pelatihan/${row.getValue(
                   "KodePelatihan"
-                )}/peserta-pelatihan?XSRF084=${row.getValue("IdPelatihan")}`
+                )}/peserta-pelatihan/${row.getValue("IdPelatihan")}`
               )
             }
             variant="outline"
@@ -327,9 +328,9 @@ const TableDataPelatihan: React.FC = () => {
         <div className={`${"ml-0"} text-left capitalize`}>
           <p className="text-xs text-gray-400 capitalize"> Dilaksanakan pada</p>
           <p className="text-base font-semibold tracking-tight leading-none">
-            {row.getValue("TanggalMulaiPelatihan")}{" "}
+            {convertDate(row.getValue("TanggalMulaiPelatihan"))}{" "}
             <span className="lowercase">s.d</span>{" "}
-            {row.original.TanggalBerakhirPelatihan}
+            {convertDate(row.original.TanggalBerakhirPelatihan)}
           </p>
         </div>
       ),

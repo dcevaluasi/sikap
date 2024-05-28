@@ -41,70 +41,11 @@ import { MdOutlinePaid } from "react-icons/md";
 import { DialogSertifikat } from "@/components/sertifikat/dialogSertifikat";
 import { Checkbox } from "@/components/ui/checkbox";
 import Toast from "@/components/toast";
+import { UserPelatihan } from "@/types/product";
 
-const TableDataPesertaPelatihan: React.FC = () => {
+const TableDataPesertaPelatihan = ({ data }: { data: UserPelatihan[] }) => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
-
-  type Pelatihan = {
-    No: number;
-    KodePelatihan: string;
-    DiklatPelatihan: string;
-    KuotaPeserta: number;
-    DenganFasilitasMenginap: string;
-    FasilitasMenginap: Penginapan[];
-    DenganPaketKonsumsi: string;
-    PaketKonsumsi: Konsumsi[];
-    TanggalPelaksanaan: string;
-  };
-
-  const [data, setData] = React.useState<Pelatihan[]>([
-    {
-      No: 1,
-      KodePelatihan: "DIKUV1093",
-      DiklatPelatihan: "Diklat Pembesaran Udang Vaname Lvl. Teknisi",
-      KuotaPeserta: 35,
-      TanggalPelaksanaan: "25 April 2024 - 01 Mei 2024",
-      DenganFasilitasMenginap: "Ya",
-      FasilitasMenginap: [
-        {
-          KodePenginapan: "PNG0340324",
-          NamaFasilitasPenginapan: "Paket BAHARI RESIDANCE-UMUM A",
-          Harga: 215000,
-        },
-        {
-          KodePenginapan: "PNG0340114",
-          NamaFasilitasPenginapan: "Paket BAHARI RESIDANCE-UMUM B",
-          Harga: 110000,
-        },
-      ],
-      DenganPaketKonsumsi: "Ya",
-      PaketKonsumsi: [
-        {
-          KodeKonsumsi: "KNM0340324",
-          NamaPaketKonsumsi: "Tipe Paket Fullboard, Paket 3x Makan & Snack",
-          Harga: 300000,
-        },
-        {
-          KodeKonsumsi: "KNM0340114",
-          NamaPaketKonsumsi: "Tipe Paket Fullboard, Paket 1x Makan & Snack",
-          Harga: 150000,
-        },
-      ],
-    },
-  ]);
-
-  type Penginapan = {
-    KodePenginapan: string;
-    NamaFasilitasPenginapan: string;
-    Harga: number;
-  };
-
-  type Konsumsi = {
-    KodeKonsumsi: string;
-    NamaPaketKonsumsi: string;
-    Harga: number;
-  };
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -115,7 +56,7 @@ const TableDataPesertaPelatihan: React.FC = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const columns: ColumnDef<Pelatihan>[] = [
+  const columns: ColumnDef<UserPelatihan>[] = [
     {
       accessorKey: "No",
       header: ({ column }) => {
@@ -135,7 +76,7 @@ const TableDataPesertaPelatihan: React.FC = () => {
       ),
     },
     {
-      accessorKey: "KodePelatithan",
+      accessorKey: "IdPelatihan",
       header: ({ column }) => {
         return (
           <Button

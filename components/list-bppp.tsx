@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { TbClockHour2 } from "react-icons/tb";
 import Link from "next/link";
-import { createSlug } from "@/utils";
+import { createSlug, truncateText } from "@/utils";
 import { PelatihanMasyarakat } from "@/types/product";
 
 function ListBPPP({ pelatihan }: { pelatihan: PelatihanMasyarakat[] }) {
@@ -48,16 +48,18 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
           </div>
           <p
             dangerouslySetInnerHTML={{
-              __html: pelatihan && pelatihan?.DetailPelatihan,
+              __html:
+                pelatihan &&
+                truncateText(pelatihan?.DetailPelatihan, 250, "..."),
             }}
             className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000"
           />
 
           <Link
             target="_blank"
-            href={`/pelatihan/${createSlug(pelatihan.NamaPelatihan)}?XSRF084=${
-              pelatihan?.IdPelatihan
-            }`}
+            href={`/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
+              pelatihan?.KodePelatihan
+            }/${pelatihan?.IdPelatihan}`}
             className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
           >
             Registrasi

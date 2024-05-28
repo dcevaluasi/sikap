@@ -50,6 +50,7 @@ function FormRegistrationTraining({ id }: { id: number }) {
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const token = Cookies.get("XSRF081");
+  const router = useRouter();
 
   const handleRegistrationTrainingForPeople = async (e: any) => {
     e.preventDefault();
@@ -67,9 +68,18 @@ function FormRegistrationTraining({ id }: { id: number }) {
         }
       );
 
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil melakukan pendaftaran, tunggu kabar selanjutnya sobat ELAUT!`,
+      });
       console.log({ response });
+      router.push("/dashboard");
     } catch (error) {
       console.error({ error });
+      Toast.fire({
+        icon: "error",
+        title: `Maaf terdapata kendala dalam server, coba lagi nanti sobat ELAUT!`,
+      });
     }
   };
 

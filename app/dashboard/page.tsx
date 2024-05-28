@@ -8,7 +8,7 @@ import FormCompleteProfile from "@/components/dashboard/users/formCompleteProfil
 export default function Page() {
   return (
     <>
-      <FormCompleteProfile />
+      <h1>DASHBOARD USER BRO!</h1>
     </>
   );
 }

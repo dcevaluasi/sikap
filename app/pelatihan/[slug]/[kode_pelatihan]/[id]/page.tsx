@@ -1,24 +1,16 @@
 "use client";
 
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-  SelectLabel,
-} from "@/components/ui/select";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -33,36 +25,23 @@ import {
   TbLink,
   TbMap2,
 } from "react-icons/tb";
-import { GrLocation } from "react-icons/gr";
-import { Input } from "@/components/ui/input";
+
 import { FaFilePdf, FaPlaceOfWorship, FaRupiahSign } from "react-icons/fa6";
 
-import { Button } from "@/components/ui/button";
-
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination";
-import { PELATIHAN } from "@/dummies/pelatihan";
 import Footer from "@/components/ui/footer";
 import { MdOutlineAppRegistration, MdVerified } from "react-icons/md";
-import SertifikatPage1 from "@/components/sertifikat/sertifikatPage1";
-import SertifikatPage2 from "@/components/sertifikat/sertifikatPage2";
 import FormRegistrationTraining from "@/components/dashboard/users/formRegistrationTraining";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PelatihanMasyarakat } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
+import { convertDate, extractLastSegment } from "@/utils";
 
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const params = useSearchParams();
-  const id = params.get("XSRF084");
+  const pathname = usePathname();
+  const id = extractLastSegment(pathname);
+  const token = Cookies.get("XSRF081");
 
   const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
 
@@ -78,8 +57,6 @@ function page() {
       throw error;
     }
   };
-
-  const token = Cookies.get("XSRF081");
 
   const handleRegistrationTrainingForPeople = async () => {
     try {
@@ -102,6 +79,18 @@ function page() {
     }
   };
 
+  const router = useRouter();
+  const [isOpenRegistrationCommand, setIsOpenRegistrationCommand] =
+    React.useState(false);
+
+  const handleRegistration = () => {
+    if (Cookies.get("XSRF081")) {
+      setIsRegistrasi(true);
+    } else {
+      setIsOpenRegistrationCommand(true);
+    }
+  };
+
   React.useEffect(() => {
     handleFetchingPublicTrainingDataById();
   }, []);
@@ -112,6 +101,37 @@ function page() {
     <section className="relative w-full mt-36">
       {data?.map((pelatihan, index) => (
         <div className="flex gap-2 max-w-6xl mx-auto px-5">
+          <AlertDialog open={isOpenRegistrationCommand}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Anda Belum Login</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Untuk dapat melanjutkan proses pendaftaran
+                  <span className="font-semibold">
+                    {" "}
+                    {pelatihan?.NamaPelatihan}
+                  </span>{" "}
+                  harap melakukan proses login terlebih dahulu sobat ELAUT!
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel
+                  onClick={(e) => setIsOpenRegistrationCommand(false)}
+                >
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={(e) => {
+                    Cookies.set("XSRF085", pathname);
+                    router.push("/login");
+                  }}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
           <div className="w-full pb-5 md:pb-8 flex flex-col ">
             <h1 className="h2 text-4xl md:text-5xl mb-2 font-calsans leading-[100%] max-w-3xl">
               {pelatihan.NamaPelatihan}
@@ -186,7 +206,7 @@ function page() {
                       </div>
                       <div className="flex flex-col gap-2">
                         <button
-                          onClick={(e) => setIsRegistrasi(true)}
+                          onClick={(e) => handleRegistration()}
                           className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
                         >
                           <MdOutlineAppRegistration /> Daftar Pelatihan
@@ -198,21 +218,13 @@ function page() {
                       </div>
                     </div>
 
-                    <p className="text-base text-gray-600 max-w-4xl mt-3 text-justify hidden md:flex">
-                      Dapatkan keunggulan kompetitif dengan sertifikasi
-                      masyarakat kelautan dan perikanan. Tingkatkan kredibilitas
-                      dan peluang karier Anda dalam industri yang dinamis dan
-                      berkelanjutan. Bergabunglah hari ini untuk langkah menuju
-                      kesuksesan!
-                    </p>
-
                     {/* <Tab /> */}
 
                     <div
                       dangerouslySetInnerHTML={{
                         __html: pelatihan && pelatihan?.DetailPelatihan,
                       }}
-                      className="w-full text-gray-600 text-left mt-2 md:mt-9 text-base"
+                      className="w-full text-gray-600 text-justify mt-2 md:mt-9 text-base "
                     ></div>
                   </>
                 )}
@@ -232,7 +244,7 @@ function page() {
                 </div>
                 <div className="flex flex-col gap-2">
                   <button
-                    onClick={(e) => setIsRegistrasi(true)}
+                    onClick={(e) => handleRegistration()}
                     className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
                   >
                     <MdOutlineAppRegistration /> Daftar Pelatihan
@@ -244,24 +256,30 @@ function page() {
                   <div className="flex flex-col gap-1 mt-2">
                     <table>
                       <tr>
-                        {/* <td className="text-gray-600">
-                 <TbCalendarUser className="text-lg w-6" />
-               </td> */}
-                        {/* <td>
-                 <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                   Tanggal Pelaksanaan :{" "}
-                   {PELATIHAN[3].TanggalPendaftaran}
-                 </p>
-               </td> */}
+                        <td className="text-gray-600">
+                          <TbCalendarUser className="text-lg w-6" />
+                        </td>
+                        <td>
+                          <p className="text-base text-gray-600">
+                            <span className="font-semibold">
+                              Tanggal Pelaksanaan :{" "}
+                            </span>
+                            {convertDate(pelatihan?.TanggalMulaiPelatihan)}{" "}
+                            <span className="lowercase">s.d</span>{" "}
+                            {convertDate(pelatihan?.TanggalBerakhirPelatihan)}
+                          </p>
+                        </td>
                       </tr>
                       <tr>
                         <td className="text-gray-600">
                           <TbMap2 className="text-lg w-6" />
                         </td>
                         <td>
-                          <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                            Lokasi Pelatihan : {PELATIHAN[3].LokasiPelatihan}{" "}
-                            (Balai Pelatihan Pengembangan dan Penyuluhan Tegal)
+                          <p className="text-base text-gray-600 ">
+                            <span className="font-semibold">
+                              Lokasi Pelatihan :
+                            </span>{" "}
+                            {pelatihan.LokasiPelatihan}{" "}
                           </p>
                         </td>
                       </tr>
@@ -270,9 +288,11 @@ function page() {
                           <TbBroadcast className="text-lg w-6" />
                         </td>
                         <td>
-                          <p className="text-base text-gray-600 flex w-full items-center gap-1">
-                            Pelaksanaan Pelatihan :{" "}
-                            {PELATIHAN[3].PelaksanaanPelatihan}
+                          <p className="text-base text-gray-600 ">
+                            <span className="font-semibold">
+                              Pelaksanaan Pelatihan :{" "}
+                            </span>
+                            {pelatihan.PelaksanaanPelatihan}
                           </p>
                         </td>
                       </tr>

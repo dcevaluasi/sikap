@@ -14,3 +14,16 @@ export function getPenyeleggara(city: string): string {
       return 'Penyeleggara not found'
   }
 }
+
+export function extractPathAfterBppp(path: string): string {
+    const prefix = "/bppp/";
+    const index = path.indexOf(prefix);
+
+    if (index !== -1) {
+        // Extract the part after "/bppp/"
+        return path.substring(index + prefix.length);
+    }
+
+    // Return an empty string or handle the case when "/bppp/" is not found
+    return "";
+}
