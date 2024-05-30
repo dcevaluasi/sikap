@@ -8,7 +8,7 @@ import { PelatihanMasyarakat } from "@/types/product";
 
 function ListBPPP({ pelatihan }: { pelatihan: PelatihanMasyarakat[] }) {
   return (
-    <div className="w-full grid grid-cols-3 gap-y-6">
+    <div className="w-full grid grid-cols-3 gap-y-6 gap-x-3 ml-6">
       {pelatihan.map((pelatihan: PelatihanMasyarakat, index: number) => (
         <CardPelatihan key={index} pelatihan={pelatihan} />
       ))}
@@ -19,7 +19,7 @@ function ListBPPP({ pelatihan }: { pelatihan: PelatihanMasyarakat[] }) {
 const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
   return (
     <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
-      <div className="w-fit absolute top-4 right-4 flex gap-1">
+      <div className="w-fit absolute top-4 right-4 flex gap-1 z-[60]">
         <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
           {pelatihan.HargaPelatihan == "0"
             ? "Gratis"
@@ -29,14 +29,17 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
           {pelatihan.BidangPelatihan}
         </div>
       </div>
+      <div className="w-full relative h-[240px]">
+        <div className="flex w-full absolute h-[240px] bg-gradient-to-r opacity-40 from-blue-500 to-teal-400 bg-opacity-40 rounded-tl-3xl rounded-tr-3xl"></div>
+        <Image
+          className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
+          alt=""
+          src={`${pelatihan.FotoPelatihan}`}
+          width={0}
+          height={0}
+        />
+      </div>
 
-      <Image
-        className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
-        alt=""
-        src={`${pelatihan.FotoPelatihan}`}
-        width={0}
-        height={0}
-      />
       <div className="px-6 py-3">
         <div className="w-full pb-4">
           <h2 className="font-calsans text-xl duration-1000 text-black mt-2 leading-[110%]">

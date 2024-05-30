@@ -71,9 +71,9 @@ export default function BPPPTrainings({
 
 const Tab = () => {
   return (
-    <section className="flex flex-col md:flex-row gap-3 w-full items-center max-w-6xl mb-5 px-6 md:px-3 mx-auto">
+    <section className="grid grid-cols-4 gap-3 w-full items-center max-w-6xl mb-5 px-6 md:px-3 mx-auto">
       <Select>
-        <SelectTrigger className="w-full md:w-fit rounded-3xl py-5 md:py-2">
+        <SelectTrigger className="w-full rounded-3xl py-5 md:py-2">
           <p className="mr-3 flex items-center gap-1 text-sm">
             <FiSlack />
             Pilih Bidang Pelatihan
@@ -97,7 +97,7 @@ const Tab = () => {
       </Select>
 
       <Select>
-        <SelectTrigger className="w-full md:w-fit rounded-3xl py-5 md:py-2">
+        <SelectTrigger className="w-full rounded-3xl py-5 md:py-2">
           <p className="mr-3 flex items-center gap-1 text-sm">
             <FaPlaceOfWorship />
             Pilih Penyelenggara Pelatihan
@@ -114,7 +114,7 @@ const Tab = () => {
       </Select>
 
       <Select>
-        <SelectTrigger className="w-full md:w-fit rounded-3xl py-5 md:py-2">
+        <SelectTrigger className="w-full rounded-3xl py-5 md:py-2">
           <p className="mr-3 flex items-center gap-1 text-sm">
             <GrLocation />
             Pilih Pelaksanaan Pelatihan
