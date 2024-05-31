@@ -93,6 +93,7 @@ import { convertDate } from "@/utils";
 import SertifikatPage1 from "@/components/sertifikat/sertifikatPage1";
 import SertifikatPage2 from "@/components/sertifikat/sertifikatPage2";
 import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 
 const TableDataPelatihanUser: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -740,14 +741,16 @@ function DialogSertifikat({ children }: { children: ReactElement }) {
       return;
     }
 
-    html2canvas(sertifikat).then(function (canvas) {
-      const link = document.createElement("a");
-      link.download = `CBIB.II.2024.0034.png`;
-      link.href = canvas.toDataURL("image/png");
-      link.click();
+    html2canvas(sertifikat).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
 
-      const imageDataURL = canvas.toDataURL("image/png");
-      console.log(imageDataURL);
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("CBIB.II.2024.0034.pdf");
     });
   };
 
@@ -771,7 +774,12 @@ function DialogSertifikat({ children }: { children: ReactElement }) {
           <div className="flex flex-col gap-4" ref={sertifikatRef}>
             <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-6 rounded-md font-cambria leading-[120%] h-[120vh]">
               <div className="flex flex-row justify-end items-start">
-                <p className="text-base">No. Reg. : C.03.01.001147</p>
+                <p
+                  className="text
+                -base"
+                >
+                  No. Reg. : C.03.01.001147
+                </p>
               </div>
 
               <div className="flex flex-col gap-0 w-full items-center justify-center mt-6">

@@ -35,6 +35,7 @@
     "flatpickr": "^4.6.13",
     "html2canvas": "^1.4.1",
     "js-cookie": "^3.0.5",
+    "jspdf": "^2.5.1",
     "jsvectormap": "^1.5.3",
     "jvectormap-next": "^3.1.1",
     "lucide-react": "^0.372.0",
