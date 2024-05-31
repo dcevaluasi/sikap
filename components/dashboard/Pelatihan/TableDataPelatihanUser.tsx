@@ -35,9 +35,11 @@ import {
   TbCalendarStats,
   TbChartBubble,
   TbChartDonut,
+  TbCloudDownload,
   TbDatabaseEdit,
   TbFileCertificate,
   TbFishChristianity,
+  TbLink,
   TbMoneybag,
   TbQrcode,
   TbSchool,
@@ -57,7 +59,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
-import { MdOutlineSaveAlt } from "react-icons/md";
+import { MdOutlineSaveAlt, MdVerified } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
@@ -69,6 +71,16 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { PelatihanMasyarakat } from "@/types/product";
 import { FaRupiahSign } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -78,6 +90,8 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { convertDate } from "@/utils";
+import SertifikatPage1 from "@/components/sertifikat/sertifikatPage1";
+import SertifikatPage2 from "@/components/sertifikat/sertifikatPage2";
 
 const TableDataPelatihanUser: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -182,104 +196,15 @@ const TableDataPelatihanUser: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className={`${"flex"} flex items-center justify-center gap-1`}>
-          <SheetInfoPelatihan>
-            <Button variant="outline" className="ml-auto">
-              <IoIosInformationCircle className="h-4 w-4" />
+          <DialogSertifikat>
+            <Button
+              variant="outline"
+              className="w-full border border-purple-600"
+            >
+              <RiVerifiedBadgeFill className="h-4 w-4 text-purple-600" />{" "}
+              Download Sertifikat
             </Button>
-          </SheetInfoPelatihan>
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="ml-auto border border-rose-600"
-              >
-                <Trash className="h-4 w-4 text-rose-600" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-          <Button
-            variant="outline"
-            className="ml-auto border border-yellow-500"
-          >
-            <Edit3Icon className="h-4 w-4 text-yellow-500" />
-          </Button>
-
-          <Button
-            onClick={(e) =>
-              router.push(
-                `/admin/lemdiklat/pelatihan/${row.getValue(
-                  "KodePelatihan"
-                )}/peserta-pelatihan/${row.getValue("IdPelatihan")}`
-              )
-            }
-            variant="outline"
-            className="ml-auto border border-green-500"
-          >
-            <HiUserGroup className="h-4 w-4 text-green-500" />
-          </Button>
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="ml-auto border border-purple-600"
-              >
-                <RiVerifiedBadgeFill className="h-4 w-4 text-purple-600" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
-                <AlertDialogDescription className="-mt-2">
-                  Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh
-                  masyarakat umum lakukan checklist agar tampil di website
-                  E-LAUT!
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <form autoComplete="off">
-                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                  <div>
-                    <Checkbox />
-                  </div>
-                  <div className="space-y-1 leading-none">
-                    <label>Publish Website E-LAUT</label>
-                    <p className="text-xs leading-[110%] text-gray-600">
-                      Dengan ini sebagai pihak lemdiklat saya mempublish
-                      informasi pelatihan terbuka untuk masyarakat umum!
-                    </p>
-                  </div>
-                </div>
-              </form>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={(e) =>
-                    Toast.fire({
-                      icon: "success",
-                      title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
-                    })
-                  }
-                >
-                  Publish
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          </DialogSertifikat>
         </div>
       ),
     },
@@ -803,3 +728,42 @@ const SheetInfoPelatihan = ({
 };
 
 export default TableDataPelatihanUser;
+
+function DialogSertifikat({ children }: { children: ReactElement }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="sm:max-w-[1225px]">
+        <DialogHeader>
+          <div className="flex gap-2 items-center">
+            <MdVerified className="text-3xl text-blue-500" />
+            <div className="flex flex-col">
+              <DialogTitle>Nomor : 319/BPPSDM.5/RSDM.510/II/2024</DialogTitle>
+              <DialogDescription>
+                No. Sertifikasi terdaftar dan dinyatakan valid telah mengikuti
+                pelatihan!
+              </DialogDescription>
+            </div>
+          </div>
+        </DialogHeader>
+        <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
+          <SertifikatPage1 />
+          <SertifikatPage2 />
+        </div>
+        <DialogFooter>
+          <Button
+            type="submit"
+            className="flex items-center gap-1 bg-blue-500 hover:bg-blue-500"
+          >
+            <TbLink />
+            Salin Tautan
+          </Button>
+          <Button type="submit" className="flex items-center gap-1">
+            <TbCloudDownload />
+            Download
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

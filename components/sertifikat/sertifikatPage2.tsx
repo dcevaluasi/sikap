@@ -6,14 +6,11 @@ export default function SertifikatPage2() {
       <div className="flex flex-row justify-center items-center">
         <div className="flex flex-row gap-2 items-center">
           <div className="flex flex-col font-cambria text-center">
-            <p className="font-extrabold">Materi Pelatihan</p>
-            <p className="-mt-1 font-extrabold">
-              Pelatihan Olahan dan Diversifikasi Produk Perikanan/Rumput Laut
+            <p className="font-extrabold max-w-md w-full italic">
+              Good Aquaculture Practices (GAqP) Training For Students in the
+              Marine and Fisheries Education Units
             </p>
-            <p className="-mt-1 font-extrabold">
-              Kabupaten Alor, Provinsi Nusa Tenggara Timur
-            </p>
-            <p className="mt-2">Tanggal 26 – 27 Januari 2024</p>
+            <p className="font-extrabold max-w-3xl">19 – 21 February 2024</p>
           </div>
         </div>
       </div>
@@ -33,7 +30,7 @@ export default function SertifikatPage2() {
             rowSpan={2}
             className="border border-black-2 p-2 font-extrabold text-lg"
           >
-            MATERI PELATIHAN
+            COURSES
           </td>
           <td
             colSpan={3}
@@ -44,50 +41,92 @@ export default function SertifikatPage2() {
         </tr>
         <tr>
           <td className="border border-black-2 p-2 font-extrabold text-lg">
-            TEORI
+            T
           </td>
           <td className="border border-black-2 p-2 font-extrabold text-lg">
-            PRAKTEK
+            P
           </td>
-          <td className="border border-black-2 p-2 font-extrabold text-lg">
-            TOTAL
+        </tr>
+        <tr>
+          <td className="border border-black-2 p-2 font-black">I</td>
+          <td className="border border-black-2 font-black p-2 text-left">
+            GENERAL COMPETENCY
           </td>
+          <td className="border border-black-2 p-2"></td>
+          <td className="border border-black-2 p-2"></td>
         </tr>
         <tr>
           <td className="border border-black-2 p-2">1.</td>
           <td className="border border-black-2 p-2 text-left">
-            Teknik Pembuatan Ikan Asap
+            GAqP Certification Policy
           </td>
           <td className="border border-black-2 p-2">1</td>
           <td className="border border-black-2 p-2">3</td>
-          <td className="border border-black-2 p-2">4</td>
+        </tr>
+        <tr>
+          <td className="border border-black-2 p-2 font-black">II</td>
+          <td className="border border-black-2 font-black p-2 text-left">
+            CORE COMPETENCIES
+          </td>
+          <td className="border border-black-2 p-2"></td>
+          <td className="border border-black-2 p-2"></td>
         </tr>
         <tr>
           <td className="border border-black-2 p-2">2.</td>
           <td className="border border-black-2 p-2 text-left">
-            Teknik Pembuatan Abon Ikan
+            Food Hazards, International and National Requirements
           </td>
           <td className="border border-black-2 p-2">1</td>
           <td className="border border-black-2 p-2">3</td>
-          <td className="border border-black-2 p-2">4</td>
         </tr>
         <tr>
           <td className="border border-black-2 p-2">3.</td>
           <td className="border border-black-2 p-2 text-left">
-            Teknik Pembuatan Dodol Rumput Laut
+            Indonesian National GAqP Food Safety Standard Requirements
           </td>
           <td className="border border-black-2 p-2">1</td>
           <td className="border border-black-2 p-2">3</td>
-          <td className="border border-black-2 p-2">4</td>
         </tr>
         <tr>
           <td className="border border-black-2 p-2">4.</td>
           <td className="border border-black-2 p-2 text-left">
-            Pengemasan Produk Olahan Ikan
+            Aquaculture Quality and Safety Guarantee System Mechanism for
+            Fishery Products
           </td>
           <td className="border border-black-2 p-2">1</td>
           <td className="border border-black-2 p-2">3</td>
-          <td className="border border-black-2 p-2">4</td>
+        </tr>
+        <tr>
+          <td className="border border-black-2 p-2">4.</td>
+          <td className="border border-black-2 p-2 text-left">
+            Aquaculture Unit Risk Management
+          </td>
+          <td className="border border-black-2 p-2">1</td>
+          <td className="border border-black-2 p-2">3</td>
+        </tr>
+        <tr>
+          <td className="border border-black-2 p-2">4.</td>
+          <td className="border border-black-2 p-2 text-left">
+            Fish Health Management and Biosecurity
+          </td>
+          <td className="border border-black-2 p-2">1</td>
+          <td className="border border-black-2 p-2">3</td>
+        </tr>
+        <tr>
+          <td className="border border-black-2 p-2">4.</td>
+          <td className="border border-black-2 p-2 text-left">
+            Traceability in the Fish Aquaculture Unit
+          </td>
+          <td className="border border-black-2 p-2">1</td>
+          <td className="border border-black-2 p-2">3</td>
+        </tr>
+        <tr>
+          <td className="border border-black-2 p-2">4.</td>
+          <td className="border border-black-2 p-2 text-left">
+            Aquaculture Process Control Procedures
+          </td>
+          <td className="border border-black-2 p-2">1</td>
+          <td className="border border-black-2 p-2">3</td>
         </tr>
         <tr>
           <td
@@ -98,11 +137,10 @@ export default function SertifikatPage2() {
           </td>
           <td className="border border-black-2 p-2 font-extrabold">4</td>
           <td className="border border-black-2 p-2 font-extrabold">12</td>
-          <td className="border border-black-2 p-2 font-extrabold">16</td>
         </tr>
       </table>
 
-      <div className="flex gap-2 items-center justify-end mt-5">
+      {/* <div className="flex gap-2 items-center justify-end mt-5">
         <div className="flex flex-col font-cambria text-center items-center justify-center">
           <p>Ketua Pokja Pelatihan</p>
           <Image
@@ -117,7 +155,7 @@ export default function SertifikatPage2() {
           </p>
           <p className="font-extrabold -mt-1">NIP. 198402102008011005</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

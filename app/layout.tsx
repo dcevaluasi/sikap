@@ -12,6 +12,11 @@ const myFont = localFont({
   variable: "--font-calsans",
 });
 
+// const certificateFont = localFont({
+//   src: "./font/BOOKOS.TTF",
+//   variable: "--font-bookmanOldStyle",
+// });
+
 const cambria = localFont({
   src: "./font/cambria.ttf",
   variable: "--font-cambria",

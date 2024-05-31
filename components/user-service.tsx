@@ -27,6 +27,7 @@ import { User } from "@/types/user";
 import UserTrainingService from "./user-training-service";
 
 import { Skeleton } from "@/components/ui/skeleton";
+import UserCertificateService from "./user-certificate-service";
 
 export default function UserService({ user }: { user: User | null }) {
   const tabMenus = [
@@ -137,6 +138,7 @@ export default function UserService({ user }: { user: User | null }) {
       </section>
 
       {indexMenuSelected == 0 && <UserTrainingService user={user} />}
+      {indexMenuSelected == 1 && <UserCertificateService user={user} />}
       {indexMenuSelected == 2 && <UserDocuments user={user} />}
     </div>
   );
