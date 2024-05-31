@@ -205,7 +205,12 @@ function FormRegistrasi() {
               {isKusukaUser ? "Batal" : "Oke"}
             </AlertDialogCancel>
             {isKusukaUser && (
-              <AlertDialogAction onClick={(e) => {setOpenInfoKusuka(false); Cookies.set('IsUsedKusuka', 'true')}}>
+              <AlertDialogAction
+                onClick={(e) => {
+                  setOpenInfoKusuka(false);
+                  Cookies.set("IsUsedKusuka", "true");
+                }}
+              >
                 Lanjutkan
               </AlertDialogAction>
             )}
@@ -246,7 +251,7 @@ function FormRegistrasi() {
                   className="block text-gray-200 text-sm font-medium mb-1"
                   htmlFor="name"
                 >
-                  No KUSUKA <span className="text-red-600">*</span>
+                  No KUSUKA <span className="text-red-600"></span>
                 </label>
                 <input
                   id="name"
