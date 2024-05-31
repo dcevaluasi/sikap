@@ -412,19 +412,10 @@ const TableDataPelatihanUser: React.FC = () => {
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-primary">Total Pelatihan</p>
-                  <p className="text-sm font-medium">{data.length} pelatihan</p>
-                </div>
-              </div>
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-secondary">
-                    Total Publish Umum
+                  <p className="font-semibold text-primary">
+                    Total Pelatihan Yang Diikuti
                   </p>
-                  <p className="text-sm font-medium">1 pelatihan</p>
+                  <p className="text-sm font-medium">{data.length} pelatihan</p>
                 </div>
               </div>
             </div>
@@ -512,19 +503,10 @@ const TableDataPelatihanUser: React.FC = () => {
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-primary">Total Pelatihan</p>
-                  <p className="text-sm font-medium">{data.length} pelatihan</p>
-                </div>
-              </div>
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-secondary">
-                    Total Publish Umum
+                  <p className="font-semibold text-primary">
+                    Total Pelatihan Diikuti
                   </p>
-                  <p className="text-sm font-medium">1 pelatihan</p>
+                  <p className="text-sm font-medium">{data.length} pelatihan</p>
                 </div>
               </div>
             </div>
@@ -616,29 +598,6 @@ const TableDataPelatihanUser: React.FC = () => {
                       <SelectLabel>Bidang</SelectLabel>
                       <SelectItem value="apple">Kepelautan</SelectItem>
                       <SelectItem value="banana">Non-Kepelautan</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select>
-                  <SelectTrigger className="w-[110px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div
-                      onClick={(e) => {
-                        router.push(
-                          "/admin/lemdiklat/pelatihan/tambah-pelatihan"
-                        );
-                      }}
-                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
-                    >
-                      <TbBroadcast />
-                      Publish
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Bidang</SelectLabel>
-                      <SelectItem value="apple">Publish E-LAUT</SelectItem>
-                      <SelectItem value="banana">Unpublish E-LAUT</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

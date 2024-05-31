@@ -51,7 +51,7 @@ export default function Header() {
 
           <nav className="hidden md:flex md:grow">
             <ul className="flex grow justify-end flex-wrap items-center">
-              <NavLink href="/" name="Beranda" top={top} />
+              <NavLinkDefault href="/" name="Beranda" top={top} />
 
               <NavDropDown href="#" name="Balai Pelatihan" top={top}>
                 <NavLink
@@ -75,7 +75,11 @@ export default function Header() {
                 <NavLink href="/" name="Uji Kompetensi" top={top} />
               </NavDropDown>
 
-              <NavLink href="/" name="Cek Sertifikat" top={top} />
+              <NavLinkDefault
+                href="#cek-sertifikat"
+                name="Cek Sertifikat"
+                top={top}
+              />
 
               {Cookies.get("XSRF081") ? (
                 <div className="flex items-center gap-3 2xsm:gap-7">
@@ -152,6 +156,36 @@ const NavDropDown = ({
 };
 
 const NavLink = ({
+  href,
+  name,
+  top,
+}: {
+  href: string;
+  name: string;
+  top: boolean;
+}) => {
+  return (
+    <li>
+      <Link
+        href={href}
+        className={`font-medium ${
+          !top || usePathname().includes("bppp")
+            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+            : (top && usePathname().includes("pelatihan")) ||
+              usePathname().includes("sertifikasi") ||
+              usePathname().includes("cek-sertifikat") ||
+              usePathname().includes("users")
+            ? "text-gray-900 hover:text-gray-900 hover:scale-105"
+            : "text-gray-800 hover:text-gray-900 hover:scale-105"
+        }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+      >
+        {name}
+      </Link>
+    </li>
+  );
+};
+
+const NavLinkDefault = ({
   href,
   name,
   top,

@@ -16,16 +16,7 @@ import "./../app/css/additional-styles/features-slider.css";
 
 // import required modules
 import "swiper/css/navigation";
-import { Pagination, Navigation } from "swiper/modules";
-import ListProgram from "./lists";
-import Link from "next/link";
 import { Slide } from "react-awesome-reveal";
-import { FaPlaceOfWorship } from "react-icons/fa6";
-import { GrLocation } from "react-icons/gr";
-import { Button } from "./ui/button";
-import { FiSearch, FiSlack } from "react-icons/fi";
-import { Input } from "./ui/input";
-import BPPPTrainings from "./bppp-trainings";
 import { usePathname } from "next/navigation";
 import { extractPathAfterBppp, getPenyeleggara } from "@/utils/pelatihan";
 import { PelatihanMasyarakat } from "@/types/product";
@@ -34,6 +25,8 @@ import BPPPCertificates from "./bppp-certificates";
 import UserDocuments from "./user-documents";
 import { User } from "@/types/user";
 import UserTrainingService from "./user-training-service";
+
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function UserService({ user }: { user: User | null }) {
   const tabMenus = [
@@ -73,30 +66,12 @@ export default function UserService({ user }: { user: User | null }) {
   const location = extractPathAfterBppp(pathname);
   const penyelenggara = getPenyeleggara(location!);
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-
-  const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
-
-  const handleFetchingPublicTrainingDataByPenyelenggara = async () => {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getPelatihan?penyelenggara_pelatihan=${penyelenggara}`
-      );
-      console.log({ response });
-      setData(response.data.data);
-    } catch (error) {
-      console.error("Error posting training data:", error);
-      throw error;
-    }
-  };
-
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      handleFetchingPublicTrainingDataByPenyelenggara();
     }, 1000);
   }, []);
 

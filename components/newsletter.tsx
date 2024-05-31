@@ -1,6 +1,6 @@
 export default function Newsletter() {
   return (
-    <section>
+    <section id="cek-sertifikat" className="scroll-smooth">
       <div className="max-w-[70rem] mx-auto px-4 sm:px-6">
         <div className="pb-12 md:pb-20">
           {/* CTA box */}
