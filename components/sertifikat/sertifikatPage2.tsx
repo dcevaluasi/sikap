@@ -139,23 +139,6 @@ export default function SertifikatPage2() {
           <td className="border border-black-2 p-2 font-extrabold">12</td>
         </tr>
       </table>
-
-      {/* <div className="flex gap-2 items-center justify-end mt-5">
-        <div className="flex flex-col font-cambria text-center items-center justify-center">
-          <p>Ketua Pokja Pelatihan</p>
-          <Image
-            className="w-[200px] my-3"
-            width={0}
-            height={0}
-            alt="Logo Kementrian Kelautan dan Perikanan RI"
-            src={"/ttd-elektronik.png"}
-          />
-          <p className="-mt-1 font-extrabold">
-            YANUAR RUSTRIANTO B, S.St.Pi., M.Si
-          </p>
-          <p className="font-extrabold -mt-1">NIP. 198402102008011005</p>
-        </div>
-      </div> */}
     </div>
   );
 }
