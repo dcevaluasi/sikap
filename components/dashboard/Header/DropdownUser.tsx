@@ -58,12 +58,12 @@ const DropdownUser = () => {
         href="#"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-white dark:text-white">
+          <span className="block text-sm font-medium text-black dark:text-white">
             {pathname.includes("lemdiklat")
               ? " Bagja Lazwardi"
               : "Farhan Augustiansyah"}
           </span>
-          <span className="block text-xs text-gray-100">
+          <span className="block text-xs">
             {pathname.includes("lemdiklat")
               ? " BPPP Tegal"
               : "Pusat Pelatihan KP"}

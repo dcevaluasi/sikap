@@ -534,20 +534,6 @@ const TableDataPelatihan: React.FC = () => {
           <div>
             <div id="chartOne" className="-ml-5"></div>
             <div className="flex w-full items-center mb-2">
-              {/* <Input
-                placeholder="Cari Nama Pelatihan..."
-                value={
-                  (table
-                    .getColumn("NamaPelatihan")
-                    ?.getFilterValue() as string) ?? ""
-                }
-                onChange={(event: any) =>
-                  table
-                    .getColumn("NamaPelatihan")
-                    ?.setFilterValue(event.target.value)
-                }
-                className="max-w-xs py-1 px-4 h-9 text-sm"
-              /> */}
               <div className="flex w-full gap-1 items-start">
                 <Select>
                   <SelectTrigger className="w-[160px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">

@@ -44,7 +44,7 @@ export type UserPelatihan = {
   IdUserPelatihan: number;
   IdPelatihan: number;
   IdUsers: number;
-  IsActive: string;
+  IsActice: string;
   IsKeterangan: string;
   MetodoPembayaran: string;
   NilaiPraktek: number;

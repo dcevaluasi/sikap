@@ -12,6 +12,14 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+} from "@/components/ui/select";
+import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -22,24 +30,46 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Edit3Icon, LucideListChecks, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   TbBroadcast,
+  TbChartBubble,
+  TbChartDonut,
+  TbDatabaseEdit,
   TbFileCertificate,
   TbFileStack,
+  TbRubberStamp,
+  TbSchool,
   TbTargetArrow,
 } from "react-icons/tb";
-import { IoIosInformationCircle } from "react-icons/io";
+import { IoIosInformationCircle, IoMdCloseCircle } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
 
 import { usePathname, useRouter } from "next/navigation";
-import { MdOutlinePaid } from "react-icons/md";
+import {
+  MdInfo,
+  MdOutlineNumbers,
+  MdOutlinePaid,
+  MdOutlinePayment,
+  MdSchool,
+} from "react-icons/md";
 import { DialogSertifikat } from "@/components/sertifikat/dialogSertifikat";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Pelatihan, UserPelatihan } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
 import { extractLastSegment } from "@/utils";
+import {
+  HiMiniNewspaper,
+  HiMiniUserGroup,
+  HiOutlineDocument,
+  HiUserGroup,
+} from "react-icons/hi2";
+import { RiShipLine, RiVerifiedBadgeFill } from "react-icons/ri";
+import Link from "next/link";
+import { FaRupiahSign } from "react-icons/fa6";
+import Toast from "@/components/toast";
+import { GiTakeMyMoney } from "react-icons/gi";
 
 const TableDataPesertaPelatihan = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -95,7 +125,7 @@ const TableDataPesertaPelatihan = () => {
       IdUserPelatihan: 0,
       IdPelatihan: 0,
       IdUsers: 0,
-      IsActive: "",
+      IsActice: "",
       IsKeterangan: "",
       MetodoPembayaran: "",
       NilaiPraktek: 0,
@@ -136,39 +166,21 @@ const TableDataPesertaPelatihan = () => {
   const [rowSelection, setRowSelection] = React.useState({});
   const columns: ColumnDef<UserPelatihan>[] = [
     {
-      accessorKey: "No",
+      accessorKey: "KodePelatihan",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className={``}
+            className={`text-gray-900 font-semibold w-fit`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             No
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown className="ml-1 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`text-center uppercase`}>{row.index + 1}</div>
-      ),
-    },
-    {
-      accessorKey: "IdUsers",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={``}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Id User
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`text-center uppercase`}>{row.getValue("IdUsers")}</div>
+        <div className={`w-full text-center uppercase`}>{row.index + 1}</div>
       ),
     },
     {
@@ -177,17 +189,88 @@ const TableDataPesertaPelatihan = () => {
         return (
           <Button
             variant="ghost"
-            className={``}
+            className={`flex items-center justify-center leading-[105%] p-0 w-full text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Id Pelatihan
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            Validasi <br /> Data & Berkas
+            <TbDatabaseEdit className="ml-1 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`text-center uppercase`}>
-          {row.getValue("IdPelatihan")}
+        <div className={` flex items-center justify-center w-full gap-1`}>
+          {row.original.IsActice == "valid" ? (
+            <Button variant="outline" className=" border border-green-500">
+              <RiVerifiedBadgeFill className="h-4 w-4 text-green-500" />
+            </Button>
+          ) : (
+            <Button variant="outline" className=" border border-rose-500">
+              <IoMdCloseCircle className="h-4 w-4 text-rose-500" />
+            </Button>
+          )}
+        </div>
+      ),
+    },
+    {
+      accessorKey: "IdUsers",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={`text-black font-semibold w-fit p-0 flex justify-start items-centee`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <p className="leading-[105%]"> Peserta Pelatihan</p>
+
+            <HiMiniUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"} text-left capitalize`}>
+          <p className="text-xs text-gray-400"> CBIB.II.2024.003</p>{" "}
+          <p className="text-base font-semibold tracking-tight leading-none">
+            Farhan Augustiansyah
+          </p>
+        </div>
+      ),
+    },
+
+    {
+      accessorKey: "IdUsers",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={`text-black font-semibold w-fit p-0 flex justify-start items-centee`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <p className="leading-[105%]"> Pembayaran</p>
+
+            <GiTakeMyMoney className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"} text-left capitalize`}>
+          <p className="text-xs text-gray-400">
+            {" "}
+            <span
+              className={`${
+                row.original.StatusPembayaran == "pending"
+                  ? "text-yellow-500"
+                  : row.original.StatusPembayaran == "paid"
+                  ? "text-green-500"
+                  : "text-rose-500"
+              } capitalize`}
+            >
+              {row.original.StatusPembayaran}
+            </span>{" "}
+            • BTPN
+          </p>{" "}
+          <p className="text-base font-semibold tracking-tight leading-none">
+            Rp. 145.678
+          </p>
         </div>
       ),
     },
@@ -197,75 +280,150 @@ const TableDataPesertaPelatihan = () => {
         return (
           <Button
             variant="ghost"
-            className={``}
+            className={`text-black font-semibold text-center w-full  items-center justify-center p-0 flex`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             No Sertifikat
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <RiVerifiedBadgeFill className="ml-2 h-4 w-4" />
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div className={`text-center uppercase`}>
-          {row.getValue("NoSertifikat")}
-        </div>
-      ),
+      cell: ({ row }) =>
+        row.getValue("NoSertifikat") == "" ? (
+          <Button
+            variant="outline"
+            className="border flex gap-2 w-full items-center justify-center border-gray-600"
+          >
+            <TbRubberStamp className="h-4 w-4 text-gray-600" />{" "}
+            <span className="text-xs"> Terbitkan Sertifikat</span>
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+          >
+            <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+            <span className="text-xs"> {row.getValue("NoSertifikat")}</span>
+          </Button>
+        ),
     },
     {
-      accessorKey: "NoRegistrasi",
+      accessorKey: "IdPelatihan",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className={``}
+            className={`flex items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            No Registrasi
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            Input <br />
+            Penilaian
+            <TbDatabaseEdit className="ml-1 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`text-center uppercase`}>
-          {row.getValue("NoRegistrasi")}
+        <div className={` flex items-center justify-center w-full gap-1`}>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline" className=" border border-purple-600">
+                <LucideListChecks className="h-4 w-4 text-purple-600" />
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
+                <AlertDialogDescription className="-mt-2">
+                  Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh
+                  masyarakat umum lakukan checklist agar tampil di website
+                  E-LAUT!
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <form autoComplete="off">
+                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                  <div>
+                    <Checkbox />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>Publish Website E-LAUT</label>
+                    <p className="text-xs leading-[110%] text-gray-600">
+                      Dengan ini sebagai pihak lemdiklat saya mempublish
+                      informasi pelatihan terbuka untuk masyarakat umum!
+                    </p>
+                  </div>
+                </div>
+              </form>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={(e) =>
+                    Toast.fire({
+                      icon: "success",
+                      title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+                    })
+                  }
+                >
+                  Publish
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       ),
     },
     {
-      accessorKey: "PreTest",
+      accessorKey: "IdPelatihan",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className={``}
+            className={`flex items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Pre Test
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <MdOutlineNumbers className="ml-1 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`text-center uppercase`}>{row.getValue("PreTest")}</div>
+        <div
+          className={` flex items-center justify-center w-full gap-1 font-semibold ${
+            row.original.PreTest > 70
+              ? "text-green-500"
+              : row.original.PreTest > 50
+              ? "text-yellow-500"
+              : "text-rose-500"
+          }`}
+        >
+          {row.original.PreTest}
+        </div>
       ),
     },
     {
-      accessorKey: "PostTest",
+      accessorKey: "IdPelatihan",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className={``}
+            className={`flex items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Post Test
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <MdOutlineNumbers className="ml-1 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`text-center uppercase`}>
-          {row.getValue("PostTest")}
+        <div
+          className={` flex items-center justify-center w-full gap-1 font-semibold ${
+            row.original.PostTest > 70
+              ? "text-green-500"
+              : row.original.PostTest > 50
+              ? "text-yellow-500"
+              : "text-rose-500"
+          }`}
+        >
+          {row.original.PostTest}
         </div>
       ),
     },
@@ -275,16 +433,22 @@ const TableDataPesertaPelatihan = () => {
         return (
           <Button
             variant="ghost"
-            className={``}
+            className={`text-black font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Keterangan
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <MdSchool className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`text-center uppercase`}>
+        <div
+          className={`text-center uppercase text-base font-semibold ${
+            row.getValue("Keterangan") == "Lulus"
+              ? "text-green-500"
+              : "text-rose-500"
+          }`}
+        >
           {row.getValue("Keterangan")}
         </div>
       ),
@@ -365,9 +529,65 @@ const TableDataPesertaPelatihan = () => {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-            <div className="flex w-full gap-2 justify-end">
+          <div className="flex w-full items-center mb-2">
+            <div className="flex w-full gap-1 items-start">
+              <Select>
+                <SelectTrigger className="w-[200px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                  <div className="inline-flex gap-2 px-3 mr-2 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                    <MdOutlinePayment />
+                    Status Pembayaran
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Status Pembayaran</SelectLabel>
+                    <SelectItem value="pendaftaran">Paid</SelectItem>
+                    <SelectItem value="pelaksanaan">Pending</SelectItem>
+                    <SelectItem value="selesai">Not Paid</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+
+              <Select>
+                <SelectTrigger className="w-[130px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                    <TbSchool />
+                    Kelulusan
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Kelulusan</SelectLabel>
+                    <SelectItem value="pendaftaran">Lulus</SelectItem>
+                    <SelectItem value="pelaksanaan">Tidak Lulus</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+
+              <Select>
+                <SelectTrigger className="w-[140px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                    <HiOutlineDocument />
+                    Sertifikat
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Sertifikat</SelectLabel>
+                    <SelectItem value="apple">Sudah Diterbitkan</SelectItem>
+                    <SelectItem value="banana">Belum Diterbitkan</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full flex justify-end gap-2">
+              <div className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer w-fit">
+                <TbChartDonut />
+                Statistik
+              </div>
               <div
                 onClick={(e) => setShowFormAjukanPelatihan(true)}
                 className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
