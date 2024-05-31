@@ -94,9 +94,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
               !top ? "text-gray-600 hover:text-gray-900 hover:scale-105" : ""
             } block text-base font-medium text-gray-200 hover:text-white hover:scale-105`}
           >
-            {pathname.includes("lemdiklat")
-              ? " Bagja Lazwardi"
-              : "Farhan Augustiansyah"}
+            {userDetail?.Nama}
           </span>
         </span>
 
