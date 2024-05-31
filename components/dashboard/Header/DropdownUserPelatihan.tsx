@@ -1,11 +1,42 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import Toast from "@/components/toast";
+import { User } from "@/types/user";
+import axios, { AxiosResponse } from "axios";
 
-const DropdownUser = () => {
+const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
+  const token = Cookies.get("XSRF081");
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+  const [userDetail, setUserDetail] = React.useState<User | null>(null);
+
+  const handleFetchingUserDetail = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/getUserPelatihan`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log({ response });
+      setUserDetail(response.data);
+    } catch (error) {
+      console.error("Error posting training data:", error);
+      throw error;
+    }
+  };
+
+  React.useEffect(() => {
+    setTimeout(() => {
+      handleFetchingUserDetail();
+    }, 1000);
+  }, []);
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -14,13 +45,13 @@ const DropdownUser = () => {
   const dropdown = useRef<any>(null);
 
   const handleLogOut = async () => {
-    Cookies.remove("XSRF091");
-    Cookies.remove("XSRF092");
+    Cookies.remove("XSRF081");
+    Cookies.remove("XSRF082");
     Toast.fire({
       icon: "success",
-      title: `Berhasil logout dari dashboard Admin!`,
+      title: `Berhasil logout dari dashboard!`,
     });
-    router.replace("/admin/auth/login");
+    router.replace("/");
   };
 
   // close on click outside
@@ -58,15 +89,14 @@ const DropdownUser = () => {
         href="#"
       >
         <span className="hidden text-right lg:block">
-          <span className="block text-sm font-medium text-white dark:text-white">
+          <span
+            className={`${
+              !top ? "text-gray-600 hover:text-gray-900 hover:scale-105" : ""
+            } block text-base font-medium text-gray-200 hover:text-white hover:scale-105`}
+          >
             {pathname.includes("lemdiklat")
               ? " Bagja Lazwardi"
               : "Farhan Augustiansyah"}
-          </span>
-          <span className="block text-xs text-gray-100">
-            {pathname.includes("lemdiklat")
-              ? " BPPP Tegal"
-              : "Pusat Pelatihan KP"}
           </span>
         </span>
 
@@ -113,7 +143,7 @@ const DropdownUser = () => {
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
           <li>
             <Link
-              href="/profile"
+              href="/dashboard"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg
@@ -133,7 +163,7 @@ const DropdownUser = () => {
                   fill=""
                 />
               </svg>
-              My Profile
+              Dashboard
             </Link>
           </li>
           <li>
@@ -154,7 +184,7 @@ const DropdownUser = () => {
                   fill=""
                 />
               </svg>
-              My Contacts
+              Order Pelatihan
             </Link>
           </li>
           <li>
@@ -212,4 +242,4 @@ const DropdownUser = () => {
   );
 };
 
-export default DropdownUser;
+export default DropdownUserPelatihan;
