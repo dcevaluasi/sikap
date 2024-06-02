@@ -52,7 +52,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
       icon: "success",
       title: `Berhasil logout dari dashboard!`,
     });
-    router.replace("/");
+    router.push("/");
   };
 
   // close on click outside
