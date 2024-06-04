@@ -52,6 +52,8 @@ function FormRegistrationTraining({ id }: { id: number }) {
   const token = Cookies.get("XSRF081");
   const router = useRouter();
 
+  const [totalBayar, setTotalBayar] = React.useState(0);
+
   const handleRegistrationTrainingForPeople = async (e: any) => {
     e.preventDefault();
     try {
@@ -59,6 +61,7 @@ function FormRegistrationTraining({ id }: { id: number }) {
         `${baseUrl}/users/addPelatihan`,
         JSON.stringify({
           id_pelatihan: id.toString(),
+          totalBayar: totalBayar.toString(),
         }),
         {
           headers: {

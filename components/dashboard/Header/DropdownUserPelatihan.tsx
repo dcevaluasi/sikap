@@ -17,7 +17,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
   const handleFetchingUserDetail = async () => {
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/getUserPelatihan`,
+        `${baseUrl}/users/getUsersById`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -92,8 +92,12 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
         <span className="hidden text-right lg:block">
           <span
             className={`${
-              !top ? "text-gray-600 hover:text-gray-900 hover:scale-105" : ""
-            } block text-base font-medium text-gray-200 hover:text-white hover:scale-105`}
+              !top
+                ? "text-gray-600 hover:text-gray-900 hover:scale-105 "
+                : usePathname().includes("complete-profile")
+                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+                : "hover:text-white"
+            } block text-base font-medium text-gray-200  hover:scale-105`}
           >
             {userDetail?.Nama}
           </span>

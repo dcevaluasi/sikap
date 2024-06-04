@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
+  lemdikInfo: LemdiklatDetailInfo;
 }) => {
   const pathname = usePathname();
   return (
@@ -67,7 +68,7 @@ const Header = (props: {
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           {/* <!-- User Area --> */}
-          <DropdownUser />
+          <DropdownUser usereLoggedInInfo={props?.lemdikInfo!} />
           {/* <!-- User Area --> */}
         </div>
       </div>

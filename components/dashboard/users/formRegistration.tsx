@@ -16,17 +16,6 @@ function FormRegistration() {
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
 
-  /* function to generate data in type FormData */
-  const convertDataToFormData = () => {
-    const data = new FormData();
-
-    data.append("name", name);
-    data.append("email", email);
-    data.append("password", password);
-
-    return data;
-  };
-
   const [isInputError, setIsInputError] = React.useState(false);
 
   const handleRegistrasiAkun = (e: FormEvent) => {
@@ -41,17 +30,12 @@ function FormRegistration() {
         icon: "success",
         title: `Berhasil melakukan registrasi akun!`,
       });
-      router.push("/dashbord/profile");
+      router.push("/dashbord/complete-profile");
     }
   };
 
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = ["/images/hero-img2.jpg"];
-
-  const handleDummySignUp = (e: any) => {
-    e.preventDefault();
-    router.push("/users/dashboard");
-  };
 
   React.useEffect(() => {
     const interval = setInterval(() => {
@@ -160,25 +144,6 @@ function FormRegistration() {
                   )}
                 </div>
               </div>
-              {/* <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="w-full px-3">
-                  <label
-                    className="block text-gray-200 text-sm font-medium mb-1"
-                    htmlFor="email"
-                  >
-                    Email <span className="text-red-600"></span>
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    className="form-input w-full text-black"
-                    placeholder="Masukkan alamat email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-              </div> */}
               <div className="flex flex-wrap -mx-3 mb-1">
                 <div className="w-full px-3">
                   <label

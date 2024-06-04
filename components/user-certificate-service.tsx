@@ -143,7 +143,7 @@ export default function UserCertificateService({
   const handleFetchingUserDetail = async () => {
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/getUserPelatihan`,
+        `${baseUrl}/users/getUsersById`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -216,11 +216,11 @@ export default function UserCertificateService({
         <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6">
           <div className="pt-12 md:pt-20 flex flex-col items-center">
             <Image
-              src={"/illustrations/not-found.png"}
+              src={"/illustrations/598.jpg"}
               alt="Not Found"
               width={0}
               height={0}
-              className="w-[500px]"
+              className="w-[400px]"
             />
             <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
               <h1 className="text-3xl font-calsans leading-[110%] text-black">

@@ -104,7 +104,7 @@ export default function UserService({ user }: { user: User | null }) {
           aria-hidden="true"
         ></div>
 
-        <div className="relative max-w-7xl w-full mx-auto px-4 sm:px-6">
+        <div className="relative w-full mx-auto px-4 sm:px-6">
           <div className="">
             <div className="flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-5 md:gap-9">
               {tabMenus.map((tabMenu, index) => (

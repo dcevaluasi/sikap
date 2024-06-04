@@ -5,7 +5,11 @@ import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import Toast from "@/components/toast";
 
-const DropdownUser = () => {
+const DropdownUser = ({
+  usereLoggedInInfo,
+}: {
+  usereLoggedInInfo: LemdiklatDetailInfo | null;
+}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -60,12 +64,12 @@ const DropdownUser = () => {
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
             {pathname.includes("lemdiklat")
-              ? " Bagja Lazwardi"
+              ? usereLoggedInInfo?.data?.NamaLemdik
               : "Farhan Augustiansyah"}
           </span>
           <span className="block text-xs">
             {pathname.includes("lemdiklat")
-              ? " BPPP Tegal"
+              ? usereLoggedInInfo?.data?.Alamat
               : "Pusat Pelatihan KP"}
           </span>
         </span>

@@ -13,6 +13,15 @@ export function middleware(request: any) {
     if (protectedPaths.includes(request.nextUrl.pathname)) {
       return NextResponse.redirect(new URL('/', request.url))
     }
+  } else {
+    const protectedPaths = [
+      '/registrasi',
+      '/login'
+    ]
+
+    if (protectedPaths.includes(request.nextUrl.pathname)) {
+      return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
   }
 
   if (!XSRF092) {

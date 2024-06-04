@@ -9,6 +9,7 @@ import { extractPathAfterBppp, getPenyeleggara } from "@/utils/pelatihan";
 import TrainingTypeSection from "@/components/trainingTypeSection";
 import BPPPServices from "@/components/bppp-services";
 import BPPPTrainings from "@/components/bppp-trainings";
+import { convertToBPPP } from "@/utils/lemdiklat";
 
 export default function Page() {
   const pathname = usePathname();
@@ -22,7 +23,9 @@ export default function Page() {
   const handleFetchingPublicTrainingDataByPenyelenggara = async () => {
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getPelatihan?penyelenggara_pelatihan=${penyelenggara}`
+        `${baseUrl}/lemdik/getPelatihan?penyelenggara_pelatihan=${convertToBPPP(
+          penyelenggara
+        )}`
       );
       console.log({ response });
       setData(response.data.data);
@@ -32,7 +35,6 @@ export default function Page() {
     }
   };
 
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {

@@ -18,7 +18,7 @@ import Cookies from "js-cookie";
 import DropdownUser from "../dashboard/Header/DropdownUser";
 import DropdownUserPelatihan from "../dashboard/Header/DropdownUserPelatihan";
 
-export default function Header() {
+export default function HeaderProfile() {
   const [top, setTop] = React.useState<boolean>(true);
 
   const scrollHandler = () => {
@@ -33,17 +33,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
-        !top
-          ? `bg-white backdrop-blur-sm shadow-lg`
-          : usePathname().includes("pelatihan") ||
-            usePathname().includes("sertifikasi") ||
-            usePathname().includes("users")
-          ? `bg-white backdrop-blur-sm shadow-lg`
-          : usePathname().includes("complete-profile")
-          ? "bg-white backdrop-blur-sm shadow-lg"
-          : ""
-      }`}
+      className={`fixed w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${`bg-white backdrop-blur-sm shadow-lg`}`}
     >
       <div className="max-w-6xl mx-auto px-5 sm:px-6">
         <div className="flex items-center justify-between h-24 md:h-24 py-3">
@@ -57,7 +47,7 @@ export default function Header() {
 
               <NavDropDown href="#" name="Balai Pelatihan" top={top}>
                 <NavLink
-                  href="/bppp/medan"
+                  href="/bppp?location=medan"
                   name="BPPP Medan"
                   top={top}
                 />
@@ -74,11 +64,7 @@ export default function Header() {
 
               <NavDropDown href="#" name="Layanan" top={top}>
                 <NavLink href="/" name="Pelatihan" top={top} />
-                <NavLink
-                  href="/"
-                  name="Uji Kompetensi dan Keahlian"
-                  top={top}
-                />
+                <NavLink href="/" name="Uji Kompetensi" top={top} />
               </NavDropDown>
 
               <NavLinkDefault
@@ -147,8 +133,6 @@ const NavDropDown = ({
                   usePathname().includes("cek-sertifikat") ||
                   usePathname().includes("users")
                 ? "text-gray-900 hover:text-gray-900 hover:scale-105"
-                : usePathname().includes("complete-profile")
-                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
                 : "text-gray-200 hover:text-white hover:scale-105"
             }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
           >
@@ -184,9 +168,7 @@ const NavLink = ({
               usePathname().includes("cek-sertifikat") ||
               usePathname().includes("users")
             ? "text-gray-900 hover:text-gray-900 hover:scale-105"
-            : usePathname().includes("complete-profile")
-            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-            : "text-gray-600 hover:text-gray-900 hover:scale-105"
+            : "text-gray-800 hover:text-gray-900 hover:scale-105"
         }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
       >
         {name}
@@ -216,8 +198,6 @@ const NavLinkDefault = ({
               usePathname().includes("cek-sertifikat") ||
               usePathname().includes("users")
             ? "text-gray-900 hover:text-gray-900 hover:scale-105"
-            : usePathname().includes("complete-profile")
-            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
             : "text-gray-200 hover:text-white hover:scale-105"
         }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
       >

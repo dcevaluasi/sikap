@@ -7,6 +7,7 @@ import { User } from "@/types/user";
 import UserService from "@/components/user-service";
 import Footer from "@/components/ui/footer";
 import { Skeleton } from "@/components/ui/skeleton";
+import TableDataPelatihanUser from "@/components/dashboard/Pelatihan/TableDataPelatihanUser";
 
 export default function Page() {
   const token = Cookies.get("XSRF081");
@@ -19,7 +20,7 @@ export default function Page() {
     setIsLoading(true);
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/getUserPelatihan`,
+        `${baseUrl}/users/getUsersById`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -59,7 +60,7 @@ export default function Page() {
               <h1 className="text-4xl md:text-[2.9rem] font-extrabold leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans">
                 Dashboard <br />
                 {isLoading ? (
-                  <Skeleton className="w-[100px] h-[100px] rounded-full"  />
+                  <Skeleton className="w-[100px] h-[100px] rounded-full" />
                 ) : (
                   <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
                     {userDetail == null ? "" : userDetail.Nama}
@@ -77,6 +78,7 @@ export default function Page() {
           </div>
         </div>
         <UserService user={userDetail} />
+        <TableDataPelatihanUser />
       </section>
       <Footer />
     </>

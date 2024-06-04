@@ -139,7 +139,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
   const handleFetchingUserDetail = async () => {
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/getUserPelatihan`,
+        `${baseUrl}/users/getUsersById`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -193,7 +193,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
         ></div>
         <div className="absolute left-0 right-0 m-auto w-px p-px h-28 bg-gray-200 transform -translate-y-1/2"></div>
 
-        <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6">
+        <div className="relative w-full mx-auto px-4 sm:px-6">
           <div className="pt-12 md:pt-20">
             {/* Section header */}
             <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
@@ -206,10 +206,198 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                 dan perikanan!
               </p>
             </div>
-            <TableDataPelatihanUser />
+            <div className="w-full max-w-6xl mx-auto flex gap-5">
+              <div className="flex flex-col gap-2 w-5/12">
+                <CardPelatihan />
+              </div>
+              {/* <div className="bg-gray-200 w-1 h-screen rounded-full"></div> */}
+              <div className="flex items-start justify-center w-7/12">
+                <a
+                  href="#"
+                  className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:px-6 lg:py-0"
+                >
+                  <div className="sm:flex sm:justify-between sm:gap-4">
+                    <div>
+                      <h3 className="text-3xl font-bold text-gray-900 sm:text-3xl leading-[105%]">
+                        Building a SaaS product as a software developer
+                      </h3>
+
+                      <p className="mt-1 text-xs font-medium text-gray-600">
+                        By John Doe
+                      </p>
+                    </div>
+
+                    <div className="hidden sm:block sm:shrink-0">
+                      <Image
+                        width={0}
+                        height={0}
+                        alt=""
+                        src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
+                        className="w-16 rounded-lg object-cover shadow-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <p className="text-pretty text-sm text-gray-500">
+                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+                      At velit illum provident a, ipsa maiores deleniti
+                      consectetur nobis et eaque.
+                    </p>
+                  </div>
+
+                  <dl className="mt-6 flex gap-4 sm:gap-6">
+                    <div className="flex flex-col-reverse">
+                      <dt className="text-sm font-medium text-gray-600">
+                        Published
+                      </dt>
+                      <dd className="text-xs text-gray-500">31st June, 2021</dd>
+                    </div>
+
+                    <div className="flex flex-col-reverse">
+                      <dt className="text-sm font-medium text-gray-600">
+                        Reading time
+                      </dt>
+                      <dd className="text-xs text-gray-500">3 minute</dd>
+                    </div>
+                  </dl>
+
+                  <Timeline />
+                </a>
+              </div>
+            </div>
+            {/* <TableDataPelatihanUser /> */}
           </div>
         </div>
       </section>
     </>
   );
 }
+
+const CardPelatihan = () => {
+  return (
+    <Slide direction="up">
+      <a
+        href="#"
+        className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8  shadow-custom"
+      >
+        <span className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-blue-500 via-blue-500 to-teal-400"></span>
+
+        <div className="sm:flex sm:justify-between sm:gap-4">
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 sm:text-xl leading-[100%] ">
+              Building a SaaS product as a software developer
+            </h3>
+
+            <p className="mt-1 text-xs font-medium text-gray-600">
+              By John Doe
+            </p>
+          </div>
+
+          <div className="hidden sm:block sm:shrink-0">
+            <Image
+              width={0}
+              height={0}
+              alt=""
+              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
+              className="w-16 rounded-lg object-cover shadow-sm"
+            />
+          </div>
+        </div>
+
+        <div className="mt-4">
+          <p className="text-pretty text-sm text-gray-500">
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. At velit
+            illum provident a, ipsa maiores deleniti consectetur nobis et eaque.
+          </p>
+        </div>
+
+        <dl className="mt-6 flex gap-4 sm:gap-6">
+          <div className="flex flex-col-reverse">
+            <dt className="text-sm font-medium text-gray-600">Published</dt>
+            <dd className="text-xs text-gray-500">31st June, 2021</dd>
+          </div>
+
+          <div className="flex flex-col-reverse">
+            <dt className="text-sm font-medium text-gray-600">Reading time</dt>
+            <dd className="text-xs text-gray-500">3 minute</dd>
+          </div>
+        </dl>
+      </a>
+    </Slide>
+  );
+};
+
+const Timeline = () => {
+  return (
+    <section className="dark:bg-gray-100 dark:text-gray-800">
+      <div className=" py-12 ">
+        <div className="grid gap-4 sm:grid-cols-12">
+          <div className="col-span-12 sm:col-span-3">
+            <div className="text-center sm:text-left mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:mx-auto sm:before:mx-0 before:bg-blue-500">
+              <h3 className="text-xl font-semibold leading-[100%]">
+                Morbi tempor
+              </h3>
+              <p className="text-pretty text-sm text-gray-500">
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. At
+                velit illum provident a, ipsa maiores deleniti consectetur nobis
+                et eaque.
+              </p>
+            </div>
+          </div>
+          <div className="relative col-span-12 px-4 space-y-6 sm:col-span-9">
+            <div className="col-span-12 space-y-12 relative px-4 sm:col-span-8 sm:space-y-8 sm:before:absolute sm:before:top-2 sm:before:bottom-0 sm:before:w-0.5 sm:before:-left-3 before:bg-gray-300">
+              <Slide direction="right">
+                <div className="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-blue-500">
+                  <h3 className="text-xl font-semibold tracking-wide">
+                    Donec porta enim vel{" "}
+                  </h3>
+                  <time className="text-xs tracking-wide uppercase dark:text-gray-600">
+                    Dec 2020
+                  </time>
+                  <p className="mt-3">
+                    Pellentesque feugiat ante at nisl efficitur, in mollis orci
+                    scelerisque. Interdum et malesuada fames ac ante ipsum
+                    primis in faucibus.
+                  </p>
+                </div>
+              </Slide>
+
+              <Slide direction="right">
+                <div className="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-blue-500">
+                  <h3 className="text-xl font-semibold tracking-wide">
+                    Aliquam sit amet nunc ut
+                  </h3>
+                  <time className="text-xs tracking-wide uppercase dark:text-gray-600">
+                    Jul 2019
+                  </time>
+                  <p className="mt-3">
+                    Morbi vulputate aliquam libero non dictum. Aliquam sit amet
+                    nunc ut diam aliquet tincidunt nec nec dui. Donec mollis
+                    turpis eget egestas sodales.
+                  </p>
+                </div>
+              </Slide>
+              <Slide direction="right">
+                <div className="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-blue-500">
+                  <h3 className="text-xl font-semibold tracking-wide">
+                    Pellentesque habitant morbi
+                  </h3>
+                  <time className="text-xs tracking-wide uppercase dark:text-gray-600">
+                    Jan 2016
+                  </time>
+                  <p className="mt-3">
+                    Suspendisse tincidunt, arcu nec faucibus efficitur, justo
+                    velit consectetur nisl, sit amet condimentum lacus orci nec
+                    purus. Mauris quis quam suscipit, vehicula felis id,
+                    vehicula enim.
+                  </p>
+                </div>
+              </Slide>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};

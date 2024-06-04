@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from "react";
 import TableData from "../Tables/TableData";
-import { RiShipLine } from "react-icons/ri";
+import { RiShipLine, RiVerifiedBadgeFill } from "react-icons/ri";
 
 import {
   Sheet,
@@ -23,13 +23,21 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Edit3Icon, LucidePrinter, Trash, X } from "lucide-react";
+import {
+  ArrowUpDown,
+  Edit3Icon,
+  Fullscreen,
+  LucidePrinter,
+  Trash,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
 import {
   TbBroadcast,
   TbBuildingCommunity,
   TbCalendarCheck,
+  TbCalendarDot,
   TbCalendarExclamation,
   TbCalendarSearch,
   TbCalendarStats,
@@ -37,13 +45,14 @@ import {
   TbChartDonut,
   TbDatabaseEdit,
   TbFileCertificate,
+  TbFileDigit,
   TbFishChristianity,
   TbMoneybag,
   TbQrcode,
   TbSchool,
   TbTargetArrow,
 } from "react-icons/tb";
-import { IoIosInformationCircle } from "react-icons/io";
+import { IoIosInformationCircle, IoMdGlobe } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
 import {
   AlertDialog,
@@ -78,6 +87,9 @@ import {
   SelectTrigger,
 } from "@/components/ui/select";
 import { convertDate } from "@/utils";
+import Cookies from "js-cookie";
+import { LemdiklatDetailInfo } from "@/types/lemdiklat";
+import { Progress } from "@/components/ui/progress";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -86,39 +98,7 @@ const TableDataPelatihan: React.FC = () => {
     React.useState<boolean>(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  type Pelatihan = {
-    IdPelatihan: number;
-    IdLemdik: string;
-    KodePelatihan: string;
-    NamaPelatihan: string;
-    PenyelenggaraPelatihan: string;
-    DetailPelatihan: string;
-    JenisPelatihan: string;
-    BidangPelatihan: string;
-    DukunganProgramTerobosan: string;
-    TanggalMulaiPelatihan: string;
-    TanggalBerakhirPelatihan: string;
-    HargaPelatihan: string;
-    Instruktur: string;
-    FotoPelatihan: string;
-    Status: string;
-    MemoPusat: string;
-    SilabusPelatihan: string;
-    LokasiPelatihan: string;
-    PelaksanaanPelatihan: string;
-    UjiKompetensi: string;
-    KoutaPelatihan: string; // type from be, should be KuotaPelatihan
-    AsalPelatihan: string;
-    JenisSertifikat: string;
-    TtdSertifikat: string;
-    NoSertifikat: string;
-    IdSaranaPrasarana: string;
-    IdKonsumsi: string;
-    CreatedAt: string;
-    UpdatedAt: string;
-  };
-
-  const [data, setData] = React.useState<Pelatihan[]>([]);
+  const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
 
@@ -126,15 +106,53 @@ const TableDataPelatihan: React.FC = () => {
     setIsFetching(true);
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getPelatihan`
+        `${baseUrl}/lemdik/getPelatihan?id_lemdik=${Cookies.get("IDLemdik")}`
       );
-      console.log({ response });
+      console.log("PELATIHAN BY LEMDIK: ", response);
       setData(response.data.data);
+
       setIsFetching(false);
     } catch (error) {
       console.error("Error posting training data:", error);
       setIsFetching(false);
       throw error;
+    }
+  };
+
+  const [statusPelatihan, setStatusPelatihan] = React.useState("");
+  const publishedData = data.filter(
+    (item: PelatihanMasyarakat) => item.Status === "Publish"
+  ).length;
+
+  const handleUpdatePublishPelatihanToELAUT = async (
+    id: number,
+    status: string
+  ) => {
+    const formData = new FormData();
+    formData.append("Status", status);
+    try {
+      const response = await axios.put(
+        `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+          },
+        }
+      );
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+      });
+      console.log("UPDATE PELATIHAN: ", response);
+      handleFetchingPublicTrainingData();
+    } catch (error) {
+      console.error("ERROR UPDATE PELATIHAN: ", error);
+      Toast.fire({
+        icon: "success",
+        title: `Gagal mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+      });
+      handleFetchingPublicTrainingData();
     }
   };
 
@@ -147,7 +165,7 @@ const TableDataPelatihan: React.FC = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const columns: ColumnDef<Pelatihan>[] = [
+  const columns: ColumnDef<PelatihanMasyarakat>[] = [
     {
       accessorKey: "KodePelatihan",
       header: ({ column }) => {
@@ -181,105 +199,204 @@ const TableDataPelatihan: React.FC = () => {
         );
       },
       cell: ({ row }) => (
-        <div className={`${"flex"} flex items-center justify-center gap-1`}>
-          <SheetInfoPelatihan>
-            <Button variant="outline" className="ml-auto">
-              <IoIosInformationCircle className="h-4 w-4" />
-            </Button>
-          </SheetInfoPelatihan>
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="ml-auto border border-rose-600"
-              >
-                <Trash className="h-4 w-4 text-rose-600" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-
-          <Button
-            variant="outline"
-            className="ml-auto border border-yellow-500"
-          >
-            <Edit3Icon className="h-4 w-4 text-yellow-500" />
-          </Button>
-
-          <Button
-            onClick={(e) =>
-              router.push(
-                `/admin/lemdiklat/pelatihan/${row.getValue(
-                  "KodePelatihan"
-                )}/peserta-pelatihan/${row.getValue("IdPelatihan")}`
-              )
-            }
-            variant="outline"
-            className="ml-auto border border-green-500"
-          >
-            <HiUserGroup className="h-4 w-4 text-green-500" />
-          </Button>
-
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button
-                variant="outline"
-                className="ml-auto border border-purple-600"
-              >
-                <TbBroadcast className="h-4 w-4 text-purple-600" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
-                <AlertDialogDescription className="-mt-2">
-                  Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh
-                  masyarakat umum lakukan checklist agar tampil di website
-                  E-LAUT!
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <form autoComplete="off">
-                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                  <div>
-                    <Checkbox />
-                  </div>
-                  <div className="space-y-1 leading-none">
-                    <label>Publish Website E-LAUT</label>
-                    <p className="text-xs leading-[110%] text-gray-600">
-                      Dengan ini sebagai pihak lemdiklat saya mempublish
-                      informasi pelatihan terbuka untuk masyarakat umum!
-                    </p>
-                  </div>
+        <div className="w-full flex flex-col gap-2">
+          <div className="w-full relative ">
+            <div className="full h-40 relative">
+              <Image
+                alt={row.original.NamaPelatihan}
+                src={row.original.FotoPelatihan}
+                width={0}
+                height={0}
+                className="w-full h-40 object-cover rounded-xl"
+              />
+              {row.original.Status == "Publish" && (
+                <div className="w-fit flex gap-1 bg-white shadow-custom rounded-full items-center px-2 py-1   text-xs absolute top-3 right-3 font-medium text-blue-500">
+                  <IoMdGlobe /> Published
                 </div>
-              </form>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={(e) =>
-                    Toast.fire({
-                      icon: "success",
-                      title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
-                    })
-                  }
+              )}
+              <div className="w-full h-40 absolute bg-blue-500 bg-opacity-10 top-0 rounded-xl"></div>
+            </div>
+          </div>
+
+          <div className={`${"flex"} flex items-center justify-center gap-1`}>
+            <SheetInfoPelatihan>
+              <Button variant="outline" className="ml-auto">
+                <IoIosInformationCircle className="h-4 w-4" />
+              </Button>
+            </SheetInfoPelatihan>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="ml-auto border border-rose-600"
                 >
-                  Publish
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+                  <Trash className="h-4 w-4 text-rose-600" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>
+                    Apakah kamu yakin menghapus pelatihan ini?
+                  </AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Penghapusan data ini akan dilakukan secara permanen,
+                    sehingga anda tidak dapat kembali melakukan undo terkait
+                    tindakan ini!
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Batal</AlertDialogCancel>
+                  <AlertDialogAction className="bg-rose-600">
+                    Hapus
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <Button
+              onClick={(e) =>
+                router.push(
+                  `/admin/lemdiklat/pelatihan/edit-pelatihan/${row.original.IdPelatihan}`
+                )
+              }
+              variant="outline"
+              className="ml-auto border border-yellow-500"
+            >
+              <Edit3Icon className="h-4 w-4 text-yellow-500" />
+            </Button>
+
+            <Button
+              onClick={(e) =>
+                router.push(
+                  `/admin/lemdiklat/pelatihan/${row.getValue(
+                    "KodePelatihan"
+                  )}/peserta-pelatihan/${row.getValue("IdPelatihan")}`
+                )
+              }
+              variant="outline"
+              className="ml-auto border border-green-500"
+            >
+              <HiUserGroup className="h-4 w-4 text-green-500" />
+            </Button>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="ml-auto border border-blue-600"
+                >
+                  <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
+                  <AlertDialogDescription className="-mt-2">
+                    Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh
+                    masyarakat umum lakukan checklist agar tampil di website
+                    E-LAUT!
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <form autoComplete="off">
+                  <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                    <div>
+                      <Checkbox />
+                    </div>
+                    <div className="space-y-1 leading-none">
+                      <label>Publish Website E-LAUT</label>
+                      <p className="text-xs leading-[110%] text-gray-600">
+                        Dengan ini sebagai pihak lemdiklat saya mempublish
+                        informasi pelatihan terbuka untuk masyarakat umum!
+                      </p>
+                    </div>
+                  </div>
+                </form>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={(e) =>
+                      Toast.fire({
+                        icon: "success",
+                        title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+                      })
+                    }
+                  >
+                    Publish
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="ml-auto border border-purple-600"
+                >
+                  <TbBroadcast className="h-4 w-4 text-purple-600" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
+                  <AlertDialogDescription className="-mt-2">
+                    Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh
+                    masyarakat umum lakukan checklist agar tampil di website
+                    E-LAUT!
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <form autoComplete="off">
+                  {row.original.Status == "Belum Publish" ? (
+                    <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                      <div>
+                        <Checkbox
+                          id="publish"
+                          onCheckedChange={(e) => setStatusPelatihan("Publish")}
+                        />
+                      </div>
+                      <div className="space-y-1 leading-none">
+                        <label>Publish Website E-LAUT</label>
+                        <p className="text-xs leading-[110%] text-gray-600">
+                          Dengan ini sebagai pihak lemdiklat saya mempublish
+                          informasi pelatihan terbuka untuk masyarakat umum!
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                      <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
+                      <div className="space-y-1 leading-none">
+                        <label>Published Website E-LAUT</label>
+                        <p className="text-xs leading-[110%] text-gray-600">
+                          Informasi Kelas Pelatihanmu telah dipublikasikan
+                          melalui laman Website E-LAUT balai mu!
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </form>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={(e) =>
+                      row.original.Status == "Belum Publish"
+                        ? handleUpdatePublishPelatihanToELAUT(
+                            row.original.IdPelatihan,
+                            statusPelatihan
+                          )
+                        : handleUpdatePublishPelatihanToELAUT(
+                            row.original.IdPelatihan,
+                            "Belum Publish"
+                          )
+                    }
+                  >
+                    {row.original.Status == "Publish" ? "Unpublish" : "Publsih"}
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
       ),
     },
@@ -300,38 +417,39 @@ const TableDataPelatihan: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-gray-400 mt-2 leading-[100%] mb-1">
             {" "}
-            {row.getValue("KodePelatihan")} • {row.original.BidangPelatihan}
+            {row.getValue("KodePelatihan")} • {row.original.BidangPelatihan} •{" "}
+            {row.original.JenisPelatihan} • Mendukung Program Terobosan{" "}
+            {row.original.DukunganProgramTerobosan}
           </p>
           <p className="text-base font-semibold tracking-tight leading-none">
             {row.getValue("NamaPelatihan")}
           </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "TanggalMulaiPelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`p-0 !text-left w-fit flex items-center justify-start text-gray-900 font-semibold`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Tanggal Pelaksanaan
-            <TbCalendarCheck className="ml-2 h-4 w-4 text-xl" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-xs text-gray-400 capitalize"> Dilaksanakan pada</p>
-          <p className="text-base font-semibold tracking-tight leading-none">
-            {convertDate(row.getValue("TanggalMulaiPelatihan"))}{" "}
-            <span className="lowercase">s.d</span>{" "}
-            {convertDate(row.original.TanggalBerakhirPelatihan)}
-          </p>
+          <div className={`${"ml-0"} text-left capitalize mt-1`}>
+            <p className="text-xs  font-medium capitalize ">
+              {" "}
+              <span className="flex items-center gap-1 leading-[105%]">
+                <TbTargetArrow />
+                <span>{row.original?.PelaksanaanPelatihan}</span>{" "}
+              </span>
+              <span className="flex items-center gap-1 leading-[105%]">
+                <TbCalendarCheck />
+                <span className="">
+                  {" "}
+                  <span>
+                    {" "}
+                    {convertDate(row.original.TanggalMulaiPelatihan)}{" "}
+                  </span>
+                  <span className="lowercase">s.d</span>{" "}
+                  <span>
+                    {" "}
+                    {convertDate(row?.original?.TanggalBerakhirPelatihan)}
+                  </span>
+                </span>
+              </span>
+            </p>
+          </div>
         </div>
       ),
     },
@@ -351,13 +469,51 @@ const TableDataPelatihan: React.FC = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-xs text-gray-400 capitalize">
-            {" "}
-            Asal dan Kuota Peserta
-          </p>
+          <p className="text-xs text-gray-400"> Asal dan Kuota Peserta</p>
           <p className="text-base font-semibold tracking-tight leading-none">
             {row.getValue("AsalPelatihan")} • {row.original.KoutaPelatihan}{" "}
             Orang
+          </p>
+          <span className="text-xs  font-medium capitalize leading-[100%] mt-2">
+            Realisasi Pendaftar
+          </span>
+          <Progress
+            value={
+              row.original.UserPelatihan.length *
+              (100 / parseInt(row.original.KoutaPelatihan))
+            }
+            max={parseInt(row.original.KoutaPelatihan)}
+            className="w-full"
+          />
+          <p className="text-xs text-gray-400 capitalize">
+            {" "}
+            {row.original.UserPelatihan.length}/
+            {parseInt(row.original.KoutaPelatihan)}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Pelaksanaan",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[150px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Hasil Pelaksanaan
+            <TbFileDigit className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"} text-left capitalize`}>
+          <p className="text-xs text-gray-400 capitalize"> Jumlah Yang Lulus</p>
+          <p className="text-base font-semibold tracking-tight leading-none">
+            <span className="text-green-500">
+              {row.original.KoutaPelatihan} Orang
+            </span>{" "}
           </p>
         </div>
       ),
@@ -398,7 +554,7 @@ const TableDataPelatihan: React.FC = () => {
 
           {/* List Data Pelatihan */}
           <div>
-            <FormPelatihan />
+            <FormPelatihan edit={false} />
           </div>
         </>
       ) : showCertificateSetting ? (
@@ -424,7 +580,9 @@ const TableDataPelatihan: React.FC = () => {
                   <p className="font-semibold text-secondary">
                     Total Publish Umum
                   </p>
-                  <p className="text-sm font-medium">1 pelatihan</p>
+                  <p className="text-sm font-medium">
+                    {publishedData} pelatihan
+                  </p>
                 </div>
               </div>
             </div>
@@ -524,7 +682,9 @@ const TableDataPelatihan: React.FC = () => {
                   <p className="font-semibold text-secondary">
                     Total Publish Umum
                   </p>
-                  <p className="text-sm font-medium">1 pelatihan</p>
+                  <p className="text-sm font-medium">
+                    {publishedData} pelatihan
+                  </p>
                 </div>
               </div>
             </div>

@@ -220,7 +220,7 @@ const TableDataPesertaPelatihan = () => {
             className={`text-black font-semibold w-fit p-0 flex justify-start items-centee`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            <p className="leading-[105%]"> Peserta Pelatihan</p>
+            <p className="leading-[105%]"> No Peserta</p>
 
             <HiMiniUserGroup className="ml-2 h-4 w-4" />
           </Button>
@@ -228,9 +228,9 @@ const TableDataPesertaPelatihan = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-xs text-gray-400"> CBIB.II.2024.003</p>{" "}
+          <p className="text-xs text-gray-400"> No registrasi</p>{" "}
           <p className="text-base font-semibold tracking-tight leading-none">
-            Farhan Augustiansyah
+            {row.original.NoRegistrasi}
           </p>
         </div>
       ),
@@ -295,7 +295,7 @@ const TableDataPesertaPelatihan = () => {
             className="border flex gap-2 w-full items-center justify-center border-gray-600"
           >
             <TbRubberStamp className="h-4 w-4 text-gray-600" />{" "}
-            <span className="text-xs"> Terbitkan Sertifikat</span>
+            <span className="text-sm"> Terbitkan Sertifikat</span>
           </Button>
         ) : (
           <Button

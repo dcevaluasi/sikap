@@ -1,7 +1,23 @@
-import { UserPelatihan } from "@/types/user";
+export type LemdiklatDetailInfo = {
+    Pesan:string;
+    data: LemdiklatDetail;
+}
 
+export type LemdiklatDetail = {
+    IdLemdik: number;
+    NamaLemdik: string;
+    NoTelpon: number;
+    Email: string;
+    Password:string;
+    Alamat: string;
+    Deskripsi:string;
+    CreateAt:string;
+    UpdateAt:string;
+    LastNoSertif: string;
+    Pelatihan: Pelatihan;
+}
 
-type Pelatihan = {
+export type Pelatihan = {
     IdPelatihan: number;
     IdLemdik: string;
     KodePelatihan: string;
@@ -31,5 +47,4 @@ type Pelatihan = {
     IdKonsumsi: string;
     CreatedAt: string;
     UpdatedAt: string;
-    UserPelatihan: UserPelatihan[]
   };

@@ -6,16 +6,17 @@ import localFont from "next/font/local";
 
 import Header from "@/components/ui/header";
 import Banner from "@/components/banner";
+import CallCenter from "@/components/call-center";
 
 const myFont = localFont({
   src: "./font/calsans.ttf",
   variable: "--font-calsans",
 });
 
-// const certificateFont = localFont({
-//   src: "./font/BOOKOS.TTF",
-//   variable: "--font-bookmanOldStyle",
-// });
+const bos = localFont({
+  src: "./font/bookmanoldstyle.ttf",
+  variable: "--font-bos",
+});
 
 const cambria = localFont({
   src: "./font/cambria.ttf",
@@ -48,11 +49,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.className} ${myFont.variable} ${delius.variable} ${cambria.variable} antialiased bg-white text-gray-900 tracking-tight`}
+        className={`${inter.className} ${myFont.variable} ${delius.variable} ${bos.variable} ${cambria.variable} antialiased bg-white text-gray-900 tracking-tight `}
       >
-        <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip">
+        <div className="flex flex-col min-h-screen overflow-hidden supports-[overflow:clip]:overflow-clip relative">
           <Header />
           {children}
+          <CallCenter />
         </div>
       </body>
     </html>

@@ -1,17 +1,23 @@
 "use client";
 
+// NEXT JS COMPONENTS
 import Image from "next/image";
 import Link from "next/link";
+
 import React, { FormEvent } from "react";
 import Toast from "../toast";
 import { useRouter } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 
+// RECAPTCHA
+import ReCAPTCHA from "react-google-recaptcha";
+
 function FormLogin() {
   /* state variable to store basic user information to register */
   const [nik, setNik] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
+  const recaptchaRef = React.createRef();
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
@@ -53,7 +59,11 @@ function FormLogin() {
             icon: "success",
             title: `Berhasil melakukan login!`,
           });
-          router.push("/dashboard");
+          if (Cookies.get("XSRF083")) {
+            router.push("/dashboard/complete-profile");
+          } else {
+            router.push("/dashboard");
+          }
         }
       } catch (error: any) {
         console.error({ error });
@@ -76,6 +86,19 @@ function FormLogin() {
         }
       }
     }
+  };
+
+  const onReCAPTCHAChange = (captchaCode: any) => {
+    // If the reCAPTCHA code is null or undefined indicating that
+    // the reCAPTCHA was expired then return early
+    if (!captchaCode) {
+      return;
+    }
+    // Else reCAPTCHA was executed successfully so proceed with the
+    // alert
+    alert(`Hey, ${nik}`);
+    // Reset the reCAPTCHA so that it can be executed again if user
+    // submits another email.
   };
 
   const [imageIndex, setImageIndex] = React.useState(0);

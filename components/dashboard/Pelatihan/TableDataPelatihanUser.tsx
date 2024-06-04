@@ -95,6 +95,112 @@ import SertifikatPage2 from "@/components/sertifikat/sertifikatPage2";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
+import { ApexOptions } from "apexcharts";
+import ReactApexChart from "react-apexcharts";
+
+const options: ApexOptions = {
+  legend: {
+    show: false,
+    position: "top",
+    horizontalAlign: "left",
+  },
+  colors: ["#3C50E0"],
+  chart: {
+    fontFamily: "Satoshi, sans-serif",
+    height: 335,
+    type: "area",
+    dropShadow: {
+      enabled: true,
+      color: "#623CEA14",
+      top: 10,
+      blur: 4,
+      left: 0,
+      opacity: 0.1,
+    },
+
+    toolbar: {
+      show: false,
+    },
+  },
+  responsive: [
+    {
+      breakpoint: 1024,
+      options: {
+        chart: {
+          height: 300,
+        },
+      },
+    },
+    {
+      breakpoint: 1366,
+      options: {
+        chart: {
+          height: 0,
+        },
+      },
+    },
+  ],
+  stroke: {
+    width: [2, 2],
+    curve: "straight",
+  },
+  grid: {
+    xaxis: {
+      lines: {
+        show: true,
+      },
+    },
+    yaxis: {
+      lines: {
+        show: true,
+      },
+    },
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  markers: {
+    size: 4,
+    colors: "#fff",
+    strokeColors: ["#3056D3"],
+    strokeWidth: 3,
+    strokeOpacity: 0.9,
+    strokeDashArray: 0,
+    fillOpacity: 1,
+    discrete: [],
+    hover: {
+      size: undefined,
+      sizeOffset: 5,
+    },
+  },
+  xaxis: {
+    type: "category",
+    categories: ["Sep", "Oct", "Nov", "Dec"],
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false,
+    },
+  },
+  yaxis: {
+    title: {
+      style: {
+        fontSize: "0px",
+      },
+    },
+    min: 0,
+    max: 0,
+  },
+};
+
+interface ChartOneState {
+  series: {
+    name: string;
+    data: number[];
+  }[];
+}
+
 const TableDataPelatihanUser: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
@@ -137,6 +243,27 @@ const TableDataPelatihanUser: React.FC = () => {
   const [data, setData] = React.useState<Pelatihan[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
+
+  const [state, setState] = useState<ChartOneState>({
+    series: [
+      {
+        name: "PNBP",
+        data: [0, 0, 0, 0, 0],
+      },
+
+      {
+        name: "Anggaran",
+        data: [0, 0, 0, 0, 0],
+      },
+    ],
+  });
+
+  const handleReset = () => {
+    setState((prevState) => ({
+      ...prevState,
+    }));
+  };
+  handleReset;
 
   const handleFetchingPublicTrainingData = async () => {
     setIsFetching(true);
@@ -234,6 +361,15 @@ const TableDataPelatihanUser: React.FC = () => {
           <p className="text-base font-semibold tracking-tight leading-none">
             {row.getValue("NamaPelatihan")}
           </p>
+          <div className={`${"ml-0"} text-left capitalize`}>
+            <ReactApexChart
+              options={options}
+              series={state.series}
+              type="area"
+              height={350}
+              width={"100%"}
+            />
+          </div>
         </div>
       ),
     },
@@ -314,7 +450,7 @@ const TableDataPelatihanUser: React.FC = () => {
     handleFetchingPublicTrainingData();
   }, []);
 
-  return (
+return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       {showFormAjukanPelatihan ? (
         <>
@@ -325,7 +461,7 @@ const TableDataPelatihanUser: React.FC = () => {
 
           {/* List Data Pelatihan */}
           <div>
-            <FormPelatihan />
+            <FormPelatihan edit={false} />
           </div>
         </>
       ) : showCertificateSetting ? (

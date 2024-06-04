@@ -3,7 +3,7 @@ import Image from "next/image";
 export default function SertifikatPage1() {
   return (
     <div className="flex flex-col">
-      <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-6 rounded-md font-cambria leading-[120%] h-[120vh]">
+      <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-6 rounded-md font-BOS leading-[120%] h-[120vh]">
         <div className="flex flex-row justify-end items-start">
           <p className="text-base">No. Reg. : C.03.01.001147</p>
         </div>
@@ -17,14 +17,14 @@ export default function SertifikatPage1() {
           </p>
         </div>
 
-        <div className="flex w-full flex-col items-start -mt-2 text-center">
+        <div className="flex w-full flex-col items-start -mt-2 text-center font-BOS">
           <p>
             Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan
             Perikanan berdasarkan Peraturan Pemerintah Nomor.62 Tahun 2014
             tentang Penyelenggaraan Pendidikan, Pelatihan dan Penyuluhan
             Perikanan, serta ketentuan pelaksanaannya menyatakan bahwa :
           </p>
-          <p className="text-xs italic">
+          <p className="text-xs italic font-BOS">
             The Agency for Marine and Fisheries Extension and Human Resources
             Development based on Government Regulation Number 62 of 2014
             concerning the Implementation of Fisheries Education, Training and
@@ -66,7 +66,7 @@ export default function SertifikatPage1() {
         </div>
 
         <div className="flex gap-2 items-center justify-center mt-5">
-          <div className="flex flex-col font-cambria text-center items-center justify-center">
+          <div className="flex flex-col font-BOS text-center items-center justify-center">
             <div className="flex w-full flex-col items-cennter mt-2 text-center">
               <p>Jakarta, 21 Februari 2024</p>
               <p>
@@ -91,10 +91,10 @@ export default function SertifikatPage1() {
           </div>
         </div>
       </div>
-      <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-6 rounded-md font-cambria leading-[120%] !h-[120vh]">
+      <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-6 rounded-md font-BOS leading-[120%] !h-[120vh]">
         <div className="flex flex-row justify-center items-center">
           <div className="flex flex-row gap-2 items-center">
-            <div className="flex flex-col font-cambria text-center">
+            <div className="flex flex-col font-BOS text-center">
               <p className="font-extrabold max-w-md w-full italic">
                 Good Aquaculture Practices (GAqP) Training For Students in the
                 Marine and Fisheries Education Units

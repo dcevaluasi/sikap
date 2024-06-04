@@ -1,3 +1,4 @@
+
 export type Product = {
   image: string;
   name: string;
@@ -37,6 +38,7 @@ export type PelatihanMasyarakat =  {
   IdKonsumsi: string;
   CreatedAt: string;
   UpdatedAt: string;
+  UserPelatihan: UserPelatihan[];
 }
 
 export type UserPelatihan = {
@@ -98,5 +100,4 @@ export type Pelatihan = {
   CatatanPenerbitanByPusat: string;
   SarprasPelatihan: string;
   MateriPelatihan: string;
-  UserPelatihan: UserPelatihan[];
 };

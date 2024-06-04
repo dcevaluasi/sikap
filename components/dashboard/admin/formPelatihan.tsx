@@ -31,7 +31,7 @@ import Cookies from "js-cookie";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
-function FormPelatihan() {
+function FormPelatihan({ edit = false }: { edit: boolean }) {
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
@@ -53,37 +53,7 @@ function FormPelatihan() {
     });
   };
 
-  /* function to generate data in type FormData */
-  const convertDataToFormData = () => {
-    const data = new FormData();
-
-    data.append("name", name);
-    data.append("email", email);
-    data.append("password", password);
-
-    return data;
-  };
-
   const [isInputError, setIsInputError] = React.useState(false);
-
-  const handleRegistrasiAkun = (e: FormEvent) => {
-    if (name == "" || nik == "" || phoneNumber == "" || password == "") {
-      Toast.fire({
-        icon: "error",
-        title: `Tolong lengkapi data registrasi!`,
-      });
-      setIsInputError(true);
-    } else {
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil melakukan registrasi akun!`,
-      });
-      router.push("/dashbord/profile");
-    }
-  };
-
-  const [imageIndex, setImageIndex] = React.useState(0);
-  const images = ["/images/hero-img2.jpg"];
 
   const editorRef = useRef(null);
 
@@ -336,7 +306,9 @@ function FormPelatihan() {
                   <div className="flex flex-col gap-1 my-4">
                     <h2 className="font-bold text-2xl leading-[100%] md:text-2xl text-black font-calsans flex items-center gap-1">
                       <TbSchool />
-                      <span className="mt-2">Data Pelatihan</span>
+                      <span className="mt-2">
+                        {edit && "Edit"} Data Pelatihan
+                      </span>
                     </h2>
                     <p className="text-sm text-gray-600 max-w-md">
                       Lengkapi data pelatihan yang akan disimpan dalam database
@@ -362,19 +334,35 @@ function FormPelatihan() {
 
                 <p className="text-base">
                   {indexFormTab == 0 ? (
-                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                    <span
+                      className={`font-bold  leading-[100%] my-6 ${
+                        edit ? "text-yellow-500" : "text-blue-500"
+                      } `}
+                    >
                       1
                     </span>
                   ) : indexFormTab == 1 ? (
-                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                    <span
+                      className={`font-bold  leading-[100%] my-6 ${
+                        edit ? "text-yellow-500" : "text-blue-500"
+                      } `}
+                    >
                       2
                     </span>
                   ) : indexFormTab == 2 ? (
-                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                    <span
+                      className={`font-bold  leading-[100%] my-6 ${
+                        edit ? "text-yellow-500" : "text-blue-500"
+                      } `}
+                    >
                       3
                     </span>
                   ) : (
-                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                    <span
+                      className={`font-bold  leading-[100%] my-6 ${
+                        edit ? "text-yellow-500" : "text-blue-500"
+                      } `}
+                    >
                       4
                     </span>
                   )}{" "}
@@ -994,7 +982,11 @@ function FormPelatihan() {
                 >
                   <button
                     type="button"
-                    className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                    className={`btn text-white ${
+                      edit
+                        ? "bg-yellow-600 hover:bg-yellow-700"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    }  w-full`}
                     onClick={(e) => {
                       setIndexFormTab(indexFormTab - 1);
                       scrollToTop();
@@ -1009,7 +1001,11 @@ function FormPelatihan() {
                   <button
                     type="submit"
                     onClick={(e: any) => handlePostingPublicTrainingData(e)}
-                    className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                    className={`btn text-white ${
+                      edit
+                        ? "bg-yellow-600 hover:bg-yellow-700"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    } w-full`}
                   >
                     Upload Pelatihan
                   </button>
@@ -1019,7 +1015,11 @@ function FormPelatihan() {
                 >
                   <button
                     type="button"
-                    className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                    className={`btn text-white ${
+                      edit
+                        ? "bg-yellow-600 hover:bg-yellow-700"
+                        : "bg-blue-500 hover:bg-blue-600"
+                    } w-full`}
                     onClick={(e) => {
                       setIndexFormTab(indexFormTab + 1);
                       scrollToTop();

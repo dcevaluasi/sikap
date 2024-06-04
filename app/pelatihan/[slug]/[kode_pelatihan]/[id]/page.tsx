@@ -144,13 +144,17 @@ function page() {
                 }`}
               >
                 <div className="relative w-full">
-                  <Image
-                    className="w-full rounded-3xl h-[250px] md:h-[350px] object-cover"
-                    alt=""
-                    src={pelatihan?.FotoPelatihan}
-                    width={0}
-                    height={0}
-                  />
+                  <div className="w-full h-fit relative">
+                    <Image
+                      className="w-full rounded-3xl h-[250px] md:h-[350px] object-cover"
+                      alt=""
+                      src={pelatihan?.FotoPelatihan}
+                      width={0}
+                      height={0}
+                    />
+                    <div className="flex w-full top-0 absolute h-[350px] bg-gradient-to-r opacity-40 from-blue-500 to-teal-400 bg-opacity-20 rounded-tl-3xl rounded-tr-3xl"></div>
+                  </div>
+
                   <div className="w-fit absolute top-4 right-4 flex gap-1">
                     <div className="text-sm font-medium px-4 py-3 bg-blue-500 rounded-3xl text-white">
                       {pelatihan?.HargaPelatihan == "0"
