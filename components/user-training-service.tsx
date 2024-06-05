@@ -42,7 +42,7 @@ import {
 } from "react-icons/md";
 import { PiHandsPrayingBold, PiTrainRegional } from "react-icons/pi";
 import { TbGenderBigender, TbSchool } from "react-icons/tb";
-import { BiDonateBlood } from "react-icons/bi";
+import { BiDonateBlood, BiSearch } from "react-icons/bi";
 import ListUser from "./list-users";
 import Cookies from "js-cookie";
 import TableDataPelatihan from "./dashboard/Pelatihan/TableDataPelatihan";
@@ -51,6 +51,7 @@ import { DialogSertifikatPelatihan } from "./sertifikat/dialogSertifikatPelatiha
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 export default function UserTrainingService({ user }: { user: User | null }) {
+  const [indexPelatihanSelected, setIndexPelatihanSelected] = React.useState<number>(0)
   const tabMenus = [
     {
       id: 1,
@@ -186,6 +187,86 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
   console.log(user?.Pelatihan);
 
+  const CardPelatihan = ({ pelatihan, index }: { pelatihan: UserPelatihan, index: number }) => {
+    return (
+        <div
+         
+          className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8  shadow-custom hover:scale-105 duration-700"
+        >
+          <span className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-blue-500 via-blue-500 to-teal-400"></span>
+  
+          <div className="sm:flex sm:justify-between sm:gap-4">
+            <div>
+              <h3  onClick={(e) => setIndexPelatihanSelected(index)} className="text-lg hover:cursor-pointer font-bold text-gray-900 sm:text-xl leading-[100%] ">
+              Pelatihan Budidaya Ikan Air Tawar (CBIB) Ikan Nila
+              </h3>
+  
+              <p className="mt-1 text-xs font-medium text-gray-600">
+                By BPPP Medan · 29 Mei 2024 - 7 Juni 2024
+              </p>
+            </div>
+  
+            <div className="hidden sm:block sm:shrink-0">
+              <Image
+                width={0}
+                height={0}
+                alt=""
+                src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
+                className="w-16 rounded-lg object-cover shadow-sm"
+              />
+            </div>
+          </div>
+  
+          <div className="mt-2 mb-2">
+            <p className="text-pretty text-sm text-gray-500">
+            Pelatihan Cara Budidaya Ikan yang Baik (CBIB) untuk Ikan Nila adalah program pelatihan yang dirancang untuk memberikan pengetahuan dan keterampilan.
+            </p>
+          </div>
+  
+          {/* <DialogSertifikatPelatihan userPelatihan={pelatihan} pelatihan={{}}> */}
+          {
+            pelatihan?.NoSertifikat == "" ? <div className="flex gap-1">
+          <Button
+            variant="outline"
+            onClick={(e) => setIndexPelatihanSelected(index)}
+            className="w-full border flex gap-2 border-gray-600 text-left capitalize items-center justify-center"
+          >
+            <BiSearch className="h-4 w-4 text-gray-600" />{" "}
+            <span className="text-xs">Cek Pelatihan</span>
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+          >
+            <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+            <span className="text-xs">Lacak Sertifikat</span>
+          </Button>
+            </div>  : <Button
+            variant="outline"
+            className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+          >
+            <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+            <span className="text-xs"> Download Sertifikat</span>
+          </Button>
+          }
+          
+          {/* </DialogSertifikatPelatihan> */}
+  
+          <dl className="mt-6 flex gap-4 sm:gap-6">
+            <div className="flex flex-col-reverse">
+              <dt className="text-sm font-medium text-gray-600">Budidaya</dt>
+              <dd className="text-xs text-gray-500">Bidang</dd>
+            </div>
+  
+            <div className="flex flex-col-reverse">
+              <dt className="text-sm font-medium text-gray-600">{pelatihan?.NoSertifikat == "" ? "-" : "No. B. " + pelatihan?.NoSertifikat}</dt>
+              <dd className="text-xs text-gray-500">No Sertifikat</dd>
+            </div>
+          </dl>
+        </div>
+    );
+  };
+
   return (
     <>
       <section className="relative h-fit pb-20 bg-white" id="explore">
@@ -211,10 +292,10 @@ export default function UserTrainingService({ user }: { user: User | null }) {
             <div className="w-full max-w-6xl mx-auto flex gap-5">
               <div className="flex flex-col gap-2 w-5/12">
                 {userDetail?.Pelatihan.map((pelatihan, index) => (
-                  <CardPelatihan pelatihan={pelatihan} key={index} />
+                  <CardPelatihan pelatihan={pelatihan} key={index} index={index} />
                 ))}
               </div>
-              {/* <div className="bg-gray-200 w-1 h-screen rounded-full"></div> */}
+
               <div className="flex items-start justify-center w-7/12">
                 <a
                   href="#"
@@ -223,11 +304,11 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                   <div className="sm:flex sm:justify-between sm:gap-4">
                     <div>
                       <h3 className="text-3xl font-bold text-gray-900 sm:text-3xl leading-[105%]">
-                        Building a SaaS product as a software developer
+                      Pelatihan Budidaya Ikan Air Tawar (CBIB) Ikan Nila
                       </h3>
 
                       <p className="mt-1 text-xs font-medium text-gray-600">
-                        By John Doe
+                        By BPPP Medan · 29 Mei 2024 - 7 Juni 2024
                       </p>
                     </div>
 
@@ -244,25 +325,23 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
                   <div className="mt-4">
                     <p className="text-pretty text-sm text-gray-500">
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      At velit illum provident a, ipsa maiores deleniti
-                      consectetur nobis et eaque.
+                    Pelatihan Cara Budidaya Ikan yang Baik (CBIB) untuk Ikan Nila adalah program pelatihan yang dirancang untuk memberikan pengetahuan dan keterampilan.
                     </p>
                   </div>
 
                   <dl className="mt-6 flex gap-4 sm:gap-6">
                     <div className="flex flex-col-reverse">
                       <dt className="text-sm font-medium text-gray-600">
-                        Published
+                        Budidaya
                       </dt>
-                      <dd className="text-xs text-gray-500">31st June, 2021</dd>
+                      <dd className="text-xs text-gray-500">Bidang</dd>
                     </div>
 
                     <div className="flex flex-col-reverse">
                       <dt className="text-sm font-medium text-gray-600">
-                        Reading time
+                        {userDetail?.Pelatihan[indexPelatihanSelected].NoSertifikat == "" ? "-" : userDetail?.Pelatihan[indexPelatihanSelected]?.NoSertifikat}
                       </dt>
-                      <dd className="text-xs text-gray-500">3 minute</dd>
+                      <dd className="text-xs text-gray-500">No Sertifikat</dd>
                     </div>
                   </dl>
 
@@ -270,94 +349,16 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                 </a>
               </div>
             </div>
-            {/* <TableDataPelatihanUser /> */}
           </div>
         </div>
       </section>
     </>
   );
+
+
 }
 
-const CardPelatihan = ({ pelatihan }: { pelatihan: UserPelatihan }) => {
-  return (
-    <Slide direction="up">
-      <a
-        href="#"
-        className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8  shadow-custom"
-      >
-        <span className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-blue-500 via-blue-500 to-teal-400"></span>
 
-        <div className="sm:flex sm:justify-between sm:gap-4">
-          <div>
-            <h3 className="text-lg font-bold text-gray-900 sm:text-xl leading-[100%] ">
-            Pelatihan Budidaya Ikan Air Tawar (CBIB) Ikan Nila
-            </h3>
-
-            <p className="mt-1 text-xs font-medium text-gray-600">
-              By BPPP Medan · 29 Mei 2024 - 7 Juni 2024
-            </p>
-          </div>
-
-          <div className="hidden sm:block sm:shrink-0">
-            <Image
-              width={0}
-              height={0}
-              alt=""
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
-              className="w-16 rounded-lg object-cover shadow-sm"
-            />
-          </div>
-        </div>
-
-        <div className="mt-2 mb-2">
-          <p className="text-pretty text-sm text-gray-500">
-          Pelatihan Cara Budidaya Ikan yang Baik (CBIB) untuk Ikan Nila adalah program pelatihan yang dirancang untuk memberikan pengetahuan dan keterampilan.
-          </p>
-        </div>
-
-        {/* <DialogSertifikatPelatihan userPelatihan={pelatihan} pelatihan={{}}> */}
-        {
-          pelatihan?.NoSertifikat == "" ? <div className="flex gap-1">
-        <Button
-          variant="outline"
-          className="w-full border flex gap-2 border-gray-600 text-left capitalize items-center justify-center"
-        >
-          <InfoCircledIcon className="h-4 w-4 text-gray-600" />{" "}
-          <span className="text-xs">Detail Pelatihan</span>
-        </Button>
-        <Button
-          variant="outline"
-          className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
-        >
-          <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-          <span className="text-xs">Lacak Sertifikat</span>
-        </Button>
-          </div>  : <Button
-          variant="outline"
-          className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
-        >
-          <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-          <span className="text-xs"> Download Sertifikat</span>
-        </Button>
-        }
-        
-        {/* </DialogSertifikatPelatihan> */}
-
-        <dl className="mt-6 flex gap-4 sm:gap-6">
-          <div className="flex flex-col-reverse">
-            <dt className="text-sm font-medium text-gray-600">Budidaya</dt>
-            <dd className="text-xs text-gray-500">Bidang</dd>
-          </div>
-
-          <div className="flex flex-col-reverse">
-            <dt className="text-sm font-medium text-gray-600">{pelatihan?.NoSertifikat == "" ? "-" : "No. B. " + pelatihan?.NoSertifikat}</dt>
-            <dd className="text-xs text-gray-500">No Sertifikat</dd>
-          </div>
-        </dl>
-      </a>
-    </Slide>
-  );
-};
 
 const Timeline = () => {
   return (
@@ -366,13 +367,11 @@ const Timeline = () => {
         <div className="grid gap-4 sm:grid-cols-12">
           <div className="col-span-12 sm:col-span-3">
             <div className="text-center sm:text-left mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:mx-auto sm:before:mx-0 before:bg-blue-500">
-              <h3 className="text-xl font-semibold leading-[100%]">
-                Morbi tempor
+              <h3 className="text-xl font-semibold leading-[100%] mb-1">
+                Progress Pelatihan
               </h3>
               <p className="text-pretty text-sm text-gray-500">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. At
-                velit illum provident a, ipsa maiores deleniti consectetur nobis
-                et eaque.
+               Lihat progress pelaksanaan pelatihan yang kamu ikuti!
               </p>
             </div>
           </div>
@@ -381,7 +380,7 @@ const Timeline = () => {
               <Slide direction="right">
                 <div className="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-blue-500">
                   <h3 className="text-xl font-semibold tracking-wide">
-                    Donec porta enim vel{" "}
+                    Pendaftaran{" "}
                   </h3>
                   <time className="text-xs tracking-wide uppercase dark:text-gray-600">
                     Dec 2020
@@ -397,7 +396,7 @@ const Timeline = () => {
               <Slide direction="right">
                 <div className="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-blue-500">
                   <h3 className="text-xl font-semibold tracking-wide">
-                    Aliquam sit amet nunc ut
+                    Pelaksanaan
                   </h3>
                   <time className="text-xs tracking-wide uppercase dark:text-gray-600">
                     Jul 2019
@@ -412,7 +411,7 @@ const Timeline = () => {
               <Slide direction="right">
                 <div className="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-blue-500">
                   <h3 className="text-xl font-semibold tracking-wide">
-                    Pellentesque habitant morbi
+                    Selesai Pelatihan
                   </h3>
                   <time className="text-xs tracking-wide uppercase dark:text-gray-600">
                     Jan 2016
