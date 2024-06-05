@@ -48,6 +48,7 @@ import Cookies from "js-cookie";
 import TableDataPelatihan from "./dashboard/Pelatihan/TableDataPelatihan";
 import TableDataPelatihanUser from "./dashboard/Pelatihan/TableDataPelatihanUser";
 import { DialogSertifikatPelatihan } from "./sertifikat/dialogSertifikatPelatihan";
+import { InfoCircledIcon } from "@radix-ui/react-icons";
 
 export default function UserTrainingService({ user }: { user: User | null }) {
   const tabMenus = [
@@ -289,11 +290,11 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: UserPelatihan }) => {
         <div className="sm:flex sm:justify-between sm:gap-4">
           <div>
             <h3 className="text-lg font-bold text-gray-900 sm:text-xl leading-[100%] ">
-              Building a SaaS product as a software developer
+            Pelatihan Budidaya Ikan Air Tawar (CBIB) Ikan Nila
             </h3>
 
             <p className="mt-1 text-xs font-medium text-gray-600">
-              By John Doe
+              By BPPP Medan · 29 Mei 2024 - 7 Juni 2024
             </p>
           </div>
 
@@ -308,32 +309,49 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: UserPelatihan }) => {
           </div>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-2 mb-2">
           <p className="text-pretty text-sm text-gray-500">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. At velit
-            illum provident a, ipsa maiores deleniti consectetur nobis et eaque.
+          Pelatihan Cara Budidaya Ikan yang Baik (CBIB) untuk Ikan Nila adalah program pelatihan yang dirancang untuk memberikan pengetahuan dan keterampilan.
           </p>
         </div>
 
         {/* <DialogSertifikatPelatihan userPelatihan={pelatihan} pelatihan={{}}> */}
+        {
+          pelatihan?.NoSertifikat == "" ? <div className="flex gap-1">
+        <Button
+          variant="outline"
+          className="w-full border flex gap-2 border-gray-600 text-left capitalize items-center justify-center"
+        >
+          <InfoCircledIcon className="h-4 w-4 text-gray-600" />{" "}
+          <span className="text-xs">Detail Pelatihan</span>
+        </Button>
         <Button
           variant="outline"
           className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
         >
           <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-          <span className="text-xs"> {pelatihan?.NoSertifikat}</span>
+          <span className="text-xs">Lacak Sertifikat</span>
         </Button>
+          </div>  : <Button
+          variant="outline"
+          className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+        >
+          <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+          <span className="text-xs"> Download Sertifikat</span>
+        </Button>
+        }
+        
         {/* </DialogSertifikatPelatihan> */}
 
         <dl className="mt-6 flex gap-4 sm:gap-6">
           <div className="flex flex-col-reverse">
-            <dt className="text-sm font-medium text-gray-600">Published</dt>
-            <dd className="text-xs text-gray-500">31st June, 2021</dd>
+            <dt className="text-sm font-medium text-gray-600">Budidaya</dt>
+            <dd className="text-xs text-gray-500">Bidang</dd>
           </div>
 
           <div className="flex flex-col-reverse">
-            <dt className="text-sm font-medium text-gray-600">Reading time</dt>
-            <dd className="text-xs text-gray-500">3 minute</dd>
+            <dt className="text-sm font-medium text-gray-600">{pelatihan?.NoSertifikat == "" ? "-" : "No. B. " + pelatihan?.NoSertifikat}</dt>
+            <dd className="text-xs text-gray-500">No Sertifikat</dd>
           </div>
         </dl>
       </a>

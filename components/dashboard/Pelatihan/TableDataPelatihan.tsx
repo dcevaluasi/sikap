@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from "react";
 import TableData from "../Tables/TableData";
-import { RiShipLine, RiVerifiedBadgeFill } from "react-icons/ri";
+import { RiRadioButtonLine, RiShipLine, RiVerifiedBadgeFill } from "react-icons/ri";
 
 import {
   Sheet,
@@ -281,7 +281,7 @@ const TableDataPelatihan: React.FC = () => {
               <div className="flex w-fit gap-1 absolute top-3 right-3">
                 {row.original.StatusApproval == "Selesai" && (
                   <div className="w-fit flex gap-1 bg-white shadow-custom rounded-full items-center px-2 py-1   text-xs font-medium text-purple-500">
-                    <IoMdGlobe /> Selesai
+                    <RiRadioButtonLine /> Selesai
                   </div>
                 )}
                 {row.original.Status == "Publish" && (
