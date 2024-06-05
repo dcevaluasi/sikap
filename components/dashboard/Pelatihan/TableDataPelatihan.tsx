@@ -200,6 +200,7 @@ const TableDataPelatihan: React.FC = () => {
   const [openFormSertifikat, setOpenFormSertifikat] = React.useState(false);
 
   const handleGenerateSertifikat = async (id: number) => {
+    console.log({ttdSertifikat})
     const formData = new FormData();
     formData.append("TtdSertifikat", ttdSertifikat);
     try {
@@ -214,17 +215,18 @@ const TableDataPelatihan: React.FC = () => {
       );
       Toast.fire({
         icon: "success",
-        title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+        title: `Berhasil mengenerate nomor sertifikat pelatihan!`,
       });
+      handleFetchingPublicTrainingData
       console.log("GENERATE SERTIFIKAT: ", response);
       // handleFetchingPublicTrainingData();
     } catch (error) {
       console.error("ERROR GENERATE SERTIFIKAT: ", error);
       Toast.fire({
         icon: "success",
-        title: `Gagal mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+        title: `Gagal mengenerate nomor sertifikat pelatihan!`,
       });
-      // handleFetchingPublicTrainingData();
+      handleFetchingPublicTrainingData();
     }
   };
 
@@ -352,7 +354,7 @@ const TableDataPelatihan: React.FC = () => {
                     melanjutkan ke proses penerbitan sertifikat.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
-                <form autoComplete="off">
+                <form autoComplete="off" className="w-fit">
                   {row.original.StatusApproval != "Selesai" ? (
                     <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
                       <div>
@@ -415,7 +417,141 @@ const TableDataPelatihan: React.FC = () => {
             </Button>
 
             {row.original.StatusApproval == "Selesai" ? (
-              <AlertDialog>
+              row.original.NoSertifikat == "" ?<AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  onClick={(e) => setOpenFormSertifikat(true)}
+                  variant="outline"
+                  className="ml-auto border border-blue-600"
+                >
+                  <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Penerbitan Sertifikat Pelatihan
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="-mt-2">
+                      Lampirkan Berita acara sebagai bukti pelaksanaan
+                      pelatihan yang telah selesai, tunggu proses approval
+                      dari pusat, dan dapatkan nomor sertifikat Pelatihanmu!
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <div>
+                    <div className="flex flex-wrap  mb-1 w-full">
+                      <div className="w-full">
+                        <label
+                          className="block text-gray-800 text-sm font-medium mb-1"
+                          htmlFor="noSertifikat"
+                        >
+                          Sertifikat untuk Pelatihan{" "}
+                          <span className="text-red-600">*</span>
+                        </label>
+                        <input
+                          id="noSertifikat"
+                          type="hidden"
+                          className="form-input w-full text-black border-gray-300 rounded-md"
+                          placeholder=""
+                          value={row.original.IdPelatihan}
+                          onChange={(e) =>
+                            setSertifikatUntukPelatihan(
+                              row.original.IdPelatihan.toString()
+                            )
+                          }
+                          disabled
+                          readOnly
+                        />
+                        <input
+                          id="noSertifikat"
+                          type="text"
+                          className="form-input w-full text-black border-gray-300 rounded-md"
+                          placeholder={
+                            row.original.NamaPelatihan +
+                            " - " +
+                            row.original.KodePelatihan
+                          }
+                          disabled
+                          readOnly
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap  mb-1 w-full">
+                      <div className="w-full">
+                        <label
+                          className="block text-gray-800 text-sm font-medium mb-1"
+                          htmlFor="noSertifikat"
+                        >
+                          TTD Sertifikat{" "}
+                          <span className="text-red-600">*</span>
+                        </label>
+                        <select name="" id="" onChange={(e) => setTtdSertifikat(e.target.value)} className="w-full rounded-lg border border-gray-300">
+                          <option value={''}>Pilih Penandatangan</option>
+                          <option onClick={(e) => setTtdSertifikat('Kepala BPPSDM')} value={'Kepala BPPSDM'}>Kepala BPPSDM</option>
+                          <option onClick={(e) => setTtdSertifikat('Kepala Balai Pelatihan dan Penyuluhan KP')} value={'Kepala Balai Pelatihan dan Penyuluhan KP'}>Kepala Balai Pelatihan dan Penyuluhan KP</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 space-y-2">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Berita Acara <span className="text-red-600">*</span>
+                      </label>
+                      <div className="flex items-center justify-center w-full">
+                        <label className="flex flex-col rounded-lg border-2 border-dashed w-full h-40 p-10 group text-center">
+                          <div className="h-full w-full text-center flex flex-col items-center justify-center">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                              />
+                            </svg>
+                            <p className="pointer-none text-gray-500 text-sm">
+                              <span className="text-sm">Drag and drop</span>{" "}
+                              files here <br /> or{" "}
+                              <a
+                                href=""
+                                id=""
+                                className="text-blue-600 hover:underline"
+                              >
+                                select a file
+                              </a>{" "}
+                              from your computer
+                            </p>
+                          </div>
+                          <input type="file" className="hidden" />
+                        </label>
+                      </div>
+                    </div>
+                    <p className="text-sm text-gray-300">
+                      <span>File type: doc,pdf,types of images</span>
+                    </p>
+                  </div>
+                </>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={(e) =>
+                      handleGenerateSertifikat(row.original.IdPelatihan)
+                    }
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog> :    <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
                     onClick={(e) => setOpenFormSertifikat(true)}
@@ -426,126 +562,27 @@ const TableDataPelatihan: React.FC = () => {
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
-                  <>
-                    <AlertDialogHeader>
+                  <div className="flex flex-col items-center justify-center w-full">
+                    <Image
+                      src={"/illustrations/web_13.jpg"}
+                      alt="Not Found"
+                      width={0}
+                      height={0}
+                      className="w-[400px]"
+                    />
+                    <AlertDialogHeader className="flex flex-col items-center justify-center text-center">
                       <AlertDialogTitle>
                         Penerbitan Sertifikat Pelatihan
                       </AlertDialogTitle>
-                      <AlertDialogDescription className="-mt-2">
-                        Lampirkan Berita acara sebagai bukti pelaksanaan
-                        pelatihan yang telah selesai, tunggu proses approval
-                        dari pusat, dan dapatkan nomor sertifikat Pelatihanmu!
+                      <AlertDialogDescription className="-mt-2 text-center">
+                       Nomor sertifikat kamu telah digenerate, kamu tidak dapat mengatur ulang no sertifikatmu!s
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <div>
-                      <div className="flex flex-wrap  mb-1 w-full">
-                        <div className="w-full">
-                          <label
-                            className="block text-gray-800 text-sm font-medium mb-1"
-                            htmlFor="noSertifikat"
-                          >
-                            Sertifikat untuk Pelatihan{" "}
-                            <span className="text-red-600">*</span>
-                          </label>
-                          <input
-                            id="noSertifikat"
-                            type="hidden"
-                            className="form-input w-full text-black border-gray-300 rounded-md"
-                            placeholder=""
-                            value={row.original.IdPelatihan}
-                            onChange={(e) =>
-                              setSertifikatUntukPelatihan(
-                                row.original.IdPelatihan.toString()
-                              )
-                            }
-                            disabled
-                            readOnly
-                          />
-                          <input
-                            id="noSertifikat"
-                            type="text"
-                            className="form-input w-full text-black border-gray-300 rounded-md"
-                            placeholder={
-                              row.original.NamaPelatihan +
-                              " - " +
-                              row.original.KodePelatihan
-                            }
-                            disabled
-                            readOnly
-                          />
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap  mb-1 w-full">
-                        <div className="w-full">
-                          <label
-                            className="block text-gray-800 text-sm font-medium mb-1"
-                            htmlFor="noSertifikat"
-                          >
-                            TTD Sertifikat{" "}
-                            <span className="text-red-600">*</span>
-                          </label>
-                          <select name="" id="">
-                            <option>Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusia KP</option>
-                            <option>Kepala Balai Pelatihan dan Penyuluhan KP</option>
-                          </select>
-                        </div>
-                      </div>
+                  </div>
 
-                      <div className="grid grid-cols-1 space-y-2">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="name"
-                        >
-                          Berita Acara <span className="text-red-600">*</span>
-                        </label>
-                        <div className="flex items-center justify-center w-full">
-                          <label className="flex flex-col rounded-lg border-2 border-dashed w-full h-40 p-10 group text-center">
-                            <div className="h-full w-full text-center flex flex-col items-center justify-center">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                />
-                              </svg>
-                              <p className="pointer-none text-gray-500 text-sm">
-                                <span className="text-sm">Drag and drop</span>{" "}
-                                files here <br /> or{" "}
-                                <a
-                                  href=""
-                                  id=""
-                                  className="text-blue-600 hover:underline"
-                                >
-                                  select a file
-                                </a>{" "}
-                                from your computer
-                              </p>
-                            </div>
-                            <input type="file" className="hidden" />
-                          </label>
-                        </div>
-                      </div>
-                      <p className="text-sm text-gray-300">
-                        <span>File type: doc,pdf,types of images</span>
-                      </p>
-                    </div>
-                  </>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={(e) =>
-                        handleGenerateSertifikat(row.original.IdPelatihan)
-                      }
-                    >
-                      Continue
-                    </AlertDialogAction>
+                    <AlertDialogAction>Continue</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
@@ -808,30 +845,13 @@ const TableDataPelatihan: React.FC = () => {
         <div className={`${"ml-0"} text-left capitalize`}>
           <p className="text-xs text-gray-400 leading-[100%]">
             {" "}
-            Jenis, Harga, dan Realisasi Pelatihan
+            Penandatangan {row.original.TtdSertifikat}
           </p>
           <p className="text-base font-semibold tracking-tight leading-[100%] mt-1">
             {row.original.NoSertifikat}
           </p>
 
-          <div className="w-full flex flex-col mt-1">
-            <span className="text-xs  font-medium capitalize leading-[100%] mb-1">
-              Realisasi PNBP
-            </span>
-            <Progress
-              value={
-                row.original.UserPelatihan.length *
-                parseInt(row.original.HargaPelatihan)
-              }
-              max={500000000000000}
-              className="w-[80%]"
-            />
-            <p className="text-xs text-gray-400 capitalize">
-              Rp.{" "}
-              {row.original.UserPelatihan.length *
-                parseInt(row.original.HargaPelatihan)}
-            </p>
-          </div>
+          
         </div>
       ),
     },

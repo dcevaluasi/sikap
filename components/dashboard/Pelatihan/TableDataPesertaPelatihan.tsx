@@ -290,7 +290,8 @@ const TableDataPesertaPelatihan = () => {
         );
       },
       cell: ({ row }) =>
-        row.getValue("NoSertifikat") == "" ? (
+        dataPelatihan?.NoSertifikat == "" ? (
+
           <Button
             variant="outline"
             className="border flex gap-2 w-full items-center justify-center border-gray-600"
@@ -304,7 +305,7 @@ const TableDataPesertaPelatihan = () => {
             className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
           >
             <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-            <span className="text-xs"> {row.getValue("NoSertifikat")}</span>
+            <span className="text-xs">  {dataPelatihan?.NoSertifikat}</span>
           </Button>
         ),
     },
