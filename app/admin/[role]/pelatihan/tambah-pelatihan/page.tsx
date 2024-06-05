@@ -20,7 +20,7 @@ export default function Home() {
 
             {/* List Data Pelatihan */}
             <div>
-              <FormPelatihan />
+              <FormPelatihan edit={false} />
             </div>
           </>
         </div>

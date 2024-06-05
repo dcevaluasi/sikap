@@ -4,6 +4,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import Toast from "@/components/toast";
+import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 
 const DropdownUser = ({
   usereLoggedInInfo,

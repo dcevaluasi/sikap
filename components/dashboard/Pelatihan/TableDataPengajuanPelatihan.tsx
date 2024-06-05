@@ -375,7 +375,7 @@ const TableDataPengajuanPelatihan: React.FC = () => {
 
           {/* List Data Pelatihan */}
           <div>
-            <FormPelatihan />
+            <FormPelatihan edit={false} />
           </div>
         </>
       ) : showCertificateSetting ? (

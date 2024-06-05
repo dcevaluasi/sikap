@@ -4,6 +4,7 @@ import Sidebar from "../Sidebar";
 import Header from "../Header";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 
 export default function DefaultLayout({
   children,

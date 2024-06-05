@@ -7,7 +7,6 @@ import { User } from "@/types/user";
 import UserService from "@/components/user-service";
 import Footer from "@/components/ui/footer";
 import { Skeleton } from "@/components/ui/skeleton";
-import TableDataPelatihanUser from "@/components/dashboard/Pelatihan/TableDataPelatihanUser";
 
 export default function Page() {
   const token = Cookies.get("XSRF081");
@@ -78,7 +77,6 @@ export default function Page() {
           </div>
         </div>
         <UserService user={userDetail} />
-        <TableDataPelatihanUser />
       </section>
       <Footer />
     </>
