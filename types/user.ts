@@ -47,6 +47,6 @@ export type UserPelatihan = {
     PreTest: number;
     StatusPembayaran: string;
     UpdateAt: string;
-    WaktuPembayaran: string;
+    WaktuPembayaran: string
   };
   

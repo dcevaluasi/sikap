@@ -62,6 +62,7 @@ export type UserPelatihan = {
   StatusPembayaran: string;
   UpdateAt: string;
   WaktuPembayaran: string;
+  Nama: string;
 };
 
 export type Pelatihan = {

@@ -319,7 +319,10 @@ function page() {
             </div>
 
             {isRegistrasi && (
-              <FormRegistrationTraining id={pelatihan?.IdPelatihan} />
+              <FormRegistrationTraining
+                id={pelatihan?.IdPelatihan}
+                harga={pelatihan?.HargaPelatihan}
+              />
             )}
           </div>
         </div>

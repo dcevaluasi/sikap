@@ -38,7 +38,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 
-function FormRegistrationTraining({ id }: { id: number }) {
+function FormRegistrationTraining({ id, harga }: { id: number, harga: string }) {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -216,7 +216,7 @@ function FormRegistrationTraining({ id }: { id: number }) {
         </div>
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
-            <label
+            {/* <label
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
@@ -262,11 +262,11 @@ function FormRegistrationTraining({ id }: { id: number }) {
                   <p className="font-medium font-calsans">Rp. 850.000</p>
                 </div>
               </SelectTrigger>
-            </Select>
+            </Select> */}
             <div className="h-1 w-full rounded-full my-2 bg-blue-500"></div>
             <div className="flex items-center justify-between">
               <p className="font-bold text-lg">Total</p>
-              <p className="font-bold text-blue-500 text-3xl">Rp. 1.260.000</p>
+              <p className="font-bold text-blue-500 text-3xl">Rp. {harga}</p>
             </div>
             <div className="flex items-center space-x-2 py-3 mt-5">
               <Checkbox id="terms" />

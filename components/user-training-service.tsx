@@ -33,7 +33,7 @@ import axios, { AxiosResponse } from "axios";
 import BPPPCertificates from "./bppp-certificates";
 import { IoIosInformationCircle, IoMdCloseCircle } from "react-icons/io";
 import { Edit3Icon, LucideDot, Trash } from "lucide-react";
-import { User } from "@/types/user";
+import { User, UserPelatihan } from "@/types/user";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import {
   MdAlternateEmail,
@@ -47,6 +47,7 @@ import ListUser from "./list-users";
 import Cookies from "js-cookie";
 import TableDataPelatihan from "./dashboard/Pelatihan/TableDataPelatihan";
 import TableDataPelatihanUser from "./dashboard/Pelatihan/TableDataPelatihanUser";
+import { DialogSertifikatPelatihan } from "./sertifikat/dialogSertifikatPelatihan";
 
 export default function UserTrainingService({ user }: { user: User | null }) {
   const tabMenus = [
@@ -208,7 +209,9 @@ export default function UserTrainingService({ user }: { user: User | null }) {
             </div>
             <div className="w-full max-w-6xl mx-auto flex gap-5">
               <div className="flex flex-col gap-2 w-5/12">
-                <CardPelatihan />
+                {userDetail?.Pelatihan.map((pelatihan, index) => (
+                  <CardPelatihan pelatihan={pelatihan} key={index} />
+                ))}
               </div>
               {/* <div className="bg-gray-200 w-1 h-screen rounded-full"></div> */}
               <div className="flex items-start justify-center w-7/12">
@@ -274,7 +277,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
   );
 }
 
-const CardPelatihan = () => {
+const CardPelatihan = ({ pelatihan }: { pelatihan: UserPelatihan }) => {
   return (
     <Slide direction="up">
       <a
@@ -311,6 +314,16 @@ const CardPelatihan = () => {
             illum provident a, ipsa maiores deleniti consectetur nobis et eaque.
           </p>
         </div>
+
+        {/* <DialogSertifikatPelatihan userPelatihan={pelatihan} pelatihan={{}}> */}
+        <Button
+          variant="outline"
+          className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+        >
+          <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+          <span className="text-xs"> {pelatihan?.NoSertifikat}</span>
+        </Button>
+        {/* </DialogSertifikatPelatihan> */}
 
         <dl className="mt-6 flex gap-4 sm:gap-6">
           <div className="flex flex-col-reverse">

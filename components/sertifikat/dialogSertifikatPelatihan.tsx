@@ -13,8 +13,17 @@ import SertifikatPage1 from "./sertifikatPage1";
 import SertifikatPage2 from "./sertifikatPage2";
 import { Button } from "../ui/button";
 import { TbCloudDownload, TbLink } from "react-icons/tb";
+import { PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 
-export function DialogSertifikat({ children }: { children: ReactElement }) {
+export function DialogSertifikatPelatihan({
+  children,
+  pelatihan,
+  userPelatihan,
+}: {
+  children: ReactElement;
+  pelatihan: PelatihanMasyarakat;
+  userPelatihan: UserPelatihan;
+}) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -23,7 +32,7 @@ export function DialogSertifikat({ children }: { children: ReactElement }) {
           <div className="flex gap-2 items-center">
             <MdVerified className="text-3xl text-blue-500" />
             <div className="flex flex-col">
-              <DialogTitle>B.45/BPPP.BYW/RSDM.510/I/2024</DialogTitle>
+              <DialogTitle>B.{pelatihan?.NoSertifikat}</DialogTitle>
               <DialogDescription>
                 No. Sertifikasi terdaftar dan dinyatakan valid telah mengikuti
                 pelatihan!
@@ -32,8 +41,10 @@ export function DialogSertifikat({ children }: { children: ReactElement }) {
           </div>
         </DialogHeader>
         <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
-          <SertifikatPage1 />
-          <SertifikatPage2 />
+          <SertifikatPage1
+            userPelatihan={userPelatihan}
+            pelatihan={pelatihan}
+          />
         </div>
         <DialogFooter>
           <Button

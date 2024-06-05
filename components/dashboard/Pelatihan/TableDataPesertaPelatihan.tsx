@@ -54,7 +54,6 @@ import {
   MdOutlinePayment,
   MdSchool,
 } from "react-icons/md";
-import { DialogSertifikat } from "@/components/sertifikat/dialogSertifikat";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Pelatihan, UserPelatihan } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
@@ -70,11 +69,14 @@ import Link from "next/link";
 import { FaRupiahSign } from "react-icons/fa6";
 import Toast from "@/components/toast";
 import { GiTakeMyMoney } from "react-icons/gi";
+import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
+import Cookies from "js-cookie";
 
 const TableDataPesertaPelatihan = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const pathname = usePathname();
   const id = extractLastSegment(pathname);
+  const [noSertifikatTerbitkan, setNoSertifikatTerbitkan] = React.useState("");
 
   const [dataPelatihan, setDataPelatihan] = React.useState<any>({
     IdPelatihan: 0,
@@ -137,6 +139,7 @@ const TableDataPesertaPelatihan = () => {
       StatusPembayaran: "",
       UpdateAt: "",
       WaktuPembayaran: "",
+      Nama: "",
     },
   ]);
   const handleFetchingPublicTrainingDataById = async () => {
@@ -161,6 +164,41 @@ const TableDataPesertaPelatihan = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
+  const router = useRouter();
+
+  const handleUpdatePublishPelatihanToELAUT = async (
+    id: number,
+    status: string
+  ) => {
+    const formData = new FormData();
+    formData.append("NoSertifikat", status);
+    console.log({ status });
+    try {
+      const response = await axios.put(
+        `${baseUrl}/lemdik/updatePelatihanUsers?id=${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+          },
+        }
+      );
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil menyisipkan no sertifikat ke akun pesereta pelatihan!`,
+      });
+      console.log("UPDATE PELATIHAN: ", response);
+      handleFetchingPublicTrainingDataById();
+    } catch (error) {
+      console.error("ERROR UPDATE PELATIHAN: ", error);
+      Toast.fire({
+        icon: "success",
+        title: `Gagal menyisipkan no sertifikat ke akun pesereta pelatihan!`,
+      });
+      handleFetchingPublicTrainingDataById();
+    }
+  };
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -290,23 +328,95 @@ const TableDataPesertaPelatihan = () => {
         );
       },
       cell: ({ row }) =>
-        dataPelatihan?.NoSertifikat == "" ? (
-
-          <Button
-            variant="outline"
-            className="border flex gap-2 w-full items-center justify-center border-gray-600"
-          >
-            <TbRubberStamp className="h-4 w-4 text-gray-600" />{" "}
-            <span className="text-sm"> Terbitkan Sertifikat</span>
-          </Button>
+        row.original.NoSertifikat == "" ? (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="outline"
+                className="border flex gap-2 w-full items-center justify-center border-gray-600"
+              >
+                <TbRubberStamp className="h-4 w-4 text-gray-600" />{" "}
+                <span className="text-sm"> Terbitkan Sertifikat</span>
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Sebarkan No Sertifikat</AlertDialogTitle>
+                <AlertDialogDescription className="-mt-2">
+                  Agar no sertifikat dapat diakses dan diunduh sertifikatnya
+                  oleh peserta pelatihan, harap memverifikasi!
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <form autoComplete="off">
+                {row.original.NoSertifikat == "" ? (
+                  <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                    <div>
+                      {dataPelatihan.NoSertifikat != "" && (
+                        <Checkbox
+                          id="publish"
+                          onCheckedChange={(e) =>
+                            setNoSertifikatTerbitkan(
+                              dataPelatihan?.NoSertifikat
+                            )
+                          }
+                        />
+                      )}
+                    </div>
+                    <div className="space-y-1 leading-none">
+                      <label>
+                        {dataPelatihan.NoSertifikat == ""
+                          ? "Generate Terlebih Dahulu"
+                          : "B" + dataPelatihan.NoSertifikat}
+                      </label>
+                      <p className="text-xs leading-[110%] text-gray-600">
+                        Generate nomor sertifikat terlebih dahulu dan sebarkan
+                        nomor ke sertifikat peserta
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                    <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
+                    <div className="space-y-1 leading-none">
+                      <label>{row.original?.NoSertifikat}</label>
+                      <p className="text-xs leading-[110%] text-gray-600">
+                        Nomor sertifikat telah diterbitkan, sertifikat telah
+                        muncul di bagian dashboard user!
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </form>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={(e) =>
+                    dataPelatihan.NoSertifikat != ""
+                      ? handleUpdatePublishPelatihanToELAUT(
+                          row.original.IdUserPelatihan,
+                          dataPelatihan?.NoSertifikat
+                        )
+                      : null
+                  }
+                >
+                  {dataPelatihan.NoSertifikat != "" ? "Sebarkan" : "Ok"}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         ) : (
-          <Button
-            variant="outline"
-            className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+          <DialogSertifikatPelatihan
+            userPelatihan={data[row.index]}
+            pelatihan={dataPelatihan}
           >
-            <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-            <span className="text-xs">  {dataPelatihan?.NoSertifikat}</span>
-          </Button>
+            <Button
+              variant="outline"
+              className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+            >
+              <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+              <span className="text-xs"> {row.original?.NoSertifikat}</span>
+            </Button>
+          </DialogSertifikatPelatihan>
         ),
     },
     {
