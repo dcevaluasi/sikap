@@ -424,7 +424,15 @@ const Timeline = () => {
                   </p>
                 </div>
               </Slide>
+
             </div>
+            <Button
+            variant="outline"
+            className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+          >
+            <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+            <span className="text-sm"> Download Sertifikat</span>
+          </Button>
           </div>
         </div>
       </div>
