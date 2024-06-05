@@ -144,7 +144,8 @@ const TableDataPesertaPelatihan = () => {
       const response: AxiosResponse = await axios.get(
         `${baseUrl}/getPelatihanUser?idPelatihan=${id}`
       );
-      console.log({ response });
+      console.log("PELATIHAN : ", response.data);
+      console.log("USER PELATIHAN: ", response.data.UserPelatihan);
       setDataPelatihan(response.data);
       setData(response.data.UserPelatihan);
     } catch (error) {
@@ -212,7 +213,7 @@ const TableDataPesertaPelatihan = () => {
       ),
     },
     {
-      accessorKey: "IdUsers",
+      accessorKey: "NoRegistrasi",
       header: ({ column }) => {
         return (
           <Button
@@ -308,7 +309,7 @@ const TableDataPesertaPelatihan = () => {
         ),
     },
     {
-      accessorKey: "IdPelatihan",
+      accessorKey: "IdUserPelatihan",
       header: ({ column }) => {
         return (
           <Button
@@ -372,7 +373,7 @@ const TableDataPesertaPelatihan = () => {
       ),
     },
     {
-      accessorKey: "IdPelatihan",
+      accessorKey: "PreTest",
       header: ({ column }) => {
         return (
           <Button
@@ -400,7 +401,7 @@ const TableDataPesertaPelatihan = () => {
       ),
     },
     {
-      accessorKey: "IdPelatihan",
+      accessorKey: "PostTest",
       header: ({ column }) => {
         return (
           <Button
@@ -455,8 +456,6 @@ const TableDataPesertaPelatihan = () => {
     },
   ];
 
-  console.log({ dataPelatihan });
-  console.log({ data });
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
 

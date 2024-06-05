@@ -106,7 +106,7 @@ const Tab = () => {
   ];
 
   return (
-    <section className="grid grid-cols-4 gap-3 w-full items-center max-w-6xl mb-5 px-6 md:px-3 mx-auto">
+    <section className="grid grid-cols-4 gap-3 w-full items-center max-w-5xl mb-5 px-6 md:px-3 mx-auto">
       <Select
         value={bidangSertifikasi}
         onValueChange={(value) => setBidangSertifikasi(value)}

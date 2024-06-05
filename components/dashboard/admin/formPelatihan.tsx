@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { ChangeEvent, FormEvent, useRef } from "react";
 
 import { BiBed } from "react-icons/bi";
@@ -26,14 +26,18 @@ import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import axios, { AxiosResponse } from "axios";
 import { CheckedState } from "@radix-ui/react-checkbox";
 import { refresh } from "aos";
-import { generateRandomString } from "@/utils";
+import { extractLastSegment, generateRandomString } from "@/utils";
 import Cookies from "js-cookie";
+import { PelatihanMasyarakat } from "@/types/product";
+import Image from "next/image";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 function FormPelatihan({ edit = false }: { edit: boolean }) {
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const pathname = usePathname();
+  const id = extractLastSegment(pathname);
 
   /* state variable to store basic user information to register */
   const [name, setName] = React.useState<string>("");
@@ -152,6 +156,37 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     setIdSaranaPrasarana("");
     setIdKonsumsi("");
   };
+
+  const [detailPelatihanById, setDetailPelatihanById] =
+    React.useState<PelatihanMasyarakat | null>(null);
+  const [fotoPelatihanOld, setFotoPelatihanOld] = React.useState<string>("");
+  const handleFetchingPelatihanById = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}/getPelatihanUser?idPelatihan=${id}`
+      );
+      setDetailPelatihanById(response.data);
+      setNamaPelatihan(response.data.NamaPelatihan);
+      setTanggalMulaiPelatihan(response.data.TanggalMulaiPelatihan);
+      setTanggalBerakhirPelatihan(response.data.TanggalBerakhirPelatihan);
+      setPenyelenggaraPelatihan(response.data.PenyelenggaraPelatihan);
+      setJenisPelatihan(response.data.JenisPelatihan);
+      setLokasiPelatihan(response.data.LokasiPelatihan);
+      setPelaksanaanPelatihan(response.data.PelaksanaanPelatihan);
+      setBidangPelatihan(response.data.BidangPelatihan);
+      setDukunganProgramTerobosan(response.data.DukunganProgramTerobosan);
+      setHargaPelatihan(response.data.HargaPelatihan);
+      setDetailPelatihan(response.data.DetailPelatihan);
+      setFotoPelatihanOld(response.data.FotoPelatihan);
+      setAsalPelatihan(response.data.AsalPelatihan);
+      setKuotaPelatihan(response.data.KoutaPelatihan);
+      console.log("PELATIHANN BY ID: ", response);
+    } catch (error) {
+      console.error("ERROR PELATIHAN BY ID: ", error);
+    }
+  };
+
+  console.log("PELATIHAN DETAI BY ID STATE: ", detailPelatihanById);
 
   /*
     method for processing posting data public traning (POST)
@@ -292,6 +327,9 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   React.useEffect(() => {
     handleFetchingSarprasData();
     handleFetchingKonsumsiData();
+    if (edit) {
+      handleFetchingPelatihanById();
+    }
   }, []);
 
   return (
@@ -477,6 +515,16 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                           Cover Pelatihan{" "}
                           <span className="text-red-600">*</span>
                         </label>
+                        <Image
+                          src={
+                            "https://api-elaut.ikulatluh.cloud/public/static/pelatihan/" +
+                            fotoPelatihanOld
+                          }
+                          alt={namaPelatihan}
+                          width={0}
+                          height={0}
+                          className="w-full h-80 mb-5 rounded-2xl object-cover"
+                        />
                         <Input
                           id="file_excel"
                           type="file"
@@ -519,6 +567,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                             <span className="text-red-600">*</span>
                           </label>
                           <Select
+                            value={jenisPelatihan}
                             onValueChange={(value: string) =>
                               setJenisPelatihan(value)
                             }
@@ -569,6 +618,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                             <span className="text-red-600">*</span>
                           </label>
                           <Select
+                            value={pelaksanaanPelatihan}
                             onValueChange={(value: string) =>
                               setPelaksanaanPelatihan(value)
                             }
@@ -601,6 +651,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                             <span className="text-red-600">*</span>
                           </label>
                           <Select
+                            value={bidangPelatihan}
                             onValueChange={(value: string) =>
                               setBidangPelatihan(value)
                             }
@@ -642,6 +693,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                             <span className="text-red-600">*</span>
                           </label>
                           <Select
+                            value={dukunganProgramTerobosan}
                             onValueChange={(value: string) =>
                               setDukunganProgramTerobosan(value)
                             }
@@ -772,6 +824,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                             <span className="text-red-600">*</span>
                           </label>
                           <Select
+                            value={asalPelatihan}
                             onValueChange={(value: string) =>
                               setAsalPelatihan(value)
                             }

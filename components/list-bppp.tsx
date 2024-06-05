@@ -53,7 +53,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
       <div className=" py-3 relative ">
         <div className="w-full pb-4 px-6">
           <h2 className="font-calsans text-xl duration-1000 text-black mt-2 leading-[110%]">
-            {pelatihan.NamaPelatihan}
+            {truncateText(pelatihan?.NamaPelatihan, 50, "...")}
           </h2>
           <div className="flex gap-1 my-1 text-gray-600 text-sm items-center">
             <TbClockHour2 />

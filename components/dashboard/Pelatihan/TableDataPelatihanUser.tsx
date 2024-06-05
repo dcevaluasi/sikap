@@ -207,6 +207,27 @@ const TableDataPelatihanUser: React.FC = () => {
   const [showCertificateSetting, setShowCertificateSetting] =
     React.useState<boolean>(false);
 
+  const [state, setState] = useState<ChartOneState>({
+    series: [
+      {
+        name: "PNBP",
+        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
+      },
+
+      {
+        name: "Anggaran",
+        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
+      },
+    ],
+  });
+
+  const handleReset = () => {
+    setState((prevState) => ({
+      ...prevState,
+    }));
+  };
+  handleReset;
+
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   type Pelatihan = {
     IdPelatihan: number;
@@ -243,27 +264,6 @@ const TableDataPelatihanUser: React.FC = () => {
   const [data, setData] = React.useState<Pelatihan[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
-
-  const [state, setState] = useState<ChartOneState>({
-    series: [
-      {
-        name: "PNBP",
-        data: [0, 0, 0, 0, 0],
-      },
-
-      {
-        name: "Anggaran",
-        data: [0, 0, 0, 0, 0],
-      },
-    ],
-  });
-
-  const handleReset = () => {
-    setState((prevState) => ({
-      ...prevState,
-    }));
-  };
-  handleReset;
 
   const handleFetchingPublicTrainingData = async () => {
     setIsFetching(true);
@@ -450,7 +450,7 @@ const TableDataPelatihanUser: React.FC = () => {
     handleFetchingPublicTrainingData();
   }, []);
 
-return (
+  return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       {showFormAjukanPelatihan ? (
         <>

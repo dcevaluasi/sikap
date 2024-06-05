@@ -32,6 +32,7 @@ import { PelatihanMasyarakat } from "@/types/product";
 import ListBPPP from "./list-bppp";
 import { useSearchParams } from "next/navigation";
 import { getPenyeleggara } from "@/utils/pelatihan";
+import { IoMdPricetag } from "react-icons/io";
 
 export default function BPPPTrainings({
   data,
@@ -99,16 +100,15 @@ const Tab = () => {
       <Select>
         <SelectTrigger className="w-full rounded-3xl py-5 md:py-2">
           <p className="mr-3 flex items-center gap-1 text-sm">
-            <FaPlaceOfWorship />
-            Pilih Penyelenggara Pelatihan
+            <IoMdPricetag />
+            Pilih Tarif Pelatihan
           </p>
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Penyelenggara Pelatihan</SelectLabel>
-            <SelectItem value="apple">BPPP Tegal</SelectItem>
-            <SelectItem value="banana">BPPP Medan</SelectItem>
-            <SelectItem value="blueberry">BPPP Banyuwangi</SelectItem>
+            <SelectLabel>Tarif Pelatihan</SelectLabel>
+            <SelectItem value="apple">Gratis</SelectItem>
+            <SelectItem value="banana">Berbayar</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
