@@ -515,16 +515,19 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                           Cover Pelatihan{" "}
                           <span className="text-red-600">*</span>
                         </label>
-                        <Image
-                          src={
-                            "https://api-elaut.ikulatluh.cloud/public/static/pelatihan/" +
-                            fotoPelatihanOld
-                          }
-                          alt={namaPelatihan}
-                          width={0}
-                          height={0}
-                          className="w-full h-80 mb-5 rounded-2xl object-cover"
-                        />
+                        {edit && (
+                          <Image
+                            src={
+                              "https://api-elaut.ikulatluh.cloud/public/static/pelatihan/" +
+                              fotoPelatihanOld
+                            }
+                            alt={namaPelatihan}
+                            width={0}
+                            height={0}
+                            className="w-full h-80 mb-5 rounded-2xl object-cover"
+                          />
+                        )}
+
                         <Input
                           id="file_excel"
                           type="file"

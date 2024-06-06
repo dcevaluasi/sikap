@@ -38,7 +38,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 
-function FormRegistrationTraining({ id, harga }: { id: number, harga: string }) {
+function FormRegistrationTraining({
+  id,
+  harga,
+}: {
+  id: number;
+  harga: string;
+}) {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -61,7 +67,7 @@ function FormRegistrationTraining({ id, harga }: { id: number, harga: string }) 
         `${baseUrl}/users/addPelatihan`,
         JSON.stringify({
           id_pelatihan: id.toString(),
-          totalBayar: totalBayar.toString(),
+          totalBayar: harga,
         }),
         {
           headers: {
