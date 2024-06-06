@@ -63,17 +63,6 @@ const Tab = () => {
   return (
     <section className="flex flex-row gap-3 items-center w-full mb-5 px-3 mx-auto">
       <div className="relative w-[400px] mx-auto flex items-center border-black border px-2 rounded-3xl">
-        <DialogSertifikat>
-          <Button
-            type="button"
-            variant={"outline"}
-            className="flex items-center justify-center rounded-full bg-black-2 w-fit hover:bg-black h-fit absolute right-1"
-          >
-            {" "}
-            <FiSearch className="text-gray-200 text-base" />
-          </Button>
-        </DialogSertifikat>
-
         <Input
           className="text-sm border-none -ml-1 focus:border-none active:outline-none active:border-none focus:outline-none focus-visible:ring-0"
           placeholder="Nomor Sertifikat"
