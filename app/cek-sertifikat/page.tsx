@@ -90,8 +90,8 @@ function DialogSertifikat({ children }: { children: ReactElement }) {
           </div>
         </DialogHeader>
         <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
-          <SertifikatPage1 />
-          <SertifikatPage2 />
+          {/* <SertifikatPage1 />
+          <SertifikatPage2 /> */}
         </div>
         <DialogFooter>
           <Button
