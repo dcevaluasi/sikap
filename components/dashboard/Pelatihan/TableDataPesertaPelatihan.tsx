@@ -121,27 +121,7 @@ const TableDataPesertaPelatihan = () => {
     UserPelatihan: [],
   });
 
-  const [data, setData] = React.useState<UserPelatihan[]>([
-    {
-      CreatedAt: "",
-      IdUserPelatihan: 0,
-      IdPelatihan: 0,
-      IdUsers: 0,
-      IsActice: "",
-      IsKeterangan: "",
-      MetodoPembayaran: "",
-      NilaiPraktek: 0,
-      NilaiTeory: 0,
-      NoRegistrasi: "",
-      NoSertifikat: "",
-      PostTest: 0,
-      PreTest: 0,
-      StatusPembayaran: "",
-      UpdateAt: "",
-      WaktuPembayaran: "",
-      Nama: "",
-    },
-  ]);
+  const [data, setData] = React.useState<UserPelatihan[] | []>([]);
   const handleFetchingPublicTrainingDataById = async () => {
     try {
       const response: AxiosResponse = await axios.get(
@@ -405,10 +385,7 @@ const TableDataPesertaPelatihan = () => {
             </AlertDialogContent>
           </AlertDialog>
         ) : (
-          <DialogSertifikatPelatihan
-            userPelatihan={data[row.index]}
-            pelatihan={dataPelatihan}
-          >
+          <DialogSertifikatPelatihan userPelatihan={data[row.index]}>
             <Button
               variant="outline"
               className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"

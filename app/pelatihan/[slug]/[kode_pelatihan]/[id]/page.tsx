@@ -322,6 +322,7 @@ function page() {
               <FormRegistrationTraining
                 id={pelatihan?.IdPelatihan}
                 harga={pelatihan?.HargaPelatihan}
+                pelatihan={pelatihan}
               />
             )}
           </div>

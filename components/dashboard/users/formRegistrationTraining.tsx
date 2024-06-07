@@ -37,13 +37,16 @@ import { MdWorkOutline } from "react-icons/md";
 import { Checkbox } from "@/components/ui/checkbox";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
+import { PelatihanMasyarakat } from "@/types/product";
 
 function FormRegistrationTraining({
   id,
   harga,
+  pelatihan,
 }: {
   id: number;
   harga: string;
+  pelatihan: PelatihanMasyarakat;
 }) {
   const scrollToTop = () => {
     window.scrollTo({
@@ -67,7 +70,11 @@ function FormRegistrationTraining({
         `${baseUrl}/users/addPelatihan`,
         JSON.stringify({
           id_pelatihan: id.toString(),
-          totalBayar: harga,
+          totalBayar: harga.toString(),
+          namaPelatihan: pelatihan?.NamaPelatihan,
+          bidangPelatihan: pelatihan?.BidangPelatihan,
+          DetailPelatihan: pelatihan?.DetailPelatihan,
+          statusAproval: pelatihan?.StatusApproval,
         }),
         {
           headers: {

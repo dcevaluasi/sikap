@@ -49,6 +49,7 @@ import TableDataPelatihan from "./dashboard/Pelatihan/TableDataPelatihan";
 import TableDataPelatihanUser from "./dashboard/Pelatihan/TableDataPelatihanUser";
 import { DialogSertifikatPelatihan } from "./sertifikat/dialogSertifikatPelatihan";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
+import { truncateText } from "@/utils";
 
 export default function UserTrainingService({ user }: { user: User | null }) {
   const [indexPelatihanSelected, setIndexPelatihanSelected] =
@@ -186,6 +187,17 @@ export default function UserTrainingService({ user }: { user: User | null }) {
     setIndexMenuSelected(index);
   };
 
+  const icons = (bidangPelatihan: string) => {
+    switch (bidangPelatihan) {
+      case "Pengolahan dan Pemasaran":
+        return "/images/bidangPelatihan/pengolahan-pemasaran.png";
+      case "Budidaya":
+        return "/images/bidangPelatihan/budidaya.png";
+      default:
+        return "/images/bidangPelatihian/budidaya.png";
+    }
+  };
+
   console.log(user?.Pelatihan);
 
   const CardPelatihan = ({
@@ -205,11 +217,11 @@ export default function UserTrainingService({ user }: { user: User | null }) {
               onClick={(e) => setIndexPelatihanSelected(index)}
               className="text-lg hover:cursor-pointer font-bold text-gray-900 sm:text-xl leading-[100%] "
             >
-              Pelatihan Budidaya Ikan Air Tawar (CBIB) Ikan Nila
+              {pelatihan?.NamaPelatihan}
             </h3>
 
             <p className="mt-1 text-xs font-medium text-gray-600">
-              By BPPP Medan · 29 Mei 2024 - 7 Juni 2024
+              29 Mei 2024 - 7 Juni 2024
             </p>
           </div>
 
@@ -218,54 +230,40 @@ export default function UserTrainingService({ user }: { user: User | null }) {
               width={0}
               height={0}
               alt=""
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
-              className="w-16 rounded-lg object-cover shadow-sm"
+              src={icons(pelatihan?.BidangPelatihan)}
+              className="w-14 rounded-lg object-cover shadow-sm"
             />
           </div>
         </div>
 
         <div className="mt-2 mb-2">
-          <p className="text-pretty text-sm text-gray-500">
-            Pelatihan Cara Budidaya Ikan yang Baik (CBIB) untuk Ikan Nila adalah
-            program pelatihan yang dirancang untuk memberikan pengetahuan dan
-            keterampilan.
-          </p>
-        </div>
+          <p
+            dangerouslySetInnerHTML={{
+              __html:
+                pelatihan &&
+                truncateText(pelatihan?.DetailPelatihan, 150, "..."),
+            }}
+            className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[140%]"
+          />
 
-        {/* <DialogSertifikatPelatihan userPelatihan={pelatihan} pelatihan={{}}> */}
-        {pelatihan?.NoSertifikat == "" ? (
-          <div className="flex gap-1">
-            <Button
-              variant="outline"
-              onClick={(e) => setIndexPelatihanSelected(index)}
-              className="w-full border flex gap-2 border-gray-600 text-left capitalize items-center justify-center"
-            >
-              <BiSearch className="h-4 w-4 text-gray-600" />{" "}
-              <span className="text-xs">Cek Pelatihan</span>
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
-            >
-              <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-              <span className="text-xs">Lacak Sertifikat</span>
-            </Button>
-          </div>
-        ) : (
+          <p className="text-pretty text-sm text-gray-500">{}</p>
+        </div>
+        <div className="flex gap-1">
           <Button
             variant="outline"
-            className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+            onClick={(e) => setIndexPelatihanSelected(index)}
+            className="w-full border flex gap-2 border-gray-600 text-left capitalize items-center justify-center"
           >
-            <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-            <span className="text-xs"> Download Sertifikat</span>
+            <BiSearch className="h-4 w-4 text-gray-600" />{" "}
+            <span className="text-xs">Cek Pelatihan</span>
           </Button>
-        )}
-
-        {/* </DialogSertifikatPelatihan> */}
+        </div>
 
         <dl className="mt-6 flex gap-4 sm:gap-6">
           <div className="flex flex-col-reverse">
-            <dt className="text-sm font-medium text-gray-600">Budidaya</dt>
+            <dt className="text-sm font-medium text-gray-600">
+              {pelatihan?.BidangPelatihan!}
+            </dt>
             <dd className="text-xs text-gray-500">Bidang</dd>
           </div>
 
@@ -273,7 +271,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
             <dt className="text-sm font-medium text-gray-600">
               {pelatihan?.NoSertifikat == ""
                 ? "-"
-                : "No. B. " + pelatihan?.NoSertifikat}
+                : "No. B. " + pelatihan?.NoSertifikat!}
             </dt>
             <dd className="text-xs text-gray-500">No Sertifikat</dd>
           </div>
@@ -284,7 +282,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
   const Timeline = () => {
     return (
-      <section className="dark:bg-gray-100 dark:text-gray-800">
+      <section className="dark:bg-gray-100 -mt-5 dark:text-gray-800">
         <div className=" py-12 ">
           <div className="grid gap-4 sm:grid-cols-12">
             <div className="col-span-12 sm:col-span-3">
@@ -349,18 +347,120 @@ export default function UserTrainingService({ user }: { user: User | null }) {
               </div>
               {userDetail?.Pelatihan[indexPelatihanSelected].NoSertifikat ==
               "" ? null : (
-                <Button
-                  variant="outline"
-                  className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+                <DialogSertifikatPelatihan
+                  userPelatihan={userDetail?.Pelatihan[indexPelatihanSelected]!}
                 >
-                  <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-                  <span className="text-sm"> Download Sertifikat</span>
-                </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+                  >
+                    <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+                    <span className="text-sm"> Download Sertifikat</span>
+                  </Button>
+                </DialogSertifikatPelatihan>
               )}
             </div>
           </div>
         </div>
       </section>
+    );
+  };
+
+  const TablePenilaian = () => {
+    return (
+      <div className="flex flex-col mt-5">
+        <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+          <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+            <div className="overflow-hidden">
+              <table className="min-w-full border border-neutral-200 text-center text-sm font-light text-surface mb-5 dark:border-white/10 dark:text-white">
+                <thead className="border-b border-neutral-200 font-medium dark:border-white/10">
+                  <tr>
+                    <th
+                      scope="col"
+                      className="border-e border-neutral-200 px-6 py-4 dark:border-white/10"
+                    >
+                      #
+                    </th>
+                    <th
+                      scope="col"
+                      className="border-e border-neutral-200 px-6 py-4 dark:border-white/10"
+                    >
+                      Pre-test
+                    </th>
+                    <th
+                      scope="col"
+                      className="border-e border-neutral-200 px-6 py-4 dark:border-white/10"
+                    >
+                      Post-test
+                    </th>
+                    <th scope="col" className="px-6 py-4">
+                      Total
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b border-neutral-200 dark:border-white/10">
+                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 font-medium dark:border-white/10">
+                      1
+                    </td>
+                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 dark:border-white/10">
+                      {userDetail?.Pelatihan[indexPelatihanSelected]?.PreTest!}
+                    </td>
+                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 dark:border-white/10">
+                      {userDetail?.Pelatihan[indexPelatihanSelected]?.PostTest!}
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {" "}
+                      {(userDetail?.Pelatihan[indexPelatihanSelected]
+                        ?.PreTest! +
+                        userDetail?.Pelatihan[indexPelatihanSelected]
+                          ?.PostTest!) /
+                        2}
+                    </td>
+                  </tr>
+
+                  <tr className="border-b border-neutral-200 dark:border-white/10">
+                    <th
+                      colSpan={3}
+                      className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 dark:border-white/10"
+                    >
+                      Keterangan
+                    </th>
+                    <th className="whitespace-nowrap px-6 py-4">
+                      {" "}
+                      {(userDetail?.Pelatihan[indexPelatihanSelected]
+                        ?.PreTest! +
+                        userDetail?.Pelatihan[indexPelatihanSelected]
+                          ?.PostTest!) /
+                        2 >
+                      60
+                        ? "LULUS"
+                        : "TIDAK LULUS"}
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+
+              {userDetail?.Pelatihan[indexPelatihanSelected].NoSertifikat ==
+              "" ? null : (
+                <DialogSertifikatPelatihan
+                  userPelatihan={userDetail?.Pelatihan[indexPelatihanSelected]!}
+                >
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+                  >
+                    <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+                    <span className="text-sm"> Download Sertifikat</span>
+                  </Button>
+                </DialogSertifikatPelatihan>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
     );
   };
 
@@ -419,10 +519,13 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                   <div className="sm:flex sm:justify-between sm:gap-4">
                     <div>
                       <h3 className="text-3xl font-bold text-gray-900 font-calsans sm:text-3xl leading-[105%]">
-                        Pelatihan Budidaya Ikan Air Tawar (CBIB) Ikan Nila
+                        {
+                          userDetail?.Pelatihan[indexPelatihanSelected]
+                            ?.NamaPelatihan!
+                        }
                       </h3>
 
-                      <p className="mt-1 text-xs font-medium text-gray-600">
+                      <p className="mt-1 text-sm font-medium text-gray-600">
                         By BPPP Medan · 29 Mei 2024 - 7 Juni 2024 ·{" "}
                         {/* {
                           userDetail?.Pelatihan[indexPelatihanSelected]
@@ -436,24 +539,37 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                         width={0}
                         height={0}
                         alt=""
-                        src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1180&q=80"
-                        className="w-16 rounded-lg object-cover shadow-sm"
+                        src={icons(
+                          userDetail?.Pelatihan[indexPelatihanSelected]
+                            ?.BidangPelatihan!
+                        )}
+                        className="w-20 rounded-lg object-cover shadow-sm"
                       />
                     </div>
                   </div>
-
                   <div className="mt-4">
-                    <p className="text-pretty text-sm text-gray-500">
-                      Pelatihan Cara Budidaya Ikan yang Baik (CBIB) untuk Ikan
-                      Nila adalah program pelatihan yang dirancang untuk
-                      memberikan pengetahuan dan keterampilan.
-                    </p>
+                    <p className="text-pretty text-sm text-gray-500"></p>
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html:
+                          userDetail?.Pelatihan[indexPelatihanSelected]! &&
+                          truncateText(
+                            userDetail?.Pelatihan[indexPelatihanSelected]
+                              ?.DetailPelatihan!,
+                            150,
+                            "..."
+                          ),
+                      }}
+                      className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000"
+                    />
                   </div>
-
                   <dl className="mt-6 flex gap-4 sm:gap-6">
                     <div className="flex flex-col-reverse">
                       <dt className="text-sm font-medium text-gray-600">
-                        Budidaya
+                        {
+                          userDetail?.Pelatihan[indexPelatihanSelected]
+                            ?.BidangPelatihan!
+                        }
                       </dt>
                       <dd className="text-xs text-gray-500">Bidang</dd>
                     </div>
@@ -461,26 +577,26 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                     <div className="flex flex-col-reverse">
                       <dt className="text-sm font-bold text-gray-600">
                         {userDetail?.Pelatihan[indexPelatihanSelected]
-                          .NoSertifikat == ""
+                          .NoSertifikat! == ""
                           ? "-"
                           : userDetail?.Pelatihan[indexPelatihanSelected]
-                              ?.NoSertifikat}
+                              ?.NoSertifikat!}
                       </dt>
                       <dd className="text-xs text-gray-500">No Sertifikat</dd>
                     </div>
                     <div className="flex flex-col-reverse">
                       <dt className="text-sm font-bold text-gray-600">
                         {userDetail?.Pelatihan[indexPelatihanSelected]
-                          .NoRegistrasi == ""
+                          .NoRegistrasi! == ""
                           ? "-"
                           : userDetail?.Pelatihan[indexPelatihanSelected]
-                              ?.NoRegistrasi}
+                              ?.NoRegistrasi!}
                       </dt>
                       <dd className="text-xs text-gray-500">No Registrasi</dd>
                     </div>
                   </dl>
-
-                  <Timeline />
+                  <TablePenilaian />
+                  {/* <Timeline /> */}
                 </a>
               </div>
             </div>

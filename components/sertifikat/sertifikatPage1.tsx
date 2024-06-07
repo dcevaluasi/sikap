@@ -3,10 +3,8 @@ import Image from "next/image";
 
 export default function SertifikatPage1({
   userPelatihan,
-  pelatihan,
 }: {
   userPelatihan: UserPelatihan;
-  pelatihan: PelatihanMasyarakat;
 }) {
   return (
     <div className="flex flex-col">
@@ -20,7 +18,7 @@ export default function SertifikatPage1({
           <p className="text-base mt-1 italic">CERTIFICATE</p>
 
           <p className="text-xl mt-1 font-black">
-            Nomor : B.{pelatihan?.NoSertifikat}
+            Nomor : B.{userPelatihan?.NoSertifikat}
           </p>
         </div>
 
@@ -56,7 +54,7 @@ export default function SertifikatPage1({
 
         <div className="flex w-full flex-col items-start mt-2 text-center">
           <p>
-            Dalam {pelatihan?.NamaPelatihan} yang diselenggarakan atas kerjasama
+            Dalam {userPelatihan?.NamaPelatihan} yang diselenggarakan atas kerjasama
             Pusat Pelatihan Kelautan dan Perikanan – Badan Penyuluhan dan
             Pengembangan Sumber Daya Manusia Kelautan dan Perikanan pada tanggal
             19 - 21 Februari 2024.

@@ -47,22 +47,26 @@ export type PelatihanMasyarakat =  {
 
 export type UserPelatihan = {
   CreatedAt: string;
-  IdUserPelatihan: number;
-  IdPelatihan: number;
-  IdUsers: number;
-  IsActice: string;
-  IsKeterangan: string;
-  MetodoPembayaran: string;
-  NilaiPraktek: number;
-  NilaiTeory: number;
-  NoRegistrasi: string;
-  NoSertifikat: string;
-  PostTest: number;
-  PreTest: number;
-  StatusPembayaran: string;
-  UpdateAt: string;
-  WaktuPembayaran: string;
-  Nama: string;
+    IdUserPelatihan: number;
+    IdPelatihan: number;
+    IdUsers: number;
+    IsActice: string;
+    IsKeterangan: string;
+    MetodoPembayaran: string;
+    NilaiPraktek: number;
+    NilaiTeory: number;
+    NoRegistrasi: string;
+    NoSertifikat: string;
+    PostTest: number;
+    PreTest: number;
+    StatusPembayaran: string;
+    UpdateAt: string;
+    WaktuPembayaran: string
+    NamaPelatihan: string;
+    DetailPelatihan: string;
+    BidangPelatihan: string;
+    Keterangan: string;
+    Nama: string;
 };
 
 export type Pelatihan = {

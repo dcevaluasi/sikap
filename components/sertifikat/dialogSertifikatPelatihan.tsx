@@ -17,11 +17,9 @@ import { PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 
 export function DialogSertifikatPelatihan({
   children,
-  pelatihan,
   userPelatihan,
 }: {
   children: ReactElement;
-  pelatihan: PelatihanMasyarakat;
   userPelatihan: UserPelatihan;
 }) {
   return (
@@ -32,7 +30,7 @@ export function DialogSertifikatPelatihan({
           <div className="flex gap-2 items-center">
             <MdVerified className="text-3xl text-blue-500" />
             <div className="flex flex-col">
-              <DialogTitle>B.{pelatihan?.NoSertifikat}</DialogTitle>
+              <DialogTitle>B.{userPelatihan?.NoSertifikat}</DialogTitle>
               <DialogDescription>
                 No. Sertifikasi terdaftar dan dinyatakan valid telah mengikuti
                 pelatihan!
@@ -41,10 +39,7 @@ export function DialogSertifikatPelatihan({
           </div>
         </DialogHeader>
         <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
-          <SertifikatPage1
-            userPelatihan={userPelatihan}
-            pelatihan={pelatihan}
-          />
+          <SertifikatPage1 userPelatihan={userPelatihan} />
         </div>
         <DialogFooter>
           <Button
