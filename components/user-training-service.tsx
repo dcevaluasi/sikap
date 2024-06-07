@@ -476,130 +476,167 @@ export default function UserTrainingService({ user }: { user: User | null }) {
         <div className="relative w-full mx-auto px-4 sm:px-6">
           <div className="pt-12 md:pt-20">
             {/* Section header */}
-            <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
-              <h1 className="text-3xl font-calsans leading-[110%] text-black">
-                Pelatihan Masyarakat, Teknis, <br /> dan Kepelatuan yang Diikuti
-              </h1>
-              <p className="text-base text-gray-600">
-                Jelajahi layanan serta informasi yang ada pada Balai Pelatihan
-                Kelautan dan Perikanan dan jadilah SDM kompeten bidang kelautan
-                dan perikanan!
-              </p>
-            </div>
-            <div className="w-full max-w-6xl mx-auto flex gap-5">
-              <div className="flex flex-col gap-2 w-5/12">
-                <div className="relative w-full flex items-center border-gray-300 border px-2 rounded-xl">
-                  <Button
-                    type="button"
-                    variant={"outline"}
-                    className="flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-700 w-fit h-fit absolute right-1"
-                  >
-                    {" "}
-                    <FiSearch className="text-white text-base" />
-                  </Button>
-                  <Input
-                    className="text-sm border-none -ml-1 focus:border-none active:outline-none active:border-none focus:outline-none focus-visible:ring-0"
-                    placeholder="Cari Pelatihan-mu"
-                  />
-                </div>
-                {userDetail?.Pelatihan.map((pelatihan, index) => (
-                  <CardPelatihan
-                    pelatihan={pelatihan}
-                    key={index}
-                    index={index}
-                  />
-                ))}
-              </div>
 
-              <div className="flex items-start justify-center w-7/12">
-                <a
-                  href="#"
-                  className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:px-6 lg:py-0"
-                >
-                  <div className="sm:flex sm:justify-between sm:gap-4">
-                    <div>
-                      <h3 className="text-3xl font-bold text-gray-900 font-calsans sm:text-3xl leading-[105%]">
-                        {
-                          userDetail?.Pelatihan[indexPelatihanSelected]
-                            ?.NamaPelatihan!
-                        }
-                      </h3>
-
-                      <p className="mt-1 text-sm font-medium text-gray-600">
-                        By BPPP Medan · 29 Mei 2024 - 7 Juni 2024 ·{" "}
-                        {/* {
-                          userDetail?.Pelatihan[indexPelatihanSelected]
-                            ?.NoRegistrasi
-                        } */}
-                      </p>
-                    </div>
-
-                    <div className="hidden sm:block sm:shrink-0">
-                      <Image
-                        width={0}
-                        height={0}
-                        alt=""
-                        src={icons(
-                          userDetail?.Pelatihan[indexPelatihanSelected]
-                            ?.BidangPelatihan!
-                        )}
-                        className="w-20 rounded-lg object-cover shadow-sm"
+            {userDetail?.Pelatihan!.length != 0 ? (
+              <>
+                <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
+                  <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                    Pelatihan Masyarakat, Teknis, <br /> dan Kepelatuan yang
+                    Diikuti
+                  </h1>
+                  <p className="text-base text-gray-600">
+                    Jelajahi layanan serta informasi yang ada pada Balai
+                    Pelatihan Kelautan dan Perikanan dan jadilah SDM kompeten
+                    bidang kelautan dan perikanan!
+                  </p>
+                </div>{" "}
+                <div className="w-full max-w-6xl mx-auto flex gap-5">
+                  <div className="flex flex-col gap-2 w-5/12">
+                    <div className="relative w-full flex items-center border-gray-300 border px-2 rounded-xl">
+                      <Button
+                        type="button"
+                        variant={"outline"}
+                        className="flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-700 w-fit h-fit absolute right-1"
+                      >
+                        {" "}
+                        <FiSearch className="text-white text-base" />
+                      </Button>
+                      <Input
+                        className="text-sm border-none -ml-1 focus:border-none active:outline-none active:border-none focus:outline-none focus-visible:ring-0"
+                        placeholder="Cari Pelatihan-mu"
                       />
                     </div>
+                    {userDetail?.Pelatihan.map((pelatihan, index) => (
+                      <CardPelatihan
+                        pelatihan={pelatihan}
+                        key={index}
+                        index={index}
+                      />
+                    ))}
                   </div>
-                  <div className="mt-4">
-                    <p className="text-pretty text-sm text-gray-500"></p>
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          userDetail?.Pelatihan[indexPelatihanSelected]! &&
-                          truncateText(
-                            userDetail?.Pelatihan[indexPelatihanSelected]
-                              ?.DetailPelatihan!,
-                            150,
-                            "..."
-                          ),
-                      }}
-                      className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000"
-                    />
-                  </div>
-                  <dl className="mt-6 flex gap-4 sm:gap-6">
-                    <div className="flex flex-col-reverse">
-                      <dt className="text-sm font-medium text-gray-600">
-                        {
-                          userDetail?.Pelatihan[indexPelatihanSelected]
-                            ?.BidangPelatihan!
-                        }
-                      </dt>
-                      <dd className="text-xs text-gray-500">Bidang</dd>
-                    </div>
 
-                    <div className="flex flex-col-reverse">
-                      <dt className="text-sm font-bold text-gray-600">
-                        {userDetail?.Pelatihan[indexPelatihanSelected]
-                          .NoSertifikat! == ""
-                          ? "-"
-                          : userDetail?.Pelatihan[indexPelatihanSelected]
-                              ?.NoSertifikat!}
-                      </dt>
-                      <dd className="text-xs text-gray-500">No Sertifikat</dd>
+                  <div className="flex items-start justify-center w-7/12">
+                    <a
+                      href="#"
+                      className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:px-6 lg:py-0"
+                    >
+                      <div className="sm:flex sm:justify-between sm:gap-4">
+                        <div>
+                          <h3 className="text-3xl font-bold text-gray-900 font-calsans sm:text-3xl leading-[105%]">
+                            {
+                              userDetail?.Pelatihan[indexPelatihanSelected]
+                                ?.NamaPelatihan!
+                            }
+                          </h3>
+
+                          <p className="mt-1 text-sm font-medium text-gray-600">
+                            By BPPP Medan · 29 Mei 2024 - 7 Juni 2024 ·{" "}
+                            {/* {
+                            userDetail?.Pelatihan[indexPelatihanSelected]
+                              ?.NoRegistrasi
+                          } */}
+                          </p>
+                        </div>
+
+                        <div className="hidden sm:block sm:shrink-0">
+                          <Image
+                            width={0}
+                            height={0}
+                            alt=""
+                            src={icons(
+                              userDetail?.Pelatihan[indexPelatihanSelected]
+                                ?.BidangPelatihan!
+                            )}
+                            className="w-20 rounded-lg object-cover shadow-sm"
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-4">
+                        <p className="text-pretty text-sm text-gray-500"></p>
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              userDetail?.Pelatihan[indexPelatihanSelected]! &&
+                              truncateText(
+                                userDetail?.Pelatihan[indexPelatihanSelected]
+                                  ?.DetailPelatihan!,
+                                150,
+                                "..."
+                              ),
+                          }}
+                          className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000"
+                        />
+                      </div>
+                      <dl className="mt-6 flex gap-4 sm:gap-6">
+                        <div className="flex flex-col-reverse">
+                          <dt className="text-sm font-medium text-gray-600">
+                            {
+                              userDetail?.Pelatihan[indexPelatihanSelected]
+                                ?.BidangPelatihan!
+                            }
+                          </dt>
+                          <dd className="text-xs text-gray-500">Bidang</dd>
+                        </div>
+
+                        <div className="flex flex-col-reverse">
+                          <dt className="text-sm font-bold text-gray-600">
+                            {userDetail?.Pelatihan[indexPelatihanSelected]
+                              .NoSertifikat! == ""
+                              ? "-"
+                              : userDetail?.Pelatihan[indexPelatihanSelected]
+                                  ?.NoSertifikat!}
+                          </dt>
+                          <dd className="text-xs text-gray-500">
+                            No Sertifikat
+                          </dd>
+                        </div>
+                        <div className="flex flex-col-reverse">
+                          <dt className="text-sm font-bold text-gray-600">
+                            {userDetail?.Pelatihan[indexPelatihanSelected]
+                              .NoRegistrasi! == ""
+                              ? "-"
+                              : userDetail?.Pelatihan[indexPelatihanSelected]
+                                  ?.NoRegistrasi!}
+                          </dt>
+                          <dd className="text-xs text-gray-500">
+                            No Registrasi
+                          </dd>
+                        </div>
+                      </dl>
+                      <TablePenilaian />
+                      {/* <Timeline /> */}
+                    </a>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6">
+                <div className="pt-12 md:pt-20 flex flex-col items-center">
+                  <Image
+                    src={"/illustrations/not-found.png"}
+                    alt="Not Found"
+                    width={0}
+                    height={0}
+                    className="w-[400px]"
+                  />
+                  <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
+                    <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                      Belum Ada Pelatihan
+                    </h1>
+                    <div className="text-gray-600 text-center  max-w-md">
+                      Kamu belum mengikuti pelatihan apapun, ayo cari pelatihan
+                      menarik di E-LAUT dan jadilah SDM unggul untuk Indonesia!{" "}
+                      <Link
+                        href="/"
+                        className="text-blue-600 hover:underline transition duration-150 ease-in-out"
+                      >
+                        Cari Pelatihan
+                      </Link>
                     </div>
-                    <div className="flex flex-col-reverse">
-                      <dt className="text-sm font-bold text-gray-600">
-                        {userDetail?.Pelatihan[indexPelatihanSelected]
-                          .NoRegistrasi! == ""
-                          ? "-"
-                          : userDetail?.Pelatihan[indexPelatihanSelected]
-                              ?.NoRegistrasi!}
-                      </dt>
-                      <dd className="text-xs text-gray-500">No Registrasi</dd>
-                    </div>
-                  </dl>
-                  <TablePenilaian />
-                  {/* <Timeline /> */}
-                </a>
+                  </div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

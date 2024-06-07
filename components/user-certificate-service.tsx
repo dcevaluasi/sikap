@@ -216,7 +216,7 @@ export default function UserCertificateService({
         <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6">
           <div className="pt-12 md:pt-20 flex flex-col items-center">
             <Image
-              src={"/illustrations/598.jpg"}
+              src={"/illustrations/not-found.png"}
               alt="Not Found"
               width={0}
               height={0}
