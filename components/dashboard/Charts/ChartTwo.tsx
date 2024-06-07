@@ -96,12 +96,10 @@ const ChartTwo: React.FC = () => {
   handleReset;
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default dark:border-strokedark dark:bg-boxdark xl:col-span-4">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default   xl:col-span-4">
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
-          <h4 className="text-xl font-semibold text-black dark:text-white">
-            Jenis Pelatihan
-          </h4>
+          <h4 className="text-xl font-semibold text-black ">Jenis Pelatihan</h4>
         </div>
         <div>
           <div className="relative z-20 inline-block">
@@ -110,19 +108,19 @@ const ChartTwo: React.FC = () => {
               id="#"
               className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
             >
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2024
               </option>
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2023
               </option>
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2022
               </option>
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2021
               </option>
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2020
               </option>
             </select>

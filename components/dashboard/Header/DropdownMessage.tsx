@@ -43,7 +43,7 @@ const DropdownMessage = () => {
           setNotifying(false);
           setDropdownOpen(!dropdownOpen);
         }}
-        className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
+        className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary "
         href="#"
       >
         <span
@@ -86,7 +86,7 @@ const DropdownMessage = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute -right-16 mt-2.5 flex h-90 w-75 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark sm:right-0 sm:w-80 ${
+        className={`absolute -right-16 mt-2.5 flex h-90 w-75 flex-col rounded-sm border border-stroke bg-white shadow-default  sm:right-0 sm:w-80 ${
           dropdownOpen === true ? "block" : "hidden"
         }`}
       >
@@ -97,7 +97,7 @@ const DropdownMessage = () => {
         <ul className="flex h-auto flex-col overflow-y-auto">
           <li>
             <Link
-              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 "
               href="/messages"
             >
               <div className="h-12.5 w-12.5 rounded-full">
@@ -114,7 +114,7 @@ const DropdownMessage = () => {
               </div>
 
               <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
+                <h6 className="text-sm font-medium text-black ">
                   Mariya Desoja
                 </h6>
                 <p className="text-sm">I like your confidence 💪</p>
@@ -124,7 +124,7 @@ const DropdownMessage = () => {
           </li>
           <li>
             <Link
-              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 "
               href="/messages"
             >
               <div className="h-12.5 w-12.5 rounded-full">
@@ -141,9 +141,7 @@ const DropdownMessage = () => {
               </div>
 
               <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Robert Jhon
-                </h6>
+                <h6 className="text-sm font-medium text-black ">Robert Jhon</h6>
                 <p className="text-sm">Can you share your offer?</p>
                 <p className="text-xs">10min ago</p>
               </div>
@@ -151,7 +149,7 @@ const DropdownMessage = () => {
           </li>
           <li>
             <Link
-              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 "
               href="/messages"
             >
               <div className="h-12.5 w-12.5 rounded-full">
@@ -168,9 +166,7 @@ const DropdownMessage = () => {
               </div>
 
               <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Henry Dholi
-                </h6>
+                <h6 className="text-sm font-medium text-black ">Henry Dholi</h6>
                 <p className="text-sm">I cam across your profile and...</p>
                 <p className="text-xs">1day ago</p>
               </div>
@@ -178,7 +174,7 @@ const DropdownMessage = () => {
           </li>
           <li>
             <Link
-              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 "
               href="/messages"
             >
               <div className="h-12.5 w-12.5 rounded-full">
@@ -195,9 +191,7 @@ const DropdownMessage = () => {
               </div>
 
               <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
-                  Cody Fisher
-                </h6>
+                <h6 className="text-sm font-medium text-black ">Cody Fisher</h6>
                 <p className="text-sm">I’m waiting for you response!</p>
                 <p className="text-xs">5days ago</p>
               </div>
@@ -205,7 +199,7 @@ const DropdownMessage = () => {
           </li>
           <li>
             <Link
-              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 dark:border-strokedark dark:hover:bg-meta-4"
+              className="flex gap-4.5 border-t border-stroke px-4.5 py-3 hover:bg-gray-2 "
               href="/messages"
             >
               <div className="h-12.5 w-12.5 rounded-full">
@@ -222,7 +216,7 @@ const DropdownMessage = () => {
               </div>
 
               <div>
-                <h6 className="text-sm font-medium text-black dark:text-white">
+                <h6 className="text-sm font-medium text-black ">
                   Mariya Desoja
                 </h6>
                 <p className="text-sm">I like your confidence 💪</p>

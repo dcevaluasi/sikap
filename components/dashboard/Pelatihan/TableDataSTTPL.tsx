@@ -454,7 +454,7 @@ const TableDataSTTPL: React.FC = () => {
   }, []);
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       {showFormAjukanPelatihan ? (
         <>
           {/* Header Tabel Data Pelatihan */}
@@ -497,7 +497,7 @@ const TableDataSTTPL: React.FC = () => {
             <div className="flex w-full gap-2 justify-end">
               <Sheet>
                 <SheetTrigger asChild>
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
                     <PiStampLight />
                     Add Stempel
                   </div>
@@ -557,7 +557,7 @@ const TableDataSTTPL: React.FC = () => {
                     title: `Berhasil mengenerate STTPL peserta pelatihan!`,
                   });
                 }}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
               >
                 <TbFileCertificate />
                 Generate Sertifikat Peserta
@@ -600,7 +600,7 @@ const TableDataSTTPL: React.FC = () => {
               <div className="flex w-full gap-2 justify-end">
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
                       <FiUploadCloud />
                       Pemberitahuan Penerbitan STTPL
                     </div>

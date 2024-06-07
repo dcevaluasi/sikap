@@ -333,7 +333,7 @@ const TableDataKonsumsi: React.FC = () => {
   };
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       {showFormAjukanPelatihan ? (
         <>
           {/* Header Tabel Data Pelatihan */}
@@ -348,7 +348,7 @@ const TableDataKonsumsi: React.FC = () => {
                   });
                   setShowFormAjukanPelatihan(!showFormAjukanPelatihan);
                 }}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
               >
                 <MdOutlineSaveAlt />
                 Simpan ke Database
@@ -382,7 +382,7 @@ const TableDataKonsumsi: React.FC = () => {
             <div className="flex w-full gap-2 justify-end">
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
                     <FiUploadCloud />
                     Tambah Database Konsumsi
                   </div>

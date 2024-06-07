@@ -71,10 +71,10 @@ const ChartThree: React.FC = () => {
   handleReset;
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-5">
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
-          <h5 className="text-xl font-semibold text-black dark:text-white">
+          <h5 className="text-xl font-semibold text-black ">
             Bidang Pelatihan
           </h5>
         </div>
@@ -85,13 +85,13 @@ const ChartThree: React.FC = () => {
               id=""
               className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
             >
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2024
               </option>
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2023
               </option>
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2022
               </option>
             </select>
@@ -116,7 +116,7 @@ const ChartThree: React.FC = () => {
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-primary"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+            <p className="flex w-full justify-between text-sm font-medium text-black ">
               <span>
                 {" "}
                 Kepelatuan &<br /> Mesin Perikanan
@@ -128,7 +128,7 @@ const ChartThree: React.FC = () => {
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#6577F3]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+            <p className="flex w-full justify-between text-sm font-medium text-black ">
               <span> Pengolahan & Pemasaran </span>
               <span> 34% </span>
             </p>
@@ -137,7 +137,7 @@ const ChartThree: React.FC = () => {
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#8FD0EF]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+            <p className="flex w-full justify-between text-sm font-medium text-black ">
               <span> Budidaya </span>
               <span> 45% </span>
             </p>
@@ -146,7 +146,7 @@ const ChartThree: React.FC = () => {
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#0FADCF]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+            <p className="flex w-full justify-between text-sm font-medium text-black ">
               <span> Konservasi </span>
               <span> 12% </span>
             </p>
@@ -155,7 +155,7 @@ const ChartThree: React.FC = () => {
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#FFb703]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+            <p className="flex w-full justify-between text-sm font-medium text-black ">
               <span> SD Perikanan </span>
               <span> 20% </span>
             </p>
@@ -164,7 +164,7 @@ const ChartThree: React.FC = () => {
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#fb8500]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+            <p className="flex w-full justify-between text-sm font-medium text-black ">
               <span> Penangkapan </span>
               <span> 32% </span>
             </p>

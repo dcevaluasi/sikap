@@ -567,7 +567,7 @@ const TableDataPesertaPelatihan = () => {
   });
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       {showFormAjukanPelatihan ? (
         <h1>TEST</h1>
       ) : (
@@ -622,7 +622,7 @@ const TableDataPesertaPelatihan = () => {
             <div className="flex w-full gap-1 items-start">
               <Select>
                 <SelectTrigger className="w-[200px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                  <div className="inline-flex gap-2 px-3 mr-2 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                  <div className="inline-flex gap-2 px-3 mr-2 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
                     <MdOutlinePayment />
                     Status Pembayaran
                   </div>
@@ -639,7 +639,7 @@ const TableDataPesertaPelatihan = () => {
 
               <Select>
                 <SelectTrigger className="w-[130px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
                     <TbSchool />
                     Kelulusan
                   </div>
@@ -655,7 +655,7 @@ const TableDataPesertaPelatihan = () => {
 
               <Select>
                 <SelectTrigger className="w-[140px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
                     <HiOutlineDocument />
                     Sertifikat
                   </div>
@@ -671,13 +671,13 @@ const TableDataPesertaPelatihan = () => {
             </div>
 
             <div className="w-full flex justify-end gap-2">
-              <div className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer w-fit">
+              <div className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit">
                 <TbChartDonut />
                 Statistik
               </div>
               <div
                 onClick={(e) => setShowFormAjukanPelatihan(true)}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
               >
                 <FiUploadCloud />
                 Tambah Peserta Pelatihan

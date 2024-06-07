@@ -29,53 +29,49 @@ const packageData: Package[] = [
 
 const TableThree = () => {
   return (
-    <div className="rounded-sm border border-white  shadow-default dark:border-strokedark dark:bg-boxdark ">
+    <div className="rounded-sm border border-white  shadow-default  ">
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">
           <thead>
-            <tr className="bg-gray-3 text-left dark:bg-meta-4">
-              <th className="min-w-[220px] px-4 py-4 font-medium text-black dark:text-white xl:pl-11">
+            <tr className="bg-gray-3 text-left ">
+              <th className="min-w-[220px] px-4 py-4 font-medium text-black  xl:pl-11">
                 Package
               </th>
-              <th className="min-w-[150px] px-4 py-4 font-medium text-black dark:text-white">
+              <th className="min-w-[150px] px-4 py-4 font-medium text-black ">
                 Invoice date
               </th>
-              <th className="min-w-[120px] px-4 py-4 font-medium text-black dark:text-white">
+              <th className="min-w-[120px] px-4 py-4 font-medium text-black ">
                 Status
               </th>
-              <th className="px-4 py-4 font-medium text-black dark:text-white">
-                Actions
-              </th>
+              <th className="px-4 py-4 font-medium text-black ">Actions</th>
             </tr>
           </thead>
           <tbody>
             {packageData.map((packageItem, key) => (
               <tr key={key}>
-                <td className="border-b border-[#eee] px-4 py-5 pl-9 dark:border-strokedark xl:pl-11">
-                  <h5 className="font-medium text-black dark:text-white">
+                <td className="border-b border-[#eee] px-4 py-5 pl-9  xl:pl-11">
+                  <h5 className="font-medium text-black ">
                     {packageItem.name}
                   </h5>
                   <p className="text-sm">${packageItem.price}</p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
-                  <p className="text-black dark:text-white">
-                    {packageItem.invoiceDate}
-                  </p>
+                <td className="border-b border-[#eee] px-4 py-5 ">
+                  <p className="text-black ">{packageItem.invoiceDate}</p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-[#eee] px-4 py-5 ">
                   <p
                     className={`inline-flex rounded-full bg-opacity-10 px-3 py-1 text-sm font-medium ${
                       packageItem.status === "Paid"
                         ? "bg-success text-success"
                         : packageItem.status === "Unpaid"
-                          ? "bg-danger text-danger"
-                          : "bg-warning text-warning"
+                        ? "bg-danger text-danger"
+                        : "bg-warning text-warning"
                     }`}
                   >
                     {packageItem.status}
                   </p>
                 </td>
-                <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                <td className="border-b border-[#eee] px-4 py-5 ">
                   <div className="flex items-center space-x-3.5">
                     <button className="hover:text-primary">
                       <svg

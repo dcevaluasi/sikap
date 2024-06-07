@@ -282,7 +282,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
   const Timeline = () => {
     return (
-      <section className="dark:bg-gray-100 -mt-5 dark:text-gray-800">
+      <section className=" -mt-5 ">
         <div className=" py-12 ">
           <div className="grid gap-4 sm:grid-cols-12">
             <div className="col-span-12 sm:col-span-3">
@@ -302,7 +302,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                     <h3 className="text-xl font-semibold tracking-wide">
                       Pendaftaran{" "}
                     </h3>
-                    <time className="text-xs tracking-wide uppercase dark:text-gray-600">
+                    <time className="text-xs tracking-wide uppercase ">
                       Dec 2020
                     </time>
                     <p className="mt-3">
@@ -318,7 +318,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                     <h3 className="text-xl font-semibold tracking-wide">
                       Pelaksanaan
                     </h3>
-                    <time className="text-xs tracking-wide uppercase dark:text-gray-600">
+                    <time className="text-xs tracking-wide uppercase ">
                       Jul 2019
                     </time>
                     <p className="mt-3">
@@ -333,7 +333,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                     <h3 className="text-xl font-semibold tracking-wide">
                       Selesai Pelatihan
                     </h3>
-                    <time className="text-xs tracking-wide uppercase dark:text-gray-600">
+                    <time className="text-xs tracking-wide uppercase ">
                       Jan 2016
                     </time>
                     <p className="mt-3">
@@ -373,24 +373,24 @@ export default function UserTrainingService({ user }: { user: User | null }) {
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
             <div className="overflow-hidden">
-              <table className="min-w-full border border-neutral-200 text-center text-sm font-light text-surface mb-5 dark:border-white/10 dark:text-white">
-                <thead className="border-b border-neutral-200 font-medium dark:border-white/10">
+              <table className="min-w-full border border-neutral-200 text-center text-sm font-light text-surface mb-5 ">
+                <thead className="border-b border-neutral-200 font-medium ">
                   <tr>
                     <th
                       scope="col"
-                      className="border-e border-neutral-200 px-6 py-4 dark:border-white/10"
+                      className="border-e border-neutral-200 px-6 py-4 "
                     >
                       #
                     </th>
                     <th
                       scope="col"
-                      className="border-e border-neutral-200 px-6 py-4 dark:border-white/10"
+                      className="border-e border-neutral-200 px-6 py-4 "
                     >
                       Pre-test
                     </th>
                     <th
                       scope="col"
-                      className="border-e border-neutral-200 px-6 py-4 dark:border-white/10"
+                      className="border-e border-neutral-200 px-6 py-4 "
                     >
                       Post-test
                     </th>
@@ -400,14 +400,14 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-neutral-200 dark:border-white/10">
-                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 font-medium dark:border-white/10">
+                  <tr className="border-b border-neutral-200 ">
+                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 font-medium ">
                       1
                     </td>
-                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 dark:border-white/10">
+                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 ">
                       {userDetail?.Pelatihan[indexPelatihanSelected]?.PreTest!}
                     </td>
-                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 dark:border-white/10">
+                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 ">
                       {userDetail?.Pelatihan[indexPelatihanSelected]?.PostTest!}
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
@@ -420,10 +420,10 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                     </td>
                   </tr>
 
-                  <tr className="border-b border-neutral-200 dark:border-white/10">
+                  <tr className="border-b border-neutral-200 ">
                     <th
                       colSpan={3}
-                      className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 dark:border-white/10"
+                      className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 "
                     >
                       Keterangan
                     </th>

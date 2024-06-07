@@ -67,7 +67,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-900 duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 scrollbar-hide ${
+      className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-900 duration-300 ease-linear  lg:static lg:translate-x-0 scrollbar-hide ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
@@ -132,10 +132,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <Link
                         href="/admin/lemdiklat/dashboard"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                           (pathname === "/" ||
                             pathname.includes("dashboard")) &&
-                          "bg-graydark dark:bg-meta-4"
+                          "bg-graydark "
                         }`}
                       >
                         <svg
@@ -181,10 +181,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/pelatihan" ||
                               pathname.includes("pelatihan")) &&
-                            "bg-graydark dark:bg-meta-4"
+                            "bg-graydark "
                           }`}
                           onClick={(e) => {
                             e.preventDefault();
@@ -284,10 +284,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/admin/pusat/pelatihan" ||
                               pathname.includes("pelatihan")) &&
-                            "bg-graydark dark:bg-meta-4"
+                            "bg-graydark "
                           }`}
                           onClick={(e) => {
                             e.preventDefault();
@@ -367,10 +367,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/forms" ||
                               pathname.includes("forms")) &&
-                            "bg-graydark dark:bg-meta-4"
+                            "bg-graydark "
                           }`}
                           onClick={(e) => {
                             e.preventDefault();
@@ -457,10 +457,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/forms" ||
                               pathname.includes("forms")) &&
-                            "bg-graydark dark:bg-meta-4"
+                            "bg-graydark "
                           }`}
                           onClick={(e) => {
                             e.preventDefault();
@@ -538,10 +538,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/forms" ||
                               pathname.includes("forms")) &&
-                            "bg-graydark dark:bg-meta-4"
+                            "bg-graydark "
                           }`}
                           onClick={(e) => {
                             e.preventDefault();
@@ -624,10 +624,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <Link
                   href="/admin/lemdiklat/pnbp"
-                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                  className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                     (pathname === "/admin/lemdiklat/pnbp" ||
                       pathname.includes("pnbp")) &&
-                    "bg-graydark dark:bg-meta-4"
+                    "bg-graydark "
                   }`}
                 >
                   <FaRupiahSign className="text-3xl" />
@@ -646,10 +646,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="#"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/forms" ||
                               pathname.includes("forms")) &&
-                            "bg-graydark dark:bg-meta-4"
+                            "bg-graydark "
                           }`}
                           onClick={(e) => {
                             e.preventDefault();

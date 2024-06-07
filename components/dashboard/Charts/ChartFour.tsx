@@ -71,10 +71,10 @@ const ChartFour: React.FC = () => {
   handleReset;
 
   return (
-    <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 col-span-7">
+    <div className="w-full rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 col-span-7">
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
-          <h5 className="text-xl font-semibold text-black dark:text-white">
+          <h5 className="text-xl font-semibold text-black ">
             Asal Pengguna E-LAUT
           </h5>
         </div>
@@ -85,13 +85,13 @@ const ChartFour: React.FC = () => {
               id=""
               className="relative z-20 inline-flex appearance-none bg-transparent py-1 pl-3 pr-8 text-sm font-medium outline-none"
             >
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2024
               </option>
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2023
               </option>
-              <option value="" className="dark:bg-boxdark">
+              <option value="" className="">
                 2022
               </option>
             </select>
@@ -112,7 +112,7 @@ const ChartFour: React.FC = () => {
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#6577F3]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+            <p className="flex w-full justify-between text-sm font-medium text-black ">
               <span>KUSUKA</span>
               <span> 65% </span>
             </p>
@@ -121,7 +121,7 @@ const ChartFour: React.FC = () => {
         <div className="w-full px-8 sm:w-1/2">
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#80CAEE]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
+            <p className="flex w-full justify-between text-sm font-medium text-black ">
               <span> Non-KUSUKA </span>
               <span> 35% </span>
             </p>

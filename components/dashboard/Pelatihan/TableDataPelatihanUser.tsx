@@ -316,7 +316,7 @@ const TableDataPelatihanUser: React.FC = () => {
   }, []);
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       {showFormAjukanPelatihan ? (
         <>
           {/* Header Tabel Data Pelatihan */}
@@ -352,7 +352,7 @@ const TableDataPelatihanUser: React.FC = () => {
             <div className="flex w-full gap-2 justify-end">
               <Sheet>
                 <SheetTrigger asChild>
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer">
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
                     <PiStampLight />
                     Add Stempel
                   </div>
@@ -407,7 +407,7 @@ const TableDataPelatihanUser: React.FC = () => {
 
               <div
                 onClick={(e) => setShowFormAjukanPelatihan(true)}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
               >
                 <TbFileCertificate />
                 Generate Sertifikat Peserta
@@ -467,7 +467,7 @@ const TableDataPelatihanUser: React.FC = () => {
                           "/admin/lemdiklat/pelatihan/tambah-pelatihan"
                         );
                       }}
-                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
                     >
                       <FaRupiahSign />
                       Jenis Pelatihan
@@ -491,7 +491,7 @@ const TableDataPelatihanUser: React.FC = () => {
                           "/admin/lemdiklat/pelatihan/tambah-pelatihan"
                         );
                       }}
-                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
                     >
                       <TbChartBubble />
                       Status Pelatihan
@@ -515,7 +515,7 @@ const TableDataPelatihanUser: React.FC = () => {
                           "/admin/lemdiklat/pelatihan/tambah-pelatihan"
                         );
                       }}
-                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5 dark:bg-meta-4 cursor-pointer"
+                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
                     >
                       <RiShipLine />
                       Bidang Pelatihan
