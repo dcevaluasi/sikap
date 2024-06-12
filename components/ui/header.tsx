@@ -25,6 +25,114 @@ export default function Header() {
     window.pageYOffset > 10 ? setTop(false) : setTop(true);
   };
 
+  const [openModal, setOpenModal] = React.useState(false)
+  const [currentName, setCurrentName] = React.useState('')
+
+  const NavDropDown = ({
+    href,
+    name,
+    top,
+    children,
+  }: {
+    href: string;
+    name: string;
+    top: boolean;
+    children: any;
+  }) => {
+
+    return (
+      <Popover open={openModal} >
+        <PopoverTrigger asChild>
+          <li className="cursor-pointer" onClick={(e) => { setCurrentName(name); setOpenModal(!openModal) }}>
+            <div
+              className={`font-medium ${!top || usePathname().includes("bppp")
+                ? "text-gray-600 hover:text-white hover:scale-105"
+                : (top && usePathname().includes("pelatihan")) ||
+                  usePathname().includes("sertifikasi") ||
+                  usePathname().includes("cek-sertifikat") ||
+                  usePathname().includes("users")
+                  ? "text-gray-900 hover:text-gray-900 hover:scale-105"
+                  : usePathname().includes("complete-profile")
+                    ? "text-gray-600 hover:text-white hover:scale-105"
+                    : "text-gray-200 hover:text-white hover:scale-105"
+                }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+            >
+              {name} <HiMiniChevronDown className="text-lg" />
+            </div>
+          </li>
+        </PopoverTrigger>
+        {
+          name == currentName && <PopoverContent className="w-80 flex flex-col gap-1 ">
+            <ul>{children}</ul>
+          </PopoverContent>
+        }
+      </Popover>
+    );
+  };
+
+  const NavLink = ({
+    href,
+    name,
+    top,
+  }: {
+    href: string;
+    name: string;
+    top: boolean;
+  }) => {
+    return (
+      <li>
+        <Link
+          href={href}
+          onClick={(e) => setOpenModal(false)}
+          className={`font-medium ${!top || usePathname().includes("bppp")
+            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+            : (top && usePathname().includes("pelatihan")) ||
+              usePathname().includes("sertifikasi") ||
+              usePathname().includes("cek-sertifikat") ||
+              usePathname().includes("users")
+              ? "text-gray-900 hover:text-gray-900 hover:scale-105"
+              : usePathname().includes("complete-profile")
+                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+                : "text-gray-600 hover:text-white hover:scale-105"
+            }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+        >
+          {name}
+        </Link>
+      </li>
+    );
+  };
+
+  const NavLinkDefault = ({
+    href,
+    name,
+    top,
+  }: {
+    href: string;
+    name: string;
+    top: boolean;
+  }) => {
+    return (
+      <li>
+        <Link
+          href={href}
+          className={`font-medium ${!top || usePathname().includes("bppp")
+            ? "text-gray-600 hover:text-white hover:scale-105"
+            : (top && usePathname().includes("pelatihan")) ||
+              usePathname().includes("sertifikasi") ||
+              usePathname().includes("cek-sertifikat") ||
+              usePathname().includes("users")
+              ? "text-gray-900 hover:text-gray-900 hover:scale-105"
+              : usePathname().includes("complete-profile")
+                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+                : "text-gray-200 hover:text-white hover:scale-105"
+            }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+        >
+          {name}
+        </Link>
+      </li>
+    );
+  };
+
   React.useEffect(() => {
     scrollHandler();
     window.addEventListener("scroll", scrollHandler);
@@ -33,17 +141,16 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
-        !top
-          ? `bg-white backdrop-blur-sm shadow-lg`
-          : usePathname().includes("pelatihan") ||
-            usePathname().includes("sertifikasi") ||
-            usePathname().includes("users")
+      className={`fixed w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${!top
+        ? `bg-white backdrop-blur-sm shadow-lg`
+        : usePathname().includes("pelatihan") ||
+          usePathname().includes("sertifikasi") ||
+          usePathname().includes("users")
           ? `bg-white backdrop-blur-sm shadow-lg`
           : usePathname().includes("complete-profile")
-          ? "bg-white backdrop-blur-sm shadow-lg"
-          : ""
-      }`}
+            ? "bg-white backdrop-blur-sm shadow-lg"
+            : ""
+        }`}
     >
       <div className="max-w-6xl mx-auto px-5 sm:px-6">
         <div className="flex items-center justify-between h-24 md:h-24 py-3">
@@ -123,106 +230,4 @@ export default function Header() {
   );
 }
 
-const NavDropDown = ({
-  href,
-  name,
-  top,
-  children,
-}: {
-  href: string;
-  name: string;
-  top: boolean;
-  children: any;
-}) => {
-  return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <li className="cursor-pointer">
-          <div
-            className={`font-medium ${
-              !top || usePathname().includes("bppp")
-                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-                : (top && usePathname().includes("pelatihan")) ||
-                  usePathname().includes("sertifikasi") ||
-                  usePathname().includes("cek-sertifikat") ||
-                  usePathname().includes("users")
-                ? "text-gray-900 hover:text-gray-900 hover:scale-105"
-                : usePathname().includes("complete-profile")
-                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-                : "text-gray-200 hover:text-white hover:scale-105"
-            }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
-          >
-            {name} <HiMiniChevronDown className="text-lg" />
-          </div>
-        </li>
-      </PopoverTrigger>
-      <PopoverContent className="w-80 flex flex-col gap-1 ">
-        <ul>{children}</ul>
-      </PopoverContent>
-    </Popover>
-  );
-};
 
-const NavLink = ({
-  href,
-  name,
-  top,
-}: {
-  href: string;
-  name: string;
-  top: boolean;
-}) => {
-  return (
-    <li>
-      <Link
-        href={href}
-        className={`font-medium ${
-          !top || usePathname().includes("bppp")
-            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-            : (top && usePathname().includes("pelatihan")) ||
-              usePathname().includes("sertifikasi") ||
-              usePathname().includes("cek-sertifikat") ||
-              usePathname().includes("users")
-            ? "text-gray-900 hover:text-gray-900 hover:scale-105"
-            : usePathname().includes("complete-profile")
-            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-            : "text-gray-600 hover:text-gray-900 hover:scale-105"
-        }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
-      >
-        {name}
-      </Link>
-    </li>
-  );
-};
-
-const NavLinkDefault = ({
-  href,
-  name,
-  top,
-}: {
-  href: string;
-  name: string;
-  top: boolean;
-}) => {
-  return (
-    <li>
-      <Link
-        href={href}
-        className={`font-medium ${
-          !top || usePathname().includes("bppp")
-            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-            : (top && usePathname().includes("pelatihan")) ||
-              usePathname().includes("sertifikasi") ||
-              usePathname().includes("cek-sertifikat") ||
-              usePathname().includes("users")
-            ? "text-gray-900 hover:text-gray-900 hover:scale-105"
-            : usePathname().includes("complete-profile")
-            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-            : "text-gray-200 hover:text-white hover:scale-105"
-        }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
-      >
-        {name}
-      </Link>
-    </li>
-  );
-};
