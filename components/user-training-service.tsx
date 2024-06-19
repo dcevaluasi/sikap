@@ -159,6 +159,26 @@ export default function UserTrainingService({ user }: { user: User | null }) {
     }
   };
 
+  const [selectedIdPelatihan, setSelectedIdPelatihan] =
+    React.useState<number>(0);
+
+  const handleFetchingDetailPelatihan = async (id: number) => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/getPelatihanUser?idPelatihan=${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("SELECTED PELATIHAN : ", response);
+    } catch (error) {
+      console.error("Error posting training data:", error);
+      throw error;
+    }
+  };
+
   React.useEffect(() => {
     setTimeout(() => {
       setLoading(false);
@@ -222,7 +242,10 @@ export default function UserTrainingService({ user }: { user: User | null }) {
         <div className="sm:flex sm:justify-between sm:gap-4">
           <div>
             <h3
-              onClick={(e) => setIndexPelatihanSelected(index)}
+              onClick={(e) => {
+                setIndexPelatihanSelected(index);
+                handleFetchingDetailPelatihan(pelatihan?.IdPelatihan);
+              }}
               className="text-lg hover:cursor-pointer font-bold text-gray-900 sm:text-xl leading-[100%] "
             >
               {pelatihan?.NamaPelatihan}

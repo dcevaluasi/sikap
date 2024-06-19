@@ -46,26 +46,21 @@ const ECommerce: React.FC = () => {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <CardDataStats
           title="Total Masyarakat Dilatih"
-          total="14.509"
-          rate="0.43%"
+          total="0"
+          rate="0%"
           levelUp
         >
           <HiMiniUserGroup className="text-primary text-xl" />
         </CardDataStats>
         <CardDataStats
           title="Total Bersertifikat Kompetensi"
-          total="2.450"
-          rate="4.35%"
+          total="0"
+          rate="0%"
           levelUp
         >
           <HiCheckBadge className="text-primary text-xl" />
         </CardDataStats>
-        <CardDataStats
-          title="Total PNBP"
-          total="Rp 18.4 M"
-          rate="2.59%"
-          levelUp
-        >
+        <CardDataStats title="Total PNBP" total="Rp 0 M" rate="0%" levelUp>
           <GiReceiveMoney className="text-primary text-xl" />
         </CardDataStats>
         <CardDataStats
@@ -75,7 +70,7 @@ const ECommerce: React.FC = () => {
               ? lemdikData!.data!.Pelatihan!.length.toString()
               : "0"
           }
-          rate="0.95%"
+          rate=""
           levelDown
         >
           <MdSchool className="text-primary text-xl" />
