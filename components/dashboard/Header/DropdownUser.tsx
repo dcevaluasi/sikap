@@ -1,18 +1,110 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import Toast from "@/components/toast";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
+import axios from "axios";
+import { AiFillBank } from "react-icons/ai";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { MdAlternateEmail, MdModeEdit } from "react-icons/md";
+import { BiSolidPhone } from "react-icons/bi";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { HiMiniUserGroup } from "react-icons/hi2";
 const DropdownUser = ({
-  usereLoggedInInfo,
+  userLoggedInInfo,
 }: {
-  usereLoggedInInfo: LemdiklatDetailInfo | null;
+  userLoggedInInfo: LemdiklatDetailInfo | null;
 }) => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
+  const isLemdik = pathname.includes("lemdik");
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const token = Cookies.get("XSRF091");
+
+  /*
+    EDIT PROFILE HANDLING
+  */
+  const [openDialogEditProfile, setOpenDialogEditProfile] =
+    React.useState<boolean>(false);
+  const [openFormEditProfile, setOpenFormEditProfile] =
+    React.useState<boolean>(false);
+
+  const [email, setEmail] = React.useState<string>("");
+  const [namaLemdiklat, setNamaLemdiklat] = React.useState<string>("");
+  const [noTelpon, setNoTelpon] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [deskripsi, setDeskripsi] = React.useState<string>("");
+  const [LastNosertif, setLastNosertif] = React.useState<string>("");
+  const [alamat, setAlamat] = React.useState<string>("");
+
+  const handleEditProfileUpdate = async () => {
+    console.log(
+      "DATA UPDATE : ",
+      JSON.stringify({
+        email: email,
+        nama_lemdik: namaLemdiklat,
+        no_telpon: noTelpon,
+        password: password,
+        deskripsi: deskripsi,
+        alamat: alamat,
+        last_no_sertif: LastNosertif,
+      })
+    );
+    try {
+      const response = await axios.put(
+        `${baseUrl}/${isLemdik ? "lemdik" : "pusat"}/update`,
+        {
+          email: email,
+          nama_lemdik: namaLemdiklat,
+          no_telpon: noTelpon,
+          password: password,
+          deskripsi: deskripsi,
+          alamat: alamat,
+          no_last_sertifikat: LastNosertif,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      Toast.fire({
+        icon: "success",
+        title: `Data profile lemdiklat mu telah diupdate!`,
+      });
+      console.log("RESPONSE UPDATE PROFILE: ", response);
+      setOpenDialogEditProfile(!openFormEditProfile);
+      setOpenFormEditProfile(!openFormEditProfile);
+      setNamaLemdiklat("");
+      setEmail("");
+      setNoTelpon("");
+      setAlamat("");
+      setLastNosertif("");
+      setDeskripsi("");
+      router.replace("/admin/lemdiklat/pelatihan");
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: `Data profile lemdiklat mu gagal diupdate!`,
+      });
+      console.error("ERROR UPDATE PROFILE: ", error);
+      setOpenFormEditProfile(!openFormEditProfile);
+    }
+  };
+
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const router = useRouter();
 
   const trigger = useRef<any>(null);
@@ -56,6 +148,250 @@ const DropdownUser = ({
 
   return (
     <div className="relative">
+      <AlertDialog open={openDialogEditProfile}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              <div className="flex justify-between items-center">
+                <div className="flex w-fit gap-1 items-center font-semibold tracking-tighter">
+                  <AiFillBank className="text-2xl text-blue-500" />
+                  {openFormEditProfile ? "Edit" : "Detail"} Profile{" "}
+                  {userLoggedInInfo != null &&
+                    userLoggedInInfo!.data!.NamaLemdik}
+                </div>
+                {!openFormEditProfile && (
+                  <div
+                    onClick={(e) =>
+                      setOpenFormEditProfile(!openFormEditProfile)
+                    }
+                    className="flex items-center animate-pulse duration-1000 hover:bg-blue-600 hover:animate-none hover:duration-0 cursor-pointer justify-center text-lg bg-blue-500 text-white rounded-full p-2"
+                  >
+                    <MdModeEdit />
+                  </div>
+                )}
+              </div>
+            </AlertDialogTitle>
+            <div className="w-full h-[2px] bg-gray-300 rounded-full"></div>
+            {openFormEditProfile ? (
+              <form autoComplete="off">
+                <AlertDialogDescription className=" mb-2 mt-1 text-justify text-gray-500">
+                  Edit profile lemdiklatmu sekarang, isi format inputan sesuai
+                  dengan datamu!
+                </AlertDialogDescription>
+                <div className="grid grid-cols-2 gap-x-3 gap-y-2  mb-1 w-full">
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium"
+                      htmlFor="namaLemdiklat"
+                    >
+                      Nama Lemdiklat <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="namaLemdiklat"
+                      type="text"
+                      className="form-input w-full text-sm text-black border-gray-300 rounded-md"
+                      required
+                      placeholder={
+                        userLoggedInInfo != null
+                          ? userLoggedInInfo!.data!.NamaLemdik!
+                          : ""
+                      }
+                      value={namaLemdiklat!}
+                      onChange={(e) => setNamaLemdiklat(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium"
+                      htmlFor="email"
+                    >
+                      Email <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      className="form-input w-full text-sm text-black border-gray-300 rounded-md"
+                      required
+                      placeholder={
+                        userLoggedInInfo != null
+                          ? userLoggedInInfo!.data!.Email!
+                          : ""
+                      }
+                      value={email!}
+                      onChange={(e) => setEmail(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium"
+                      htmlFor="noTelpon"
+                    >
+                      No Telpon <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="noTelpon"
+                      type="text"
+                      className="form-input w-full text-sm text-black border-gray-300 rounded-md"
+                      required
+                      value={noTelpon!}
+                      placeholder={
+                        userLoggedInInfo != null
+                          ? userLoggedInInfo!.data!.NoTelpon!.toString()
+                          : ""
+                      }
+                      onChange={(e) => setNoTelpon(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium"
+                      htmlFor="alamat"
+                    >
+                      Alamat <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="alamat"
+                      type="text"
+                      className="form-input w-full text-sm text-black border-gray-300 rounded-md"
+                      required
+                      value={alamat!}
+                      placeholder={
+                        userLoggedInInfo != null
+                          ? userLoggedInInfo!.data!.Alamat!
+                          : ""
+                      }
+                      onChange={(e) => setAlamat(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="w-full">
+                  <label
+                    className="block text-gray-800 text-sm font-medium"
+                    htmlFor="alamat"
+                  >
+                    No Terakhir Sertifikat{" "}
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    id="alamat"
+                    type="text"
+                    className="form-input w-full text-sm text-black border-gray-300 rounded-md"
+                    required
+                    value={LastNosertif!}
+                    placeholder={
+                      userLoggedInInfo != null
+                        ? userLoggedInInfo!.data!.LastNosertif!
+                        : ""
+                    }
+                    onChange={(e) => setLastNosertif(e.target.value)}
+                  />
+                </div>
+                <div className="w-full">
+                  <label
+                    className="block text-gray-800 text-sm font-medium"
+                    htmlFor="deskripsi"
+                  >
+                    Deskripsi <span className="text-red-600">*</span>
+                  </label>
+                  <textarea
+                    id="deskripsi"
+                    className="form-input w-full text-sm text-black border-gray-300 rounded-md"
+                    required
+                    value={deskripsi!}
+                    rows={7}
+                    placeholder={
+                      userLoggedInInfo != null
+                        ? userLoggedInInfo!.data!.Deskripsi!
+                        : ""
+                    }
+                    onChange={(e) => setDeskripsi(e.target.value)}
+                  ></textarea>
+                </div>
+                <AlertDialogFooter>
+                  <AlertDialogCancel
+                    onClick={(e) =>
+                      setOpenFormEditProfile(!openFormEditProfile)
+                    }
+                  >
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    className="bg-blue-500 hover:bg-blue-600"
+                    onClick={(e) => handleEditProfileUpdate()}
+                  >
+                    Edit
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
+            ) : (
+              <>
+                {" "}
+                <div className="w-full flex flex-col gap-2 items-start justify-between">
+                  <div className="flex gap-2 w-full items-center justify-between mt-4">
+                    <div className="flex w-fit gap-1 items-center">
+                      <AiFillBank className="text-lg text-blue-500" />
+                      <span className="font-semibold text-sm tracking-tighter">
+                        {" "}
+                        {userLoggedInInfo != null &&
+                          userLoggedInInfo!.data!.NamaLemdik}
+                      </span>
+                    </div>
+                    <div className="flex w-fit gap-1 items-center">
+                      <MdAlternateEmail className="text-lg text-blue-500" />
+                      <span className="font-semibold text-sm tracking-tighter">
+                        {" "}
+                        {userLoggedInInfo != null &&
+                          userLoggedInInfo!.data!.Email}
+                      </span>
+                    </div>
+                    <div className="flex w-fit gap-1 items-center">
+                      <BiSolidPhone className="text-lg text-blue-500" />
+                      <span className="font-semibold text-sm tracking-tighter">
+                        {" "}
+                        {userLoggedInInfo != null &&
+                          userLoggedInInfo!.data!.NoTelpon}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex w-fit gap-1 items-center">
+                    <RiVerifiedBadgeFill className="text-lg text-blue-500" />
+                    <span className="font-semibold text-sm tracking-tighter">
+                      {" "}
+                      {/* {userLoggedInInfo != null && userLoggedInInfo!.data!.Email} */}
+                      {userLoggedInInfo != null &&
+                        userLoggedInInfo!.data!.LastNosertif}{" "}
+                    </span>
+                  </div>
+                  <div className="flex w-fit gap-1 items-center">
+                    <HiMiniUserGroup className="text-lg text-blue-500" />
+                    <span className="font-semibold text-sm tracking-tighter">
+                      {" "}
+                      {userLoggedInInfo != null &&
+                        userLoggedInInfo!.data!.Pelatihan.length}{" "}
+                      Pelatihan
+                    </span>
+                  </div>
+                </div>
+                <AlertDialogDescription className="-mt-2 text-justify text-gray-600">
+                  {userLoggedInInfo != null &&
+                    userLoggedInInfo!.data!.Deskripsi}
+                </AlertDialogDescription>
+                <AlertDialogFooter>
+                  <AlertDialogCancel
+                    onClick={(e) =>
+                      setOpenDialogEditProfile(!openDialogEditProfile)
+                    }
+                  >
+                    Close
+                  </AlertDialogCancel>
+                </AlertDialogFooter>
+              </>
+            )}
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <Link
         ref={trigger}
         onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -65,12 +401,12 @@ const DropdownUser = ({
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black">
             {pathname.includes("lemdiklat")
-              ? usereLoggedInInfo?.data?.NamaLemdik
+              ? userLoggedInInfo?.data?.NamaLemdik
               : "Farhan Augustiansyah"}
           </span>
           <span className="block text-xs">
             {pathname.includes("lemdiklat")
-              ? usereLoggedInInfo?.data?.Alamat
+              ? userLoggedInInfo?.data?.Alamat
               : "Pusat Pelatihan KP"}
           </span>
         </span>
@@ -117,9 +453,9 @@ const DropdownUser = ({
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 ">
           <li>
-            <Link
-              href="/profile"
-              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+            <div
+              onClick={(e) => setOpenDialogEditProfile(!openDialogEditProfile)}
+              className="flex items-center gap-3.5 cursor-pointer text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg
                 className="fill-current"
@@ -139,29 +475,9 @@ const DropdownUser = ({
                 />
               </svg>
               My Profile
-            </Link>
+            </div>
           </li>
-          <li>
-            <Link
-              href="#"
-              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-            >
-              <svg
-                className="fill-current"
-                width="22"
-                height="22"
-                viewBox="0 0 22 22"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M17.6687 1.44374C17.1187 0.893744 16.4312 0.618744 15.675 0.618744H7.42498C6.25623 0.618744 5.25935 1.58124 5.25935 2.78437V4.12499H4.29685C3.88435 4.12499 3.50623 4.46874 3.50623 4.91562C3.50623 5.36249 3.84998 5.70624 4.29685 5.70624H5.25935V10.2781H4.29685C3.88435 10.2781 3.50623 10.6219 3.50623 11.0687C3.50623 11.4812 3.84998 11.8594 4.29685 11.8594H5.25935V16.4312H4.29685C3.88435 16.4312 3.50623 16.775 3.50623 17.2219C3.50623 17.6687 3.84998 18.0125 4.29685 18.0125H5.25935V19.25C5.25935 20.4187 6.22185 21.4156 7.42498 21.4156H15.675C17.2218 21.4156 18.4937 20.1437 18.5281 18.5969V3.47187C18.4937 2.68124 18.2187 1.95937 17.6687 1.44374ZM16.9469 18.5625C16.9469 19.2844 16.3625 19.8344 15.6406 19.8344H7.3906C7.04685 19.8344 6.77185 19.5594 6.77185 19.2156V17.875H8.6281C9.0406 17.875 9.41873 17.5312 9.41873 17.0844C9.41873 16.6375 9.07498 16.2937 8.6281 16.2937H6.77185V11.7906H8.6281C9.0406 11.7906 9.41873 11.4469 9.41873 11C9.41873 10.5875 9.07498 10.2094 8.6281 10.2094H6.77185V5.63749H8.6281C9.0406 5.63749 9.41873 5.29374 9.41873 4.84687C9.41873 4.39999 9.07498 4.05624 8.6281 4.05624H6.77185V2.74999C6.77185 2.40624 7.04685 2.13124 7.3906 2.13124H15.6406C15.9844 2.13124 16.2937 2.26874 16.5687 2.50937C16.8094 2.74999 16.9469 3.09374 16.9469 3.43749V18.5625Z"
-                  fill=""
-                />
-              </svg>
-              My Contacts
-            </Link>
-          </li>
+
           <li>
             <Link
               href="/settings"

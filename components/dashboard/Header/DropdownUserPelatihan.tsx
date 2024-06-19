@@ -96,7 +96,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
                 ? "text-gray-600 hover:text-gray-900 hover:scale-105 "
                 : usePathname().includes("complete-profile")
                 ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-                : "hover:text-white"
+                : "hover:text-white text-gray-900"
             } block text-base font-medium text-gray-200  hover:scale-105`}
           >
             {userDetail?.Nama}

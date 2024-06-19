@@ -13,8 +13,8 @@ export type LemdiklatDetail = {
     Deskripsi:string;
     CreateAt:string;
     UpdateAt:string;
-    LastNoSertif: string;
-    Pelatihan: Pelatihan;
+    LastNosertif: string;
+    Pelatihan: Pelatihan[];
 }
 
 export type Pelatihan = {

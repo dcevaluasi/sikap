@@ -30,11 +30,15 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { usePathname, useRouter } from "next/navigation";
-import { MdOutlineSaveAlt } from "react-icons/md";
+import { MdBed, MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
+import { Input } from "@/components/ui/input";
+import { TbClockPlus, TbClockUp, TbDatabaseEdit } from "react-icons/tb";
+import { FaRupiahSign } from "react-icons/fa6";
+import Image from "next/image";
 
 const TableDataFasilitas: React.FC = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -50,6 +54,7 @@ const TableDataFasilitas: React.FC = () => {
     Deskripsi: string;
     Jenis: string;
     CreatedAt: string;
+    FotoSarpras: string;
     UpdatedAt: string;
   };
 
@@ -57,29 +62,41 @@ const TableDataFasilitas: React.FC = () => {
   const [harga, setHarga] = React.useState("");
   const [deskripsi, setDeskripsi] = React.useState("");
   const [jenis, setJenis] = React.useState("");
+  const [fotoFasilitas, setFotoFasilitas] = React.useState(null);
+
+  const handleFileChange = (e: any) => {
+    setFotoFasilitas(e.target.files[0]);
+  };
 
   const resetAllStateToEmptyString = () => {
     setNamaSarpras("");
     setHarga("");
     setDeskripsi("");
     setJenis("");
+    setFotoFasilitas(null);
   };
 
   const handlePostingSarprasData = async (e: any) => {
     e.preventDefault();
+
+    const data = new FormData();
+
+    data.append("NamaSarpras", namaSarpras);
+    data.append("Harga", harga);
+    data.append("Jenis", "Penginapan");
+    if (fotoFasilitas !== null) {
+      data.append("FotoSarpras", fotoFasilitas);
+    }
+    data.append("Deskripsi", deskripsi);
+
     try {
       const response: AxiosResponse = await axios.post(
         `${baseUrl}/lemdik/createSarpras`,
-        JSON.stringify({
-          nama_sarpras: namaSarpras,
-          harga: harga,
-          deskripsi: deskripsi,
-          jenis: jenis,
-        }),
+        data,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -118,30 +135,16 @@ const TableDataFasilitas: React.FC = () => {
 
   const handleFetchingSarprasData = async () => {
     try {
-      var response: AxiosResponse;
-      if (pathname.includes("konsumsi")) {
-        response = await axios.get(
-          `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Konsumsi`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log({ response });
-        setData(response.data.data);
-      } else {
-        response = await axios.get(
-          `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Penginapan`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log({ response });
-        setData(response.data.data);
-      }
+      var response: AxiosResponse = await axios.get(
+        `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Penginapan`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log({ response });
+      setData(response.data.data);
     } catch (error) {
       console.error("Error fetching data sarpras:", error);
       throw error;
@@ -162,13 +165,9 @@ const TableDataFasilitas: React.FC = () => {
       accessorKey: "No",
       header: ({ column }) => {
         return (
-          <Button
-            variant="ghost"
-            className={``}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
+          <Button variant="ghost" className={`text-gray-900 font-semibold`}>
             No
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ArrowUpDown className="ml-1 h-4 w-4" />
           </Button>
         );
       },
@@ -182,50 +181,71 @@ const TableDataFasilitas: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className={`${"flex"} w-full`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className={`${"flex"} w-full text-gray-900 font-semibold`}
           >
             Action
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <TbDatabaseEdit className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`${"flex"} flex items-center justify-center gap-1`}>
-          <Button variant="outline" className="ml-auto">
-            <IoIosInformationCircle className="h-4 w-4" />
-          </Button>
+        <div className="flex flex-col gap-2 items-center justify-center">
+          <div className=" w-72 relative">
+            <div className="w-full h-40 relative">
+              <Image
+                alt={row.original.NamaSarpras}
+                src={row.original.FotoSarpras}
+                width={0}
+                height={0}
+                className="w-full h-40 object-cover rounded-xl"
+              />
 
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
+              <div className="w-full h-40 absolute bg-blue-500 bg-opacity-10 top-0 rounded-xl"></div>
+            </div>
+            <div
+              className={`flex items-center justify-center w-fit gap-1 absolute top-2 right-2`}
+            >
               <Button
                 variant="outline"
-                className="ml-auto border border-rose-600"
+                className="ml-auto bg-transparent hover:bg-transparent px-3 py-0 h-7"
               >
-                <Trash className="h-4 w-4 text-rose-600" />
+                <IoIosInformationCircle className="h-3 w-3" />
               </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction>Continue</AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
 
-          <Button
-            variant="outline"
-            className="ml-auto border border-yellow-500"
-          >
-            <Edit3Icon className="h-4 w-4 text-yellow-500" />
-          </Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="ml-auto bg-transparent hover:bg-transparent px-3 py-0 h-7 border border-rose-600"
+                  >
+                    <Trash className="h-3 w-3 text-rose-600" />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your account and remove your data from our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction>Continue</AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              <Button
+                variant="outline"
+                className="ml-auto bg-transparent hover:bg-transparent px-3 py-0 h-7 border border-yellow-500"
+              >
+                <Edit3Icon className="h-3 w-3 text-yellow-500" />
+              </Button>
+            </div>
+          </div>
         </div>
       ),
     },
@@ -235,57 +255,27 @@ const TableDataFasilitas: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className={`p-0 !text-left w-[270px] flex items-center justify-start text-gray-900 font-semibold`}
           >
-            Nama Fasilitas
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            Detail Fasilitas
+            <MdBed className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`${"ml-0"} text-center capitalize`}>
-          {row.getValue("NamaSarpras")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Harga",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"ml-0 text-center w-full"}`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Harga
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`${"ml-0"} text-center capitalize`}>
-          Rp {row.getValue("Harga")}
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Deskripsi",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="w-full flex items-center justify-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Deskripsi
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-center capitalize w-[400px]">
-          {row.getValue("Deskripsi")}
+        <div className={`${"ml-0"} text-left capitalize`}>
+          <p className="text-xs text-gray-400 mt-2 leading-[100%] mb-1">
+            {" "}
+            Jenis Fasiltas • {row.original.Jenis} • Rp. {row.original.Harga}
+          </p>
+          <p className="text-base font-semibold tracking-tight leading-none">
+            {row.getValue("NamaSarpras")}
+          </p>
+          <div className={`${"ml-0"} text-left capitalize mt-1`}>
+            <p className="text-xs  font-medium capitalize ">
+              {row.original.Deskripsi}
+            </p>
+          </div>
         </div>
       ),
     },
@@ -295,11 +285,10 @@ const TableDataFasilitas: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className="w-full flex items-center justify-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="w-full flex items-center justify-center text-gray-900 font-semibold"
           >
-            Dibuat pada
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            Ditambahkan pada
+            <TbClockPlus className="ml-2 h-4 w-4" />
           </Button>
         );
       },
@@ -313,11 +302,10 @@ const TableDataFasilitas: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className="w-full flex items-center justify-center"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+            className="w-full flex items-center justify-center text-gray-900 font-semibold"
           >
             Diupdate pada
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <TbClockUp className="ml-2 h-4 w-4" />
           </Button>
         );
       },
@@ -410,8 +398,8 @@ const TableDataFasilitas: React.FC = () => {
                   </div>
 
                   <div className="flex gap-2 w-full">
-                    <div className="flex flex-wrap -mx-3 mb-1 w-full">
-                      <div className="w-full px-3">
+                    <div className="flex flex-wrap mb-1 w-full">
+                      <div className="w-full">
                         <label
                           className="block text-gray-800 text-sm font-medium mb-1"
                           htmlFor="name"
@@ -430,25 +418,23 @@ const TableDataFasilitas: React.FC = () => {
                         />
                       </div>
                     </div>
-                    <div className="flex flex-wrap -mx-3 mb-1 w-full">
-                      <div className="w-full px-3">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="name"
-                        >
-                          Jenis Fasilitas{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <input
-                          id="name"
-                          type="text"
-                          className="form-input w-full text-black border-gray-300 rounded-md"
-                          placeholder="Jenis fasilitas"
-                          required
-                          value={jenis}
-                          onChange={(e) => setJenis(e.target.value)}
-                        />
-                      </div>
+                  </div>
+
+                  <div className="w-full mb-1 flex">
+                    <div className="w-full">
+                      {" "}
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Foto Fasilitas <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        type="file"
+                        className="cursor-pointer w-full border border-neutral-200 rounded-md text-black h-10 text-base flex items-center"
+                        required
+                        onChange={handleFileChange}
+                      />
                     </div>
                   </div>
 

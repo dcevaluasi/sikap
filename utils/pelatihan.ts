@@ -27,3 +27,7 @@ export function extractPathAfterBppp(path: string): string {
     // Return an empty string or handle the case when "/bppp/" is not found
     return "";
 }
+
+export function convertIdSarpras(arr: number[]): string {
+  return arr.join(',');
+}

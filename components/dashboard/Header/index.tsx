@@ -4,12 +4,19 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 
+import { FiUploadCloud } from "react-icons/fi";
+import React from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import Toast from "@/components/toast";
+
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
   lemdikInfo: LemdiklatDetailInfo;
 }) => {
   const pathname = usePathname();
+
   return (
     <header className="sticky top-0 z-50 flex w-full bg-white drop-shadow-1 ">
       <div className="flex flex-grow items-center justify-end px-4 py-4 shadow-2 md:px-6 2xl:px-11">
@@ -69,7 +76,7 @@ const Header = (props: {
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           {/* <!-- User Area --> */}
-          <DropdownUser usereLoggedInInfo={props?.lemdikInfo!} />
+          <DropdownUser userLoggedInInfo={props?.lemdikInfo!} />
           {/* <!-- User Area --> */}
         </div>
       </div>

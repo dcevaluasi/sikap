@@ -69,7 +69,6 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
           />
 
           <Link
-            target="_blank"
             href={`/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
               pelatihan?.KodePelatihan
             }/${pelatihan?.IdPelatihan}`}

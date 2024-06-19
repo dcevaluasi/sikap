@@ -36,6 +36,7 @@ import { PelatihanMasyarakat } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { convertDate, extractLastSegment } from "@/utils";
+import Toast from "@/components/toast";
 
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -84,10 +85,17 @@ function page() {
     React.useState(false);
 
   const handleRegistration = () => {
-    if (Cookies.get("XSRF081")) {
-      setIsRegistrasi(true);
+    if (data[0]?.StatusApproval == "Selesai") {
+      Toast.fire({
+        icon: "error",
+        title: `Yah pelatihan ini sudah berakhir, cari pelatihan lainnya sobat ELAUT!`,
+      });
     } else {
-      setIsOpenRegistrationCommand(true);
+      if (Cookies.get("XSRF081")) {
+        setIsRegistrasi(true);
+      } else {
+        setIsOpenRegistrationCommand(true);
+      }
     }
   };
 
@@ -164,6 +172,11 @@ function page() {
                     <div className="text-sm font-medium px-4 py-3 bg-blue-500 rounded-3xl text-white">
                       {pelatihan.BidangPelatihan}
                     </div>
+                    {pelatihan.StatusApproval == "Selesai" && (
+                      <div className="text-sm font-medium px-4 py-3 bg-blue-500 rounded-3xl text-white">
+                        {pelatihan.StatusApproval}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -216,9 +229,13 @@ function page() {
                           <MdOutlineAppRegistration /> Daftar Pelatihan
                         </button>
 
-                        <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white">
+                        <Link
+                          target="_blank"
+                          href={pelatihan?.SilabusPelatihan}
+                          className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white"
+                        >
                           <FaFilePdf /> Unduh Silabus Pelatihan
-                        </div>
+                        </Link>
                       </div>
                     </div>
 

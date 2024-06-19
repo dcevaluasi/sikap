@@ -39,10 +39,22 @@ export type PelatihanMasyarakat =  {
   CreatedAt: string;
   UpdatedAt: string;
   UserPelatihan: UserPelatihan[];
+  MateriPelatihan: MateriPelatihan[];
   BeritaAcara: string;
   CatatanPenerbitanByPusat: string;
   StatusApproval: string;
   PenerbitanSertifikatDiterima: string;
+}
+
+export type MateriPelatihan = {
+  CreateAt: string;
+  Deskripsi: string;
+  IdMateriPelatihan: number;
+  IdPelatihan: number;
+  JamPraktek: string;
+  JamTeory: string;
+  NamaMateri: string;
+  UpdateAt: string;
 }
 
 export type UserPelatihan = {

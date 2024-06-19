@@ -30,6 +30,7 @@ import { extractLastSegment, generateRandomString } from "@/utils";
 import Cookies from "js-cookie";
 import { PelatihanMasyarakat } from "@/types/product";
 import Image from "next/image";
+import { convertIdSarpras } from "@/utils/pelatihan";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
@@ -84,7 +85,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   const [fotoPelatihan, setFotoPelatihan] = React.useState(null);
   const [status, setStatus] = React.useState("");
   const [memoPusat, setMemoPusat] = React.useState("");
-  const [silabusPelatihan, setSilabusPelatihan] = React.useState("");
+  const [silabusPelatihan, setSilabusPelatihan] = React.useState(null);
   const [lokasiPelatihan, setLokasiPelatihan] = React.useState("");
   const [pelaksanaanPelatihan, setPelaksanaanPelatihan] = React.useState("");
   const [ujiKompetensi, setUjiKompetensi] = React.useState("");
@@ -144,7 +145,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     setFotoPelatihan(null);
     setStatus("");
     setMemoPusat("");
-    setSilabusPelatihan("");
+    setSilabusPelatihan(null);
     setLokasiPelatihan("");
     setPelaksanaanPelatihan("");
     setUjiKompetensi("");
@@ -216,7 +217,9 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     }
     data.append("Status", status);
     data.append("MemoPusat", memoPusat);
-    data.append("SilabusPelatihan", silabusPelatihan);
+    if (silabusPelatihan !== null) {
+      data.append("SilabusPelatihan", silabusPelatihan);
+    }
     data.append("LokasiPelatihan", lokasiPelatihan);
     data.append("PelaksanaanPelatihan", pelaksanaanPelatihan);
     data.append("UjiKompetensi", ujiKompetensi);
@@ -225,7 +228,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     data.append("JenisSertifikat", jenisSertifikat);
     data.append("TtdSertifikat", ttdSertifikat);
     data.append("NoSertifikat", noSertifikat);
-    data.append("IdSaranaPrasarana", idSaranaPrasarana);
+    data.append("IdSaranaPrasarana", convertIdSarpras(selectedSarpras));
     data.append("IdKonsumsi", idKonsumsi);
 
     try {
@@ -261,6 +264,10 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     setFotoPelatihan(e.target.files[0]);
   };
 
+  const handleSilabusChange = (e: any) => {
+    setSilabusPelatihan(e.target.files[0]);
+  };
+
   const [formTab, setFormTab] = React.useState("FormDataPelatihan");
   const [indexFormTab, setIndexFormTab] = React.useState(0);
 
@@ -285,6 +292,9 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   const [konsumsi, setKonsumsi] = React.useState<Sarpras[]>([]);
 
   const token = Cookies.get("XSRF091");
+
+  const [selectedSarpras, setSelectedSarpras] = React.useState<number[]>([]);
+  console.log({ selectedSarpras });
 
   const handleFetchingSarprasData = async () => {
     try {
@@ -528,10 +538,10 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                           />
                         )}
 
-                        <Input
+                        <input
                           id="file_excel"
                           type="file"
-                          className=" cursor-pointer w-full"
+                          className=" cursor-pointer w-full border border-neutral-200 rounded-md"
                           onChange={handleFileChange}
                         />
                       </div>
@@ -726,6 +736,25 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                       </div>
                     </div>
 
+                    <div className="flex flex-wrap  mb-1 w-full">
+                      <div className="w-full">
+                        <label
+                          className="block text-gray-800 text-sm font-medium mb-1"
+                          htmlFor="penyelenggaraPelatihan"
+                        >
+                          Silabus Pelatihan{" "}
+                          <span className="text-red-600">*</span>
+                        </label>
+
+                        <input
+                          id="file_excel"
+                          type="file"
+                          className=" cursor-pointer w-full border border-neutral-200 rounded-md"
+                          onChange={handleSilabusChange}
+                        />
+                      </div>
+                    </div>
+
                     <div className="w-full">
                       <label
                         className="block text-gray-800 text-sm font-medium mb-1"
@@ -884,9 +913,9 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                           <span className="text-red-600">*</span>
                         </label>
                         <div className="flex gap-1">
-                          <Input
+                          <input
                             type="file"
-                            className="w-full text-black h-10 text-base flex items-center"
+                            className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
                             required
                           />
                           <button
@@ -951,7 +980,11 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                                 className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
                               >
                                 <div>
-                                  <Checkbox />
+                                  <Checkbox
+                                    onCheckedChange={(e) =>
+                                      selectedSarpras.push(item.IdSarpras)
+                                    }
+                                  />
                                 </div>
                                 <div className="space-y-1 leading-none">
                                   <label>
@@ -1011,7 +1044,11 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                                 className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
                               >
                                 <div>
-                                  <Checkbox />
+                                  <Checkbox
+                                    onCheckedChange={(e) =>
+                                      selectedSarpras.push(item.IdSarpras)
+                                    }
+                                  />
                                 </div>
                                 <div className="space-y-1 leading-none">
                                   <label>

@@ -413,50 +413,16 @@ const TableDataPesertaPelatihan = () => {
       },
       cell: ({ row }) => (
         <div className={` flex items-center justify-center w-full gap-1`}>
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
-              <Button variant="outline" className=" border border-purple-600">
-                <LucideListChecks className="h-4 w-4 text-purple-600" />
-              </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
-                <AlertDialogDescription className="-mt-2">
-                  Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh
-                  masyarakat umum lakukan checklist agar tampil di website
-                  E-LAUT!
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <form autoComplete="off">
-                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                  <div>
-                    <Checkbox />
-                  </div>
-                  <div className="space-y-1 leading-none">
-                    <label>Publish Website E-LAUT</label>
-                    <p className="text-xs leading-[110%] text-gray-600">
-                      Dengan ini sebagai pihak lemdiklat saya mempublish
-                      informasi pelatihan terbuka untuk masyarakat umum!
-                    </p>
-                  </div>
-                </div>
-              </form>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={(e) =>
-                    Toast.fire({
-                      icon: "success",
-                      title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
-                    })
-                  }
-                >
-                  Publish
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <Button
+            onClick={(e) => {
+              setIsOpenFormInputNilai(!isOpenFormInputNilai);
+              setSelectedIdPeserta(row.original?.IdUserPelatihan);
+            }}
+            variant="outline"
+            className=" border border-purple-600"
+          >
+            <LucideListChecks className="h-4 w-4 text-purple-600" />
+          </Button>
         </div>
       ),
     },
@@ -533,12 +499,10 @@ const TableDataPesertaPelatihan = () => {
       cell: ({ row }) => (
         <div
           className={`text-center uppercase text-base font-semibold ${
-            row.getValue("Keterangan") == "Lulus"
-              ? "text-green-500"
-              : "text-rose-500"
+            row.original.PostTest > 65 ? "text-green-500" : "text-rose-500"
           }`}
         >
-          {row.getValue("Keterangan")}
+          {row.original.PostTest >= 65 ? "LULUS" : "TIDAK LULUS"}
         </div>
       ),
     },
@@ -566,8 +530,117 @@ const TableDataPesertaPelatihan = () => {
     },
   });
 
+  const [isOpenFormInputNilai, setIsOpenFormInputNilai] = React.useState(false);
+  const [nilaiPretest, setNilaiPretest] = React.useState("");
+  const [nilaiPosttest, setNilaiPosttest] = React.useState("");
+
+  const [selectedIdPeserta, setSelectedIdPeserta] = React.useState(0);
+
+  const handleUploadNilaiPeserta = async (id: number) => {
+    const formData = new FormData();
+    formData.append("PreTest", nilaiPretest);
+    formData.append("PostTest", nilaiPosttest);
+
+    try {
+      const response = await axios.put(
+        `${baseUrl}/lemdik/updatePelatihanUsers?id=${selectedIdPeserta}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+          },
+        }
+      );
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+      });
+      console.log("UPDATE PELATIHAN: ", response);
+      handleFetchingPublicTrainingDataById();
+      setIsOpenFormInputNilai(!isOpenFormInputNilai);
+    } catch (error) {
+      console.error("ERROR UPDATE PELATIHAN: ", error);
+      Toast.fire({
+        icon: "success",
+        title: `Gagal mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+      });
+      handleFetchingPublicTrainingDataById();
+      setIsOpenFormInputNilai(!isOpenFormInputNilai);
+    }
+  };
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+      <AlertDialog open={isOpenFormInputNilai}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              {" "}
+              <HiMiniUserGroup className="h-4 w-4" />
+              Upload Nilai Peserta
+            </AlertDialogTitle>
+            <AlertDialogDescription className="-mt-2">
+              Upload nilai peserta pelatihan yang diselenggarakan yang nantinya
+              akan tercantum pada sertifikat peserta pelatihan!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <fieldset>
+            <form autoComplete="off">
+              <div className="flex gap-2 w-full">
+                <div className="flex gap-2 mb-1 w-full">
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="name"
+                    >
+                      Nilai Pre Test <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      className="form-input w-full text-black border-gray-300 rounded-md"
+                      required
+                      value={nilaiPretest}
+                      onChange={(e) => setNilaiPretest(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="name"
+                    >
+                      Nilai Post Test <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      className="form-input w-full text-black border-gray-300 rounded-md"
+                      required
+                      value={nilaiPosttest}
+                      onChange={(e) => setNilaiPosttest(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <AlertDialogFooter className="mt-3">
+                <AlertDialogCancel
+                  onClick={(e) =>
+                    setIsOpenFormInputNilai(!isOpenFormInputNilai)
+                  }
+                >
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={(e) => handleUploadNilaiPeserta(selectedIdPeserta)}
+                >
+                  Upload
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </fieldset>
+        </AlertDialogContent>
+      </AlertDialog>
       {showFormAjukanPelatihan ? (
         <h1>TEST</h1>
       ) : (

@@ -43,6 +43,7 @@ import {
 import { PiHandsPrayingBold, PiTrainRegional } from "react-icons/pi";
 import { TbGenderBigender, TbSchool } from "react-icons/tb";
 import { BiDonateBlood } from "react-icons/bi";
+import { truncateText } from "@/utils";
 
 export default function UserDocuments({ user }: { user: User | null }) {
   const tabMenus = [
@@ -55,7 +56,8 @@ export default function UserDocuments({ user }: { user: User | null }) {
       icon: (
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
-      available: true,
+      link: user?.Foto,
+      available: user?.Foto != "" ? true : false,
     },
     {
       id: 2,
@@ -66,7 +68,8 @@ export default function UserDocuments({ user }: { user: User | null }) {
       icon: (
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
-      available: true,
+      link: user?.KK,
+      available: user?.KK != "" ? true : false,
     },
 
     {
@@ -78,7 +81,8 @@ export default function UserDocuments({ user }: { user: User | null }) {
       icon: (
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
-      available: false,
+      link: user?.Ktp,
+      available: user?.Ktp != "" ? true : false,
     },
     {
       id: 4,
@@ -89,7 +93,8 @@ export default function UserDocuments({ user }: { user: User | null }) {
       icon: (
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
-      available: true,
+      link: user?.Ijazah,
+      available: user?.Ijazah != "" ? true : false,
     },
     {
       id: 4,
@@ -100,7 +105,8 @@ export default function UserDocuments({ user }: { user: User | null }) {
       icon: (
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
-      available: false,
+      link: user?.SuratKesehatan,
+      available: user?.SuratKesehatan != "" ? true : false,
     },
   ];
 
@@ -225,7 +231,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
                           <div className="flex flex-col gap-1 items-center justify-content">
                             {tabMenus[0].available ? (
                               <p className="text-2xl cursor-pointer hover:underline duration-800 text-gray-600 text-center font-normal leading-[105%]">
-                                4
+                                0
                               </p>
                             ) : (
                               <p className="text-sm cursor-pointer hover:underline duration-800 text-gray-600 text-center font-normal leading-[105%]">
@@ -522,9 +528,20 @@ export default function UserDocuments({ user }: { user: User | null }) {
                             {tabMenu.name}
                           </p>
                           {tabMenu.available ? (
-                            <p className="text-sm cursor-pointer hover:underline duration-800 text-gray-600 text-left font-normal leading-[105%]">
-                              https://elaut.vercel.app/storage/{tabMenu.name}
-                            </p>
+                            <Link
+                              href={
+                                "https://api-elaut.ikulatluh.cloud/public/static/storage/" +
+                                tabMenu.link
+                              }
+                              className="text-sm cursor-pointer hover:underline duration-800 text-gray-600 text-left font-normal leading-[105%] w-1/2"
+                            >
+                              {truncateText(
+                                "https://api-elaut.ikulatluh.cloud/public/static/peserta/" +
+                                  tabMenu.link,
+                                50,
+                                "..."
+                              )}
+                            </Link>
                           ) : (
                             <p className="text-sm cursor-pointer hover:underline duration-800 text-gray-600 text-left font-normal leading-[105%]">
                               Berkasmu belum tersedia, mohon untuk diupload!

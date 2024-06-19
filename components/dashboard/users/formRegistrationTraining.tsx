@@ -94,12 +94,65 @@ function FormRegistrationTraining({
       console.error({ error });
       Toast.fire({
         icon: "error",
-        title: `Maaf terdapata kendala dalam server, coba lagi nanti sobat ELAUT!`,
+        title: "Anda telah mendaftar pelatihan ini sebelumnya!",
       });
     }
   };
 
-  React.useEffect(() => {}, []);
+  type Sarpras = {
+    IdSarpras: number;
+    IdLemdik: number;
+    NamaSarpras: string;
+    Harga: number;
+    Deskripsi: string;
+    Jenis: string;
+    CreatedAt: string;
+    UpdatedAt: string;
+  };
+
+  const [sarpras, setSarpras] = React.useState<Sarpras[]>([]);
+  const [konsumsi, setKonsumsi] = React.useState<Sarpras[]>([]);
+
+  const handleFetchingSarprasData = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Penginapan`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log({ response });
+      setSarpras(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data sarpras:", error);
+      throw error;
+    }
+  };
+
+  const handleFetchingKonsumsiData = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Konsumsi`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log({ response });
+      setKonsumsi(response.data.data);
+    } catch (error) {
+      console.error("Error fetching data konsumsi:", error);
+      throw error;
+    }
+  };
+
+  React.useEffect(() => {
+    handleFetchingSarprasData();
+    handleFetchingKonsumsiData();
+  }, []);
 
   const [formTab, setFormTab] = React.useState("FormFasilitas");
   const [indexFormTab, setIndexFormTab] = React.useState(0);
@@ -116,85 +169,30 @@ function FormRegistrationTraining({
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
             <label
-              className="block text-gray-800 text-sm md:text-lg font-medium mb-1"
+              className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              Pilih Paket Penginapan <span className="text-red-600">*</span>
+              Pilih Paket Fasilitas Penginapan{" "}
+              <span className="text-red-600">*</span>
             </label>
-            <div className="flex items-center space-x-2 py-3">
-              <Checkbox
-                id="terms"
-                checked={isTakeFacilityHome}
-                onClick={(e) => setIsTakeFacilityHome(!isTakeFacilityHome)}
-              />
-              <label
-                htmlFor="terms"
-                className="text-sm md:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Ambil Fasilitas Penginapan
-              </label>
+            <div className="flex flex-col gap-2">
+              {sarpras.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                >
+                  <div>
+                    <Checkbox />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>
+                      {item.NamaSarpras} Rp. {item.Harga}
+                    </label>
+                    <p className="text-xs text-gray-600">{item.Deskripsi}</p>
+                  </div>
+                </div>
+              ))}
             </div>
-            {isTakeFacilityHome && (
-              <Select>
-                <SelectTrigger className="w-full text-base py-6">
-                  <SelectValue placeholder="Pilih paket penginapan" />
-                </SelectTrigger>
-                <SelectContent side="top">
-                  <SelectItem value="Paket BAHARI RESIDANCE-UMUM A Rp 215.000">
-                    Paket BAHARI RESIDANCE-UMUM A Rp 215.000
-                  </SelectItem>
-                  <SelectItem value="Paket BAHARI RESIDANCE-UMUM B Rp 110.000">
-                    Paket BAHARI RESIDANCE-UMUM B Rp 110.000
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm md:text-lg font-medium mb-1"
-              htmlFor="email"
-            >
-              Pilih Paket Konsumsi <span className="text-red-600">*</span>
-            </label>
-            <div className="flex items-center space-x-2 py-3">
-              <Checkbox
-                id="terms"
-                checked={isTakeFacilityFood}
-                onClick={(e) => setIsTakeFacilityFood(!isTakeFacilityFood)}
-              />
-              <label
-                htmlFor="terms"
-                className="text-sm md:text-base font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Ambil Paket Konsumsi
-              </label>
-            </div>
-            {isTakeFacilityFood && (
-              <Select>
-                <SelectTrigger className="w-full text-base py-6">
-                  <SelectValue placeholder="Pilih paket konsumsi" />
-                </SelectTrigger>
-                <SelectContent side="top">
-                  <SelectItem
-                    value="(Menginap) Tipe Paket Fullboard, Paket 3x Makan & Snack Rp.
-                    300.000"
-                  >
-                    (Menginap) Tipe Paket Fullboard, Paket 3x Makan & Snack Rp.
-                    300.000
-                  </SelectItem>
-                  <SelectItem
-                    value="(Tidak Menginap) Tipe Paket Fullboard, Paket 1x Makan &
-                    Snack Rp. 150.000"
-                  >
-                    (Tidak Menginap) Tipe Paket Fullboard, Paket 1x Makan &
-                    Snack Rp. 150.000
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            )}
           </div>
         </div>
       </form>

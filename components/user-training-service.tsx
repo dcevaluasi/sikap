@@ -193,8 +193,16 @@ export default function UserTrainingService({ user }: { user: User | null }) {
         return "/images/bidangPelatihan/pengolahan-pemasaran.png";
       case "Budidaya":
         return "/images/bidangPelatihan/budidaya.png";
+      case "Penangkapan":
+        return "/images/bidangPelatihan/penangkapan.png";
+      case "Konservasi":
+        return "/images/bidangPelatihan/konservasi.png";
+      case "Mesin Perikanan":
+        return "/images/bidangPelatihan/mesin-perikanan.png";
+      case "Kepelautan":
+        return "/images/bidangPelatihan/kepelautan.png";
       default:
-        return "/images/bidangPelatihian/budidaya.png";
+        return "/images/bidangPelatihian/sd-perikanan.png";
     }
   };
 
@@ -248,7 +256,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
           <p className="text-pretty text-sm text-gray-500">{}</p>
         </div>
-        <div className="flex gap-1">
+        {/* <div className="flex gap-1">
           <Button
             variant="outline"
             onClick={(e) => setIndexPelatihanSelected(index)}
@@ -257,7 +265,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
             <BiSearch className="h-4 w-4 text-gray-600" />{" "}
             <span className="text-xs">Cek Pelatihan</span>
           </Button>
-        </div>
+        </div> */}
 
         <dl className="mt-6 flex gap-4 sm:gap-6">
           <div className="flex flex-col-reverse">
@@ -560,7 +568,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                               truncateText(
                                 userDetail?.Pelatihan[indexPelatihanSelected]
                                   ?.DetailPelatihan!,
-                                150,
+                                300,
                                 "..."
                               ),
                           }}
