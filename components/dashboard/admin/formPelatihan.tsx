@@ -31,6 +31,7 @@ import Cookies from "js-cookie";
 import { PelatihanMasyarakat } from "@/types/product";
 import Image from "next/image";
 import { convertIdSarpras } from "@/utils/pelatihan";
+import Link from "next/link";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
@@ -218,7 +219,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     data.append("Status", status);
     data.append("MemoPusat", memoPusat);
     if (silabusPelatihan !== null) {
-      data.append("SilabusPelatihan", silabusPelatihan);
+      data.append("silabus_pelatihan", silabusPelatihan);
     }
     data.append("LokasiPelatihan", lokasiPelatihan);
     data.append("PelaksanaanPelatihan", pelaksanaanPelatihan);
@@ -900,40 +901,6 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                             required
                           />
                         </div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap -mx-3 mb-1">
-                      <div className="w-full px-3">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="email"
-                        >
-                          Data by Name by Address Peserta Pelatihan{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <div className="flex gap-1">
-                          <input
-                            type="file"
-                            className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                            required
-                          />
-                          <button
-                            type="submit"
-                            className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
-                            onClick={(e) => {
-                              setIndexFormTab(indexFormTab + 1);
-                              scrollToTop();
-                            }}
-                          >
-                            <PiMicrosoftExcelLogoFill />
-                            Unduh Template
-                          </button>
-                        </div>
-                        <p className="text-gray-700 text-xs mt-1">
-                          *Jika asal peserta merupakan Karyawan/Pegawai dari
-                          PT/Mitra/Kelompok/Instansi/Sekolah/Universitas
-                        </p>
                       </div>
                     </div>
                   </div>

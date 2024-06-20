@@ -79,6 +79,7 @@ export type UserPelatihan = {
     BidangPelatihan: string;
     Keterangan: string;
     Nama: string;
+    TotalBayar: string;
 };
 
 export type Pelatihan = {

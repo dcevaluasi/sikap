@@ -96,7 +96,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
                 ? "text-gray-600 hover:text-gray-900 hover:scale-105 "
                 : usePathname().includes("complete-profile")
                 ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-                : "hover:text-white text-gray-900"
+                : "hover:text-white text-gray-200"
             } block text-base font-medium text-gray-200  hover:scale-105`}
           >
             {userDetail?.Nama}
@@ -107,7 +107,12 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
           <Image
             width={112}
             height={112}
-            src={"/dummies/profile.jpg"}
+            src={
+              userDetail?.Foto! ==
+              "https://api-elaut.ikulatluh.cloud/public/static/profile/fotoProfile/"
+                ? "/dummies/profile.jpg"
+                : userDetail?.Foto!
+            }
             style={{
               width: "auto",
               height: "auto",

@@ -634,6 +634,34 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                           </dd>
                         </div>
                       </dl>
+                      <dl className="mt-3">
+                        <div className="flex flex-col-reverse">
+                          <dt
+                            className={`text-sm font-medium text-gray-600 ${
+                              userDetail?.Pelatihan[indexPelatihanSelected]
+                                ?.Keterangan! == ""
+                                ? "text-rose-500"
+                                : "text-green-500"
+                            }`}
+                          >
+                            {userDetail?.Pelatihan[indexPelatihanSelected]
+                              ?.Keterangan! == "" ? (
+                              <span className="flex items-center">
+                                <IoMdCloseCircle />
+                                Data Belum Divalidasi
+                              </span>
+                            ) : (
+                              <span className="flex items-center">
+                                <RiVerifiedBadgeFill />
+                                Data pendaftaran anda valid
+                              </span>
+                            )}
+                          </dt>
+                          <dd className="text-xs text-gray-500">
+                            Status Peserta
+                          </dd>
+                        </div>
+                      </dl>
                       <TablePenilaian />
                       {/* <Timeline /> */}
                     </a>

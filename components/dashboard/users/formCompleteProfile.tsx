@@ -32,6 +32,7 @@ import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { User } from "@/types/user";
 import { Bounce } from "react-awesome-reveal";
+import { HashLoader } from "react-spinners";
 
 function FormCompleteProfile() {
   const router = useRouter();
@@ -90,6 +91,9 @@ function FormCompleteProfile() {
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
+  const [isLoadingCompleteProfile, setIsLoadingCompleteProfile] =
+    React.useState<boolean>(false);
+
   const [userDetail, setUserDetail] = React.useState<User | null>(null);
 
   const handleFetchingUserDetail = async () => {
@@ -120,6 +124,7 @@ function FormCompleteProfile() {
   }, []);
 
   const handleCompleteProfileUser = async () => {
+    setIsLoadingCompleteProfile(true);
     console.log(
       name,
       nik,
@@ -179,6 +184,7 @@ function FormCompleteProfile() {
         icon: "success",
         title: `Berhasil mengupdate data profile-mu!`,
       });
+      setIsLoadingCompleteProfile(false);
       router.push("/dashboard");
     } catch (error) {
       console.error({ error });
@@ -186,6 +192,7 @@ function FormCompleteProfile() {
         icon: "error",
         title: `Gagal mengupdate data profile-mu!`,
       });
+      setIsLoadingCompleteProfile(false);
     }
   };
 
@@ -1354,9 +1361,13 @@ function FormCompleteProfile() {
                     onClick={(e) => {
                       handleCompleteProfileUser();
                     }}
-                    className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                    className="btn text-white flex items-center justify-center bg-blue-600 hover:bg-blue-700 w-full"
                   >
-                    Upload
+                    {isLoadingCompleteProfile ? (
+                      <HashLoader color="#FFFFFF" size={20} />
+                    ) : (
+                      <span>Upload</span>
+                    )}
                   </button>
                 </div>
                 {/* </AlertDialogTrigger>

@@ -6,7 +6,12 @@ import Image from "next/image";
 import FeaturesBg from "@/public/images/features-bg.png";
 import FeaturesElement from "@/public/images/features-element.png";
 import { GiLuckyFisherman, GiWaterSplash } from "react-icons/gi";
-import { HiGlobeAmericas, HiOutlineCake, HiUserGroup } from "react-icons/hi2";
+import {
+  HiGlobeAmericas,
+  HiMiniUserGroup,
+  HiOutlineCake,
+  HiUserGroup,
+} from "react-icons/hi2";
 
 // Import Swiper styles
 import "swiper/css";
@@ -26,7 +31,7 @@ import { Button } from "./ui/button";
 import { FiSearch, FiSlack } from "react-icons/fi";
 import { Input } from "./ui/input";
 import BPPPTrainings from "./bppp-trainings";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { extractPathAfterBppp, getPenyeleggara } from "@/utils/pelatihan";
 import { PelatihanMasyarakat } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
@@ -44,6 +49,19 @@ import { PiHandsPrayingBold, PiTrainRegional } from "react-icons/pi";
 import { TbGenderBigender, TbSchool } from "react-icons/tb";
 import { BiDonateBlood } from "react-icons/bi";
 import { truncateText } from "@/utils";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog";
+import Cookies from "js-cookie";
+import Toast from "./toast";
 
 export default function UserDocuments({ user }: { user: User | null }) {
   const tabMenus = [
@@ -57,7 +75,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
       link: user?.Foto,
-      available: user?.Foto != "" ? true : false,
+      available: user?.Foto.endsWith("/") ? false : true,
     },
     {
       id: 2,
@@ -69,7 +87,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
       link: user?.KK,
-      available: user?.KK != "" ? true : false,
+      available: user?.KK.endsWith("/") ? false : true,
     },
 
     {
@@ -82,7 +100,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
       link: user?.Ktp,
-      available: user?.Ktp != "" ? true : false,
+      available: user?.Ktp.endsWith("/") ? false : true,
     },
     {
       id: 4,
@@ -94,7 +112,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
       link: user?.Ijazah,
-      available: user?.Ijazah != "" ? true : false,
+      available: user?.Ijazah.endsWith("/") ? false : true,
     },
     {
       id: 4,
@@ -106,7 +124,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
       link: user?.SuratKesehatan,
-      available: user?.SuratKesehatan != "" ? true : false,
+      available: user?.SuratKesehatan.endsWith("/") ? false : true,
     },
   ];
 
@@ -133,6 +151,44 @@ export default function UserDocuments({ user }: { user: User | null }) {
 
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [loading, setLoading] = React.useState<boolean>(true);
+
+  const [profilePicture, setProfilePicture] = React.useState<File | null>(null);
+  const handleFileChange = (e: any) => {
+    setProfilePicture(e.target.files[0]);
+  };
+  const router = useRouter();
+
+  const handleUpdateUser = async (e: any) => {
+    const formData = new FormData();
+    if (profilePicture != null) {
+      formData.append("Fotos", profilePicture);
+    }
+
+    try {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/users/updateUsers`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF081")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log({ response });
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil mengupdate profile profile-mu!`,
+      });
+      router.refresh();
+    } catch (error) {
+      console.error({ error });
+      Toast.fire({
+        icon: "error",
+        title: `Gagal mengupdate profile profile-mu!`,
+      });
+    }
+  };
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -195,16 +251,55 @@ export default function UserDocuments({ user }: { user: User | null }) {
                       <div className=" relative rounded-full w-fit  -mt-28">
                         <Image
                           src={
-                            "https://yt3.googleusercontent.com/pv17akWLCW5NxKTbRyBNIJo9K6i0aXk0_vHUU1pIj5H73Q_UgYquVVB2-p0GoAxFMBnW9-Ij6w=s900-c-k-c0x00ffffff-no-rj"
+                            user?.Foto! ==
+                            "https://api-elaut.ikulatluh.cloud/public/static/profile/fotoProfile/"
+                              ? "/dummies/profile.jpg"
+                              : user?.Foto!
                           }
                           alt={"profile picture"}
                           width={0}
                           height={0}
                           className="w-32 h-32 rounded-full object-cover"
                         />
-                        <div className="w-fit bg-white rounded-full bottom-0 p-2 flex shadow-custom items-center justify-center absolute right-0 cursor-pointer">
-                          <Edit3Icon />
-                        </div>
+                        <AlertDialog>
+                          <AlertDialogTrigger asChild>
+                            <div className="w-fit bg-white rounded-full bottom-0 p-2 flex shadow-custom items-center justify-center absolute right-0 cursor-pointer">
+                              <Edit3Icon />
+                            </div>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent>
+                            <AlertDialogHeader>
+                              <AlertDialogTitle className="flex items-center gap-2">
+                                {" "}
+                                <HiMiniUserGroup className="h-4 w-4" />
+                                Update Foto Profile
+                              </AlertDialogTitle>
+                              <AlertDialogDescription className="-mt-2">
+                                Upload foto profile terbaru mu, direkomendasikan
+                                agar dapat mengupload dengan pas foto yang telah
+                                dikrop!
+                              </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <fieldset>
+                              <form autoComplete="off">
+                                <input
+                                  type="file"
+                                  className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                                  required
+                                  onChange={handleFileChange}
+                                />
+                                <AlertDialogFooter className="mt-3">
+                                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={(e) => handleUpdateUser(e)}
+                                  >
+                                    Update
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </form>
+                            </fieldset>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
 
                       <div className="max-w-5xl mx-auto text-center pb-5 mt-4 md:pb-8">
@@ -529,18 +624,10 @@ export default function UserDocuments({ user }: { user: User | null }) {
                           </p>
                           {tabMenu.available ? (
                             <Link
-                              href={
-                                "https://api-elaut.ikulatluh.cloud/public/static/storage/" +
-                                tabMenu.link
-                              }
+                              href={tabMenu.link!}
                               className="text-sm cursor-pointer hover:underline duration-800 text-gray-600 text-left font-normal leading-[105%] w-1/2"
                             >
-                              {truncateText(
-                                "https://api-elaut.ikulatluh.cloud/public/static/peserta/" +
-                                  tabMenu.link,
-                                50,
-                                "..."
-                              )}
+                              {truncateText(tabMenu!.link!, 50, "...")}
                             </Link>
                           ) : (
                             <p className="text-sm cursor-pointer hover:underline duration-800 text-gray-600 text-left font-normal leading-[105%]">

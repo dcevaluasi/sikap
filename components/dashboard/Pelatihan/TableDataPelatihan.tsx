@@ -83,7 +83,7 @@ import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
 import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
-import { PiStampLight } from "react-icons/pi";
+import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -106,6 +106,7 @@ import { Progress } from "@/components/ui/progress";
 import { GiBookmarklet } from "react-icons/gi";
 import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
 import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
+import Link from "next/link";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -1161,6 +1162,38 @@ const TableDataPelatihan: React.FC = () => {
                 </div>
               </div>
 
+              <div className="flex flex-wrap -mx-3 mb-1">
+                <div className="w-full px-3">
+                  <label
+                    className="block text-gray-800 text-sm font-medium mb-1"
+                    htmlFor="email"
+                  >
+                    Upload File Excel Materi{" "}
+                  </label>
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                      required
+                    />
+                    <Link
+                      target="_blank"
+                      href={
+                        "https://docs.google.com/spreadsheets/d/1KlEBRcgXLZK6NCL0r4nglKa6XazHgUH7fqvHlrIHmNI/edit?usp=sharing"
+                      }
+                      className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
+                    >
+                      <PiMicrosoftExcelLogoFill />
+                      Unduh Template
+                    </Link>
+                  </div>
+                  <p className="text-gray-700 text-xs mt-1">
+                    *Upload by excel jika dirasa materi pelatihan terlalu banyak
+                    (opsional)
+                  </p>
+                </div>
+              </div>
+
               <AlertDialogFooter className="mt-3">
                 <AlertDialogCancel
                   onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
@@ -1211,6 +1244,19 @@ const TableDataPelatihan: React.FC = () => {
                 <div className="w-full">
                   <p className="font-semibold text-secondary">
                     Total Publish Umum
+                  </p>
+                  <p className="text-sm font-medium">
+                    {publishedData} pelatihan
+                  </p>
+                </div>
+              </div>
+              <div className="flex min-w-47.5">
+                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
+                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
+                </span>
+                <div className="w-full">
+                  <p className="font-semibold text-secondary">
+                    Total Pelatihan Selesai
                   </p>
                   <p className="text-sm font-medium">
                     {publishedData} pelatihan
@@ -1316,6 +1362,27 @@ const TableDataPelatihan: React.FC = () => {
                   </p>
                   <p className="text-sm font-medium">
                     {publishedData} pelatihan
+                  </p>
+                </div>
+              </div>
+              <div className="flex min-w-47.5">
+                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
+                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-400"></span>
+                </span>
+                <div className="w-full">
+                  <p className="font-semibold text-green-400">Total Selesai</p>
+                  <p className="text-sm font-medium">
+                    {data?.reduce(
+                      (total: number, item: PelatihanMasyarakat) => {
+                        // Check if StatusApprovala is "Selesai"
+                        if (item.StatusApproval === "Selesai") {
+                          return total + 1;
+                        }
+                        return total;
+                      },
+                      0
+                    ) || 0}{" "}
+                    pelatihan
                   </p>
                 </div>
               </div>

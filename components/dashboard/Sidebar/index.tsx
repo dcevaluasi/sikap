@@ -635,7 +635,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </Link>
               </li>
 
-              {pathname.includes("lemdiklat") && (
+              {pathname.includes("pusat") && (
                 <SidebarLinkGroup
                   activeCondition={
                     pathname === "/forms" || pathname.includes("forms")

@@ -69,7 +69,6 @@ const DropdownUser = ({
           email: email,
           nama_lemdik: namaLemdiklat,
           no_telpon: noTelpon,
-          password: password,
           deskripsi: deskripsi,
           alamat: alamat,
           no_last_sertifikat: LastNosertif,
@@ -402,7 +401,7 @@ const DropdownUser = ({
           <span className="block text-sm font-medium text-black">
             {pathname.includes("lemdiklat")
               ? userLoggedInInfo?.data?.NamaLemdik
-              : "Farhan Augustiansyah"}
+              : "BPPP"}
           </span>
           <span className="block text-xs">
             {pathname.includes("lemdiklat")

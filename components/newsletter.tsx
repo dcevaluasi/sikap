@@ -1,6 +1,76 @@
+"use client";
+
+import axios from "axios";
+import React from "react";
+import Toast from "./toast";
+import { UserPelatihan } from "@/types/product";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "./ui/button";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
+
 export default function Newsletter() {
+  const [noRegistrasi, setNoRegistrasi] = React.useState<string>("");
+  const [isError, setIsError] = React.useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = React.useState<string>("");
+  const [validSertifikat, setValidSertifikat] =
+    React.useState<UserPelatihan | null>(null);
+  const [isShowValidForm, setIsShowValidForm] = React.useState<boolean>(false);
+  const handleCekValiditasSertifikat = async () => {
+    console.log({ noRegistrasi });
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/cekSertifikat`,
+        {
+          no_registrasi: noRegistrasi,
+        }
+      );
+
+      console.log("NO SERTIFIKAT VALID: ", response);
+      setValidSertifikat(response.data.data);
+      setIsShowValidForm(!isShowValidForm);
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: error!.response!.data!.Pesan!,
+      });
+      console.error({ error });
+    }
+  };
   return (
     <section id="cek-sertifikat" className="scroll-smooth">
+      <AlertDialog open={isShowValidForm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              <RiVerifiedBadgeFill className="h-4 w-4 text-blue-500" />
+              {validSertifikat?.NoRegistrasi!}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Nama : {validSertifikat?.Nama}
+              No. Sertifikat : {validSertifikat?.NoSertifikat}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={(e) => setIsShowValidForm(!isShowValidForm)}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction>Continue</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       <div className="max-w-[70rem] mx-auto px-4 sm:px-6">
         <div className="pb-12 md:pb-20">
           {/* CTA box */}
@@ -107,17 +177,19 @@ export default function Newsletter() {
                 <form className="w-full lg:w-auto">
                   <div className="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:mx-0">
                     <input
-                      type="email"
+                      type="text"
                       className="form-input w-full appearance-none bg-gray-800 border border-gray-700 focus:border-gray-600 rounded-sm px-4 py-3 mb-2 sm:mb-0 sm:mr-2 text-white placeholder-gray-500"
-                      placeholder="No Register/Sertifikat"
-                      aria-label="No Sertifikat"
+                      placeholder="No Registrasi"
+                      aria-label="No Register"
+                      value={noRegistrasi}
+                      onChange={(e) => setNoRegistrasi(e.target.value)}
                     />
-                    <a
+                    <div
                       className="btn text-white bg-blue-600 hover:bg-blue-700 shadow"
-                      href="#0"
+                      onClick={(e) => handleCekValiditasSertifikat()}
                     >
                       Cek
-                    </a>
+                    </div>
                   </div>
                   {/* Success message */}
                   {/* <p className="text-sm text-gray-400 mt-3">Thanks for subscribing!</p> */}

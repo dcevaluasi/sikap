@@ -71,6 +71,7 @@ import Toast from "@/components/toast";
 import { GiTakeMyMoney } from "react-icons/gi";
 import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
 import Cookies from "js-cookie";
+import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 
 const TableDataPesertaPelatihan = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -180,6 +181,51 @@ const TableDataPesertaPelatihan = () => {
     }
   };
 
+  const handleValidDataPesertaPelatihan = async (
+    id: number,
+    status: string
+  ) => {
+    const formData = new FormData();
+    formData.append("Keterangan", status);
+    console.log({ status });
+    console.log({ selectedIdPeserta });
+    try {
+      const response = await axios.put(
+        `${baseUrl}/lemdik/updatePelatihanUsers?id=${selectedIdPeserta}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+          },
+        }
+      );
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil memvalidasi data pesereta pelatihan!`,
+      });
+      console.log("VALIDASI PESERTA PELATIHAN: ", response);
+      handleFetchingPublicTrainingDataById();
+      setOpenFormValidasiDataPesertaPelatihan(
+        !openFormValidasiDataPesertaPelatihan
+      );
+    } catch (error) {
+      console.error("ERROR UPDATE PELATIHAN: ", error);
+      Toast.fire({
+        icon: "success",
+        title: `Gagal menyisipkan no sertifikat ke akun pesereta pelatihan!`,
+      });
+      handleFetchingPublicTrainingDataById();
+    }
+  };
+
+  const [
+    openFormValidasiDataPesertaPelatihan,
+    setOpenFormValidasiDataPesertaPelatihan,
+  ] = React.useState<boolean>(false);
+
+  const [validitasDataPeserta, setValiditasDataPeserta] =
+    React.useState<string>("");
+
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -218,12 +264,30 @@ const TableDataPesertaPelatihan = () => {
       },
       cell: ({ row }) => (
         <div className={` flex items-center justify-center w-full gap-1`}>
-          {row.original.IsActice == "valid" ? (
-            <Button variant="outline" className=" border border-green-500">
+          {row.original.Keterangan == "Valid" ? (
+            <Button
+              onClick={(e) => {
+                setOpenFormValidasiDataPesertaPelatihan(
+                  !openFormValidasiDataPesertaPelatihan
+                );
+                setSelectedIdPeserta(row.original!.IdUserPelatihan);
+              }}
+              variant="outline"
+              className=" border border-green-500"
+            >
               <RiVerifiedBadgeFill className="h-4 w-4 text-green-500" />
             </Button>
           ) : (
-            <Button variant="outline" className=" border border-rose-500">
+            <Button
+              onClick={(e) => {
+                setOpenFormValidasiDataPesertaPelatihan(
+                  !openFormValidasiDataPesertaPelatihan
+                );
+                setSelectedIdPeserta(row.original!.IdUserPelatihan);
+              }}
+              variant="outline"
+              className=" border border-rose-500"
+            >
               <IoMdCloseCircle className="h-4 w-4 text-rose-500" />
             </Button>
           )}
@@ -254,7 +318,6 @@ const TableDataPesertaPelatihan = () => {
         </div>
       ),
     },
-
     {
       accessorKey: "IdUsers",
       header: ({ column }) => {
@@ -278,7 +341,8 @@ const TableDataPesertaPelatihan = () => {
               className={`${
                 row.original.StatusPembayaran == "pending"
                   ? "text-yellow-500"
-                  : row.original.StatusPembayaran == "paid"
+                  : row.original.StatusPembayaran == "paid" ||
+                    row.original.StatusPembayaran == "Done"
                   ? "text-green-500"
                   : "text-rose-500"
               } capitalize`}
@@ -288,7 +352,7 @@ const TableDataPesertaPelatihan = () => {
             • BTPN
           </p>{" "}
           <p className="text-base font-semibold tracking-tight leading-none">
-            Rp. 145.678
+            Rp. {row.original?.TotalBayar}
           </p>
         </div>
       ),
@@ -308,7 +372,16 @@ const TableDataPesertaPelatihan = () => {
         );
       },
       cell: ({ row }) =>
-        row.original.NoSertifikat == "" ? (
+        row.original.Keterangan == "" ? (
+          <Button
+            variant="outline"
+            className="w-full border flex gap-2 border-rose-600 text-left capitalize items-center justify-center"
+          >
+            <IoMdCloseCircle className="h-4 w-4 text-rose-600" /> Data Belum
+            Divalidasi
+            <span className="text-xs"> {row.original?.NoSertifikat}</span>
+          </Button>
+        ) : row.original.NoSertifikat == "" ? (
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
@@ -569,6 +642,48 @@ const TableDataPesertaPelatihan = () => {
     }
   };
 
+  const [isOpenFormPeserta, setIsOpenFormPeserta] =
+    React.useState<boolean>(false);
+  const [fileExcelPesertaPelatihan, setFileExcelPesertaPelatihan] =
+    React.useState<File | null>(null);
+  const handleFileChange = (e: any) => {
+    setFileExcelPesertaPelatihan(e.target.files[0]);
+  };
+  const handleUploadImportPesertaPelatihan = async (e: any) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("IdPelatihan", id);
+    if (fileExcelPesertaPelatihan != null) {
+      formData.append("file", fileExcelPesertaPelatihan);
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/exportPesertaPelatihan`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+          },
+        }
+      );
+      console.log("FILE UPLOADED PESERTA : ", response);
+      Toast.fire({
+        icon: "success",
+        title: `Selamat anda berhasil mengupload peserta pelatihan!`,
+      });
+      setIsOpenFormPeserta(!isOpenFormPeserta);
+      handleFetchingPublicTrainingDataById();
+    } catch (error) {
+      console.log("FILE IMPORT PESERTA PELATIHAN : ", error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal mengupload peserta pelatihan!`,
+      });
+      handleFetchingPublicTrainingDataById();
+    }
+  };
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       <AlertDialog open={isOpenFormInputNilai}>
@@ -641,6 +756,110 @@ const TableDataPesertaPelatihan = () => {
           </fieldset>
         </AlertDialogContent>
       </AlertDialog>
+
+      <AlertDialog open={isOpenFormPeserta}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              {" "}
+              <HiMiniUserGroup className="h-4 w-4" />
+              Import Peserta Pelatihan
+            </AlertDialogTitle>
+            <AlertDialogDescription className="-mt-2">
+              Import peserta yang akan mengikuti pelatihan ini!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <fieldset>
+            <form autoComplete="off">
+              <div className="flex flex-wrap -mx-3 mb-1">
+                <div className="w-full px-3">
+                  <label
+                    className="block text-gray-800 text-sm font-medium mb-1"
+                    htmlFor="email"
+                  >
+                    Data By Name By Address <span>*</span>
+                  </label>
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                      required
+                      onChange={handleFileChange}
+                    />
+                    <Link
+                      target="_blank"
+                      href={
+                        "https://docs.google.com/spreadsheets/d/1KlEBRcgXLZK6NCL0r4nglKa6XazHgUH7fqvHlrIHmNI/edit?usp=sharing"
+                      }
+                      className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
+                    >
+                      <PiMicrosoftExcelLogoFill />
+                      Unduh Template
+                    </Link>
+                  </div>
+                  <p className="text-gray-700 text-xs mt-1">
+                    *Download terlebih dahulu template lalu isi file excel dan
+                    upload
+                  </p>
+                </div>
+              </div>
+
+              <AlertDialogFooter className="mt-3 pt-3 border-t border-t-gray-300">
+                <AlertDialogCancel
+                  onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
+                >
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={(e) => handleUploadImportPesertaPelatihan(e)}
+                >
+                  Upload
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </fieldset>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={openFormValidasiDataPesertaPelatihan}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              {" "}
+              <HiMiniUserGroup className="h-4 w-4" />
+              Validasi Data Peserta Pelatihan
+            </AlertDialogTitle>
+            <AlertDialogDescription className="-mt-2">
+              Upload nilai peserta pelatihan yang diselenggarakan yang nantinya
+              akan tercantum pada sertifikat peserta pelatihan!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <fieldset>
+            <form autoComplete="off">
+              <AlertDialogFooter className="mt-3">
+                <AlertDialogCancel
+                  onClick={(e) =>
+                    setOpenFormValidasiDataPesertaPelatihan(
+                      !openFormValidasiDataPesertaPelatihan
+                    )
+                  }
+                >
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-green-500 hover:bg-green-600"
+                  onClick={(e) =>
+                    handleValidDataPesertaPelatihan(selectedIdPeserta, "Valid")
+                  }
+                >
+                  Validasi
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </fieldset>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {showFormAjukanPelatihan ? (
         <h1>TEST</h1>
       ) : (
@@ -670,7 +889,13 @@ const TableDataPesertaPelatihan = () => {
                   </p>
                   <p className="text-sm font-medium">
                     {" "}
-                    {dataPelatihan?.UserPelatihan.length} orang
+                    {dataPelatihan?.UserPelatihan.length} orang / Rp.{" "}
+                    {dataPelatihan?.UserPelatihan?.reduce(
+                      (total: number, jumlahBayar: UserPelatihan) => {
+                        return total + parseInt(jumlahBayar.TotalBayar);
+                      },
+                      0
+                    )}
                   </p>
                 </div>
               </div>
@@ -685,6 +910,29 @@ const TableDataPesertaPelatihan = () => {
                   <p className="text-sm font-medium">
                     {" "}
                     {dataPelatihan?.UserPelatihan.length} orang
+                  </p>
+                </div>
+              </div>
+              <div className="flex min-w-47.5">
+                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-yellow-400">
+                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-yellow-500"></span>
+                </span>
+                <div className="w-full">
+                  <p className="font-semibold text-yellow-500">
+                    Total Terbit Sertifikat
+                  </p>
+                  <p className="text-sm font-medium">
+                    {" "}
+                    {dataPelatihan?.UserPelatihan?.reduce(
+                      (total: number, user: UserPelatihan) => {
+                        if (user.NoSertifikat !== "") {
+                          return total + 1;
+                        }
+                        return total;
+                      },
+                      0
+                    ) || 0}{" "}
+                    orang
                   </p>
                 </div>
               </div>
@@ -749,7 +997,7 @@ const TableDataPesertaPelatihan = () => {
                 Statistik
               </div>
               <div
-                onClick={(e) => setShowFormAjukanPelatihan(true)}
+                onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
                 className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
               >
                 <FiUploadCloud />
