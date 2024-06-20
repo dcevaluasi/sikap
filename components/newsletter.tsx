@@ -1,6 +1,6 @@
 "use client";
 
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import React from "react";
 import Toast from "./toast";
 import { UserPelatihan } from "@/types/product";
@@ -40,10 +40,17 @@ export default function Newsletter() {
       setValidSertifikat(response.data.data);
       setIsShowValidForm(!isShowValidForm);
     } catch (error) {
-      Toast.fire({
-        icon: "error",
-        title: error!.response!.data!.Pesan!,
-      });
+      if (isAxiosError(error)) {
+        Toast.fire({
+          icon: "error",
+          title: error.response?.data?.Pesan || "An error occurred",
+        });
+      } else {
+        Toast.fire({
+          icon: "error",
+          title: "An unknown error occurred",
+        });
+      }
       console.error({ error });
     }
   };
