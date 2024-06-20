@@ -20,14 +20,18 @@ import { Pagination, Navigation } from "swiper/modules";
 import ListProgram from "./lists";
 import Link from "next/link";
 import { Slide } from "react-awesome-reveal";
-import { FaPlaceOfWorship } from "react-icons/fa6";
+import { FaCircle, FaPlaceOfWorship } from "react-icons/fa6";
 import { GrFormEdit, GrFormTrash, GrLocation } from "react-icons/gr";
 import { Button } from "./ui/button";
 import { FiSearch, FiSlack } from "react-icons/fi";
 import { Input } from "./ui/input";
 import BPPPTrainings from "./bppp-trainings";
 import { usePathname } from "next/navigation";
-import { extractPathAfterBppp, getPenyeleggara } from "@/utils/pelatihan";
+import {
+  addFiveYears,
+  extractPathAfterBppp,
+  getPenyeleggara,
+} from "@/utils/pelatihan";
 import { PelatihanMasyarakat } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
 import BPPPCertificates from "./bppp-certificates";
@@ -50,6 +54,7 @@ import TableDataPelatihanUser from "./dashboard/Pelatihan/TableDataPelatihanUser
 import { DialogSertifikatPelatihan } from "./sertifikat/dialogSertifikatPelatihan";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
 import { truncateText } from "@/utils";
+import { Pelatihan } from "@/types/pelatihan";
 
 export default function UserTrainingService({ user }: { user: User | null }) {
   const [indexPelatihanSelected, setIndexPelatihanSelected] =
@@ -161,6 +166,8 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
   const [selectedIdPelatihan, setSelectedIdPelatihan] =
     React.useState<number>(0);
+  const [selectedPelatihan, setSelectedPelatihan] =
+    React.useState<PelatihanMasyarakat | null>(null);
 
   const handleFetchingDetailPelatihan = async (id: number) => {
     try {
@@ -172,6 +179,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
           },
         }
       );
+      setSelectedPelatihan(response.data);
       console.log("SELECTED PELATIHAN : ", response);
     } catch (error) {
       console.error("Error posting training data:", error);
@@ -199,6 +207,13 @@ export default function UserTrainingService({ user }: { user: User | null }) {
   useEffect(() => {
     heightFix();
   }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 500,
+      behavior: "smooth", // This smooth scrolling is optional, you can remove it if you want instant scrolling
+    });
+  };
 
   const [menuSelected, setMenuSelected] = React.useState(false);
   const [indexMenuSelected, setIndexMenuSelected] = React.useState(0);
@@ -245,6 +260,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
               onClick={(e) => {
                 setIndexPelatihanSelected(index);
                 handleFetchingDetailPelatihan(pelatihan?.IdPelatihan);
+                scrollToTop();
               }}
               className="text-lg hover:cursor-pointer font-bold text-gray-900 sm:text-xl leading-[100%] "
             >
@@ -379,6 +395,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
               {userDetail?.Pelatihan[indexPelatihanSelected].NoSertifikat ==
               "" ? null : (
                 <DialogSertifikatPelatihan
+                  pelatihan={selectedPelatihan!}
                   userPelatihan={userDetail?.Pelatihan[indexPelatihanSelected]!}
                 >
                   <Button
@@ -400,11 +417,12 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
   const TablePenilaian = () => {
     return (
-      <div className="flex flex-col mt-5">
+      <div className="flex flex-col mt-0">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+            <dd className="text-xs text-gray-500 mb-2">Table Penilaian</dd>
             <div className="overflow-hidden">
-              <table className="min-w-full border border-neutral-200 text-center text-sm font-light text-surface mb-5 ">
+              <table className="min-w-full border border-neutral-200 rounded-md text-center text-sm font-light text-surface mb-5 ">
                 <thead className="border-b border-neutral-200 font-medium ">
                   <tr>
                     <th
@@ -475,18 +493,31 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
               {userDetail?.Pelatihan[indexPelatihanSelected].NoSertifikat ==
               "" ? null : (
-                <DialogSertifikatPelatihan
-                  userPelatihan={userDetail?.Pelatihan[indexPelatihanSelected]!}
-                >
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+                <>
+                  <DialogSertifikatPelatihan
+                    userPelatihan={
+                      userDetail?.Pelatihan[indexPelatihanSelected]!
+                    }
+                    pelatihan={selectedPelatihan!}
                   >
-                    <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-                    <span className="text-sm"> Download Sertifikat</span>
-                  </Button>
-                </DialogSertifikatPelatihan>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+                    >
+                      <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+                      <span className="text-sm"> Download Sertifikat</span>
+                    </Button>
+                  </DialogSertifikatPelatihan>
+                  <dd className="text-xs text-gray-500 mb-2 mt-1">
+                    *Sertifikat ini terbit pada{" "}
+                    {userDetail?.Pelatihan[indexPelatihanSelected]?.IsActice!}{" "}
+                    dan akan kadaluarsa pada{" "}
+                    {addFiveYears(
+                      userDetail?.Pelatihan[indexPelatihanSelected]?.IsActice!
+                    )}
+                  </dd>
+                </>
               )}
             </div>
           </div>
@@ -510,7 +541,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
             {userDetail?.Pelatihan!.length != 0 ? (
               <>
-                <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
+                <div className="max-w-3xl mx-auto text-center flex items-center justify-center flex-col pb-5 md:pb-8">
                   <h1 className="text-3xl font-calsans leading-[110%] text-black">
                     Pelatihan Masyarakat, Teknis, <br /> dan Kepelatuan yang
                     Diikuti
@@ -520,8 +551,9 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                     Pelatihan Kelautan dan Perikanan dan jadilah SDM kompeten
                     bidang kelautan dan perikanan!
                   </p>
+                  <div className="rounded-full bg-gray-300 h-1 w-20 mt-3"></div>
                 </div>{" "}
-                <div className="w-full max-w-6xl mx-auto flex gap-5">
+                <div className="w-full max-w-6xl mx-auto flex gap-5 mt-8">
                   <div className="flex flex-col gap-2 w-5/12">
                     <div className="relative w-full flex items-center border-gray-300 border px-2 rounded-xl">
                       <Button
@@ -547,11 +579,8 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                   </div>
 
                   <div className="flex items-start justify-center w-7/12">
-                    <a
-                      href="#"
-                      className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:px-6 lg:py-0"
-                    >
-                      <div className="sm:flex sm:justify-between sm:gap-4">
+                    <div className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:px-6 lg:py-0">
+                      <div className="sm:flex justify-between sm:gap-4 items-center border-b-2 border-b-gray-200 pb-4">
                         <div>
                           <h3 className="text-3xl font-bold text-gray-900 font-calsans sm:text-3xl leading-[105%]">
                             {
@@ -578,7 +607,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                               userDetail?.Pelatihan[indexPelatihanSelected]
                                 ?.BidangPelatihan!
                             )}
-                            className="w-20 rounded-lg object-cover shadow-sm"
+                            className="w-16 rounded-lg object-cover shadow-sm"
                           />
                         </div>
                       </div>
@@ -662,9 +691,12 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                           </dd>
                         </div>
                       </dl>
-                      <TablePenilaian />
+
+                      {userDetail?.Pelatihan[indexPelatihanSelected]?.PreTest !=
+                        0 && <TablePenilaian />}
+
                       {/* <Timeline /> */}
-                    </a>
+                    </div>
                   </div>
                 </div>
               </>

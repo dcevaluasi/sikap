@@ -31,3 +31,18 @@ export function extractPathAfterBppp(path: string): string {
 export function convertIdSarpras(arr: number[]): string {
   return arr.join(',');
 }
+
+export function addFiveYears(dateString: string) {
+  // Buat objek Date dari string tanggal
+  const date = new Date(dateString);
+
+  // Tambahkan 5 tahun ke tanggal
+  date.setFullYear(date.getFullYear() + 5);
+
+  // Format tanggal baru
+  const day = date.getDate();
+  const month = date.toLocaleString('default', { month: 'long' });
+  const year = date.getFullYear();
+
+  return `${day} ${month} ${year}`;
+}

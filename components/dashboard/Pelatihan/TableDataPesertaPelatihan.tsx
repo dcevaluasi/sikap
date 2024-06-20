@@ -55,7 +55,7 @@ import {
   MdSchool,
 } from "react-icons/md";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Pelatihan, UserPelatihan } from "@/types/product";
+import { Pelatihan, PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
 import { extractLastSegment } from "@/utils";
 import {
@@ -79,48 +79,8 @@ const TableDataPesertaPelatihan = () => {
   const id = extractLastSegment(pathname);
   const [noSertifikatTerbitkan, setNoSertifikatTerbitkan] = React.useState("");
 
-  const [dataPelatihan, setDataPelatihan] = React.useState<any>({
-    IdPelatihan: 0,
-    IdLemdik: 0,
-    KodePelatihan: "",
-    NamaPelatihan: "",
-    PenyelenggaraPelatihan: "",
-    DetailPelatihan: "",
-    FotoPelatihan: "",
-    JenisPelatihan: "",
-    BidangPelatihan: "",
-    DukunganProgramTerobosan: "",
-    TanggalMulaiTerobosan: "",
-    TanggalBerakhirTerobosan: "",
-    HargaPelatihan: 0,
-    Instruktur: "",
-    Status: "",
-    MemoPusat: "",
-    SilabusPelatihan: "",
-    PelaksanaanPelatihan: "",
-    UjiKompotensi: 0,
-    KoutaPelatihan: 0,
-    AsalPelatihan: "",
-    AsalSertifikat: "",
-    JenisSertifikat: "",
-    TtdSertifikat: "",
-    NoSertifikat: "",
-    StatusApproval: "",
-    IdSaranaPrasarana: 0,
-    IdKonsumsi: "",
-    ModuleMateri: "",
-    CreateAt: "",
-    UpdateAt: "",
-    PemberitahuanDiterima: "",
-    SuratPemberitahuan: "",
-    CatatanPemberitahuanByPusat: "",
-    PenerbitanSertifikatDiterima: "",
-    BeritaAcara: "",
-    CatatanPenerbitanByPusat: "",
-    SarprasPelatihan: "",
-    MateriPelatihan: "",
-    UserPelatihan: [],
-  });
+  const [dataPelatihan, setDataPelatihan] =
+    React.useState<PelatihanMasyarakat | null>(null);
 
   const [data, setData] = React.useState<UserPelatihan[] | []>([]);
   const handleFetchingPublicTrainingDataById = async () => {
@@ -404,12 +364,12 @@ const TableDataPesertaPelatihan = () => {
                 {row.original.NoSertifikat == "" ? (
                   <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
                     <div>
-                      {dataPelatihan.NoSertifikat != "" && (
+                      {dataPelatihan!.NoSertifikat != "" && (
                         <Checkbox
                           id="publish"
                           onCheckedChange={(e) =>
                             setNoSertifikatTerbitkan(
-                              dataPelatihan?.NoSertifikat
+                              dataPelatihan!.NoSertifikat
                             )
                           }
                         />
@@ -417,9 +377,9 @@ const TableDataPesertaPelatihan = () => {
                     </div>
                     <div className="space-y-1 leading-none">
                       <label>
-                        {dataPelatihan.NoSertifikat == ""
+                        {dataPelatihan!.NoSertifikat == ""
                           ? "Generate Terlebih Dahulu"
-                          : "B" + dataPelatihan.NoSertifikat}
+                          : "B" + dataPelatihan!.NoSertifikat}
                       </label>
                       <p className="text-xs leading-[110%] text-gray-600">
                         Generate nomor sertifikat terlebih dahulu dan sebarkan
@@ -444,21 +404,24 @@ const TableDataPesertaPelatihan = () => {
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={(e) =>
-                    dataPelatihan.NoSertifikat != ""
+                    dataPelatihan!.NoSertifikat != ""
                       ? handleUpdatePublishPelatihanToELAUT(
                           row.original.IdUserPelatihan,
-                          dataPelatihan?.NoSertifikat
+                          dataPelatihan!.NoSertifikat
                         )
                       : null
                   }
                 >
-                  {dataPelatihan.NoSertifikat != "" ? "Sebarkan" : "Ok"}
+                  {dataPelatihan!.NoSertifikat != "" ? "Sebarkan" : "Ok"}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
         ) : (
-          <DialogSertifikatPelatihan userPelatihan={data[row.index]}>
+          <DialogSertifikatPelatihan
+            pelatihan={dataPelatihan!}
+            userPelatihan={data[row.index]}
+          >
             <Button
               variant="outline"
               className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
