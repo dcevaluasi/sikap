@@ -19,6 +19,8 @@ function FormLogin() {
   const [password, setPassword] = React.useState<string>("");
   const recaptchaRef = React.createRef();
 
+  const [captcha, setCaptcha] = React.useState<string | null>()
+
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
 
@@ -30,59 +32,61 @@ function FormLogin() {
         title: `Tolong lengkapi data login!`,
       });
     } else {
-      try {
-        const response: AxiosResponse = await axios.post(
-          `${baseUrl}/users/login`,
-          JSON.stringify({
-            nik: nik,
-            password: password,
-          }),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log({ response });
+      if (captcha) {
+        try {
+          const response: AxiosResponse = await axios.post(
+            `${baseUrl}/users/login`,
+            JSON.stringify({
+              nik: nik,
+              password: password,
+            }),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log({ response });
 
-        Cookies.set("XSRF081", response.data.t);
-        Cookies.set("XSRF082", "true");
+          Cookies.set("XSRF081", response.data.t);
+          Cookies.set("XSRF082", "true");
 
-        if (Cookies.get("XSRF085")) {
-          Toast.fire({
-            icon: "success",
-            title: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
-          });
-          router.push(Cookies.get("XSRF085")!);
-        } else {
-          Toast.fire({
-            icon: "success",
-            title: `Berhasil melakukan login!`,
-          });
-          if (Cookies.get("XSRF083")) {
-            router.push("/dashboard/complete-profile");
+          if (Cookies.get("XSRF085")) {
+            Toast.fire({
+              icon: "success",
+              title: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
+            });
+            router.push(Cookies.get("XSRF085")!);
           } else {
-            router.push("/dashboard");
+            Toast.fire({
+              icon: "success",
+              title: `Berhasil melakukan login!`,
+            });
+            if (Cookies.get("XSRF083")) {
+              router.push("/dashboard/complete-profile");
+            } else {
+              router.push("/dashboard");
+            }
           }
-        }
-      } catch (error: any) {
-        console.error({ error });
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.Message
-        ) {
-          const errorMsg = error.response.data.Message;
-          Toast.fire({
-            icon: "error",
-            title: `Gagal melakukan login, ${errorMsg}!`,
-          });
-        } else {
-          const errorMsg = error.response.data.Message;
-          Toast.fire({
-            icon: "error",
-            title: `Gagal melakukan login. ${errorMsg}!`,
-          });
+        } catch (error: any) {
+          console.error({ error });
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.Message
+          ) {
+            const errorMsg = error.response.data.Message;
+            Toast.fire({
+              icon: "error",
+              title: `Gagal melakukan login, ${errorMsg}!`,
+            });
+          } else {
+            const errorMsg = error.response.data.Message;
+            Toast.fire({
+              icon: "error",
+              title: `Gagal melakukan login. ${errorMsg}!`,
+            });
+          }
         }
       }
     }
@@ -177,11 +181,24 @@ function FormLogin() {
                   />
                 </div>
               </div>
+              <div className="flex flex-wrap -mx-3 mb-4">
+                <div className="w-full px-3">
+                  <label
+                    className="block text-gray-200 text-sm font-medium mb-1"
+                    htmlFor="password"
+                  >
+                    Verify if you are not a robot <span className="text-red-600">*</span>
+                  </label>
+                  <ReCAPTCHA sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!} className="mx-auto w-full font-inter text-sm" onChange={setCaptcha} />
+                </div>
+              </div>
+
               <div className="flex flex-wrap -mx-3 mt-6">
                 <div className="w-full px-3">
                   <button
                     type="submit"
-                    className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                    className={`btn text-white ${captcha ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 hover:bg-gray-600'} w-full`}
+                    disabled={captcha ? false : true}
                   >
                     Login
                   </button>
