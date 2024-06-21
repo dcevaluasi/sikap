@@ -57,7 +57,7 @@ export default function Newsletter() {
   };
   return (
     <section id="cek-sertifikat" className="scroll-smooth">
-      <AlertDialog open={isShowValidForm}>
+      <AlertDialog open={true}>
         <AlertDialogContent className="flex flex-col items-center justify-center !w-[390px]">
           <AlertDialogHeader>
             <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
@@ -80,25 +80,21 @@ export default function Newsletter() {
           <AlertDialogFooter className="w-full">
 
             <div className="flex-col flex w-full">
-              <div className="flex flex-wrap mb-1 w-full">
+              <div className="flex flex-wrap  border-b py-2 border-b-gray-300 w-full">
                 <div className="w-full">
                   <label
-                    className="block text-sm text-gray-800 font-medium mb-1"
+                    className="block text-sm text-gray-800  font-medium mb-1"
                     htmlFor="name"
                   >
                     No Sertifikat{" "}
                   </label>
-                  <input
-                    id="name"
-                    type="text"
-                    className="form-input w-full text-sm text-black border-gray-300 rounded-md py-2 px-2"
-                    placeholder={validSertifikat?.NoSertifikat}
-                    required
-                    readOnly
-                  />
+                  <p className="text-gray-600 text-base -mt-1">
+                    {validSertifikat?.NoSertifikat}
+                  </p>
+
                 </div>
               </div>
-              <div className="flex flex-wrap mb-1 w-full">
+              <div className="flex flex-wrap border-b py-2 border-b-gray-300 w-full">
                 <div className="w-full">
                   <label
                     className="block text-sm text-gray-800 font-medium mb-1"
@@ -106,17 +102,12 @@ export default function Newsletter() {
                   >
                     Nama Lengkap{" "}
                   </label>
-                  <input
-                    id="name"
-                    type="text"
-                    className="form-input w-full text-sm text-black border-gray-300 rounded-md py-2 px-2"
-                    placeholder={validSertifikat?.Nama}
-                    required
-                    readOnly
-                  />
+                  <p className="text-gray-600 text-base -mt-1">
+                    {validSertifikat?.Nama}
+                  </p>
                 </div>
               </div>
-              <div className="flex flex-wrap mb-1 w-full">
+              <div className="flex flex-wrap border-b py-2 border-b-gray-300 w-full">
                 <div className="w-full">
                   <label
                     className="block text-sm text-gray-800 font-medium mb-1"
@@ -124,17 +115,12 @@ export default function Newsletter() {
                   >
                     Nama Pelatihan{" "}
                   </label>
-                  <input
-                    id="name"
-                    type="text"
-                    className="form-input w-full text-sm text-black border-gray-300 rounded-md py-2 px-2"
-                    placeholder={validSertifikat?.NamaPelatihan}
-                    required
-                    readOnly
-                  />
+                  <p className="text-gray-600 text-base -mt-1">
+                    {validSertifikat?.NamaPelatihan}
+                  </p>
                 </div>
               </div>
-              <div className="flex flex-wrap mb-3 w-full">
+              <div className="flex flex-wrap  py-2  mb-6 w-full">
                 <div className="w-full">
                   <label
                     className="block text-sm text-gray-800 font-medium mb-1"
@@ -142,17 +128,13 @@ export default function Newsletter() {
                   >
                     Tanggal Pelaksanaan{" "}
                   </label>
-                  <input
-                    id="name"
-                    type="text"
-                    className="form-input w-full text-sm text-black border-gray-300 rounded-md py-2 px-2"
-                    placeholder={'10 Juni 2024 - 19 Juni 2024'}
-                    required
-                    readOnly
-                  />
+                  <p className="text-gray-600 text-base -mt-1">
+                    {'10 Juni 2024 - 19 Juni 2024'}
+                  </p>
+
                 </div>
               </div>
-              <AlertDialogAction className="py-5" onClick={(e) => setIsShowValidForm(!isShowValidForm)}>Continue</AlertDialogAction>
+              <AlertDialogAction className="py-5" onClick={(e) => setIsShowValidForm(!isShowValidForm)}>Close</AlertDialogAction>
             </div>
           </AlertDialogFooter>
         </AlertDialogContent>
