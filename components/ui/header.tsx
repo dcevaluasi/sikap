@@ -46,7 +46,7 @@ export default function Header() {
           <li className="cursor-pointer" onClick={(e) => { setCurrentName(name); setOpenModal(!openModal) }}>
             <div
               className={`font-medium ${!top || usePathname().includes("bppp")
-                ? "text-gray-600 hover:text-white hover:scale-105"
+                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
                 : (top && usePathname().includes("pelatihan")) ||
                   usePathname().includes("sertifikasi") ||
                   usePathname().includes("cek-sertifikat") ||
@@ -93,7 +93,7 @@ export default function Header() {
               ? "text-gray-900 hover:text-gray-900 hover:scale-105"
               : usePathname().includes("complete-profile")
                 ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-                : "text-gray-600 hover:text-white hover:scale-105"
+                : "text-gray-600 hover:text-gray-900 hover:scale-105"
             }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
         >
           {name}
@@ -116,7 +116,7 @@ export default function Header() {
         <Link
           href={href}
           className={`font-medium ${!top || usePathname().includes("bppp")
-            ? "text-gray-600 hover:text-white hover:scale-105"
+            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
             : (top && usePathname().includes("pelatihan")) ||
               usePathname().includes("sertifikasi") ||
               usePathname().includes("cek-sertifikat") ||

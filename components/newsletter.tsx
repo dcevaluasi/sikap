@@ -39,6 +39,7 @@ export default function Newsletter() {
       console.log("NO SERTIFIKAT VALID: ", response);
       setValidSertifikat(response.data.data);
       setIsShowValidForm(!isShowValidForm);
+      setNoRegistrasi("")
     } catch (error) {
       if (isAxiosError(error)) {
         Toast.fire({
@@ -57,24 +58,102 @@ export default function Newsletter() {
   return (
     <section id="cek-sertifikat" className="scroll-smooth">
       <AlertDialog open={isShowValidForm}>
-        <AlertDialogContent>
+        <AlertDialogContent className="flex flex-col items-center justify-center !w-[390px]">
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              <RiVerifiedBadgeFill className="h-4 w-4 text-blue-500" />
-              {validSertifikat?.NoRegistrasi!}
+            <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
+              <div className="w-24 h-24 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center animate-pulse">
+                <div className="w-16 h-16 rounded-full  bg-gradient-to-b from-gray-300 via-whiter to-white flex items-center justify-center animate-pulse">
+                  <RiVerifiedBadgeFill className="h-12 w-12 text-blue-500" />
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-1 w-full justify-center items-center">
+                <h1 className="font-bold text-2xl">{validSertifikat?.NoRegistrasi!}</h1>
+                <AlertDialogDescription className="w-full text-center font-normal text-sm -mt-1">
+                  No Registrasi valid dan dinyatakan telah mengikuti pelatihan <span className="font-semibold">{validSertifikat?.NamaPelatihan}</span> bidang <span className="font-semibold">
+                    {validSertifikat?.BidangPelatihan}</span> dan memiliki sertifikat kelulusan dengan detail sebagai berikut :
+                </AlertDialogDescription>
+              </div>
+
             </AlertDialogTitle>
-            <AlertDialogDescription>
-              Nama : {validSertifikat?.Nama}
-              No. Sertifikat : {validSertifikat?.NoSertifikat}
-            </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel
-              onClick={(e) => setIsShowValidForm(!isShowValidForm)}
-            >
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
+          <AlertDialogFooter className="w-full">
+
+            <div className="flex-col flex w-full">
+              <div className="flex flex-wrap mb-1 w-full">
+                <div className="w-full">
+                  <label
+                    className="block text-sm text-gray-800 font-medium mb-1"
+                    htmlFor="name"
+                  >
+                    No Sertifikat{" "}
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    className="form-input w-full text-sm text-black border-gray-300 rounded-md py-2 px-2"
+                    placeholder={validSertifikat?.NoSertifikat}
+                    required
+                    readOnly
+                  />
+                </div>
+              </div>
+              <div className="flex flex-wrap mb-1 w-full">
+                <div className="w-full">
+                  <label
+                    className="block text-sm text-gray-800 font-medium mb-1"
+                    htmlFor="name"
+                  >
+                    Nama Lengkap{" "}
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    className="form-input w-full text-sm text-black border-gray-300 rounded-md py-2 px-2"
+                    placeholder={validSertifikat?.Nama}
+                    required
+                    readOnly
+                  />
+                </div>
+              </div>
+              <div className="flex flex-wrap mb-1 w-full">
+                <div className="w-full">
+                  <label
+                    className="block text-sm text-gray-800 font-medium mb-1"
+                    htmlFor="name"
+                  >
+                    Nama Pelatihan{" "}
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    className="form-input w-full text-sm text-black border-gray-300 rounded-md py-2 px-2"
+                    placeholder={validSertifikat?.NamaPelatihan}
+                    required
+                    readOnly
+                  />
+                </div>
+              </div>
+              <div className="flex flex-wrap mb-3 w-full">
+                <div className="w-full">
+                  <label
+                    className="block text-sm text-gray-800 font-medium mb-1"
+                    htmlFor="name"
+                  >
+                    Tanggal Pelaksanaan{" "}
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    className="form-input w-full text-sm text-black border-gray-300 rounded-md py-2 px-2"
+                    placeholder={'10 Juni 2024 - 19 Juni 2024'}
+                    required
+                    readOnly
+                  />
+                </div>
+              </div>
+              <AlertDialogAction className="py-5" onClick={(e) => setIsShowValidForm(!isShowValidForm)}>Continue</AlertDialogAction>
+            </div>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
