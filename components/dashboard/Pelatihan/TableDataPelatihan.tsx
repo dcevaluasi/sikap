@@ -31,6 +31,7 @@ import {
   ArrowUpDown,
   Edit3Icon,
   Fullscreen,
+  LucideClipboardEdit,
   LucideNewspaper,
   LucidePrinter,
   Trash,
@@ -50,6 +51,7 @@ import {
   TbCalendarStats,
   TbChartBubble,
   TbChartDonut,
+  TbDatabase,
   TbDatabaseEdit,
   TbFileCertificate,
   TbFileDigit,
@@ -358,13 +360,13 @@ const TableDataPelatihan: React.FC = () => {
       cell: ({ row }) => (
         <div className="w-full flex flex-col gap-2">
           <div className="w-full relative ">
-            <div className="full h-40 relative">
+            <div className="full h-48 relative">
               <Image
                 alt={row.original.NamaPelatihan}
                 src={row.original.FotoPelatihan}
                 width={0}
                 height={0}
-                className="w-full h-40 object-cover rounded-xl"
+                className="w-full h-48 object-cover rounded-xl"
               />
               <div className="flex w-fit gap-1 absolute top-3 right-3">
                 {row.original.StatusApproval == "Selesai" && (
@@ -487,9 +489,9 @@ const TableDataPelatihan: React.FC = () => {
                     onClick={(e) =>
                       row.original.StatusApproval != "Selesai"
                         ? handleUpdateClosePelatihanELAUT(
-                            row.original.IdPelatihan,
-                            statusPelatihan
-                          )
+                          row.original.IdPelatihan,
+                          statusPelatihan
+                        )
                         : null
                     }
                   >
@@ -824,13 +826,13 @@ const TableDataPelatihan: React.FC = () => {
                       onClick={(e) =>
                         row.original.Status == "Belum Publish"
                           ? handleUpdatePublishPelatihanToELAUT(
-                              row.original.IdPelatihan,
-                              statusPelatihan
-                            )
+                            row.original.IdPelatihan,
+                            statusPelatihan
+                          )
                           : handleUpdatePublishPelatihanToELAUT(
-                              row.original.IdPelatihan,
-                              "Belum Publish"
-                            )
+                            row.original.IdPelatihan,
+                            "Belum Publish"
+                          )
                       }
                     >
                       {row.original.Status == "Publish"
@@ -841,6 +843,20 @@ const TableDataPelatihan: React.FC = () => {
                 </AlertDialogContent>
               </AlertDialog>
             </>
+
+            <Button
+              onClick={(e) =>
+                router.push(
+                  `/admin/lemdiklat/pelatihan/${row.getValue(
+                    "KodePelatihan"
+                  )}/bank-soal/${row.getValue("IdPelatihan")}`
+                )
+              }
+              variant="outline"
+              className="ml-auto border border-gray-600"
+            >
+              <TbDatabase className="h-4 w-4 text-gray-600" />
+            </Button>
           </div>
         </div>
       ),
@@ -1103,7 +1119,7 @@ const TableDataPelatihan: React.FC = () => {
           </AlertDialogHeader>
           <fieldset>
             <form autoComplete="off">
-              <div className="flex flex-wrap mb-1 w-full">
+              {/* <div className="flex flex-wrap mb-1 w-full">
                 <div className="w-full">
                   <label
                     className="block text-gray-800 text-sm font-medium mb-1"
@@ -1160,7 +1176,7 @@ const TableDataPelatihan: React.FC = () => {
                     />
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="flex flex-wrap -mx-3 mb-1">
                 <div className="w-full px-3">
@@ -1188,8 +1204,7 @@ const TableDataPelatihan: React.FC = () => {
                     </Link>
                   </div>
                   <p className="text-gray-700 text-xs mt-1">
-                    *Upload by excel jika dirasa materi pelatihan terlalu banyak
-                    (opsional)
+                    *Download template, input data sesuai format template lalu upload
                   </p>
                 </div>
               </div>

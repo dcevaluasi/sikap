@@ -30,32 +30,93 @@ import { TbCloudDownload, TbLink } from "react-icons/tb";
 import Image from "next/image";
 import SertifikatPage1 from "@/components/sertifikat/sertifikatPage1";
 import SertifikatPage2 from "@/components/sertifikat/sertifikatPage2";
+import CertificationTypeSection from "@/components/certificationTypeSection";
 
 function page() {
   return (
-    <section className="relative w-full mt-[17%] h-screen">
-      <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 relative">
-        <h1 className="h2 text-5xl mb-2 font-calsans leading-[100%]">
-          Cek Validitas <br />
-          Sertifikat Pelatihan & Kompetensi
-        </h1>
-        <p className="text-base text-gray-600">
-          Pastikan keaslian dan nilai sertifikat pelatihan serta kompetensi Anda
-          dengan layanan cek validitas kami. Percayakan masa depan Anda pada
-          sertifikasi yang terpercaya dan diakui secara luas. Cek sekarang untuk
-          memastikan langkah Anda menuju kesuksesan yang terjamin!
-        </p>
-      </div>
-      <Tab />
+    <>
+      <section className="relative h-screen flex items-center justify-center">
+        <Image
+          src={'/images/hero-img5.jpg'}
+          className="absolute w-full h-full object-cover duration-1000"
+          alt=""
+          layout="fill"
+          priority
+        />
 
-      {/* <Image
-        className="w-[200px] my-3 absolute bottom-0 right-1/2"
-        width={0}
-        height={0}
-        alt="Logo Kementrian Kelautan dan Perikanan RI"
-        src={"/book.png"}
-      /> */}
-    </section>
+        <div className="absolute w-full h-full bg-black bg-opacity-80"></div>
+
+        {/* Illustration behind hero content */}
+        <div
+          className="absolute left-1/2 transform -translate-x-1/2 bottom-0 pointer-events-none -z-1"
+          aria-hidden="true"
+        >
+          <svg
+            width="1360"
+            height="578"
+            viewBox="0 0 1360 578"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient
+                x1="50%"
+                y1="0%"
+                x2="50%"
+                y2="100%"
+                id="illustration-01"
+              >
+                <stop stopColor="#FFF" offset="0%" />
+                <stop stopColor="#EAEAEA" offset="77.402%" />
+                <stop stopColor="#DFDFDF" offset="100%" />
+              </linearGradient>
+            </defs>
+            <g fill="url(#illustration-01)" fillRule="evenodd">
+              <circle cx="1232" cy="128" r="128" />
+              <circle cx="155" cy="443" r="64" />
+            </g>
+          </svg>
+        </div>
+
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 z-[40]">
+          {/* Hero content */}
+          <div className="pt-32 pb-12 md:pt-40 md:pb-20">
+            {/* Section header */}
+
+            <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
+              {/* <Image
+              className="w-[250px] z-[9999] -mb-11 -mt-20"
+              width={0}
+              height={0}
+              src={"/logo-elaut.png"}
+              alt="Kementrian Kelautan dan Perikanan RI Logo"
+            /> */}
+              <h1
+                className="text-4xl md:text-[3.9rem] font-extrabold leading-[110%] tracking-tighter mb-3 -mt-2 text-white font-calsans"
+
+              >
+                Cek Sertifikat<br />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 leading-[110%]">
+                  Pelatihan dan Uji Kompetensi/Keahlianmu
+                </span>
+              </h1>
+              <div className="max-w-3xl mx-auto">
+                <p
+                  className="text-lg text-gray-200 mb-8"
+
+                  data-aos-delay="150"
+                >
+                  Aplikasi Pelatihan serta sertifikasi KP yang dikembangkan oleh
+                  BPPSDMKP untuk menjaring masyarakat KP, aparatur KP, dll untuk
+                  meningkatkan kompetensi di bidang KP
+                </p>
+              </div>
+              <CertificationTypeSection />
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+
   );
 }
 

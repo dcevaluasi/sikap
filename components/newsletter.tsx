@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "./ui/button";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { addFiveYears } from "@/utils/pelatihan";
 
 export default function Newsletter() {
   const [noRegistrasi, setNoRegistrasi] = React.useState<string>("");
@@ -58,7 +59,7 @@ export default function Newsletter() {
   return (
     <section id="cek-sertifikat" className="scroll-smooth">
       <AlertDialog open={isShowValidForm}>
-        <AlertDialogContent className="flex flex-col items-center justify-center !w-[390px]">
+        <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
           <AlertDialogHeader>
             <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
               <div className="w-24 h-24 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center animate-pulse">
@@ -120,7 +121,7 @@ export default function Newsletter() {
                   </p>
                 </div>
               </div>
-              <div className="flex flex-wrap  py-2  mb-6 w-full">
+              <div className="flex flex-wrap border-b py-2 border-b-gray-300 w-full">
                 <div className="w-full">
                   <label
                     className="block text-sm text-gray-800 font-medium mb-1"
@@ -134,7 +135,23 @@ export default function Newsletter() {
 
                 </div>
               </div>
+
+              <div className="flex flex-wrap  py-2  mb-6 w-full">
+                <div className="w-full">
+                  <label
+                    className="block text-sm text-gray-800 font-medium mb-1"
+                    htmlFor="name"
+                  >
+                    Diterbitkan Pada{" "}
+                  </label>
+                  <p className="text-gray-600 text-base -mt-1">
+                    {validSertifikat?.IsActice!}
+                  </p>
+
+                </div>
+              </div>
               <AlertDialogAction className="py-5" onClick={(e) => setIsShowValidForm(!isShowValidForm)}>Close</AlertDialogAction>
+              <p className="italic text-xs leading-[100%] mt-2">* This information is <span className="font-semibold ">valid</span> and comes from the Ministry of Maritime Affairs and Fisheries of the Republic of Indonesia and <span className="font-semibold">is valid until {addFiveYears(validSertifikat?.IsActice!)}</span></p>
             </div>
           </AlertDialogFooter>
         </AlertDialogContent>

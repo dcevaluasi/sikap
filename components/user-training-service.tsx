@@ -53,7 +53,7 @@ import TableDataPelatihan from "./dashboard/Pelatihan/TableDataPelatihan";
 import TableDataPelatihanUser from "./dashboard/Pelatihan/TableDataPelatihanUser";
 import { DialogSertifikatPelatihan } from "./sertifikat/dialogSertifikatPelatihan";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
-import { truncateText } from "@/utils";
+import { createSlug, truncateText } from "@/utils";
 import { Pelatihan } from "@/types/pelatihan";
 
 export default function UserTrainingService({ user }: { user: User | null }) {
@@ -293,7 +293,10 @@ export default function UserTrainingService({ user }: { user: User | null }) {
             className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[140%]"
           />
 
-          <p className="text-pretty text-sm text-gray-500">{}</p>
+
+
+
+          <p className="text-pretty text-sm text-gray-500">{ }</p>
         </div>
         {/* <div className="flex gap-1">
           <Button
@@ -393,7 +396,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                 </Slide>
               </div>
               {userDetail?.Pelatihan[indexPelatihanSelected].NoSertifikat ==
-              "" ? null : (
+                "" ? null : (
                 <DialogSertifikatPelatihan
                   pelatihan={selectedPelatihan!}
                   userPelatihan={userDetail?.Pelatihan[indexPelatihanSelected]!}
@@ -483,7 +486,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                         userDetail?.Pelatihan[indexPelatihanSelected]
                           ?.PostTest!) /
                         2 >
-                      60
+                        60
                         ? "LULUS"
                         : "TIDAK LULUS"}
                     </th>
@@ -492,7 +495,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
               </table>
 
               {userDetail?.Pelatihan[indexPelatihanSelected].NoSertifikat ==
-              "" ? null : (
+                "" ? null : (
                 <>
                   <DialogSertifikatPelatihan
                     userPelatihan={
@@ -613,19 +616,23 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                       </div>
                       <div className="mt-4">
                         <p className="text-pretty text-sm text-gray-500"></p>
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html:
-                              userDetail?.Pelatihan[indexPelatihanSelected]! &&
-                              truncateText(
-                                userDetail?.Pelatihan[indexPelatihanSelected]
-                                  ?.DetailPelatihan!,
-                                300,
-                                "..."
-                              ),
-                          }}
-                          className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000"
-                        />
+                        <div className="flex gap-1">
+                          <p
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                userDetail?.Pelatihan[indexPelatihanSelected]! &&
+                                truncateText(
+                                  userDetail?.Pelatihan[indexPelatihanSelected]
+                                    ?.DetailPelatihan!,
+                                  300,
+                                  "..."
+                                ),
+                            }}
+                            className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000"
+                          />
+
+                        </div>
+
                       </div>
                       <dl className="mt-6 flex gap-4 sm:gap-6">
                         <div className="flex flex-col-reverse">
@@ -644,7 +651,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                               .NoSertifikat! == ""
                               ? "-"
                               : userDetail?.Pelatihan[indexPelatihanSelected]
-                                  ?.NoSertifikat!}
+                                ?.NoSertifikat!}
                           </dt>
                           <dd className="text-xs text-gray-500">
                             No Sertifikat
@@ -656,7 +663,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                               .NoRegistrasi! == ""
                               ? "-"
                               : userDetail?.Pelatihan[indexPelatihanSelected]
-                                  ?.NoRegistrasi!}
+                                ?.NoRegistrasi!}
                           </dt>
                           <dd className="text-xs text-gray-500">
                             No Registrasi
@@ -666,18 +673,17 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                       <dl className="mt-3">
                         <div className="flex flex-col-reverse">
                           <dt
-                            className={`text-sm font-medium text-gray-600 ${
-                              userDetail?.Pelatihan[indexPelatihanSelected]
-                                ?.Keterangan! == ""
-                                ? "text-rose-500"
-                                : "text-green-500"
-                            }`}
+                            className={`text-sm font-medium text-gray-600 ${userDetail?.Pelatihan[indexPelatihanSelected]
+                              ?.Keterangan! == ""
+                              ? "text-rose-500"
+                              : "text-green-500"
+                              }`}
                           >
                             {userDetail?.Pelatihan[indexPelatihanSelected]
                               ?.Keterangan! == "" ? (
                               <span className="flex items-center">
                                 <IoMdCloseCircle />
-                                Data Belum Divalidasi
+                                Data belum divalidasi operator
                               </span>
                             ) : (
                               <span className="flex items-center">

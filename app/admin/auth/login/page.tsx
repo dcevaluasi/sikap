@@ -19,12 +19,13 @@ import {
 } from "@/components/ui/select";
 import { FiSlack } from "react-icons/fi";
 import { HiMiniUserGroup } from "react-icons/hi2";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
 
-  
+  const [captcha, setCaptcha] = React.useState<string | null>()
 
   /*
     state variables for login
@@ -191,10 +192,12 @@ function page() {
                 </SelectContent>
               </Select>
             </div>
+            <ReCAPTCHA sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!} className="mx-auto w-full font-inter text-sm" onChange={setCaptcha} />
             <div className="pb-2 pt-4">
               <button
                 type="submit"
-                className="uppercase block w-full p-3 text-lg rounded-lg bg-blue-600 focus:outline-none"
+                className={`capitalize block w-full p-3 text-lg rounded-lg ${captcha ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 hover:bg-gray-600'} focus:outline-none`}
+                disabled={captcha ? false : true}
               >
                 sign in
               </button>

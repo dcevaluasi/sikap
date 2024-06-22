@@ -49,7 +49,7 @@ export default function Header() {
                 ? "text-gray-600 hover:text-gray-900 hover:scale-105"
                 : (top && usePathname().includes("pelatihan")) ||
                   usePathname().includes("sertifikasi") ||
-                  usePathname().includes("cek-sertifikat") ||
+
                   usePathname().includes("users")
                   ? "text-gray-900 hover:text-gray-900 hover:scale-105"
                   : usePathname().includes("complete-profile")
@@ -88,7 +88,7 @@ export default function Header() {
             ? "text-gray-600 hover:text-gray-900 hover:scale-105"
             : (top && usePathname().includes("pelatihan")) ||
               usePathname().includes("sertifikasi") ||
-              usePathname().includes("cek-sertifikat") ||
+
               usePathname().includes("users")
               ? "text-gray-900 hover:text-gray-900 hover:scale-105"
               : usePathname().includes("complete-profile")
@@ -119,7 +119,7 @@ export default function Header() {
             ? "text-gray-600 hover:text-gray-900 hover:scale-105"
             : (top && usePathname().includes("pelatihan")) ||
               usePathname().includes("sertifikasi") ||
-              usePathname().includes("cek-sertifikat") ||
+
               usePathname().includes("users")
               ? "text-gray-900 hover:text-gray-900 hover:scale-105"
               : usePathname().includes("complete-profile")
@@ -189,7 +189,7 @@ export default function Header() {
               </NavDropDown>
 
               <NavLinkDefault
-                href="#cek-sertifikat"
+                href="#"
                 name="Cek Sertifikat"
                 top={top}
               />
