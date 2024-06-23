@@ -21,33 +21,77 @@ import {
 } from "@/components/ui/alert-dialog"
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { IoMdCloseCircle } from 'react-icons/io'
 
 
 function Page() {
-    // React.useEffect(() => {
-    //     const handleBeforeUnload = (event: any) => {
-    //         event.preventDefault();
-    //         event.returnValue = '';
-    //         return '';
-    //     };
+    React.useEffect(() => {
+        const handleBeforeUnload = (event: any) => {
+            event.preventDefault();
+            event.returnValue = '';
+            return '';
+        };
 
-    //     window.addEventListener('beforeunload', handleBeforeUnload);
-    //     return () => {
-    //         window.removeEventListener('beforeunload', handleBeforeUnload);
-    //     };
-    // }, []);
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
 
-    // React.useEffect(() => {
-    //     const handleBlur = () => {
-    //         alert('JIka kamu membuka tab, kamu melakukan kecurangan dan akan diskualifikasi secara otomatis!.');
-    //     };
+    const [doCheating, setDoCheating] = React.useState<boolean>(false)
+    const [countDoCheating, setCountDoCheating] = React.useState<number>(0)
 
-    //     window.addEventListener('blur', handleBlur);
+    React.useEffect(() => {
+        const handleKeyDown = (e: any) => {
+            if (e.key === 'PrintScreen') {
+                e.preventDefault();
+                alert('Screenshots are disabled.');
+            }
+        };
 
-    //     return () => {
-    //         window.removeEventListener('blur', handleBlur);
-    //     };
-    // }, []);
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    React.useEffect(() => {
+        const handleBlur = () => {
+            const confirmCheat = confirm('JIka kamu membuka tab, kamu melakukan kecurangan dan kamu diskualifikasi secara otomatis!.');
+            if (confirmCheat) {
+                console.log('Setting doCheating to true');
+                setDoCheating(true)
+                Cookies.set('DOCHEATING', (countDoCheating + 1).toString())
+                Toast.fire({
+                    icon: "error",
+                    title: `Kamu didiskualifikasi karena telah melanggar aturan membuka tab dan keluar dari browser!`,
+                });
+                router.replace('/dashboard')
+            } else {
+                console.log('Setting doCheating to true');
+                setDoCheating(true)
+                Cookies.set('DOCHEATING', (countDoCheating + 1).toString())
+                Toast.fire({
+                    icon: "error",
+                    title: `Kamu didiskualifikasi karena telah melanggar aturan membuka tab dan keluar dari browser!`,
+                });
+                router.replace('/dashboard')
+            }
+
+        };
+
+        window.addEventListener('blur', handleBlur);
+
+        return () => {
+            window.removeEventListener('blur', handleBlur);
+        };
+    }, []);
+
+    React.useEffect(() => {
+        console.log('doCheating state updated:', doCheating);
+        console.log('countDoCheating state updated:', Cookies.get('DOCHEATING'));
+    }, [doCheating]);
 
     type SoalUser = {
         Soal: Soal[];
@@ -146,7 +190,22 @@ function Page() {
 
     return (
         <section className='w-full h-screen bg-gray-900 grid items-center justify-center text-white relative'>
-            {
+            {doCheating ? <div className="w-fit flex flex-col items-center justify-center gap-2 max-w-md mx-auto text-center">
+                <div className="rounded-full w-fit bg-white shadow-custom p-7">
+                    <IoMdCloseCircle className='text-rose-500 text-6xl' />
+                </div>
+                <div className="flex flex-col gap-1">
+                    <h1 className="text-gray-200 text-3xl">
+                        Oopsss!
+                    </h1>
+                    <p className="text-gray-200">
+                        Kamu telah melanggar aturan karena keluar dari tab/browser pengerjaan pre-test, sekali lagi kamu melakukannya maka akan otomatis diskualifikasi pada pre-test ini!
+                    </p>
+                </div>
+                {/* {
+                        countDoCheating != 2 && <Button onClick={(e) => setDoCheating(false)} className='bg-white hover:bg-gray-200 text-rose-500'>Lanjutkan Pengerjaan</Button>
+                    } */}
+            </div> :
                 <>
                     <div className="absolute w-fit flex gap-2 top-5 right-5 text-2xl font-medium text-white items-center">
                         <TbClock />
