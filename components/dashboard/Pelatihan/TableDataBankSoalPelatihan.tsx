@@ -72,7 +72,7 @@ import {
 } from "react-icons/hi2";
 import { RiFilePaper2Line, RiShipLine, RiVerifiedBadgeFill } from "react-icons/ri";
 import Link from "next/link";
-import { FaRupiahSign } from "react-icons/fa6";
+import { FaRegPaperPlane, FaRupiahSign } from "react-icons/fa6";
 import Toast from "@/components/toast";
 import { GiTakeMyMoney } from "react-icons/gi";
 import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
@@ -92,7 +92,7 @@ const TableDataBankSoalPelatihan = () => {
     const handleFetchingPublicTrainingDataById = async () => {
         try {
             const response: AxiosResponse = await axios.get(
-                `${baseUrl}/getPelatihanUser?idPelatihan=${id}`
+                `${baseUrl}/getPelatihanUser?idPelatihan=${id}`,
             );
             console.log("PELATIHAN : ", response.data);
             console.log("USER PELATIHAN: ", response.data.UserPelatihan);
@@ -107,11 +107,14 @@ const TableDataBankSoalPelatihan = () => {
     const handleFetchingDatabaseSoalDataById = async () => {
         try {
             const response: AxiosResponse = await axios.get(
-                `${baseUrl}/lemdik/getSoalPelatihan?idPelatihan=${id}`
+                `${baseUrl}/lemdik/GetPertanyaanRandom`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('XSRF091')}`
+                }
+            }
             );
             console.log("BANK SOAL : ", response.data);
-            setDataPelatihan(response.data);
-            setData(response.data.UserPelatihan);
+
         } catch (error) {
             console.error("Error posting training data:", error);
             throw error;
@@ -119,6 +122,7 @@ const TableDataBankSoalPelatihan = () => {
     };
     React.useEffect(() => {
         handleFetchingPublicTrainingDataById();
+        handleFetchingDatabaseSoalDataById()
     }, []);
 
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -197,6 +201,36 @@ const TableDataBankSoalPelatihan = () => {
             handleFetchingPublicTrainingDataById();
         }
     };
+
+    const handlingAddSoalUsers = async (e: any) => {
+        e.preventDefault()
+        try {
+            const response = await axios.post(
+                `${baseUrl}/lemdik/AddSoalUsers`,
+                {
+                    id_pelatihan: id
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+                    },
+                }
+            );
+            Toast.fire({
+                icon: "success",
+                title: `Berhasil menyematkan soal ke peserta pelatihan!`,
+            });
+            console.log("SOAL PELATIHAN: ", response);
+
+        } catch (error) {
+            console.error("ERROR SOAL PELATIHAN: ", error);
+            Toast.fire({
+                icon: "success",
+                title: `Gagal menyematkan soal ke peserta pelatihan!`,
+            });
+
+        }
+    }
 
     const [
         openFormValidasiDataPesertaPelatihan,
@@ -549,76 +583,6 @@ const TableDataBankSoalPelatihan = () => {
 
     return (
         <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
-            <AlertDialog open={isOpenFormInputNilai}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle className="flex items-center gap-2">
-                            {" "}
-                            <HiMiniUserGroup className="h-4 w-4" />
-                            Upload Nilai Peserta
-                        </AlertDialogTitle>
-                        <AlertDialogDescription className="-mt-2">
-                            Upload nilai peserta pelatihan yang diselenggarakan yang nantinya
-                            akan tercantum pada sertifikat peserta pelatihan!
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <fieldset>
-                        <form autoComplete="off">
-                            <div className="flex gap-2 w-full">
-                                <div className="flex gap-2 mb-1 w-full">
-                                    <div className="w-full">
-                                        <label
-                                            className="block text-gray-800 text-sm font-medium mb-1"
-                                            htmlFor="name"
-                                        >
-                                            Nilai Pre Test <span className="text-red-600">*</span>
-                                        </label>
-                                        <input
-                                            id="name"
-                                            type="text"
-                                            className="form-input w-full text-black border-gray-300 rounded-md"
-                                            required
-                                            value={nilaiPretest}
-                                            onChange={(e) => setNilaiPretest(e.target.value)}
-                                        />
-                                    </div>
-                                    <div className="w-full">
-                                        <label
-                                            className="block text-gray-800 text-sm font-medium mb-1"
-                                            htmlFor="name"
-                                        >
-                                            Nilai Post Test <span className="text-red-600">*</span>
-                                        </label>
-                                        <input
-                                            id="name"
-                                            type="text"
-                                            className="form-input w-full text-black border-gray-300 rounded-md"
-                                            required
-                                            value={nilaiPosttest}
-                                            onChange={(e) => setNilaiPosttest(e.target.value)}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <AlertDialogFooter className="mt-3">
-                                <AlertDialogCancel
-                                    onClick={(e) =>
-                                        setIsOpenFormInputNilai(!isOpenFormInputNilai)
-                                    }
-                                >
-                                    Cancel
-                                </AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={(e) => handleUploadNilaiPeserta(selectedIdPeserta)}
-                                >
-                                    Upload
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </form>
-                    </fieldset>
-                </AlertDialogContent>
-            </AlertDialog>
 
             <AlertDialog open={isOpenFormPeserta}>
                 <AlertDialogContent>
@@ -771,6 +735,14 @@ const TableDataBankSoalPelatihan = () => {
                                     </AlertDialogFooter>
                                 </AlertDialogContent>
                             </AlertDialog>
+
+                            <div
+                                onClick={(e) => handlingAddSoalUsers(e)}
+                                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
+                            >
+                                <FaRegPaperPlane />
+                                Sematkan Soal
+                            </div>
 
                             <div
                                 onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}

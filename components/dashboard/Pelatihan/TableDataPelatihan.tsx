@@ -1063,14 +1063,14 @@ const TableDataPelatihan: React.FC = () => {
               Silabus Pelatihan
             </p>
             <p className="text-xs font-medium text-gray-900 tracking-tight leading-[110%] mt-1">
-              {row.original.SilabusPelatihan}
+
               <a
-                href="http://"
+                href={row.original.SilabusPelatihan}
                 target="_blank"
                 className="text-blue-500 underline lowercase"
                 rel="noopener noreferrer"
               >
-                https://elaut.kkp.go.id/filesilabus.pdf
+                {row.original.SilabusPelatihan}
               </a>
             </p>
           </div>
