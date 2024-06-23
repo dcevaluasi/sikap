@@ -200,7 +200,7 @@ function Page() {
                             Oopsss!
                         </h1>
                         <p className="text-gray-200">
-                            Kamu telah melanggar aturan karena keluar dari tab/browser pengerjaan pre-test, sekali lagi kamu melakukannya maka akan otomatis diskualifikasi pada pre-test ini!
+                            Kamu telah melanggar aturan karena keluar dari tab/browser pengerjaan pre-test, kamu otomatis diskualifikasi pada pre-test ini!
                         </p>
                     </div>
                     {/* {
