@@ -888,11 +888,11 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
                                         <div className="flex flex-col gap-1 w-full justify-center items-center">
                                           {
-                                            userDetail!.Pelatihan[indexPelatihanSelected]!.PreTest == 0 && <h1 className="font-bold text-2xl text-center leading-[100%]">{selectedPelatihan! && selectedPelatihan!.NamaPelatihan}</h1>
+                                            userDetail!.Pelatihan[indexPelatihanSelected]!.PostTest == 0 && <h1 className="font-bold text-2xl text-center leading-[100%]">{selectedPelatihan! && selectedPelatihan!.NamaPelatihan}</h1>
                                           }
 
                                           {
-                                            userDetail!.Pelatihan[indexPelatihanSelected]!.PreTest == 0 && <>  <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
+                                            userDetail!.Pelatihan[indexPelatihanSelected]!.PostTest == 0 && <>  <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
                                               Sebagai bagian dari pelaksanaan pelatihan agar dapat mengetahui kemampuan peserta diawal harap untuk mengikuti <span className="italic">post-test</span> dan  {isOpenGuideline ? 'membaca petunjuk pengerjaan' : 'memasukkan kode akses'} terlebih dahulu
                                             </AlertDialogDescription>{isOpenGuideline ? <AlertDialogDescription className="w-full text-left font-normal text-sm mt-2">
                                               <span className="font-semibold text-[#000]">Petunjuk Pengerjaan : </span><br />
@@ -912,7 +912,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                                     <AlertDialogFooter className="w-full">
 
                                       {
-                                        userDetail!.Pelatihan[indexPelatihanSelected]!.PreTest == 0 ? <div className="flex-col flex w-full gap-2">
+                                        userDetail!.Pelatihan[indexPelatihanSelected]!.PostTest == 0 ? <div className="flex-col flex w-full gap-2">
                                           {
                                             isOpenGuideline ? <Button className="py-5 bg-blue-500 hover:bg-blue-500" onClick={(e) => setIsOpenGuideline(!isOpenGuideline)}>Lanjut</Button> : <AlertDialogAction className="py-5" disabled={codeAccess == '' ? true : false} onClick={(e) => handleDirectToExamPostTest(e)}>Mulai Post Test</AlertDialogAction>
                                           }

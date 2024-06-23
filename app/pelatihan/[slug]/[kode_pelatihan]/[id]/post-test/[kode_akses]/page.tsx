@@ -175,9 +175,9 @@ function Page() {
                                 </AlertDialogTrigger>
                                 <AlertDialogContent>
                                     <AlertDialogHeader>
-                                        <AlertDialogTitle>Kamu yakin akan mensubmit soal?</AlertDialogTitle>
+                                        <AlertDialogTitle>Kamu yakin akan mensubmit jawaban?</AlertDialogTitle>
                                         <AlertDialogDescription>
-                                            Jika kamu mensubmit soal, kamu akan segera mendapatkan nilai dari pengerjaan pre-test ini
+                                            Jika kamu mensubmit jawaban, kamu akan segera mendapatkan nilai dari pengerjaan post-test ini
                                         </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
