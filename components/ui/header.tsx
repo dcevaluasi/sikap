@@ -141,7 +141,7 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed ${usePathname().includes('pre-test') ? 'hidden' : 'block'} w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${!top
+      className={`fixed ${usePathname().includes('pre-test') || usePathname().includes('post-test') ? 'hidden' : 'block'} w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${!top
         ? `bg-white backdrop-blur-sm shadow-lg`
         : usePathname().includes("pelatihan") ||
           usePathname().includes("sertifikasi") ||
