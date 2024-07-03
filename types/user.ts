@@ -55,4 +55,5 @@ export type UserPelatihan = {
   Nama: string
   TotalBayar: string
   CodeAksess: string
+  TempatTanggalLahir: string;
 }

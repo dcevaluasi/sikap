@@ -224,11 +224,11 @@ export default function UserCertificateService({
             />
             <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
               <h1 className="text-3xl font-calsans leading-[110%] text-black">
-                Belum Ada Sertifikasi
+                Belum Ada Uji Kompetensi
               </h1>
               <div className="text-gray-600 text-center  max-w-md">
-                Kamu belum punya sertifikasi kompetensi maupun profesi, ayo cari
-                sertifikasi menarik di E-LAUT dan jadilah SDM unggul untuk
+                Kamu belum mengikuti uji kompetensi apapun, ayo cari uji
+                kompetensi menarik di E-LAUT dan jadilah SDM unggul untuk
                 Indonesia!{" "}
                 <Link
                   href="/"

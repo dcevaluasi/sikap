@@ -8,9 +8,9 @@ export type Product = {
   profit: number;
 };
 
-export type PelatihanMasyarakat =  {
+export type PelatihanMasyarakat = {
   IdPelatihan: number;
-  IdLemdik: string; 
+  IdLemdik: string;
   KodePelatihan: string;
   NamaPelatihan: string;
   PenyelenggaraPelatihan: string;
@@ -59,27 +59,28 @@ export type MateriPelatihan = {
 
 export type UserPelatihan = {
   CreatedAt: string;
-    IdUserPelatihan: number;
-    IdPelatihan: number;
-    IdUsers: number;
-    IsActice: string;
-    IsKeterangan: string;
-    MetodoPembayaran: string;
-    NilaiPraktek: number;
-    NilaiTeory: number;
-    NoRegistrasi: string;
-    NoSertifikat: string;
-    PostTest: number;
-    PreTest: number;
-    StatusPembayaran: string;
-    UpdateAt: string;
-    WaktuPembayaran: string
-    NamaPelatihan: string;
-    DetailPelatihan: string;
-    BidangPelatihan: string;
-    Keterangan: string;
-    Nama: string;
-    TotalBayar: string;
+  IdUserPelatihan: number;
+  IdPelatihan: number;
+  IdUsers: number;
+  IsActice: string;
+  IsKeterangan: string;
+  MetodoPembayaran: string;
+  NilaiPraktek: number;
+  NilaiTeory: number;
+  NoRegistrasi: string;
+  NoSertifikat: string;
+  PostTest: number;
+  PreTest: number;
+  StatusPembayaran: string;
+  UpdateAt: string;
+  WaktuPembayaran: string
+  NamaPelatihan: string;
+  DetailPelatihan: string;
+  BidangPelatihan: string;
+  Keterangan: string;
+  Nama: string;
+  TotalBayar: string;
+  TempatTanggalLahir: string;
 };
 
 export type Pelatihan = {

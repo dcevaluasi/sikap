@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Dashboard AKAPI - Aplikasi Awak Kapal Perikanan",
 };
 
-export default function Home() {
+export default function page() {
   return (
     <>
       <DefaultLayoutAKP>

@@ -28,11 +28,11 @@ export function DialogSertifikatPelatihan({
   const componentRef = useRef(null);
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
-    bodyClass: "font-cambria",
-    fonts: [
-      { family: "bookmanoldstyle.ttf", source: "./font/bookmanoldstyle.ttf" },
-    ],
+    bodyClass: "font-bos",
+    fonts: [{ family: "Bookmand Old Style", source: "./font/bos.ttf" }],
   });
+
+  console.log("SELECTED PELATIHAN : ", pelatihan);
 
   return (
     <Dialog>
@@ -102,15 +102,13 @@ const SertifikatPage1 = React.forwardRef(
 
     return (
       <div className="flex flex-col gap-8" ref={ref}>
-        <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-10 rounded-md font-cambria leading-[120%] h-[100vh]">
+        <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-10 rounded-md font-bos leading-[120%] h-[100vh]">
           <div className="flex flex-row justify-end items-start">
-            <p className="text-base">
-              No. Reg. : {userPelatihan?.NoRegistrasi}
-            </p>
+            <p className="text-base">No. Reg : {userPelatihan?.NoRegistrasi}</p>
           </div>
 
           <div className="flex flex-col gap-0 w-full items-center justify-center mt-6">
-            <h1 className="font-black text-3xl">SERTIFIKAT</h1>
+            <h1 className="font-black text-3xl font-bosBold">SERTIFIKAT</h1>
             <p className="text-base mt-1 italic">CERTIFICATE</p>
 
             <p className="text-xl mt-1 font-black">
@@ -118,14 +116,14 @@ const SertifikatPage1 = React.forwardRef(
             </p>
           </div>
 
-          <div className="flex w-full flex-col items-start -mt-2 text-center font-cambria">
+          <div className="flex w-full flex-col items-start -mt-2 text-center font-bos">
             <p>
               Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan
               Perikanan berdasarkan Peraturan Pemerintah Nomor.62 Tahun 2014
               tentang Penyelenggaraan Pendidikan, Pelatihan dan Penyuluhan
               Perikanan, serta ketentuan pelaksanaannya menyatakan bahwa :
             </p>
-            <p className="text-xs italic font-cambria">
+            <p className="text-xs italic font-bos">
               The Agency for Marine and Fisheries Extension and Human Resources
               Development based on Government Regulation Number 62 of 2014
               concerning the Implementation of Fisheries Education, Training and
@@ -138,7 +136,7 @@ const SertifikatPage1 = React.forwardRef(
               <h1 className="font-black text-3xl">{userPelatihan?.Nama}</h1>
             </div>
             <div className="text-center">
-              <p>Lahir di XXXXXXXXXXX </p>
+              <p>Lahir di {userPelatihan?.TempatTanggalLahir} </p>
               <p className="text-xs italic">Born in Bekasi, 01 October 2001</p>
             </div>
           </div>
@@ -164,7 +162,7 @@ const SertifikatPage1 = React.forwardRef(
           </div>
 
           <div className="flex gap-2 items-center justify-center mt-2">
-            <div className="flex flex-col font-cambria text-center items-center justify-center">
+            <div className="flex flex-col font-bos text-center items-center justify-center">
               <div className="flex w-full flex-col items-cennter mt-2 text-center">
                 <p>Jakarta, {getCurrentDate()}</p>
                 <p>
@@ -191,10 +189,10 @@ const SertifikatPage1 = React.forwardRef(
           </div>
         </div>
 
-        <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-10 rounded-md font-cambria leading-[120%] !h-[120vh]">
+        <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-10 rounded-md font-bos leading-[120%] !h-[120vh]">
           <div className="flex flex-row justify-center items-center">
             <div className="flex flex-row gap-2 items-center">
-              <div className="flex flex-col font-cambria text-center">
+              <div className="flex flex-col font-bos text-center">
                 <p className="font-extrabold max-w-md w-full italic">
                   {pelatihan?.NamaPelatihan}
                 </p>

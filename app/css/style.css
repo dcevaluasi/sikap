@@ -15,3 +15,17 @@
         direction: rtl;
     }
 }
+
+@font-face {
+    font-family: 'Bookman Old Style';
+    src: url('./../font/bos.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'Bookman Old Style Bold';
+    src: url('./../font/bos_bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }

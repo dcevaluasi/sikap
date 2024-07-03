@@ -226,7 +226,8 @@ module.exports = {
         inter: ['var(--font-inter)', 'sans-serif'],
         calsans: ['var(--font-calsans)', 'sans-serif'],
         cambria: ['var(--font-cambria)', 'sans-serif'],
-        BOS: ['var(--font-bos)', 'sans-serif'],
+        bos: ['var(--font-bos)', 'sans-serif'],
+        bosBold: ['var(--font-bosBold)', 'sans-serif'],
         delius: ['var(--font-delius)', 'sans-serif'],
       },
       fontSize: {
