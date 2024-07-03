@@ -350,7 +350,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                     • Database Pelatihan
                                   </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                   <Link
                                     href="/admin/lemdiklat/pelatihan/pemberitahuan-pelatihan"
                                     className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
@@ -373,7 +373,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   >
                                     • Penerbitan STTPL
                                   </Link>
-                                </li>
+                                </li> */}
                                 {/* <li>
                               <Link
                                 href="/forms/form-elements"
@@ -500,7 +500,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               }}
                             >
                               <TbFileCertificate className="text-xl" />
-                              Sertifikasi Non-Konvensi
+                              Uji Kompetensi
                               <svg
                                 className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
                                   open && "rotate-180"
@@ -528,16 +528,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                                 <li>
                                   <Link
-                                    href="/forms/form-elements"
+                                    href="/admin/lemdiklat/ujikom"
                                     className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                      pathname === "/forms/form-elements" &&
+                                      pathname === "/admin/lemdiklat/ujikom" &&
                                       "text-white"
                                     }`}
                                   >
-                                    Ajukan Sertifikasi
+                                    Database Uji Kompetensi
                                   </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                   <Link
                                     href="/forms/form-elements"
                                     className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
@@ -558,7 +558,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   >
                                     Peserta Sertifikasi
                                   </Link>
-                                </li>
+                                </li> */}
                               </ul>
                             </div>
                             {/* <!-- Dropdown Menu End --> */}

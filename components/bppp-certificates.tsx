@@ -32,6 +32,7 @@ import { PelatihanMasyarakat } from "@/types/product";
 import ListBPPP from "./list-bppp";
 import { useSearchParams } from "next/navigation";
 import { getPenyeleggara } from "@/utils/pelatihan";
+import FeaturesPelatihanBalai from "./features-pelatihan-balai";
 
 export default function BPPPCertificates({
   data,
@@ -53,7 +54,7 @@ export default function BPPPCertificates({
 
           <div className="max-w-2xl mx-auto text-center pb-5 md:pb-8">
             <h1 className="text-3xl font-calsans leading-[110%]">
-              Sertifikasi Kompetensi
+              Uji Kompetensi
             </h1>
             <p className="text-base text-gray-600">
               Optimalkan potensi sumber daya laut. Bergabunglah dalam pelatihan
@@ -61,8 +62,9 @@ export default function BPPPCertificates({
               berkelanjutan dan produktif.
             </p>
           </div>
-          <Tab />
-          <ListBPPP pelatihan={data} />
+          {/* <Tab />
+          <ListBPPP pelatihan={data} ty /> */}
+          <FeaturesPelatihanBalai pelatihan={data} />
         </div>
       </div>
     </section>

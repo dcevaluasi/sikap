@@ -46,7 +46,7 @@ export default function BPPPServices() {
     },
     {
       id: 2,
-      name: "Sertifikasi",
+      name: "Uji Kompetensi",
       description:
         "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
       image: "/illustrations/bppp-certificate.png",
@@ -185,6 +185,10 @@ export default function BPPPServices() {
       </section>
       {indexMenuSelected == 0 ? (
         <BPPPTrainings data={data} />
+      ) : indexMenuSelected == 1 ? (
+        <BPPPCertificates data={data} />
+      ) : indexMenuSelected == 2 ? (
+        <BPPPCertificates data={data} />
       ) : (
         <BPPPCertificates data={data} />
       )}

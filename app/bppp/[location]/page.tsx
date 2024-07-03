@@ -10,6 +10,7 @@ import TrainingTypeSection from "@/components/trainingTypeSection";
 import BPPPServices from "@/components/bppp-services";
 import BPPPTrainings from "@/components/bppp-trainings";
 import { convertToBPPP } from "@/utils/lemdiklat";
+import Footer from "@/components/ui/footer";
 
 export default function Page() {
   const pathname = usePathname();
@@ -48,6 +49,7 @@ export default function Page() {
     <>
       <HeroBPPP bppp={location!} />
       <BPPPServices />
+      <Footer />
     </>
   );
 }

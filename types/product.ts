@@ -46,6 +46,44 @@ export type PelatihanMasyarakat = {
   PenerbitanSertifikatDiterima: string;
 }
 
+export type UjiKompetensi = {
+  IdUjikom: number;
+  IdLemdik: string;
+  KodeUjikom: string;
+  NamaUjikom: string;
+  PenyelenggaraUjikom: string;
+  DetailUjikom: string;
+  JenisUjikom: string;
+  BidangUjikom: string;
+  DukunganProgramTerobosan: string;
+  TanggalMulaiUjikom: string;
+  TanggalBerakhirUjikom: string;
+  HargaUjikom: string;
+  Instruktur: string;
+  FotoUjikom: string;
+  Status: string;
+  MemoPusat: string;
+  SilabusUjikom: string;
+  LokasiUjikom: string;
+  PelaksanaanUjikom: string;
+  UjiKompetensi: string;
+  KoutaUjikom: string; // type from be, should be KuotaUjikom
+  AsalUjikom: string;
+  JenisSertifikat: string;
+  TtdSertifikat: string;
+  NoSertifikat: string;
+  IdSaranaPrasarana: string;
+  IdKonsumsi: string;
+  CreatedAt: string;
+  UpdatedAt: string;
+  UserUjikom: UserUjikom[];
+  MateriUjikom: MateriUjikom[];
+  BeritaAcara: string;
+  CatatanPenerbitanByPusat: string;
+  StatusApproval: string;
+  PenerbitanSertifikatDiterima: string;
+}
+
 export type MateriPelatihan = {
   CreateAt: string;
   Deskripsi: string;
@@ -56,6 +94,45 @@ export type MateriPelatihan = {
   NamaMateri: string;
   UpdateAt: string;
 }
+
+
+export type MateriUjikom = {
+  CreateAt: string;
+  Deskripsi: string;
+  IdMateriPelatihan: number;
+  IdPelatihan: number;
+  JamPraktek: string;
+  JamTeory: string;
+  NamaMateri: string;
+  UpdateAt: string;
+}
+
+export type UserUjikom = {
+  CreatedAt: string;
+  IdUserPelatihan: number;
+  IdPelatihan: number;
+  IdUsers: number;
+  IsActice: string;
+  IsKeterangan: string;
+  MetodoPembayaran: string;
+  NilaiPraktek: number;
+  NilaiTeory: number;
+  NoRegistrasi: string;
+  NoSertifikat: string;
+  PostTest: number;
+  PreTest: number;
+  StatusPembayaran: string;
+  UpdateAt: string;
+  WaktuPembayaran: string
+  NamaPelatihan: string;
+  DetailPelatihan: string;
+  BidangPelatihan: string;
+  Keterangan: string;
+  Nama: string;
+  TotalBayar: string;
+  TempatTanggalLahir: string;
+};
+
 
 export type UserPelatihan = {
   CreatedAt: string;

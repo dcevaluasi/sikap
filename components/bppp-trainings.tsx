@@ -33,6 +33,11 @@ import ListBPPP from "./list-bppp";
 import { useSearchParams } from "next/navigation";
 import { getPenyeleggara } from "@/utils/pelatihan";
 import { IoMdPricetag } from "react-icons/io";
+import FeaturesPelatihanBbalai from "./features-pelatihan-balai";
+import FeaturesPelatihanBalai from "./features-pelatihan-balai";
+import { Slide } from "react-awesome-reveal";
+import Image from "next/image";
+import Pelatihan from "./dashboard/Dashboard/Pelatihan";
 
 export default function BPPPTrainings({
   data,
@@ -62,8 +67,9 @@ export default function BPPPTrainings({
               berkelanjutan dan produktif.
             </p>
           </div>
-          <Tab />
-          <ListBPPP pelatihan={data} />
+          {/* <Tab /> */}
+
+          <FeaturesPelatihanBalai pelatihan={data} />
         </div>
       </div>
     </section>

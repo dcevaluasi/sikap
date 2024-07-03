@@ -5,22 +5,33 @@ import { TbClockHour2 } from "react-icons/tb";
 import Link from "next/link";
 import { createSlug, truncateText } from "@/utils";
 import { PelatihanMasyarakat } from "@/types/product";
-import { Slide } from "react-awesome-reveal";
+import { Bounce, Slide } from "react-awesome-reveal";
 
-function ListBPPP({ pelatihan }: { pelatihan: PelatihanMasyarakat[] }) {
+function ListBPPP({
+  pelatihan,
+  type,
+}: {
+  pelatihan: PelatihanMasyarakat[];
+  type: string;
+}) {
+  const filteredPelatihan = pelatihan.filter(
+    (item) => item.JenisSertifikat === type
+  );
+
   return (
     <div className="w-full items-center justify-center flex">
       <div className="w-fit grid grid-cols-3 gap-y-6 gap-x-5 items-center ml-6">
-        {pelatihan.map((pelatihan: PelatihanMasyarakat, index: number) => (
-          <Slide
-            direction="up"
-            key={index}
-            duration={500 * (index + 1)}
-            className={`${pelatihan?.Status == "Belum Publish" && "hidden"}`}
-          >
-            <CardPelatihan pelatihan={pelatihan} />
-          </Slide>
-        ))}
+        {filteredPelatihan.map(
+          (pelatihan: PelatihanMasyarakat, index: number) => (
+            <Bounce
+              key={index}
+              duration={500 * (index + 1)}
+              className={`${pelatihan?.Status == "Belum Publish" && "hidden"}`}
+            >
+              <CardPelatihan pelatihan={pelatihan} />
+            </Bounce>
+          )
+        )}
       </div>
     </div>
   );

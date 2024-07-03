@@ -98,6 +98,7 @@ function FormRegistrasi() {
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [isInputError, setIsInputError] = React.useState(false);
+  const [isKUSUKA, setIsKUSUKA] = React.useState("");
 
   const handleRegistrasiAkun = async (e: FormEvent) => {
     e.preventDefault();
@@ -116,6 +117,7 @@ function FormRegistrasi() {
             nama: name,
             password: password,
             no_number: phoneNumber,
+            kusuka_users: isKUSUKA,
           }),
           {
             headers: {
@@ -208,7 +210,8 @@ function FormRegistrasi() {
               <AlertDialogAction
                 onClick={(e) => {
                   setOpenInfoKusuka(false);
-                  Cookies.set("IsUsedKusuka", "true");
+                  setIsKUSUKA("yes");
+                  Cookies.set("IsUsedKusuka", "yes");
                 }}
               >
                 Lanjutkan

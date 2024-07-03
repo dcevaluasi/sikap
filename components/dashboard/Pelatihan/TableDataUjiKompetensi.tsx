@@ -89,7 +89,7 @@ import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PelatihanMasyarakat } from "@/types/product";
+import { PelatihanMasyarakat, UjiKompetensi } from "@/types/product";
 import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
 import {
@@ -110,14 +110,14 @@ import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifi
 import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 
-const TableDataPelatihan: React.FC = () => {
+const TableDataUjiKompetensi: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
   const [showCertificateSetting, setShowCertificateSetting] =
     React.useState<boolean>(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
+  const [data, setData] = React.useState<UjiKompetensi[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
 
@@ -125,7 +125,7 @@ const TableDataPelatihan: React.FC = () => {
     setIsFetching(true);
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getPelatihan?id_lemdik=${Cookies.get("IDLemdik")}`
+        `${baseUrl}/lemdik/getUjikom?id_lemdik=${Cookies.get("IDLemdik")}`
       );
       console.log("PELATIHAN BY LEMDIK: ", response);
       setData(response.data.data);
@@ -140,7 +140,7 @@ const TableDataPelatihan: React.FC = () => {
 
   const [statusPelatihan, setStatusPelatihan] = React.useState("");
   const publishedData = data.filter(
-    (item: PelatihanMasyarakat) => item.Status === "Publish"
+    (item: UjiKompetensi) => item.Status === "Publish"
   ).length;
 
   const handleUpdatePublishPelatihanToELAUT = async (
@@ -324,7 +324,7 @@ const TableDataPelatihan: React.FC = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const columns: ColumnDef<PelatihanMasyarakat>[] = [
+  const columns: ColumnDef<UjiKompetensi>[] = [
     {
       accessorKey: "KodePelatihan",
       header: ({ column }) => {
@@ -362,8 +362,8 @@ const TableDataPelatihan: React.FC = () => {
           <div className="w-full relative ">
             <div className="full h-48 relative">
               <Image
-                alt={row.original.NamaPelatihan}
-                src={row.original.FotoPelatihan}
+                alt={row.original.NamaUjikom}
+                src={row.original.FotoUjikom}
                 width={0}
                 height={0}
                 className="w-full h-48 object-cover rounded-xl"
@@ -390,7 +390,7 @@ const TableDataPelatihan: React.FC = () => {
               variant="outline"
               onClick={(e) => {
                 setIsOpenFormMateri(!isOpenFormMateri);
-                setSelectedId(row.original.IdPelatihan);
+                setSelectedId(row.original.IdUjikom);
               }}
               className="ml-auto border border-[#000000]"
             >
@@ -431,7 +431,7 @@ const TableDataPelatihan: React.FC = () => {
                 <Button
                   // onClick={(e) =>
                   //   router.push(
-                  //     `/admin/lemdiklat/pelatihan/edit-pelatihan/${row.original.IdPelatihan}`
+                  //     `/admin/lemdiklat/pelatihan/edit-pelatihan/${row.original.IdUjikom}`
                   //   )
                   // }
                   variant="outline"
@@ -489,7 +489,7 @@ const TableDataPelatihan: React.FC = () => {
                     onClick={(e) =>
                       row.original.StatusApproval != "Selesai"
                         ? handleUpdateClosePelatihanELAUT(
-                            row.original.IdPelatihan,
+                            row.original.IdUjikom,
                             statusPelatihan
                           )
                         : null
@@ -554,10 +554,10 @@ const TableDataPelatihan: React.FC = () => {
                               type="hidden"
                               className="form-input w-full text-black border-gray-300 rounded-md"
                               placeholder=""
-                              value={row.original.IdPelatihan}
+                              value={row.original.IdUjikom}
                               onChange={(e) =>
                                 setSertifikatUntukPelatihan(
-                                  row.original.IdPelatihan.toString()
+                                  row.original.IdUjikom.toString()
                                 )
                               }
                               disabled
@@ -568,9 +568,9 @@ const TableDataPelatihan: React.FC = () => {
                               type="text"
                               className="form-input w-full text-black border-gray-300 rounded-md"
                               placeholder={
-                                row.original.NamaPelatihan +
+                                row.original.NamaUjikom +
                                 " - " +
-                                row.original.KodePelatihan
+                                row.original.KodeUjikom
                               }
                               disabled
                               readOnly
@@ -679,7 +679,7 @@ const TableDataPelatihan: React.FC = () => {
                       <AlertDialogCancel>Cancel</AlertDialogCancel>
                       <AlertDialogAction
                         onClick={(e) =>
-                          handleGenerateSertifikat(row.original.IdPelatihan)
+                          handleGenerateSertifikat(row.original.IdUjikom)
                         }
                       >
                         Continue
@@ -826,11 +826,11 @@ const TableDataPelatihan: React.FC = () => {
                       onClick={(e) =>
                         row.original.Status == "Belum Publish"
                           ? handleUpdatePublishPelatihanToELAUT(
-                              row.original.IdPelatihan,
+                              row.original.IdUjikom,
                               statusPelatihan
                             )
                           : handleUpdatePublishPelatihanToELAUT(
-                              row.original.IdPelatihan,
+                              row.original.IdUjikom,
                               "Belum Publish"
                             )
                       }
@@ -880,7 +880,7 @@ const TableDataPelatihan: React.FC = () => {
         <div className={`${"ml-0"} text-left capitalize`}>
           <p className="text-xs text-gray-400 mt-2 leading-[100%] mb-1">
             {" "}
-            {row.getValue("KodePelatihan")} • {row.original.BidangPelatihan} •
+            {row.getValue("KodePelatihan")} • {row.original.BidangUjikom} •
             Mendukung Program Terobosan {row.original.DukunganProgramTerobosan}
           </p>
           <p className="text-base font-semibold tracking-tight leading-none">
@@ -891,7 +891,7 @@ const TableDataPelatihan: React.FC = () => {
               {" "}
               <span className="flex items-center gap-1 leading-[105%]">
                 <TbTargetArrow />
-                <span>{row.original?.PelaksanaanPelatihan}</span>{" "}
+                <span>{row.original?.PelaksanaanUjikom}</span>{" "}
               </span>
               <span className="flex items-center gap-1 leading-[105%]">
                 <TbCalendarCheck />
@@ -899,22 +899,22 @@ const TableDataPelatihan: React.FC = () => {
                   {" "}
                   <span>
                     {" "}
-                    {convertDate(row.original.TanggalMulaiPelatihan)}{" "}
+                    {row.original ? row.original.TanggalMulaiUjikom : null}{" "}
                   </span>
                   <span className="lowercase">s.d</span>{" "}
                   <span>
                     {" "}
-                    {convertDate(row?.original?.TanggalBerakhirPelatihan)}
+                    {row.original ? row?.original?.TanggalBerakhirUjikom : null}
                   </span>
                 </span>
               </span>
               <span className="flex items-center gap-1 leading-[105%]">
                 <HiUserGroup className="text-base" />
                 <span>
-                  Asal peserta merupakan {row.original?.AsalPelatihan} dengan
-                  kuota pendaftar{" "}
+                  Asal peserta merupakan {row.original?.AsalUjikom} dengan kuota
+                  pendaftar{" "}
                   <span className="font-semibold">
-                    {row.original.KoutaPelatihan}
+                    {row.original.KoutaUjikom}
                   </span>
                 </span>{" "}
               </span>
@@ -922,18 +922,22 @@ const TableDataPelatihan: React.FC = () => {
                 <span className="text-xs  font-medium capitalize leading-[100%] mt-1 mb-1">
                   Realisasi Pendaftar
                 </span>
-                <Progress
-                  value={
-                    row.original.UserPelatihan.length *
-                    (100 / parseInt(row.original.KoutaPelatihan))
-                  }
-                  max={parseInt(row.original.KoutaPelatihan)}
-                  className="w-[80%]"
-                />
+                {row.original.UserUjikom != null && (
+                  <Progress
+                    value={
+                      row.original.UserUjikom!.length *
+                      (100 / parseInt(row.original.KoutaUjikom))
+                    }
+                    max={parseInt(row.original.KoutaUjikom)}
+                    className="w-[80%]"
+                  />
+                )}
+
                 <p className="text-xs text-gray-400 capitalize">
                   {" "}
-                  {row.original.UserPelatihan.length}/
-                  {parseInt(row.original.KoutaPelatihan)}
+                  {row.original.UjiKompetensi != null &&
+                    row.original.UserUjikom!.length}
+                  /{parseInt(row.original.KoutaUjikom)}
                 </p>
               </span>
             </p>
@@ -962,10 +966,10 @@ const TableDataPelatihan: React.FC = () => {
             Jenis, Harga, dan Realisasi Pelatihan
           </p>
           <p className="text-base font-semibold tracking-tight leading-[100%] mt-1">
-            {row.original.HargaPelatihan == "0"
+            {row.original.HargaUjikom == "0"
               ? "Gratis"
-              : "Rp " + row.original.HargaPelatihan}{" "}
-            • {row.original.JenisPelatihan}
+              : "Rp " + row.original.HargaUjikom}{" "}
+            • {row.original.JenisUjikom}
           </p>
 
           <div className="w-full flex flex-col mt-1">
@@ -974,22 +978,22 @@ const TableDataPelatihan: React.FC = () => {
             </span>
             <Progress
               value={
-                row.original.UserPelatihan.length *
-                parseInt(row.original.HargaPelatihan)
+                row.original.UserUjikom.length *
+                parseInt(row.original.HargaUjikom)
               }
               max={
-                parseInt(row.original.KoutaPelatihan) *
-                parseInt(row.original.HargaPelatihan)
+                parseInt(row.original.KoutaUjikom) *
+                parseInt(row.original.HargaUjikom)
               }
               className="w-[80%]"
             />
             <p className="text-xs text-gray-400 capitalize">
               Rp.{" "}
-              {row.original.UserPelatihan.length *
-                parseInt(row.original.HargaPelatihan)}{" "}
+              {row.original.UserUjikom.length *
+                parseInt(row.original.HargaUjikom)}{" "}
               / Rp.{" "}
-              {parseInt(row.original.KoutaPelatihan) *
-                parseInt(row.original.HargaPelatihan)}
+              {parseInt(row.original.KoutaUjikom) *
+                parseInt(row.original.HargaUjikom)}
             </p>
           </div>
         </div>
@@ -1018,11 +1022,11 @@ const TableDataPelatihan: React.FC = () => {
             Penandatangan {row.original.TtdSertifikat}
           </p>
 
-          <DialogTemplateSertifikatPelatihan pelatihan={data[row.index]}>
+          {/* <DialogTemplateSertifikatUjikom pelatihan={data[row.index]}>
             <p className="text-base font-semibold cursor-pointer tracking-tight leading-[100%] mt-1">
               {row.original.NoSertifikat}
             </p>
-          </DialogTemplateSertifikatPelatihan>
+          </DialogTemplateSertifikatUjikom> */}
         </div>
       ),
     },
@@ -1048,7 +1052,7 @@ const TableDataPelatihan: React.FC = () => {
               List Materi Pelatihan
             </p>
             <p className="text-xs font-medium text-gray-900 tracking-tight leading-[110%] mt-1">
-              {row.original.MateriPelatihan.map((materi, index) => (
+              {row.original.MateriUjikom.map((materi, index) => (
                 <>
                   {" "}
                   {index + 1}.{materi.NamaMateri};
@@ -1064,12 +1068,12 @@ const TableDataPelatihan: React.FC = () => {
             </p>
             <p className="text-xs font-medium text-gray-900 tracking-tight leading-[110%] mt-1">
               <a
-                href={row.original.SilabusPelatihan}
+                href={row.original.SilabusUjikom}
                 target="_blank"
                 className="text-blue-500 underline lowercase"
                 rel="noopener noreferrer"
               >
-                {row.original.SilabusPelatihan}
+                {row.original.SilabusUjikom}
               </a>
             </p>
           </div>
@@ -1107,7 +1111,7 @@ const TableDataPelatihan: React.FC = () => {
 
   const filteredData = React.useMemo(() => {
     return data.filter((item) =>
-      item.JenisPelatihan.includes(filterSelectedJenisPelatihan)
+      item.JenisUjikom.includes(filterSelectedJenisPelatihan)
     );
   }, [filterSelectedJenisPelatihan, data]);
 
@@ -1262,8 +1266,10 @@ const TableDataPelatihan: React.FC = () => {
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-primary">Total Pelatihan</p>
-                  <p className="text-sm font-medium">{data.length} pelatihan</p>
+                  <p className="font-semibold text-primary">
+                    Total Uji Kompetensi
+                  </p>
+                  <p className="text-sm font-medium">{data.length} ujian</p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -1274,9 +1280,7 @@ const TableDataPelatihan: React.FC = () => {
                   <p className="font-semibold text-secondary">
                     Total Publish Umum
                   </p>
-                  <p className="text-sm font-medium">
-                    {publishedData} pelatihan
-                  </p>
+                  <p className="text-sm font-medium">{publishedData} ujian</p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -1285,11 +1289,9 @@ const TableDataPelatihan: React.FC = () => {
                 </span>
                 <div className="w-full">
                   <p className="font-semibold text-secondary">
-                    Total Pelatihan Selesai
+                    Total Uji Kompetensi Selesai
                   </p>
-                  <p className="text-sm font-medium">
-                    {publishedData} pelatihan
-                  </p>
+                  <p className="text-sm font-medium">{publishedData} ujian</p>
                 </div>
               </div>
             </div>
@@ -1377,8 +1379,10 @@ const TableDataPelatihan: React.FC = () => {
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-primary">Total Pelatihan</p>
-                  <p className="text-sm font-medium">{data.length} pelatihan</p>
+                  <p className="font-semibold text-primary">
+                    Total Uji Kompetensi
+                  </p>
+                  <p className="text-sm font-medium">{data.length} ujian</p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -1389,9 +1393,7 @@ const TableDataPelatihan: React.FC = () => {
                   <p className="font-semibold text-secondary">
                     Total Publish Umum
                   </p>
-                  <p className="text-sm font-medium">
-                    {publishedData} pelatihan
-                  </p>
+                  <p className="text-sm font-medium">{publishedData} ujian</p>
                 </div>
               </div>
               <div className="flex min-w-47.5">
@@ -1401,17 +1403,14 @@ const TableDataPelatihan: React.FC = () => {
                 <div className="w-full">
                   <p className="font-semibold text-green-400">Total Selesai</p>
                   <p className="text-sm font-medium">
-                    {data?.reduce(
-                      (total: number, item: PelatihanMasyarakat) => {
-                        // Check if StatusApprovala is "Selesai"
-                        if (item.StatusApproval === "Selesai") {
-                          return total + 1;
-                        }
-                        return total;
-                      },
-                      0
-                    ) || 0}{" "}
-                    pelatihan
+                    {data?.reduce((total: number, item: UjiKompetensi) => {
+                      // Check if StatusApprovala is "Selesai"
+                      if (item.StatusApproval === "Selesai") {
+                        return total + 1;
+                      }
+                      return total;
+                    }, 0) || 0}{" "}
+                    ujian
                   </p>
                 </div>
               </div>
@@ -1425,7 +1424,7 @@ const TableDataPelatihan: React.FC = () => {
               <div className="flex w-full gap-1 items-start">
                 {/* ==================== FILTERING BY JENIS PELATIHAN ==================== */}
                 {/* <Select
-                  value={filterSelectedJenisPelatihan}
+                  value={filterSelectedJenisUjikom}
                   onValueChange={(value) =>
                     setFilterSelectedJenisPelatihan(value)
                   }
@@ -1532,12 +1531,12 @@ const TableDataPelatihan: React.FC = () => {
                 </div> */}
                 <div
                   onClick={(e) => {
-                    router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
+                    router.push("/admin/lemdiklat/pelatihan/tambah-ujikom");
                   }}
                   className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
                 >
                   <FiUploadCloud />
-                  Tambah Database Pelatihan
+                  Tambah Database Ujian
                 </div>
               </div>
             </div>
@@ -1740,4 +1739,4 @@ const SheetInfoPelatihan = ({
   );
 };
 
-export default TableDataPelatihan;
+export default TableDataUjiKompetensi;

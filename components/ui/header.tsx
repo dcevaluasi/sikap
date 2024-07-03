@@ -173,7 +173,7 @@ export default function Header() {
             <ul className="flex grow justify-end flex-wrap items-center">
               <NavLinkDefault href="/" name="Beranda" top={top} />
 
-              <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} />
+              {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
 
               <NavDropDown href="#" name="Balai Pelatihan" top={top}>
                 <NavLink href="/bppp/medan" name="BPPP Medan" top={top} />
@@ -185,7 +185,6 @@ export default function Header() {
                 />
                 <NavLink href="/bppp/bitung" name="BPPP Bitung" top={top} />
                 <NavLink href="/bppp/ambon" name="BPPP Ambon" top={top} />
-                <NavLink href="/bda/sukamandi" name="BDA Sukamandi" top={top} />
               </NavDropDown>
 
               <NavDropDown href="#" name="Layanan" top={top}>
@@ -196,13 +195,23 @@ export default function Header() {
                   top={top}
                 />
                 <NavLink
+                  href="https://elearning.kkp.go.id/"
+                  name="Pelatihan Aparatur"
+                  top={top}
+                />
+                <NavLink
+                  href="https://akapi.kkp.go.id/"
+                  name="Awak Kapal Perikanan"
+                  top={top}
+                />
+                <NavLink
                   href="https://dpkakp.vercel.app"
                   name="DPKAKP"
                   top={top}
                 />
               </NavDropDown>
 
-              <NavLinkDefault href="#" name="Cek Sertifikat" top={top} />
+              <NavLinkDefault href="" name="Cek Sertifikat" top={top} />
 
               {Cookies.get("XSRF081") ? (
                 <div className="flex items-center gap-3 2xsm:gap-7">

@@ -341,7 +341,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
                           <div className="flex flex-col items-center justify-content">
                             {tabMenus[0].available ? (
                               <p className="text-2xl cursor-pointer hover:underline duration-800 text-gray-600 text-center  font-normal leading-[105%]">
-                                {user!.KusukaUsers ? (
+                                {user!.KusukaUsers == "yes" ? (
                                   <RiVerifiedBadgeFill className="text-green-500 text-3xl" />
                                 ) : (
                                   <IoMdCloseCircle className="text-rose-600 -mt-1 text-3xl" />
