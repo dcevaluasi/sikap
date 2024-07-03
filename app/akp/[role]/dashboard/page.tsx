@@ -5,8 +5,7 @@ import DefaultLayoutAKP from "@/components/dashboard/Layouts/DefaultLayoutAKP";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title:
-    "Dashboard Lemdiklat - Elektronik Layanan Pelatihan Kelautan dan Perikanan Utama Terpadu",
+  title: "Dashboard AKAPI - Aplikasi Awak Kapal Perikanan",
 };
 
 export default function Home() {
