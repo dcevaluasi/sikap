@@ -9,15 +9,15 @@ import Footer from "@/components/ui/footer";
 
 import localFont from "next/font/local";
 
-const bos = localFont({
-  src: "./../font/bos.ttf",
-  variable: "--font-bos",
-});
+// const bos = localFont({
+//   src: "./../font/bos.ttf",
+//   variable: "--font-bos",
+// });
 
-const bosBold = localFont({
-  src: "./../font/bos_bold.ttf",
-  variable: "--font-bosBold",
-});
+// const bosBold = localFont({
+//   src: "./../font/bos_bold.ttf",
+//   variable: "--font-bosBold",
+// });
 
 export default function DefaultLayout({
   children,
@@ -35,9 +35,7 @@ export default function DefaultLayout({
 
   return (
     <>
-      <main className={`grow ${bosBold.variable} ${bos.variable}`}>
-        {children}
-      </main>
+      <main className={`grow `}>{children}</main>
 
       <Footer />
     </>
