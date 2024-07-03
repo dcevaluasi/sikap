@@ -13,17 +13,17 @@ import FeaturesASN from "@/components/features-asn";
 export default function Home() {
   return (
     <>
+      {/* Hero Section  */}
       <Hero />
       <TrainingTypeSection />
       <FeaturesKepelautan />
       <FeaturesDiklatKepelautan />
-      <FeaturesASN />
+      {/* <FeaturesASN /> */}
       <FeaturesBlocks />
       <Features />
       {/* <MapIndonesia /> */}
       <Testimonials />
       <Newsletter />
-      
     </>
   );
 }

@@ -14,12 +14,10 @@ const options: ApexOptions = {
   },
   colors: ["#6577F3", "#80CAEE"],
   labels: [
-    "Kepelatuan",
-    "Pengolahan & Pemasaran",
-    "Konservasi",
-    "Budidaya",
-    "SD Perikanan",
-    "Penangkapan",
+    "ANKAPIN/ATKAPIN I",
+    "ANKAPIN/ATKAPIN II",
+    "ANKAPIN/ATKAPIN III (Upgrading)",
+    "Rating",
   ],
   legend: {
     show: false,
@@ -75,7 +73,7 @@ const ChartFour: React.FC = () => {
       <div className="mb-3 justify-between gap-4 sm:flex">
         <div>
           <h5 className="text-xl font-semibold text-black ">
-            Asal Pengguna E-LAUT
+            Jumlah PNBP Yang Dihasilkan
           </h5>
         </div>
         <div>
@@ -113,8 +111,8 @@ const ChartFour: React.FC = () => {
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#6577F3]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black ">
-              <span>KUSUKA</span>
-              <span> 65% </span>
+              <span>ATKAPIN II</span>
+              <span> Rp </span>
             </p>
           </div>
         </div>
@@ -122,8 +120,8 @@ const ChartFour: React.FC = () => {
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#80CAEE]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black ">
-              <span> Non-KUSUKA </span>
-              <span> 35% </span>
+              <span> ANKAPIN II </span>
+              <span> Rp {44} </span>
             </p>
           </div>
         </div>

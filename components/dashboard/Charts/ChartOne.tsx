@@ -84,10 +84,6 @@ const options: ApexOptions = {
   xaxis: {
     type: "category",
     categories: [
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
       "Jan",
       "Feb",
       "Mar",
@@ -96,6 +92,10 @@ const options: ApexOptions = {
       "Jun",
       "Jul",
       "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ],
     axisBorder: {
       show: false,
@@ -131,7 +131,7 @@ const ChartOne: React.FC = () => {
       },
 
       {
-        name: "Anggaran",
+        name: "Peserta Keahlian",
         data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
       },
     ],
@@ -154,7 +154,7 @@ const ChartOne: React.FC = () => {
             </span>
             <div className="w-full">
               <p className="font-semibold text-primary">Total PNBP</p>
-              <p className="text-sm font-medium">Rp 18.485.233.000</p>
+              <p className="text-sm font-medium"></p>
             </div>
           </div>
           <div className="flex min-w-47.5">
@@ -162,8 +162,10 @@ const ChartOne: React.FC = () => {
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
             </span>
             <div className="w-full">
-              <p className="font-semibold text-secondary">Total Anggaran</p>
-              <p className="text-sm font-medium">Rp. 20.503.678.000</p>
+              <p className="font-semibold text-secondary leading-[100%]">
+                Total Peserta Keahlian
+              </p>
+              <p className="text-sm font-medium">{44 + 49}</p>
             </div>
           </div>
         </div>

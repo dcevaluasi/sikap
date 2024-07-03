@@ -173,6 +173,8 @@ export default function Header() {
             <ul className="flex grow justify-end flex-wrap items-center">
               <NavLinkDefault href="/" name="Beranda" top={top} />
 
+              <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} />
+
               <NavDropDown href="#" name="Balai Pelatihan" top={top}>
                 <NavLink href="/bppp/medan" name="BPPP Medan" top={top} />
                 <NavLink href="/bppp/tegal" name="BPPP Tegal" top={top} />
@@ -214,7 +216,7 @@ export default function Header() {
                     href="/login"
                     className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
                   >
-                    <span>Masuk Akun</span>
+                    <span>Masuk</span>
                     <svg
                       className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
                       viewBox="0 0 12 12"

@@ -401,7 +401,7 @@ const DropdownUser = ({
           <span className="block text-sm font-medium text-black">
             {pathname.includes("lemdiklat")
               ? userLoggedInInfo?.data?.NamaLemdik
-              : "BPPP"}
+              : ""}
           </span>
           <span className="block text-xs">
             {pathname.includes("lemdiklat")

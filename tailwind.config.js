@@ -19,6 +19,8 @@ module.exports = {
       },
       colors: {
         current: 'currentColor',
+        darkAKP : 'hsl(224 71% 4%)',
+        borderAKP: 'hsl(214.3 31.8% 91.4%)',
         transparent: 'transparent',
         white: '#FFFFFF',
         black: '#1C2434',

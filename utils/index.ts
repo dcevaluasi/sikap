@@ -5,18 +5,18 @@ export function createSlug(inputString: String) {
     return slug.replace(/\s+/g, '-');
 }
 
-export function addPortToURL(url: string){
+export function addPortToURL(url: string) {
     // Split the URL into parts
     const parts = url.split('://');
-    
+
     // Insert :8000 after the domain
     parts[1] = parts[1].replace(/^([^/]+)(.*)/, '$1:8000$2');
-  
+
     // Join the parts back together
     return parts.join('://');
-  };
-  
-  export function generateRandomString(): string {
+};
+
+export function generateRandomString(): string {
     const lettersAndDigits: string = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let randomString: string = '';
 
@@ -55,4 +55,24 @@ export function truncateText(text: string, maxLength: number, ending: string): s
 export function extractLastSegment(path: string): string {
     const segments = path.split('/');
     return segments[segments.length - 1];
+}
+
+export function formatDateTime() {
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    const now = new Date();
+    const dayName = days[now.getDay()];
+    const day = String(now.getDate()).padStart(2, '0');
+    const monthName = months[now.getMonth()];
+    const year = now.getFullYear();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+
+    return `${dayName}, ${day} ${monthName} ${year} ${hours}:${minutes}`;
+}
+
+export function getMonthFromDateString(dateString: string) {
+    const date = new Date(dateString);
+    return (date.getMonth() + 1).toString().padStart(2, '0');
 }

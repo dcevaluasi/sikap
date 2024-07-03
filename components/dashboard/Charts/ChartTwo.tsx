@@ -74,15 +74,15 @@ const ChartTwo: React.FC = () => {
   const [state, setState] = useState<ChartTwoState>({
     series: [
       {
-        name: "Reguler",
+        name: "BSTF",
         data: [44, 55, 41, 67, 22],
       },
       {
-        name: "PNBP/BLU",
+        name: "SKN",
         data: [13, 23, 20, 8, 13],
       },
       {
-        name: "Aspirasi",
+        name: "SOPI",
         data: [13, 23, 20, 8, 13],
       },
     ],
@@ -96,10 +96,14 @@ const ChartTwo: React.FC = () => {
   handleReset;
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white p-7.5 shadow-default   xl:col-span-4">
+    <div
+      className={`col-span-12 rounded-xl border border-stroke bg-white p-7.5 shadow-default   xl:col-span-4`}
+    >
       <div className="mb-4 justify-between gap-4 sm:flex">
         <div>
-          <h4 className="text-xl font-semibold text-black ">Jenis Pelatihan</h4>
+          <h4 className="text-xl font-semibold text-black ">
+            Jenis Keterampilan
+          </h4>
         </div>
         <div>
           <div className="relative z-20 inline-block">
