@@ -273,7 +273,7 @@ const TableDataPelatihan: React.FC = () => {
   const handleUploadMateriPelatihan = async (id: number) => {
     try {
       const response = await axios.post(
-        `${baseUrl}/lemdik/createMateriPelatihan?idpelatihan=${id}`,
+        `${baseUrl}/lemdik/createMateriPelatihan?id_pelatihan=${id}`,
         {
           nama_materi: namaMateri,
           deskripsi: "",
@@ -304,6 +304,7 @@ const TableDataPelatihan: React.FC = () => {
         title: `Gagal menambahkan materi pelatihan!`,
       });
       handleFetchingPublicTrainingData();
+      setIsOpenFormMateri(!isOpenFormMateri);
     }
   };
 
