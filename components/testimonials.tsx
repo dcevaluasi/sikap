@@ -81,9 +81,9 @@ export default function Testimonials() {
                   />
                 </div>
                 <blockquote className="text-xl font-medium mb-4">
-                  “ I love this product and would recommend it to anyone. Could
-                  be not easier to use, and our multiple websites are wonderful.
-                  We get nice comments all the time. “
+                  “ Ikuti pelatihan dan uji kompetensi untuk meningkatkan
+                  kompetensi-mu dan ikut kontribusi di bidang Kelautan dan
+                  Perikanan, bersama kita bisa, kita bisa karena bersama!. “
                 </blockquote>
                 <cite className="block font-bold text-lg not-italic mb-1">
                   Lilly Aprilia Pregiwati
