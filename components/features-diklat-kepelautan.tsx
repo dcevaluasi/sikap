@@ -145,7 +145,7 @@ export default function FeaturesDiklatKepelautan() {
               berkelanjutan dan produktif.
             </p>
           </div>
-          <ListProgram pelatihan={data} />
+          <ListProgram pelatihan={data} type="Kepelautan" />
         </div>
       </div>
     </section>

@@ -23,10 +23,19 @@ import { TbClockHour2 } from "react-icons/tb";
 import Link from "next/link";
 import { Pelatihan } from "@/types/pelatihan";
 import { PELATIHAN } from "@/dummies/pelatihan";
-import { createSlug } from "@/utils";
+import { createSlug, truncateText } from "@/utils";
 import { PelatihanMasyarakat } from "@/types/product";
 
-function ListProgram({ pelatihan }: { pelatihan: PelatihanMasyarakat[] }) {
+function ListProgram({
+  pelatihan,
+  type,
+}: {
+  pelatihan: PelatihanMasyarakat[];
+  type: string;
+}) {
+  const filteredPelatihan = pelatihan.filter(
+    (item) => item.JenisSertifikat === type
+  );
   return (
     <div>
       <Swiper
@@ -47,11 +56,13 @@ function ListProgram({ pelatihan }: { pelatihan: PelatihanMasyarakat[] }) {
               <CardPelatihanMasyarakat pelatihan={pelatihan} />
             </SwiperSlide>
           ))} */}
-        {PELATIHAN.map((pelatihan: Pelatihan, index: number) => (
-          <SwiperSlide key={index}>
-            <CardPelatihan pelatihan={pelatihan} />
-          </SwiperSlide>
-        ))}
+        {filteredPelatihan.map(
+          (pelatihan: PelatihanMasyarakat, index: number) => (
+            <SwiperSlide key={index}>
+              <CardPelatihan pelatihan={pelatihan} />
+            </SwiperSlide>
+          )
+        )}
       </Swiper>
     </div>
   );
@@ -111,12 +122,12 @@ const CardPelatihanMasyarakat = ({
   );
 };
 
-const CardPelatihan = ({ pelatihan }: { pelatihan: Pelatihan }) => {
+const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
   return (
-    <div className="coverflow flex flex-col shadow-custom relative w-[360px] h-fit rounded-3xl">
-      <div className="w-fit absolute top-4 right-4 flex gap-1">
+    <div className="coverflow flex flex-col shadow-custom relative w-[350px] h-fit rounded-3xl">
+      <div className="w-fit absolute top-4 right-4 flex gap-1 z-[60]">
         <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
-          {pelatihan.HargaPelatihan == 0
+          {pelatihan.HargaPelatihan == "0"
             ? "Gratis"
             : "Rp. " + pelatihan.HargaPelatihan}
         </div>
@@ -124,34 +135,42 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: Pelatihan }) => {
           {pelatihan.BidangPelatihan}
         </div>
       </div>
+      <div className="w-full relative h-[240px]">
+        <div className="flex w-full absolute h-[240px] bg-gradient-to-r opacity-40 from-blue-500 to-teal-400 bg-opacity-20 rounded-tl-3xl rounded-tr-3xl"></div>
+        <Image
+          className="w-full rounded-tl-3xl rounded-tr-3xl h-full object-cover"
+          alt=""
+          src={`${pelatihan.FotoPelatihan}`}
+          width={0}
+          height={0}
+        />
+      </div>
 
-      <Image
-        className="w-full rounded-tl-3xl rounded-tr-3xl h-fit object-cover"
-        alt=""
-        src={`/images${pelatihan.CoverPelatihan}`}
-        width={0}
-        height={0}
-      />
-      <div className="px-6 py-3">
-        <div className="w-full pb-4">
+      <div className=" py-3 relative ">
+        <div className="w-full pb-4 px-6">
           <h2 className="font-calsans text-xl duration-1000 text-black mt-2 leading-[110%]">
-            {pelatihan.JudulPelatihan}
+            {truncateText(pelatihan?.NamaPelatihan, 50, "...")}
           </h2>
-          <div className="flex gap-1 my-1 text-gray-600 text-xs items-center">
+          <div className="flex gap-1 my-1 text-gray-600 text-sm items-center">
             <TbClockHour2 />
-            Pendaftaran :<p>{pelatihan.TanggalPendaftaran}</p>
+            Pendaftaran :<p>{pelatihan.TanggalMulaiPelatihan}</p>
           </div>
-          <p className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000">
-            Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat
-            kelautan perikanan yang ingin mengasah skill nya dibidang kelautan
-            dan perikanan...
-          </p>
+          <p
+            dangerouslySetInnerHTML={{
+              __html:
+                pelatihan &&
+                truncateText(pelatihan?.DetailPelatihan, 150, "..."),
+            }}
+            className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000"
+          />
+
           <Link
-            target="_blank"
-            href={`/pelatihan/${createSlug(pelatihan.JudulPelatihan)}`}
+            href={`/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
+              pelatihan?.KodePelatihan
+            }/${pelatihan?.IdPelatihan}`}
             className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
           >
-            Lihat Detail
+            Registrasi
           </Link>
         </div>
       </div>

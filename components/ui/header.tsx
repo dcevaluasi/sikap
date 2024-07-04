@@ -188,12 +188,16 @@ export default function Header() {
               </NavDropDown>
 
               <NavDropDown href="#" name="Layanan" top={top}>
-                <NavLink href="/" name="Pelatihan" top={top} />
                 <NavLink
+                  href="/"
+                  name="Pelatihan dan Uji Kompetensi Masyarakat"
+                  top={top}
+                />
+                {/* <NavLink
                   href="/"
                   name="Uji Kompetensi dan Keahlian"
                   top={top}
-                />
+                /> */}
                 <NavLink
                   href="https://elearning.kkp.go.id/"
                   name="Pelatihan Aparatur"
