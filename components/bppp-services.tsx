@@ -64,7 +64,7 @@ export default function BPPPServices() {
     //   icon: (
     //     <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
     //   ),
-  // },
+    // },
     // {
     //   id: 4,
     //   name: "Fasilitas",
@@ -186,7 +186,7 @@ export default function BPPPServices() {
       {indexMenuSelected == 0 ? (
         <BPPPTrainings data={data} />
       ) : indexMenuSelected == 1 ? (
-        <BPPPCertificates data={data} />
+        <BPPPCertificates data={[]} />
       ) : indexMenuSelected == 2 ? (
         <BPPPCertificates data={data} />
       ) : (

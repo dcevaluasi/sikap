@@ -197,22 +197,6 @@ export default function UserCertificateService({
         ></div>
         <div className="absolute left-0 right-0 m-auto w-px p-px h-28 bg-gray-200 transform -translate-y-1/2"></div>
 
-        {/* <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6">
-          <div className="pt-12 md:pt-20">
-            <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
-              <h1 className="text-3xl font-calsans leading-[110%] text-black">
-                Pelatihan Masyarakat, Teknis, <br /> dan Kepelatuan yang Diikuti
-              </h1>
-              <p className="text-base text-gray-600">
-                Jelajahi layanan serta informasi yang ada pada Balai Pelatihan
-                Kelautan dan Perikanan dan jadilah SDM kompeten bidang kelautan
-                dan perikanan!
-              </p>
-            </div>
-            <TableDataPelatihanUser />
-          </div>
-        </div> */}
-
         <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6">
           <div className="pt-12 md:pt-20 flex flex-col items-center">
             <Image
@@ -234,7 +218,7 @@ export default function UserCertificateService({
                   href="/"
                   className="text-blue-600 hover:underline transition duration-150 ease-in-out"
                 >
-                  Cari Sertifikasi
+                  Cari Uji Kompetensi
                 </Link>
               </div>
             </div>
