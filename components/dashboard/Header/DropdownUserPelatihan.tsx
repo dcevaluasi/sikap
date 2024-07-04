@@ -103,7 +103,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
           </span>
         </span>
 
-        <span className="h-21 w-21 rounded-full">
+        <span className="h-12 w-12 rounded-full">
           <Image
             width={112}
             height={112}
