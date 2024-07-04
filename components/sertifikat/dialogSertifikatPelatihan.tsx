@@ -29,7 +29,7 @@ export function DialogSertifikatPelatihan({
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     bodyClass: "font-bos",
-    fonts: [{ family: "Bookmand Old Style", source: "./font/bos.ttf" }],
+    fonts: [{ family: "Bookman Old Style", source: "./font/bos.ttf" }],
   });
 
   console.log("SELECTED PELATIHAN : ", pelatihan);
@@ -58,13 +58,13 @@ export function DialogSertifikatPelatihan({
           />
         </div>
         <DialogFooter>
-          <Button
+          {/* <Button
             type="submit"
             className="flex items-center gap-1 bg-blue-500 hover:bg-blue-500"
           >
             <TbLink />
             Salin Tautan
-          </Button>
+          </Button> */}
           <Button onClick={handlePrint} className="flex items-center gap-1">
             <TbCloudDownload />
             Cetak Sertifikat
@@ -137,7 +137,9 @@ const SertifikatPage1 = React.forwardRef(
             </div>
             <div className="text-center">
               <p>Lahir di {userPelatihan?.TempatTanggalLahir} </p>
-              <p className="text-xs italic">Born in Bekasi, 01 October 2001</p>
+              <p className="text-xs italic">
+                Born in {userPelatihan?.TempatTanggalLahir}{" "}
+              </p>
             </div>
           </div>
 
@@ -168,7 +170,7 @@ const SertifikatPage1 = React.forwardRef(
                 <p>
                   {pelatihan?.TtdSertifikat === "Kepala BPPSDM"
                     ? "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan Perikanan"
-                    : "Kepala Balai Pelatihan dan Penyuluhan"}
+                    : "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan Perikanan"}
                 </p>
                 <p className="text-xs italic">
                   Chairman of the Agency for Marine and Fisheries Extension and
@@ -189,7 +191,7 @@ const SertifikatPage1 = React.forwardRef(
           </div>
         </div>
 
-        <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-10 rounded-md font-bos leading-[120%] !h-[120vh]">
+        {/* <div className="w-full border flex flex-col gap-4 border-gray-300 px-10 py-10 rounded-md font-bos leading-[120%] !h-[120vh]">
           <div className="flex flex-row justify-center items-center">
             <div className="flex flex-row gap-2 items-center">
               <div className="flex flex-col font-bos text-center">
@@ -262,7 +264,7 @@ const SertifikatPage1 = React.forwardRef(
               </td>
             </tr>
           </table>
-        </div>
+        </div> */}
       </div>
     );
   }

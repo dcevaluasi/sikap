@@ -55,26 +55,26 @@ export default function BPPPServices() {
       ),
     },
 
-    {
-      id: 3,
-      name: "Profil BPPP",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/illustrations/bppp-profile.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 4,
-      name: "Fasilitas",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/illustrations/bppp-facility.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
+    // {
+    //   id: 3,
+    //   name: "Profil BPPP",
+    //   description:
+    //     "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+    //   image: "/illustrations/bppp-profile.png",
+    //   icon: (
+    //     <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
+    //   ),
+  // },
+    // {
+    //   id: 4,
+    //   name: "Fasilitas",
+    //   description:
+    //     "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+    //   image: "/illustrations/bppp-facility.png",
+    //   icon: (
+    //     <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
+    //   ),
+    // },
   ];
 
   const pathname = usePathname();

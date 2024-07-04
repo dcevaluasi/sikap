@@ -72,7 +72,7 @@ function CallCenter() {
           <AlertDialogAction className="bg-blue-500 flex gap-2 items-center group duration-700">
             <Link
               href={
-                "https://api.whatsapp.com/send?phone=0123456789&text=I'm%20interested%20in%20your%20services"
+                "https://api.whatsapp.com/send?phone=6282123104078&text=Halo, Sobat Elaut! Ada yang bisa dibantu?"
               }
               className="bg-transparent flex gap-2 items-center group-hover:bg-transparent duration-700"
             >

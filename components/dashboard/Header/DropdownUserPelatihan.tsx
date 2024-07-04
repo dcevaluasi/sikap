@@ -105,8 +105,8 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
 
         <span className="h-21 w-21 rounded-full">
           <Image
-            width={0}
-            height={0}
+            width={112}
+            height={112}
             src={
               userDetail?.Foto! ==
               "https://api-elaut.ikulatluh.cloud/public/static/profile/fotoProfile/"
@@ -118,7 +118,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
               height: "auto",
             }}
             alt="User"
-            className="rounded-full w-20 h-20 !object-cover"
+            className="rounded-full !object-cover"
           />
         </span>
 
