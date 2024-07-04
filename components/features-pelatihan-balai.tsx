@@ -72,7 +72,7 @@ export default function FeaturesPelatihanBalai({
                 <Bounce key={index} duration={500 * index}>
                   <div
                     className={`${
-                      selectedMenu == index ? "scale-110 animate-pulse" : ""
+                      selectedMenu == index ? "scale-110" : ""
                     } relative flex flex-col items-center px-6 py-7 bg-white rounded shadow-xl hover:cursor-pointer  duration-1000 w-1/3 mx-auto md:mx-0 md:w-full`}
                     onClick={(e) => handleSelectedMenu(index)}
                   >

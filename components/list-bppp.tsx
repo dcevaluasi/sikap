@@ -20,52 +20,20 @@ function ListBPPP({
 
   return (
     <div className="w-full items-center justify-center flex">
-      {pelatihan.length == 0 ? (
-        <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6">
-          <div className="pt-0 md:pt-0 flex flex-col items-center">
-            <Image
-              src={"/illustrations/not-found.png"}
-              alt="Not Found"
-              width={0}
-              height={0}
-              className="w-[400px]"
-            />
-            <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
-              <h1 className="text-3xl font-calsans leading-[110%] text-black">
-                Belum Ada Uji Kompetensi
-              </h1>
-              <div className="text-gray-600 text-center  max-w-md">
-                Kamu belum mengikuti uji kompetensi apapun, ayo cari uji
-                kompetensi menarik di E-LAUT dan jadilah SDM unggul untuk
-                Indonesia!{" "}
-                <Link
-                  href="/"
-                  className="text-blue-600 hover:underline transition duration-150 ease-in-out"
-                >
-                  Cari Uji Kompetensi
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="w-fit grid grid-cols-3 gap-y-6 gap-x-5 items-center ml-6">
-          {filteredPelatihan.map(
-            (pelatihan: PelatihanMasyarakat, index: number) => (
-              <Bounce
-                direction="up"
-                key={index}
-                duration={500 * (index + 1)}
-                className={`${
-                  pelatihan?.Status == "Belum Publish" && "hidden"
-                }`}
-              >
-                <CardPelatihan pelatihan={pelatihan} />
-              </Bounce>
-            )
-          )}
-        </div>
-      )}
+      <div className="w-fit grid grid-cols-3 gap-y-6 gap-x-5 items-center ml-6">
+        {filteredPelatihan.map(
+          (pelatihan: PelatihanMasyarakat, index: number) => (
+            <Slide
+              direction="up"
+              key={index}
+              duration={500 * (index + 1)}
+              className={`${pelatihan?.Status == "Belum Publish" && "hidden"}`}
+            >
+              <CardPelatihan pelatihan={pelatihan} />
+            </Slide>
+          )
+        )}
+      </div>
     </div>
   );
 }
