@@ -273,7 +273,7 @@ const TableDataPelatihan: React.FC = () => {
   const handleUploadMateriPelatihan = async (id: number) => {
     try {
       const response = await axios.post(
-        `${baseUrl}/lemdik/createMateriPelatihan?id_pelatihan=${id}`,
+        `${baseUrl}/lemdik/createMateriPelatihan?idpelatihan=${id}`,
         {
           nama_materi: namaMateri,
           deskripsi: "",
@@ -1132,7 +1132,7 @@ const TableDataPelatihan: React.FC = () => {
           </AlertDialogHeader>
           <fieldset>
             <form autoComplete="off">
-              {/* <div className="flex flex-wrap mb-1 w-full">
+              <div className="flex flex-wrap mb-1 w-full">
                 <div className="w-full">
                   <label
                     className="block text-gray-800 text-sm font-medium mb-1"
@@ -1189,9 +1189,9 @@ const TableDataPelatihan: React.FC = () => {
                     />
                   </div>
                 </div>
-              </div> */}
+              </div>
 
-              <div className="flex flex-wrap -mx-3 mb-1">
+              {/* <div className="flex flex-wrap -mx-3 mb-1">
                 <div className="w-full px-3">
                   <label
                     className="block text-gray-800 text-sm font-medium mb-1"
@@ -1221,7 +1221,7 @@ const TableDataPelatihan: React.FC = () => {
                     upload
                   </p>
                 </div>
-              </div>
+              </div> */}
 
               <AlertDialogFooter className="mt-3">
                 <AlertDialogCancel

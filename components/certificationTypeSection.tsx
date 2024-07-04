@@ -186,7 +186,7 @@ export default function CertificationTypeSection() {
                 </p>
                 <div className="w-[100px] h-2 rounded-sm bg-blue-500 mt-3"></div>
               </div>
-              <ListProgram pelatihan={[]} />
+              <ListProgram type="" pelatihan={[]} />
             </div>
           )}
         </div>
