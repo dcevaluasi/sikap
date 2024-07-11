@@ -230,7 +230,7 @@ const TableDataBankSoalPelatihan = () => {
             console.error("ERROR SOAL PELATIHAN: ", error);
             Toast.fire({
                 icon: "success",
-                title: `Gagal menyematkan soal ke peserta pelatihan!`,
+                title: `Ups, belum ada bank soal yang kamu upload sobat lemdik!`,
             });
 
         }
