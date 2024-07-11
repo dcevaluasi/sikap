@@ -91,13 +91,12 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
       >
         <span className="hidden text-right lg:block">
           <span
-            className={`${
-              !top
-                ? "text-gray-600 hover:text-gray-900 hover:scale-105 "
-                : usePathname().includes("complete-profile")
+            className={`${!top
+              ? "text-gray-600 hover:text-gray-900 hover:scale-105 "
+              : usePathname().includes("complete-profile")
                 ? "text-gray-600 hover:text-gray-900 hover:scale-105"
                 : "hover:text-white text-gray-200"
-            } block text-base font-medium text-gray-200  hover:scale-105`}
+              } block text-base font-medium text-gray-200  hover:scale-105`}
           >
             {userDetail?.Nama}
           </span>
@@ -109,7 +108,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
             height={112}
             src={
               userDetail?.Foto! ==
-              "https://api-elaut.ikulatluh.cloud/public/static/profile/fotoProfile/"
+                "https://api-elaut.ikulatluh.cloud/public/static/profile/fotoProfile/"
                 ? "/dummies/profile.jpg"
                 : userDetail?.Foto!
             }
@@ -123,9 +122,8 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
         </span>
 
         <HiMiniChevronDown
-          className={`${
-            !top ? "text-gray-600 hover:text-gray-900 hover:scale-105" : ""
-          } block text-lg font-medium text-gray-200 hover:text-white hover:scale-105`}
+          className={`${!top ? "text-gray-600 hover:text-gray-900 hover:scale-105" : ""
+            } block text-lg font-medium text-gray-200 hover:text-white hover:scale-105`}
         />
       </Link>
 
@@ -134,9 +132,8 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default   ${
-          dropdownOpen === true ? "block" : "hidden"
-        }`}
+        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default   ${dropdownOpen === true ? "block" : "hidden"
+          }`}
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 ">
           <li>
@@ -182,12 +179,12 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
                   fill=""
                 />
               </svg>
-              Order Pelatihan
+              History Pelatihan
             </Link>
           </li>
           <li>
             <Link
-              href="/settings"
+              href="/dashboard/edit-profile"
               className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg
