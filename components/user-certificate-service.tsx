@@ -197,33 +197,8 @@ export default function UserCertificateService({
         ></div>
         <div className="absolute left-0 right-0 m-auto w-px p-px h-28 bg-gray-200 transform -translate-y-1/2"></div>
 
-        <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6">
-          <div className="pt-12 md:pt-20 flex flex-col items-center">
-            <Image
-              src={"/illustrations/not-found.png"}
-              alt="Not Found"
-              width={0}
-              height={0}
-              className="w-[400px]"
-            />
-            <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
-              <h1 className="text-3xl font-calsans leading-[110%] text-black">
-                Belum Ada Uji Kompetensi
-              </h1>
-              <div className="text-gray-600 text-center  max-w-md">
-                Kamu belum mengikuti uji kompetensi apapun, ayo cari uji
-                kompetensi menarik di E-LAUT dan jadilah SDM unggul untuk
-                Indonesia!{" "}
-                <Link
-                  href="/"
-                  className="text-blue-600 hover:underline transition duration-150 ease-in-out"
-                >
-                  Cari Uji Kompetensi
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+       
+       
       </section>
     </>
   );

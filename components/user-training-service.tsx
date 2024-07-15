@@ -248,6 +248,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
             title: `Nampaknya terdapat kendala pada server, hubungi Call Center!`,
           });
           setCodeAccess("");
+          console.log({ error });
         }
       }
     } else {
@@ -606,12 +607,8 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                     </th>
                     <th className="whitespace-nowrap px-6 py-4">
                       {" "}
-                      {(userDetail?.Pelatihan[indexPelatihanSelected]
-                        ?.PreTest! +
-                        userDetail?.Pelatihan[indexPelatihanSelected]
-                          ?.PostTest!) /
-                        2 >
-                      60
+                      {userDetail?.Pelatihan[indexPelatihanSelected]
+                        ?.PostTest! > 60
                         ? "LULUS"
                         : "TIDAK LULUS"}
                     </th>

@@ -524,7 +524,7 @@ function FormCompleteProfile() {
         className="fixed -z-10 w-[450px] -bottom-10 left-10 animate-float"
       />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
-        <div className="pt-32 pb-12 md:pt-40 md:pb-20">
+        <form className="pt-32 pb-12 md:pt-40 md:pb-20">
           {/* Page header */}
           <div className="max-w-3xl mx-auto text-center pb-0 md:pb-0">
             <h1 className="font-bold text-4xl leading-[100%] md:text-4xl text-black font-calsans">
@@ -768,7 +768,6 @@ function FormCompleteProfile() {
                         <SelectItem value="A">A</SelectItem>
                         <SelectItem value="B">B</SelectItem>
                         <SelectItem value="AB">AB</SelectItem>
-                        <SelectItem value="Lainnya">Lainnya</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -789,8 +788,12 @@ function FormCompleteProfile() {
                         <SelectValue placeholder="Pilih status" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Belum">Belum</SelectItem>
-                        <SelectItem value="Sudah">Sudah</SelectItem>
+                        <SelectItem value="Belum Menikah">
+                          Belum Menikah
+                        </SelectItem>
+                        <SelectItem value="Sudah Menikah">
+                          Sudah Menikah
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -856,8 +859,12 @@ function FormCompleteProfile() {
                         <SelectValue placeholder="Pilih kewarganegaraan" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="WNI">WNI</SelectItem>
-                        <SelectItem value="WNA">WNA</SelectItem>
+                        <SelectItem value="WNI">
+                          WNI (Warga Negara Indonesia)
+                        </SelectItem>
+                        <SelectItem value="WNA">
+                          WNA (Warga Negara Asing)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -888,10 +895,6 @@ function FormCompleteProfile() {
                       htmlFor="email"
                     >
                       Negara Tujuan Bekerja{" "}
-                      <span className="text-red-600">*</span> <br />
-                      <span className="text-gray-500">
-                        Jika tidak ada isi (-)
-                      </span>
                     </label>
                     <input
                       id="negara_tujuan"
@@ -1208,7 +1211,7 @@ function FormCompleteProfile() {
                         Jika tidak ada isi Lainnya
                       </span>
                     </label>
-                    <Select>
+                    <Select required>
                       <SelectTrigger className="w-full text-base py-6">
                         <SelectValue placeholder="Pilih Jenis Usaha" />
                       </SelectTrigger>
@@ -1344,16 +1347,10 @@ function FormCompleteProfile() {
                   <button
                     type="submit"
                     className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
-                    onClick={(e) => {
-                      setIndexFormTab(indexFormTab + 1);
-                      scrollToTop();
-                    }}
                   >
                     Selanjutnya
                   </button>
                 </div>
-                {/* <AlertDialog>
-                  <AlertDialogTrigger asChild> */}
                 <div
                   className={`w-full ${indexFormTab == 3 ? "block" : "hidden"}`}
                 >
@@ -1361,6 +1358,7 @@ function FormCompleteProfile() {
                     onClick={(e) => {
                       handleCompleteProfileUser();
                     }}
+                    type="submit"
                     className="btn text-white flex items-center justify-center bg-blue-600 hover:bg-blue-700 w-full"
                   >
                     {isLoadingCompleteProfile ? (
@@ -1370,45 +1368,10 @@ function FormCompleteProfile() {
                     )}
                   </button>
                 </div>
-                {/* </AlertDialogTrigger>
-                  <AlertDialogContent className="rounded-lg">
-                    <AlertDialogHeader className="flex items-center">
-                      <AlertDialogTitle className="text-2xl">
-                        Apakah anda yakin?
-                      </AlertDialogTitle>
-
-                      <Image
-                        className="w-[60%]"
-                        src={"/illustrations/598.jpg"}
-                        width={0}
-                        height={0}
-                        alt="Apakah anda yakin?"
-                      />
-
-                      <AlertDialogDescription className="text-base leading-[130%] -mt-10">
-                        Pastikan data anda terisi dengan sesuai dan berkas yang
-                        diupload valid dan bener sesuai identitas diri!
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel className=" py-6 text-base">
-                        Cancel
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        className="bg-blue-500 py-6 text-base"
-                        onClick={(e) => {
-                          handleCompleteProfileUser();
-                        }}
-                      >
-                        Upload
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog> */}
               </div>
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </section>
   );
