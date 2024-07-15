@@ -61,7 +61,7 @@ import {
     MdSchool,
 } from "react-icons/md";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Pelatihan, PelatihanMasyarakat, UserPelatihan } from "@/types/product";
+import { JawabanSoalPelatihan, Pelatihan, PelatihanMasyarakat, SoalPelatihan, UserPelatihan } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
 import { extractLastSegment } from "@/utils";
 import {
@@ -88,16 +88,20 @@ const TableDataBankSoalPelatihan = () => {
     const [dataPelatihan, setDataPelatihan] =
         React.useState<PelatihanMasyarakat | null>(null);
 
-    const [data, setData] = React.useState<UserPelatihan[] | []>([]);
+    const [data, setData] = React.useState<SoalPelatihan[] | []>([]);
     const handleFetchingPublicTrainingDataById = async () => {
         try {
             const response: AxiosResponse = await axios.get(
-                `${baseUrl}/getPelatihanUser?idPelatihan=${id}`,
+                `${baseUrl}/lemdik/GetSoalPelatihanById?idPelatihan=${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('XSRF091')}`
+                }
+            }
             );
-            console.log("PELATIHAN : ", response.data);
-            console.log("USER PELATIHAN: ", response.data.UserPelatihan);
+            console.log("SOAL : ", response.data);
+            console.log("SOAL PELATIHAN: ", response.data.data);
             setDataPelatihan(response.data);
-            setData(response.data.UserPelatihan);
+            setData(response.data.data);
         } catch (error) {
             console.error("Error posting training data:", error);
             throw error;
@@ -226,7 +230,7 @@ const TableDataBankSoalPelatihan = () => {
             console.error("ERROR SOAL PELATIHAN: ", error);
             Toast.fire({
                 icon: "success",
-                title: `Gagal menyematkan soal ke peserta pelatihan!`,
+                title: `Ups, belum ada bank soal yang kamu upload sobat lemdik!`,
             });
 
         }
@@ -243,7 +247,7 @@ const TableDataBankSoalPelatihan = () => {
     const [columnVisibility, setColumnVisibility] =
         React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
-    const columns: ColumnDef<UserPelatihan>[] = [
+    const columns: ColumnDef<SoalPelatihan>[] = [
         {
             accessorKey: "KodePelatihan",
             header: ({ column }) => {
@@ -279,9 +283,9 @@ const TableDataBankSoalPelatihan = () => {
             },
             cell: ({ row }) => (
                 <div className={`${"ml-0"} text-left capitalize`}>
-                    <p className="text-xs text-gray-400"> No registrasi</p>{" "}
+
                     <p className="text-base font-semibold tracking-tight leading-none">
-                        {row.original.NoRegistrasi}
+                        {row.original.Soal}
                     </p>
                 </div>
             ),
@@ -303,23 +307,9 @@ const TableDataBankSoalPelatihan = () => {
             },
             cell: ({ row }) => (
                 <div className={`${"ml-0"} text-left capitalize`}>
-                    <p className="text-xs text-gray-400">
-                        {" "}
-                        <span
-                            className={`${row.original.StatusPembayaran == "pending"
-                                ? "text-yellow-500"
-                                : row.original.StatusPembayaran == "paid" ||
-                                    row.original.StatusPembayaran == "Done"
-                                    ? "text-green-500"
-                                    : "text-rose-500"
-                                } capitalize`}
-                        >
-                            {row.original.StatusPembayaran}
-                        </span>{" "}
-                        • BTPN
-                    </p>{" "}
-                    <p className="text-base font-semibold tracking-tight leading-none">
-                        Rp. {row.original?.TotalBayar}
+
+                    <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+                        {row.original?.JawabanBenar}
                     </p>
                 </div>
             ),
@@ -340,24 +330,10 @@ const TableDataBankSoalPelatihan = () => {
                 );
             },
             cell: ({ row }) => (
-                <div className={`${"ml-0"} text-left capitalize`}>
-                    <p className="text-xs text-gray-400">
-                        {" "}
-                        <span
-                            className={`${row.original.StatusPembayaran == "pending"
-                                ? "text-yellow-500"
-                                : row.original.StatusPembayaran == "paid" ||
-                                    row.original.StatusPembayaran == "Done"
-                                    ? "text-green-500"
-                                    : "text-rose-500"
-                                } capitalize`}
-                        >
-                            {row.original.StatusPembayaran}
-                        </span>{" "}
-                        • BTPN
-                    </p>{" "}
-                    <p className="text-base font-semibold tracking-tight leading-none">
-                        Rp. {row.original?.TotalBayar}
+                <div className={`${"ml-0"} text-left capitalize w-1/3`}>
+
+                    <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+                        {row.original?.Jawaban[1]?.NameJawaban}
                     </p>
                 </div>
             ),
@@ -379,23 +355,9 @@ const TableDataBankSoalPelatihan = () => {
             },
             cell: ({ row }) => (
                 <div className={`${"ml-0"} text-left capitalize`}>
-                    <p className="text-xs text-gray-400">
-                        {" "}
-                        <span
-                            className={`${row.original.StatusPembayaran == "pending"
-                                ? "text-yellow-500"
-                                : row.original.StatusPembayaran == "paid" ||
-                                    row.original.StatusPembayaran == "Done"
-                                    ? "text-green-500"
-                                    : "text-rose-500"
-                                } capitalize`}
-                        >
-                            {row.original.StatusPembayaran}
-                        </span>{" "}
-                        • BTPN
-                    </p>{" "}
-                    <p className="text-base font-semibold tracking-tight leading-none">
-                        Rp. {row.original?.TotalBayar}
+
+                    <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+                        {row.original?.Jawaban[2]?.NameJawaban}
                     </p>
                 </div>
             ),
@@ -417,23 +379,9 @@ const TableDataBankSoalPelatihan = () => {
             },
             cell: ({ row }) => (
                 <div className={`${"ml-0"} text-left capitalize`}>
-                    <p className="text-xs text-gray-400">
-                        {" "}
-                        <span
-                            className={`${row.original.StatusPembayaran == "pending"
-                                ? "text-yellow-500"
-                                : row.original.StatusPembayaran == "paid" ||
-                                    row.original.StatusPembayaran == "Done"
-                                    ? "text-green-500"
-                                    : "text-rose-500"
-                                } capitalize`}
-                        >
-                            {row.original.StatusPembayaran}
-                        </span>{" "}
-                        • BTPN
-                    </p>{" "}
-                    <p className="text-base font-semibold tracking-tight leading-none">
-                        Rp. {row.original?.TotalBayar}
+
+                    <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+                        {row.original?.Jawaban[3]?.NameJawaban}
                     </p>
                 </div>
             ),
@@ -455,23 +403,9 @@ const TableDataBankSoalPelatihan = () => {
             },
             cell: ({ row }) => (
                 <div className={`${"ml-0"} text-left capitalize`}>
-                    <p className="text-xs text-gray-400">
-                        {" "}
-                        <span
-                            className={`${row.original.StatusPembayaran == "pending"
-                                ? "text-yellow-500"
-                                : row.original.StatusPembayaran == "paid" ||
-                                    row.original.StatusPembayaran == "Done"
-                                    ? "text-green-500"
-                                    : "text-rose-500"
-                                } capitalize`}
-                        >
-                            {row.original.StatusPembayaran}
-                        </span>{" "}
-                        • BTPN
-                    </p>{" "}
-                    <p className="text-base font-semibold tracking-tight leading-none">
-                        Rp. {row.original?.TotalBayar}
+
+                    <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+                        {row.original?.Jawaban[4]?.NameJawaban}
                     </p>
                 </div>
             ),
@@ -702,7 +636,7 @@ const TableDataBankSoalPelatihan = () => {
                                 <div className="w-full">
                                     <p className="font-semibold text-primary">Total Soal</p>
                                     <p className="text-sm font-medium">
-                                        {dataPelatihan?.UserPelatihan.length} soal
+                                        {data?.length} soal
                                     </p>
                                 </div>
                             </div>

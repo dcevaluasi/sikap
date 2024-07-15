@@ -9,7 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React, { FormEvent } from "react";
 
 import {
@@ -31,11 +31,13 @@ import { MdWorkOutline } from "react-icons/md";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { User } from "@/types/user";
-import { Bounce } from "react-awesome-reveal";
 import { HashLoader } from "react-spinners";
 
 function FormCompleteProfile() {
   const router = useRouter();
+
+  const pathname = usePathname()
+  const isEditProfile = pathname.includes('edit-profile');
 
   /* token user */
   const token = Cookies.get("XSRF081");
