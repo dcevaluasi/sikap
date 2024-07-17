@@ -116,6 +116,23 @@ const TableDataBlankoKeluar: React.FC = () => {
     }
   };
 
+  const handleDeletingBlankoKeluar = async (id: number) => {
+    setIsFetching(true);
+    try {
+      const response: AxiosResponse = await axios.delete(
+        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/deleteBlankoKeluar?id=${id}`
+      );
+      console.log("DELETE BLANKO KELUAR : ", response);
+      handleFetchingBlanko();
+      setIsFetching(false);
+    } catch (error) {
+      console.error("ERROR DELETE BLANKO KELUAR : ", error);
+      handleFetchingBlanko();
+      setIsFetching(false);
+      throw error;
+    }
+  };
+
   const [isOpenFormMateri, setIsOpenFormMateri] =
     React.useState<boolean>(false);
 

@@ -81,7 +81,7 @@ function page() {
 
       Cookies.set("XSRF091", response.data.t);
       Cookies.set("XSRF092", "true");
-      Cookies.set("XSRF093", role == "lemdik" ? "lemdiklat" : "pusat");
+      Cookies.set("XSRF093", role == "lemdik" ? "lemdiklat" : "adminPusat");
 
       resetAllStateToEmptyString();
       router.push(

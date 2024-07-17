@@ -55,7 +55,8 @@ import { PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import Link from "next/link";
 import axios, { AxiosResponse } from "axios";
-import { PelatihanMasyarakat } from "@/types/product";
+import { Pelatihan, PelatihanMasyarakat } from "@/types/product";
+import Cookies from "js-cookie";
 
 const TableDataPengajuanPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -64,65 +65,28 @@ const TableDataPengajuanPelatihan: React.FC = () => {
     React.useState<boolean>(false);
   const pathname = usePathname();
 
-  type Pelatihan = {
-    No: number;
-    KodePelatihan: string;
-    DiklatPelatihan: string;
-    KuotaPeserta: number;
-    DenganFasilitasMenginap: string;
-    FasilitasMenginap: Penginapan[];
-    DenganPaketKonsumsi: string;
-    PaketKonsumsi: Konsumsi[];
-    TanggalPelaksanaan: string;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
+
+  const [isFetching, setIsFetching] = React.useState<boolean>(false);
+
+  const handleFetchingPublicTrainingData = async () => {
+    setIsFetching(true);
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/lemdik/getPelatihan?id_lemdik=${Cookies.get("IDLemdik")}`
+      );
+      console.log("PELATIHAN BY LEMDIK: ", response);
+      setData(response.data.data);
+
+      setIsFetching(false);
+    } catch (error) {
+      console.error("Error posting training data:", error);
+      setIsFetching(false);
+      throw error;
+    }
   };
 
-  const [data, setData] = React.useState<Pelatihan[]>([
-    {
-      No: 1,
-      KodePelatihan: "DIKUV1093",
-      DiklatPelatihan: "Diklat Pembesaran Udang Vaname Lvl. Teknisi",
-      KuotaPeserta: 35,
-      TanggalPelaksanaan: "25 April 2024 - 01 Mei 2024",
-      DenganFasilitasMenginap: "Ya",
-      FasilitasMenginap: [
-        {
-          KodePenginapan: "PNG0340324",
-          NamaFasilitasPenginapan: "Paket BAHARI RESIDANCE-UMUM A",
-          Harga: 215000,
-        },
-        {
-          KodePenginapan: "PNG0340114",
-          NamaFasilitasPenginapan: "Paket BAHARI RESIDANCE-UMUM B",
-          Harga: 110000,
-        },
-      ],
-      DenganPaketKonsumsi: "Ya",
-      PaketKonsumsi: [
-        {
-          KodeKonsumsi: "KNM0340324",
-          NamaPaketKonsumsi: "Tipe Paket Fullboard, Paket 3x Makan & Snack",
-          Harga: 300000,
-        },
-        {
-          KodeKonsumsi: "KNM0340114",
-          NamaPaketKonsumsi: "Tipe Paket Fullboard, Paket 1x Makan & Snack",
-          Harga: 150000,
-        },
-      ],
-    },
-  ]);
-
-  type Penginapan = {
-    KodePenginapan: string;
-    NamaFasilitasPenginapan: string;
-    Harga: number;
-  };
-
-  type Konsumsi = {
-    KodeKonsumsi: string;
-    NamaPaketKonsumsi: string;
-    Harga: number;
-  };
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -133,7 +97,7 @@ const TableDataPengajuanPelatihan: React.FC = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const columns: ColumnDef<Pelatihan>[] = [
+  const columns: ColumnDef<PelatihanMasyarakat>[] = [
     {
       accessorKey: "No",
       header: ({ column }) => {
@@ -328,22 +292,9 @@ const TableDataPengajuanPelatihan: React.FC = () => {
       rowSelection,
     },
   });
-
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [pelatihan, setPelatihan] = React.useState([]);
 
-  const handleFetchingPublicTrainingData = async () => {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getPelatihan`
-      );
-      console.log({ response });
-      setPelatihan(response.data.data);
-    } catch (error) {
-      console.error("Error posting training data:", error);
-      throw error;
-    }
-  };
+
 
   React.useEffect(() => {
     handleFetchingPublicTrainingData();
