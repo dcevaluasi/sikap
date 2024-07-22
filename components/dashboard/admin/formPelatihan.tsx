@@ -845,7 +845,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                           <span className="text-red-600">*</span>
                         </label>
                         <Editor
-                          apiKey="3iks15ku1opgl6rw13vgbcijulz9ajw2muuon534xraretcy"
+                          apiKey={process.env.NEXT_PUBLIC_TINY_MCE_KEY}
                           value={detailPelatihan}
                           onEditorChange={(content: string, editor: any) =>
                             setDetailPelatihan(content)
@@ -853,17 +853,10 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                           init={{
                             height: 500,
                             menubar: false,
-                            plugins: [
-                              "advlist autolink lists link image charmap print preview anchor",
-                              "searchreplace visualblocks code fullscreen",
-                              "insertdatetime media table paste code help wordcount",
-                            ],
+                            plugins:
+                              "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker",
                             toolbar:
-                              "undo redo | formatselect | " +
-                              "bold italic backcolor | alignleft aligncenter " +
-                              "alignright alignjustify | bullist numlist outdent indent | " +
-                              "removeformat | help",
-
+                              "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
                             content_style:
                               "body { font-family:Plus Jakarta Sans,Arial,sans-serif; font-size:14px }",
                           }}

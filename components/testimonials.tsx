@@ -58,7 +58,7 @@ export default function Testimonials() {
           </div>
 
           {/* Testimonials */}
-          <div className="flex flex-row gap-3">
+          <div className="flex flex-col md:flex-row gap-3">
             <div className="max-w-4xl mx-auto mt-20" data-aos="zoom-y-out">
               <div className="relative flex items-start border-2 border-gray-200 rounded bg-white">
                 {/* Testimonial */}

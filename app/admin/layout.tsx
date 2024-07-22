@@ -45,7 +45,9 @@ export default function RootLayout({
         suppressHydrationWarning={true}
         className={`${inter.className} ${myFont.variable} ${delius.variable} `}
       >
-        <div className="h-screen max-h-screen overflow-y-hidden">{loading ? <Loader /> : children}</div>
+        <div className="h-screen max-h-screen overflow-y-hidden">
+          {loading ? <Loader /> : children}
+        </div>
       </body>
     </html>
   );
