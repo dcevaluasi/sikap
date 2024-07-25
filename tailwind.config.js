@@ -19,8 +19,11 @@ module.exports = {
       },
       colors: {
         current: 'currentColor',
-        darkAKP : 'hsl(224 71% 4%)',
+        darkDPKAKP: 'hsl(224 71% 4%)',
+        mutedDPKAKP: 'hsl(223 47% 11%)',
+        mutedForegroundDPKAKP: 'hsl(215.4 16.3% 46.9%)',
         borderAKP: 'hsl(214.3 31.8% 91.4%)',
+
         transparent: 'transparent',
         white: '#FFFFFF',
         black: '#1C2434',

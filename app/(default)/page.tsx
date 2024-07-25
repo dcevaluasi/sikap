@@ -9,6 +9,8 @@ import FeaturesDiklatKepelautan from "@/components/features-diklat-kepelautan";
 import Timeline from "@/components/timeline";
 import Testimonials from "@/components/testimonials";
 import FeaturesASN from "@/components/features-asn";
+import BentoInformationLandingSection from "@/components/elaut/bentoInformationLandingSection";
+
 
 export default function Home() {
   return (
@@ -21,6 +23,7 @@ export default function Home() {
       {/* <FeaturesASN /> */}
       <FeaturesBlocks />
       <Features />
+      {/* <BentoInformationLandingSection /> */}
       {/* <MapIndonesia /> */}
       <Testimonials />
       <Newsletter />

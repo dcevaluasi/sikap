@@ -23,7 +23,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative h-screen flex items-center justify-center">
+    <section className="relative h-[80vh] flex items-center justify-center">
       <Image
         src={images[imageIndex]}
         className="absolute w-full h-full object-cover duration-1000"
