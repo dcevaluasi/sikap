@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { HiMiniChevronDown, HiMiniUserGroup } from "react-icons/hi2";
+import { HiCalendar, HiMiniChevronDown, HiMiniUserGroup } from "react-icons/hi2";
 import Cookies from "js-cookie";
 import DropdownUser from "../dashboard/Header/DropdownUser";
 import DropdownUserPelatihan from "../dashboard/Header/DropdownUserPelatihan";
@@ -21,6 +21,7 @@ import { Dropdown } from "flowbite-react";
 import { RiSchoolFill } from "react-icons/ri";
 import { BiSolidShip } from "react-icons/bi";
 import { AiFillShop } from "react-icons/ai";
+import { BsFillPatchCheckFill } from "react-icons/bs";
 
 export default function Header() {
   const [top, setTop] = React.useState<boolean>(true);
@@ -150,7 +151,7 @@ export default function Header() {
   return (
     <header
       className={`fixed ${usePathname().includes("pre-test") ||
-        usePathname().includes("post-test")
+        usePathname().includes("post-test") || usePathname().includes("/dpkakp/admin")
         ? "hidden"
         : "block"
         } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${!top
@@ -173,69 +174,121 @@ export default function Header() {
           <nav className="hidden md:flex md:grow">
             <ul className="flex grow gap-0 justify-end flex-wrap items-center w-fit">
 
-              <NavLinkDefault href="/" name="Beranda" top={top} />
+              {
+                usePathname().includes('dpkakp') ? <> <NavLinkDefault href="/dpkakp" name="Beranda" top={top} />
 
-              {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
+                  {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
 
-              <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
-                <NavLink href="/bppp/medan" name="Balai Pelatihan" top={top}>
-                  <div className="flex gap-2 items-center">
-                    <RiSchoolFill className="text-xl" /> <span>Balai Pelatihan</span>
-                  </div>
-                </NavLink>
-                <NavLink href="/dpkakp" name="DPKAKP" top={top}>
-                  <div className="flex gap-2 items-center">
-                    <BiSolidShip className="text-4xl" /> <span>DPKAKP - Dewang Penguji Keahlian Awak Kapal Perikanan</span>
-                  </div></NavLink>
-                <NavLink href="/bppp/bitung" name="P2MKP" top={top} >
-                  <div className="flex gap-2 items-center">
-                    <AiFillShop className="text-4xl" /> <span>P2MKP - Pelaksana Pelatihan Mandiri Kelautan dan Perikanan</span>
-                  </div></NavLink>
-                <NavLink href="/bppp/ambon" name="Komite Approval" top={top} >
-                  <div className="flex gap-2 items-center">
-                    <HiMiniUserGroup className="text-3xl" /> <span>Komite Approval Diklat Awak Kapal Perikanan</span>
-                  </div></NavLink>
-              </NavDropDown>
+                  <NavDropDown href="#" name="Layanan" top={top}>
+                    <NavLink href="/bppp/medan" name="Balai Pelatihan" top={top}>
+                      <div className="flex gap-2 items-center">
+                        <BiSolidShip className="text-2xl" /> <span>Sertifikasi Awak Kapal Perikanan</span>
+                      </div>
+                    </NavLink>
+                    <NavLink href="/dpkakp" name="DPKAKP" top={top}>
+                      <div className="flex gap-2 items-center">
+                        <HiCalendar className="text-3xl" /> <span>Jadwal Pelaksanaan Ujian Awak Kapal Perikanan</span>
+                      </div></NavLink>
+                    <NavLink href="/bppp/bitung" name="P2MKP" top={top} >
+                      <div className="flex gap-2 items-center">
+                        <BsFillPatchCheckFill className="text-2xl" /> <span>Cek Sertifikat Awak Kapal Perikanan</span>
+                      </div></NavLink>
 
-              <NavLinkDefault href="" name="Cek Sertifikat" top={top} />
+                  </NavDropDown>
 
-              {Cookies.get("XSRF081") ? (
-                <div className="flex items-center gap-3 2xsm:gap-7">
-                  {/* <!-- User Area --> */}
-                  <DropdownUserPelatihan top={top} />
-                  {/* <!-- User Area --> */}
-                </div>
-              ) : (
-                <div className="flex">
-                  <li>
-                    <Link
-                      href="/login"
-                      className={`btn-sm ${top ? 'text-gray-200' : 'text-blue-500 hover:text-white'} bg-transparent border border-blue-500 hover:bg-blue-500 ml-3`}
-                    >
-                      <span>Masuk</span>
+                  <NavLinkDefault href="" name="Tentang DPKAKP" top={top} />
 
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/login"
-                      className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
-                    >
-                      <span>Registrasi</span>
-                      <svg
-                        className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
-                        viewBox="0 0 12 12"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
-                          fillRule="nonzero"
-                        />
-                      </svg>
-                    </Link>
-                  </li>
-                </div>
-              )}
+                  {Cookies.get("XSRF081") ? (
+                    <div className="flex items-center gap-3 2xsm:gap-7">
+                      {/* <!-- User Area --> */}
+                      <DropdownUserPelatihan top={top} />
+                      {/* <!-- User Area --> */}
+                    </div>
+                  ) : (
+                    <div className="flex">
+                      <li>
+                        <Link
+                          href="/login"
+                          className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
+                        >
+                          <span>Layanan</span>
+                          <svg
+                            className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
+                              fillRule="nonzero"
+                            />
+                          </svg>
+                        </Link>
+                      </li>
+                    </div>
+                  )}</> : <> <NavLinkDefault href="/" name="Beranda" top={top} />
+
+                  {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
+
+                  <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
+                    <NavLink href="/bppp/medan" name="Balai Pelatihan" top={top}>
+                      <div className="flex gap-2 items-center">
+                        <RiSchoolFill className="text-xl" /> <span>Balai Pelatihan</span>
+                      </div>
+                    </NavLink>
+                    <NavLink href="/dpkakp" name="DPKAKP" top={top}>
+                      <div className="flex gap-2 items-center">
+                        <BiSolidShip className="text-4xl" /> <span>DPKAKP - Dewang Penguji Keahlian Awak Kapal Perikanan</span>
+                      </div></NavLink>
+                    <NavLink href="/bppp/bitung" name="P2MKP" top={top} >
+                      <div className="flex gap-2 items-center">
+                        <AiFillShop className="text-4xl" /> <span>P2MKP - Pelaksana Pelatihan Mandiri Kelautan dan Perikanan</span>
+                      </div></NavLink>
+                    <NavLink href="/bppp/ambon" name="Komite Approval" top={top} >
+                      <div className="flex gap-2 items-center">
+                        <HiMiniUserGroup className="text-3xl" /> <span>Komite Approval Diklat Awak Kapal Perikanan</span>
+                      </div></NavLink>
+                  </NavDropDown>
+
+                  <NavLinkDefault href="" name="Cek Sertifikat" top={top} />
+
+                  {Cookies.get("XSRF081") ? (
+                    <div className="flex items-center gap-3 2xsm:gap-7">
+                      {/* <!-- User Area --> */}
+                      <DropdownUserPelatihan top={top} />
+                      {/* <!-- User Area --> */}
+                    </div>
+                  ) : (
+                    <div className="flex">
+                      <li>
+                        <Link
+                          href="/login"
+                          className={`btn-sm ${top ? 'text-gray-200' : 'text-blue-500 hover:text-white'} bg-transparent border border-blue-500 hover:bg-blue-500 ml-3`}
+                        >
+                          <span>Masuk</span>
+
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          href="/login"
+                          className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
+                        >
+                          <span>Registrasi</span>
+                          <svg
+                            className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
+                              fillRule="nonzero"
+                            />
+                          </svg>
+                        </Link>
+                      </li>
+                    </div>
+                  )}</>
+              }
             </ul>
           </nav>
 

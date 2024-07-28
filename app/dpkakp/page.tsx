@@ -20,6 +20,7 @@ import "./styles.css"
 // import required modules
 import { EffectCoverflow, Pagination } from "swiper/modules"
 import { Slide } from 'react-awesome-reveal';
+import Newsletter from '@/components/newsletter';
 
 // export const metadata = {
 //     title: "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan",
@@ -280,6 +281,7 @@ function page() {
                         slideShadows: true,
                     }}
                     pagination={true}
+                    autoplay
                     modules={[EffectCoverflow, Pagination]}
                     className="mySwiper"
                 >
@@ -361,7 +363,7 @@ function page() {
 
             <section
                 id="maklumat"
-                className="container space-y-6 pt-7 dark:bg-transparent md:py-10 lg:py-20"
+                className=" space-y-6 pt-7 dark:bg-transparent md:py-10 lg:py-20"
             >
                 <div className="mx-auto flex max-w-[58rem] flex-col items-center space-y-4 text-center">
                     <Slide direction="up">

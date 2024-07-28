@@ -66,7 +66,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden bg-gray-900 duration-300 ease-linear  lg:static lg:translate-x-0 scrollbar-hide ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden ${pathname.includes('/dpkakp') ? 'bg-darkDPKAKP' : 'bg-gray-900'} duration-300 ease-linear  lg:static lg:translate-x-0 scrollbar-hide ${sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
@@ -78,11 +78,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <LogoFooter />
           <div className="flex flex-col gap-0 w-full items-center justify-center">
             <p className="font-bold text-4xl !font-delius text-white">
-              {pathname.includes("akp") ? "AKAPI" : "E-LAUT"}
+              {pathname.includes("/akp") ? "AKAPI" : pathname.includes("/dpkakp") ? "DPKAKP" : "E-LAUT"}
             </p>
             <p className="font-medium text-white text-sm text-center">
-              Aplikasi Awak Kapal Perikanan Badan Penyuluhan dan Pengembangan
-              Sumber Daya Manusia
+              {pathname.includes('/akp') ? 'Dashboard Aplikasi Awak Kapal Perikanan Badan Penyuluhan dan Pengembangan Sumber Daya Manusia' : pathname.includes('/dpkakp') ? 'Dashboard Dewan Penguji Keahlian Awak Kapal Perikanan Badan Penyuluhan dan Pengembangan Sumber Daya Manusia' : 'Dashboard Elektronik Layanan Pelatihan Kelautan dan Perikanan Utama TerpaduBadan Penyuluhan dan Pengembangan Sumber Daya Manusia'}
             </p>
           </div>
         </Link>
@@ -122,7 +121,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Dashboard --> */}
-              {pathname.includes("akp") ? (
+              {pathname.includes("/akp") ? (
                 <SidebarLinkGroup
                   activeCondition={
                     pathname === "/" || pathname.includes("dashboard")
@@ -218,7 +217,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </SidebarLinkGroup>
               )}
 
-              {pathname.includes("akp") && (
+              {pathname.includes("/akp") && (
                 <SidebarLinkGroup
                   activeCondition={!pathname.includes("keluar")}
                 >
@@ -239,7 +238,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </SidebarLinkGroup>
               )}
 
-              {pathname.includes("akp") && (
+              {pathname.includes("/akp") && (
                 <SidebarLinkGroup activeCondition={pathname.includes("keluar")}>
                   {(handleClick, open) => {
                     return (
@@ -258,7 +257,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </SidebarLinkGroup>
               )}
 
-              {pathname.includes("akp") && (
+              {pathname.includes("/akp") && (
                 <SidebarLinkGroup activeCondition={pathname.includes("rusak")}>
                   {(handleClick, open) => {
                     return (
@@ -277,7 +276,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </SidebarLinkGroup>
               )}
 
-              {pathname.includes("akp") ? (
+              {pathname.includes("/akp") ? (
                 <></>
               ) : (
                 <>

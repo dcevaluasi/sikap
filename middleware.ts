@@ -4,23 +4,32 @@ export function middleware(request: any) {
   const XSRF092 = request.cookies.get('XSRF092')
   const XSRF081 = request.cookies.get('XSRF081')
 
+  const XSRF095 = request.cookies.get('XSRF095') // DPKAKP USERS
+
   if (!XSRF081) {
-    const protectedPaths = [
-      '/dashboard/complete-profile',
-      '/dashboard'
-    ]
+    const protectedPaths = ['/dashboard/complete-profile', '/dashboard']
 
     if (protectedPaths.includes(request.nextUrl.pathname)) {
       return NextResponse.redirect(new URL('/', request.url))
     }
   } else {
-    const protectedPaths = [
-      '/registrasi',
-      '/login'
-    ]
+    const protectedPaths = ['/registrasi', '/login']
 
     if (protectedPaths.includes(request.nextUrl.pathname)) {
       return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+  }
+
+  if (!XSRF095) {
+    const protectedPaths = [
+      '/dpkakp/admin/dashboard',
+      '/dpkakp/admin/dashboard/bank-soal',
+      '/dpkakp/admin/dashboard/master',
+      '/dpkakp/admin/dashboard/ujian',
+    ]
+
+    if (protectedPaths.includes(request.nextUrl.pathname)) {
+      return NextResponse.redirect(new URL('/dpkakp', request.url))
     }
   }
 
@@ -44,5 +53,4 @@ export function middleware(request: any) {
       )
     }
   }
-
 }
