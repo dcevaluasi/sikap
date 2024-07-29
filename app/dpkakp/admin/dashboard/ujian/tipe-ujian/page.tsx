@@ -1,3 +1,4 @@
+import TipeUjianKeahlian from "@/components/dashboard/Dashboard/DPKAKP/TipeUjianKeahlian";
 import ECommerce from "@/components/dashboard/Dashboard/E-commerce";
 import Pelatihan from "@/components/dashboard/Dashboard/Pelatihan";
 import UjianKeahlianAKP from "@/components/dashboard/Dashboard/UjianKeahlianAKP";
@@ -12,7 +13,7 @@ export default function Page() {
     return (
         <>
             <DefaultLayout>
-                <UjianKeahlianAKP />
+                <TipeUjianKeahlian />
             </DefaultLayout>
         </>
     );
