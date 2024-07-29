@@ -21,7 +21,14 @@ type SoalUjianBagian = {
   Jawaban: Jawaban[]
 }
 
-type Jawaban = {}
+type Jawaban = {
+  IdJawaban: number,
+  IdSoalUjianBagian: number,
+  NameJawaban: string,
+  Status: string,
+  CreateAt: string,
+  UpdateAt: string
+}
 
 type Bagian = {
   IdBagian: number
@@ -69,4 +76,12 @@ type TypeUjian = {
   UpdateAt: string
   Fungsi: FungsiUjian[]
   Ujian: Ujian[]
+}
+
+type SoalBagian = {
+  Bagian: string;
+  Fungsi: string;
+  Soal: SoalUjianBagian[];
+  Ujian: string;
+  jumlah: number;
 }

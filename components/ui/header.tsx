@@ -13,7 +13,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-import { HiCalendar, HiMiniChevronDown, HiMiniUserGroup } from "react-icons/hi2";
+import {
+  HiCalendar,
+  HiMiniChevronDown,
+  HiMiniUserGroup,
+} from "react-icons/hi2";
 import Cookies from "js-cookie";
 import DropdownUser from "../dashboard/Header/DropdownUser";
 import DropdownUserPelatihan from "../dashboard/Header/DropdownUserPelatihan";
@@ -55,23 +59,26 @@ export default function Header() {
             }}
           >
             <div
-              className={`font-medium ${!top || usePathname().includes("bppp")
-                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-                : (top && usePathname().includes("pelatihan")) ||
-                  usePathname().includes("sertifikasi") ||
-                  usePathname().includes("users")
+              className={`font-medium ${
+                !top || usePathname().includes("bppp")
+                  ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+                  : (top && usePathname().includes("pelatihan")) ||
+                    usePathname().includes("sertifikasi") ||
+                    usePathname().includes("users")
                   ? "text-gray-900 hover:text-gray-900 hover:scale-105"
                   : usePathname().includes("complete-profile")
-                    ? "text-gray-600 hover:text-white hover:scale-105"
-                    : "text-gray-200 hover:text-white hover:scale-105"
-                }  px-5 py-3 flex items-center transition duration-150 ease-in-out font-semibold`}
+                  ? "text-gray-600 hover:text-white hover:scale-105"
+                  : "text-gray-200 hover:text-white hover:scale-105"
+              }  px-5 py-3 flex items-center transition duration-150 ease-in-out font-semibold`}
             >
               {name} <HiMiniChevronDown className="text-lg" />
             </div>
           </li>
         </PopoverTrigger>
         {name == currentName && (
-          <PopoverContent className={`w-80 flex flex-col gap-1 ${top ? '' : 'mt-7'}`}>
+          <PopoverContent
+            className={`w-80 flex flex-col gap-1 ${top ? "" : "mt-7"}`}
+          >
             <ul>{children}</ul>
           </PopoverContent>
         )}
@@ -95,16 +102,17 @@ export default function Header() {
         <Link
           href={href}
           onClick={(e) => setOpenModal(false)}
-          className={`font-medium ${!top || usePathname().includes("bppp")
-            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-            : (top && usePathname().includes("pelatihan")) ||
-              usePathname().includes("sertifikasi") ||
-              usePathname().includes("users")
+          className={`font-medium ${
+            !top || usePathname().includes("bppp")
+              ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+              : (top && usePathname().includes("pelatihan")) ||
+                usePathname().includes("sertifikasi") ||
+                usePathname().includes("users")
               ? "text-gray-900 hover:text-gray-900 hover:scale-105"
               : usePathname().includes("complete-profile")
-                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-                : "text-gray-600 hover:text-gray-900 hover:scale-105"
-            }  px-5 py-3 flex items-center transition duration-150 ease-in-out font-semibold`}
+              ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+              : "text-gray-600 hover:text-gray-900 hover:scale-105"
+          }  px-5 py-3 flex items-center transition duration-150 ease-in-out font-semibold`}
         >
           {children}
         </Link>
@@ -125,16 +133,17 @@ export default function Header() {
       <li>
         <Link
           href={href}
-          className={`font-semibold ${!top || usePathname().includes("bppp")
-            ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-            : (top && usePathname().includes("pelatihan")) ||
-              usePathname().includes("sertifikasi") ||
-              usePathname().includes("users")
+          className={`font-semibold ${
+            !top || usePathname().includes("bppp")
+              ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+              : (top && usePathname().includes("pelatihan")) ||
+                usePathname().includes("sertifikasi") ||
+                usePathname().includes("users")
               ? "text-gray-900 hover:text-gray-900 hover:scale-105"
               : usePathname().includes("complete-profile")
-                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-                : "text-gray-200 hover:text-white hover:scale-105"
-            }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
+              ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+              : "text-gray-200 hover:text-white hover:scale-105"
+          }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
         >
           {name}
         </Link>
@@ -150,20 +159,24 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed ${usePathname().includes("pre-test") ||
-        usePathname().includes("post-test") || usePathname().includes("/dpkakp/admin")
-        ? "hidden"
-        : "block"
-        } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${!top
+      className={`fixed ${
+        usePathname().includes("pre-test") ||
+        usePathname().includes("post-test") ||
+        usePathname().includes("/dpkakp/admin") ||
+        usePathname().includes("/dpkakp/user")
+          ? "hidden"
+          : "block"
+      } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
+        !top
           ? `bg-white backdrop-blur-sm shadow-lg`
           : usePathname().includes("pelatihan") ||
             usePathname().includes("sertifikasi") ||
             usePathname().includes("users")
-            ? `bg-white backdrop-blur-sm shadow-lg`
-            : usePathname().includes("complete-profile")
-              ? "bg-white backdrop-blur-sm shadow-lg"
-              : ""
-        }`}
+          ? `bg-white backdrop-blur-sm shadow-lg`
+          : usePathname().includes("complete-profile")
+          ? "bg-white backdrop-blur-sm shadow-lg"
+          : ""
+      }`}
     >
       <div className="max-w-6xl mx-auto px-5 sm:px-6">
         <div className="flex items-center justify-between h-24 md:h-24 py-3">
@@ -173,36 +186,40 @@ export default function Header() {
 
           <nav className="hidden md:flex md:grow">
             <ul className="flex grow gap-0 justify-end flex-wrap items-center w-fit">
-
-              {
-                usePathname().includes('dpkakp') ? <> <NavLinkDefault href="/dpkakp" name="Beranda" top={top} />
-
-                  {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
-
+              {usePathname().includes("dpkakp") ? (
+                <>
+                  {" "}
+                  <NavLinkDefault href="/dpkakp" name="Beranda" top={top} />
                   <NavDropDown href="#" name="Layanan" top={top}>
-                    <NavLink href="/bppp/medan" name="Balai Pelatihan" top={top}>
+                    <NavLink
+                      href="/bppp/medan"
+                      name="Balai Pelatihan"
+                      top={top}
+                    >
                       <div className="flex gap-2 items-center">
-                        <BiSolidShip className="text-2xl" /> <span>Sertifikasi Awak Kapal Perikanan</span>
+                        <BiSolidShip className="text-2xl" />{" "}
+                        <span>Sertifikasi Awak Kapal Perikanan</span>
                       </div>
                     </NavLink>
                     <NavLink href="/dpkakp" name="DPKAKP" top={top}>
                       <div className="flex gap-2 items-center">
-                        <HiCalendar className="text-3xl" /> <span>Jadwal Pelaksanaan Ujian Awak Kapal Perikanan</span>
-                      </div></NavLink>
-                    <NavLink href="/bppp/bitung" name="P2MKP" top={top} >
+                        <HiCalendar className="text-3xl" />{" "}
+                        <span>
+                          Jadwal Pelaksanaan Ujian Awak Kapal Perikanan
+                        </span>
+                      </div>
+                    </NavLink>
+                    <NavLink href="/bppp/bitung" name="P2MKP" top={top}>
                       <div className="flex gap-2 items-center">
-                        <BsFillPatchCheckFill className="text-2xl" /> <span>Cek Sertifikat Awak Kapal Perikanan</span>
-                      </div></NavLink>
-
+                        <BsFillPatchCheckFill className="text-2xl" />{" "}
+                        <span>Cek Sertifikat Awak Kapal Perikanan</span>
+                      </div>
+                    </NavLink>
                   </NavDropDown>
-
                   <NavLinkDefault href="" name="Tentang DPKAKP" top={top} />
-
                   {Cookies.get("XSRF081") ? (
                     <div className="flex items-center gap-3 2xsm:gap-7">
-                      {/* <!-- User Area --> */}
                       <DropdownUserPelatihan top={top} />
-                      {/* <!-- User Area --> */}
                     </div>
                   ) : (
                     <div className="flex">
@@ -225,32 +242,53 @@ export default function Header() {
                         </Link>
                       </li>
                     </div>
-                  )}</> : <> <NavLinkDefault href="/" name="Beranda" top={top} />
-
+                  )}
+                </>
+              ) : (
+                <>
+                  {" "}
+                  <NavLinkDefault href="/" name="Beranda" top={top} />
                   {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
-
                   <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
-                    <NavLink href="/bppp/medan" name="Balai Pelatihan" top={top}>
+                    <NavLink
+                      href="/bppp/medan"
+                      name="Balai Pelatihan"
+                      top={top}
+                    >
                       <div className="flex gap-2 items-center">
-                        <RiSchoolFill className="text-xl" /> <span>Balai Pelatihan</span>
+                        <RiSchoolFill className="text-xl" />{" "}
+                        <span>Balai Pelatihan</span>
                       </div>
                     </NavLink>
                     <NavLink href="/dpkakp" name="DPKAKP" top={top}>
                       <div className="flex gap-2 items-center">
-                        <BiSolidShip className="text-4xl" /> <span>DPKAKP - Dewang Penguji Keahlian Awak Kapal Perikanan</span>
-                      </div></NavLink>
-                    <NavLink href="/bppp/bitung" name="P2MKP" top={top} >
+                        <BiSolidShip className="text-4xl" />{" "}
+                        <span>
+                          DPKAKP - Dewang Penguji Keahlian Awak Kapal Perikanan
+                        </span>
+                      </div>
+                    </NavLink>
+                    <NavLink href="/bppp/bitung" name="P2MKP" top={top}>
                       <div className="flex gap-2 items-center">
-                        <AiFillShop className="text-4xl" /> <span>P2MKP - Pelaksana Pelatihan Mandiri Kelautan dan Perikanan</span>
-                      </div></NavLink>
-                    <NavLink href="/bppp/ambon" name="Komite Approval" top={top} >
+                        <AiFillShop className="text-4xl" />{" "}
+                        <span>
+                          P2MKP - Pelaksana Pelatihan Mandiri Kelautan dan
+                          Perikanan
+                        </span>
+                      </div>
+                    </NavLink>
+                    <NavLink
+                      href="/bppp/ambon"
+                      name="Komite Approval"
+                      top={top}
+                    >
                       <div className="flex gap-2 items-center">
-                        <HiMiniUserGroup className="text-3xl" /> <span>Komite Approval Diklat Awak Kapal Perikanan</span>
-                      </div></NavLink>
+                        <HiMiniUserGroup className="text-3xl" />{" "}
+                        <span>Komite Approval Diklat Awak Kapal Perikanan</span>
+                      </div>
+                    </NavLink>
                   </NavDropDown>
-
                   <NavLinkDefault href="" name="Cek Sertifikat" top={top} />
-
                   {Cookies.get("XSRF081") ? (
                     <div className="flex items-center gap-3 2xsm:gap-7">
                       {/* <!-- User Area --> */}
@@ -262,10 +300,13 @@ export default function Header() {
                       <li>
                         <Link
                           href="/login"
-                          className={`btn-sm ${top ? 'text-gray-200' : 'text-blue-500 hover:text-white'} bg-transparent border border-blue-500 hover:bg-blue-500 ml-3`}
+                          className={`btn-sm ${
+                            top
+                              ? "text-gray-200"
+                              : "text-blue-500 hover:text-white"
+                          } bg-transparent border border-blue-500 hover:bg-blue-500 ml-3`}
                         >
                           <span>Masuk</span>
-
                         </Link>
                       </li>
                       <li>
@@ -287,8 +328,9 @@ export default function Header() {
                         </Link>
                       </li>
                     </div>
-                  )}</>
-              }
+                  )}
+                </>
+              )}
             </ul>
           </nav>
 

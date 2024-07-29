@@ -78,11 +78,11 @@ import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialo
 import Link from "next/link";
 import TableData from "../../Tables/TableData";
 
-const TableDataTipeUjianKeahlian: React.FC = () => {
+const TableDataFungsiUjianKeahlian: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
 
-  const [data, setData] = React.useState<TypeUjian[]>([]);
+  const [data, setData] = React.useState<FungsiUjian[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
 
@@ -90,7 +90,7 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
     setIsFetching(true);
     try {
       const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL}/adminPusat/getTypeUjian`,
+        `${process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL}/adminPusat/getFungsi`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("XSRF095")}`,
@@ -100,7 +100,7 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
       setData(response.data.data);
       setIsFetching(false);
     } catch (error) {
-      console.error("Error posting tipe ujian:", error);
+      console.error("Error posting fungsi ujian:", error);
       setIsFetching(false);
       throw error;
     }
@@ -131,7 +131,7 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const columns: ColumnDef<TypeUjian>[] = [
+  const columns: ColumnDef<FungsiUjian>[] = [
     {
       accessorKey: "IdTypeUjian",
       header: ({ column }) => {
@@ -151,6 +151,26 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
       ),
     },
     {
+      accessorKey: "IdTypeUjian",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={`text-gray-900 font-semibold w-full`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Tipe Ujian
+            <ArrowUpDown className="ml-1 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`text-center uppercas w-fite`}>
+          {row.original.IdTypeUjian}
+        </div>
+      ),
+    },
+    {
       accessorKey: "NamaTypeUjian",
       header: ({ column }) => {
         return (
@@ -159,17 +179,18 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
             className={`text-gray-900 font-semibold w-full`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Nama Tipe Ujian
+            Nama Fungsi Ujian
             <ArrowUpDown className="ml-1 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
         <div className={`text-center uppercas w-fite`}>
-          {row.original.NamaTypeUjian}
+          {row.original.NamaFungsi}
         </div>
       ),
     },
+
     {
       accessorKey: "CreateAt",
       header: ({ column }) => {
@@ -231,8 +252,76 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
     handleFetchingTypeUjian();
   }, []);
 
+  const [isOpenFormPeserta, setIsOpenFormPeserta] =
+    React.useState<boolean>(false);
+  const [fileExcelPesertaPelatihan, setFileExcelPesertaPelatihan] =
+    React.useState<File | null>(null);
+  const handleFileChange = (e: any) => {
+    setFileExcelPesertaPelatihan(e.target.files[0]);
+  };
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+      <AlertDialog open={isOpenFormPeserta}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              {" "}
+              <HiMiniUserGroup className="h-4 w-4" />
+              Import Peserta Pelatihan
+            </AlertDialogTitle>
+            <AlertDialogDescription className="-mt-2">
+              Import peserta yang akan mengikuti pelatihan ini!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <fieldset>
+            <form autoComplete="off">
+              <div className="flex flex-wrap -mx-3 mb-1">
+                <div className="w-full px-3">
+                  <label
+                    className="block text-gray-800 text-sm font-medium mb-1"
+                    htmlFor="email"
+                  >
+                    Data By Name By Address <span>*</span>
+                  </label>
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                      required
+                      onChange={handleFileChange}
+                    />
+                    <Link
+                      target="_blank"
+                      href={
+                        "https://docs.google.com/spreadsheets/d/1KlEBRcgXLZK6NCL0r4nglKa6XazHgUH7fqvHlrIHmNI/edit?usp=sharing"
+                      }
+                      className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
+                    >
+                      <PiMicrosoftExcelLogoFill />
+                      Unduh Template
+                    </Link>
+                  </div>
+                  <p className="text-gray-700 text-xs mt-1">
+                    *Download terlebih dahulu template lalu isi file excel dan
+                    upload
+                  </p>
+                </div>
+              </div>
+
+              <AlertDialogFooter className="mt-3 pt-3 border-t border-t-gray-300">
+                <AlertDialogCancel
+                  onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
+                >
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction>Upload</AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </fieldset>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <AlertDialog open={isOpenFormMateri}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -392,4 +481,4 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
   );
 };
 
-export default TableDataTipeUjianKeahlian;
+export default TableDataFungsiUjianKeahlian;

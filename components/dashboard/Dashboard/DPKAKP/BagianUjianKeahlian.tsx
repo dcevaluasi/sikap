@@ -1,10 +1,13 @@
 "use client";
 
 import React from "react";
+import { TbSchool } from "react-icons/tb";
 import { HiMiniComputerDesktop } from "react-icons/hi2";
 import TableDataTipeUjianKeahlian from "./TableDataTipeUjianKeahlian";
+import TableDataFungsiUjianKeahlian from "./TableDataFungsiUjianKeahlian";
+import TableDataBagianUjianKeahlian from "./TableDataBagianUjianKeahlian";
 
-const TipeUjianKeahlian: React.FC = () => {
+const BagianUjianKeahlian: React.FC = () => {
   return (
     <>
       <div className="flex flex-col">
@@ -12,20 +15,20 @@ const TipeUjianKeahlian: React.FC = () => {
           <HiMiniComputerDesktop className="text-4xl" />
           <div className="flex flex-col">
             <h1 className="text-3xl font-medium leading-[100%] font-calsans">
-              Master Data Tipe Ujian
+              Master Data Bagian Ujian
             </h1>
             <p className="font-medium text-gray-400 text-base">
-              Tambahkan data tipe ujian keahlian awak kapal perikanan!
+              Tambahkan data bagian ujian keahlian awak kapal perikanan!
             </p>
           </div>
         </div>
       </div>
 
       <div className="mt-4 md:mt-6 2xl:mt-7.5">
-        <TableDataTipeUjianKeahlian />
+        <TableDataBagianUjianKeahlian />
       </div>
     </>
   );
 };
 
-export default TipeUjianKeahlian;
+export default BagianUjianKeahlian;
