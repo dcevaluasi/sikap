@@ -48,6 +48,11 @@ type FungsiUjian = {
   Bagian: Bagian[]
 }
 
+type UjianKeahlian = {
+  Pesan: string;
+  data: Ujian[]
+}
+
 type Ujian = {
   IdUjian: number
   IdTypeUjian: number
@@ -67,7 +72,39 @@ type Ujian = {
   UsersUjian: UsersUjian[]
 }
 
-type UsersUjian = {}
+type UsersUjian = {
+  IdUserUjian: number;
+  Nama: string;
+  Nik: string;
+  TempatLahir: string;
+  TanggalLahir: string;
+  NomorUjian: string;
+  JenisKelamin: string;
+  Instansi: string;
+  IdUjian: number;
+  IdCodeAksesUsersBagian: number;
+  NilaiF1B1: number;
+  NilaiF1B2: number;
+  NilaiF1B3: number;
+  NilaiF2B1: number;
+  NilaiF3B1: number;
+  NilaiF3B2: number;
+  NilaiKomprensif: number;
+  CreteAt: string;
+  Status: string;
+  UpdateAt: string;
+  CodeAksesUsersBagian: CodeAksesUsersBagian[];
+}
+
+type CodeAksesUsersBagian = {
+  IdCodeAksesUsersBagian: number,
+  IdUserUjian: number,
+  IdBagian: number,
+  NamaBagian: string,
+  KodeAkses: string,
+  CreteAt: string,
+  UpdateAt: string
+}
 
 type TypeUjian = {
   IdTypeUjian: number

@@ -3,13 +3,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function Logo() {
-  const pathname = usePathname()
+  const pathname = usePathname();
   const getLogoHeader = () => {
-    return pathname.includes('dpkakp') ? './dpkakp/logo.png' : './logo-kkp.png'
-  }
+    return pathname.includes("dpkakp") ? "/dpkakp/logo.png" : "/logo-kkp.png";
+  };
   const getSizeLogoHeader = () => {
-    return pathname.includes('dpkakp') ? 'w-14' : 'w-16'
-  }
+    return pathname.includes("dpkakp") ? "w-14" : "w-16";
+  };
   return (
     <Link
       href="/"

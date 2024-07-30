@@ -47,7 +47,7 @@ export default function DefaultLayout({
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
-        <div className="relative flex flex-1 flex-col overflow-x-hidden">
+        <div className={`relative flex flex-1 flex-col overflow-x-hidden`}>
           {/* <!-- ===== Header Start ===== --> */}
           <Header
             sidebarOpen={sidebarOpen}

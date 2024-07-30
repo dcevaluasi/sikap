@@ -1,11 +1,20 @@
-import React from 'react'
+import TipeUjianKeahlian from "@/components/dashboard/Dashboard/DPKAKP/TipeUjianKeahlian";
+import ECommerce from "@/components/dashboard/Dashboard/E-commerce";
+import Pelatihan from "@/components/dashboard/Dashboard/Pelatihan";
+import UjianKeahlianAKP from "@/components/dashboard/Dashboard/UjianKeahlianAKP";
+import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
+import { Metadata } from "next";
 
-function page() {
-    return (
-        <div>
+export const metadata: Metadata = {
+  title: "Ujian Keahlian - Dewan Penguji Keahlian Awak Kapal Perikanan",
+};
 
-        </div>
-    )
+export default function Page() {
+  return (
+    <>
+      <DefaultLayout>
+        <TipeUjianKeahlian />
+      </DefaultLayout>
+    </>
+  );
 }
-
-export default page

@@ -1,20 +1,5 @@
 import React, { ReactElement, useState } from "react";
-import {
-  RiRadioButtonLine,
-  RiShipLine,
-  RiVerifiedBadgeFill,
-} from "react-icons/ri";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -59,22 +44,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import Toast from "@/components/toast";
-import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
-import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
-import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
-import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
-import { Checkbox } from "@/components/ui/checkbox";
-import { PelatihanMasyarakat } from "@/types/product";
 import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
-import { Input } from "@/components/ui/input";
-import { convertDate } from "@/utils";
 import Cookies from "js-cookie";
-import { LemdiklatDetailInfo } from "@/types/lemdiklat";
-import { Progress } from "@/components/ui/progress";
-import { GiBookmarklet } from "react-icons/gi";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
-import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import TableData from "../../Tables/TableData";
 
@@ -97,6 +69,7 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
           },
         }
       );
+      console.log(response);
       setData(response.data.data);
       setIsFetching(false);
     } catch (error) {
@@ -156,20 +129,51 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className={`text-gray-900 font-semibold w-full`}
+            className={`text-gray-900 text-left mx-0 px-0 font-semibold w-fit`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Nama Tipe Ujian
+            Ujian Keahlian
             <ArrowUpDown className="ml-1 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div className={`text-center uppercas w-fite`}>
-          {row.original.NamaTypeUjian}
+        <div className="flex flex-col gap-2 w-fit">
+          <div
+            className={`text-center uppercase w-fit font-semibold text-base`}
+          >
+            {row.original.NamaTypeUjian}
+          </div>
+          <div className={`text-left capitalize flex-wrap w-full -mt-2`}>
+            <div
+              className={`text-left w-full capitalize font-semibold text-xs`}
+            >
+              Fungsi Ujian :
+            </div>
+            <div className="w-1/2">
+              {row.original.Fungsi.map((fungsi, index) => (
+                <p className="text-xs font-normal" key={index}>
+                  {index + 1}. {fungsi.NamaFungsi}{" "}
+                  <span className="flex flex-row gap-1">
+                    {fungsi.Bagian.map((bagian, index) => (
+                      <Link
+                        href={`/dpkakp/admin/dashboard/bank-soal/${row.original.IdTypeUjian}/${bagian.IdBagian}`}
+                        className="text-xs text-blue-500"
+                        key={index}
+                      >
+                        {bagian.NamaBagian}
+                        {index != fungsi.Bagian.length - 1 && " •  "}
+                      </Link>
+                    ))}
+                  </span>
+                </p>
+              ))}
+            </div>
+          </div>
         </div>
       ),
     },
+
     {
       accessorKey: "CreateAt",
       header: ({ column }) => {

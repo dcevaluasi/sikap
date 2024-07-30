@@ -34,6 +34,79 @@ function page() {
     setPassword("");
   };
 
+  const [answers, setAnswers] = React.useState<string[]>([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
+
   const [data, setData] = React.useState<SoalBagian | null>(null);
   const handleFetchExamInformation = async () => {
     try {
@@ -89,11 +162,11 @@ function page() {
           />
         </div>
         <section
-          className={`w-full h-screen grid items-center justify-center text-white relative`}
+          className={`w-full h-screen grid items-center justify-center text-white relative z-50`}
         >
           <>
-            <div className="flex w-full h-fit mx-auto items-center justify-center  gap-10">
-              <div className="rounded-md h-[400px] max-w-5xl px-6 py-10">
+            <div className="flex w-full h-fit mx-auto items-center justify-between  gap-10">
+              <div className="rounded-md h-[400px] max-w-3xl px-6 py-10 flex-1">
                 <h2 className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 text-2xl">
                   Soal No. {selectedIdSoal + 1}
                 </h2>
@@ -159,15 +232,17 @@ function page() {
                     </AlertDialog>
                   ) : (
                     <div className="flex gap-2">
-                      <Button
-                        className="w-fit text-lg px-4 py-2 bg-mutedForegroundDPKAKP hover:bg-gray-600"
-                        onClick={(e) => {
-                          setSelectedIdSoal(selectedIdSoal - 1);
-                          setCountSoal(countSoal - 1);
-                        }}
-                      >
-                        Sebelumnya
-                      </Button>
+                      {selectedIdSoal != 0 && (
+                        <Button
+                          className="w-fit text-lg px-4 py-2 bg-mutedForegroundDPKAKP hover:bg-gray-600"
+                          onClick={(e) => {
+                            setSelectedIdSoal(selectedIdSoal - 1);
+                            setCountSoal(countSoal - 1);
+                          }}
+                        >
+                          Sebelumnya
+                        </Button>
+                      )}
                       <Button
                         className="w-fit text-lg p-4 bg-mutedForegroundDPKAKP hover:bg-gray-600"
                         onClick={(e) => {
@@ -182,13 +257,17 @@ function page() {
                 </div>
               </div>
               <div className="w-1 rounded-full bg-gray-300 h-[100px]"></div>
-              <div className="grid grid-cols-3 h-fit gap-3 ml-10 w-fit">
+              <div className="grid grid-cols-5 h-fit gap-3 ml-10 w-fit">
                 {data! &&
                   data!.Soal.map((soal, index) => (
                     <div
                       key={index + 1}
                       onClick={(e) => setSelectedIdSoal(index)}
-                      className="flex cursor-pointer items-center justify-center rounded-lg w-14 h-14 bg-transparent border border-white"
+                      className={`flex cursor-pointer items-center justify-center rounded-lg w-14 h-14  border border-white ${
+                        answers[index] == ""
+                          ? "bg-rose-700 bg-opacity-20 border border-rose-700"
+                          : "bg-green-500 bg-opacity-20 border-green-500 border"
+                      }`}
                     >
                       {index + 1}
                     </div>
