@@ -232,7 +232,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       ),
     },
     {
-      accessorKey: "IdUsers",
+      accessorKey: "Jawaban",
       header: ({ column }) => {
         return (
           <Button
@@ -255,7 +255,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       ),
     },
     {
-      accessorKey: "IdUsers",
+      accessorKey: "Jawaban2",
       header: ({ column }) => {
         return (
           <Button
@@ -278,7 +278,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       ),
     },
     {
-      accessorKey: "IdUsers",
+      accessorKey: "Jawaban3",
       header: ({ column }) => {
         return (
           <Button
@@ -301,7 +301,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       ),
     },
     {
-      accessorKey: "IdUsers",
+      accessorKey: "Jawaban4",
       header: ({ column }) => {
         return (
           <Button
@@ -381,17 +381,55 @@ const TableDataBankSoalUjianKeahlian = () => {
       console.log("FILE UPLOADED BANK SOAL : ", response);
       Toast.fire({
         icon: "success",
-        title: `Selamat anda berhasil mengupload bank soal pelatihan!`,
+        title: `Selamat anda berhasil mengupload bank soal ujian keahlian!`,
       });
       setIsOpenFormPeserta(!isOpenFormPeserta);
       handleFetchingTypeUjian();
+      handleFetchingBagianUjian();
     } catch (error) {
       console.log("FILE IMPORT BANK SOAL PELATIHAN : ", error);
       Toast.fire({
         icon: "error",
-        title: `Gagal mengupload bank soal pelatihan!`,
+        title: `Gagal mengupload bank soal ujian keahlian!`,
       });
       handleFetchingTypeUjian();
+      handleFetchingBagianUjian();
+    }
+  };
+
+  const [isOpenFormDelete, setIsOpenFormDelete] =
+    React.useState<boolean>(false);
+
+  const handleDeleteBankSoal = async (e: any) => {
+    e.preventDefault();
+    try {
+      const response = await axios.delete(
+        `${dpkakpBaseUrl}/adminPusat/deleteBagian?id=${getIdUjianKeahlianInBankSoal(
+          pathname!
+        )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: `Selamat anda berhasil menghapus bank soal ujian keahlian!`,
+      });
+      handleFetchingTypeUjian();
+      handleFetchingBagianUjian();
+      setIsOpenFormDelete(!isOpenFormDelete);
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal menghapus bank soal ujian keahlian!`,
+      });
+      handleFetchingTypeUjian();
+      handleFetchingBagianUjian();
+      setIsOpenFormDelete(!isOpenFormDelete);
     }
   };
 
@@ -489,9 +527,12 @@ const TableDataBankSoalUjianKeahlian = () => {
 
           <div className="flex w-full items-center mb-2 -mt-3">
             <div className="w-full flex justify-end gap-2">
-              <AlertDialog>
+              <AlertDialog open={isOpenFormDelete}>
                 <AlertDialogTrigger asChild>
-                  <div className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit">
+                  <div
+                    onClick={(e) => setIsOpenFormDelete(!isOpenFormDelete)}
+                    className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                  >
                     <TbTrash />
                     Hapus Bank Soal
                   </div>
@@ -507,8 +548,14 @@ const TableDataBankSoalUjianKeahlian = () => {
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
+                    <AlertDialogCancel
+                      onClick={(e) => setIsOpenFormDelete(!isOpenFormDelete)}
+                    >
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction onClick={(e) => handleDeleteBankSoal(e)}>
+                      Continue
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
