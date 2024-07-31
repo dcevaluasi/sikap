@@ -110,7 +110,7 @@ function page() {
             DPKAKP
           </Link>
           <h1 className="font-bold text-gray-200 text-4xl -mt-2">
-            {data?.Ujian} - {data?.Bagian}
+            {data?.Ujian} - {data?.Fungsi} {data?.Bagian}
           </h1>
           <p className="font-jakarta max-w-[42rem] leading-[100%] text-mutedForegroundDPKAKP  sm:text-lg sm:leading-8 -mt-4">
             Harap membaca dengan teliti dan saksama panduan pengerjaan ujian

@@ -49,6 +49,8 @@ import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import TableData from "../../Tables/TableData";
+import { PiBookOpen } from "react-icons/pi";
+import { dpkakpBaseUrl } from "@/constants/urls";
 
 const TableDataTipeUjianKeahlian: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -150,22 +152,38 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
             >
               Fungsi Ujian :
             </div>
-            <div className="w-1/2">
+            <div className="w-full flex flex-col">
               {row.original.Fungsi.map((fungsi, index) => (
                 <p className="text-xs font-normal" key={index}>
                   {index + 1}. {fungsi.NamaFungsi}{" "}
-                  <span className="flex flex-row gap-1">
-                    {fungsi.Bagian.map((bagian, index) => (
-                      <Link
-                        href={`/dpkakp/admin/dashboard/bank-soal/${row.original.IdTypeUjian}/${bagian.IdBagian}`}
-                        className="text-xs text-blue-500"
-                        key={index}
-                      >
-                        {bagian.NamaBagian}
-                        {index != fungsi.Bagian.length - 1 && " •  "}
-                      </Link>
-                    ))}
-                  </span>
+                  <div className="flex flex-row gap-1">
+                    <span className="flex flex-row gap-1">
+                      {fungsi.Bagian.map((bagian, index) => (
+                        <Link
+                          href={`/dpkakp/admin/dashboard/bank-soal/${row.original.IdTypeUjian}/${bagian.IdBagian}`}
+                          className="flex gap-2 px-3 my-2 text-xs items-center rounded-md border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 duration-700 p-1.5  cursor-pointer w-fit"
+                          key={index}
+                        >
+                          <PiBookOpen />
+                          {bagian.NamaBagian}
+                        </Link>
+                      ))}
+                    </span>
+                    {fungsi.Bagian.length < 3 && (
+                      <span className="flex flex-row gap-1 my-2">
+                        <div
+                          onClick={(e) => {
+                            setIsOpenFormMateri(!isOpenFormMateri);
+                            setIdFungsiSelected(fungsi.IdFungsi.toString());
+                          }}
+                          className="flex gap-2 px-3 text-xs items-center rounded-md border border-gray-600 hover:bg-gray-600 hover:text-white text-gray-600 duration-700 p-1.5  cursor-pointer w-fit"
+                        >
+                          <FiUploadCloud />
+                          Tambah Bagian Fungsi
+                        </div>
+                      </span>
+                    )}
+                  </div>
                 </p>
               ))}
             </div>
@@ -231,6 +249,40 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
     },
   });
 
+  const [namaBagian, setNamaBagian] = React.useState<string>("");
+  const [idFungsiSelected, setIdFungsiSelected] = React.useState<string>("");
+  const handlePostNewBagianUjianKeahlian = async (e: any) => {
+    try {
+      const response = await axios.post(
+        `${dpkakpBaseUrl}/adminPusat/createBagian`,
+        {
+          idFungsi: idFungsiSelected,
+          namaBagian: namaBagian,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil menambahkan data bagian ujian keahlian baru!`,
+      });
+      handleFetchingTypeUjian();
+      setIsOpenFormMateri(!isOpenFormMateri);
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal menambahkan data bagian ujian keahlian baru!`,
+      });
+      handleFetchingTypeUjian();
+      setIsOpenFormMateri(!isOpenFormMateri);
+    }
+  };
+
   React.useEffect(() => {
     handleFetchingTypeUjian();
   }, []);
@@ -243,11 +295,12 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
             <AlertDialogTitle className="flex items-center gap-2">
               {" "}
               <FaBookOpen className="h-4 w-4" />
-              Tambah Materi Pelatihan
+              Tambah Bagian Fungsi Ujian Keahlian
             </AlertDialogTitle>
             <AlertDialogDescription className="-mt-2">
-              Daftarkan materi pelatihan yang diselenggarakan yang nantinya akan
-              tercantum pada sertifikat peserta pelatihan!
+              Sebelum melakukan storing bank soal per bagian dan per fungsi
+              ujian keahlian awak kapal perikanan, tambahkan terlebih dahulu
+              bagian dari fungsi tersebut!
             </AlertDialogDescription>
           </AlertDialogHeader>
           <fieldset>
@@ -258,56 +311,21 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
                     className="block text-gray-800 text-sm font-medium mb-1"
                     htmlFor="name"
                   >
-                    Nama Materi <span className="text-red-600">*</span>
+                    Nama Bagian <span className="text-red-600">*</span>
                   </label>
-                  <input
+                  <select
                     id="name"
-                    type="text"
-                    className="form-input w-full text-black border-gray-300 rounded-md"
-                    placeholder="Masukkan nama materi"
+                    className="form-input w-full text-black text-sm border-gray-300 rounded-md"
+                    placeholder="Tipe Blanko"
                     required
-                    value={namaMateri}
-                    onChange={(e) => setNamaMateri(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="flex gap-2 w-full">
-                <div className="flex gap-2 mb-1 w-full">
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Jam Teori <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Jam Pelajaran"
-                      required
-                      value={jamTeori}
-                      onChange={(e) => setJamTeori(e.target.value)}
-                    />
-                  </div>
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Jam Praktek <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Jam Pelajaran"
-                      required
-                      value={jamPraktek}
-                      onChange={(e) => setJamPraktek(e.target.value)}
-                    />
-                  </div>
+                    value={namaBagian}
+                    onChange={(e) => setNamaBagian(e.target.value)}
+                  >
+                    <option value="0">Pilih Tipe Ujian</option>
+                    <option value="Bagian 1">Bagian 1</option>
+                    <option value="Bagian 2">Bagian 2</option>
+                    <option value="Bagian 3">Bagian 3</option>
+                  </select>
                 </div>
               </div>
 
@@ -317,12 +335,17 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
                 >
                   Cancel
                 </AlertDialogCancel>
-                <AlertDialogAction>Upload</AlertDialogAction>
+                <AlertDialogAction
+                  onClick={(e) => handlePostNewBagianUjianKeahlian(e)}
+                >
+                  Upload
+                </AlertDialogAction>
               </AlertDialogFooter>
             </form>
           </fieldset>
         </AlertDialogContent>
       </AlertDialog>
+
       {showFormAjukanPelatihan ? (
         <>
           {/* Header Tabel Data Pelatihan */}

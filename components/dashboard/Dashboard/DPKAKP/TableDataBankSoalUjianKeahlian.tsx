@@ -100,6 +100,7 @@ const TableDataBankSoalUjianKeahlian = () => {
   const id = extractLastSegment(pathname);
   const [data, setData] = React.useState<SoalUjianBagian[]>([]);
   const [dataBagian, setDataBagian] = React.useState<Bagian | null>(null);
+  const route = useRouter();
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
 
@@ -142,7 +143,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       );
       console.log(response);
       setDataBagian(response.data.data[0]!);
-      setData(response.data.data[0].SoalUjianBagian!);
+      setData(response.data!.data[0]!.SoalUjianBagian!);
     } catch (error) {
       console.error("Error posting tipe ujian:", error);
       setIsFetching(false);
@@ -418,16 +419,16 @@ const TableDataBankSoalUjianKeahlian = () => {
         icon: "success",
         title: `Selamat anda berhasil menghapus bank soal ujian keahlian!`,
       });
-      handleFetchingTypeUjian();
+
       handleFetchingBagianUjian();
       setIsOpenFormDelete(!isOpenFormDelete);
+      route.replace("/dpkakp/admin/dashboard/bank-soal");
     } catch (error) {
       console.error(error);
       Toast.fire({
         icon: "error",
         title: `Gagal menghapus bank soal ujian keahlian!`,
       });
-      handleFetchingTypeUjian();
       handleFetchingBagianUjian();
       setIsOpenFormDelete(!isOpenFormDelete);
     }

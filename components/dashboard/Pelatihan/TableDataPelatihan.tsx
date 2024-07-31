@@ -125,7 +125,14 @@ const TableDataPelatihan: React.FC = () => {
     setIsFetching(true);
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getPelatihan?id_lemdik=${Cookies.get("IDLemdik")}`
+        `${baseUrl}/lemdik/getPelatihanAdmin?id_lemdik=${Cookies.get(
+          "IDLemdik"
+        )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+          },
+        }
       );
       console.log("PELATIHAN BY LEMDIK: ", response);
       setData(response.data.data);

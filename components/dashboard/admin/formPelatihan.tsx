@@ -481,11 +481,11 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                             <span className="text-red-600">*</span>
                           </label>
                           <input
-                            id="kodePelatihan"
+                            id="tanggalMulaiPelatihan"
                             type="date"
                             className="form-input w-full text-black border-gray-300 rounded-md"
-                            placeholder="Masukkan kode pelatihan"
                             required
+                            min={new Date().toISOString().split("T")[0]}
                             value={tanggalMulaiPelatihan}
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                               setTanggalMulaiPelatihan(e.target.value)
@@ -503,15 +503,19 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                             <span className="text-red-600">*</span>
                           </label>
                           <input
-                            id="namaPelatihan"
+                            id="tanggalBerakhirPelatihan"
                             type="date"
                             className="form-input w-full text-black border-gray-300 rounded-md"
-                            placeholder="Masukkan nama pelatihan"
                             required
+                            min={
+                              tanggalMulaiPelatihan ||
+                              new Date().toISOString().split("T")[0]
+                            }
                             value={tanggalBerakhirPelatihan}
                             onChange={(e: ChangeEvent<HTMLInputElement>) =>
                               setTanggalBerakhirPelatihan(e.target.value)
                             }
+                            disabled={!tanggalMulaiPelatihan}
                           />
                         </div>
                       </div>

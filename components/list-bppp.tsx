@@ -14,15 +14,11 @@ function ListBPPP({
   pelatihan: PelatihanMasyarakat[];
   type: string;
 }) {
-  const filteredPelatihan = pelatihan.filter(
-    (item) => item.JenisSertifikat === type
-  );
-
   return (
     <div className="w-full items-center justify-center flex">
       <div className="w-fit grid grid-cols-3 gap-y-6 gap-x-5 items-center ml-6">
-        {filteredPelatihan.map(
-          (pelatihan: PelatihanMasyarakat, index: number) => (
+        {pelatihan &&
+          pelatihan!.map((pelatihan: PelatihanMasyarakat, index: number) => (
             <Slide
               direction="up"
               key={index}
@@ -31,8 +27,7 @@ function ListBPPP({
             >
               <CardPelatihan pelatihan={pelatihan} />
             </Slide>
-          )
-        )}
+          ))}
       </div>
     </div>
   );

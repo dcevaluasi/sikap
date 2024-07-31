@@ -249,17 +249,42 @@ export default function Header() {
                   {" "}
                   <NavLinkDefault href="/" name="Beranda" top={top} />
                   {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
-                  <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
+                  <NavDropDown href="#" name="Balai Pelatihan" top={top}>
+                    <NavLink href="/bppp/tegal" name="BPPP Tegal" top={top}>
+                      <div className="flex gap-2 items-center">
+                        <span>BPPP Tegal</span>
+                      </div>
+                    </NavLink>
+                    <NavLink href="/bppp/ambon" name="BPPP Ambon" top={top}>
+                      <div className="flex gap-2 items-center">
+                        <span>BPPP Ambon</span>
+                      </div>
+                    </NavLink>
+                    <NavLink href="/bppp/medan" name="BPPP Medan" top={top}>
+                      <div className="flex gap-2 items-center">
+                        <span>BPPP Medan</span>
+                      </div>
+                    </NavLink>
                     <NavLink
-                      href="/bppp/medan"
-                      name="Balai Pelatihan"
+                      href="/bppp/banyuwangi"
+                      name="BPPP Banyuwangi"
                       top={top}
                     >
                       <div className="flex gap-2 items-center">
-                        <RiSchoolFill className="text-xl" />{" "}
-                        <span>Balai Pelatihan</span>
+                        <span>BPPP Banyuwangi</span>
                       </div>
                     </NavLink>
+                    <NavLink
+                      href="/bppp/banyuwangi"
+                      name="BPPP Banyuwangi"
+                      top={top}
+                    >
+                      <div className="flex gap-2 items-center">
+                        <span>BPPP Bitung</span>
+                      </div>
+                    </NavLink>
+                  </NavDropDown>
+                  <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
                     <NavLink href="/dpkakp" name="DPKAKP" top={top}>
                       <div className="flex gap-2 items-center">
                         <BiSolidShip className="text-4xl" />{" "}
@@ -288,7 +313,11 @@ export default function Header() {
                       </div>
                     </NavLink>
                   </NavDropDown>
-                  <NavLinkDefault href="" name="Cek Sertifikat" top={top} />
+                  <NavLinkDefault
+                    href="/#cek-sertifikat"
+                    name="Cek Sertifikat"
+                    top={top}
+                  />
                   {Cookies.get("XSRF081") ? (
                     <div className="flex items-center gap-3 2xsm:gap-7">
                       {/* <!-- User Area --> */}
