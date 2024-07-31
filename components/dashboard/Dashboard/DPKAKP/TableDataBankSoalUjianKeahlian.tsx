@@ -385,7 +385,6 @@ const TableDataBankSoalUjianKeahlian = () => {
         title: `Selamat anda berhasil mengupload bank soal ujian keahlian!`,
       });
       setIsOpenFormPeserta(!isOpenFormPeserta);
-      handleFetchingTypeUjian();
       handleFetchingBagianUjian();
     } catch (error) {
       console.log("FILE IMPORT BANK SOAL PELATIHAN : ", error);
@@ -393,7 +392,6 @@ const TableDataBankSoalUjianKeahlian = () => {
         icon: "error",
         title: `Gagal mengupload bank soal ujian keahlian!`,
       });
-      handleFetchingTypeUjian();
       handleFetchingBagianUjian();
     }
   };

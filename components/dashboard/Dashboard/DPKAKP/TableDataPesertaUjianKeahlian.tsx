@@ -149,7 +149,7 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
     },
     {
-      accessorKey: "IdUserUjian",
+      accessorKey: "Nik",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -517,6 +517,7 @@ const TableDataPesertaUjianKeahlian = () => {
         icon: "success",
         title: `Selamat anda berhasil mengupload peserta ujian keahlian!`,
       });
+      handleFetchingUjianKeahlianData();
       setIsOpenFormPeserta(!isOpenFormPeserta);
     } catch (error) {
       console.log("FILE IMPORT PESERTA PELATIHAN : ", error);
@@ -525,6 +526,7 @@ const TableDataPesertaUjianKeahlian = () => {
         icon: "error",
         title: `Gagal mengupload peserta ujian keahlian!`,
       });
+      handleFetchingUjianKeahlianData();
     }
   };
 

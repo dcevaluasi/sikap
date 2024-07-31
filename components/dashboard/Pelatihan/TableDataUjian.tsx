@@ -367,7 +367,7 @@ const TableDataUjian: React.FC = () => {
               <span className="flex items-center gap-1 leading-[105%]">
                 <HiUserGroup className="text-base" />
                 <span>
-                  Jumlah peserta ujian: {row.original.JumlahPesertaUjian}
+                  Jumlah peserta ujian: {row.original.UsersUjian.length}
                 </span>
               </span>
             </p>
@@ -579,6 +579,7 @@ const TableDataUjian: React.FC = () => {
                       className="form-input w-full text-black border-gray-300 rounded-md"
                       placeholder="Tanggall Mulai"
                       required
+                      min={new Date().toISOString().split("T")[0]}
                       value={tanggalMulai}
                       onChange={(e) => setTanggalMulai(e.target.value)}
                     />
@@ -592,12 +593,13 @@ const TableDataUjian: React.FC = () => {
                       Tanggal Berakhir <span className="text-red-600">*</span>
                     </label>
                     <input
-                      id="name"
+                      id="tanggalBerakhir"
                       type="date"
                       className="form-input w-full text-black border-gray-300 rounded-md"
                       placeholder="Tanggal Berakhir"
                       required
                       value={tanggalBerakhir}
+                      min={tanggalMulai}
                       onChange={(e) => setTanggalBerakhir(e.target.value)}
                     />
                   </div>
