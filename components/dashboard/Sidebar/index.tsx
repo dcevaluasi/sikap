@@ -93,7 +93,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 ? "Dashboard Aplikasi Awak Kapal Perikanan Badan Penyuluhan dan Pengembangan Sumber Daya Manusia"
                 : pathname.includes("/dpkakp")
                 ? "Dashboard Dewan Penguji Keahlian Awak Kapal Perikanan Badan Penyuluhan dan Pengembangan Sumber Daya Manusia"
-                : "Dashboard Elektronik Layanan Pelatihan Kelautan dan Perikanan Utama TerpaduBadan Penyuluhan dan Pengembangan Sumber Daya Manusia"}
+                : "Dashboard Elektronik Layanan Pelatihan Kelautan dan Perikanan Utama Terpadu"}
             </p>
           </div>
         </Link>
