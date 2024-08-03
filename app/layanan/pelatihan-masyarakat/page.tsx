@@ -9,7 +9,7 @@ import React from "react";
 import { Bounce, Slide } from "react-awesome-reveal";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
-export const bidangPelatihan = [
+const bidangPelatihan = [
   {
     id: 0,
     name: "Budidaya",
