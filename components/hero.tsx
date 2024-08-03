@@ -23,7 +23,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative h-[80vh] flex items-center justify-center">
+    <section className="relative h-[90vh] flex items-center justify-center">
       <Image
         src={images[imageIndex]}
         className="absolute w-full h-full object-cover duration-1000"
@@ -71,20 +71,13 @@ export default function Hero() {
           {/* Section header */}
 
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
-            {/* <Image
-              className="w-[250px] z-[9999] -mb-11 -mt-20"
-              width={0}
-              height={0}
-              src={"/logo-elaut.png"}
-              alt="Kementrian Kelautan dan Perikanan RI Logo"
-            /> */}
             <h1
-              className="text-4xl md:text-[3.9rem] font-extrabold leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
+              className="text-4xl md:text-[3.9rem] font-normal leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
               data-aos="zoom-y-out"
             >
               Elektronik Layanan Pelatihan <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                Kelautan dan Perikanan Terpadu
+                Kelautan dan Perikanan Utama Terpadu
               </span>
             </h1>
             <div className="max-w-3xl mx-auto">

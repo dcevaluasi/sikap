@@ -99,8 +99,8 @@ function page() {
   }, []);
 
   return (
-    <main className="bg-darkDPKAKP w-full h-screen">
-      <section className="relative h-fit space-y-6 pb-8 pt-36 md:h-screen md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col">
+    <main className="bg-darkDPKAKP w-full h-screen overflow-y-scroll">
+      <section className="relative h-fit px-7 md:px-0 space-y-6 pb-8 pt-20 md:h-screen md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col">
         <div className="container relative flex max-w-[64rem] flex-col items-center gap-2 text-center">
           <Link
             href={"/dpkakp"}
@@ -109,15 +109,15 @@ function page() {
           >
             DPKAKP
           </Link>
-          <h1 className="font-bold text-gray-200 text-4xl -mt-2">
+          <h1 className="font-bold text-gray-200 text-3xl leading-[110%] mb-5 mt-2">
             {data?.Ujian} - {data?.Fungsi} {data?.Bagian}
           </h1>
-          <p className="font-jakarta max-w-[42rem] leading-[100%] text-mutedForegroundDPKAKP  sm:text-lg sm:leading-8 -mt-4">
+          <p className="font-jakarta max-w-[42rem] leading-[95%] text-mutedForegroundDPKAKP  sm:text-lg sm:leading-8 -mt-4">
             Harap membaca dengan teliti dan saksama panduan pengerjaan ujian
             keahlian awak kapal perikanan.
           </p>
           <Image
-            className="absolute -top-28 w-[500px] opacity-10 z-10"
+            className="absolute top-16 md:-top-28 w-[500px] opacity-10 z-10"
             src={"/dpkakp/logo.png"}
             width={0}
             height={0}

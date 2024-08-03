@@ -22,7 +22,11 @@ import Cookies from "js-cookie";
 import DropdownUser from "../dashboard/Header/DropdownUser";
 import DropdownUserPelatihan from "../dashboard/Header/DropdownUserPelatihan";
 import { Dropdown } from "flowbite-react";
-import { RiSchoolFill } from "react-icons/ri";
+import {
+  RiGovernmentFill,
+  RiSchoolFill,
+  RiVerifiedBadgeFill,
+} from "react-icons/ri";
 import { BiSolidShip } from "react-icons/bi";
 import { AiFillShop } from "react-icons/ai";
 import { BsFillPatchCheckFill } from "react-icons/bs";
@@ -249,38 +253,27 @@ export default function Header() {
                   {" "}
                   <NavLinkDefault href="/" name="Beranda" top={top} />
                   {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
-                  <NavDropDown href="#" name="Balai Pelatihan" top={top}>
-                    <NavLink href="/bppp/tegal" name="BPPP Tegal" top={top}>
+                  <NavDropDown href="#" name="Layanan" top={top}>
+                    <NavLink
+                      href="/layanan/pelatihan-masyarakat"
+                      name="BPPP Tegal"
+                      top={top}
+                    >
                       <div className="flex gap-2 items-center">
-                        <span>BPPP Tegal</span>
+                        <HiMiniUserGroup className="text-xl" />{" "}
+                        <span>Pelatihan Masyarakat</span>
                       </div>
                     </NavLink>
                     <NavLink href="/bppp/ambon" name="BPPP Ambon" top={top}>
                       <div className="flex gap-2 items-center">
-                        <span>BPPP Ambon</span>
+                        <RiVerifiedBadgeFill className="text-xl" />{" "}
+                        <span>Sertifikasi atau Uji Kompetensi</span>
                       </div>
                     </NavLink>
                     <NavLink href="/bppp/medan" name="BPPP Medan" top={top}>
                       <div className="flex gap-2 items-center">
-                        <span>BPPP Medan</span>
-                      </div>
-                    </NavLink>
-                    <NavLink
-                      href="/bppp/banyuwangi"
-                      name="BPPP Banyuwangi"
-                      top={top}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <span>BPPP Banyuwangi</span>
-                      </div>
-                    </NavLink>
-                    <NavLink
-                      href="/bppp/banyuwangi"
-                      name="BPPP Banyuwangi"
-                      top={top}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <span>BPPP Bitung</span>
+                        <RiGovernmentFill className="text-xl" />{" "}
+                        <span>Pelatihan Aparatur</span>
                       </div>
                     </NavLink>
                   </NavDropDown>
@@ -303,7 +296,7 @@ export default function Header() {
                       </div>
                     </NavLink>
                     <NavLink
-                      href="/bppp/ambon"
+                      href="/komite-approval"
                       name="Komite Approval"
                       top={top}
                     >

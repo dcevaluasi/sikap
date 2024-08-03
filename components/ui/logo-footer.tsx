@@ -3,13 +3,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export default function LogoFooter() {
-  const pathname = usePathname()
+  const pathname = usePathname();
   const getLogo = () => {
-    return pathname.includes('dpkakp') ? '/dpkakp/logo.png' : '/logo-kkp-white.png'
-  }
+    return pathname.includes("dpkakp")
+      ? "/dpkakp/logo.png"
+      : "/logo-kkp-white.png";
+  };
   const getSizeLogoHeader = () => {
-    return pathname.includes('dpkakp') ? 'w-14' : 'w-16'
-  }
+    return pathname.includes("dpkakp") ? "w-14" : "w-16";
+  };
 
   return (
     <Link
@@ -24,6 +26,7 @@ export default function LogoFooter() {
         src={getLogo()}
         alt="Kementrian Kelautan dan Perikanan RI Logo"
       />
+   
     </Link>
   );
 }

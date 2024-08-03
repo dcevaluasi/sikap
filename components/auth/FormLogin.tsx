@@ -19,7 +19,7 @@ function FormLogin() {
   const [password, setPassword] = React.useState<string>("");
   const recaptchaRef = React.createRef();
 
-  const [captcha, setCaptcha] = React.useState<string | null>()
+  const [captcha, setCaptcha] = React.useState<string | null>();
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
@@ -117,19 +117,19 @@ function FormLogin() {
   }, []);
 
   return (
-    <section className="relative w-full h-full">
+    <section className="relative w-full h-screen md:h-full">
       <Image
         src={images[imageIndex]}
         className="absolute w-full h-full object-cover duration-1000 -z-40"
         alt=""
-        layout="fill"
+        layout={"fill"}
         priority
       />
 
       <div className="absolute w-full h-full bg-black bg-opacity-70 -z-30"></div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8 h-screen">
-        <div className="pt-32  md:pt-40 md:pb-20 h-screen">
+      <div className="max-w-6xl h-full mx-auto px-4 sm:px-6 md:-mt-8">
+        <div className="pt-32  md:pt-40 md:pb-20">
           {/* Page header */}
           <div className="max-w-3xl mx-auto text-center pb-0 md:pb-0">
             <h1 className="font-bold text-4xl leading-[100%] md:text-4xl text-gray-200 font-calsans">
@@ -143,7 +143,7 @@ function FormLogin() {
           {/* Form */}
           <div className="max-w-sm mx-auto mt-4">
             <form onSubmit={(e) => handleLoginAkun(e)}>
-              <div className="flex flex-wrap -mx-3 mb-4">
+              <div className="flex flex-wrap -mx-3 mb-2">
                 <div className="w-full px-3">
                   <label
                     className="block text-gray-200 text-sm font-medium mb-1"
@@ -162,7 +162,7 @@ function FormLogin() {
                   />
                 </div>
               </div>
-              <div className="flex flex-wrap -mx-3 mb-4">
+              <div className="flex flex-wrap -mx-3 mb-2">
                 <div className="w-full px-3">
                   <label
                     className="block text-gray-200 text-sm font-medium mb-1"
@@ -181,23 +181,39 @@ function FormLogin() {
                   />
                 </div>
               </div>
-              <div className="flex flex-wrap -mx-3 mb-4">
-                <div className="w-full px-3">
+              <div
+                className="flex flex-wrap w-full -mx-3 mb-2"
+                style={{ width: "100% !important" }}
+              >
+                <div
+                  className="w-full px-3"
+                  style={{ width: "100% !important" }}
+                >
                   <label
                     className="block text-gray-200 text-sm font-medium mb-1"
                     htmlFor="password"
                   >
-                    Verify if you are not a robot <span className="text-red-600">*</span>
+                    Verify if you are not a robot{" "}
+                    <span className="text-red-600">*</span>
                   </label>
-                  <ReCAPTCHA sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!} className="mx-auto w-full font-inter text-sm" onChange={setCaptcha} />
+                  <ReCAPTCHA
+                    style={{ width: "100% !important" }}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                    className="mx-auto w-full font-inter text-sm"
+                    onChange={setCaptcha}
+                  />
                 </div>
               </div>
 
-              <div className="flex flex-wrap -mx-3 mt-6">
+              <div className="flex flex-wrap -mx-3 mt-3">
                 <div className="w-full px-3">
                   <button
                     type="submit"
-                    className={`btn text-white ${captcha ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-500 hover:bg-gray-600'} w-full`}
+                    className={`btn text-white ${
+                      captcha
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : "bg-gray-500 hover:bg-gray-600"
+                    } w-full`}
                     disabled={captcha ? false : true}
                   >
                     Login

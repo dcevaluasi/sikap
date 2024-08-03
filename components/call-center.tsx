@@ -29,9 +29,9 @@ function CallCenter() {
         >
           <Bounce duration={1000}>
             <div className="flex flex-col gap-2 cursor-pointer items-center duration-1000 hover:scale-105 text-center">
-              <div className="flex flex-col items-center justify-center  bg-white shadow-custom rounded-full w-24 h-24 md:w-20 md:h-20 p-2">
+              <div className="flex flex-col items-center justify-center  bg-white shadow-custom rounded-full w-16 h-16 md:w-20 md:h-20 p-2">
                 <Image
-                  className="w-12 md:w-12"
+                  className="w-10 md:w-12"
                   width={0}
                   height={0}
                   src={"/illustrations/call-center.png"}
