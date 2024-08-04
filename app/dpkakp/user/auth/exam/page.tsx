@@ -13,6 +13,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { dpkakpBaseUrl } from "@/constants/urls";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
@@ -33,79 +34,6 @@ function page() {
     setEmail("");
     setPassword("");
   };
-
-  const [answers, setAnswers] = React.useState<string[]>([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-  ]);
 
   const [data, setData] = React.useState<SoalBagian | null>(null);
   const handleFetchExamInformation = async () => {
@@ -129,7 +57,120 @@ function page() {
   const [countSoal, setCountSoal] = React.useState<number>(1);
   const countdownEndTimeRef = React.useRef<number>(Date.now() + 900000);
 
+  const [loading, setLoading] = React.useState(true);
+  React.useEffect(() => {
+    // Simulate data fetching
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000); // Adjust the timeout duration as needed
+  }, []);
+
   const [selectedAnswers, setSelectedAnswers] = React.useState<Jawaban[]>([]);
+
+  const handleAnswerChange = (soalId: number, answer: string) => {
+    setSelectedAnswers((prevAnswers) => {
+      const existingAnswerIndex = prevAnswers.findIndex(
+        (a: any) => a.id_soal_bagian === soalId
+      );
+      const newAnswers: any = [...prevAnswers];
+
+      if (existingAnswerIndex >= 0) {
+        newAnswers[existingAnswerIndex] = {
+          id_soal_bagian: soalId,
+          jawaban_pengguna: answer,
+        };
+      } else {
+        newAnswers.push({ id_soal_bagian: soalId, jawaban_pengguna: answer });
+      }
+
+      return newAnswers;
+    });
+  };
+
+  console.log("SELECTED ANSWERS", selectedAnswers);
+
+  React.useEffect(() => {
+    // Load state from local storage on component mount
+    const savedSelectedIdSoal = localStorage.getItem("selectedIdSoal");
+    const savedAnswers = localStorage.getItem("answers");
+
+    if (savedSelectedIdSoal !== null) {
+      setSelectedIdSoal(JSON.parse(savedSelectedIdSoal));
+    }
+    if (savedAnswers !== null) {
+      setSelectedAnswers(JSON.parse(savedAnswers));
+    }
+  }, []);
+
+  React.useEffect(() => {
+    // Save state to local storage whenever it changes
+    localStorage.setItem("selectedIdSoal", JSON.stringify(selectedIdSoal));
+    localStorage.setItem("answers", JSON.stringify(selectedAnswers));
+  }, [selectedIdSoal, selectedAnswers]);
+
+  const [showAlert, setShowAlert] = React.useState(false);
+  const [showSubmitAlert, setShowSubmitAlert] = React.useState(false);
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        `${dpkakpBaseUrl}/SumbitExam`,
+        selectedAnswers,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log("Response:", response.data);
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil mensubmit jawabanmu!`,
+      });
+      Cookies.remove("XSRF096");
+      setTimeout(() => {
+        router.replace("/dpkakp/user/auth");
+      }, 1500); // Adjust the timeout duration as needed
+      // Handle the response as needed
+    } catch (error) {
+      console.error("Error submitting exam:", error);
+      // Handle the error as needed
+    }
+  };
+  const handleNextClick = () => {
+    if (
+      !selectedAnswers.find((a: any) => a.id_soal_bagian === selectedIdSoal)
+    ) {
+      setShowAlert(true);
+    } else {
+      setSelectedIdSoal(selectedIdSoal + 1);
+    }
+  };
+
+  React.useEffect(() => {
+    // Clear radio button selection when moving to the next question
+    const radioButtons = document.querySelectorAll(
+      `input[name="radio-${selectedIdSoal}"]`
+    );
+    radioButtons.forEach((radio: any) => {
+      radio.checked = false;
+    });
+
+    // Check the selected answer if it exists
+    const selected: any = selectedAnswers.find(
+      (a: any) => a.id_soal_bagian === selectedIdSoal
+    );
+    if (selected) {
+      const radioButton: any = document.querySelector(
+        `input[name="radio-${selectedIdSoal}"][value="${selected.jawaban_pengguna}"]`
+      );
+      if (radioButton) {
+        radioButton.checked = true;
+      }
+    }
+  }, [selectedIdSoal, selectedAnswers]);
+  const handlePrevClick = () => {
+    setSelectedIdSoal(selectedIdSoal - 1);
+  };
 
   React.useEffect(() => {
     handleFetchExamInformation();
@@ -190,7 +231,7 @@ function page() {
               alt="DPKAKP Logo"
             />
           </div>
-          <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row  justify-between gap-10 items-center">
             <h1 className="font-bold text-gray-200 text-sm md:text-xl max-w-xs md:max-w-md leading-[95%] mb-5 mt-2 text-left">
               {data?.Ujian} <br />{" "}
               <span className="font-normal text-xs md:text-base text-mutedForegroundDPKAKP leading-[90%]">
@@ -204,22 +245,22 @@ function page() {
             <Timer />
           </div>
         </div>
-        <section
-          className={`w-full max-w-[54rem] container flex items-center justify-center text-white relative z-50`}
-        >
-          <>
+        {loading ? (
+          <SkeletonDataSoal />
+        ) : (
+          <section className="w-full max-w-[54rem] container flex items-center justify-center text-white relative z-50">
             <div className="flex w-full h-fit mx-auto items-center justify-between gap-10">
               <div className="rounded-md h-[400px] max-w-xl px-6 py-3 flex-1">
                 <h2 className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 text-2xl">
                   Soal No. {selectedIdSoal + 1}
                 </h2>
                 <h3 className="text-white leading-[110%] text-xl font-semibold">
-                  {data! && data!.Soal[selectedIdSoal]!.Soal} ?
+                  {data && data.Soal[selectedIdSoal]?.Soal} ?
                 </h3>
-                <div className="flex flex-col items-start text-mutedForegroundDPKAKP justify-start gap-1 mt-5 ">
-                  {data! &&
-                    data!.Soal[selectedIdSoal]!.Jawaban!.slice(1).map(
-                      (jawaban: Jawaban, index: number) => (
+                <div className="flex flex-col items-start text-mutedForegroundDPKAKP justify-start gap-1 mt-5">
+                  {data &&
+                    data.Soal[selectedIdSoal]?.Jawaban?.slice(1).map(
+                      (jawaban, index) => (
                         <div
                           key={index}
                           className="flex items-start w-full mb-4 text-gray-360"
@@ -228,96 +269,94 @@ function page() {
                             id={`radio-${selectedIdSoal}-${index}`}
                             type="radio"
                             value={jawaban.NameJawaban}
-                            name="default-radio"
-                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700 "
-                            onChange={() => null}
+                            name={`radio-${selectedIdSoal}`}
+                            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"
+                            onChange={() =>
+                              handleAnswerChange(
+                                selectedIdSoal,
+                                jawaban.NameJawaban
+                              )
+                            }
                           />
                           <label
                             htmlFor={`radio-${selectedIdSoal}-${index}`}
-                            className="ms-2 -mt-1 text-base capitalize font-normal text-white "
+                            className="ms-2 -mt-1 text-base capitalize font-normal text-white"
                           >
-                            {index == 0
+                            {index === 0
                               ? "A"
-                              : index == 1
+                              : index === 1
                               ? "B"
-                              : index == 2
+                              : index === 2
                               ? "C"
                               : "D"}
-                            . {jawaban!.NameJawaban!}
+                            . {jawaban.NameJawaban}
                           </label>
                         </div>
                       )
                     )}
                 </div>
-                {/* <div className="flex w-full items-center justify-end">
-                  {data! && data!.Soal!.length == countSoal ? (
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button className="w-fit text-lg p-4 bg-blue-500 hover:bg-blue-600">
-                          Submit
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Kamu yakin akan mensubmit soal?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Jika kamu mensubmit soal, kamu akan segera
-                            mendapatkan nilai dari pengerjaan pre-test ini
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction>Submit</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  ) : (
-                    <div className="flex gap-2">
-                      {selectedIdSoal != 0 && (
-                        <Button
-                          className="w-fit text-lg px-4 py-2 bg-mutedForegroundDPKAKP hover:bg-gray-600"
-                          onClick={(e) => {
-                            setSelectedIdSoal(selectedIdSoal - 1);
-                            setCountSoal(countSoal - 1);
-                          }}
-                        >
-                          Sebelumnya
-                        </Button>
-                      )}
-                      <Button
-                        className="w-fit text-lg p-4 bg-mutedForegroundDPKAKP hover:bg-gray-600"
-                        onClick={(e) => {
-                          setSelectedIdSoal(selectedIdSoal + 1);
-                          setCountSoal(countSoal + 1);
-                        }}
-                      >
-                        Selanjutnya
-                      </Button>
-                    </div>
-                  )}
-                </div> */}
-              </div>
-              {/* <div className="grid grid-cols-8 h-fit gap-3 ml-10 w-fit">
-                {data! &&
-                  data!.Soal.map((soal, index) => (
-                    <div
-                      key={index + 1}
-                      onClick={(e) => setSelectedIdSoal(index)}
-                      className={`flex cursor-pointer items-center justify-center rounded-lg w-14 h-14  border border-white ${
-                        answers[index] == ""
-                          ? "bg-rose-700 bg-opacity-20 border border-rose-700"
-                          : "bg-green-500 bg-opacity-20 border-green-500 border"
-                      }`}
+                <div className="flex w-full items-center justify-end mt-4">
+                  {selectedIdSoal !== 0 && (
+                    <Button
+                      className="w-fit text-lg px-4 py-2 bg-mutedForegroundDPKAKP hover:bg-gray-600"
+                      onClick={handlePrevClick}
                     >
-                      {index + 1}
-                    </div>
-                  ))}
-              </div> */}
+                      Sebelumnya
+                    </Button>
+                  )}
+                  {selectedIdSoal === data!.Soal.length - 1 ? (
+                    <Button
+                      className="w-fit text-lg px-4 py-2 bg-mutedForegroundDPKAKP hover:bg-gray-600 ml-4"
+                      onClick={() => setShowSubmitAlert(true)}
+                    >
+                      Submit
+                    </Button>
+                  ) : (
+                    <Button
+                      className="w-fit text-lg px-4 py-2 bg-mutedForegroundDPKAKP hover:bg-gray-600 ml-4"
+                      onClick={handleNextClick}
+                    >
+                      Selanjutnya
+                    </Button>
+                  )}
+                </div>
+              </div>
             </div>
-          </>
-        </section>
+            <AlertDialog open={showAlert}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Peringatan</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Anda harus memilih jawaban sebelum melanjutkan.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel onClick={() => setShowAlert(false)}>
+                    OK
+                  </AlertDialogCancel>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <AlertDialog open={showSubmitAlert}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Konfirmasi</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Anda yakin ingin mengirim jawaban?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel onClick={() => setShowSubmitAlert(false)}>
+                    Batal
+                  </AlertDialogCancel>
+                  <AlertDialogAction onClick={handleSubmit}>
+                    Kirim
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </section>
+        )}
       </section>
     </main>
   );
@@ -329,6 +368,27 @@ interface CountDownTime {
   minutes: string;
   seconds: string;
 }
+
+const SkeletonDataSoal = () => {
+  return (
+    <section className="w-full max-w-[54rem] container flex items-center justify-center text-white relative z-50">
+      <div className="flex w-full h-fit mx-auto items-center justify-between gap-10">
+        <div className="rounded-md h-[400px] max-w-xl px-6 py-3 flex-1  animate-pulse">
+          <div className="h-8 bg-gray-600 rounded mb-4 w-20"></div>
+          <div className="h-6 bg-gray-600 rounded mb-4"></div>
+          <div className="flex flex-col gap-4">
+            {[...Array(4)].map((_, index) => (
+              <div key={index} className="flex items-center gap-4">
+                <div className="w-4 h-4 bg-gray-600 rounded-full"></div>
+                <div className="h-6 bg-gray-600 rounded flex-1"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 const Timer: React.FC = () => {
   const [countDownTime, setCountDownTime] = React.useState<CountDownTime>({
