@@ -20,20 +20,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
-import Countdown from "react-countdown";
-import { IoMdCloseCircle } from "react-icons/io";
-import { TbClock } from "react-icons/tb";
 
 function page() {
   const router = useRouter();
-
-  const [email, setEmail] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
-
-  const handleClearFormLoginAdminDPKAKP = async () => {
-    setEmail("");
-    setPassword("");
-  };
 
   const [data, setData] = React.useState<SoalBagian | null>(null);
   const handleFetchExamInformation = async () => {
@@ -54,8 +43,6 @@ function page() {
   };
 
   const [selectedIdSoal, setSelectedIdSoal] = React.useState<number>(0);
-  const [countSoal, setCountSoal] = React.useState<number>(1);
-  const countdownEndTimeRef = React.useRef<number>(Date.now() + 900000);
 
   const [loading, setLoading] = React.useState(true);
   React.useEffect(() => {
@@ -117,7 +104,7 @@ function page() {
         selectedAnswers,
         {
           headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+            Authorization: `Bearer ${Cookies.get("XSRF096")}`,
           },
         }
       );
@@ -402,23 +389,6 @@ const Timer: React.FC = () => {
     const currentTime = new Date().getTime();
     const timeDifference = countDownDate - currentTime;
 
-    const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000))
-      .toString()
-      .padStart(2, "0");
-    const hours = Math.floor(
-      (timeDifference % (24 * 60 * 60 * 1000)) / (1000 * 60 * 60)
-    )
-      .toString()
-      .padStart(2, "0");
-    const minutes = Math.floor(
-      (timeDifference % (60 * 60 * 1000)) / (1000 * 60)
-    )
-      .toString()
-      .padStart(2, "0");
-    const seconds = Math.floor((timeDifference % (60 * 1000)) / 1000)
-      .toString()
-      .padStart(2, "0");
-
     if (timeDifference < 0) {
       setCountDownTime({
         days: "00",
@@ -427,6 +397,23 @@ const Timer: React.FC = () => {
         seconds: "00",
       });
     } else {
+      const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000))
+        .toString()
+        .padStart(2, "0");
+      const hours = Math.floor(
+        (timeDifference % (24 * 60 * 60 * 1000)) / (1000 * 60 * 60)
+      )
+        .toString()
+        .padStart(2, "0");
+      const minutes = Math.floor(
+        (timeDifference % (60 * 60 * 1000)) / (1000 * 60)
+      )
+        .toString()
+        .padStart(2, "0");
+      const seconds = Math.floor((timeDifference % (60 * 1000)) / 1000)
+        .toString()
+        .padStart(2, "0");
+
       setCountDownTime({
         days,
         hours,
@@ -439,28 +426,23 @@ const Timer: React.FC = () => {
   const startCountDown = React.useCallback(() => {
     const customDate = new Date();
     const countDownDate = new Date(
-      customDate.getFullYear(),
-      customDate.getMonth() + 1,
-      customDate.getDate() + 6,
-      customDate.getHours(),
-      customDate.getMinutes(),
-      customDate.getSeconds() + 1
+      customDate.getTime() + 120 * 60 * 1000 // Set countdown to 120 minutes from now
     ).getTime();
 
     const intervalId = setInterval(() => {
       getTimeDifference(countDownDate);
     }, 1000);
 
-    return () => clearInterval(intervalId);
+    return intervalId; // Return the interval ID
   }, []);
 
   React.useEffect(() => {
     const intervalId = startCountDown();
-    return () => clearInterval(1000);
+    return () => clearInterval(intervalId); // Use the interval ID for clearInterval
   }, [startCountDown]);
 
   return (
-    <div className=" h-fit">
+    <div className="h-fit">
       <div className="flex flex-col items-center justify-center w-full h-full gap-8 sm:gap-16">
         <div className="flex justify-center gap-3 sm:gap-8">
           <div className="flex flex-col gap-2 relative">

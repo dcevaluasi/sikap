@@ -97,6 +97,7 @@ const TableDataPesertaUjianKeahlian = () => {
 
   /*============== STORE DATA VARIABLES ================ */
   const [data, setData] = React.useState<UsersUjian[]>([]);
+  const [dataUjian, setDataUjian] = React.useState<Ujian[]>([]);
 
   /*================== LOADER VARIABLES ================= */
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
@@ -115,6 +116,8 @@ const TableDataPesertaUjianKeahlian = () => {
       );
       console.log(response);
       setData(response.data.data[0]!.UsersUjian!);
+      setDataUjian(response.data.data);
+
       setIsFetching(false);
     } catch (error) {
       console.error(error);
@@ -496,6 +499,19 @@ const TableDataPesertaUjianKeahlian = () => {
   };
   const handleUploadImportPesertaPelatihan = async (e: any) => {
     e.preventDefault();
+
+    if (dataUjian.length > 0) {
+      if (dataUjian[0]!.UsersUjian.length > 0) {
+        Toast.fire({
+          icon: "error",
+          title: `Maaf import peserta hanya dapat dilakukan sekali, kamu tidak bisa menambahkan lagi setelah mengimport data!`,
+        });
+        handleFetchingUjianKeahlianData();
+        setIsOpenFormPeserta(!isOpenFormPeserta);
+        return;
+      }
+    }
+
     const formData = new FormData();
     formData.append("IdUjian", id);
     if (fileExcelPesertaPelatihan != null) {
@@ -531,6 +547,17 @@ const TableDataPesertaUjianKeahlian = () => {
   };
 
   const handleSematkanSoalUjianKeahlianToPeserta = async (e: any) => {
+    if (data.length > 0) {
+      if (data[0]!.CodeAksesUsersBagian.length > 0) {
+        Toast.fire({
+          icon: "error",
+          title: `Maaf sematkan soal peserta hanya dapat dilakukan sekali, kamu tidak bisa menyematkan kembali`,
+        });
+        handleFetchingUjianKeahlianData();
+        return;
+      }
+    }
+
     e.preventDefault();
     try {
       const response = await axios.post(
