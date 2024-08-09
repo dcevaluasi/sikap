@@ -167,7 +167,8 @@ export default function Header() {
         usePathname().includes("pre-test") ||
         usePathname().includes("post-test") ||
         usePathname().includes("/dpkakp/admin") ||
-        usePathname().includes("/dpkakp/user")
+        usePathname().includes("/dpkakp/user") ||
+        usePathname().includes("/dpkakp/penguji")
           ? "hidden"
           : "block"
       } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
