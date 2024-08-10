@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { dpkakpBaseUrl } from "@/constants/urls";
 
 function FormAsesorPage() {
   const router = useRouter();
@@ -34,12 +35,34 @@ function FormAsesorPage() {
   const [asalInstansi, setAsalInstansi] = React.useState<string>("");
   const [nomorTelpon, setNomorTelpon] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
+
+  const [namaUserDpkakpError, setNamaUserDpkakpError] =
+    React.useState<boolean>(false);
+  const [typeDpkakpError, setTypeDpkakpError] = React.useState<boolean>(false);
+  const [nikError, setNikError] = React.useState<boolean>(false);
+  const [alamatError, setAlamatError] = React.useState<boolean>(false);
+  const [provinsiError, setProvinsiError] = React.useState<boolean>(false);
+  const [citiesError, setCitiesError] = React.useState<boolean>(false);
+  const [asalInstansiError, setAsalInstansiError] =
+    React.useState<boolean>(false);
+  const [nomorTelponError, setNomorTelponError] =
+    React.useState<boolean>(false);
+  const [emailError, setEmailError] = React.useState<boolean>(false);
+
+  const [jabatanError, setJabatanError] = React.useState<boolean>(false);
+  const [golonganError, setGolonganError] = React.useState<boolean>(false);
+  const [tipeKeahlianError, setTipeKeahlianError] =
+    React.useState<boolean>(false);
+  const [pengalamanBerlayarError, setPengalamanBerlayarError] =
+    React.useState<boolean>(false);
+  const [pengalamanError, setPengalamanError] = React.useState<boolean>(false);
+
   const [jabatan, setJabatan] = React.useState<string>("");
   const [golongan, setGolongan] = React.useState<string>("");
   const [tipeKeahlian, setTipeKeahlian] = React.useState<string>("");
   const [foto, setFoto] = React.useState<File | null>(null);
-  const [pegalamanBerlayara, setPengalamanBerlayar] =
-    React.useState<string>("");
+  const [pegalamanBerlayar, setPengalamanBerlayar] = React.useState<string>("");
+  const [pengalaman, setPengalaman] = React.useState<string>("");
 
   const [ijazah, setIjazah] = React.useState<File | null>(null);
   const [sertifikatKeahlian, setSertifikatKeahlian] =
@@ -56,6 +79,248 @@ function FormAsesorPage() {
   );
   const [bukuPelaut, setBukuPelaut] = React.useState<File | null>(null);
   const [experience, setExperience] = React.useState<string>("");
+
+  const [ijazahError, setIjazahError] = React.useState<boolean>(false);
+  const [sertifikatKeahlianError, setSertifikatKeahlianError] =
+    React.useState<boolean>(false);
+  const [sertifikatTotError, setSertifikatTotError] =
+    React.useState<boolean>(false);
+  const [sertifikatToeError, setSertifikatToeError] =
+    React.useState<boolean>(false);
+  const [sertifikatToeSimulatorError, setSertifikatToeSimulatorError] =
+    React.useState<boolean>(false);
+  const [sertifikatAuditorError, setSertifikatAuditorError] =
+    React.useState<boolean>(false);
+  const [bukuPelautError, setBukuPelautError] = React.useState<boolean>(false);
+
+  const handleClickNext = () => {
+    const isNamaUserDpkakpError = namaUserDpkakp === "";
+    const isNikError = nik === "";
+    const isAlamatError = alamat === "";
+    const isProvinsiError = provinsi === "";
+    const isCitiesError = cities === "";
+    const isAsalInstansiError = asalInstansi === "";
+    const isNomorTelponError = nomorTelpon === "";
+    const isEmailError = email === "";
+
+    const isJabatanError = jabatan === "";
+    const isGolonganError = golongan === "";
+    const isTipeKeahlianError = tipeKeahlian === "";
+    const isPengalamanBerlayarError = pegalamanBerlayar === "";
+    const isPengalamanError = pengalaman === "";
+    const isIjazahError = ijazah === null;
+    const isSertifikatKeahlianError = sertifikatKeahlian === null;
+    const isSertifikatTotError = sertifikatTot === null;
+    const isSertifikatToeError = sertifikatToe === null;
+    const isSertifikatToeSimulatorError = sertifikatToeSimulator === null;
+    const isSertifikatAuditorError = sertifikatAuditor === null;
+    const isBukuPelautError = bukuPelaut === null;
+
+    if (currentPage == 1) {
+      if (
+        isNamaUserDpkakpError ||
+        isNikError ||
+        isAlamatError ||
+        isProvinsiError ||
+        isCitiesError ||
+        isAsalInstansiError ||
+        isNomorTelponError ||
+        isEmailError
+      ) {
+        setNamaUserDpkakpError(isNamaUserDpkakpError);
+        setNikError(isNikError);
+        setAlamatError(isAlamatError);
+        setProvinsiError(isProvinsiError);
+        setCitiesError(isCitiesError);
+        setAsalInstansiError(isAsalInstansiError);
+        setNomorTelponError(isNomorTelponError);
+        setEmailError(isEmailError);
+
+        window.scrollTo(0, 0);
+      } else {
+        setCurrentPage((prevPage) => prevPage + 1);
+
+        if (currentPage === 1) {
+          setNamaUserDpkakpError(false);
+          setNikError(false);
+          setAlamatError(false);
+          setProvinsiError(false);
+          setCitiesError(false);
+          setAsalInstansiError(false);
+          setNomorTelponError(false);
+          setEmailError(false);
+        }
+
+        window.scrollTo(0, 0);
+      }
+    } else if (currentPage == 2) {
+      if (
+        isJabatanError ||
+        isGolonganError ||
+        isTipeKeahlianError ||
+        isPengalamanBerlayarError ||
+        isPengalamanError
+      ) {
+        setJabatanError(isJabatanError);
+        setGolonganError(isGolonganError);
+        setTipeKeahlianError(isTipeKeahlianError);
+        setPengalamanBerlayarError(isPengalamanBerlayarError);
+        setPengalamanError(isPengalamanError);
+
+        window.scrollTo(0, 0);
+      } else {
+        setCurrentPage((prevPage) => prevPage + 1);
+
+        setJabatanError(false);
+        setGolonganError(false);
+        setTipeKeahlianError(false);
+        setPengalamanBerlayarError(false);
+        setPengalamanError(false);
+
+        window.scrollTo(0, 0);
+      }
+    } else if (currentPage === 3) {
+      if (
+        isIjazahError ||
+        isSertifikatKeahlianError ||
+        isSertifikatTotError ||
+        isSertifikatToeError ||
+        isSertifikatToeSimulatorError ||
+        isSertifikatAuditorError ||
+        isBukuPelautError
+      ) {
+        setIjazahError(isIjazahError);
+        setSertifikatKeahlianError(isSertifikatKeahlianError);
+        setSertifikatTotError(isSertifikatTotError);
+        setSertifikatToeError(isSertifikatToeError);
+        setSertifikatToeSimulatorError(isSertifikatToeSimulatorError);
+        setSertifikatAuditorError(isSertifikatAuditorError);
+        setBukuPelautError(isBukuPelautError);
+
+        window.scrollTo(0, 0);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  };
+
+  const handleSubmitForm = async () => {
+    const isIjazahError = ijazah === null;
+    const isSertifikatKeahlianError = sertifikatKeahlian === null;
+    const isSertifikatTotError = sertifikatTot === null;
+    const isSertifikatToeError = sertifikatToe === null;
+    const isSertifikatToeSimulatorError = sertifikatToeSimulator === null;
+    const isSertifikatAuditorError = sertifikatAuditor === null;
+    const isBukuPelautError = bukuPelaut === null;
+
+    if (currentPage === 3) {
+      if (
+        isIjazahError ||
+        isSertifikatKeahlianError ||
+        isSertifikatTotError ||
+        isSertifikatToeError ||
+        isSertifikatToeSimulatorError ||
+        isSertifikatAuditorError ||
+        isBukuPelautError
+      ) {
+        setIjazahError(isIjazahError);
+        setSertifikatKeahlianError(isSertifikatKeahlianError);
+        setSertifikatTotError(isSertifikatTotError);
+        setSertifikatToeError(isSertifikatToeError);
+        setSertifikatToeSimulatorError(isSertifikatToeSimulatorError);
+        setSertifikatAuditorError(isSertifikatAuditorError);
+        setBukuPelautError(isBukuPelautError);
+
+        window.scrollTo(0, 0);
+      } else {
+        const formData = new FormData();
+        alert("HELLO");
+
+        // Append string data
+        formData.append("NamaUsersDpkakp", namaUserDpkakp);
+        formData.append("TypeDpkapk", typeDpkakp);
+        formData.append("Nik", nik);
+        formData.append("Alamat", alamat);
+        formData.append("Provinsi", provinsi);
+        formData.append("Cities", cities);
+        formData.append("AsalInstansi", asalInstansi);
+        formData.append("NomorTelpon", nomorTelpon);
+        formData.append("Email", email);
+        formData.append("Jabatan", jabatan);
+        formData.append("Golongan", golongan);
+        formData.append("TipeKeahlian", tipeKeahlian);
+        formData.append("PengalamanBerlayar", pegalamanBerlayar);
+
+        // Append file data
+        if (foto) formData.append("Foto", foto);
+        if (ijazah) formData.append("Ijazah", ijazah);
+        if (sertifikatKeahlian)
+          formData.append("SertifikatKeahlian", sertifikatKeahlian);
+        if (sertifikatTot) formData.append("SertifikatTot", sertifikatTot);
+        if (sertifikatToe) formData.append("SertifikatToe", sertifikatToe);
+        if (sertifikatToeSimulator)
+          formData.append("SertifikatToeSimulator", sertifikatToeSimulator);
+        if (sertifikatAuditor)
+          formData.append("SertifikatAuditor", sertifikatAuditor);
+        if (sertifikatLainnya)
+          formData.append("SertifikatLainnya", sertifikatLainnya);
+        if (bukuPelaut) formData.append("BukuPelaut", bukuPelaut);
+
+        try {
+          const response = await axios.post(
+            `${dpkakpBaseUrl}/formDataDpkakp`,
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          console.log("Form submitted successfully:", response.data);
+          Toast.fire({
+            icon: "success",
+            title: `Sukses melakukan mengupload data diri anggota dewan penguji awak kapal perirkanan!`,
+          });
+          setCurrentPage(1);
+          handleClearFormPengujiDPKAKP();
+        } catch (error) {
+          console.error("Error submitting form:", error);
+          Toast.fire({
+            icon: "error",
+            title: `Gagal mengupload data, harap coba lagi nanti!`,
+          });
+        }
+        window.scrollTo(0, 0);
+      }
+    }
+  };
+
+  console.log(currentPage);
+  const handleClickPrev = () => {
+    setCurrentPage((prevPage) => {
+      const newPage = prevPage - 1;
+      return newPage;
+    });
+
+    setNamaUserDpkakpError(false);
+    setNikError(false);
+    setAlamatError(false);
+    setProvinsiError(false);
+    setCitiesError(false);
+    setAsalInstansiError(false);
+    setNomorTelponError(false);
+    setEmailError(false);
+
+    setJabatanError(false);
+    setGolonganError(false);
+    setTipeKeahlianError(false);
+    setPengalamanBerlayarError(false);
+    setPengalamanError(false);
+
+    window.scrollTo(0, 0);
+  };
+
+  console.log(currentPage);
 
   const handleClearFormPengujiDPKAKP = () => {
     setNamaUserDpkakp("");
@@ -90,7 +355,7 @@ function FormAsesorPage() {
   };
 
   return (
-    <main className="bg-darkDPKAKP w-full h-full flex items-center justify-center relative">
+    <main className="bg-darkDPKAKP w-full h-full pb-24 flex items-center justify-center relative">
       <Image
         className="absolute w-[300px] opacity-10 z-10"
         src={"/dpkakp/logo.png"}
@@ -122,12 +387,19 @@ function FormAsesorPage() {
             penguji keahlian awak kapal perikanan.
           </p> */}
         </div>
-        {/* <div className="w-full">
+        <div className="w-full flex flex-col gap-1">
           <Progress value={progress} className="w-full" />
-          <div className="flex">
-            <p className="text-white text-md">Form 1/3</p>
+          <div className="flex w-full items-center justify-between">
+            <p className="text-white text-sm">
+              {currentPage == 1
+                ? "Data Diri"
+                : currentPage == 2
+                ? "Data Domisili"
+                : "Data Sertifikasi "}
+            </p>
+            <p className="text-white text-sm">{currentPage}/3</p>
           </div>
-        </div> */}
+        </div>
         <div
           className={`${
             currentPage == 2 && "h-screen"
@@ -146,6 +418,11 @@ function FormAsesorPage() {
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your name"
                 />
+                {namaUserDpkakpError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Nama lengkap beserta gelar belum diisi
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -159,6 +436,11 @@ function FormAsesorPage() {
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your NIK"
                 />
+                {nikError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    NIK kamu belum diisi
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -172,6 +454,11 @@ function FormAsesorPage() {
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your address"
                 />
+                {alamatError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Alamat lengkap-mu belum diisi
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -185,6 +472,11 @@ function FormAsesorPage() {
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your province"
                 />
+                {provinsiError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Pilih provinsi terlebih dahulu
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -198,6 +490,11 @@ function FormAsesorPage() {
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your city"
                 />
+                {citiesError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Pilih kabupaten atau kota-mu
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -211,6 +508,12 @@ function FormAsesorPage() {
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your institution"
                 />
+
+                {asalInstansiError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Asal instansi belum diisi
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -224,6 +527,12 @@ function FormAsesorPage() {
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your phone number"
                 />
+
+                {nomorTelponError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    No telepon mu belum diisi
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -237,6 +546,11 @@ function FormAsesorPage() {
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your email"
                 />
+                {emailError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Alamat email-mu belum diisi
+                  </p>
+                )}
               </div>
             </>
           )}
@@ -254,6 +568,11 @@ function FormAsesorPage() {
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your position"
                 />
+                {jabatanError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    jabatan-mu belum diisi
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -267,6 +586,11 @@ function FormAsesorPage() {
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your rank"
                 />
+                {golonganError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    golongan-mu belum diisi
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -282,13 +606,25 @@ function FormAsesorPage() {
                   <option value="" disabled>
                     Select your expertise type
                   </option>
-                  <option value="" disabled>
+                  <option
+                    className="text-black"
+                    value="Ahli Nautika Penangkap Ikan"
+                  >
                     Ahli Nautika Penangkap Ikan
                   </option>
-                  <option value="" disabled>
+                  <option
+                    className="text-black"
+                    value="Ahli Teknika Penangkap Ikan"
+                  >
                     Ahli Teknika Penangkap Ikan
                   </option>
                 </select>
+
+                {tipeKeahlianError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    tipe keahlian-mu belum diisi
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -297,11 +633,16 @@ function FormAsesorPage() {
                 </p>
                 <input
                   type="text"
-                  value={pegalamanBerlayara}
+                  value={pegalamanBerlayar}
                   onChange={(e) => setPengalamanBerlayar(e.target.value)}
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your sailing experience"
                 />
+                {pengalamanBerlayarError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Pengalaman berlayar belum diisi
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -310,11 +651,16 @@ function FormAsesorPage() {
                 </p>
                 <input
                   type="text"
-                  value={experience}
-                  onChange={(e) => setExperience(e.target.value)}
+                  value={pengalaman}
+                  onChange={(e) => setPengalaman(e.target.value)}
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                   placeholder="Enter your experience"
                 />
+                {pengalamanError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    pengalaman belum diisi
+                  </p>
+                )}
               </div>
             </>
           )}
@@ -347,6 +693,11 @@ function FormAsesorPage() {
                   }
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                 />
+                {ijazahError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Upload ijazah mu terlebih dahulu
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -362,6 +713,11 @@ function FormAsesorPage() {
                   }
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                 />
+                {sertifikatKeahlianError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Upload sertififkat keahlian terlebih dahulu
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -375,6 +731,11 @@ function FormAsesorPage() {
                   }
                   className="border rounded-xl  text-white border-gray-500 bg-transparent w-full"
                 />
+                {sertifikatTotError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Upload sertifikat TOT 6.09-mu
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -388,6 +749,11 @@ function FormAsesorPage() {
                   }
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                 />
+                {sertifikatToeError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Upload sertifikat TOE 3.12-mu
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -403,6 +769,11 @@ function FormAsesorPage() {
                   }
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                 />
+                {sertifikatToeSimulatorError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Upload sertifikat TOE Simulator 6.10 mu
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -418,6 +789,11 @@ function FormAsesorPage() {
                   }
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                 />
+                {sertifikatAuditorError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Upload sertifikat Auditor-mu
+                  </p>
+                )}
               </div>
 
               <div className="flex flex-col gap-1">
@@ -446,6 +822,11 @@ function FormAsesorPage() {
                   }
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
                 />
+                {bukuPelautError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    Upload buku pelaut-mu
+                  </p>
+                )}
               </div>
             </>
           )}
@@ -453,7 +834,7 @@ function FormAsesorPage() {
           <div className="flex w-full gap-2">
             {currentPage != 1 && (
               <button
-                onClick={(e) => setCurrentPage(currentPage - 1)}
+                onClick={(e) => handleClickPrev()}
                 className="text-white w-full bg-blue-950 rounded-xl bg-opacity-100 py-2"
               >
                 Sebelumnya
@@ -461,14 +842,14 @@ function FormAsesorPage() {
             )}
             {currentPage >= 1 && currentPage < 3 ? (
               <button
-                onClick={(e) => setCurrentPage(currentPage + 1)}
+                onClick={(e) => handleClickNext()}
                 className="text-white w-full bg-blue-950 rounded-xl bg-opacity-100 py-2"
               >
                 Selanjutnya
               </button>
             ) : (
               <button
-                onClick={(e) => alert("kirim")}
+                onClick={(e) => handleSubmitForm()}
                 className="text-white w-full bg-blue-950 rounded-xl bg-opacity-100 py-2"
               >
                 Kirim
