@@ -394,7 +394,7 @@ function FormAsesorPage() {
               {currentPage == 1
                 ? "Data Diri"
                 : currentPage == 2
-                ? "Data Domisili"
+                ? "Data Pekerjaan"
                 : "Data Sertifikasi "}
             </p>
             <p className="text-white text-sm">{currentPage}/3</p>
