@@ -18,6 +18,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { dpkakpBaseUrl } from "@/constants/urls";
+import {
+  GolonganDewanPenguji,
+  JabatanDewanPenguji,
+  PendidikanDewanPenguji,
+} from "@/types/dpkakp";
 
 function FormAsesorPage() {
   const router = useRouter();
@@ -25,6 +30,31 @@ function FormAsesorPage() {
   const [progress, setProgress] = React.useState(20);
   const [formPage, setFormPage] = React.useState(1);
   const [currentPage, setCurrentPage] = React.useState(1);
+
+  const [dataJabatan, setDataJabatan] = React.useState<JabatanDewanPenguji[]>(
+    []
+  );
+  const [dataPendidikan, setDataPendidikan] = React.useState<
+    PendidikanDewanPenguji[]
+  >([]);
+  const [dataGolongan, setDataGolongan] = React.useState<
+    GolonganDewanPenguji[]
+  >([]);
+  const handlFetchingDataMaster = async () => {
+    try {
+      const response = await axios.get(`${dpkakpBaseUrl}/getDataMaster`);
+      setDataPendidikan(response.data!.Education);
+      setDataGolongan(response.data!.Golongan);
+      setDataJabatan(response.data!.Jabatan);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log({ dataGolongan });
+  console.log({ dataPendidikan });
+  console.log({ dataJabatan });
 
   const [namaUserDpkakp, setNamaUserDpkakp] = React.useState<string>("");
   const [typeDpkakp, setTypeDpkakp] = React.useState<string>("");
@@ -50,6 +80,8 @@ function FormAsesorPage() {
   const [emailError, setEmailError] = React.useState<boolean>(false);
 
   const [jabatanError, setJabatanError] = React.useState<boolean>(false);
+  const [pendidikanTerakhirError, setPendidikanTerakhirError] =
+    React.useState<boolean>(false);
   const [golonganError, setGolonganError] = React.useState<boolean>(false);
   const [tipeKeahlianError, setTipeKeahlianError] =
     React.useState<boolean>(false);
@@ -58,6 +90,8 @@ function FormAsesorPage() {
   const [pengalamanError, setPengalamanError] = React.useState<boolean>(false);
 
   const [jabatan, setJabatan] = React.useState<string>("");
+  const [pendidikanTerakhir, setPendidikanTerakhir] =
+    React.useState<string>("");
   const [golongan, setGolongan] = React.useState<string>("");
   const [tipeKeahlian, setTipeKeahlian] = React.useState<string>("");
   const [foto, setFoto] = React.useState<File | null>(null);
@@ -104,6 +138,7 @@ function FormAsesorPage() {
     const isEmailError = email === "";
 
     const isJabatanError = jabatan === "";
+    const isPendidikanTerakhirError = pendidikanTerakhir === "";
     const isGolonganError = golongan === "";
     const isTipeKeahlianError = tipeKeahlian === "";
     const isPengalamanBerlayarError = pegalamanBerlayar === "";
@@ -159,19 +194,22 @@ function FormAsesorPage() {
         isGolonganError ||
         isTipeKeahlianError ||
         isPengalamanBerlayarError ||
-        isPengalamanError
+        isPengalamanError ||
+        isPendidikanTerakhirError
       ) {
         setJabatanError(isJabatanError);
         setGolonganError(isGolonganError);
         setTipeKeahlianError(isTipeKeahlianError);
         setPengalamanBerlayarError(isPengalamanBerlayarError);
         setPengalamanError(isPengalamanError);
+        setPendidikanTerakhirError(isPendidikanTerakhirError);
 
         window.scrollTo(0, 0);
       } else {
         setCurrentPage((prevPage) => prevPage + 1);
 
         setJabatanError(false);
+        setPendidikanTerakhirError(false);
         setGolonganError(false);
         setTipeKeahlianError(false);
         setPengalamanBerlayarError(false);
@@ -246,6 +284,7 @@ function FormAsesorPage() {
         formData.append("NomorTelpon", nomorTelpon);
         formData.append("Email", email);
         formData.append("Jabatan", jabatan);
+        formData.append("Pendidikan", pendidikanTerakhir);
         formData.append("Golongan", golongan);
         formData.append("TipeKeahlian", tipeKeahlian);
         formData.append("PengalamanBerlayar", pegalamanBerlayar);
@@ -352,6 +391,10 @@ function FormAsesorPage() {
     try {
     } catch (error) {}
   };
+
+  React.useEffect(() => {
+    handlFetchingDataMaster();
+  }, []);
 
   return (
     <main className="bg-darkDPKAKP w-full h-full pb-24 flex items-center justify-center relative">
@@ -558,15 +601,57 @@ function FormAsesorPage() {
             <>
               <div className="flex flex-col gap-1">
                 <p className="font-jakarta leading-[100%] text-gray-400 sm:text-sm sm:leading-8">
+                  Pendidikan Terakhir
+                </p>
+                <select
+                  value={pendidikanTerakhir}
+                  onChange={(e) => setPendidikanTerakhir(e.target.value)}
+                  className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
+                  required
+                >
+                  <option value="" disabled>
+                    Pilih Pendidikan Terakhir
+                  </option>
+                  {dataPendidikan.map((pendidikan, index) => (
+                    <option className="text-black" value={pendidikan.Name}>
+                      {pendidikan.Name +
+                        " - " +
+                        pendidikan.Description +
+                        " - " +
+                        pendidikan.Simpeg}
+                    </option>
+                  ))}
+                </select>
+                {pendidikanTerakhirError && (
+                  <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
+                    pendidikan terakhir-mu belum diisi
+                  </p>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-1">
+                <p className="font-jakarta leading-[100%] text-gray-400 sm:text-sm sm:leading-8">
                   Jabatan
                 </p>
-                <input
-                  type="text"
+                <select
                   value={jabatan}
                   onChange={(e) => setJabatan(e.target.value)}
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
-                  placeholder="Enter your position"
-                />
+                  required
+                >
+                  <option value="" disabled>
+                    Pilih Jabatan
+                  </option>
+                  {dataJabatan.map((jabatan, index) => (
+                    <option className="text-black" value={jabatan.Name}>
+                      {jabatan.Name +
+                        " - " +
+                        jabatan.Jenjang +
+                        " - " +
+                        jabatan.Urutan}
+                    </option>
+                  ))}
+                </select>
                 {jabatanError && (
                   <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
                     jabatan-mu belum diisi
@@ -578,13 +663,26 @@ function FormAsesorPage() {
                 <p className="font-jakarta leading-[100%] text-gray-400 sm:text-sm sm:leading-8">
                   Golongan
                 </p>
-                <input
-                  type="text"
+
+                <select
                   value={golongan}
                   onChange={(e) => setGolongan(e.target.value)}
                   className="border rounded-xl text-white border-gray-500 bg-transparent w-full"
-                  placeholder="Enter your rank"
-                />
+                  required
+                >
+                  <option value="" disabled>
+                    Pilih Golongan
+                  </option>
+                  {dataGolongan.map((golongan, index) => (
+                    <option className="text-black" value={golongan.Name}>
+                      {golongan.Name +
+                        " - " +
+                        golongan.Description +
+                        " - " +
+                        golongan.Simpeg}
+                    </option>
+                  ))}
+                </select>
                 {golonganError && (
                   <p className="font-jakarta leading-[100%] text-rose-600 text-xs sm:leading-8">
                     golongan-mu belum diisi
