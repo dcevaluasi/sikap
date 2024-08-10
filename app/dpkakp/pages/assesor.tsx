@@ -705,15 +705,27 @@ function FormAsesorPage() {
                   </option>
                   <option
                     className="text-black"
-                    value="Ahli Nautika Penangkap Ikan"
+                    value="Ahli Nautika Penangkap Ikan Tk I"
                   >
-                    Ahli Nautika Penangkap Ikan
+                    Ahli Nautika Penangkap Ikan Tk I
+                  </option>
+                  <option
+                    className="text-black"
+                    value="Ahli Teknika Penangkap Ikan Tk I"
+                  >
+                    Ahli Teknika Penangkap Ikan Tk I
+                  </option>
+                  <option
+                    className="text-black"
+                    value="Ahli Nautika Penangkap Ikan Tk I"
+                  >
+                    Ahli Nautika Penangkap Ikan Tk II
                   </option>
                   <option
                     className="text-black"
                     value="Ahli Teknika Penangkap Ikan"
                   >
-                    Ahli Teknika Penangkap Ikan
+                    Ahli Teknika Penangkap Ikan Tk II
                   </option>
                 </select>
 
@@ -726,7 +738,7 @@ function FormAsesorPage() {
 
               <div className="flex flex-col gap-1">
                 <p className="font-jakarta leading-[100%] text-gray-400 sm:text-sm sm:leading-8">
-                  Pengalaman Berlayar
+                  Pengalaman Berlayar (tahun)
                 </p>
                 <input
                   type="text"
