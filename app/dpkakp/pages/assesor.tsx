@@ -234,7 +234,6 @@ function FormAsesorPage() {
         window.scrollTo(0, 0);
       } else {
         const formData = new FormData();
-        alert("HELLO");
 
         // Append string data
         formData.append("NamaUsersDpkakp", namaUserDpkakp);
