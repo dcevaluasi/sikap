@@ -363,7 +363,7 @@ function FormAsesorPage() {
         height={0}
         alt="DPKAKP Logo"
       />
-      <section className="relative h-full space-y-6 pb-8 pt-16 md:h-screen md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col px-10">
+      <section className="relative h-full space-y-6 pb-8 pt-16 md:h-full md:pb-12 md:pt-14 lg:py-44 w-full flex items-center justify-center flex-col px-10">
         <div className="container relative flex max-w-[64rem] flex-col items-center gap-2 text-center">
           <Link
             href={"/dpkakp"}
@@ -379,7 +379,7 @@ function FormAsesorPage() {
             height={0}
             alt="DPKAKP Logo"
           />
-          <h1 className="font-bold text-gray-200 text-2xl leading-[100%] mt-2">
+          <h1 className="font-bold text-gray-200 text-2xl md:text-4xl md:max-w-md leading-[100%] mt-2">
             Data Penguji Sertifikasi Keahlian Awak Kapal Perikanan
           </h1>
           {/* <p className="font-jakarta max-w-[42rem] leading-[100%] text-gray-400  sm:text-lg sm:leading-8">
@@ -387,7 +387,7 @@ function FormAsesorPage() {
             penguji keahlian awak kapal perikanan.
           </p> */}
         </div>
-        <div className="w-full flex flex-col gap-1">
+        <div className="w-full md:max-w-md flex flex-col gap-1">
           <Progress value={progress} className="w-full" />
           <div className="flex w-full items-center justify-between">
             <p className="text-white text-sm">
