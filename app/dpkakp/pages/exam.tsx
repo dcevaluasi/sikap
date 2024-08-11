@@ -83,13 +83,13 @@ function Exam() {
   //     });
   //   };
 
-  const handleAnswerChange = (answer: string) => {
+  const handleAnswerChange = (idSoal: number, answer: string) => {
     setSelectedAnswers((prevAnswers) => {
       const newAnswers = [...prevAnswers];
 
       // Update the corresponding index in the array
       newAnswers[selectedIdSoal] = {
-        id_soal_bagian: selectedIdSoal,
+        id_soal_bagian: idSoal.toString(),
         jawaban_pengguna: answer,
       };
 
@@ -268,7 +268,7 @@ function Exam() {
                               className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"
                               onChange={() =>
                                 handleAnswerChange(
-                                  //   selectedIdSoal,
+                                  jawaban.IdSoalUjianBagian,
                                   jawaban.NameJawaban
                                 )
                               }

@@ -19,14 +19,32 @@ export default function LogoFooter() {
       className="flex flex-row gap-2 items-center"
       aria-label="Cruip"
     >
-      <Image
-        className="w-16 md:w-20"
-        width={0}
-        height={0}
-        src={getLogo()}
-        alt="Kementrian Kelautan dan Perikanan RI Logo"
-      />
-   
+      {!pathname.includes("dpkakp") || !pathname.includes("akp") ? (
+        <div className="flex flex-row gap-2">
+          {/* <Image
+            className="w-16 md:w-16"
+            width={0}
+            height={0}
+            src={getLogo()}
+            alt="Kementrian Kelautan dan Perikanan RI Logo"
+          /> */}
+          <Image
+            className="w-16 md:w-32"
+            width={0}
+            height={0}
+            src={"/images/logo/logo-elaut-color.png"}
+            alt="Kementrian Kelautan dan Perikanan RI Logo"
+          />
+        </div>
+      ) : (
+        <Image
+          className="w-16 md:w-20"
+          width={0}
+          height={0}
+          src={getLogo()}
+          alt="Kementrian Kelautan dan Perikanan RI Logo"
+        />
+      )}
     </Link>
   );
 }

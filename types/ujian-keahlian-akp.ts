@@ -31,7 +31,7 @@ type Jawaban = {
 }
 
 type JawabanUser = {
-  id_soal_bagian: number,
+  id_soal_bagian: string,
   jawaban_pengguna: string,
 }
 

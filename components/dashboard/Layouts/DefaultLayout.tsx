@@ -41,13 +41,15 @@ export default function DefaultLayout({
   return (
     <>
       {/* <!-- ===== Page Wrapper Start ===== --> */}
-      <div className="flex h-screen max-h-screen overflow-y-hidden">
+      <div className="flex h-screen ">
         {/* <!-- ===== Sidebar Start ===== --> */}
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         {/* <!-- ===== Sidebar End ===== --> */}
 
         {/* <!-- ===== Content Area Start ===== --> */}
-        <div className={`relative flex flex-1 flex-col overflow-x-hidden`}>
+        <div
+          className={`relative flex flex-1 h-screen flex-col overflow-x-hidden`}
+        >
           {/* <!-- ===== Header Start ===== --> */}
           <Header
             sidebarOpen={sidebarOpen}
@@ -57,8 +59,8 @@ export default function DefaultLayout({
           {/* <!-- ===== Header End ===== --> */}
 
           {/* <!-- ===== Main Content Start ===== --> */}
-          <main className="scrollbar-hide">
-            <div className="mx-auto max-w-screen-2xl scrollbar-hide p-4 md:p-6 2xl:p-10">
+          <main className="h-screen">
+            <div className="mx-auto max-w-screen-2xl h-screen scrollbar-hide p-4 md:p-6 2xl:p-10">
               {children}
             </div>
           </main>

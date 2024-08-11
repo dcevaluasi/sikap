@@ -12,16 +12,16 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import React, { ChangeEvent, FormEvent, useRef } from "react";
 
-import { BiBed } from "react-icons/bi";
+import { BiBed, BiInfoCircle, BiSolidFileImage } from "react-icons/bi";
 
-import { TbFileStack, TbSchool } from "react-icons/tb";
+import { TbFileStack, TbListDetails, TbSchool } from "react-icons/tb";
 
 import { Progress } from "@/components/ui/progress";
 import { MdOutlineFastfood } from "react-icons/md";
 import { Editor } from "@tinymce/tinymce-react";
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
-import { HiUserGroup } from "react-icons/hi2";
+import { HiMiniBookOpen, HiUserGroup } from "react-icons/hi2";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import axios, { AxiosResponse } from "axios";
 import { CheckedState } from "@radix-ui/react-checkbox";
@@ -32,12 +32,35 @@ import { PelatihanMasyarakat } from "@/types/product";
 import Image from "next/image";
 import { convertIdSarpras } from "@/utils/pelatihan";
 import Link from "next/link";
+import { IoIosImages, IoMdInformationCircle } from "react-icons/io";
+import { FiBookOpen, FiFileText } from "react-icons/fi";
+import { LemdiklatDetailInfo } from "@/types/lemdiklat";
+import { RiVerifiedBadgeLine } from "react-icons/ri";
 
 type Checked = DropdownMenuCheckboxItemProps["checked"];
 
 function FormPelatihan({ edit = false }: { edit: boolean }) {
   const router = useRouter();
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+  const token = Cookies.get("XSRF091");
+
+  const [lemdikData, setLemdikData] =
+    React.useState<LemdiklatDetailInfo | null>(null);
+
+  const handleFetchInformationLemdiklat = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}/lemdik/getLemdik`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setLemdikData(response.data);
+    } catch (error) {
+      console.error("LEMDIK INFO: ", error);
+    }
+  };
+
   const pathname = usePathname();
   const id = extractLastSegment(pathname);
 
@@ -72,7 +95,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   );
   const [namaPelatihan, setNamaPelatihan] = React.useState("");
   const [penyelenggaraPelatihan, setPenyelenggaraPelatihan] =
-    React.useState("BPPP Tegal");
+    React.useState("");
   const [detailPelatihan, setDetailPelatihan] = React.useState("");
   const [jenisPelatihan, setJenisPelatihan] = React.useState("");
   const [bidangPelatihan, setBidangPelatihan] = React.useState("");
@@ -292,8 +315,6 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   const [sarpras, setSarpras] = React.useState<Sarpras[]>([]);
   const [konsumsi, setKonsumsi] = React.useState<Sarpras[]>([]);
 
-  const token = Cookies.get("XSRF091");
-
   const [selectedSarpras, setSelectedSarpras] = React.useState<number[]>([]);
   console.log({ selectedSarpras });
 
@@ -338,6 +359,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   React.useEffect(() => {
     handleFetchingSarprasData();
     handleFetchingKonsumsiData();
+    handleFetchInformationLemdiklat();
     if (edit) {
       handleFetchingPelatihanById();
     }
@@ -425,6 +447,10 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                 <>
                   {" "}
                   <div className={`${indexFormTab == 0 ? "block" : "hidden"}`}>
+                    <p className="text-base flex gap-2 border-b border-b-gray-300 pb-2 mb-2 items-center text-gray-900 font-semibold max-w-md">
+                      <BiInfoCircle /> <span>Informasi Umum Pelatihan</span>
+                    </p>
+
                     <div className="flex gap-2 w-full">
                       <div className="flex flex-wrap -mx-3 mb-1 w-full">
                         <div className="w-full px-3">
@@ -521,118 +547,6 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap -mx-3 mb-1 w-full">
-                      <div className="w-full px-3">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="jensiPelatihan"
-                        >
-                          Layanan Pelatihan{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <Select
-                          value={jenisSertifikat}
-                          onValueChange={(value: string) =>
-                            setJenisSertifikat(value)
-                          }
-                        >
-                          <SelectTrigger className="w-full text-base py-5">
-                            <SelectValue placeholder="Pilih jenis sertifikat" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Kepelautan">
-                              Kepelautan
-                            </SelectItem>
-                            <SelectItem value="Non-Kepelautan">
-                              Non-Kepelautan
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap  mb-1 w-full">
-                      <div className="w-full">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="penyelenggaraPelatihan"
-                        >
-                          Cover Pelatihan{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-                        {edit && (
-                          <Image
-                            src={
-                              "https://api-elaut.ikulatluh.cloud/public/static/pelatihan/" +
-                              fotoPelatihanOld
-                            }
-                            alt={namaPelatihan}
-                            width={0}
-                            height={0}
-                            className="w-full h-80 mb-5 rounded-2xl object-cover"
-                          />
-                        )}
-
-                        <input
-                          id="file_excel"
-                          type="file"
-                          className=" cursor-pointer w-full border border-neutral-200 rounded-md"
-                          onChange={handleFileChange}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex gap-2 w-full">
-                      <div className="flex flex-wrap -mx-3 mb-1 w-full">
-                        <div className="w-full px-3">
-                          <label
-                            className="block text-gray-800 text-sm font-medium mb-1"
-                            htmlFor="penyelenggaraPelatihan"
-                          >
-                            Penyelenggara Pelatihan{" "}
-                            <span className="text-red-600">*</span>
-                          </label>
-                          <input
-                            id="penyelenggaraPelatihan"
-                            type="text"
-                            className="form-input w-full text-black border-gray-300 rounded-md"
-                            placeholder="BPPP Tegal"
-                            required
-                            value={penyelenggaraPelatihan}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                              setPenyelenggaraPelatihan(e.target.value)
-                            }
-                          />
-                        </div>
-                      </div>
-                      <div className="flex flex-wrap -mx-3 mb-1 w-full">
-                        <div className="w-full px-3">
-                          <label
-                            className="block text-gray-800 text-sm font-medium mb-1"
-                            htmlFor="jensiPelatihan"
-                          >
-                            Jenis Pelatihan{" "}
-                            <span className="text-red-600">*</span>
-                          </label>
-                          <Select
-                            value={jenisPelatihan}
-                            onValueChange={(value: string) =>
-                              setJenisPelatihan(value)
-                            }
-                          >
-                            <SelectTrigger className="w-full text-base py-5">
-                              <SelectValue placeholder="Pilih jenis pelatihan" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Aspirasi">Aspirasi</SelectItem>
-                              <SelectItem value="PNBP/BLU">PNBP/BLU</SelectItem>
-                              <SelectItem value="Reguler">Reguler</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                    </div>
-
                     <div className="flex gap-2 w-full">
                       <div className="flex flex-wrap -mx-3 mb-1 w-full">
                         <div className="w-full px-3">
@@ -660,30 +574,22 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                         <div className="w-full px-3">
                           <label
                             className="block text-gray-800 text-sm font-medium mb-1"
-                            htmlFor="pelaksanaanPelatihan"
+                            htmlFor="hargaPelatihan"
                           >
-                            Pelaksanaan Pelatihan{" "}
+                            Harga Pelatihan{" "}
                             <span className="text-red-600">*</span>
                           </label>
-                          <Select
-                            value={pelaksanaanPelatihan}
-                            onValueChange={(value: string) =>
-                              setPelaksanaanPelatihan(value)
+                          <input
+                            id="name"
+                            type="number"
+                            className="form-input w-full text-black border-gray-300 rounded-md"
+                            placeholder="Rp"
+                            required
+                            value={hargaPelatihan}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                              setHargaPelatihan(parseInt(e.target.value))
                             }
-                          >
-                            <SelectTrigger className="w-full text-base py-5">
-                              <SelectValue placeholder="Pilih pelaksanaan pelatihan" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Online">Online</SelectItem>
-                              <SelectItem value="Offline/Klasikal">
-                                Klasikal
-                              </SelectItem>
-                              <SelectItem value="Online+Offline/Blended">
-                                Blended
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
+                          />
                         </div>
                       </div>
                     </div>
@@ -735,6 +641,185 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                         <div className="w-full px-3">
                           <label
                             className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="pelaksanaanPelatihan"
+                          >
+                            Pelaksanaan Pelatihan{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <Select
+                            value={pelaksanaanPelatihan}
+                            onValueChange={(value: string) =>
+                              setPelaksanaanPelatihan(value)
+                            }
+                          >
+                            <SelectTrigger className="w-full text-base py-5">
+                              <SelectValue placeholder="Pilih pelaksanaan pelatihan" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Online">Online</SelectItem>
+                              <SelectItem value="Offline/Klasikal">
+                                Klasikal
+                              </SelectItem>
+                              <SelectItem value="Online+Offline/Blended">
+                                Blended
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <p className="text-base flex gap-2 border-b border-b-gray-300 pb-2 mb-2 items-center text-gray-900 font-semibold max-w-md mt-2">
+                      <FiBookOpen />{" "}
+                      <span>Silabus atau Kurikulum Pembelajaran</span>
+                    </p>
+
+                    <div className="flex flex-wrap  mb-1 w-full">
+                      <div className="w-full">
+                        <label
+                          className="block text-gray-800 text-sm font-medium mb-1"
+                          htmlFor="penyelenggaraPelatihan"
+                        >
+                          Silabus Pelatihan{" "}
+                          <span className="text-red-600">*</span>
+                        </label>
+
+                        <input
+                          id="file_excel"
+                          type="file"
+                          className=" cursor-pointer w-full border border-neutral-200 rounded-md"
+                          onChange={handleSilabusChange}
+                        />
+                      </div>
+                    </div>
+
+                    <p className="text-base flex gap-2 border-b border-b-gray-300 pb-2 mb-2 items-center text-gray-900 font-semibold max-w-md mt-2">
+                      <IoIosImages /> <span>Cover atau Poster Pelatihan</span>
+                    </p>
+
+                    <div className="flex flex-wrap  mb-1 w-full">
+                      <div className="w-full">
+                        <label
+                          className="block text-gray-800 text-sm font-medium mb-1"
+                          htmlFor="penyelenggaraPelatihan"
+                        >
+                          Cover Pelatihan{" "}
+                          <span className="text-red-600">*</span>
+                        </label>
+                        {edit && (
+                          <Image
+                            src={
+                              "https://api-elaut.ikulatluh.cloud/public/static/pelatihan/" +
+                              fotoPelatihanOld
+                            }
+                            alt={namaPelatihan}
+                            width={0}
+                            height={0}
+                            className="w-full h-80 mb-5 rounded-2xl object-cover"
+                          />
+                        )}
+
+                        <input
+                          id="file_excel"
+                          type="file"
+                          className=" cursor-pointer w-full border border-neutral-200 rounded-md"
+                          onChange={handleFileChange}
+                        />
+                      </div>
+                    </div>
+
+                    <p className="text-base flex gap-2 border-b border-b-gray-300 pb-2 mb-2 items-center text-gray-900 font-semibold max-w-md mt-2">
+                      <TbListDetails /> <span>Detail Informasi Pelatihan</span>
+                    </p>
+
+                    <div className="flex gap-2 w-full">
+                      <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="penyelenggaraPelatihan"
+                          >
+                            Penyelenggara Pelatihan{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="penyelenggaraPelatihan"
+                            type="text"
+                            className="form-input w-full text-black border-gray-300 rounded-md"
+                            placeholder={lemdikData?.data?.NamaLemdik!}
+                            required
+                            value={lemdikData?.data?.NamaLemdik!}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                              setPenyelenggaraPelatihan(e.target.value)
+                            }
+                            disabled
+                            readOnly
+                          />
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="jensiPelatihan"
+                          >
+                            Jenis Pelatihan{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <Select
+                            value={jenisPelatihan}
+                            onValueChange={(value: string) =>
+                              setJenisPelatihan(value)
+                            }
+                          >
+                            <SelectTrigger className="w-full text-base py-5">
+                              <SelectValue placeholder="Pilih jenis pelatihan" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Aspirasi">Aspirasi</SelectItem>
+                              <SelectItem value="PNBP/BLU">PNBP/BLU</SelectItem>
+                              <SelectItem value="Reguler">Reguler</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 w-full">
+                      <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="jensiPelatihan"
+                          >
+                            Jenis Sertifikasi{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <Select
+                            value={jenisSertifikat}
+                            onValueChange={(value: string) =>
+                              setJenisSertifikat(value)
+                            }
+                          >
+                            <SelectTrigger className="w-full text-base py-5">
+                              <SelectValue placeholder="Pilih jenis sertifikat" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Kepelautan">
+                                Kepelautan
+                              </SelectItem>
+                              <SelectItem value="Non-Kepelautan">
+                                Non-Kepelautan
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
                             htmlFor="dukunganProgramTerobosan"
                           >
                             Dukungan Program Prioritas{" "}
@@ -771,32 +856,17 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap  mb-1 w-full">
-                      <div className="w-full">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="penyelenggaraPelatihan"
-                        >
-                          Silabus Pelatihan{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-
-                        <input
-                          id="file_excel"
-                          type="file"
-                          className=" cursor-pointer w-full border border-neutral-200 rounded-md"
-                          onChange={handleSilabusChange}
-                        />
-                      </div>
-                    </div>
+                    <p className="text-base flex gap-2 border-b border-b-gray-300 pb-2 mb-2 items-center text-gray-900 font-semibold max-w-md mt-2">
+                      <RiVerifiedBadgeLine />{" "}
+                      <span>Pelaksanaan Test Pelatihan</span>
+                    </p>
 
                     <div className="w-full">
                       <label
                         className="block text-gray-800 text-sm font-medium mb-1"
                         htmlFor="ujiKompetensi"
                       >
-                        Dengan Uji Kompetensi{" "}
-                        <span className="text-red-600">*</span>
+                        Test Pelatihan <span className="text-red-600">*</span>
                       </label>
                       <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
                         <div>
@@ -807,37 +877,18 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                           />
                         </div>
                         <div className="space-y-1 leading-none">
-                          <label>Uji Kompetensi Pelatihan</label>
+                          <label>Pre Test dan Post Test Pelatihan</label>
                           <p className="text-xs text-gray-600">
-                            You can manage your mobile notifications in the
-                            page.
+                            Jika pelatihan yang diselenggarakan terdapat
+                            pelaksanaan pre-test dan post-test, silahkan dicheck
                           </p>
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap mb-1 w-full">
-                      <div className="w-full">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="hargaPelatihan"
-                        >
-                          Harga Pelatihan{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <input
-                          id="name"
-                          type="number"
-                          className="form-input w-full text-black border-gray-300 rounded-md"
-                          placeholder="Rp"
-                          required
-                          value={hargaPelatihan}
-                          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                            setHargaPelatihan(parseInt(e.target.value))
-                          }
-                        />
-                      </div>
-                    </div>
+                    <p className="text-base flex gap-2 border-b border-b-gray-300 pb-2 mb-2 items-center text-gray-900 font-semibold max-w-md mt-2">
+                      <FiFileText /> <span>Deskripsi Pelatihan</span>
+                    </p>
 
                     <div className="flex flex-wrap -mx-3 mb-1">
                       <div className="w-full px-3">
@@ -1064,7 +1115,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
               <div className="flex -mx-3 mt-5 gap-2 px-3">
                 <div
                   className={`w-full ${
-                    indexFormTab == 0 || indexFormTab == 3 ? "hidden" : "block"
+                    indexFormTab == 0 || indexFormTab > 3 ? "hidden" : "block"
                   }`}
                 >
                   <button

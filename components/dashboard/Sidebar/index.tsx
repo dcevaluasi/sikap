@@ -80,13 +80,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           className="flex gap-2 mt-10 flex-col items-center justify-center"
         >
           <LogoFooter />
-          <div className="flex flex-col gap-0 w-full items-center justify-center">
-            <p className="font-bold text-4xl !font-delius text-white">
+          <div className="flex flex-col gap-0 mt-3 w-full items-center justify-center">
+            <p className="font-bold text-3xl !font-delius text-white">
               {pathname.includes("/akp")
                 ? "AKAPI"
                 : pathname.includes("/dpkakp")
                 ? "DPKAKP"
-                : "E-LAUT"}
+                : ""}
             </p>
             <p className="font-medium text-white text-sm text-center">
               {pathname.includes("/akp")
@@ -122,7 +122,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       </div>
       {/* <!-- SIDEBAR HEADER --> */}
 
-      <div className="scrollbar-hide flex flex-col overflow-y-auto duration-300 ease-linear -mt-5">
+      <div className="scrollbar-hide flex flex-col overflow-y-auto duration-300 ease-linear -mt-7">
         {/* <!-- Sidebar Menu --> */}
         <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
@@ -131,7 +131,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               MENU
             </h3>
 
-            <ul className="mb-6 flex flex-col gap-1.5">
+            <ul className="mb-6 flex flex-col gap-1.5 text-sm">
               {/* <!-- Menu Item Dashboard --> */}
               {pathname.includes("/akp") ? (
                 <SidebarLinkGroup
@@ -502,18 +502,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               }`}
                             >
                               <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
-                                <li>
-                                  <Link
-                                    href="/admin/pusat/pelatihan/pemberitahuan-kelas"
-                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                      pathname ===
-                                        "/admin/pusat/pelatihan/pemberitahuan-pelatihan" &&
-                                      "text-white"
-                                    }`}
-                                  >
-                                    • Pemberitahuan Kelas
-                                  </Link>
-                                </li>
                                 <li>
                                   <Link
                                     href="/admin/pusat/pelatihan/pengajuan-sttpl"
