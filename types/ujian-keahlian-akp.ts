@@ -30,6 +30,11 @@ type Jawaban = {
   UpdateAt: string
 }
 
+type JawabanUser = {
+  id_soal_bagian: number,
+  jawaban_pengguna: string,
+}
+
 type Bagian = {
   IdBagian: number
   IdFungsi: number
