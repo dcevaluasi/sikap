@@ -8,9 +8,9 @@ export default function Hero() {
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = [
     "/images/hero-img4.jpg",
-    "/images/hero-img4.jpg",
-    "/images/hero-img4.jpg",
-    "/images/hero-img4.jpg",
+    "/images/hero-img3.jpg",
+    "/images/hero-img2.jpg",
+    "/dpkakp/image2.jpg",
     "/images/hero-img4.jpg",
   ];
 

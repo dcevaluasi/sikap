@@ -72,6 +72,7 @@ import { GiTakeMyMoney } from "react-icons/gi";
 import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
 import Cookies from "js-cookie";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
+import { User } from "@/types/user";
 
 const TableDataPesertaPelatihan = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -97,6 +98,27 @@ const TableDataPesertaPelatihan = () => {
       throw error;
     }
   };
+
+  const [dataPesertaPelatihan, setDataPesertaPelatihan] =
+    React.useState<User | null>(null);
+  const handleFetchingPesertaPelatihanDataById = async (id: number) => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/lemdik/getAllUsers?id=${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+          },
+        }
+      );
+      console.log("PESERTA PELATIHAN : ", response.data);
+      setDataPesertaPelatihan(response.data);
+    } catch (error) {
+      console.error("Error posting participants training data:", error);
+      throw error;
+    }
+  };
+
   React.useEffect(() => {
     handleFetchingPublicTrainingDataById();
   }, []);
@@ -185,6 +207,10 @@ const TableDataPesertaPelatihan = () => {
 
   const [validitasDataPeserta, setValiditasDataPeserta] =
     React.useState<string>("");
+  const [dataPesertaSelected, setDataPesertaSelected] =
+    React.useState<UserPelatihan | null>(null);
+
+  console.log({ dataPesertaPelatihan });
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -230,6 +256,7 @@ const TableDataPesertaPelatihan = () => {
                 setOpenFormValidasiDataPesertaPelatihan(
                   !openFormValidasiDataPesertaPelatihan
                 );
+                setDataPesertaSelected(row.original!);
                 setSelectedIdPeserta(row.original!.IdUserPelatihan);
               }}
               variant="outline"
@@ -243,6 +270,7 @@ const TableDataPesertaPelatihan = () => {
                 setOpenFormValidasiDataPesertaPelatihan(
                   !openFormValidasiDataPesertaPelatihan
                 );
+                handleFetchingPesertaPelatihanDataById(row.original!.IdUsers);
                 setSelectedIdPeserta(row.original!.IdUserPelatihan);
               }}
               variant="outline"
