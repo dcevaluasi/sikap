@@ -40,7 +40,7 @@ export default function Newsletter() {
       console.log("NO SERTIFIKAT VALID: ", response);
       setValidSertifikat(response.data.data);
       setIsShowValidForm(!isShowValidForm);
-      setNoRegistrasi("")
+      setNoRegistrasi("");
     } catch (error) {
       if (isAxiosError(error)) {
         Toast.fire({
@@ -69,17 +69,25 @@ export default function Newsletter() {
               </div>
 
               <div className="flex flex-col gap-1 w-full justify-center items-center">
-                <h1 className="font-bold text-2xl">{validSertifikat?.NoRegistrasi!}</h1>
+                <h1 className="font-bold text-2xl">
+                  {validSertifikat?.NoRegistrasi!}
+                </h1>
                 <AlertDialogDescription className="w-full text-center font-normal text-sm -mt-1">
-                  No Registrasi valid dan dinyatakan telah mengikuti pelatihan <span className="font-semibold">{validSertifikat?.NamaPelatihan}</span> bidang <span className="font-semibold">
-                    {validSertifikat?.BidangPelatihan}</span> dan memiliki sertifikat kelulusan dengan detail sebagai berikut :
+                  No Registrasi valid dan dinyatakan telah mengikuti pelatihan{" "}
+                  <span className="font-semibold">
+                    {validSertifikat?.NamaPelatihan}
+                  </span>{" "}
+                  bidang{" "}
+                  <span className="font-semibold">
+                    {validSertifikat?.BidangPelatihan}
+                  </span>{" "}
+                  dan memiliki sertifikat kelulusan dengan detail sebagai
+                  berikut :
                 </AlertDialogDescription>
               </div>
-
             </AlertDialogTitle>
           </AlertDialogHeader>
           <AlertDialogFooter className="w-full">
-
             <div className="flex-col flex w-full">
               <div className="flex flex-wrap  border-b py-2 border-b-gray-300 w-full">
                 <div className="w-full">
@@ -92,7 +100,6 @@ export default function Newsletter() {
                   <p className="text-gray-600 text-base -mt-1">
                     {validSertifikat?.NoSertifikat}
                   </p>
-
                 </div>
               </div>
               <div className="flex flex-wrap border-b py-2 border-b-gray-300 w-full">
@@ -130,9 +137,8 @@ export default function Newsletter() {
                     Tanggal Pelaksanaan{" "}
                   </label>
                   <p className="text-gray-600 text-base -mt-1">
-                    {'10 Juni 2024 - 19 Juni 2024'}
+                    {"10 Juni 2024 - 19 Juni 2024"}
                   </p>
-
                 </div>
               </div>
 
@@ -147,11 +153,23 @@ export default function Newsletter() {
                   <p className="text-gray-600 text-base -mt-1">
                     {validSertifikat?.IsActice!}
                   </p>
-
                 </div>
               </div>
-              <AlertDialogAction className="py-5" onClick={(e) => setIsShowValidForm(!isShowValidForm)}>Close</AlertDialogAction>
-              <p className="italic text-xs leading-[100%] mt-2">* This information is <span className="font-semibold ">valid</span> and comes from the Ministry of Maritime Affairs and Fisheries of the Republic of Indonesia and <span className="font-semibold">is valid until {addFiveYears(validSertifikat?.IsActice!)}</span></p>
+              <AlertDialogAction
+                className="py-5"
+                onClick={(e) => setIsShowValidForm(!isShowValidForm)}
+              >
+                Close
+              </AlertDialogAction>
+              <p className="italic text-xs leading-[100%] mt-2">
+                * This information is{" "}
+                <span className="font-semibold ">valid</span> and comes from the
+                Ministry of Maritime Affairs and Fisheries of the Republic of
+                Indonesia and{" "}
+                <span className="font-semibold">
+                  is valid until {addFiveYears(validSertifikat?.IsActice!)}
+                </span>
+              </p>
             </div>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -279,7 +297,7 @@ export default function Newsletter() {
                   {/* Success message */}
                   {/* <p className="text-sm text-gray-400 mt-3">Thanks for subscribing!</p> */}
                   <p className="text-sm text-gray-400 mt-3">
-                    Masukkan nomor registrasi atau sertifikat kamu
+                    Masukkan nomor registrasi kamu
                   </p>
                 </form>
               </div>
