@@ -168,7 +168,8 @@ export default function Header() {
         usePathname().includes("post-test") ||
         usePathname().includes("/dpkakp/admin") ||
         usePathname().includes("/dpkakp/user") ||
-        usePathname().includes("/dpkakp/penguji")
+        usePathname().includes("/dpkakp/penguji") ||
+        usePathname().includes("/komite-approval")
           ? "hidden"
           : "block"
       } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
@@ -334,7 +335,7 @@ export default function Header() {
                       </li>
                       <li>
                         <Link
-                          href="/login"
+                          href="/registrasi"
                           className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
                         >
                           <span>Registrasi</span>

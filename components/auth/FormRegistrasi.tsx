@@ -116,7 +116,7 @@ function FormRegistrasi() {
             nik: nik,
             nama: name,
             password: password,
-            no_number: phoneNumber,
+            no_number: phoneNumber.toString(),
             kusuka_users: isKUSUKA,
           }),
           {
@@ -347,7 +347,8 @@ function FormRegistrasi() {
                   </label>
                   <input
                     id="phone number"
-                    type="phone number"
+                    type="number"
+                    maxLength={13}
                     className="form-input w-full text-black"
                     placeholder="Masukkan no telpon"
                     value={phoneNumber}
@@ -361,25 +362,6 @@ function FormRegistrasi() {
                   )}
                 </div>
               </div>
-              {/* <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="w-full px-3">
-                  <label
-                    className="block text-gray-200 text-sm font-medium mb-1"
-                    htmlFor="email"
-                  >
-                    Email <span className="text-red-600"></span>
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    className="form-input w-full text-black"
-                    placeholder="Masukkan alamat email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </div>
-              </div> */}
               <div className="flex flex-wrap -mx-3 mb-1">
                 <div className="w-full px-3">
                   <label
