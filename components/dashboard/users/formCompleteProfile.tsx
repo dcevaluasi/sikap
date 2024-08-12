@@ -36,8 +36,8 @@ import { HashLoader } from "react-spinners";
 function FormCompleteProfile() {
   const router = useRouter();
 
-  const pathname = usePathname()
-  const isEditProfile = pathname.includes('edit-profile');
+  const pathname = usePathname();
+  const isEditProfile = pathname.includes("edit-profile");
 
   /* token user */
   const token = Cookies.get("XSRF081");
@@ -1348,6 +1348,7 @@ function FormCompleteProfile() {
                 >
                   <button
                     type="submit"
+                    onClick={(e) => setIndexFormTab(indexFormTab + 1)}
                     className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
                   >
                     Selanjutnya
