@@ -140,7 +140,7 @@ function page() {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="border rounded-xl text-white border-mutedDPKAKP bg-transparent w-full"
+              className=" active:ring-mutedDPKAKP focus:ring-mutedDPKAKP active:outline-mutedDPKAKP   border rounded-xl text-white border-mutedDPKAKP bg-transparent w-full"
               placeholder="Enter your email address"
             />
           </div>
@@ -152,7 +152,7 @@ function page() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="border rounded-xl text-white border-mutedDPKAKP bg-transparent w-full"
+              className=" active:ring-mutedDPKAKP focus:ring-mutedDPKAKP active:outline-mutedDPKAKP   border rounded-xl text-white border-mutedDPKAKP bg-transparent w-full"
               placeholder="Enter your password"
             />
           </div>
