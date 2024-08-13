@@ -37,6 +37,7 @@ import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { convertDate, extractLastSegment } from "@/utils";
 import Toast from "@/components/toast";
+import { HiOutlineUserGroup } from "react-icons/hi2";
 
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -110,14 +111,22 @@ function page() {
       {data?.map((pelatihan, index) => (
         <div className="flex gap-2 max-w-6xl mx-auto px-5">
           <AlertDialog open={isOpenRegistrationCommand}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
+            <AlertDialogContent className="rounded-xl">
+              <AlertDialogHeader className="flex flex-col items-center justify-center">
                 <AlertDialogTitle>Anda Belum Login</AlertDialogTitle>
+                <Image
+                  src={"/login.jpg"}
+                  alt="Login Illustration"
+                  width={0}
+                  height={0}
+                  className="w-[300px] md:w-[400px]"
+                />
                 <AlertDialogDescription>
                   Untuk dapat melanjutkan proses pendaftaran
                   <span className="font-semibold">
                     {" "}
-                    {pelatihan?.NamaPelatihan}
+                    {pelatihan?.NamaPelatihan} di{" "}
+                    {pelatihan?.PenyelenggaraPelatihan}
                   </span>{" "}
                   harap melakukan proses login terlebih dahulu sobat ELAUT!
                 </AlertDialogDescription>
@@ -134,7 +143,7 @@ function page() {
                     router.push("/login");
                   }}
                 >
-                  Continue
+                  Masuk
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
@@ -189,6 +198,19 @@ function page() {
                         <table>
                           <tr>
                             <td className="text-gray-600">
+                              <HiOutlineUserGroup className="text-lg w-6" />
+                            </td>
+                            <td>
+                              <p className="text-base text-gray-600">
+                                <span className="font-normal">
+                                  Penyelenggara Pelatihan :{" "}
+                                </span>
+                                {pelatihan?.PenyelenggaraPelatihan}{" "}
+                              </p>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="text-gray-600">
                               <TbCalendarUser className="text-lg w-6" />
                             </td>
                             <td>
@@ -231,7 +253,8 @@ function page() {
 
                         <Link
                           target="_blank"
-                          href={pelatihan?.SilabusPelatihan}
+                          href={pelatihan.SilabusPelatihan!}
+                          title={`Silabus ${pelatihan.NamaPelatihan!}`}
                           className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white"
                         >
                           <FaFilePdf /> Unduh Silabus Pelatihan
@@ -271,11 +294,32 @@ function page() {
                     <MdOutlineAppRegistration /> Daftar Pelatihan
                   </button>
 
-                  <div className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white">
+                  <Link
+                    target="_blank"
+                    href={
+                      "https://api-elaut.ikulatluh.cloud/public/static/Silabus/" +
+                      pelatihan.SilabusPelatihan!
+                    }
+                    title={`Silabus ${pelatihan.NamaPelatihan!}`}
+                    className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white"
+                  >
                     <FaFilePdf /> Unduh Silabus Pelatihan
-                  </div>
+                  </Link>
                   <div className="flex flex-col gap-1 mt-2">
                     <table>
+                      <tr>
+                        <td className="text-gray-600">
+                          <HiOutlineUserGroup className="text-lg w-6" />
+                        </td>
+                        <td>
+                          <p className="text-base text-gray-600">
+                            <span className="font-semibold">
+                              Penyelenggara Pelatihan :{" "}
+                            </span>
+                            {pelatihan?.PenyelenggaraPelatihan}{" "}
+                          </p>
+                        </td>
+                      </tr>
                       <tr>
                         <td className="text-gray-600">
                           <TbCalendarUser className="text-lg w-6" />

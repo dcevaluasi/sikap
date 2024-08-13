@@ -326,7 +326,9 @@ export default function Header() {
                           href="/login"
                           className={`btn-sm ${
                             top
-                              ? "text-gray-200"
+                              ? usePathname().includes("pelatihan")
+                                ? "text-blue-500 hover:text-white"
+                                : "text-gray-200"
                               : "text-blue-500 hover:text-white"
                           } bg-transparent border border-blue-500 hover:bg-blue-500 ml-3`}
                         >
