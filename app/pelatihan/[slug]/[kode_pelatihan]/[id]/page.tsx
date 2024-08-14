@@ -203,9 +203,9 @@ function page() {
                             <td>
                               <p className="text-base text-gray-600">
                                 <span className="font-normal">
-                                  Penyelenggara Pelatihan :{" "}
+                                  Kuota Peserta :{" "}
                                 </span>
-                                {pelatihan?.PenyelenggaraPelatihan}{" "}
+                                {pelatihan?.KoutaPelatihan}{" "}
                               </p>
                             </td>
                           </tr>
@@ -296,10 +296,7 @@ function page() {
 
                   <Link
                     target="_blank"
-                    href={
-                      "https://api-elaut.ikulatluh.cloud/public/static/Silabus/" +
-                      pelatihan.SilabusPelatihan!
-                    }
+                    href={pelatihan.SilabusPelatihan!}
                     title={`Silabus ${pelatihan.NamaPelatihan!}`}
                     className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-teal-400 rounded-3xl text-white"
                   >
@@ -314,9 +311,9 @@ function page() {
                         <td>
                           <p className="text-base text-gray-600">
                             <span className="font-semibold">
-                              Penyelenggara Pelatihan :{" "}
+                              Kuota Peserta :{" "}
                             </span>
-                            {pelatihan?.PenyelenggaraPelatihan}{" "}
+                            {pelatihan?.KoutaPelatihan} Orang
                           </p>
                         </td>
                       </tr>

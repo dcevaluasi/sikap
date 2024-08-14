@@ -94,8 +94,9 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     generateRandomString()
   );
   const [namaPelatihan, setNamaPelatihan] = React.useState("");
-  const [penyelenggaraPelatihan, setPenyelenggaraPelatihan] =
-    React.useState("");
+  const [penyelenggaraPelatihan, setPenyelenggaraPelatihan] = React.useState(
+    lemdikData?.data?.NamaLemdik
+  );
   const [detailPelatihan, setDetailPelatihan] = React.useState("");
   const [jenisPelatihan, setJenisPelatihan] = React.useState("");
   const [bidangPelatihan, setBidangPelatihan] = React.useState("");
@@ -227,7 +228,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     data.append("IdLemdik", idLemdik);
     data.append("KodePelatihan", kodePelatihan);
     data.append("NamaPelatihan", namaPelatihan);
-    data.append("PenyelenggaraPelatihan", penyelenggaraPelatihan);
+    data.append("PenyelenggaraPelatihan", penyelenggaraPelatihan!);
     data.append("DetailPelatihan", detailPelatihan);
     data.append("JenisPelatihan", jenisPelatihan);
     data.append("BidangPelatihan", bidangPelatihan);
@@ -282,6 +283,101 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
       });
       throw error;
     }
+  };
+
+  const elementRef = useRef<HTMLDivElement>(null);
+
+  const handleNext = () => {
+    if (indexFormTab == 0) {
+      console.log({ fotoPelatihan });
+      if (
+        namaPelatihan == "" ||
+        jenisPelatihan == "" ||
+        bidangPelatihan == "" ||
+        dukunganProgramTerobosan == "" ||
+        tanggalMulaiPelatihan == "" ||
+        tanggalBerakhirPelatihan == "" ||
+        lokasiPelatihan == "" ||
+        pelaksanaanPelatihan == "" ||
+        jenisSertifikat == "" ||
+        !fotoPelatihan ||
+        !silabusPelatihan
+      ) {
+        if (elementRef.current) {
+          elementRef.current.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }
+        Toast.fire({
+          icon: "error",
+          title:
+            "Ups, inputan belum terisi. Pastikan semua data terisi terlebih dahulu!",
+        });
+        console.log({ fotoPelatihan });
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      } else {
+        setIndexFormTab(indexFormTab + 1);
+      }
+    } else if (indexFormTab == 1) {
+      if (!kuotaPelatihan || !asalPelatihan) {
+        if (elementRef.current) {
+          elementRef.current.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }
+        Toast.fire({
+          icon: "error",
+          title:
+            "Ups, inputan belum terisi. Pastikan semua data terisi terlebih dahulu!",
+        });
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      } else {
+        setIndexFormTab(indexFormTab + 1);
+      }
+    } else {
+      setIndexFormTab(indexFormTab + 1);
+    }
+    // if (
+    //   !namaPelatihan ||
+    //   !penyelenggaraPelatihan ||
+    //   !detailPelatihan ||
+    //   !jenisPelatihan ||
+    //   !bidangPelatihan ||
+    //   !dukunganProgramTerobosan ||
+    //   !tanggalMulaiPelatihan ||
+    //   !tanggalBerakhirPelatihan ||
+    //   !hargaPelatihan ||
+    //   !instruktur ||
+    //   !fotoPelatihan ||
+    //   !status ||
+    //   !memoPusat ||
+    //   !silabusPelatihan ||
+    //   !lokasiPelatihan ||
+    //   !pelaksanaanPelatihan ||
+    //   !ujiKompetensi ||
+    //   !kuotaPelatihan ||
+    //   !asalPelatihan ||
+    //   !jenisSertifikat ||
+    //   !ttdSertifikat ||
+    //   !noSertifikat
+    // ) {
+    //   Toast.fire({
+    //     icon: "error",
+    //     title: "Ups, inputan belum terisi",
+    //     text: "Pastikan semua data terisi dengan benar!",
+    //   });
+    // } else {
+    //   // Proceed to the next step
+    //   console.log("Form data is complete. Proceeding...");
+    // }
   };
 
   const handleFileChange = (e: any) => {
@@ -366,7 +462,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   }, []);
 
   return (
-    <section className="relative w-full">
+    <section ref={elementRef} className="relative w-full">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
         <div className="pb-12 md:pb-20">
           {/* Form */}
@@ -1159,7 +1255,8 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                         : "bg-blue-500 hover:bg-blue-600"
                     } w-full`}
                     onClick={(e) => {
-                      setIndexFormTab(indexFormTab + 1);
+                      handleNext();
+
                       scrollToTop();
                     }}
                   >

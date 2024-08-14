@@ -22,15 +22,15 @@ export default function LogoFooter() {
       {pathname.includes("dpkakp") == false ||
       pathname.includes("akp") == false ? (
         <div className="flex flex-row gap-2 w-full">
-          <Image
+          {/* <Image
             className="w-16 md:w-16"
             width={0}
             height={0}
             src={getLogo()}
             alt="Kementrian Kelautan dan Perikanan RI Logo"
-          />
+          /> */}
           <Image
-            className="w-20 md:w-20"
+            className="w-20 md:w-28"
             width={0}
             height={0}
             src={"/images/logo/logo-elaut-color.png"}

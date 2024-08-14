@@ -30,61 +30,6 @@ import axios, { AxiosResponse } from "axios";
 import { PelatihanMasyarakat } from "@/types/product";
 
 export default function Features() {
-  const tabMenus = [
-    {
-      id: 1,
-      name: "Pelatihan Masyarakat KP",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/masyarakat.jpg",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 2,
-      name: "Pelatihan Aparatur KP",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
-      icon: (
-        <FaUserTie className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 3,
-      name: "Sertifikasi Masyarakat KP",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
-      icon: (
-        <TbFileCertificate className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 4,
-      name: "Sertifikasi Aparatur KP",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
-      icon: (
-        <FaBuildingColumns className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 5,
-      name: "Sertifikasi Peserta Didik",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring aparatur kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/aparatur.jpg",
-      icon: (
-        <FaUserGraduate className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-  ];
-
-  const [tab, setTab] = useState<number>(1);
-
   const tabs = useRef<HTMLDivElement>(null);
 
   const heightFix = () => {
@@ -113,13 +58,6 @@ export default function Features() {
     handleFetchingPublicTrainingData();
     heightFix();
   }, []);
-
-  const [menuSelected, setMenuSelected] = React.useState(false);
-  const [indexMenuSelected, setIndexMenuSelected] = React.useState(0);
-  const handleSelectedMenu = (index: number) => {
-    setMenuSelected(!menuSelected);
-    setIndexMenuSelected(index);
-  };
 
   return (
     <section className="relative h-fit pb-10" id="explore">

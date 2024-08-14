@@ -38,7 +38,7 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
+import { HiLockClosed, HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
 import {
   TbBook,
   TbBookFilled,
@@ -109,6 +109,7 @@ import { GiBookmarklet } from "react-icons/gi";
 import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
 import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
+import { elautBaseUrl } from "@/constants/urls";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -230,16 +231,16 @@ const TableDataPelatihan: React.FC = () => {
     }
 
     try {
-      const response = await axios.post(
-        `${baseUrl}/lemdik/PublishSertifikat?id=${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // const response = await axios.post(
+      //   `${baseUrl}/lemdik/PublishSertifikat?id=${id}`,
+      //   formData,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+      //       "Content-Type": "multipart/form-data",
+      //     },
+      //   }
+      // );
       const uploadBeritaAcaraResponse = await axios.put(
         `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
         updateData,
@@ -255,7 +256,6 @@ const TableDataPelatihan: React.FC = () => {
         title: `Berhasil mengenerate nomor sertifikat pelatihan!`,
       });
       handleFetchingPublicTrainingData();
-      console.log("GENERATE SERTIFIKAT: ", response);
       console.log("UPLOAD BERITA ACARA: ", uploadBeritaAcaraResponse);
       // handleFetchingPublicTrainingData();
     } catch (error) {
@@ -277,16 +277,25 @@ const TableDataPelatihan: React.FC = () => {
     React.useState<boolean>(false);
   const [selectedId, setSelectedId] = React.useState<number>(0);
 
+  const [materiPelatihan, setMateriPelatihan] = React.useState<File | null>(
+    null
+  );
+  const handleFileMateriChange = (e: any) => {
+    setMateriPelatihan(e.target.files[0]);
+  };
+
   const handleUploadMateriPelatihan = async (id: number) => {
+    const data = new FormData();
+    if (materiPelatihan != null) {
+      data.append("file", materiPelatihan);
+    }
+
+    data.append("IdPelatihan", id.toString());
+
     try {
       const response = await axios.post(
-        `${baseUrl}/lemdik/createMateriPelatihan?id_pelatihan=${id}`,
-        {
-          nama_materi: namaMateri,
-          deskripsi: "",
-          jam_teory: jamTeori,
-          jam_praktek: jamPraktek,
-        },
+        `${baseUrl}/lemdik/exportModulePelatihan`,
+        data,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("XSRF091")}`,
@@ -327,6 +336,74 @@ const TableDataPelatihan: React.FC = () => {
 
   const [isOpenFormPublishedPelatihan, setIsOpenFormPublishedPelatihan] =
     React.useState<boolean>(false);
+
+  const handleDelete = async (
+    id: number,
+    pesertaPelatihan: number,
+    sertifikat: string
+  ) => {
+    if (pesertaPelatihan > 0) {
+      Toast.fire({
+        icon: "error",
+        title:
+          "Ups, pelatihan tidak dapat dihapus karena sudah ada yang mendaftar!",
+      });
+    } else if (sertifikat != "") {
+      Toast.fire({
+        icon: "error",
+        title:
+          "Ups, pelatihan sudah terbit nomor sertifikatnya, tidak dapat dihapus!",
+      });
+    } else {
+      try {
+        const response = await axios.delete(
+          `${elautBaseUrl}/lemdik/deletePelatihan?id=${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+            },
+          }
+        );
+        console.log(response);
+        Toast.fire({
+          icon: "success",
+          title: "Berhasil menghapus pelatihan dari database, sobat elaut!",
+        });
+        handleFetchingPublicTrainingData();
+      } catch (error) {
+        console.error({ error });
+        Toast.fire({
+          icon: "error",
+          title: "Ups, pelatihan tidak dapat dihapus karena kesalahan server!",
+        });
+        handleFetchingPublicTrainingData();
+      }
+    }
+  };
+
+  const [openFormTutupPelatihan, setOpenFormTutupPelatihan] =
+    React.useState(false);
+  const [selectedStatusPelatihan, setSelectedStatusPelatihan] =
+    React.useState("");
+  const [selectedIdStatusPelatihan, setSelectedIdStatusPelatihan] =
+    React.useState(0);
+  const [selectedIdPelatihanSertifikat, setSelectedIdPelatihanSertifikat] =
+    React.useState(0);
+  const [selectedKodePelatihanSertifikat, setSelectedKodePelatihanSertifikat] =
+    React.useState("");
+  const [selectedNamaPelatihanSertifikat, setSelectedNamaPelatihanSertifikat] =
+    React.useState("");
+  const [selectedIdPelatihanStatus, setSelectedIdPelatihanStatus] =
+    React.useState(0);
+  const [selectedStatus, setSelectedStatus] = React.useState("");
+
+  console.log(selectedIdStatusPelatihan);
+  console.log(selectedStatusPelatihan);
+  console.log(selectedIdPelatihanSertifikat);
+  console.log(selectedKodePelatihanSertifikat);
+  console.log(selectedNamaPelatihanSertifikat);
+  console.log(selectedIdPelatihanStatus);
+  console.log(selectedStatus);
 
   const router = useRouter();
   const [columnVisibility, setColumnVisibility] =
@@ -404,7 +481,6 @@ const TableDataPelatihan: React.FC = () => {
             >
               <FaBookOpen className="h-4 w-4" />
             </Button>
-
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
@@ -427,88 +503,32 @@ const TableDataPelatihan: React.FC = () => {
                 </AlertDialogHeader>
                 <AlertDialogFooter>
                   <AlertDialogCancel>Batal</AlertDialogCancel>
-                  <AlertDialogAction className="bg-rose-600">
+                  <AlertDialogAction
+                    className="bg-rose-600 text-white"
+                    onClick={() => {
+                      handleDelete(
+                        row.original.IdPelatihan,
+                        row.original.UserPelatihan.length,
+                        row.original.NoSertifikat
+                      ); // Call the handleDelete function when action is clicked
+                    }}
+                  >
                     Hapus
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  // onClick={(e) =>
-                  //   router.push(
-                  //     `/admin/lemdiklat/pelatihan/edit-pelatihan/${row.original.IdPelatihan}`
-                  //   )
-                  // }
-                  variant="outline"
-                  className="ml-auto border border-yellow-500"
-                >
-                  <Edit3Icon className="h-4 w-4 text-yellow-500" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Pelatihan Telah Selesai?</AlertDialogTitle>
-                  <AlertDialogDescription className="-mt-2">
-                    Jika Pelatihan di Lembaga atau Balai Pelatihanmu telah
-                    selesai, ubah status kelas-mu menjadi selesai, untuk dapat
-                    melanjutkan ke proses penerbitan sertifikat.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <fieldset>
-                  <form autoComplete="off" className="w-fit">
-                    {row.original.StatusApproval != "Selesai" ? (
-                      <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                        <div>
-                          <Checkbox
-                            id="publish"
-                            onCheckedChange={(e) =>
-                              setStatusPelatihan("Selesai")
-                            }
-                          />
-                        </div>
-                        <div className="space-y-1 leading-none">
-                          <label>Pelatihan Selesai</label>
-                          <p className="text-xs leading-[110%] text-gray-600">
-                            Dengan ini sebagai pihak lemdiklat saya menyatakan
-                            bahwa pelatihan telah selesai dilaksanakan!
-                          </p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                        <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
-                        <div className="space-y-1 leading-none">
-                          <label>Pelatihan Selesai</label>
-                          <p className="text-xs leading-[110%] text-gray-600">
-                            Kelas pelatihanmu telah ditutup atau selesai, kamu
-                            dapat melanjutkan ke proses penerbitan sertifikat!
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </form>
-                </fieldset>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={(e) =>
-                      row.original.StatusApproval != "Selesai"
-                        ? handleUpdateClosePelatihanELAUT(
-                            row.original.IdPelatihan,
-                            statusPelatihan
-                          )
-                        : null
-                    }
-                  >
-                    {row.original.StatusApproval == "Selesai" ? "OK" : "Edit"}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-
+            <Button
+              onClick={(e) => {
+                setOpenFormTutupPelatihan(!openFormTutupPelatihan);
+                setSelectedStatusPelatihan(row.original.StatusApproval);
+                setSelectedIdStatusPelatihan(row.original.IdPelatihan);
+              }}
+              variant="outline"
+              className="ml-auto border border-yellow-500"
+            >
+              <HiLockClosed className="h-5 w-4 text-yellow-500" />
+            </Button>
             <Button
               onClick={(e) =>
                 router.push(
@@ -522,179 +542,24 @@ const TableDataPelatihan: React.FC = () => {
             >
               <HiUserGroup className="h-4 w-4 text-green-500" />
             </Button>
-
             {row.original.StatusApproval == "Selesai" ? (
               row.original.NoSertifikat == "" ? (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      onClick={(e) => setOpenFormSertifikat(true)}
-                      variant="outline"
-                      className="ml-auto border border-blue-600"
-                    >
-                      <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Penerbitan Sertifikat Pelatihan
-                        </AlertDialogTitle>
-                        <AlertDialogDescription className="-mt-2">
-                          Lampirkan Berita acara sebagai bukti pelaksanaan
-                          pelatihan yang telah selesai, tunggu proses approval
-                          dari pusat, dan dapatkan nomor sertifikat Pelatihanmu!
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <fieldset>
-                        <div className="flex flex-wrap  mb-1 w-full">
-                          <div className="w-full">
-                            <label
-                              className="block text-gray-800 text-sm font-medium mb-1"
-                              htmlFor="noSertifikat"
-                            >
-                              Sertifikat untuk Pelatihan{" "}
-                              <span className="text-red-600">*</span>
-                            </label>
-                            <input
-                              id="noSertifikat"
-                              type="hidden"
-                              className="form-input w-full text-black border-gray-300 rounded-md"
-                              placeholder=""
-                              value={row.original.IdPelatihan}
-                              onChange={(e) =>
-                                setSertifikatUntukPelatihan(
-                                  row.original.IdPelatihan.toString()
-                                )
-                              }
-                              disabled
-                              readOnly
-                            />
-                            <input
-                              id="noSertifikat"
-                              type="text"
-                              className="form-input w-full text-black border-gray-300 rounded-md"
-                              placeholder={
-                                row.original.NamaPelatihan +
-                                " - " +
-                                row.original.KodePelatihan
-                              }
-                              disabled
-                              readOnly
-                            />
-                          </div>
-                        </div>
-                        <div className="flex flex-wrap  mb-1 w-full">
-                          <div className="w-full">
-                            <label
-                              className="block text-gray-800 text-sm font-medium mb-1"
-                              htmlFor="noSertifikat"
-                            >
-                              TTD Sertifikat{" "}
-                              <span className="text-red-600">*</span>
-                            </label>
-                            <select
-                              name=""
-                              id=""
-                              onChange={(e) => setTtdSertifikat(e.target.value)}
-                              className="w-full rounded-lg border border-gray-300"
-                            >
-                              <option value={""}>Pilih Penandatangan</option>
-                              <option
-                                onClick={(e) =>
-                                  setTtdSertifikat("Kepala BPPSDM")
-                                }
-                                value={"Kepala BPPSDM"}
-                              >
-                                Kepala BPPSDM
-                              </option>
-                              <option
-                                onClick={(e) =>
-                                  setTtdSertifikat(
-                                    "Kepala Balai Pelatihan dan Penyuluhan KP"
-                                  )
-                                }
-                                value={
-                                  "Kepala Balai Pelatihan dan Penyuluhan KP"
-                                }
-                              >
-                                Kepala Balai Pelatihan dan Penyuluhan KP
-                              </option>
-                            </select>
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-1 space-y-2">
-                          <label
-                            className="block text-gray-800 text-sm font-medium mb-1"
-                            htmlFor="name"
-                          >
-                            Berita Acara <span className="text-red-600">*</span>
-                          </label>
-                          <div className="flex items-center justify-center w-full">
-                            <label className="flex flex-col rounded-lg border-2 border-dashed w-full h-40 p-10 group text-center">
-                              <div className="h-full w-full text-center flex flex-col items-center justify-center">
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth="2"
-                                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                  />
-                                </svg>
-                                {beritaAcara == null ? (
-                                  <p className="pointer-none text-gray-500 text-sm">
-                                    <span className="text-sm">
-                                      Drag and drop
-                                    </span>{" "}
-                                    files here <br /> or{" "}
-                                    <a
-                                      href=""
-                                      id=""
-                                      className="text-blue-600 hover:underline"
-                                    >
-                                      select a file
-                                    </a>{" "}
-                                    from your computer
-                                  </p>
-                                ) : (
-                                  <p className="pointer-none text-gray-500 text-sm">
-                                    {beritaAcara.name}
-                                  </p>
-                                )}{" "}
-                              </div>
-                              <input
-                                type="file"
-                                className="hidden"
-                                onChange={handleFileChange}
-                              />
-                            </label>
-                          </div>
-                        </div>
-                        <p className="text-sm text-gray-300">
-                          <span>File type: doc,pdf,types of images</span>
-                        </p>
-                      </fieldset>
-                    </>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={(e) =>
-                          handleGenerateSertifikat(row.original.IdPelatihan)
-                        }
-                      >
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                <Button
+                  onClick={(e) => {
+                    setOpenFormSertifikat(true);
+                    setSelectedIdPelatihanSertifikat(row.original.IdPelatihan);
+                    setSelectedKodePelatihanSertifikat(
+                      row.original.KodePelatihan
+                    );
+                    setSelectedNamaPelatihanSertifikat(
+                      row.original.NamaPelatihan
+                    );
+                  }}
+                  variant="outline"
+                  className="ml-auto border border-blue-600"
+                >
+                  <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
+                </Button>
               ) : (
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
@@ -737,7 +602,6 @@ const TableDataPelatihan: React.FC = () => {
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
-                    onClick={(e) => setOpenFormSertifikat(true)}
                     variant="outline"
                     className="ml-auto border border-blue-600"
                   >
@@ -775,91 +639,38 @@ const TableDataPelatihan: React.FC = () => {
             )}
 
             <>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="ml-auto border border-purple-600"
-                  >
-                    <TbBroadcast className="h-4 w-4 text-purple-600" />
-                  </Button>
-                </AlertDialogTrigger>
-
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
-                    <AlertDialogDescription className="-mt-2">
-                      Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh
-                      masyarakat umum lakukan checklist agar tampil di website
-                      E-LAUT!
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <fieldset>
-                    <form autoComplete="off">
-                      {row.original.Status == "Belum Publish" ? (
-                        <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                          <div>
-                            <Checkbox
-                              id="publish"
-                              onCheckedChange={(e) =>
-                                setStatusPelatihan("Publish")
-                              }
-                            />
-                          </div>
-                          <div className="space-y-1 leading-none">
-                            <label>Publish Website E-LAUT</label>
-                            <p className="text-xs leading-[110%] text-gray-600">
-                              Dengan ini sebagai pihak lemdiklat saya mempublish
-                              informasi pelatihan terbuka untuk masyarakat umum!
-                            </p>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                          <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
-                          <div className="space-y-1 leading-none">
-                            <label>Published Website E-LAUT</label>
-                            <p className="text-xs leading-[110%] text-gray-600">
-                              Informasi Kelas Pelatihanmu telah dipublikasikan
-                              melalui laman Website E-LAUT balai mu!
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </form>
-                  </fieldset>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={(e) =>
-                        row.original.Status == "Belum Publish"
-                          ? handleUpdatePublishPelatihanToELAUT(
-                              row.original.IdPelatihan,
-                              statusPelatihan
-                            )
-                          : handleUpdatePublishPelatihanToELAUT(
-                              row.original.IdPelatihan,
-                              "Belum Publish"
-                            )
-                      }
-                    >
-                      {row.original.Status == "Publish"
-                        ? "Unpublish"
-                        : "Publsih"}
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+              <Button
+                onClick={(e) => {
+                  setSelectedIdPelatihanStatus(row.original.IdPelatihan);
+                  setSelectedStatus(row.original.Status);
+                  setIsOpenFormPublishedPelatihan(
+                    !isOpenFormPublishedPelatihan
+                  );
+                }}
+                variant="outline"
+                className="ml-auto border border-purple-600"
+              >
+                <TbBroadcast className="h-4 w-4 text-purple-600" />
+              </Button>
             </>
-
             <Button
-              onClick={(e) =>
-                router.push(
-                  `/admin/lemdiklat/pelatihan/${row.getValue(
-                    "KodePelatihan"
-                  )}/bank-soal/${row.getValue("IdPelatihan")}`
-                )
-              }
+              onClick={() => {
+                if (row.original.MateriPelatihan.length === 0) {
+                  // Show the toast notification if MateriPelatihan is empty
+                  Toast.fire({
+                    icon: "error",
+                    title:
+                      "Upload materi pelatihan terlebih dahulu, sobat elaut!",
+                  });
+                } else {
+                  // Proceed with navigation if MateriPelatihan is not empty
+                  router.push(
+                    `/admin/lemdiklat/pelatihan/${row.getValue(
+                      "KodePelatihan"
+                    )}/bank-soal/${row.getValue("IdPelatihan")}`
+                  );
+                }
+              }}
               variant="outline"
               className="ml-auto border border-gray-600"
             >
@@ -1049,7 +860,7 @@ const TableDataPelatihan: React.FC = () => {
         );
       },
       cell: ({ row }) => (
-        <div className={`${"ml-0"} text-left capitalize`}>
+        <div className={`w-[200px] text-left capitalize`}>
           <div className="flex flex-col gap-1">
             <p className="text-xs text-gray-400 leading-[100%]">
               {" "}
@@ -1058,16 +869,18 @@ const TableDataPelatihan: React.FC = () => {
             <p className="text-xs font-medium text-gray-900 tracking-tight leading-[110%] mt-1">
               {row.original.MateriPelatihan.map((materi, index) => (
                 <>
-                  {" "}
-                  {index + 1}.{materi.NamaMateri};
+                  <span>
+                    {" "}
+                    {index + 1}.{materi.NamaMateri};
+                  </span>
+                  <br />
                 </>
               ))}
             </p>
           </div>
 
-          <div className="flex flex-col gap-1 mt-2">
+          <div className="flex flex-col w-[200px] gap-1 mt-2">
             <p className="text-xs text-gray-400 leading-[100%]">
-              {" "}
               Silabus Pelatihan
             </p>
             <p className="text-xs font-medium text-gray-900 tracking-tight leading-[110%] mt-1">
@@ -1076,6 +889,7 @@ const TableDataPelatihan: React.FC = () => {
                 target="_blank"
                 className="text-blue-500 underline lowercase"
                 rel="noopener noreferrer"
+                style={{ overflowWrap: "break-word" }}
               >
                 {row.original.SilabusPelatihan}
               </a>
@@ -1123,8 +937,297 @@ const TableDataPelatihan: React.FC = () => {
     handleFetchingPublicTrainingData();
   }, []);
 
+  const urlTemplateMateriPelatihan =
+    "https://docs.google.com/spreadsheets/d/115Oytsh0Sv8kneobA-MNmsHWh87PNC56/export?format=xlsx";
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+      <AlertDialog
+        open={openFormSertifikat}
+        onOpenChange={setOpenFormSertifikat}
+      >
+        <AlertDialogContent>
+          <>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Penerbitan Sertifikat Pelatihan
+              </AlertDialogTitle>
+              <AlertDialogDescription className="-mt-2">
+                Lampirkan Berita acara sebagai bukti pelaksanaan pelatihan yang
+                telah selesai, tunggu proses approval dari pusat, dan dapatkan
+                nomor sertifikat Pelatihanmu!
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <fieldset>
+              <div className="flex flex-wrap  mb-1 w-full">
+                <div className="w-full">
+                  <label
+                    className="block text-gray-800 text-sm font-medium mb-1"
+                    htmlFor="noSertifikat"
+                  >
+                    Sertifikat untuk Pelatihan{" "}
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    id="noSertifikat"
+                    type="hidden"
+                    className="form-input w-full text-black border-gray-300 rounded-md"
+                    placeholder=""
+                    value={selectedIdPelatihanSertifikat}
+                    onChange={(e) =>
+                      setSertifikatUntukPelatihan(
+                        selectedIdPelatihanSertifikat.toString()
+                      )
+                    }
+                    disabled
+                    readOnly
+                  />
+                  <input
+                    id="noSertifikat"
+                    type="text"
+                    className="form-input w-full text-black border-gray-300 rounded-md"
+                    placeholder={
+                      selectedNamaPelatihanSertifikat +
+                      " - " +
+                      selectedKodePelatihanSertifikat
+                    }
+                    disabled
+                    readOnly
+                  />
+                </div>
+              </div>
+              <div className="flex flex-wrap  mb-1 w-full">
+                <div className="w-full">
+                  <label
+                    className="block text-gray-800 text-sm font-medium mb-1"
+                    htmlFor="noSertifikat"
+                  >
+                    TTD Sertifikat <span className="text-red-600">*</span>
+                  </label>
+                  <select
+                    name=""
+                    id=""
+                    onChange={(e) => setTtdSertifikat(e.target.value)}
+                    className="w-full rounded-lg border border-gray-300"
+                  >
+                    <option value={""}>Pilih Penandatangan</option>
+                    <option
+                      onClick={(e) => setTtdSertifikat("Kepala BPPSDM")}
+                      value={"Kepala BPPSDM"}
+                    >
+                      Kepala BPPSDM
+                    </option>
+                    <option
+                      onClick={(e) =>
+                        setTtdSertifikat(
+                          "Kepala Balai Pelatihan dan Penyuluhan KP"
+                        )
+                      }
+                      value={"Kepala Balai Pelatihan dan Penyuluhan KP"}
+                    >
+                      Kepala Balai Pelatihan dan Penyuluhan KP
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 space-y-2">
+                <label
+                  className="block text-gray-800 text-sm font-medium mb-1"
+                  htmlFor="name"
+                >
+                  Berita Acara <span className="text-red-600">*</span>
+                </label>
+                <div className="flex items-center justify-center w-full">
+                  <label className="flex flex-col rounded-lg border-2 border-dashed w-full h-40 p-10 group text-center">
+                    <div className="h-full w-full text-center flex flex-col items-center justify-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                        />
+                      </svg>
+                      {beritaAcara == null ? (
+                        <p className="pointer-none text-gray-500 text-sm">
+                          <span className="text-sm">Drag and drop</span> files
+                          here <br /> or{" "}
+                          <a
+                            href=""
+                            id=""
+                            className="text-blue-600 hover:underline"
+                          >
+                            select a file
+                          </a>{" "}
+                          from your computer
+                        </p>
+                      ) : (
+                        <p className="pointer-none text-gray-500 text-sm">
+                          {beritaAcara.name}
+                        </p>
+                      )}{" "}
+                    </div>
+                    <input
+                      type="file"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                </div>
+              </div>
+              <p className="text-sm text-gray-300">
+                <span>File type: doc,pdf,types of images</span>
+              </p>
+            </fieldset>
+          </>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) =>
+                handleGenerateSertifikat(selectedIdPelatihanSertifikat)
+              }
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={isOpenFormPublishedPelatihan}
+        onOpenChange={setIsOpenFormPublishedPelatihan}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
+            <AlertDialogDescription className="-mt-2">
+              Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh masyarakat
+              umum lakukan checklist agar tampil di website E-LAUT!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <fieldset>
+            <form autoComplete="off">
+              {selectedStatus == "Belum Publish" ? (
+                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                  <div>
+                    <Checkbox
+                      id="publish"
+                      onCheckedChange={(e) => setStatusPelatihan("Publish")}
+                    />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>Publish Website E-LAUT</label>
+                    <p className="text-xs leading-[110%] text-gray-600">
+                      Dengan ini sebagai pihak lemdiklat saya mempublish
+                      informasi pelatihan terbuka untuk masyarakat umum!
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                  <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
+                  <div className="space-y-1 leading-none">
+                    <label>Published Website E-LAUT</label>
+                    <p className="text-xs leading-[110%] text-gray-600">
+                      Informasi Kelas Pelatihanmu telah dipublikasikan melalui
+                      laman Website E-LAUT balai mu!
+                    </p>
+                  </div>
+                </div>
+              )}
+            </form>
+          </fieldset>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) =>
+                selectedStatus == "Belum Publish"
+                  ? handleUpdatePublishPelatihanToELAUT(
+                      selectedIdPelatihanStatus,
+                      statusPelatihan
+                    )
+                  : handleUpdatePublishPelatihanToELAUT(
+                      selectedIdPelatihanStatus,
+                      "Belum Publish"
+                    )
+              }
+            >
+              {selectedStatus == "Publish" ? "Unpublish" : "Publsih"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={openFormTutupPelatihan}
+        onOpenChange={setOpenFormTutupPelatihan}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Pelatihan Telah Selesai?</AlertDialogTitle>
+            <AlertDialogDescription className="-mt-2">
+              Jika Pelatihan di Lembaga atau Balai Pelatihanmu telah selesai,
+              ubah status kelas-mu menjadi selesai, untuk dapat melanjutkan ke
+              proses penerbitan sertifikat.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <fieldset>
+            <form autoComplete="off" className="w-fit">
+              {selectedStatusPelatihan != "Selesai" ? (
+                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                  <div>
+                    <Checkbox
+                      id="publish"
+                      onCheckedChange={(e) => setStatusPelatihan("Selesai")}
+                    />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>Tutup Pelatihan</label>
+                    <p className="text-xs leading-[110%] text-gray-600">
+                      Dengan ini sebagai pihak lemdiklat saya menyatakan bahwa
+                      pelatihan telah selesai dilaksanakan!
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                  <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
+                  <div className="space-y-1 leading-none">
+                    <label>Pelatihan Selesai</label>
+                    <p className="text-xs leading-[110%] text-gray-600">
+                      Kelas pelatihanmu telah ditutup atau selesai, kamu dapat
+                      melanjutkan ke proses penerbitan sertifikat!
+                    </p>
+                  </div>
+                </div>
+              )}
+            </form>
+          </fieldset>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) =>
+                selectedStatusPelatihan != "Selesai"
+                  ? handleUpdateClosePelatihanELAUT(
+                      selectedIdStatusPelatihan,
+                      statusPelatihan
+                    )
+                  : null
+              }
+            >
+              {selectedStatusPelatihan == "Selesai" ? "OK" : "Edit"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <AlertDialog open={isOpenFormMateri}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -1140,66 +1243,7 @@ const TableDataPelatihan: React.FC = () => {
           </AlertDialogHeader>
           <fieldset>
             <form autoComplete="off">
-              <div className="flex flex-wrap mb-1 w-full">
-                <div className="w-full">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="name"
-                  >
-                    Nama Materi <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    id="name"
-                    type="text"
-                    className="form-input w-full text-black border-gray-300 rounded-md"
-                    placeholder="Masukkan nama materi"
-                    required
-                    value={namaMateri}
-                    onChange={(e) => setNamaMateri(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="flex gap-2 w-full">
-                <div className="flex gap-2 mb-1 w-full">
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Jam Teori <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Jam Pelajaran"
-                      required
-                      value={jamTeori}
-                      onChange={(e) => setJamTeori(e.target.value)}
-                    />
-                  </div>
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Jam Praktek <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Jam Pelajaran"
-                      required
-                      value={jamPraktek}
-                      onChange={(e) => setJamPraktek(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* <div className="flex flex-wrap -mx-3 mb-1">
+              <div className="flex flex-wrap -mx-3 mb-1">
                 <div className="w-full px-3">
                   <label
                     className="block text-gray-800 text-sm font-medium mb-1"
@@ -1212,12 +1256,11 @@ const TableDataPelatihan: React.FC = () => {
                       type="file"
                       className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
                       required
+                      onChange={handleFileMateriChange}
                     />
                     <Link
                       target="_blank"
-                      href={
-                        "https://docs.google.com/spreadsheets/d/1KlEBRcgXLZK6NCL0r4nglKa6XazHgUH7fqvHlrIHmNI/edit?usp=sharing"
-                      }
+                      href={urlTemplateMateriPelatihan}
                       className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
                     >
                       <PiMicrosoftExcelLogoFill />
@@ -1229,7 +1272,7 @@ const TableDataPelatihan: React.FC = () => {
                     upload
                   </p>
                 </div>
-              </div> */}
+              </div>
 
               <AlertDialogFooter className="mt-3">
                 <AlertDialogCancel
