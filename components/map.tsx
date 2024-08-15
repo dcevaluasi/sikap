@@ -235,10 +235,7 @@ export default function MapIndonesia() {
                     className="text-xs font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[105%]"
                   />
                   <p className="text-xl font-black text-gray-800">
-                    Rp{" "}
-                    {dataPelatihan?.HargaPelatihan.toString().toLocaleString(
-                      "ID"
-                    )}
+                    Rp {dataPelatihan?.HargaPelatihan}
                     <span className="font-normal text-gray-600 text-base">
                       /diklat
                     </span>
