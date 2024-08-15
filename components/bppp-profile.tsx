@@ -1,14 +1,6 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { HiUserGroup } from "react-icons/hi2";
-import { TbFileCertificate } from "react-icons/tb";
-import { FaBuildingColumns } from "react-icons/fa6";
-import { FaUserGraduate } from "react-icons/fa";
-
-import FeaturesBg from "@/public/images/features-bg.png";
-import FeaturesElement from "@/public/images/features-element.png";
-import { GiLuckyFisherman, GiWaterSplash } from "react-icons/gi";
 
 import {
   Select,
@@ -23,27 +15,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FiSearch, FiSlack } from "react-icons/fi";
 import { FaPlaceOfWorship } from "react-icons/fa6";
-import { GrLocation } from "react-icons/gr";
+import { GrCertificate, GrLocation } from "react-icons/gr";
 
 import { FaUserTie } from "react-icons/fa6";
 
-import axios, { AxiosResponse } from "axios";
 import { PelatihanMasyarakat } from "@/types/product";
 import ListBPPP from "./list-bppp";
-import { useSearchParams } from "next/navigation";
-import { getPenyeleggara } from "@/utils/pelatihan";
-import { IoMdPricetag } from "react-icons/io";
-import FeaturesPelatihanBbalai from "./features-pelatihan-balai";
 import FeaturesPelatihanBalai from "./features-pelatihan-balai";
-import { Slide } from "react-awesome-reveal";
 import Image from "next/image";
-import Pelatihan from "./dashboard/Dashboard/Pelatihan";
 
-export default function BPPPTrainings({
-  data,
-}: {
-  data: PelatihanMasyarakat[];
-}) {
+export default function BPPPProfile({ data }: { data: PelatihanMasyarakat[] }) {
   return (
     <section className="relative h-fit pb-10" id="explore">
       {/* Section background (needs .relative class on parent and next sibling elements) */}
@@ -56,20 +37,24 @@ export default function BPPPTrainings({
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         <div className="pt-12 md:pt-20">
           {/* Section header */}
-          {/* 
+
           <div className="max-w-2xl mx-auto text-center pb-5 md:pb-8">
             <h1 className="text-3xl font-calsans leading-[110%]">
-              Pelatihan Masyarakat Umum KP
+              Sedang Dalam Development!
             </h1>
+            <Image
+              src={"/illustrations/development.png"}
+              alt="Not Found"
+              width={0}
+              height={0}
+              className="w-[400px] mx-auto"
+            />
             <p className="text-base text-gray-600">
-              Optimalkan potensi sumber daya laut. Bergabunglah dalam pelatihan
-              masyarakat kelautan dan perikanan untuk masa depan yang
-              berkelanjutan dan produktif.
+              Fitur profile Balai Pelatihan sedang dalam pengembangan, harap
+              pantau selalu E-Laut untuk mendapatkan fitur lengkap dan
+              terbarunya sobat Elaut!
             </p>
-          </div> */}
-          {/* <Tab /> */}
-
-          <FeaturesPelatihanBalai pelatihan={data} />
+          </div>
         </div>
       </div>
     </section>
@@ -77,44 +62,86 @@ export default function BPPPTrainings({
 }
 
 const Tab = () => {
+  const [bidangSertifikasi, setBidangSertifikasi] = React.useState<string>("");
+  const [jenisSertifikasi, setJenisSertifikasi] = React.useState<string>("");
+  const sertifikasiKepelautan = [
+    {
+      id: 1,
+      name: "HACCP",
+      singkatan: "Hazard Analysis and Critical Control Points",
+    },
+    {
+      id: 2,
+      name: "SPI",
+      singkatan: "Sertifikat Pengolah Ikan",
+    },
+    {
+      id: 3,
+      name: "API",
+      singkatan: "Ahli Pengolah Ikan",
+    },
+    {
+      id: 4,
+      name: "CPIB",
+      singkatan: "Cara Pembenihan Ikan Yang Baik",
+    },
+    {
+      id: 5,
+      name: "CPPIB",
+      singkatan: "Cara Pemberian Pakan Ikan Yang Baik",
+    },
+    {
+      id: 6,
+      name: "CBIB ",
+      singkatan: "Cara Budidaya Ikan Yang Baik",
+    },
+  ];
+
   return (
     <section className="grid grid-cols-4 gap-3 w-full items-center max-w-5xl mb-5 px-6 md:px-3 mx-auto">
-      <Select>
+      <Select
+        value={bidangSertifikasi}
+        onValueChange={(value) => setBidangSertifikasi(value)}
+      >
         <SelectTrigger className="w-full rounded-3xl py-5 md:py-2">
           <p className="mr-3 flex items-center gap-1 text-sm">
             <FiSlack />
-            Pilih Bidang Pelatihan
+            {bidangSertifikasi != ""
+              ? bidangSertifikasi
+              : "Pilih Bidang Sertifikasi"}
           </p>
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Bidang Pelatihan</SelectLabel>
-            <SelectItem value="Budidaya">Budidaya</SelectItem>
-            <SelectItem value="Penangkapan">Penangkapan</SelectItem>
-            <SelectItem value="Kepelautan">Kepelautan</SelectItem>
-            <SelectItem value="Pengolahan dan Pemasaran">
-              Pengolahan dan Pemasaran
-            </SelectItem>
-            <SelectItem value="Mesin Perikanan">Mesin Perikanan</SelectItem>
-            <SelectItem value="Konservasi">Konservasi</SelectItem>
-            <SelectItem value="SD Perikanan">SD Perikanan</SelectItem>
-            <SelectItem value="Wisata Bahari">Wisata Bahari</SelectItem>
+            <SelectLabel>Bidang Sertifikasi</SelectLabel>
+            <SelectItem value="Kepelatuan">Kepelautan</SelectItem>
+            <SelectItem value="Non-Kepelautan">Non-Kepelautan</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
 
-      <Select>
-        <SelectTrigger className="w-full rounded-3xl py-5 md:py-2">
+      <Select
+        value={jenisSertifikasi}
+        onValueChange={(value) => setJenisSertifikasi(value)}
+      >
+        <SelectTrigger className="w-full rounded-3xl py-5 md:py-2 overflow-hidden">
           <p className="mr-3 flex items-center gap-1 text-sm">
-            <IoMdPricetag />
-            Pilih Tarif Pelatihan
+            <GrCertificate />
+            {jenisSertifikasi != ""
+              ? jenisSertifikasi
+              : "Pilih Jenis Sertifikasi"}
           </p>
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            <SelectLabel>Tarif Pelatihan</SelectLabel>
-            <SelectItem value="apple">Gratis</SelectItem>
-            <SelectItem value="banana">Berbayar</SelectItem>
+            <SelectLabel>Jenis Sertifikasi</SelectLabel>
+            {bidangSertifikasi == "Non-Kepelautan"
+              ? sertifikasiKepelautan.map((item, index) => (
+                  <SelectItem value={`${item.name} - ${item.singkatan}`}>
+                    {item.name} - {item.singkatan}
+                  </SelectItem>
+                ))
+              : null}
           </SelectGroup>
         </SelectContent>
       </Select>

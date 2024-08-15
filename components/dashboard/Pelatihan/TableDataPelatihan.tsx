@@ -231,16 +231,16 @@ const TableDataPelatihan: React.FC = () => {
     }
 
     try {
-      // const response = await axios.post(
-      //   `${baseUrl}/lemdik/PublishSertifikat?id=${id}`,
-      //   formData,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-      //       "Content-Type": "multipart/form-data",
-      //     },
-      //   }
-      // );
+      const response = await axios.post(
+        `${baseUrl}/lemdik/PublishSertifikat?id=${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       const uploadBeritaAcaraResponse = await axios.put(
         `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
         updateData,

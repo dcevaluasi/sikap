@@ -821,8 +821,8 @@ const TableDataPesertaPelatihan = () => {
               Validasi Data Peserta Pelatihan
             </AlertDialogTitle>
             <AlertDialogDescription className="-mt-2">
-              Upload nilai peserta pelatihan yang diselenggarakan yang nantinya
-              akan tercantum pada sertifikat peserta pelatihan!
+              Validasi data peserta pelatihan, sebelum mereka mengikuti
+              pelatihan!
             </AlertDialogDescription>
           </AlertDialogHeader>
           <fieldset>
@@ -988,7 +988,16 @@ const TableDataPesertaPelatihan = () => {
                 Statistik
               </div>
               <div
-                onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
+                onClick={(e) => {
+                  if (dataPelatihan?.StatusApproval == "Selesai") {
+                    Toast.fire({
+                      icon: "error",
+                      title: `Ups, pelatihan sudah ditutup dan no sertifikat telah terbit, tidak dapat menambahkan lagi!`,
+                    });
+                  } else {
+                    setIsOpenFormPeserta(!isOpenFormPeserta);
+                  }
+                }}
                 className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
               >
                 <FiUploadCloud />

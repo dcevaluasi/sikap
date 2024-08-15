@@ -13,6 +13,8 @@ import {
 import { MdKeyboardArrowRight } from "react-icons/md";
 import { PelatihanMasyarakat } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
+import { truncateText } from "@/utils";
+import Link from "next/link";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiZ3VzdG9uZWNydXNoIiwiYSI6ImNsemR3bGp6aDBreGcyanM4b2dxYzNtYzAifQ.cFGfY0B2oKFTf5XfVrFTIw";
@@ -22,30 +24,35 @@ const locations = [
     lng: 109.15246944603237,
     lat: -6.854096593757315,
     name: "BPPP Tegal",
+    location: "tegal",
     description: "Balai Pelatihan dan Penyuluhan Perikanan Tegal.",
   },
   {
     lng: 128.1984058812489,
     lat: -3.6593469197467323,
     name: "BPPP Ambon",
+    location: "ambon",
     description: "Balai Pelatihan dan Penyuluhan Perikanan Ambon.",
   },
   {
     lng: 114.42107402176605,
     lat: -8.071680308693933,
     name: "BPPP Banyuwangi",
+    location: "banyuwangi",
     description: "Balai Pelatihan dan Penyuluhan Perikanan Banyuwangi.",
   },
   {
     lng: 125.2127379923902,
     lat: 1.4584143381978947,
     name: "BPPP Bitung",
+    location: "bitung",
     description: "Balai Pelatihan dan Penyuluhan Perikanan Bitung.",
   },
   {
     lng: 98.60778803618938,
     lat: 4.365581800690166,
     name: "BPPP Medan",
+    location: "medan",
     description: "Balai Pelatihan dan Penyuluhan Perikanan Medan.",
   },
 ];
@@ -59,6 +66,7 @@ export default function MapIndonesia() {
     lat: number;
     name: string;
     description: string;
+    location: string;
   } | null>(null);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -174,72 +182,70 @@ export default function MapIndonesia() {
           </SheetHeader>
 
           <div className="flex flex-row w-full justify-end">
-            <h2 className="text-xs  font-normal leading-[100%] tracking-tighter text-blue-500 flex gap-2 items-center justify-center mt-5">
+            <Link
+              href={`/bppp/${selectedLocation?.location}`}
+              className="text-xs  font-normal leading-[100%] tracking-tighter text-blue-500 flex gap-2 items-center justify-center mt-5"
+            >
               Explore balai & pelatihan lainnya <MdKeyboardArrowRight />
               <br />
-            </h2>
+            </Link>
           </div>
           <div className="flex flex-col gap-2 mt-5 h-full overflow-y-scroll ">
-           {
-            data.map((dataPelatihan, index) => (
+            {data.map((dataPelatihan, index) => (
               <div className="relative flex flex-col   space-y-3 md:space-y-0 rounded-xl  p-3   mx-auto border border-gray-300 bg-white">
-              <div className=" bg-white flex flex-col space-y-2 p-3">
-                <div className="flex justify-between item-center">
-                  <p className="text-gray-500 font-medium hidden text-xs">
-                    Vacations
-                  </p>
-                  <div className="flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-yellow-500"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                    <p className="text-gray-600 font-bold text-xs ml-1">
-                      4.96
-                      <span className="text-gray-500 font-normal">
-                        (76 reviews)
-                      </span>
+                <div className=" bg-white flex flex-col space-y-2 p-3">
+                  <div className="flex justify-between item-center">
+                    <p className="text-gray-500 font-medium hidden text-xs">
+                      Vacations
                     </p>
+                    <div className="flex items-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-5 w-5 text-yellow-500"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                      <p className="text-gray-600 font-bold text-xs ml-1">
+                        4.96
+                        <span className="text-gray-500 font-normal">
+                          (76 reviews)
+                        </span>
+                      </p>
+                    </div>
+
+                    <div className="bg-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-800 hidden md:block">
+                      {dataPelatihan?.BidangPelatihan}
+                    </div>
                   </div>
-                  <div className="flex items-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-5 w-5 text-pink-500"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <div className="bg-gray-200 px-3 py-1 rounded-full text-xs font-medium text-gray-800 hidden md:block">
-                    Superhost
-                  </div>
+                  <h3 className="font-black text-gray-800  text-lg leading-[100%]">
+                    {dataPelatihan.NamaPelatihan}
+                  </h3>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        data &&
+                        truncateText(
+                          dataPelatihan?.DetailPelatihan,
+                          150,
+                          "..."
+                        ),
+                    }}
+                    className="text-xs font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[105%]"
+                  />
+                  <p className="text-xl font-black text-gray-800">
+                    Rp{" "}
+                    {dataPelatihan?.HargaPelatihan.toString().toLocaleString(
+                      "ID"
+                    )}
+                    <span className="font-normal text-gray-600 text-base">
+                      /diklat
+                    </span>
+                  </p>
                 </div>
-                <h3 className="font-black text-gray-800  text-lg leading-[100%]">
-                  The Majestic and Wonderful Bahamas
-                </h3>
-                <p className=" text-gray-500 text-xs">
-                  The best kept secret of The Bahamas is the country’s sheer
-                  size and diversity. With 16 major islands, The Bahamas is an
-                  unmatched destination
-                </p>
-                <p className="text-xl font-black text-gray-800">
-                  $110
-                  <span className="font-normal text-gray-600 text-base">
-                    /night
-                  </span>
-                </p>
               </div>
-            </div>
-            ))
-           }
+            ))}
           </div>
         </SheetContent>
       </Sheet>
