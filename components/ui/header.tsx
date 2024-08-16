@@ -30,6 +30,8 @@ import {
 import { BiSolidShip } from "react-icons/bi";
 import { AiFillShop } from "react-icons/ai";
 import { BsFillPatchCheckFill } from "react-icons/bs";
+import { LucideSchool } from "lucide-react";
+import { IoMdSchool } from "react-icons/io";
 
 export default function Header() {
   const [top, setTop] = React.useState<boolean>(true);
@@ -280,6 +282,14 @@ export default function Header() {
                     </NavLink>
                   </NavDropDown>
                   <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
+                    <NavLink href="/bppp" name="DPKAKP" top={top}>
+                      <div className="flex gap-2 items-center">
+                        <IoMdSchool className="text-3xl" />{" "}
+                        <span>
+                          BPPP - Balai Pelatihan dan Penyuluhan Perikanan
+                        </span>
+                      </div>
+                    </NavLink>
                     <NavLink href="/dpkakp" name="DPKAKP" top={top}>
                       <div className="flex gap-2 items-center">
                         <BiSolidShip className="text-4xl" />{" "}
@@ -326,7 +336,8 @@ export default function Header() {
                           href="/login"
                           className={`btn-sm ${
                             top
-                              ? usePathname().includes("pelatihan")
+                              ? usePathname().includes("pelatihan") ||
+                                usePathname().includes("bppp")
                                 ? "text-blue-500 hover:text-white"
                                 : "text-gray-200"
                               : "text-blue-500 hover:text-white"
