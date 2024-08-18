@@ -16,6 +16,10 @@ function LogoIntegrated() {
       Name: "Logo Kementerian Kelautan dan Perikanan (KKP) Beyond",
       Path: "./images/logo-kkp-beyond.png",
     },
+    {
+      Name: "Logo Balai Sertifikasi Elektronik (BSRe)",
+      Path: "./images/logo-bsre.png",
+    },
   ];
 
   return (
