@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Slide } from "react-awesome-reveal";
 import { BIDANG_PELATIHAN } from "@/constants/pelatihan";
@@ -8,6 +8,13 @@ import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 
 export default function TrainingTypeSection() {
   const [selectedBidang, setSelectedBidang] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading delay
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <section className="relative h-fit pb-20" id="explore">
@@ -33,62 +40,72 @@ export default function TrainingTypeSection() {
           </div>
 
           <div className="flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-5 md:gap-9">
-            {BIDANG_PELATIHAN.map((bidangPelatihan, index) => (
-              <Slide direction="up" duration={500 * index} key={index}>
-                <Sheet>
-                  <SheetTrigger asChild>
-                    <div
-                      className="flex flex-col gap-2 cursor-pointer items-center duration-1000 hover:scale-105 text-center"
-                      onClick={() => setSelectedBidang(index)}
-                    >
-                      <div className="flex items-center justify-center bg-white shadow-custom rounded-full w-24 h-24 md:w-28 md:h-28 p-6">
-                        <Image
-                          className={` ${
-                            bidangPelatihan.Name == "Mesin Perikanan"
-                              ? "w-36 max-w-[5rem]"
-                              : "w-16 md:w-16"
-                          }`}
-                          width={0}
-                          height={0}
-                          src={bidangPelatihan.Image}
-                          alt={bidangPelatihan.Name}
-                        />
-                      </div>
-                      <p className="text-sm text-black font-semibold">
-                        {bidangPelatihan.Name}
-                      </p>
-                    </div>
-                  </SheetTrigger>
+            {loading
+              ? Array.from({ length: 8 }).map((_, index) => (
+                  <Slide direction="up" duration={500 * index} key={index}>
+                    <div className="flex flex-col gap-2 items-center text-center">
+                      <div className="flex items-center justify-center bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400 animate-pulse shadow-custom rounded-full w-24 h-24 md:w-28 md:h-28 p-6"></div>
 
-                  {selectedBidang === index && (
-                    <SheetContent className="z-[10000000]" side={"left"}>
-                      <div className="p-4">
-                        <h2 className="text-xl font-bold mb-2">
-                          {bidangPelatihan.Name}
-                        </h2>
-                        <Image
-                          className="w-16 md:w-full"
-                          width={0}
-                          height={0}
-                          src={bidangPelatihan.Illustration!}
-                          alt={bidangPelatihan.Name}
-                        />
-                        <p className="text-gray-600">
-                          {bidangPelatihan.Description}
-                        </p>
-                        <ul className="mt-4 list-disc list-inside">
-                          {bidangPelatihan.Pelatihan.map((item, i) => (
-                            <li key={i} className="text-gray-700">
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </SheetContent>
-                  )}
-                </Sheet>
-              </Slide>
-            ))}
+                      <div className="w-20 h-6  bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400  animate-pulse rounded"></div>
+                    </div>
+                  </Slide>
+                ))
+              : BIDANG_PELATIHAN.map((bidangPelatihan, index) => (
+                  <Slide direction="up" duration={500 * index} key={index}>
+                    <Sheet>
+                      <SheetTrigger asChild>
+                        <div
+                          className="flex flex-col gap-2 cursor-pointer items-center duration-1000 hover:scale-105 text-center"
+                          onClick={() => setSelectedBidang(index)}
+                        >
+                          <div className="flex items-center justify-center bg-white shadow-custom rounded-full w-24 h-24 md:w-28 md:h-28 p-6">
+                            <Image
+                              className={` ${
+                                bidangPelatihan.Name === "Mesin Perikanan"
+                                  ? "w-36 max-w-[5rem]"
+                                  : "w-16 md:w-16"
+                              }`}
+                              width={0}
+                              height={0}
+                              src={bidangPelatihan.Image}
+                              alt={bidangPelatihan.Name}
+                            />
+                          </div>
+                          <p className="text-sm text-black font-semibold">
+                            {bidangPelatihan.Name}
+                          </p>
+                        </div>
+                      </SheetTrigger>
+
+                      {selectedBidang === index && (
+                        <SheetContent className="z-[10000000]" side={"left"}>
+                          <div className="p-4">
+                            <h2 className="text-xl font-bold mb-2">
+                              {bidangPelatihan.Name}
+                            </h2>
+                            <Image
+                              className="w-16 md:w-full"
+                              width={0}
+                              height={0}
+                              src={bidangPelatihan.Illustration!}
+                              alt={bidangPelatihan.Name}
+                            />
+                            <p className="text-gray-600">
+                              {bidangPelatihan.Description}
+                            </p>
+                            <ul className="mt-4 list-disc list-inside">
+                              {bidangPelatihan.Pelatihan.map((item, i) => (
+                                <li key={i} className="text-gray-700">
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </SheetContent>
+                      )}
+                    </Sheet>
+                  </Slide>
+                ))}
           </div>
         </div>
       </div>
