@@ -266,9 +266,9 @@ function page() {
 
                     <div
                       dangerouslySetInnerHTML={{
-                        __html: pelatihan && pelatihan?.DetailPelatihan,
+                        __html: pelatihan?.DetailPelatihan || "",
                       }}
-                      className="w-full text-gray-600 text-justify mt-2 md:mt-9 text-base "
+                      className="prose prose-gray prose-p:text-justify prose-list-decimal w-full mt-2 md:mt-9"
                     ></div>
                   </>
                 )}
