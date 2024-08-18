@@ -28,3 +28,24 @@ export type FasilitasKonsumsi = {
     NamaPaketMakanan: string;
     HargaPaketMakanan: number;
 }
+
+export type JenisPelatihan = {
+    Id: string;
+    Name: string;
+    Description: string;
+}
+
+export type BidangPelatihan = {
+    Id: string;
+    Name: string;
+    Description: string;
+    Image: string;
+    Illustration?: string;
+    Pelatihan: string[];
+}
+
+export type PelaksanaanPelatihan = {
+    Id: string;
+    Name: string;
+    Description: string;
+}

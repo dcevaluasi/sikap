@@ -1,127 +1,13 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { Transition } from "@headlessui/react";
+import React, { useState } from "react";
 import Image from "next/image";
-import FeaturesBg from "@/public/images/features-bg.png";
-import FeaturesElement from "@/public/images/features-element.png";
-import { GiLuckyFisherman, GiWaterSplash } from "react-icons/gi";
-import { HiUserGroup } from "react-icons/hi2";
-import { TbFileCertificate } from "react-icons/tb";
-import { FaBuildingColumns } from "react-icons/fa6";
-import { FaUserGraduate } from "react-icons/fa";
-
-import { FaUserTie } from "react-icons/fa6";
-
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
-
-import "./../app/css/additional-styles/features-slider.css";
-
-// import required modules
-import "swiper/css/navigation";
-import { Pagination, Navigation } from "swiper/modules";
-import ListProgram from "./lists";
-import Link from "next/link";
 import { Slide } from "react-awesome-reveal";
+import { BIDANG_PELATIHAN } from "@/constants/pelatihan";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 
 export default function TrainingTypeSection() {
-  const tabMenus = [
-    {
-      id: 1,
-      name: "Budidaya",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/images/bidangPelatihan/budidaya.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 2,
-      name: "Konservasi",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/images/bidangPelatihan/konservasi.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-
-    {
-      id: 3,
-      name: "SD Perikanan",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/images/bidangPelatihan/sd-perikanan.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 4,
-      name: "Kepelautan",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/images/bidangPelatihan/kepelautan.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 5,
-      name: "Penangkapan",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/images/bidangPelatihan/penangkapan.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 6,
-      name: "Mesin Perikanan",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/images/bidangPelatihan/mesin-perikanan.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-    {
-      id: 7,
-      name: "Pengolahan & Pemasaran",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/images/bidangPelatihan/pengolahan-pemasaran.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
-  ];
-
-  const [tab, setTab] = useState<number>(1);
-
-  const tabs = useRef<HTMLDivElement>(null);
-
-  const heightFix = () => {
-    if (tabs.current && tabs.current.parentElement)
-      tabs.current.parentElement.style.height = `${tabs.current.clientHeight}px`;
-  };
-
-  useEffect(() => {
-    heightFix();
-  }, []);
-
-  const [menuSelected, setMenuSelected] = React.useState(false);
-  const [indexMenuSelected, setIndexMenuSelected] = React.useState(0);
-  const handleSelectedMenu = (index: number) => {
-    setMenuSelected(!menuSelected);
-    setIndexMenuSelected(index);
-  };
+  const [selectedBidang, setSelectedBidang] = useState<number | null>(null);
 
   return (
     <section className="relative h-fit pb-20" id="explore">
@@ -141,54 +27,65 @@ export default function TrainingTypeSection() {
               Kelautan dan Perikanan
             </h1>
             <p className="text-base text-gray-600">
-              Pilih bidang kepelautan dan perikanan yang untuk pelatihan dan
+              Pilih bidang kepelautan dan perikanan untuk pelatihan dan
               sertifikasi yang ingin kamu ikuti!
             </p>
           </div>
 
           <div className="flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-5 md:gap-9">
-            {tabMenus.map((tabMenu, index) => (
-              <div key={index} className="gap-4 w-fit">
-                <Slide direction="up" duration={500 * index}>
-                  <div
-                    key={index}
-                    className="flex flex-col gap-2 cursor-pointer items-center duration-1000 hover:scale-105 text-center"
-                  >
-                    <div className="flex items-center justify-center  bg-white shadow-custom rounded-full w-24 h-24 md:w-28 md:h-28 p-6">
-                      <Image
-                        className="w-16 md:w-16"
-                        width={0}
-                        height={0}
-                        src={tabMenu.image}
-                        alt="Kementrian Kelautan dan Perikanan RI Logo"
-                      />
+            {BIDANG_PELATIHAN.map((bidangPelatihan, index) => (
+              <Slide direction="up" duration={500 * index} key={index}>
+                <Sheet>
+                  <SheetTrigger asChild>
+                    <div
+                      className="flex flex-col gap-2 cursor-pointer items-center duration-1000 hover:scale-105 text-center"
+                      onClick={() => setSelectedBidang(index)}
+                    >
+                      <div className="flex items-center justify-center bg-white shadow-custom rounded-full w-24 h-24 md:w-28 md:h-28 p-6">
+                        <Image
+                          className="w-16 md:w-16"
+                          width={0}
+                          height={0}
+                          src={bidangPelatihan.Image}
+                          alt={bidangPelatihan.Name}
+                        />
+                      </div>
+                      <p className="text-sm text-black font-semibold">
+                        {bidangPelatihan.Name}
+                      </p>
                     </div>
-                    <p className="text-sm text-black font-semibold">
-                      {tabMenu.name}
-                    </p>
-                  </div>
-                </Slide>
-              </div>
+                  </SheetTrigger>
+
+                  {selectedBidang === index && (
+                    <SheetContent className="z-[10000000]" side={"left"}>
+                      <div className="p-4">
+                        <h2 className="text-xl font-bold mb-2">
+                          {bidangPelatihan.Name}
+                        </h2>
+                        <Image
+                          className="w-16 md:w-full"
+                          width={0}
+                          height={0}
+                          src={bidangPelatihan.Illustration!}
+                          alt={bidangPelatihan.Name}
+                        />
+                        <p className="text-gray-600">
+                          {bidangPelatihan.Description}
+                        </p>
+                        <ul className="mt-4 list-disc list-inside">
+                          {bidangPelatihan.Pelatihan.map((item, i) => (
+                            <li key={i} className="text-gray-700">
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </SheetContent>
+                  )}
+                </Sheet>
+              </Slide>
             ))}
           </div>
-          {/* </Swiper> */}
-
-          {menuSelected && (
-            <div className="mt-6 w-full max-w-8xl justify-evenly mx-auto flex">
-              <div className="w-[450px] -ml-10" data-aos="zoom-y-out">
-                <h2 className="font-calsans text-3xl duration-1000">
-                  Pelatihan Masyarakat KP
-                </h2>
-                <p className="text-base group-hover:text-xs text-gray-600 group-hover:duration-1000">
-                  Pelatihan yang diselenggaran BPPSDM KP untuk menjaring
-                  masyarakat kelautan perikanan yang ingin mengasah skill nya
-                  dibidang kelautan dan perikanan
-                </p>
-                <div className="w-[100px] h-2 rounded-sm bg-blue-500 mt-3"></div>
-              </div>
-              <ListProgram type="" pelatihan={[]} />
-            </div>
-          )}
         </div>
       </div>
     </section>

@@ -91,25 +91,14 @@ import axios, { AxiosResponse } from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PelatihanMasyarakat } from "@/types/product";
 import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { convertDate } from "@/utils";
 import Cookies from "js-cookie";
-import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 import { Progress } from "@/components/ui/progress";
-import { GiBookmarklet } from "react-icons/gi";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
 import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import { elautBaseUrl } from "@/constants/urls";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from "@/components/ui/select";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -269,10 +258,6 @@ const TableDataPelatihan: React.FC = () => {
   };
   /* ================================= HANDLING PENERBITAN SERTIFIKAT ====================================== */
 
-  const [namaMateri, setNamaMateri] = React.useState<string>("");
-  const [jamTeori, setJamTeori] = React.useState<string>("");
-  const [jamPraktek, setJamPraktek] = React.useState<string>("");
-
   const [isOpenFormMateri, setIsOpenFormMateri] =
     React.useState<boolean>(false);
   const [selectedId, setSelectedId] = React.useState<number>(0);
@@ -309,10 +294,6 @@ const TableDataPelatihan: React.FC = () => {
       handleFetchingPublicTrainingData();
       console.log("MATERI PELATIHAN: ", response);
       setIsOpenFormMateri(!isOpenFormMateri);
-      setNamaMateri("");
-      setJamPraktek("");
-      setJamTeori("");
-      // handleFetchingPublicTrainingData();
     } catch (error) {
       console.error("ERROR GENERATE SERTIFIKAT: ", error);
       Toast.fire({
@@ -1475,7 +1456,7 @@ const TableDataPelatihan: React.FC = () => {
             <div className="flex w-full items-center mb-2">
               <div className="flex w-full gap-1 items-start">
                 {/* ==================== FILTERING BY JENIS PELATIHAN ==================== */}
-                {/* <Select
+                <Select
                   value={filterSelectedJenisPelatihan}
                   onValueChange={(value) =>
                     setFilterSelectedJenisPelatihan(value)
@@ -1497,8 +1478,8 @@ const TableDataPelatihan: React.FC = () => {
                       <SelectItem value="PNBP/BLU">PNBP/BLU</SelectItem>
                     </SelectGroup>
                   </SelectContent>
-                </Select> */}
-                {/* ==================== END OF FILTERING BY JENIS PELATIHAN ==================== */}
+                </Select>
+                {/* ==================== END OF FILTERING BY JENIS PELATIHAN ====================
 
                 {/* <Select>
                   <SelectTrigger className="w-[170px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
