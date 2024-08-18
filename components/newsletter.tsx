@@ -57,7 +57,7 @@ export default function Newsletter() {
     }
   };
   return (
-    <section id="cek-sertifikat" className="scroll-smooth">
+    <section id="cek-sertifikat" className="scroll-smooth w-full">
       <AlertDialog open={isShowValidForm}>
         <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
           <AlertDialogHeader>
@@ -174,13 +174,10 @@ export default function Newsletter() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <div className="max-w-[70rem] mx-auto px-4 sm:px-6">
+      <div className="w-full mx-auto">
         <div className="pb-12 md:pb-20">
           {/* CTA box */}
-          <div
-            className="relative bg-gray-900 rounded py-10 px-8 md:py-16 md:px-12 shadow-2xl overflow-hidden"
-            data-aos="zoom-y-out"
-          >
+          <div className="relative bg-gray-900 rounded py-10 px-8 md:py-16 md:px-12 shadow-2xl overflow-hidden">
             {/* Background illustration */}
             <div
               className="absolute right-0 bottom-0 pointer-events-none hidden lg:block"

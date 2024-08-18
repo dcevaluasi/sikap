@@ -75,7 +75,7 @@ export default function Header() {
                   : usePathname().includes("complete-profile")
                   ? "text-gray-600 hover:text-white hover:scale-105"
                   : "text-gray-200 hover:text-white hover:scale-105"
-              }  px-5 py-3 flex items-center transition duration-150 ease-in-out font-semibold`}
+              }  px-5 py-3 flex items-center transition  duration-150 ease-in-out font-semibold`}
             >
               {name} <HiMiniChevronDown className="text-lg" />
             </div>
@@ -83,7 +83,9 @@ export default function Header() {
         </PopoverTrigger>
         {name == currentName && (
           <PopoverContent
-            className={`w-80 flex flex-col gap-1 ${top ? "" : "mt-7"}`}
+            className={`w-80 flex flex-col z-[1000000] gap-1 ${
+              top ? "mt-7" : "mt-7"
+            }`}
           >
             <ul>{children}</ul>
           </PopoverContent>

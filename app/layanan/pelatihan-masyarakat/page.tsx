@@ -38,6 +38,8 @@ import {
 } from "@/components/ui/select";
 import { LucideSchool } from "lucide-react";
 import { FaRupiahSign } from "react-icons/fa6";
+import LogoIntegrated from "@/components/logoIntegrated";
+import Newsletter from "@/components/newsletter";
 
 function page() {
   const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
@@ -84,7 +86,7 @@ function page() {
   }, []);
   return (
     <>
-      <section className="mt-44 max-w-6xl mx-10 md:mx-auto flex flex-col gap-24">
+      <section className="mt-44 max-w-6xl mx-10 md:mx-auto flex flex-col gap-24 mb-20">
         <div className="flex flex-col gap-0 relative">
           <div className="max-w-3xl ">
             {" "}
@@ -390,6 +392,8 @@ function page() {
             </div>
           </div>
         )}
+
+        {!showOnlyPelatihan && <Newsletter />}
       </section>{" "}
       <Footer />
     </>
