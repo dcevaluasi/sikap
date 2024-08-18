@@ -33,19 +33,6 @@ export const BIDANG_PELATIHAN: BidangPelatihan[] = [
   },
 
   {
-    Id: "BP003",
-    Name: "Pengolahan & Pemasaran",
-    Description:
-      "Pelatihan ini bertujuan untuk meningkatkan keterampilan dalam pengolahan produk perikanan, dari pasca panen hingga siap dipasarkan. Selain itu, peserta juga akan mempelajari strategi pemasaran produk perikanan untuk meningkatkan daya saing di pasar lokal dan internasional.",
-    Image: "/images/bidangPelatihan/pengolahanPemasaran.png",
-    Illustration: "/images/illustrations/pengolahanPemasaran.jpg",
-    Pelatihan: [
-      "Pelatihan Pengolahan Produk Perikanan",
-      "Pelatihan Teknik Pengemasan dan Penyimpanan Ikan",
-      "Pelatihan Strategi Pemasaran Produk Perikanan",
-    ],
-  },
-  {
     Id: "BP004",
     Name: "SD Perikanan",
     Description:
@@ -61,10 +48,10 @@ export const BIDANG_PELATIHAN: BidangPelatihan[] = [
 
   {
     Id: "BP005",
-    Name: "Penangkapan",
+    Name: "Kepelautan",
     Description:
       "Pelatihan ini berfokus pada teknik dan teknologi penangkapan ikan yang efektif dan ramah lingkungan. Materi pelatihan meliputi pengoperasian alat tangkap, navigasi, keselamatan kerja, serta regulasi penangkapan yang berkelanjutan.",
-    Image: "/images/bidangPelatihan/penangkapan.png",
+    Image: "/images/bidangPelatihan/kepelautan.png",
     Illustration: "/images/illustrations/budidaya.png",
     Pelatihan: [
       "Pelatihan Pengoperasian Alat Tangkap Ikan",
@@ -77,12 +64,25 @@ export const BIDANG_PELATIHAN: BidangPelatihan[] = [
     Name: "Mesin Perikanan",
     Description:
       "Pelatihan ini meliputi pengoperasian, pemeliharaan, dan perbaikan mesin-mesin yang digunakan dalam industri perikanan, seperti mesin kapal, mesin pengolahan ikan, dan alat bantu penangkapan ikan.",
-    Image: "/images/bidangPelatihan/mesin-perikanan.png",
+    Image: "/images/bidangPelatihan/mesinPerikanan.png",
     Illustration: "/images/illustrations/mesinPerikanan.jpg",
     Pelatihan: [
       "Pelatihan Pemeliharaan Mesin Kapal Perikanan",
       "Pelatihan Perbaikan Mesin Pengolahan Ikan",
       "Pelatihan Teknologi Alat Bantu Penangkapan",
+    ],
+  },
+  {
+    Id: "BP003",
+    Name: "Pengolahan & Pemasaran",
+    Description:
+      "Pelatihan ini bertujuan untuk meningkatkan keterampilan dalam pengolahan produk perikanan, dari pasca panen hingga siap dipasarkan. Selain itu, peserta juga akan mempelajari strategi pemasaran produk perikanan untuk meningkatkan daya saing di pasar lokal dan internasional.",
+    Image: "/images/bidangPelatihan/pengolahanPemasaran.png",
+    Illustration: "/images/illustrations/pengolahanPemasaran.jpg",
+    Pelatihan: [
+      "Pelatihan Pengolahan Produk Perikanan",
+      "Pelatihan Teknik Pengemasan dan Penyimpanan Ikan",
+      "Pelatihan Strategi Pemasaran Produk Perikanan",
     ],
   },
   {

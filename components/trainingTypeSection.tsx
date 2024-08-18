@@ -43,7 +43,11 @@ export default function TrainingTypeSection() {
                     >
                       <div className="flex items-center justify-center bg-white shadow-custom rounded-full w-24 h-24 md:w-28 md:h-28 p-6">
                         <Image
-                          className="w-16 md:w-16"
+                          className={` ${
+                            bidangPelatihan.Name == "Mesin Perikanan"
+                              ? "w-36 max-w-[5rem]"
+                              : "w-16 md:w-16"
+                          }`}
                           width={0}
                           height={0}
                           src={bidangPelatihan.Image}
