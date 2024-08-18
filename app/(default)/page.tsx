@@ -6,6 +6,7 @@ import TrainingTypeSection from "@/components/trainingTypeSection";
 import FeaturesKepelautan from "@/components/features-kepelatuan";
 import FeaturesDiklatKepelautan from "@/components/features-diklat-kepelautan";
 import Testimonials from "@/components/testimonials";
+import LogoIntegrated from "@/components/logoIntegrated";
 export default function Home() {
   return (
     <>
@@ -17,6 +18,7 @@ export default function Home() {
       <Features />
       {/* <Testimonials /> */}
       <Newsletter />
+      <LogoIntegrated />
     </>
   );
 }

@@ -16,7 +16,7 @@ function ListBPPP({
 }) {
   return (
     <div className="w-full items-center justify-center flex">
-      <div className="w-fit grid grid-cols-3 gap-y-6 gap-x-5 items-center ml-6">
+      <div className="w-fit grid grid-cols-3 gap-y-6 gap-x-5 items-center">
         {pelatihan &&
           pelatihan!.map((pelatihan: PelatihanMasyarakat, index: number) => (
             <Slide

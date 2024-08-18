@@ -35,6 +35,18 @@ export type JenisPelatihan = {
     Description: string;
 }
 
+export type BalaiPelatihan = {
+    Id: string;
+    Name: string;
+    Description: string;
+    Longitude: number;
+    Latitude: number;
+    Location: string;
+    Image?: string;
+    KepalaBalaiPelatihan?: string;
+    FullName: string;
+}
+
 export type BidangPelatihan = {
     Id: string;
     Name: string;
