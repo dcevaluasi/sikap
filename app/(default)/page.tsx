@@ -12,7 +12,7 @@ export default function Home() {
     <>
       <Hero />
       <TrainingTypeSection />
-      <FeaturesKepelautan />
+      {/* <FeaturesKepelautan /> */}
       <FeaturesDiklatKepelautan />
       <FeaturesBlocks />
       <Features />

@@ -7,10 +7,14 @@ import SidebarLinkGroup from "./SidebarLinkGroup";
 import { FaBoxOpen, FaRupiahSign } from "react-icons/fa6";
 import { IoIosPaperPlane, IoMdSchool } from "react-icons/io";
 import LogoFooter from "@/components/ui/logo-footer";
-import { RiFilePaperLine, RiVerifiedBadgeFill } from "react-icons/ri";
+import {
+  RiFilePaperLine,
+  RiVerifiedBadgeFill,
+  RiVerifiedBadgeLine,
+} from "react-icons/ri";
 import { GiPapers } from "react-icons/gi";
 import { HiMiniComputerDesktop } from "react-icons/hi2";
-import { TbDatabase, TbSchool } from "react-icons/tb";
+import { TbBroadcast, TbDatabase, TbSchool } from "react-icons/tb";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -67,7 +71,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   return (
     <aside
       ref={sidebar}
-      className={`absolute left-0 top-0 z-50 flex h-screen w-72.5 flex-col overflow-y-hidden ${
+      className={`absolute left-0 top-0 z-50 flex h-screen w-67 flex-col overflow-y-hidden ${
         pathname.includes("/dpkakp") ? "bg-darkDPKAKP" : "bg-gray-900"
       } duration-300 ease-linear  lg:static lg:translate-x-0 scrollbar-hide ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
@@ -501,17 +505,40 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 !open && "hidden"
                               }`}
                             >
-                              <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
+                              <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-3">
                                 <li>
                                   <Link
-                                    href="/admin/pusat/pelatihan/pengajuan-sttpl"
-                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                    href="/admin/pusat/pelatihan/pemberitahuan-pelatihan"
+                                    className={`group relative w-fit flex items-center gap-2 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                       pathname ===
-                                        "/admin/pusat/pelatihan/pengajuan-sttpl" &&
+                                        "/admin/pusat/pelatihan/pemberitahuan-pelatihan" &&
                                       "text-white"
                                     }`}
                                   >
-                                    • Penerbitan STTPL atau Sertifikat
+                                    <div className="flex-1">
+                                      <TbBroadcast className="text-xl" />
+                                    </div>
+                                    <span className="flex-2  w-full">
+                                      Pemberitahuan Pelatihan
+                                    </span>
+                                  </Link>
+                                </li>
+
+                                <li>
+                                  <Link
+                                    href="/admin/pusat/pelatihan/penerbitan-sertifikat"
+                                    className={`group relative  w-fit  flex items-center gap-2 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                      pathname ===
+                                        "/admin/pusat/pelatihan/penerbitan-sertifikat" &&
+                                      "text-white"
+                                    }`}
+                                  >
+                                    <div className="flex-1">
+                                      <RiVerifiedBadgeLine className="text-xl" />
+                                    </div>
+                                    <span className="flex-2  w-full">
+                                      Penerbitan Sertifikat
+                                    </span>
                                   </Link>
                                 </li>
                               </ul>

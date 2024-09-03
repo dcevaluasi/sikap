@@ -66,7 +66,7 @@ export const BALAI_PELATIHAN: BalaiPelatihan[] = [
 export const BIDANG_PELATIHAN: BidangPelatihan[] = [
   {
     Id: "BP001",
-    Name: "Budidaya",
+    Name: "Perikanan",
     Description:
       "Pelatihan ini mencakup teknik budidaya ikan, udang, dan biota perairan lainnya dengan fokus pada metode yang berkelanjutan dan efisien. Tujuan dari pelatihan ini adalah untuk meningkatkan produktivitas budidaya melalui pengenalan teknologi baru, manajemen kualitas air, pakan, serta pengendalian penyakit.",
     Image: "/images/bidangPelatihan/budidaya.png",
@@ -77,37 +77,37 @@ export const BIDANG_PELATIHAN: BidangPelatihan[] = [
       "Pelatihan Manajemen Kesehatan Ikan dan Lingkungan",
     ],
   },
-  {
-    Id: "BP002",
-    Name: "Konservasi",
-    Description:
-      "Pelatihan ini menitikberatkan pada upaya konservasi sumber daya kelautan dan perikanan, termasuk rehabilitasi terumbu karang, pengelolaan kawasan konservasi laut, dan pemulihan ekosistem pesisir.",
-    Image: "/images/bidangPelatihan/konservasi.png",
-    Illustration: "/images/illustrations/konservasi.jpg",
-    Pelatihan: [
-      "Pelatihan Rehabilitasi Terumbu Karang",
-      "Pelatihan Pengelolaan Kawasan Konservasi Laut",
-      "Pelatihan Pemulihan Ekosistem Pesisir",
-    ],
-  },
+  // {
+  //   Id: "BP002",
+  //   Name: "Konservasi",
+  //   Description:
+  //     "Pelatihan ini menitikberatkan pada upaya konservasi sumber daya kelautan dan perikanan, termasuk rehabilitasi terumbu karang, pengelolaan kawasan konservasi laut, dan pemulihan ekosistem pesisir.",
+  //   Image: "/images/bidangPelatihan/konservasi.png",
+  //   Illustration: "/images/illustrations/konservasi.jpg",
+  //   Pelatihan: [
+  //     "Pelatihan Rehabilitasi Terumbu Karang",
+  //     "Pelatihan Pengelolaan Kawasan Konservasi Laut",
+  //     "Pelatihan Pemulihan Ekosistem Pesisir",
+  //   ],
+  // },
 
-  {
-    Id: "BP004",
-    Name: "SD Perikanan",
-    Description:
-      "Pelatihan ini berfokus pada pengembangan sumber daya manusia di sektor perikanan, termasuk peningkatan kapasitas manajerial, pengelolaan sumber daya alam, dan pengetahuan tentang regulasi serta kebijakan di bidang perikanan.",
-    Image: "/images/bidangPelatihan/sd-perikanan.png",
-    Illustration: "/images/illustrations/sdPerikanan.jpg",
-    Pelatihan: [
-      "Pelatihan Manajemen Sumber Daya Perikanan",
-      "Pelatihan Kebijakan dan Regulasi Perikanan",
-      "Pelatihan Pengembangan Kapasitas SDM Perikanan",
-    ],
-  },
+  // {
+  //   Id: "BP004",
+  //   Name: "SD Perikanan",
+  //   Description:
+  //     "Pelatihan ini berfokus pada pengembangan sumber daya manusia di sektor perikanan, termasuk peningkatan kapasitas manajerial, pengelolaan sumber daya alam, dan pengetahuan tentang regulasi serta kebijakan di bidang perikanan.",
+  //   Image: "/images/bidangPelatihan/sd-perikanan.png",
+  //   Illustration: "/images/illustrations/sdPerikanan.jpg",
+  //   Pelatihan: [
+  //     "Pelatihan Manajemen Sumber Daya Perikanan",
+  //     "Pelatihan Kebijakan dan Regulasi Perikanan",
+  //     "Pelatihan Pengembangan Kapasitas SDM Perikanan",
+  //   ],
+  // },
 
   {
     Id: "BP005",
-    Name: "Kepelautan",
+    Name: "Awak Kapal Perikanan",
     Description:
       "Pelatihan ini berfokus pada teknik dan teknologi penangkapan ikan yang efektif dan ramah lingkungan. Materi pelatihan meliputi pengoperasian alat tangkap, navigasi, keselamatan kerja, serta regulasi penangkapan yang berkelanjutan.",
     Image: "/images/bidangPelatihan/kepelautan.png",
@@ -118,38 +118,51 @@ export const BIDANG_PELATIHAN: BidangPelatihan[] = [
       "Pelatihan Keselamatan Kerja di Laut",
     ],
   },
-  {
-    Id: "BP006",
-    Name: "Mesin Perikanan",
-    Description:
-      "Pelatihan ini meliputi pengoperasian, pemeliharaan, dan perbaikan mesin-mesin yang digunakan dalam industri perikanan, seperti mesin kapal, mesin pengolahan ikan, dan alat bantu penangkapan ikan.",
-    Image: "/images/bidangPelatihan/mesinPerikanan.png",
-    Illustration: "/images/illustrations/mesinPerikanan.jpg",
-    Pelatihan: [
-      "Pelatihan Pemeliharaan Mesin Kapal Perikanan",
-      "Pelatihan Perbaikan Mesin Pengolahan Ikan",
-      "Pelatihan Teknologi Alat Bantu Penangkapan",
-    ],
-  },
-  {
-    Id: "BP003",
-    Name: "Pengolahan & Pemasaran",
-    Description:
-      "Pelatihan ini bertujuan untuk meningkatkan keterampilan dalam pengolahan produk perikanan, dari pasca panen hingga siap dipasarkan. Selain itu, peserta juga akan mempelajari strategi pemasaran produk perikanan untuk meningkatkan daya saing di pasar lokal dan internasional.",
-    Image: "/images/bidangPelatihan/pengolahanPemasaran.png",
-    Illustration: "/images/illustrations/pengolahanPemasaran.jpg",
-    Pelatihan: [
-      "Pelatihan Pengolahan Produk Perikanan",
-      "Pelatihan Teknik Pengemasan dan Penyimpanan Ikan",
-      "Pelatihan Strategi Pemasaran Produk Perikanan",
-    ],
-  },
+  // {
+  //   Id: "BP006",
+  //   Name: "Mesin Perikanan",
+  //   Description:
+  //     "Pelatihan ini meliputi pengoperasian, pemeliharaan, dan perbaikan mesin-mesin yang digunakan dalam industri perikanan, seperti mesin kapal, mesin pengolahan ikan, dan alat bantu penangkapan ikan.",
+  //   Image: "/images/bidangPelatihan/mesinPerikanan.png",
+  //   Illustration: "/images/illustrations/mesinPerikanan.jpg",
+  //   Pelatihan: [
+  //     "Pelatihan Pemeliharaan Mesin Kapal Perikanan",
+  //     "Pelatihan Perbaikan Mesin Pengolahan Ikan",
+  //     "Pelatihan Teknologi Alat Bantu Penangkapan",
+  //   ],
+  // },
+  // {
+  //   Id: "BP003",
+  //   Name: "Pengolahan dan  Pemasaran",
+  //   Description:
+  //     "Pelatihan ini bertujuan untuk meningkatkan keterampilan dalam pengolahan produk perikanan, dari pasca panen hingga siap dipasarkan. Selain itu, peserta juga akan mempelajari strategi pemasaran produk perikanan untuk meningkatkan daya saing di pasar lokal dan internasional.",
+  //   Image: "/images/bidangPelatihan/pengolahanPemasaran.png",
+  //   Illustration: "/images/illustrations/pengolahanPemasaran.jpg",
+  //   Pelatihan: [
+  //     "Pelatihan Pengolahan Produk Perikanan",
+  //     "Pelatihan Teknik Pengemasan dan Penyimpanan Ikan",
+  //     "Pelatihan Strategi Pemasaran Produk Perikanan",
+  //   ],
+  // },
+  // {
+  //   Id: "BP007",
+  //   Name: "Wisata Bahari",
+  //   Description:
+  //     "Pelatihan ini dirancang untuk meningkatkan kemampuan dalam mengelola wisata bahari, termasuk pengembangan destinasi wisata, pelayanan wisata, serta pengelolaan lingkungan laut yang mendukung pariwisata berkelanjutan.",
+  //   Image: "/images/bidangPelatihan/wisataBahari.png",
+  //   Illustration: "/images/illustrations/wisataBahari.jpg",
+  //   Pelatihan: [
+  //     "Pelatihan Pengembangan Destinasi Wisata Bahari",
+  //     "Pelatihan Pengelolaan Ekowisata Pesisir",
+  //     "Pelatihan Pemandu Wisata Bahari",
+  //   ],
+  // },
   {
     Id: "BP007",
-    Name: "Wisata Bahari",
+    Name: "Kelautan",
     Description:
       "Pelatihan ini dirancang untuk meningkatkan kemampuan dalam mengelola wisata bahari, termasuk pengembangan destinasi wisata, pelayanan wisata, serta pengelolaan lingkungan laut yang mendukung pariwisata berkelanjutan.",
-    Image: "/images/bidangPelatihan/wisataBahari.png",
+    Image: "/images/bidangPelatihan/penangkapan.png",
     Illustration: "/images/illustrations/wisataBahari.jpg",
     Pelatihan: [
       "Pelatihan Pengembangan Destinasi Wisata Bahari",
@@ -157,19 +170,19 @@ export const BIDANG_PELATIHAN: BidangPelatihan[] = [
       "Pelatihan Pemandu Wisata Bahari",
     ],
   },
-  {
-    Id: "BP008",
-    Name: "Pengelolaan Sampah",
-    Description:
-      "Pelatihan ini bertujuan untuk memberikan pengetahuan dan keterampilan dalam pengelolaan sampah di kawasan pesisir dan laut, termasuk teknik pengurangan, pemanfaatan, dan daur ulang sampah plastik di laut.",
-    Image: "/images/bidangPelatihan/pengolahan-pemasaran.png",
-    Illustration: "/images/illustrations/pengelolaanSampah.jpg",
-    Pelatihan: [
-      "Pelatihan Pengelolaan Sampah Pesisir",
-      "Pelatihan Daur Ulang Sampah Plastik di Laut",
-      "Pelatihan Pengurangan Sampah di Kawasan Wisata Bahari",
-    ],
-  },
+  // {
+  //   Id: "BP008",
+  //   Name: "Pengelolaan Sampah",
+  //   Description:
+  //     "Pelatihan ini bertujuan untuk memberikan pengetahuan dan keterampilan dalam pengelolaan sampah di kawasan pesisir dan laut, termasuk teknik pengurangan, pemanfaatan, dan daur ulang sampah plastik di laut.",
+  //   Image: "/images/bidangPelatihan/pengolahan-pemasaran.png",
+  //   Illustration: "/images/illustrations/pengelolaanSampah.jpg",
+  //   Pelatihan: [
+  //     "Pelatihan Pengelolaan Sampah Pesisir",
+  //     "Pelatihan Daur Ulang Sampah Plastik di Laut",
+  //     "Pelatihan Pengurangan Sampah di Kawasan Wisata Bahari",
+  //   ],
+  // },
 ];
 
 export const JENIS_PELATIHAN: JenisPelatihan[] = [

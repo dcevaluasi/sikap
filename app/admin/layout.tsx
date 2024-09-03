@@ -15,6 +15,11 @@ const myFont = localFont({
   variable: "--font-calsans",
 });
 
+const bos = localFont({
+  src: "../font/bos.ttf",
+  variable: "--font-bos",
+});
+
 const inter = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -43,7 +48,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning={true}
-        className={`${inter.className} ${myFont.variable} ${delius.variable} `}
+        className={`${inter.className} ${myFont.variable} ${bos.variable}  ${delius.variable} `}
       >
         <div className="h-screen max-h-screen overflow-y-hidden">
           {loading ? <Loader /> : children}

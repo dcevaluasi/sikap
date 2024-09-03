@@ -1,4 +1,4 @@
-import PengajuanSTTPL from "@/components/dashboard/Dashboard/PengajuanSTTPL";
+import PengajuanSTTPL from "@/components/dashboard/Dashboard/PemberitahuanPelatihan";
 import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
 import React from "react";
 

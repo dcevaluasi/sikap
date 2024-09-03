@@ -75,7 +75,7 @@ function page() {
 
       resetAllStateToEmptyString();
       router.push(
-        `/admin/${role == "lemdik" ? "lemdiklat" : "pusat"}/dashboard`
+        `/admin/${role == "lemdik" ? "lemdiklat" : "puslat"}/dashboard`
       );
     } catch (error) {
       if (error instanceof AxiosError) {

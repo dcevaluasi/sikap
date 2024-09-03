@@ -366,8 +366,9 @@ const DropdownUser = ({
                     <HiMiniUserGroup className="text-lg text-blue-500" />
                     <span className="font-semibold text-sm tracking-tighter">
                       {" "}
-                      {userLoggedInInfo != null &&
-                        userLoggedInInfo!.data!.Pelatihan.length}{" "}
+                      {pathname.includes("lemdik") &&
+                        userLoggedInInfo != null &&
+                        userLoggedInInfo!.data!.Pelatihan.length}
                       Pelatihan
                     </span>
                   </div>
@@ -406,7 +407,7 @@ const DropdownUser = ({
           <span className="block text-xs">
             {pathname.includes("lemdiklat")
               ? userLoggedInInfo?.data?.Alamat
-              : "Pusat Pelatihan KP"}
+              : "Admin Pusat"}
           </span>
         </span>
 

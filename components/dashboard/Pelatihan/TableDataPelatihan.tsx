@@ -6,6 +6,23 @@ import {
   RiVerifiedBadgeFill,
 } from "react-icons/ri";
 
+import { LucideFileCheck2, TrendingUp } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+
 import {
   Sheet,
   SheetClose,
@@ -65,7 +82,9 @@ import {
   IoIosBook,
   IoIosInformationCircle,
   IoMdBook,
+  IoMdClose,
   IoMdGlobe,
+  IoMdInformationCircleOutline,
 } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
 import {
@@ -85,7 +104,11 @@ import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
 import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
-import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
+import {
+  PiFilePdf,
+  PiMicrosoftExcelLogoFill,
+  PiStampLight,
+} from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -98,13 +121,41 @@ import { Progress } from "@/components/ui/progress";
 import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import { elautBaseUrl } from "@/constants/urls";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+} from "@/components/ui/select";
+import { HashLoader } from "react-spinners";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
   const [showCertificateSetting, setShowCertificateSetting] =
     React.useState<boolean>(false);
+
+  const chartData = [
+    { month: "January", desktop: 186, mobile: 80 },
+    { month: "February", desktop: 305, mobile: 200 },
+    { month: "March", desktop: 237, mobile: 120 },
+    { month: "April", desktop: 73, mobile: 190 },
+    { month: "May", desktop: 209, mobile: 130 },
+    { month: "June", desktop: 214, mobile: 140 },
+  ];
+
+  const chartConfig = {
+    desktop: {
+      label: "Desktop",
+      color: "#2563eb",
+    },
+    mobile: {
+      label: "Mobile",
+      color: "#7A1CAC",
+    },
+  } satisfies ChartConfig;
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
@@ -176,31 +227,41 @@ const TableDataPelatihan: React.FC = () => {
     id: number,
     status: string
   ) => {
-    const formData = new FormData();
-    formData.append("StatusApproval", status);
-    try {
-      const response = await axios.put(
-        `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-          },
-        }
-      );
+    if (
+      fileSuratPemberitahuan !=
+      "https://api-elaut.ikulatluh.cloud/public/static/suratPemberitahuan/"
+    ) {
+      const formData = new FormData();
+      formData.append("StatusApproval", status);
+      try {
+        const response = await axios.put(
+          `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+            },
+          }
+        );
+        Toast.fire({
+          icon: "success",
+          title: `Berhasil menutup kelas pelatihan, kamu dapat melanjutkan proses selanjutnya!`,
+        });
+        console.log("UPDATE PELATIHAN: ", response);
+        handleFetchingPublicTrainingData();
+      } catch (error) {
+        console.error("ERROR UPDATE PELATIHAN: ", error);
+        Toast.fire({
+          icon: "error",
+          title: `Gagal menutup kelas pelatihan, kamu dapat melanjutkan proses selanjutnya!`,
+        });
+        handleFetchingPublicTrainingData();
+      }
+    } else {
       Toast.fire({
-        icon: "success",
-        title: `Berhasil menutup kelas pelatihan, kamu dapat melanjutkan proses selanjutnya!`,
+        icon: "error",
+        title: `Gagal menutup kelas pelatihan, surat pemberitahuan belum diupload!`,
       });
-      console.log("UPDATE PELATIHAN: ", response);
-      handleFetchingPublicTrainingData();
-    } catch (error) {
-      console.error("ERROR UPDATE PELATIHAN: ", error);
-      Toast.fire({
-        icon: "success",
-        title: `Gagal menutup kelas pelatihan, kamu dapat melanjutkan proses selanjutnya!`,
-      });
-      handleFetchingPublicTrainingData();
     }
   };
 
@@ -209,8 +270,8 @@ const TableDataPelatihan: React.FC = () => {
   const handleFileChange = (e: any) => {
     setBeritaAcara(e.target.files[0]);
   };
-  console.log({ beritaAcara });
   const handleGenerateSertifikat = async (id: number) => {
+    setIsUploading(!isUploading);
     console.log({ ttdSertifikat });
     const formData = new FormData();
     const updateData = new FormData();
@@ -221,7 +282,7 @@ const TableDataPelatihan: React.FC = () => {
 
     try {
       const response = await axios.post(
-        `${baseUrl}/lemdik/PublishSertifikat?id=${id}`,
+        `${baseUrl}/lemdik/PublishSertifikat?id=${selectedIdPelatihanSertifikat}`,
         formData,
         {
           headers: {
@@ -231,7 +292,7 @@ const TableDataPelatihan: React.FC = () => {
         }
       );
       const uploadBeritaAcaraResponse = await axios.put(
-        `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
+        `${baseUrl}/lemdik/UpdatePelatihan?id=${selectedIdPelatihanSertifikat}`,
         updateData,
         {
           headers: {
@@ -242,17 +303,21 @@ const TableDataPelatihan: React.FC = () => {
       );
       Toast.fire({
         icon: "success",
-        title: `Berhasil mengenerate nomor sertifikat pelatihan!`,
+        title: `Berhasil mengupload file berita acara dan penandatangan, tunggu proses approval dari pusat!`,
       });
+      setIsUploading(!isUploading);
       handleFetchingPublicTrainingData();
+      setOpenFormSertifikat(!openFormSertifikat);
       console.log("UPLOAD BERITA ACARA: ", uploadBeritaAcaraResponse);
       // handleFetchingPublicTrainingData();
     } catch (error) {
       console.error("ERROR GENERATE SERTIFIKAT: ", error);
       Toast.fire({
-        icon: "success",
-        title: `Gagal mengenerate nomor sertifikat pelatihan!`,
+        icon: "error",
+        title: `Gagal mengupload file berita acara dan penandatangan!`,
       });
+      setIsUploading(!isUploading);
+      setOpenFormSertifikat(!openFormSertifikat);
       handleFetchingPublicTrainingData();
     }
   };
@@ -378,18 +443,63 @@ const TableDataPelatihan: React.FC = () => {
     React.useState(0);
   const [selectedStatus, setSelectedStatus] = React.useState("");
 
-  console.log(selectedIdStatusPelatihan);
-  console.log(selectedStatusPelatihan);
-  console.log(selectedIdPelatihanSertifikat);
-  console.log(selectedKodePelatihanSertifikat);
-  console.log(selectedNamaPelatihanSertifikat);
-  console.log(selectedIdPelatihanStatus);
-  console.log(selectedStatus);
-
   const router = useRouter();
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const [isOpenFormSuratPemberitahuan, setIsOpenFormSuratPemberitahuan] =
+    React.useState<boolean>(false);
+  const [suratPemberitahuan, setSuratPemberitahuan] =
+    React.useState<File | null>(null);
+  const [isUploading, setIsUploading] = React.useState<boolean>(false);
+  const handleSuratPemberitahuanChange = (e: any) => {
+    setSuratPemberitahuan(e.target.files[0]);
+  };
+  const handleUploadSuratPemberitahuan = async (id: number) => {
+    setIsUploading(true);
+    const formData = new FormData();
+    if (suratPemberitahuan != null) {
+      formData.append("SuratPemberitahuan", suratPemberitahuan);
+    }
+    console.log("SURAT PEMBERITAHUAN", suratPemberitahuan);
+
+    try {
+      const response = await axios.put(
+        `${baseUrl}/lemdik/UpdatePelatihan?id=${selectedId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil mengupload surat pemberitahuan ke Pusat Pelatihan Kelautan dan Perikanan!`,
+      });
+      console.log("UPDATE PELATIHAN: ", response);
+      handleFetchingPublicTrainingData();
+      setSelectedId(0);
+      setIsUploading(false);
+      setIsOpenFormSuratPemberitahuan(!isOpenFormSuratPemberitahuan);
+    } catch (error) {
+      console.error("ERROR UPDATE PELATIHAN: ", error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal mengupload surat pemberitahuan ke Pusat Pelatihan Kelautan dan Perikanan!`,
+      });
+      setIsOpenFormSuratPemberitahuan(!isOpenFormSuratPemberitahuan);
+      setSelectedId(0);
+      setIsUploading(false);
+      handleFetchingPublicTrainingData();
+    }
+  };
+
+  const [fileSuratPemberitahuan, setFileSuratPemberitahuan] =
+    React.useState<string>("");
+
   const columns: ColumnDef<PelatihanMasyarakat>[] = [
     {
       accessorKey: "KodePelatihan",
@@ -502,6 +612,7 @@ const TableDataPelatihan: React.FC = () => {
             <Button
               onClick={(e) => {
                 setOpenFormTutupPelatihan(!openFormTutupPelatihan);
+                setFileSuratPemberitahuan(row.original.SuratPemberitahuan);
                 setSelectedStatusPelatihan(row.original.StatusApproval);
                 setSelectedIdStatusPelatihan(row.original.IdPelatihan);
               }}
@@ -545,7 +656,6 @@ const TableDataPelatihan: React.FC = () => {
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
-                      onClick={(e) => setOpenFormSertifikat(true)}
                       variant="outline"
                       className="ml-auto border border-blue-600"
                     >
@@ -634,7 +744,7 @@ const TableDataPelatihan: React.FC = () => {
                 <TbBroadcast className="h-4 w-4 text-purple-600" />
               </Button>
             </>
-            <Button
+            {/* <Button
               onClick={() => {
                 if (row.original.MateriPelatihan.length === 0) {
                   // Show the toast notification if MateriPelatihan is empty
@@ -655,8 +765,32 @@ const TableDataPelatihan: React.FC = () => {
               variant="outline"
               className="ml-auto border border-gray-600"
             >
-              <TbDatabase className="h-4 w-4 text-gray-600" />
-            </Button>
+              <FiUploadCloud className="h-4 w-4 text-gray-600" />
+            </Button> */}
+            {row.original.SuratPemberitahuan !=
+            "https://api-elaut.ikulatluh.cloud/public/static/suratPemberitahuan/" ? (
+              <Link
+                href={row.original.SuratPemberitahuan}
+                target="_blank"
+                className="ml-auto border border-gray-600  bg-white shadow-sm hover:bg-neutral-100 hover:text-neutral-900 h-9 px-4 py-2 rounded-md"
+              >
+                <LucideFileCheck2 className="h-4 w-4 text-gray-600" />
+              </Link>
+            ) : (
+              <Button
+                onClick={() => {
+                  setIsOpenFormSuratPemberitahuan(
+                    !isOpenFormSuratPemberitahuan
+                  );
+                  setFileSuratPemberitahuan(row.original.SuratPemberitahuan);
+                  setSelectedId(row.original.IdPelatihan);
+                }}
+                variant="outline"
+                className="ml-auto border border-gray-600"
+              >
+                <FiUploadCloud className="h-4 w-4 text-gray-600" />
+              </Button>
+            )}
           </div>
         </div>
       ),
@@ -687,7 +821,7 @@ const TableDataPelatihan: React.FC = () => {
             {row.getValue("NamaPelatihan")}
           </p>
           <div className={`${"ml-0"} text-left capitalize mt-1`}>
-            <p className="text-xs  font-medium capitalize ">
+            <p className="text-sm  font-medium capitalize ">
               {" "}
               <span className="flex items-center gap-1 leading-[105%]">
                 <TbTargetArrow />
@@ -718,7 +852,16 @@ const TableDataPelatihan: React.FC = () => {
                   </span>
                 </span>{" "}
               </span>
-              <span className="w-full flex flex-col ">
+              {/* <div
+                onClick={(e) => {
+                  router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
+                }}
+                className="flex gap-2 px-3 mt-3 text-sm hover:bg-blue-500 duration-700 hover:text-white items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+              >
+                <FiUploadCloud />
+                Upload Surat Pemberitahuan
+              </div> */}
+              {/* <span className="w-full flex flex-col ">
                 <span className="text-xs  font-medium capitalize leading-[100%] mt-1 mb-1">
                   Realisasi Pendaftar
                 </span>
@@ -735,97 +878,151 @@ const TableDataPelatihan: React.FC = () => {
                   {row.original.UserPelatihan.length}/
                   {parseInt(row.original.KoutaPelatihan)}
                 </p>
-              </span>
+              </span> */}
             </p>
           </div>
         </div>
       ),
     },
-    {
-      accessorKey: "AsalPelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[270px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Realisasi
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-xs text-gray-400 leading-[100%]">
-            {" "}
-            Jenis, Harga, dan Realisasi Pelatihan
-          </p>
-          <p className="text-base font-semibold tracking-tight leading-[100%] mt-1">
-            {row.original.HargaPelatihan == "0"
-              ? "Gratis"
-              : "Rp " + row.original.HargaPelatihan}{" "}
-            • {row.original.JenisPelatihan}
-          </p>
+    // {
+    //   accessorKey: "AsalPelatihan",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className="p-0 !text-left w-[270px] flex items-center justify-start text-gray-900 font-semibold"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Realisasi
+    //         <HiUserGroup className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div className={`${"ml-0"} text-left capitalize`}>
+    //       {/* <p className="text-xs text-gray-400 leading-[100%]">
+    //         {" "}
+    //         Jenis, Harga, dan Realisasi Pelatihan
+    //       </p>
+    //       <p className="text-base font-semibold tracking-tight leading-[100%] mt-1">
+    //         {row.original.HargaPelatihan == "0"
+    //           ? "Gratis"
+    //           : "Rp " + row.original.HargaPelatihan}{" "}
+    //         • {row.original.JenisPelatihan}
+    //       </p> */}
 
-          <div className="w-full flex flex-col mt-1">
-            <span className="text-xs  font-medium capitalize leading-[100%] mb-1">
-              Realisasi PNBP
-            </span>
-            <Progress
-              value={
-                row.original.UserPelatihan.length *
-                parseInt(row.original.HargaPelatihan)
-              }
-              max={
-                parseInt(row.original.KoutaPelatihan) *
-                parseInt(row.original.HargaPelatihan)
-              }
-              className="w-[80%]"
-            />
-            <p className="text-xs text-gray-400 capitalize">
-              Rp.{" "}
-              {row.original.UserPelatihan.length *
-                parseInt(row.original.HargaPelatihan)}{" "}
-              / Rp.{" "}
-              {parseInt(row.original.KoutaPelatihan) *
-                parseInt(row.original.HargaPelatihan)}
-            </p>
-          </div>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "NoSertifikat",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Sertifikat
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-xs text-gray-400 leading-[100%]">
-            {" "}
-            Penandatangan {row.original.TtdSertifikat}
-          </p>
+    //       <div className="w-full flex flex-col mt-1">
+    //         {/* <span className="text-xs  font-medium capitalize leading-[100%] mb-1">
+    //           Realisasi PNBP
+    //         </span> */}
+    //         <ChartContainer config={chartConfig}>
+    //           <AreaChart
+    //             accessibilityLayer
+    //             data={chartData}
+    //             margin={{
+    //               left: 12,
+    //               right: 12,
+    //             }}
+    //           >
+    //             <CartesianGrid vertical={false} />
+    //             <XAxis
+    //               dataKey="month"
+    //               tickLine={false}
+    //               axisLine={false}
+    //               tickMargin={8}
+    //               tickFormatter={(value) => value.slice(0, 3)}
+    //             />
+    //             <ChartTooltip
+    //               cursor={false}
+    //               content={<ChartTooltipContent />}
+    //             />
+    //             <defs>
+    //               <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+    //                 <stop
+    //                   offset="5%"
+    //                   stopColor="var(--color-desktop)"
+    //                   stopOpacity={0.8}
+    //                 />
+    //                 <stop
+    //                   offset="95%"
+    //                   stopColor="var(--color-desktop)"
+    //                   stopOpacity={0.1}
+    //                 />
+    //               </linearGradient>
+    //               <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
+    //                 <stop
+    //                   offset="5%"
+    //                   stopColor="var(--color-mobile)"
+    //                   stopOpacity={0.8}
+    //                 />
+    //                 <stop
+    //                   offset="95%"
+    //                   stopColor="var(--color-mobile)"
+    //                   stopOpacity={0.1}
+    //                 />
+    //               </linearGradient>
+    //             </defs>
+    //             <Area
+    //               dataKey="mobile"
+    //               type="natural"
+    //               fill="url(#fillMobile)"
+    //               fillOpacity={0.4}
+    //               stroke="var(--color-mobile)"
+    //               stackId="a"
+    //             />
+    //             <Area
+    //               dataKey="desktop"
+    //               type="natural"
+    //               fill="url(#fillDesktop)"
+    //               fillOpacity={0.4}
+    //               stroke="var(--color-desktop)"
+    //               stackId="a"
+    //             />
+    //           </AreaChart>
+    //         </ChartContainer>
+    //         {/* <p className="text-xs text-gray-400 capitalize">
+    //           Rp.{" "}
+    //           {row.original.UserPelatihan.length *
+    //             parseInt(row.original.HargaPelatihan)}{" "}
+    //           / Rp.{" "}
+    //           {parseInt(row.original.KoutaPelatihan) *
+    //             parseInt(row.original.HargaPelatihan)}
+    //         </p> */}
+    //       </div>
+    //     </div>
+    //   ),
+    // },
+    // {
+    //   accessorKey: "NoSertifikat",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Sertifikat
+    //         <HiUserGroup className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div
+    //       className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+    //     >
+    //       <p className="text-xs text-gray-400 leading-[100%]">
+    //         {" "}
+    //         Penandatangan {row.original.TtdSertifikat}
+    //       </p>
 
-          <DialogTemplateSertifikatPelatihan pelatihan={data[row.index]}>
-            <p className="text-base font-semibold cursor-pointer tracking-tight leading-[100%] mt-1">
-              {row.original.NoSertifikat}
-            </p>
-          </DialogTemplateSertifikatPelatihan>
-        </div>
-      ),
-    },
+    //       <DialogTemplateSertifikatPelatihan pelatihan={data[row.index]}>
+    //         <p className="text-base font-semibold cursor-pointer tracking-tight leading-[100%] mt-1">
+    //           {row.original.NoSertifikat}
+    //         </p>
+    //       </DialogTemplateSertifikatPelatihan>
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: "MateriPelatihan",
       header: ({ column }) => {
@@ -899,6 +1096,11 @@ const TableDataPelatihan: React.FC = () => {
       rowSelection,
     },
   });
+
+  const [
+    isShowInformationSuratPemberitahuan,
+    setIsShowInformationSuratPemberitahuan,
+  ] = React.useState<boolean>(false);
 
   /**
    * FILTERING PELATIHAN
@@ -989,24 +1191,40 @@ const TableDataPelatihan: React.FC = () => {
                     name=""
                     id=""
                     onChange={(e) => setTtdSertifikat(e.target.value)}
-                    className="w-full rounded-lg border border-gray-300"
+                    className="w-full overflow-hidden rounded-lg border border-gray-300"
                   >
                     <option value={""}>Pilih Penandatangan</option>
                     <option
-                      onClick={(e) => setTtdSertifikat("Kepala BPPSDM")}
-                      value={"Kepala BPPSDM"}
+                      onClick={(e) =>
+                        setTtdSertifikat(
+                          "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusian Kelautan dan Perikanan"
+                        )
+                      }
+                      value={
+                        "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusian Kelautan dan Perikanan"
+                      }
                     >
-                      Kepala BPPSDM
+                      Kepala BPPSDM KP
                     </option>
                     <option
                       onClick={(e) =>
                         setTtdSertifikat(
-                          "Kepala Balai Pelatihan dan Penyuluhan KP"
+                          "Kepala Pusat Pelatihan Kelautan dan Perikanan"
                         )
                       }
-                      value={"Kepala Balai Pelatihan dan Penyuluhan KP"}
+                      value={"Kepala Pusat Pelatihan Kelautan dan Perikanan"}
                     >
-                      Kepala Balai Pelatihan dan Penyuluhan KP
+                      Kepala Pusat Pelatihan KP
+                    </option>
+                    <option
+                      onClick={(e) =>
+                        setTtdSertifikat(
+                          "Kepala Balai Pelatihan dan Penyuluhan Perikanan"
+                        )
+                      }
+                      value={"Kepala Balai Pelatihan dan Penyuluhan Perikanan"}
+                    >
+                      Kepala Balai Pelatihan
                     </option>
                   </select>
                 </div>
@@ -1017,7 +1235,7 @@ const TableDataPelatihan: React.FC = () => {
                   className="block text-gray-800 text-sm font-medium mb-1"
                   htmlFor="name"
                 >
-                  Berita Acara <span className="text-red-600">*</span>
+                  File Berita Acara <span className="text-red-600">*</span>
                 </label>
                 <div className="flex items-center justify-center w-full">
                   <label className="flex flex-col rounded-lg border-2 border-dashed w-full h-40 p-10 group text-center">
@@ -1067,15 +1285,40 @@ const TableDataPelatihan: React.FC = () => {
                 <span>File type: doc,pdf,types of images</span>
               </p>
             </fieldset>
+
+            <p className="text-gray-700 text-xs mt-1">
+              *File berita acara yang diupload dapat dilampirkan dengan contoh
+              sebagai
+              <Link
+                href={
+                  "https://drive.google.com/file/d/1_LXUE02cNIIuMeg6ejMcENVAA3JJH7TC/view?usp=sharing"
+                }
+                target="_blank"
+                className="ml-1 text-blue-500 underline"
+              >
+                berikut
+              </Link>
+              , hal ini dilakukan untuk proses approval penerbitan sertifikat
+              baik yang ditanda tangan oleh Kepala BPPSDM KP, Kepala Puslat KP,
+              maupun Kepala Balai
+            </p>
           </>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            {!isUploading && (
+              <AlertDialogCancel
+                onClick={(e) => setOpenFormSertifikat(!openFormSertifikat)}
+              >
+                Cancel
+              </AlertDialogCancel>
+            )}
             <AlertDialogAction
               onClick={(e) =>
                 handleGenerateSertifikat(selectedIdPelatihanSertifikat)
               }
+              disabled={isUploading}
+              className={`${isUploading && "px-6"}`}
             >
-              Continue
+              {isUploading ? <span>Uploading...</span> : <span>Upload</span>}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -1203,7 +1446,7 @@ const TableDataPelatihan: React.FC = () => {
                   : null
               }
             >
-              {selectedStatusPelatihan == "Selesai" ? "OK" : "Edit"}
+              {selectedStatusPelatihan == "Selesai" ? "OK" : "Tutup"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -1271,6 +1514,90 @@ const TableDataPelatihan: React.FC = () => {
           </fieldset>
         </AlertDialogContent>
       </AlertDialog>
+
+      <AlertDialog open={isOpenFormSuratPemberitahuan}>
+        <AlertDialogContent>
+          <AlertDialogHeader className="flex gap-0 flex-col">
+            <AlertDialogTitle className="flex items-center gap-2">
+              {" "}
+              <FiUploadCloud className="h-4 w-4" />
+              Upload Surat Pemberitahuan
+            </AlertDialogTitle>
+            <AlertDialogDescription className="-mt-2">
+              Dalam pelaksanaan pelatihan Pusat Pelatihan Kelautan dan Perikanan
+              perlu tahu untuk pemberitahuan!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <fieldset>
+            <form autoComplete="off">
+              <div className="flex flex-wrap -mx-3 mb-1">
+                <div className="w-full px-3">
+                  <label
+                    className="block text-gray-800 text-sm font-medium mb-1"
+                    htmlFor="email"
+                  >
+                    Upload Surat Pemberitahuan{" "}
+                  </label>
+
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                      required
+                      onChange={handleSuratPemberitahuanChange}
+                    />
+                  </div>
+
+                  <p className="text-gray-700 text-xs mt-1">
+                    *Surat pemberitahuan yang diupload merupakan surat yang
+                    sudah ditandatangani melalui portal dengan contoh seperti
+                    <Link
+                      href={
+                        "https://drive.google.com/file/d/1Zzu6DRuaj_SwJ5Sk0XQfShtghA-HYT5F/view?usp=sharing"
+                      }
+                      target="_blank"
+                      className="ml-1 text-blue-500 underline"
+                    >
+                      berikut
+                    </Link>
+                    , hal ini dilakukan untuk pengarsipan dan bahan bukti
+                    penerbitan sertifikat nantinya!
+                  </p>
+                </div>
+              </div>
+
+              <AlertDialogFooter className="mt-3">
+                <>
+                  {" "}
+                  {!isUploading && (
+                    <AlertDialogCancel
+                      onClick={(e) =>
+                        setIsOpenFormSuratPemberitahuan(
+                          !isOpenFormSuratPemberitahuan
+                        )
+                      }
+                    >
+                      Cancel
+                    </AlertDialogCancel>
+                  )}
+                  <AlertDialogAction
+                    onClick={(e) => handleUploadSuratPemberitahuan(selectedId)}
+                    disabled={isUploading}
+                    className={`${isUploading && "px-6"}`}
+                  >
+                    {isUploading ? (
+                      <span>Uploading...</span>
+                    ) : (
+                      <span>Upload</span>
+                    )}
+                  </AlertDialogAction>
+                </>
+              </AlertDialogFooter>
+            </form>
+          </fieldset>
+        </AlertDialogContent>
+      </AlertDialog>
+
       {showFormAjukanPelatihan ? (
         <>
           {/* Header Tabel Data Pelatihan */}
@@ -1479,89 +1806,9 @@ const TableDataPelatihan: React.FC = () => {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-                {/* ==================== END OF FILTERING BY JENIS PELATIHAN ====================
-
-                {/* <Select>
-                  <SelectTrigger className="w-[170px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div
-                      onClick={(e) => {
-                        router.push(
-                          "/admin/lemdiklat/pelatihan/tambah-pelatihan"
-                        );
-                      }}
-                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-                    >
-                      <TbChartBubble />
-                      Status Pelatihan
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Status</SelectLabel>
-                      <SelectItem value="pendaftaran">Pendaftaran</SelectItem>
-                      <SelectItem value="pelaksanaan">Pelaksanaan</SelectItem>
-                      <SelectItem value="selesai">Selesai</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select>
-                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div
-                      onClick={(e) => {
-                        router.push(
-                          "/admin/lemdiklat/pelatihan/tambah-pelatihan"
-                        );
-                      }}
-                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-                    >
-                      <RiShipLine />
-                      Bidang Pelatihan
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Bidang</SelectLabel>
-                      <SelectItem value="apple">Kepelautan</SelectItem>
-                      <SelectItem value="banana">Non-Kepelautan</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select>
-                  <SelectTrigger className="w-[110px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div
-                      onClick={(e) => {
-                        router.push(
-                          "/admin/lemdiklat/pelatihan/tambah-pelatihan"
-                        );
-                      }}
-                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-                    >
-                      <TbBroadcast />
-                      Publish
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Bidang</SelectLabel>
-                      <SelectItem value="apple">Publish E-LAUT</SelectItem>
-                      <SelectItem value="banana">Unpublish E-LAUT</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select> */}
               </div>
 
               <div className="w-full flex justify-end gap-2">
-                {/* <div
-                  onClick={(e) => {
-                    router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
-                  }}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <TbChartDonut />
-                  Statistik
-                </div> */}
                 <div
                   onClick={(e) => {
                     router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
@@ -1610,165 +1857,6 @@ const TableDataPelatihan: React.FC = () => {
         </>
       )}
     </div>
-  );
-};
-
-const SheetInfoPelatihan = ({
-  children,
-  pelatihan,
-}: {
-  children: ReactElement;
-  pelatihan?: any;
-}) => {
-  return (
-    <Sheet>
-      <SheetTrigger asChild>{children}</SheetTrigger>
-      <SheetContent className="w-[500px]">
-        <SheetHeader>
-          <SheetTitle className="leading-[110%]">
-            Pelatihan Diversifikasi Usaha Produk Perikanan/Rumput Laut Bagi
-            Masyarakat Kabupaten Alor
-          </SheetTitle>
-          <SheetDescription>
-            Make changes to your profile here. Click save when you're done.
-          </SheetDescription>
-        </SheetHeader>
-        <div className="flex w-full mt-4">
-          <table>
-            <tr>
-              <td>
-                <SheetDescription className="flex items-center gap-1 text-black font-medium">
-                  <TbQrcode /> Kode Pelatihan
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>PDUP923</SheetDescription>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <SheetDescription className="flex items-center gap-1 text-black font-medium">
-                  <TbBuildingCommunity className="text-lg" /> Penyelenggara
-                  Pelatihan
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>BPPP Tegal</SheetDescription>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <SheetDescription className="flex items-center gap-1 text-black font-medium">
-                  <TbMoneybag className="text-sm" /> Jenis Pelatihan
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>Aspirasi</SheetDescription>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <SheetDescription className="flex items-center gap-1 text-black font-medium">
-                  <TbFishChristianity className="text-sm" /> Bidang Pelatihan
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>Pengolahan/Pemasaran</SheetDescription>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <SheetDescription className="flex items-center gap-1 text-black font-medium">
-                  <TbTargetArrow className="text-2xl" /> Dukungan Program
-                  Terobosan
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>Kalamu/Kalaju</SheetDescription>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <SheetDescription className="flex items-center gap-1 text-black font-medium">
-                  <TbCalendarStats className="text-sm" /> Tanggal Pelatihan
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>18 Mei 2024 - 20 Mei 2024</SheetDescription>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <SheetDescription className="flex items-center gap-1 text-black font-medium">
-                  <FaRupiahSign className="text-xs" /> Harga Pelatihan
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>Rp. 0</SheetDescription>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <SheetDescription className="flex items-center gap-1 text-black font-medium">
-                  <FaRupiahSign className="text-xs" /> Harga Pelatihan
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>Published to E-LAUT</SheetDescription>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <SheetDescription className="text-black font-medium">
-                  Lokasi Pelatihan
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>
-                  Desan Karang Anyar Sambo, Jawa Timur - Klasikal
-                </SheetDescription>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <SheetDescription className="text-black font-medium">
-                  Kuota Peserta
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>250 Orang</SheetDescription>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <SheetDescription className="text-black font-medium">
-                  Asal Peserta
-                </SheetDescription>
-              </td>
-              <td className="mx-5">:</td>
-              <td>
-                <SheetDescription>Dinas Kota Anyar</SheetDescription>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <SheetFooter>
-          <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
-          </SheetClose>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
   );
 };
 

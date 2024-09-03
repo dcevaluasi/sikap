@@ -58,6 +58,7 @@ export type PelatihanMasyarakat = {
   IdKonsumsi: string
   CreatedAt: string
   UpdatedAt: string
+  SuratPemberitahuan: string;
   UserPelatihan: UserPelatihan[]
   MateriPelatihan: MateriPelatihan[]
   BeritaAcara: string

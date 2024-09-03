@@ -440,7 +440,7 @@ const TableDataPesertaPelatihan = () => {
                       : null
                   }
                 >
-                  {dataPelatihan!.NoSertifikat != "" ? "Sebarkan" : "Ok"}
+                  {dataPelatihan!.NoSertifikat != "" ? "Sematkan" : "Ok"}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>

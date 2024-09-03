@@ -1,3 +1,4 @@
+import PemberitahuanPelatihan from "@/components/dashboard/Dashboard/PemberitahuanPelatihan";
 import PengajuanPelatihan from "@/components/dashboard/Dashboard/PengajuanPelatihan";
 import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
 import React from "react";
@@ -7,7 +8,7 @@ function page() {
   return (
     <>
       <DefaultLayout>
-        <PengajuanPelatihan />
+        <PemberitahuanPelatihan />
       </DefaultLayout>
     </>
   );

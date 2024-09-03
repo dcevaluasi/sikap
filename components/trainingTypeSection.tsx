@@ -27,15 +27,13 @@ export default function TrainingTypeSection() {
       <div className="relative max-w-7xl w-full mx-auto px-4 sm:px-6">
         <div className="pt-12 md:pt-20">
           {/* Section header */}
-          <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8">
+          <div className="max-w-3xl mx-auto text-center flex flex-col items-center justify-center pb-5 md:pb-8">
             <h1 className="text-3xl font-calsans leading-[110%]">
-              Ragam Bidang
-              <br />
-              Kelautan dan Perikanan
+              Program Pelatihan
             </h1>
-            <p className="text-base text-gray-600">
-              Pilih bidang kepelautan dan perikanan untuk pelatihan dan
-              sertifikasi yang ingin kamu ikuti!
+            <p className="text-base text-gray-600 max-w-xl">
+              Pilih program pelatihan kepelautan dan perikanan untuk pelatihan
+              dan sertifikasi yang ingin kamu ikuti!
             </p>
           </div>
 

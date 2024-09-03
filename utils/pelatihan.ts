@@ -16,16 +16,16 @@ export function getPenyeleggara(city: string): string {
 }
 
 export function extractPathAfterBppp(path: string): string {
-    const prefix = "/bppp/";
-    const index = path.indexOf(prefix);
+  const prefix = "/bppp/";
+  const index = path.indexOf(prefix);
 
-    if (index !== -1) {
-        // Extract the part after "/bppp/"
-        return path.substring(index + prefix.length);
-    }
+  if (index !== -1) {
+    // Extract the part after "/bppp/"
+    return path.substring(index + prefix.length);
+  }
 
-    // Return an empty string or handle the case when "/bppp/" is not found
-    return "";
+  // Return an empty string or handle the case when "/bppp/" is not found
+  return "";
 }
 
 export function convertIdSarpras(arr: number[]): string {
@@ -45,4 +45,21 @@ export function addFiveYears(dateString: string) {
   const year = date.getFullYear();
 
   return `${day} ${month} ${year}`;
+}
+
+export function getNumberFromURLDetailPelatihanAdmin(url: string): number | null {
+  const parts = url.split('/');
+
+  // Assuming the number is always at the 5th segment of the URL
+  const numberPart = parts[7]; // Index 5 corresponds to the 6th element in the array
+
+  // Convert the extracted part to a number
+  const number = parseInt(numberPart, 10);
+
+  // Check if the extracted part is a valid number
+  if (!isNaN(number)) {
+    return number;
+  } else {
+    return null; // Return null if the extracted part is not a number
+  }
 }
