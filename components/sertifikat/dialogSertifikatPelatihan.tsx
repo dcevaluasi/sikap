@@ -17,6 +17,7 @@ import html2pdf from "html2pdf.js";
 import axios from "axios";
 import { elautBaseUrl } from "@/constants/urls";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 export function DialogSertifikatPelatihan({
   children,
@@ -40,23 +41,25 @@ export function DialogSertifikatPelatihan({
 
       const opt = {
         margin: 0,
-        filename: `sertifikat-${userPelatihan?.NoSertifikat}.pdf`,
-        image: { type: "jpeg", quality: 10.98 },
-        html2canvas: { scale: 3 },
+        filename: `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 1 },
         jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
       };
 
       html2pdf()
         .from(element)
         .set(opt)
-        .outputPdf("blob")
-        .then(async (pdfBlob: Blob) => {
+        .save()
+        .then(async (pdfFile: any) => {
           const formData = new FormData();
           formData.append(
             "fileSertifikat",
-            pdfBlob,
-            `sertifikat-${userPelatihan?.NoSertifikat}.pdf`
+            pdfFile, // This is already the PDF file
+            `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`
           );
+
+          console.log("PDF File", pdfFile);
 
           try {
             const response = await axios.post(
@@ -69,16 +72,13 @@ export function DialogSertifikatPelatihan({
                 },
               }
             );
-            console.log(pdfBlob);
 
             if (response.status === 200) {
               console.log("File uploaded successfully");
-              console.log(response);
             } else {
               console.error("Failed to upload the file");
             }
           } catch (error) {
-            console.log(error);
             console.error("Error uploading the file:", error);
           }
         });
@@ -86,41 +86,6 @@ export function DialogSertifikatPelatihan({
   }, [show]);
 
   return (
-    // <Dialog>
-    //   <DialogTrigger onClick={() => handleDownloadPDF()}>
-    //     {children}
-    //   </DialogTrigger>
-    //   <DialogContent className="sm:max-w-[1225px]">
-    //     <DialogHeader>
-    //       <div className="flex gap-2 items-center">
-    //         <MdVerified className="text-3xl text-blue-500" />
-    //         <div className="flex flex-col">
-    //           <DialogTitle>B.{userPelatihan?.NoSertifikat}</DialogTitle>
-    //           <DialogDescription>
-    //             No. Sertifikasi terdaftar dan dinyatakan valid telah mengikuti
-    //             pelatihan!
-    //           </DialogDescription>
-    //         </div>
-    //       </div>
-    //     </DialogHeader>
-    //     <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
-    //     <SertifikatPage1
-    //         ref={componentRef}
-    //         pelatihan={pelatihan}
-    //         userPelatihan={userPelatihan}
-    //       />
-    //     </div>
-    //     <DialogFooter>
-    //       <Button
-    //         onClick={handleDownloadPDF}
-    //         className="flex items-center gap-1"
-    //       >
-    //         <TbCloudDownload />
-    //         Cetak Sertifikat
-    //       </Button>
-    //     </DialogFooter>
-    //   </DialogContent>
-    // </Dialog>
     <>
       <div onClick={(e) => handleDownloadPDF()}>{children}</div>
       {show && (
@@ -163,16 +128,16 @@ const SertifikatPage1 = React.forwardRef(
       <div className=" flex-col gap-8 font-bos hidden">
         <div
           ref={ref}
-          className="w-full h-full  flex flex-col gap-4 items-center justify-center  px-10 py-10 rounded-md font-bos leading-[120%]"
+          className="w-full h-full  flex flex-col gap-4 items-center justify-center  px-10 py-14 rounded-md font-bos leading-[120%]"
         >
-          <div className="w-full flex flex-col gap-4 relative h-full items-center justify-center">
+          <div className="w-full flex flex-col  gap-4 relative h-full items-center justify-center">
             <div className="flex flex-row  absolute top-0 right-0">
               <p className="text-base">
                 No. Reg : {userPelatihan?.NoRegistrasi}
               </p>
             </div>
 
-            <div className="w-full flex flex-col gap-4 px-10  mt-12">
+            <div className="w-full flex flex-col gap-4 px-10  mt-5">
               <div className="flex flex-col gap-0 w-full items-center justify-center mt-12">
                 <h1 className="font-black text-3xl font-bosBold">SERTIFIKAT</h1>
                 <p className="text-lg mt-2 italic">CERTIFICATE</p>
@@ -241,6 +206,13 @@ const SertifikatPage1 = React.forwardRef(
                       and Human Resources Development
                     </p>
                   </div>
+                  <Image
+                    alt=""
+                    width={0}
+                    height={0}
+                    src={"/ttd-elektronik.png"}
+                    className="w-fit h-[100px]"
+                  />
                   <p className="mt-20 font-extrabold text-lg">
                     Dr. I Nyoman Radiarta, S.Pi, M.Sc
                   </p>
@@ -324,6 +296,14 @@ const SertifikatPage1 = React.forwardRef(
                 </tr>
               </table>
             </div> */}
+
+            <div className="flex flex-row  absolute -bottom-12">
+              <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">
+                Dokumen ini telah ditandatangani secara elektronik menggunakan
+                sertifikat elektronik yang telah diterbitkan oleh Balai
+                Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
+              </p>
+            </div>
           </div>
         </div>
       </div>

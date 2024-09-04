@@ -2,7 +2,12 @@
 
 import React from "react";
 import { BsSendArrowUp } from "react-icons/bs";
-import { TbBroadcast, TbFileCertificate, TbListDetails } from "react-icons/tb";
+import {
+  TbBroadcast,
+  TbFileCertificate,
+  TbListDetails,
+  TbSignature,
+} from "react-icons/tb";
 import TableDataPemberitahuanPelatihan from "../../Pelatihan/TableDataPemberitahuanPelatihan";
 import { getNumberFromURLDetailPelatihanAdmin } from "@/utils/pelatihan";
 import { usePathname, useRouter } from "next/navigation";
@@ -12,6 +17,19 @@ import { PelatihanMasyarakat } from "@/types/product";
 import Link from "next/link";
 import Image from "next/image";
 import { generateFullNameBalai, generateTanggalPelatihan } from "@/utils/text";
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import Toast from "@/components/toast";
 
 const DetailPelatihan: React.FC = () => {
   const [dataPelatihan, setDataPelatihan] =
@@ -27,6 +45,23 @@ const DetailPelatihan: React.FC = () => {
       console.log(response);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const [passphrase, setPassphrase] = React.useState<string>("");
+  const handleTTDElektronik = async () => {
+    if (passphrase === "") {
+      Toast.fire({
+        icon: "error",
+        text: "Harap memasukkan passphrase untuk dapat melakukan penandatanganan file sertifikat!",
+        title: `Tidak ada passphrase`,
+      });
+    } else {
+      Toast.fire({
+        icon: "success",
+        text: "Berhasil melakuukan penandatangan sertifikat secara elektronik!",
+        title: `Berhasil TTDe`,
+      });
     }
   };
 
@@ -371,12 +406,63 @@ const DetailPelatihan: React.FC = () => {
             ></textarea>
           </div>
 
-          <button
-            type="submit"
-            className={`btn text-white ${"bg-blue-500 hover:bg-blue-600"} w-full`}
-          >
-            Terbitkan Sertifikat Pelatihan
-          </button>
+          <AlertDialog>
+            <AlertDialogTrigger>
+              {" "}
+              <button
+                type="submit"
+                className={`btn text-white w-full ${"bg-blue-500 hover:bg-blue-600"} w-full`}
+              >
+                Terbitkan Sertifikat Pelatihan
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <div className="flex flex-col gap-1">
+                  <AlertDialogTitle className="flex items-center gap-2">
+                    {" "}
+                    <TbSignature className="text-3xl" />
+                    Passphrase/OTP
+                  </AlertDialogTitle>
+                  <p className="-mt-1 text-gray-500 text-sm leading-[110%] w-full">
+                    Masukkan passphrase anda untuk melanjutkan proses
+                    penandatanganan pada sertifikat yang akan diterbitkan
+                  </p>
+                </div>
+              </AlertDialogHeader>
+              <fieldset>
+                <form autoComplete="off">
+                  <div className="flex flex-wrap -mx-3 mb-1 -mt-2">
+                    <div className="w-full px-3">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="email"
+                      >
+                        Passphrase
+                      </label>
+                      <div className="flex gap-1">
+                        <input
+                          type="password"
+                          className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                          required
+                          autoComplete="off"
+                          value={passphrase}
+                          onChange={(e) => setPassphrase(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <AlertDialogFooter className="mt-3">
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={(e) => handleTTDElektronik()}>
+                      TTD
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </form>
+              </fieldset>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </div>
     </>
