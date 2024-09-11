@@ -137,9 +137,9 @@ export default function UserService({ user }: { user: User | null }) {
         </div>
       </section>
 
-      {indexMenuSelected == 0 && <UserTrainingService user={user} />}
-      {indexMenuSelected == 1 && <UserCertificateService user={user} />}
-      {indexMenuSelected == 2 && <UserDocuments user={user} />}
+      {/* {indexMenuSelected == 0 && <UserTrainingService user={user} />} */}
+      {/* {indexMenuSelected == 1 && <UserCertificateService user={user} />} */}
+      {/* {indexMenuSelected == 2 && <UserDocuments user={user} />} */}
     </div>
   );
 }
