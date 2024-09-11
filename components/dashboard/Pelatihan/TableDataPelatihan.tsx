@@ -621,19 +621,14 @@ const TableDataPelatihan: React.FC = () => {
             >
               <HiLockClosed className="h-5 w-4 text-yellow-500" />
             </Button>
-            <Button
-              onClick={(e) =>
-                router.push(
-                  `/admin/lemdiklat/pelatihan/${row.getValue(
-                    "KodePelatihan"
-                  )}/peserta-pelatihan/${row.getValue("IdPelatihan")}`
-                )
-              }
-              variant="outline"
-              className="ml-auto border border-green-500"
+            <Link
+              href={`/admin/lemdiklat/pelatihan/${row.getValue(
+                "KodePelatihan"
+              )}/peserta-pelatihan/${row.getValue("IdPelatihan")}`}
+              className="ml-auto border border-green-500  h-9 px-4 py-2 rounded-md"
             >
               <HiUserGroup className="h-4 w-4 text-green-500" />
-            </Button>
+            </Link>
             {row.original.StatusApproval == "Selesai" ? (
               row.original.NoSertifikat == "" ? (
                 <Button

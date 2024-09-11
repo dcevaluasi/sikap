@@ -25,13 +25,13 @@ export default function Hero() {
     <section className="relative h-[90vh] flex items-center justify-center">
       <Image
         src={images[imageIndex]}
-        className="absolute w-full h-full object-cover duration-1000"
+        className="absolute w-full h-full object-cover duration-1000  "
         alt=""
         layout="fill"
         priority
       />
 
-      <div className="absolute w-full h-full bg-black bg-opacity-80"></div>
+      <div className="absolute w-full h-full bg-black bg-opacity-80  "></div>
 
       {/* Illustration behind hero content */}
       <div
@@ -72,7 +72,7 @@ export default function Hero() {
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
             <h1
               className="text-4xl md:text-[3.9rem] font-normal leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
-              data-aos="zoom-y-out"
+              // data-aos="zoom-y-out"
             >
               Elektronik Layanan Pelatihan <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
@@ -82,8 +82,8 @@ export default function Hero() {
             <div className="max-w-3xl mx-auto">
               <p
                 className="text-lg text-gray-200 mb-8"
-                data-aos="zoom-y-out"
-                data-aos-delay="150"
+                // data-aos="zoom-y-out"
+                // data-aos-delay="150"
               >
                 Aplikasi Pelatihan serta sertifikasi KP yang dikembangkan oleh
                 BPPSDMKP untuk menjaring masyarakat KP, aparatur KP, dll untuk

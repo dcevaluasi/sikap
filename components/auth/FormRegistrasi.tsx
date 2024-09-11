@@ -160,11 +160,17 @@ function FormRegistrasi() {
   const [isKusukaUser, setIsKusukaUser] = React.useState(false);
 
   const [imageIndex, setImageIndex] = React.useState(0);
-  const images = ["/images/hero-img2.jpg"];
+  const images = ["/diklat/bstf-2.jpg"];
+
+  const [imageMobIndex, setImageMobIndex] = React.useState(0);
+  const imagesMob = ["/diklat/bstf-1.jpg"];
+
+  const [useKUSUKA, setUseKUSUKA] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     const interval = setInterval(() => {
       setImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setImageMobIndex((prevIndex) => (prevIndex + 1) % imagesMob.length);
     }, 10000);
 
     return () => clearInterval(interval);
@@ -173,15 +179,23 @@ function FormRegistrasi() {
   return (
     <section className="relative w-full">
       <AlertDialog open={openInfoKusuka}>
-        <AlertDialogContent>
+        <AlertDialogContent className="rounded-2xl">
           <AlertDialogHeader>
+            <div className="flex flex-col gap-0">
+              <AlertDialogTitle className="text-xl ">
+                {isKusukaUser
+                  ? "No KUSUKA Tersedia!"
+                  : "No KUSUKA Tidak Tersedia!"}
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                {isKusukaUser
+                  ? "Selamat karena anda merupakan pelaku utama dan memiliki nomor KUSUKA, klik lanjutkan untuk mengisi data secara otomatis"
+                  : "Maaf nomor KUSUKA tidak tersedia, kamu dapat registrasi manual kedalam ELAUT!"}
+              </AlertDialogDescription>
+            </div>
+
             <AlertDialogTitle>
-              {isKusukaUser
-                ? "No KUSUKA Tersedia!"
-                : "No KUSUKA Tidak Tersedia"}
-            </AlertDialogTitle>
-            <AlertDialogTitle>
-              <div className="flex w-full items-center justify-center gap-1 text-3xl border border-gray-300 rounded-xl py-3">
+              <div className="flex w-full items-center justify-center gap-1 text-xl md:text-3xl border border-gray-300 rounded-xl py-3">
                 {isKusukaUser ? (
                   <RiVerifiedBadgeFill className="text-green-500 text-3xl" />
                 ) : (
@@ -191,11 +205,6 @@ function FormRegistrasi() {
                 <span className="font-semibold">{noKusuka}</span>
               </div>
             </AlertDialogTitle>
-            <AlertDialogDescription>
-              {isKusukaUser
-                ? "Selamat karena anda merupakan pelaku utama dan memiliki nomor KUSUKA, klik lanjutkan untuk mengisi data secara otomatis"
-                : "Maaf nomor KUSUKA tidak tersedia, kamu dapat registrasi manual kedalam ELAUT!"}
-            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
@@ -203,6 +212,7 @@ function FormRegistrasi() {
                 setOpenInfoKusuka(false);
                 clearForm();
               }}
+              className={`${!isKusukaUser && "-mt-2"}`}
             >
               {isKusukaUser ? "Batal" : "Oke"}
             </AlertDialogCancel>
@@ -213,6 +223,7 @@ function FormRegistrasi() {
                   setIsKUSUKA("yes");
                   Cookies.set("IsUsedKusuka", "yes");
                 }}
+                className="bg-blue-500 h-10"
               >
                 Lanjutkan
               </AlertDialogAction>
@@ -223,7 +234,15 @@ function FormRegistrasi() {
 
       <Image
         src={images[imageIndex]}
-        className="absolute w-full h-full object-cover duration-1000 -z-40"
+        className="absolute w-full h-full hidden md:block object-cover duration-1000 -z-40"
+        alt=""
+        layout="fill"
+        priority
+      />
+
+      <Image
+        src={imagesMob[imageMobIndex]}
+        className="absolute w-full h-full block md:hidden object-cover duration-1000 -z-40"
         alt=""
         layout="fill"
         priority
@@ -231,52 +250,57 @@ function FormRegistrasi() {
 
       <div className="absolute w-full h-full bg-black bg-opacity-70 -z-30"></div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
-        <div className="pt-32 pb-12 md:pt-40 md:pb-20">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8 ">
+        <div className="pt-32 pb-32 md:pt-40 md:pb-20">
           {/* Page header */}
           <div className="max-w-3xl mx-auto text-center pb-0 md:pb-0">
-            <h1 className="font-bold text-4xl leading-[100%] md:text-4xl text-gray-200 font-calsans">
-              Registrasi dan Temukan <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                Pelatihan serta Sertifikasi Menarik
+            <h1 className="font-semibold text-4xl leading-[100%] md:text-4xl text-gray-200">
+              <span className="font-tuwir text-[3.4rem] md:text-[4.8rem]">
+                Registrasi
+              </span>{" "}
+              <br />
+              <span className="z-0 bg-clip-text text-[4.2rem] md:text-[5.4rem]  text-transparent bg-gradient-to-r font-tuwir from-blue-500  to-teal-400">
+                Pelatihan dan Sertifikasi Menarik
               </span>{" "}
             </h1>
           </div>
 
           {/* Form */}
-          <div className="max-w-sm mx-auto mt-5">
-            <form
-              onSubmit={(e) => handleCheckingNoKusuka(e)}
-              className="w-full flex gap-1"
-            >
-              <div className="w-full">
-                <label
-                  className="block text-gray-200 text-sm font-medium mb-1"
-                  htmlFor="name"
-                >
-                  No KUSUKA <span className="text-red-600"></span>
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  className="form-input w-full text-black"
-                  placeholder="Masukkan nomor KUSUKA"
-                  value={noKusuka}
-                  onChange={(e) => setNoKusuka(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="flex flex-wrap -mx-3 mt-6">
-                <div className="w-full px-3">
-                  <button
-                    type="submit"
-                    className="btn text-white py-3 bg-blue-600 hover:bg-blue-700 w-full"
+          <div className="max-w-sm  mx-5 md:mx-auto mt-5">
+            {useKUSUKA && (
+              <form
+                onSubmit={(e) => handleCheckingNoKusuka(e)}
+                className="w-full flex gap-1"
+              >
+                <div className="w-full">
+                  <label
+                    className="block text-gray-200 text-sm font-medium mb-1"
+                    htmlFor="name"
                   >
-                    Cek
-                  </button>
+                    No KUSUKA <span className="text-red-600"></span>
+                  </label>
+                  <input
+                    id="name"
+                    type="text"
+                    className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                    placeholder="Masukkan nomor KUSUKA"
+                    value={noKusuka}
+                    onChange={(e) => setNoKusuka(e.target.value)}
+                    required
+                  />
                 </div>
-              </div>
-            </form>
+                <div className="flex flex-wrap -mx-3 mt-6">
+                  <div className="w-full px-3">
+                    <button
+                      type="submit"
+                      className="btn text-white py-3 bg-blue-500 hover:bg-blue-600 w-full"
+                    >
+                      Cek
+                    </button>
+                  </div>
+                </div>
+              </form>
+            )}
 
             <div className="flex items-center my-6">
               <div
@@ -300,7 +324,7 @@ function FormRegistrasi() {
                   <input
                     id="name"
                     type="text"
-                    className="form-input w-full text-black"
+                    className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                     placeholder="Masukkan nama lengkap"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -324,7 +348,7 @@ function FormRegistrasi() {
                   <input
                     id="nik"
                     type="nik"
-                    className="form-input w-full text-black"
+                    className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                     placeholder="Masukkan NIK"
                     value={nik}
                     onChange={(e) => setNik(e.target.value)}
@@ -349,7 +373,7 @@ function FormRegistrasi() {
                     id="phone number"
                     type="number"
                     maxLength={13}
-                    className="form-input w-full text-black"
+                    className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                     placeholder="Masukkan no telpon"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
@@ -373,7 +397,7 @@ function FormRegistrasi() {
                   <input
                     id="password"
                     type="password"
-                    className="form-input w-full text-black"
+                    className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                     placeholder="Masukkan password"
                     required
                     value={password}
@@ -387,13 +411,32 @@ function FormRegistrasi() {
                 </div>
               </div>
               <div className="flex flex-wrap -mx-3 mt-6">
-                <div className="w-full px-3">
+                <div className="w-full px-3 flex flex-col gap-2">
                   <button
                     type="submit"
-                    className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                    className="btn text-white bg-blue-500 hover:bg-blue-600 w-full"
                   >
                     Registrasi
                   </button>
+                  {!useKUSUKA && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        setUseKUSUKA(!useKUSUKA);
+                        window.scrollTo(0, 0);
+                      }}
+                      className="btn text-white bg-transparent border border-blue-500 hover:bg-blue-500 flex w-full gap-2"
+                    >
+                      <Image
+                        src={"/logo-kkp-full-white.png"}
+                        className="w-6"
+                        alt=""
+                        width={0}
+                        height={0}
+                      />
+                      <span>Daftar Dengan KUSUKA</span>
+                    </button>
+                  )}
                 </div>
               </div>
               <div className="text-sm text-gray-200 text-center mt-3">
@@ -422,7 +465,7 @@ function FormRegistrasi() {
               Sudah punya akun sebelumnya?{" "}
               <Link
                 href="/login"
-                className="text-blue-600 hover:underline transition duration-150 ease-in-out"
+                className="text-blue-500 hover:underline transition duration-150 ease-in-out"
               >
                 Log In
               </Link>

@@ -402,12 +402,12 @@ const DropdownUser = ({
           <span className="block text-sm font-medium text-black">
             {pathname.includes("lemdiklat")
               ? userLoggedInInfo?.data?.NamaLemdik
-              : ""}
+              : "Dr. I Nyoman Radiarta, S.Pi, M.Sc"}
           </span>
           <span className="block text-xs">
             {pathname.includes("lemdiklat")
-              ? userLoggedInInfo?.data?.Alamat
-              : "Admin Pusat"}
+              ? "Admin Balai Pelatihan"
+              : "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusia KP"}
           </span>
         </span>
 

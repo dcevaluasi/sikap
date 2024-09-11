@@ -23,6 +23,11 @@ const cambria = localFont({
   variable: "--font-cambria",
 });
 
+const tuwir = localFont({
+  src: "./font/Tuwir.ttf",
+  variable: "--font-tuwir",
+});
+
 const delius = Delius_Unicase({
   subsets: ["latin"],
   weight: ["400", "700"],
@@ -121,7 +126,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning={true}
-        className={`${inter.className} ${myFont.variable} ${delius.variable} ${bos.variable} ${cambria.variable} antialiased bg-white text-gray-900 tracking-tight `}
+        className={`${inter.className} ${myFont.variable} ${tuwir.variable} ${delius.variable} ${bos.variable} ${cambria.variable} antialiased bg-white text-gray-900 tracking-tight `}
       >
         <div className="flex flex-col overflow-hidden supports-[overflow:clip]:overflow-clip relative">
           <Header />

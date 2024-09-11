@@ -57,7 +57,10 @@ export default function Newsletter() {
     }
   };
   return (
-    <section id="cek-sertifikat" className="scroll-smooth w-full">
+    <section
+      id="cek-sertifikat"
+      className="scroll-smooth w-full max-w-6xl mx-auto"
+    >
       <AlertDialog open={isShowValidForm}>
         <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
           <AlertDialogHeader>

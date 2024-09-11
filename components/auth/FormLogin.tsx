@@ -63,7 +63,8 @@ function FormLogin() {
               title: `Berhasil melakukan login!`,
             });
             if (Cookies.get("XSRF083")) {
-              router.push("/dashboard/complete-profile");
+              // router.push("/dashboard/complete-profile");
+              router.push("/dashboard");
             } else {
               router.push("/dashboard");
             }
@@ -92,19 +93,6 @@ function FormLogin() {
     }
   };
 
-  const onReCAPTCHAChange = (captchaCode: any) => {
-    // If the reCAPTCHA code is null or undefined indicating that
-    // the reCAPTCHA was expired then return early
-    if (!captchaCode) {
-      return;
-    }
-    // Else reCAPTCHA was executed successfully so proceed with the
-    // alert
-    alert(`Hey, ${nik}`);
-    // Reset the reCAPTCHA so that it can be executed again if user
-    // submits another email.
-  };
-
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = ["/images/hero-img3.jpg"];
 
@@ -130,18 +118,20 @@ function FormLogin() {
 
       <div className="max-w-6xl h-full mx-auto px-4 sm:px-6 md:-mt-8">
         <div className="pt-32  md:pt-40 md:pb-20">
-          {/* Page header */}
           <div className="max-w-3xl mx-auto text-center pb-0 md:pb-0">
-            <h1 className="font-bold text-4xl leading-[100%] md:text-4xl text-gray-200 font-calsans">
-              Login dan Ikuti <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                Pelatihan serta Sertifikasi
+            <h1 className="font-semibold text-4xl leading-[100%] md:text-4xl text-gray-200">
+              <span className="font-tuwir text-[3.4rem] md:text-[4.1rem]">
+                Login dan Ikuti
+              </span>{" "}
+              <br />
+              <span className="z-0 bg-clip-text text-[4.2rem] md:text-[5.4rem]  text-transparent bg-gradient-to-r font-tuwir from-blue-500  to-teal-400">
+                Pelatihan dan Sertifikasi
               </span>{" "}
             </h1>
           </div>
 
           {/* Form */}
-          <div className="max-w-sm mx-auto mt-4">
+          <div className="max-w-sm  mx-5 md:mx-auto mt-5">
             <form onSubmit={(e) => handleLoginAkun(e)}>
               <div className="flex flex-wrap -mx-3 mb-2">
                 <div className="w-full px-3">
@@ -154,7 +144,7 @@ function FormLogin() {
                   <input
                     id="name"
                     type="text"
-                    className="form-input w-full text-black"
+                    className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                     placeholder="Masukkan NIK"
                     value={nik}
                     onChange={(e) => setNik(e.target.value)}
@@ -173,7 +163,7 @@ function FormLogin() {
                   <input
                     id="password"
                     type="password"
-                    className="form-input w-full text-black"
+                    className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                     placeholder="Masukkan password"
                     required
                     value={password}
@@ -211,7 +201,7 @@ function FormLogin() {
                     type="submit"
                     className={`btn text-white ${
                       captcha
-                        ? "bg-blue-600 hover:bg-blue-700"
+                        ? "bg-blue-500 hover:bg-blue-600"
                         : "bg-gray-500 hover:bg-gray-600"
                     } w-full`}
                     disabled={captcha ? false : true}
@@ -246,7 +236,7 @@ function FormLogin() {
               Belum punya akun sebelumnya?{" "}
               <Link
                 href="/registrasi"
-                className="text-blue-600 hover:underline transition duration-150 ease-in-out"
+                className="text-blue-500 hover:underline transition duration-150 ease-in-out"
               >
                 Registrasi
               </Link>

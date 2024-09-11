@@ -231,6 +231,7 @@ module.exports = {
         cambria: ['var(--font-cambria)', 'sans-serif'],
         bos: ['var(--font-bos)', 'sans-serif'],
         bosBold: ['var(--font-bosBold)', 'sans-serif'],
+        tuwir: ['var(--font-tuwir)', 'sans-serif'],
         delius: ['var(--font-delius)', 'sans-serif'],
       },
       fontSize: {

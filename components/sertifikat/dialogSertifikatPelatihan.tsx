@@ -42,7 +42,7 @@ export function DialogSertifikatPelatihan({
       const opt = {
         margin: 0,
         filename: `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`,
-        image: { type: "jpeg", quality: 0.98 },
+        image: { type: "jpeg", quality: 3.98 },
         html2canvas: { scale: 1 },
         jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
       };
@@ -137,7 +137,7 @@ const SertifikatPage1 = React.forwardRef(
               </p>
             </div>
 
-            <div className="w-full flex flex-col gap-4 px-10  mt-5">
+            <div className="w-full flex flex-col gap-4 px-10 ">
               <div className="flex flex-col gap-0 w-full items-center justify-center mt-12">
                 <h1 className="font-black text-3xl font-bosBold">SERTIFIKAT</h1>
                 <p className="text-lg mt-2 italic">CERTIFICATE</p>
@@ -211,9 +211,9 @@ const SertifikatPage1 = React.forwardRef(
                     width={0}
                     height={0}
                     src={"/ttd-elektronik.png"}
-                    className="w-fit h-[100px]"
+                    className="w-fit h-[100px] relative mt-4 -z-10"
                   />
-                  <p className="mt-20 font-extrabold text-lg">
+                  <p className="mt-3 font-extrabold text-lg">
                     Dr. I Nyoman Radiarta, S.Pi, M.Sc
                   </p>
                 </div>

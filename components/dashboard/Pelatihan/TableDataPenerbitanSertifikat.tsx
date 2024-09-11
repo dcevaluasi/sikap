@@ -47,6 +47,7 @@ import {
 import {
   TbBook,
   TbBookFilled,
+  TbBrandSafari,
   TbBroadcast,
   TbBuildingCommunity,
   TbCalendarCheck,
@@ -231,8 +232,8 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
             className={`flex w-full mx-0 px-0 items-center justify-center text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Action
-            <TbDatabaseEdit className="ml-1 h-4 w-4" />
+            Status
+            <TbBrandSafari className="ml-1 h-4 w-4" />
           </Button>
         );
       },
@@ -250,12 +251,9 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
                   )}/${row.getValue("KodePelatihan")}`
                 )
               }
-              className="border border-gray-900 hover:bg-gray-900 group duration-700 inline-flex items-center justify-center whitespace-nowrap rounded-md  font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 text-xs"
+              className="border w-full border-green-400 bg-green-400 group duration-700 inline-flex items-center justify-center whitespace-nowrap rounded-md  font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 text-xs"
             >
-              <RiInfoI className="h-4 w-4 text-gray-900 group-hover:text-white duration-700" />{" "}
-              <span className="group-hover:text-white text-gray-900 duration-700">
-                Review
-              </span>
+              <span className="text-white  duration-700">Done</span>
             </Link>
           </div>
         </div>

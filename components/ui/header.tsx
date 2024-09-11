@@ -68,6 +68,8 @@ export default function Header() {
               className={`font-medium ${
                 !top || usePathname().includes("bppp")
                   ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+                  : top && usePathname().includes("layanan")
+                  ? "text-gray-200 hover:text-white hover:scale-105"
                   : (top && usePathname().includes("pelatihan")) ||
                     usePathname().includes("sertifikasi") ||
                     usePathname().includes("users")
@@ -75,7 +77,7 @@ export default function Header() {
                   : usePathname().includes("complete-profile")
                   ? "text-gray-600 hover:text-white hover:scale-105"
                   : "text-gray-200 hover:text-white hover:scale-105"
-              }  px-5 py-3 flex items-center transition  duration-150 ease-in-out font-semibold`}
+              }  px-2 py-3 flex items-center transition  duration-150 ease-in-out font-medium`}
             >
               {name} <HiMiniChevronDown className="text-lg" />
             </div>
@@ -113,6 +115,8 @@ export default function Header() {
           className={`font-medium ${
             !top || usePathname().includes("bppp")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+              : top && usePathname().includes("layanan")
+              ? "text-gray-600 hover:text-gray-900 hover:scale-105"
               : (top && usePathname().includes("pelatihan")) ||
                 usePathname().includes("sertifikasi") ||
                 usePathname().includes("users")
@@ -120,7 +124,7 @@ export default function Header() {
               : usePathname().includes("complete-profile")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
               : "text-gray-600 hover:text-gray-900 hover:scale-105"
-          }  px-5 py-3 flex items-center transition duration-150 ease-in-out font-semibold`}
+          }  px-5 py-3 flex items-center transition duration-150 ease-in-out font-medium`}
         >
           {children}
         </Link>
@@ -141,9 +145,11 @@ export default function Header() {
       <li>
         <Link
           href={href}
-          className={`font-semibold ${
+          className={`font-medium ${
             !top || usePathname().includes("bppp")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+              : top && usePathname().includes("layanan")
+              ? "text-gray-200 hover:text-white hover:scale-105"
               : (top && usePathname().includes("pelatihan")) ||
                 usePathname().includes("sertifikasi") ||
                 usePathname().includes("users")
@@ -179,6 +185,8 @@ export default function Header() {
       } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
         !top
           ? `bg-white backdrop-blur-sm shadow-lg`
+          : usePathname().includes("layanan")
+          ? ""
           : usePathname().includes("pelatihan") ||
             usePathname().includes("sertifikasi") ||
             usePathname().includes("users")
@@ -188,7 +196,7 @@ export default function Header() {
           : ""
       }`}
     >
-      <div className="max-w-6xl mx-auto px-5 sm:px-6">
+      <div className=" mx-auto px-10 max-w-7xl sm:px-6">
         <div className="flex items-center justify-between h-24 md:h-24 py-3">
           <div className="shrink-0 mr-4 flex items-center gap-4">
             <Logo />

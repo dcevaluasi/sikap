@@ -104,7 +104,7 @@ export default function MobileMenu({ isTop }: { isTop: boolean }) {
             </li>
             <li>
               <Link
-                href="/signin"
+                href="/login"
                 className="flex font-medium w-full text-gray-600 hover:text-gray-900 py-2 justify-center"
                 onClick={() => setMobileNavOpen(false)}
               >
