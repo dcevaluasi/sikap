@@ -70,6 +70,8 @@ export default function Header() {
                   ? "text-gray-600 hover:text-gray-900 hover:scale-105"
                   : top && usePathname().includes("layanan")
                   ? "text-gray-200 hover:text-white hover:scale-105"
+                  : top && usePathname().includes("program")
+                  ? "text-gray-200 hover:text-white hover:scale-105"
                   : (top && usePathname().includes("pelatihan")) ||
                     usePathname().includes("sertifikasi") ||
                     usePathname().includes("users")
@@ -150,6 +152,8 @@ export default function Header() {
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
               : top && usePathname().includes("layanan")
               ? "text-gray-200 hover:text-white hover:scale-105"
+              : top && usePathname().includes("program")
+              ? "text-gray-200 hover:text-white hover:scale-105"
               : (top && usePathname().includes("pelatihan")) ||
                 usePathname().includes("sertifikasi") ||
                 usePathname().includes("users")
@@ -187,6 +191,8 @@ export default function Header() {
           ? `bg-white backdrop-blur-sm shadow-lg`
           : usePathname().includes("layanan")
           ? ""
+          : top && usePathname().includes("program")
+          ? "pt-6"
           : usePathname().includes("pelatihan") ||
             usePathname().includes("sertifikasi") ||
             usePathname().includes("users")

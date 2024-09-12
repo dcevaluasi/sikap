@@ -5,7 +5,24 @@ import Image from "next/image";
 import { Slide } from "react-awesome-reveal";
 import { BIDANG_PELATIHAN } from "@/constants/pelatihan";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import { FaFishFins } from "react-icons/fa6";
+import { FaEarthOceania, FaFishFins } from "react-icons/fa6";
+import { IoArrowForwardOutline } from "react-icons/io5";
+import Link from "next/link";
+
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/effect-coverflow";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+import "./coverflow.css";
+
+// import required modules
+import { EffectCoverflow, Pagination, Navigation } from "swiper/modules";
+import { RiShipFill } from "react-icons/ri";
 
 export default function TrainingTypeSection() {
   const [selectedBidang, setSelectedBidang] = useState<number | null>(null);
@@ -18,19 +35,33 @@ export default function TrainingTypeSection() {
       cover: "/images/program-pelatihan/perikanan.jpg",
       icon: "/images/program-pelatihan/icons/perikanan.png",
       description:
-        "Bidang perikanan adalah petualangan di laut yang melibatkan penangkapan, budidaya, serta inovasi pengelolaan sumber daya laut secara berkelanjutan.",
+        "Bidang perikanan adalah petualangan di laut yang melibatkan penangkapan, budidaya, serta inovasi sumber daya laut berkelanjutan.",
+      component: <FaFishFins className="text-white text-[3rem]" />,
+      path: "perikanan",
     },
     {
       id: 2,
+      name: "Awak Kapal Perikanan",
+      cover: "/images/program-pelatihan/awak-kapal-perikanan.jpg",
+      icon: "/images/program-pelatihan/icons/perikanan.png",
+      description:
+        "Bidang kelautan adalah eksplorasi tak terbatas yang mencakup pengelolaan sumber daya, konservasi, riset, dan inovasi teknologi di laut.",
+      component: <RiShipFill className="text-white text-[3rem]" />,
+      path: "akp",
+    },
+    {
+      id: 3,
       name: "Kelautan",
       cover: "/images/program-pelatihan/kelautan.jpeg",
       icon: "/images/program-pelatihan/icons/perikanan.png",
       description:
         "Bidang kelautan adalah eksplorasi tak terbatas yang mencakup pengelolaan sumber daya, konservasi, riset, dan inovasi teknologi di laut.",
+      component: <FaEarthOceania className="text-white text-[3rem]" />,
+      path: "kelautan",
     },
   ];
 
-  useEffect(() => {
+  React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
@@ -43,122 +74,97 @@ export default function TrainingTypeSection() {
       ></div>
       <div className="absolute left-0 right-0 m-auto w-px p-px h-28 bg-gray-200 transform -translate-y-1/2"></div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="relative w-full mx-auto px-4 sm:px-6">
         <div className="pt-12 md:pt-20">
           {/* Section header */}
-          <div className="max-w-3xl mx-auto text-center flex flex-col items-center justify-center pb-5 md:pb-8">
+          <div className="max-w-3xl w-full mx-auto text-center pflex flex-col items-center justify-center pb-5 md:pb-8">
             <h1 className="text-3xl font-calsans leading-[110%]">
-              Program Pelatihan
+              Program Utama
+              <br /> Pelatihan
             </h1>
-            <p className="text-base text-gray-600 max-w-xl">
-              Pilih program pelatihan kepelautan dan perikanan untuk pelatihan
-              dan sertifikasi yang ingin kamu ikuti!
+            <p className="text-base text-gray-60">
+              Pilih pelatihan kelautan dan perikanan yang tepat. Dapatkan
+              sertifikasi resmi dan tingkatkan keterampilanmu untuk berkarier di
+              dunia maritim. Daftar sekarang!
             </p>
           </div>
 
-          <div className="flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-5 w-full">
-            {programPelatihans.map((programPelatihan, index) => (
-              <Slide
-                direction="up"
-                duration={1000 * index}
-                className="w-1/2 rounded-3xl group relative"
-              >
-                <div
-                  className="w-full relative cursor-pointer flex items-center justify-center"
-                  key={index}
-                >
-                  <div className="w-full h-[400px] absolute duration-700 rounded-3xl top-0 bg-blue-500 group-hover:bg-opacity-40 bg-opacity-20"></div>
-                  <Image
-                    className={`w-full object-cover h-[400px] rounded-3xl`}
-                    width={0}
-                    height={0}
-                    src={programPelatihan.cover}
-                    alt={programPelatihan.name}
-                  />
-
-                  <div className="flex  absolute gap-2 px-5 items-start bottom-7 w-full">
-                    <div className="flex items-center justify-center group-hover:scale-150 duration-700 bg-black bg-opacity-25 rounded-full p-5">
-                      <FaFishFins className="text-white text-[3rem]" />
-                    </div>
-                    <div className="flex-col flex items-start">
-                      <h1 className=" text-white text-4xl leading-none  duration-700 font-calsans font-semibold">
-                        {programPelatihan.name}
-                      </h1>
-                      <p className="text-gray-100 text-sm duration-700">
-                        {programPelatihan.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </Slide>
-            ))}
-
-            {/* {loading
-              ? Array.from({ length: 8 }).map((_, index) => (
-                  <Slide direction="up" duration={500 * index} key={index}>
-                    <div className="flex flex-col gap-2 items-center text-center">
-                      <div className="flex items-center justify-center bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400 animate-pulse shadow-custom rounded-full w-24 h-24 md:w-28 md:h-28 p-6"></div>
-
-                      <div className="w-20 h-6  bg-gradient-to-br from-gray-200 via-gray-300 to-gray-400  animate-pulse rounded"></div>
-                    </div>
-                  </Slide>
-                ))
-              : BIDANG_PELATIHAN.map((bidangPelatihan, index) => (
-                  <Slide direction="up" duration={500 * index} key={index}>
-                    <Sheet>
-                      <SheetTrigger asChild>
-                        <div
-                          className="flex flex-col gap-2 cursor-pointer items-center duration-1000 hover:scale-105 text-center"
-                          onClick={() => setSelectedBidang(index)}
-                        >
-                          <div className="flex items-center justify-center bg-white shadow-custom rounded-full w-24 h-24 md:w-28 md:h-28 p-6">
-                            <Image
-                              className={` ${
-                                bidangPelatihan.Name === "Mesin Perikanan"
-                                  ? "w-36 max-w-[5rem]"
-                                  : "w-16 md:w-16"
-                              }`}
-                              width={0}
-                              height={0}
-                              src={bidangPelatihan.Image}
-                              alt={bidangPelatihan.Name}
-                            />
+          <div className="flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-5 w-full -mt-12">
+            <Swiper
+              effect={"coverflow"}
+              centeredSlides={true}
+              slidesPerView={"auto"}
+              initialSlide={1}
+              coverflowEffect={{
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: true,
+              }}
+              pagination={true}
+              modules={[EffectCoverflow, Pagination, Navigation]}
+              className="mySwiper"
+            >
+              {/* Skeleton loading for programPelatihans */}
+              {loading
+                ? Array.from({ length: 4 }).map((_, index) => (
+                    <SwiperSlide className="swiper-slide type" key={index}>
+                      <div className="rounded-3xl group relative">
+                        <div className="w-full relative flex items-center justify-center rounded-3xl animate-pulse bg-gray-300 h-[400px]"></div>
+                        <div className="absolute bottom-7 w-full flex gap-2 px-5 items-start">
+                          <div className="bg-gray-300 rounded-full p-5 w-12 h-12 animate-pulse"></div>
+                          <div className="flex flex-col items-start">
+                            <div className="w-32 h-6 bg-gray-300 animate-pulse mb-2"></div>
+                            <div className="w-64 h-4 bg-gray-300 animate-pulse"></div>
                           </div>
-                          <p className="text-sm text-black font-semibold">
-                            {bidangPelatihan.Name}
-                          </p>
                         </div>
-                      </SheetTrigger>
-
-                      {selectedBidang === index && (
-                        <SheetContent className="z-[10000000]" side={"left"}>
-                          <div className="p-4">
-                            <h2 className="text-xl font-bold mb-2">
-                              {bidangPelatihan.Name}
-                            </h2>
-                            <Image
-                              className="w-16 md:w-full"
-                              width={0}
-                              height={0}
-                              src={bidangPelatihan.Illustration!}
-                              alt={bidangPelatihan.Name}
-                            />
-                            <p className="text-gray-600">
-                              {bidangPelatihan.Description}
-                            </p>
-                            <ul className="mt-4 list-disc list-inside">
-                              {bidangPelatihan.Pelatihan.map((item, i) => (
-                                <li key={i} className="text-gray-700">
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
+                      </div>
+                    </SwiperSlide>
+                  ))
+                : programPelatihans.map((programPelatihan, index) => (
+                    <SwiperSlide className="swiper-slide type" key={index}>
+                      <Link
+                        href={`/pelatihan/program/${programPelatihan.path!}`}
+                        className="rounded-3xl group relative"
+                      >
+                        <div
+                          className="w-full relative cursor-pointer flex items-center rounded-3xl justify-center hover:scale-105 duration-700"
+                          key={index}
+                        >
+                          <div className="w-full h-full absolute duration-700 rounded-3xl top-0 bg-blue-500 group-hover:bg-opacity-40 bg-opacity-20"></div>
+                          <Image
+                            className="w-full object-cover h-[400px] rounded-3xl"
+                            width={0}
+                            height={0}
+                            src={programPelatihan.cover}
+                            alt={programPelatihan.name}
+                          />
+                          <div className="flex absolute gap-2 px-5 items-start bottom-7 w-full">
+                            <div className="flex items-center justify-center group-hover:scale-150 duration-700 group-hover:-rotate-[20deg] group-hover:z-0 bg-black bg-opacity-25 rounded-full p-5">
+                              {programPelatihan.component}
+                            </div>
+                            <div className="flex-col flex items-start group-hover:z-10 duration-700">
+                              <h1 className="text-white text-4xl leading-none duration-700 font-calsans font-semibold">
+                                {programPelatihan.name}
+                              </h1>
+                              <p className="text-gray-100 text-sm duration-700">
+                                {programPelatihan.description}
+                              </p>
+                              <Link
+                                href=""
+                                className="flex gap-2 text-gray-100 text-sm items-center hover:animate-float"
+                              >
+                                <IoArrowForwardOutline />{" "}
+                                <span>Lihat selengkapnya</span>
+                              </Link>
+                            </div>
                           </div>
-                        </SheetContent>
-                      )}
-                    </Sheet>
-                  </Slide>
-                ))} */}
+                        </div>
+                      </Link>
+                    </SwiperSlide>
+                  ))}
+            </Swiper>
           </div>
         </div>
       </div>

@@ -82,7 +82,7 @@ export default function FeaturesASN() {
                 <p className="text-sm sm:text-base">Lulusan</p>
               </div>
               <div className="flex flex-col justify-start m-2 lg:m-6">
-                <p className="text-5xl font-bold leading-none lg:text-[6rem]">
+                <p className="text-5xl font-bold  leading-none lg:text-[6rem]">
                   <CountUp end={200} duration={5} />
                   <span>+</span>
                 </p>
