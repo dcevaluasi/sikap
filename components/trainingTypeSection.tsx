@@ -76,14 +76,18 @@ export default function TrainingTypeSection() {
                     alt={programPelatihan.name}
                   />
 
-                  <div className="flex  flex-col absolute items-center justify-center max-w-lg text-center gap-0">
-                    <FaFishFins className="text-white text-4xl" />
-                    <h1 className=" text-white text-5xl leading-none group-hover:scale-110 duration-700 font-calsans font-semibold">
-                      {programPelatihan.name}
-                    </h1>
-                    <p className="text-gray-100 group-hover:scale-110 duration-700">
-                      {programPelatihan.description}
-                    </p>
+                  <div className="flex  absolute gap-2 px-5 items-start bottom-7 w-full">
+                    <div className="flex items-center justify-center group-hover:scale-150 duration-700 bg-black bg-opacity-25 rounded-full p-5">
+                      <FaFishFins className="text-white text-[3rem]" />
+                    </div>
+                    <div className="flex-col flex items-start">
+                      <h1 className=" text-white text-4xl leading-none  duration-700 font-calsans font-semibold">
+                        {programPelatihan.name}
+                      </h1>
+                      <p className="text-gray-100 text-sm duration-700">
+                        {programPelatihan.description}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </Slide>
