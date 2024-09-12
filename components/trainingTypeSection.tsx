@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Slide } from "react-awesome-reveal";
 import { BIDANG_PELATIHAN } from "@/constants/pelatihan";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { FaFishFins } from "react-icons/fa6";
 
 export default function TrainingTypeSection() {
   const [selectedBidang, setSelectedBidang] = useState<number | null>(null);
@@ -16,14 +17,16 @@ export default function TrainingTypeSection() {
       name: "Perikanan",
       cover: "/images/program-pelatihan/perikanan.jpg",
       icon: "/images/program-pelatihan/icons/perikanan.png",
-      description: "",
+      description:
+        "Bidang perikanan adalah petualangan di laut yang melibatkan penangkapan, budidaya, serta inovasi pengelolaan sumber daya laut secara berkelanjutan.",
     },
     {
       id: 2,
       name: "Kelautan",
       cover: "/images/program-pelatihan/kelautan.jpeg",
       icon: "/images/program-pelatihan/icons/perikanan.png",
-      description: "",
+      description:
+        "Bidang kelautan adalah eksplorasi tak terbatas yang mencakup pengelolaan sumber daya, konservasi, riset, dan inovasi teknologi di laut.",
     },
   ];
 
@@ -73,9 +76,15 @@ export default function TrainingTypeSection() {
                     alt={programPelatihan.name}
                   />
 
-                  <h1 className="absolute text-white text-5xl group-hover:scale-110 duration-700 font-calsans font-semibold">
-                    {programPelatihan.name}
-                  </h1>
+                  <div className="flex  flex-col absolute items-center justify-center max-w-lg text-center gap-0">
+                    <FaFishFins className="text-white text-4xl" />
+                    <h1 className=" text-white text-5xl leading-none group-hover:scale-110 duration-700 font-calsans font-semibold">
+                      {programPelatihan.name}
+                    </h1>
+                    <p className="text-gray-100 group-hover:scale-110 duration-700">
+                      {programPelatihan.description}
+                    </p>
+                  </div>
                 </div>
               </Slide>
             ))}
