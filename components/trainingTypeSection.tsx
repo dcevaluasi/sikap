@@ -10,8 +10,24 @@ export default function TrainingTypeSection() {
   const [selectedBidang, setSelectedBidang] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const programPelatihans = [
+    {
+      id: 1,
+      name: "Perikanan",
+      cover: "/images/program-pelatihan/perikanan.jpg",
+      icon: "/images/program-pelatihan/icons/perikanan.png",
+      description: "",
+    },
+    {
+      id: 2,
+      name: "Kelautan",
+      cover: "/images/program-pelatihan/kelautan.jpeg",
+      icon: "/images/program-pelatihan/icons/perikanan.png",
+      description: "",
+    },
+  ];
+
   useEffect(() => {
-    // Simulate loading delay
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
@@ -24,7 +40,7 @@ export default function TrainingTypeSection() {
       ></div>
       <div className="absolute left-0 right-0 m-auto w-px p-px h-28 bg-gray-200 transform -translate-y-1/2"></div>
 
-      <div className="relative max-w-7xl w-full mx-auto px-4 sm:px-6">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         <div className="pt-12 md:pt-20">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center flex flex-col items-center justify-center pb-5 md:pb-8">
@@ -37,8 +53,34 @@ export default function TrainingTypeSection() {
             </p>
           </div>
 
-          <div className="flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-5 md:gap-9">
-            {loading
+          <div className="flex flex-row flex-wrap md:flex-nowrap items-center justify-center gap-5 w-full">
+            {programPelatihans.map((programPelatihan, index) => (
+              <Slide
+                direction="up"
+                duration={1000 * index}
+                className="w-1/2 rounded-3xl group relative"
+              >
+                <div
+                  className="w-full relative cursor-pointer flex items-center justify-center"
+                  key={index}
+                >
+                  <div className="w-full h-[400px] absolute duration-700 rounded-3xl top-0 bg-blue-500 group-hover:bg-opacity-40 bg-opacity-20"></div>
+                  <Image
+                    className={`w-full object-cover h-[400px] rounded-3xl`}
+                    width={0}
+                    height={0}
+                    src={programPelatihan.cover}
+                    alt={programPelatihan.name}
+                  />
+
+                  <h1 className="absolute text-white text-5xl group-hover:scale-110 duration-700 font-calsans font-semibold">
+                    {programPelatihan.name}
+                  </h1>
+                </div>
+              </Slide>
+            ))}
+
+            {/* {loading
               ? Array.from({ length: 8 }).map((_, index) => (
                   <Slide direction="up" duration={500 * index} key={index}>
                     <div className="flex flex-col gap-2 items-center text-center">
@@ -103,7 +145,7 @@ export default function TrainingTypeSection() {
                       )}
                     </Sheet>
                   </Slide>
-                ))}
+                ))} */}
           </div>
         </div>
       </div>

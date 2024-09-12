@@ -318,15 +318,17 @@ function page() {
               (() => {
                 const filteredData = data.filter(
                   (pelatihan) =>
-                    (selectedJenisPelatihan === "" ||
+                    pelatihan.Status === "Publish" ||
+                    ((selectedJenisPelatihan === "" ||
                       pelatihan.JenisSertifikat === selectedJenisPelatihan) &&
-                    (selectedBidangPelatihan === "" ||
-                      pelatihan.BidangPelatihan === selectedBidangPelatihan) &&
-                    (selectedBalaiPelatihan === "" ||
-                      pelatihan.PenyelenggaraPelatihan ===
-                        selectedBalaiPelatihan) &&
-                    (selectedBiayaPelatihan === "" ||
-                      pelatihan.JenisPelatihan === selectedBiayaPelatihan)
+                      (selectedBidangPelatihan === "" ||
+                        pelatihan.BidangPelatihan ===
+                          selectedBidangPelatihan) &&
+                      (selectedBalaiPelatihan === "" ||
+                        pelatihan.PenyelenggaraPelatihan ===
+                          selectedBalaiPelatihan) &&
+                      (selectedBiayaPelatihan === "" ||
+                        pelatihan.JenisPelatihan === selectedBiayaPelatihan))
                 );
 
                 if (filteredData.length > 0) {
