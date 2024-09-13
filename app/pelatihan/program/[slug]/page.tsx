@@ -59,7 +59,7 @@ function RagamBidangPelatihan() {
       description:
         "Pelatihan dasar keselamatan untuk awak kapal perikanan yang mencakup penanganan situasi darurat di laut.",
       component: (
-        <FaShip className="group-hover:scale-110 text-blue-500 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-4xl" />
+        <FaShip className="group-hover:scale-125 text-gray-300 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-4xl" />
       ),
       img: "/images/program-pelatihan/dummies/akp/akp-6.jpg",
     },
@@ -70,9 +70,9 @@ function RagamBidangPelatihan() {
       description:
         "Pelatihan untuk ahli nautika dalam mengoperasikan dan menavigasi kapal penangkap ikan dengan keselamatan dan efisiensi.",
       component: (
-        <FaCertificate className="group-hover:scale-110 text-blue-500 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-4xl" />
+        <FaCertificate className="group-hover:scale-125 text-gray-300 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-4xl" />
       ),
-      img: "/images/program-pelatihan/dummies/akp/akp-6.jpg",
+      img: "/images/program-pelatihan/dummies/akp/akp-2.jpg",
     },
     {
       id: 3,
@@ -81,9 +81,9 @@ function RagamBidangPelatihan() {
       description:
         "Pelatihan teknis untuk ahli teknika dalam pengoperasian mesin kapal penangkap ikan dan perawatan teknis di laut.",
       component: (
-        <FaAnchor className="group-hover:scale-110 text-blue-500 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-4xl" />
+        <FaAnchor className="group-hover:scale-125 text-gray-300 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-4xl" />
       ),
-      img: "/images/program-pelatihan/dummies/akp/akp-6.jpg",
+      img: "/images/program-pelatihan/dummies/akp/akp-7.jpg",
     },
     {
       id: 4,
@@ -92,9 +92,9 @@ function RagamBidangPelatihan() {
       description:
         "Sertifikasi resmi untuk memastikan kecakapan nelayan dalam penangkapan ikan dengan standar kompetensi yang berlaku.",
       component: (
-        <FaRegFileAlt className="group-hover:scale-110 text-blue-500 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-3xl" />
+        <FaRegFileAlt className="group-hover:scale-125 text-gray-300 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-3xl" />
       ),
-      img: "/images/program-pelatihan/dummies/akp/akp-6.jpg",
+      img: "/images/program-pelatihan/dummies/akp/akp-8.jpg",
     },
     {
       id: 5,
@@ -103,9 +103,9 @@ function RagamBidangPelatihan() {
       description:
         "Sertifikasi keterampilan praktis bagi nelayan dalam metode penangkapan ikan yang efisien dan berkelanjutan.",
       component: (
-        <FaMedal className="group-hover:scale-110 text-blue-500 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-4xl" />
+        <FaMedal className="group-hover:scale-125 text-gray-300 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-4xl" />
       ),
-      img: "/images/program-pelatihan/dummies/akp/akp-6.jpg",
+      img: "/images/program-pelatihan/dummies/akp/akp-9.jpg",
     },
     {
       id: 6,
@@ -114,9 +114,9 @@ function RagamBidangPelatihan() {
       description:
         "Sertifikasi yang menunjukkan kemampuan dan keterampilan dalam operasi perikanan secara efisien dan aman.",
       component: (
-        <FaScrewdriver className="group-hover:scale-110 text-blue-500 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-4xl" />
+        <FaScrewdriver className="group-hover:scale-125 text-gray-300 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-4xl" />
       ),
-      img: "/images/program-pelatihan/dummies/akp/akp-6.jpg",
+      img: "/images/program-pelatihan/dummies/akp/akp-10.jpg",
     },
     {
       id: 7,
@@ -125,7 +125,7 @@ function RagamBidangPelatihan() {
       description:
         "Sertifikasi untuk menjadi master dalam industri perikanan dengan keterampilan manajerial dan operasional tingkat lanjut.",
       component: (
-        <FaTachometerAlt className="group-hover:scale-110 text-blue-500 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-3xl" />
+        <FaTachometerAlt className="group-hover:scale-125 text-gray-300 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-3xl" />
       ),
       img: "/images/program-pelatihan/dummies/akp/akp-6.jpg",
     },
@@ -136,23 +136,23 @@ function RagamBidangPelatihan() {
       description:
         "Penilaian keahlian untuk menentukan tingkat keterampilan dan kompetensi dalam berbagai aspek operasional perikanan.",
       component: (
-        <FaStar className="group-hover:scale-110 text-blue-500 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-3xl" />
+        <FaStar className="group-hover:scale-125 text-gray-300 group-hover:text-gray-100 relative z-20 group-hover:-rotate-[20deg] duration-700 text-3xl" />
       ),
-      img: "/images/program-pelatihan/dummies/akp/akp-6.jpg",
+      img: "/images/program-pelatihan/dummies/akp/akp-3.jpg",
     },
   ];
   return (
-    <div className="w-full flex gap-2 mb-10 mx-10">
+    <div className="w-full flex gap-2 mb-10 mx-4 -mt-4">
       <Swiper
-        slidesPerView={2} // Adjust this to control how many slides are shown on mobile view
-        spaceBetween={15}
+        slidesPerView={3} // Adjust this to control how many slides are shown on mobile view
+        spaceBetween={10}
         freeMode={true}
         pagination={{
           clickable: true,
         }}
         navigation={true} // Enable navigation arrows
         modules={[FreeMode, Navigation]} // Add Pagination and Navigation modules
-        className="mySwiper w-full md:max-w-7xl !h-[200px] !pl-10"
+        className="mySwiper w-full  !h-[140px]"
         breakpoints={{
           640: {
             slidesPerView: 1,
@@ -170,15 +170,25 @@ function RagamBidangPelatihan() {
       >
         {akp.map((item, index) => (
           <SwiperSlide>
-            <div className="flex w-full relative shadow-custom hover:bg-blue-500 rounded-xl duration-700 hover:scale-110 px-5 py-4 flex- items-center gap-2 group cursor-pointer">
-              {item.component}{" "}
-              <div className="flex flex-col z-10 relative">
-                <h1 className="font-calsans font-semibold text-lg text-black group-hover:text-gray-100 duration-700">
-                  {item.name}
-                </h1>
-                <p className="text-sm -mt-[0.5rem] text-gray-400 group-hover:text-gray-200 duration-700">
-                  {item.longname}
-                </p>
+            <div className="flex w-full h-[110px] relative shadow-custom  rounded-3xl duration-700 hover:scale-110   flex- items-center gap-2 group cursor-pointer">
+              <Image
+                src={item.img}
+                className="absolute w-full rounded-3xl h-full object-cover duration-1000  "
+                alt=""
+                layout="fill"
+                priority
+              />
+              <div className="absolute w-full h-full rounded-3xl bg-darkDPKAKP bg-opacity-50 group-hover:bg-opacity-30"></div>
+              <div className="flex relative z-20 px-5 gap-2">
+                {item.component}{" "}
+                <div className="flex flex-col z-10 relative">
+                  <h1 className="font-tuwir font-semibold text-2xl text-gray-200 group-hover:text-gray-100 duration-700 group-hover:text-xl">
+                    {item.name}
+                  </h1>
+                  <p className="text-sm -mt-[0.5rem] hidden group-hover:block text-gray-300 group-hover:text-gray-200 duration-700">
+                    {item.longname}
+                  </p>
+                </div>
               </div>
             </div>
           </SwiperSlide>
