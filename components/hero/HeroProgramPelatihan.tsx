@@ -48,16 +48,17 @@ export default function HeroProgramPelatihan({ program }: { program: string }) {
         "/images/program-pelatihan/dummies/perikanan/perikanan-6.jpg",
       ],
     },
+
     kelautan: {
       description:
         "Program Pelatihan Awak Kapal Perikanan membekali peserta dengan keterampilan penangkapan ikan, navigasi, dan keselamatan di laut. Dapatkan sertifikasi resmi untuk meningkatkan karier di sektor perikanan dengan fokus pada praktik berkelanjutan dan keselamatan kerja.",
       images: [
-        "/images/program-pelatihan/dummies/akp/akp-1.jpg",
-        "/images/program-pelatihan/dummies/akp/akp-2.jpg",
-        "/images/program-pelatihan/dummies/akp/akp-3.JPG",
-        "/images/program-pelatihan/dummies/akp/akp-5.jpg",
-        "/images/program-pelatihan/dummies/akp/akp-5.jpg",
-        "/images/program-pelatihan/dummies/akp/akp-6.jpg",
+        "/images/program-pelatihan/dummies/kelautan/kelautan.jpg",
+        "/images/program-pelatihan/dummies/kelautan/kelautan-2.jpg",
+        "/images/program-pelatihan/dummies/kelautan/kelautan-3.jpg",
+        "/images/program-pelatihan/dummies/kelautan/kelautan-4.jpeg",
+        "/images/program-pelatihan/dummies/kelautan/kelautan-5.jpg",
+        "/images/program-pelatihan/dummies/kelautan/kelautan-6.jpg",
       ],
     },
   };

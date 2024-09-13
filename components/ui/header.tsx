@@ -187,6 +187,8 @@ export default function Header() {
           ? "hidden"
           : "block"
       } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
+        top && usePathname().includes("") ? "pt-6" : ""
+      } ${
         !top
           ? `bg-white backdrop-blur-sm shadow-lg`
           : usePathname().includes("layanan")

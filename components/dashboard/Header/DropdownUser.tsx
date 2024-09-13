@@ -56,7 +56,6 @@ const DropdownUser = ({
         email: email,
         nama_lemdik: namaLemdiklat,
         no_telpon: noTelpon,
-        password: password,
         deskripsi: deskripsi,
         alamat: alamat,
         last_no_sertif: LastNosertif,

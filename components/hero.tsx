@@ -22,16 +22,16 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative h-[90vh] flex items-center justify-center">
+    <section className="relative h-[90vh] m-4 rounded-3xl flex items-center justify-center">
       <Image
         src={images[imageIndex]}
-        className="absolute w-full h-full object-cover duration-1000  "
+        className="absolute w-full h-full object-cover rounded-3xl duration-1000  "
         alt=""
         layout="fill"
         priority
       />
 
-      <div className="absolute w-full h-full bg-black bg-opacity-80  "></div>
+      <div className="absolute w-full h-full rounded-3xl bg-black bg-opacity-80  "></div>
 
       {/* Illustration behind hero content */}
       <div
