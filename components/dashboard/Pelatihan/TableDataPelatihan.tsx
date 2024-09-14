@@ -274,8 +274,9 @@ const TableDataPelatihan: React.FC = () => {
     setIsUploading(!isUploading);
     console.log({ ttdSertifikat });
     const formData = new FormData();
-    const updateData = new FormData();
     formData.append("TtdSertifikat", ttdSertifikat);
+
+    const updateData = new FormData();
     if (beritaAcara != null) {
       updateData.append("BeritaAcara", beritaAcara);
     }

@@ -61,7 +61,7 @@ function page() {
     <>
       <HeroProgramPelatihan program={programPelatihanPath!} />
       <RagamBidangPelatihan />
-      <FeaturesDiklatKepelautan />
+      {/* <FeaturesDiklatKepelautan /> */}
     </>
   );
 }
@@ -310,7 +310,7 @@ function RagamBidangPelatihan() {
   ];
 
   return (
-    <div className="w-full flex gap-2 mb-10 px-4 -mt-4">
+    <div className="w-full flex gap-2 mb-10 px-4 mt-4">
       <Swiper
         slidesPerView={3} // Adjust this to control how many slides are shown on mobile view
         spaceBetween={10}
@@ -320,7 +320,7 @@ function RagamBidangPelatihan() {
         }}
         navigation={true} // Enable navigation arrows
         modules={[FreeMode, Navigation]} // Add Pagination and Navigation modules
-        className="mySwiper w-full  !h-[140px]"
+        className="mySwiper w-full  !h-[200px]"
         breakpoints={{
           640: {
             slidesPerView: 1,
@@ -339,7 +339,7 @@ function RagamBidangPelatihan() {
         {programPelatihanPath == "akp" &&
           akp.map((item, index) => (
             <SwiperSlide>
-              <div className="flex w-full h-[110px] relative shadow-custom  rounded-3xl duration-700 hover:scale-110   flex- items-center gap-2 group cursor-pointer">
+              <div className="flex w-full h-[160px] relative shadow-custom  rounded-3xl duration-700 hover:scale-110   flex- items-center gap-2 group cursor-pointer">
                 <Image
                   src={item.img}
                   className="absolute w-full rounded-3xl h-full object-cover duration-1000  "
@@ -350,8 +350,8 @@ function RagamBidangPelatihan() {
                 <div className="absolute w-full h-full rounded-3xl bg-darkDPKAKP bg-opacity-50 group-hover:bg-opacity-30"></div>
                 <div className="flex relative z-20 px-5 gap-2">
                   {item.component}{" "}
-                  <div className="flex flex-col z-10 relative">
-                    <h1 className="font-tuwir font-semibold text-2xl text-gray-200 group-hover:text-gray-100 duration-700 group-hover:text-xl">
+                  <div className="flex flex-col z-10 relative group-hover:ml-1">
+                    <h1 className="font-calsans font-semibold text-4xl text-gray-200 group-hover:text-gray-100 duration-700 group-hover:text-3xl group-hover:mt-0 mt-2 leading-[105%]">
                       {item.name}
                     </h1>
                     <p className="text-xs -mt-[0.5rem] hidden group-hover:block text-gray-300 group-hover:text-gray-100 duration-700">
@@ -366,7 +366,7 @@ function RagamBidangPelatihan() {
         {programPelatihanPath == "perikanan" &&
           perikanan.map((item, index) => (
             <SwiperSlide>
-              <div className="flex w-full h-[110px] relative shadow-custom  rounded-3xl duration-700 hover:scale-110   flex- items-center gap-2 group cursor-pointer">
+              <div className="flex w-full h-[160px] relative shadow-custom  rounded-3xl duration-700 hover:scale-110   flex- items-center gap-2 group cursor-pointer">
                 <Image
                   src={item.img}
                   className="absolute w-full rounded-3xl h-full object-cover duration-1000  "
@@ -378,7 +378,7 @@ function RagamBidangPelatihan() {
                 <div className="flex relative z-20 px-5 gap-2">
                   {item.component}{" "}
                   <div className="flex flex-col z-10 relative group-hover:ml-1">
-                    <h1 className="font-tuwir font-semibold text-2xl text-gray-200 group-hover:text-gray-100 duration-700 group-hover:text-xl group-hover:mt-0 mt-2">
+                    <h1 className="font-calsans font-semibold text-4xl text-gray-200 group-hover:text-gray-100 duration-700 group-hover:text-3xl group-hover:mt-0 mt-2 leading-[105%]">
                       {item.name}
                     </h1>
                     <p className="text-xs -mt-[0.5rem] hidden group-hover:block text-gray-300 group-hover:text-gray-100 duration-700">
@@ -393,7 +393,7 @@ function RagamBidangPelatihan() {
         {programPelatihanPath == "kelautan" &&
           kelautan.map((item, index) => (
             <SwiperSlide>
-              <div className="flex w-full h-[110px] relative shadow-custom  rounded-3xl duration-700 hover:scale-110   flex- items-center gap-2 group cursor-pointer">
+              <div className="flex w-full h-[160px] relative shadow-custom  rounded-3xl duration-700 hover:scale-110   flex- items-center gap-2 group cursor-pointer">
                 <Image
                   src={item.img}
                   className="absolute w-full rounded-3xl h-full object-cover duration-1000  "
@@ -405,7 +405,7 @@ function RagamBidangPelatihan() {
                 <div className="flex relative z-20 px-5 gap-2">
                   {item.component}{" "}
                   <div className="flex flex-col z-10 relative group-hover:ml-1">
-                    <h1 className="font-tuwir font-semibold text-2xl text-gray-200 group-hover:text-gray-100 duration-700 group-hover:text-xl group-hover:mt-0 mt-2">
+                    <h1 className="font-calsans font-semibold text-4xl text-gray-200 group-hover:text-gray-100 duration-700 group-hover:text-3xl group-hover:mt-0 mt-2 leading-[105%]">
                       {item.name}
                     </h1>
                     <p className="text-xs -mt-[0.5rem] hidden group-hover:block text-gray-300 group-hover:text-gray-100 duration-700">

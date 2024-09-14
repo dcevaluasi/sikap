@@ -22,7 +22,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative h-[90vh] m-4 rounded-3xl flex items-center justify-center">
+    <section className="relative h-[95vh] m-4 rounded-3xl flex items-center justify-center">
       <Image
         src={images[imageIndex]}
         className="absolute w-full h-full object-cover rounded-3xl duration-1000  "

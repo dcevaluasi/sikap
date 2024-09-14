@@ -23,6 +23,7 @@ import { MdAlternateEmail, MdModeEdit } from "react-icons/md";
 import { BiSolidPhone } from "react-icons/bi";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { HiMiniUserGroup } from "react-icons/hi2";
+import { elautBaseUrl } from "@/constants/urls";
 const DropdownUser = ({
   userLoggedInInfo,
 }: {
@@ -143,6 +144,41 @@ const DropdownUser = ({
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   });
+
+  const [lastSertifikat, setLastSertifikat] = React.useState<string>("");
+  const [openDialogLastSertifikat, setOpenDialogLastSertifikat] =
+    React.useState<boolean>(false);
+  const handleUploadLastSertifikat = async () => {
+    try {
+      const response = await axios.post(
+        `${elautBaseUrl}/lemdik/LastNomorSertifBalai`,
+        {
+          no_last_sertifikat: lastSertifikat,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      Toast.fire({
+        icon: "success",
+        text: "No terakhir sertifikat yang dikeluarkan balai-mu berhasil disimpan!",
+        title: `Berhasil menyimpan!`,
+      });
+      setOpenDialogLastSertifikat(!openDialogLastSertifikat);
+      console.log("RESPONSE UP LAST SERTIF: ", response);
+      router.replace("/admin/lemdiklat/pelatihan");
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        text: "No terakhir sertifikat yang dikeluarkan balai-mu gagal disimpan!",
+        title: `Gagal menympan!`,
+      });
+      console.error("ERROR UPDATE PROFILE: ", error);
+      setOpenDialogLastSertifikat(!openDialogLastSertifikat);
+    }
+  };
 
   return (
     <div className="relative">
@@ -391,6 +427,53 @@ const DropdownUser = ({
         </AlertDialogContent>
       </AlertDialog>
 
+      <AlertDialog open={openDialogLastSertifikat}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Upload No Terakhir Sertifikat</AlertDialogTitle>
+            <div className="w-full h-[2px] bg-gray-300 rounded-full"></div>
+            <form autoComplete="off">
+              <div className=" gap-x-3 gap-y-2  mb-3 w-full">
+                <div className="w-full">
+                  <label
+                    className="block text-gray-800 text-sm font-medium"
+                    htmlFor="noSertifikatTerakhir"
+                  >
+                    No Sertifikat Terakhir{" "}
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <input
+                    id="noSertifikatTerakhir"
+                    type="text"
+                    className="form-input w-full text-sm text-black border-gray-300 rounded-md"
+                    required
+                    placeholder={"312/BPPP.XXX/RSDM.510/VIII/2024"}
+                    value={lastSertifikat}
+                    onChange={(e) => setLastSertifikat(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <AlertDialogFooter>
+                <AlertDialogCancel
+                  onClick={(e) =>
+                    setOpenDialogLastSertifikat(!openFormEditProfile)
+                  }
+                >
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-blue-500 hover:bg-blue-600"
+                  onClick={(e) => handleUploadLastSertifikat()}
+                >
+                  Edit
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </AlertDialogHeader>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <Link
         ref={trigger}
         onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -478,9 +561,11 @@ const DropdownUser = ({
           </li>
 
           <li>
-            <Link
-              href="/settings"
-              className="flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+            <div
+              onClick={(e) =>
+                setOpenDialogLastSertifikat(!openDialogEditProfile)
+              }
+              className="flex items-center gap-3.5 cursor-pointer text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
             >
               <svg
                 className="fill-current"
@@ -499,8 +584,8 @@ const DropdownUser = ({
                   fill=""
                 />
               </svg>
-              Account Settings
-            </Link>
+              Last Sertifikat
+            </div>
           </li>
         </ul>
         <button

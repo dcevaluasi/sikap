@@ -1,13 +1,16 @@
+"use client";
+
 import Image from "next/image";
 import TestimonialImage from "@/public/images/testimonial.jpg";
 import { FaBiohazard } from "react-icons/fa";
 import { TbTargetArrow } from "react-icons/tb";
 import { MdAssuredWorkload } from "react-icons/md";
 import { GiCirclingFish, GiFishEggs, GiFoodChain } from "react-icons/gi";
+import { Slide } from "react-awesome-reveal";
 
 export default function Testimonials() {
   return (
-    <section className="relative">
+    <section className="relative max-w-7xl mx-auto">
       {/* Illustration behind content */}
       <div
         className="absolute left-1/2 transform -translate-x-1/2 bottom-0 pointer-events-none -mb-32"
@@ -43,12 +46,12 @@ export default function Testimonials() {
         </svg>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto">
         <div className="py-12 md:py-20">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-16">
             <h2 className="h2 mb-4 font-calsans">
-              Tersedianya Pelatihan dan Uji Kompetensi Non-Kepelautan
+              Menjadi SDM Unggul <br /> di Bidang Kelautan dan Perikanan
             </h2>
             <p className="text-xl text-gray-600" data-aos="zoom-y-out">
               Jelajahi Peluang Baru dengan Pelatihan dan Uji Kompetensi
@@ -59,7 +62,11 @@ export default function Testimonials() {
 
           {/* Testimonials */}
           <div className="flex flex-col md:flex-row gap-3">
-            <div className="max-w-4xl mx-auto mt-20" data-aos="zoom-y-out">
+            <Slide
+              direction="left"
+              className="w-full mx-auto mt-20"
+              data-aos="zoom-y-out"
+            >
               <div className="relative flex items-start border-2 border-gray-200 rounded bg-white">
                 {/* Testimonial */}
                 <div className="text-center px-12 py-8 pt-20 mx-4 md:mx-0">
@@ -84,7 +91,7 @@ export default function Testimonials() {
                   <blockquote className="text-xl font-medium mb-4">
                     “ Ikuti pelatihan dan uji kompetensi untuk meningkatkan
                     kompetensi-mu dan ikut kontribusi di bidang Kelautan dan
-                    Perikanan, bersama kita bisa, kita bisa karena bersama!. “
+                    Perikanan, bersama kita bisa, kita bisa karena bersama!“
                   </blockquote>
                   <cite className="block font-bold text-lg not-italic mb-1">
                     I Nyoman Radiarta
@@ -97,8 +104,12 @@ export default function Testimonials() {
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="max-w-4xl mx-auto mt-20" data-aos="zoom-y-out">
+            </Slide>
+            <Slide
+              direction="right"
+              className="w-full mx-auto mt-20"
+              data-aos="zoom-y-out"
+            >
               <div className="relative flex items-start border-2 border-gray-200 rounded bg-white">
                 {/* Testimonial */}
                 <div className="text-center px-12 py-8 pt-20 mx-4 md:mx-0">
@@ -123,20 +134,20 @@ export default function Testimonials() {
                   <blockquote className="text-xl font-medium mb-4">
                     “ Ikuti pelatihan dan uji kompetensi untuk meningkatkan
                     kompetensi-mu dan ikut kontribusi di bidang Kelautan dan
-                    Perikanan, bersama kita bisa, kita bisa karena bersama!. “
+                    Perikanan, bersama kita bisa, kita bisa karena bersama!“
                   </blockquote>
                   <cite className="block font-bold text-lg not-italic mb-1">
                     Lilly Aprilia Pregiwati
                   </cite>
                   <div className="text-gray-600">
-                    <span>Plt Kepala</span>{" "}
+                    <span>Kepala</span>{" "}
                     <a className="text-blue-600 hover:underline" href="#0">
                       Pusat Pelatihan Kelautan dan Perikanan
                     </a>
                   </div>
                 </div>
               </div>
-            </div>
+            </Slide>
           </div>
         </div>
       </div>

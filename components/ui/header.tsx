@@ -192,7 +192,7 @@ export default function Header() {
         !top
           ? `bg-white backdrop-blur-sm shadow-lg`
           : usePathname().includes("layanan")
-          ? ""
+          ? "bg-white backdrop-blur-sm shadow-lg"
           : top && usePathname().includes("program")
           ? "pt-6"
           : usePathname().includes("pelatihan") ||
@@ -267,6 +267,24 @@ export default function Header() {
                           </svg>
                         </Link>
                       </li>
+                      <li>
+                        <Link
+                          href="/"
+                          className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
+                        >
+                          <span>Kembali ke ELAUT</span>
+                          <svg
+                            className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
+                            viewBox="0 0 12 12"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
+                              fillRule="nonzero"
+                            />
+                          </svg>
+                        </Link>
+                      </li>
                     </div>
                   )}
                 </>
@@ -286,13 +304,21 @@ export default function Header() {
                         <span>Pelatihan Masyarakat</span>
                       </div>
                     </NavLink>
-                    <NavLink href="/bppp/ambon" name="BPPP Ambon" top={top}>
+                    <NavLink
+                      href="/layanan/uji-kompetensi"
+                      name="BPPP Ambon"
+                      top={top}
+                    >
                       <div className="flex gap-2 items-center">
                         <RiVerifiedBadgeFill className="text-xl" />{" "}
                         <span>Sertifikasi atau Uji Kompetensi</span>
                       </div>
                     </NavLink>
-                    <NavLink href="/bppp/medan" name="BPPP Medan" top={top}>
+                    <NavLink
+                      href="https://elearning.kkp.go.id/"
+                      name="BPPP Medan"
+                      top={top}
+                    >
                       <div className="flex gap-2 items-center">
                         <RiGovernmentFill className="text-xl" />{" "}
                         <span>Pelatihan Aparatur</span>
@@ -312,7 +338,7 @@ export default function Header() {
                       <div className="flex gap-2 items-center">
                         <BiSolidShip className="text-4xl" />{" "}
                         <span>
-                          DPKAKP - Dewang Penguji Keahlian Awak Kapal Perikanan
+                          DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan
                         </span>
                       </div>
                     </NavLink>

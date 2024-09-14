@@ -100,8 +100,8 @@ export default function HeroProgramPelatihan({ program }: { program: string }) {
 
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
             <h1
-              className="text-4xl md:text-[5rem] font-bold leading-none tracking-tighter -mt-2 
-              text-white font-tuwir "
+              className="text-4xl md:text-[4.8rem] font-bold leading-none tracking-wider -mt-2 
+              text-white font-calsans "
               // data-aos="zoom-y-out"
             >
               Program Pelatihan <br /> {programPelatihan}

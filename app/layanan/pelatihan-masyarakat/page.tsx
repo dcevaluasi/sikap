@@ -103,7 +103,7 @@ function page() {
               perikanan, kembangkan potensi dan kompetensi diri menjadi SDM
               unggul kelautan dan perikanan membangun indonesia emas.
             </p>
-            <div className="flex mt-3">
+            {/* <div className="flex mt-3">
               <Link
                 href="/login"
                 className={`btn-sm ${"text-blue-500 hover:text-white"} border border-blue-500 hover:bg-blue-500`}
@@ -127,11 +127,11 @@ function page() {
                   />
                 </svg>
               </Link>
-            </div>
+            </div> */}
           </div>
         </div>
 
-        {!showOnlyPelatihan && (
+        {/* {!showOnlyPelatihan && (
           <div className="flex flex-col gap-2 w-full">
             <div className="w-full flex items-center justify-between border-b border-b-gray-300 pb-2">
               <h1 className="text-xl  font-normal leading-[100%] tracking-tighter mb-3 -mt-2 text-[#000] font-calsans">
@@ -175,7 +175,7 @@ function page() {
                   ))}
             </div>
           </div>
-        )}
+        )} */}
 
         <div className="flex flex-col gap-2 w-full">
           <div className="w-full flex items-center justify-between border-b border-b-gray-300 pb-2">

@@ -78,9 +78,9 @@ export default function TrainingTypeSection() {
         <div className="pt-12 md:pt-20">
           {/* Section header */}
           <div className="max-w-3xl w-full mx-auto text-center pflex flex-col items-center justify-center pb-5 md:pb-8">
-            <h1 className="text-3xl font-calsans leading-[110%]">
+            <h1 className="text-4xl font-calsans leading-[100%]">
               Program Utama
-              <br /> Pelatihan
+              <br /> Pelatihan dan Sertifikasi
             </h1>
             <p className="text-base text-gray-60">
               Pilih pelatihan kelautan dan perikanan yang tepat. Dapatkan

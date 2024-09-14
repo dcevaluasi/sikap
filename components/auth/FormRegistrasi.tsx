@@ -160,7 +160,7 @@ function FormRegistrasi() {
   const [isKusukaUser, setIsKusukaUser] = React.useState(false);
 
   const [imageIndex, setImageIndex] = React.useState(0);
-  const images = ["/diklat/bstf-2.jpg"];
+  const images = ["/images/program-pelatihan/dummies/kelautan/kelautan-6.jpg"];
 
   const [imageMobIndex, setImageMobIndex] = React.useState(0);
   const imagesMob = ["/diklat/bstf-1.jpg"];
@@ -253,14 +253,14 @@ function FormRegistrasi() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8 ">
         <div className="pt-32 pb-32 md:pt-40 md:pb-20">
           {/* Page header */}
-          <div className="max-w-3xl mx-auto text-center pb-0 md:pb-0">
-            <h1 className="font-semibold text-4xl leading-[100%] md:text-4xl text-gray-200">
-              <span className="font-tuwir text-[3.4rem] md:text-[4.8rem]">
+          <div className="w-full mx-auto text-center pb-0 md:pb-0">
+            <h1 className="font-semibold text-4xl leading-[110%] md:text-4xl text-gray-200">
+              <span className="font-calsans text-[3.4rem] md:text-[3.7rem]">
                 Registrasi
               </span>{" "}
               <br />
-              <span className="z-0 bg-clip-text text-[4.2rem] md:text-[5.4rem]  text-transparent bg-gradient-to-r font-tuwir from-blue-500  to-teal-400">
-                Pelatihan dan Sertifikasi Menarik
+              <span className="z-0 bg-clip-text text-[4.2rem] w-[600px] md:text-[3.7rem] leading-[110%]  text-transparent bg-gradient-to-r font-calsans from-blue-500  to-teal-400">
+                Pelatihan dan Sertifikasi
               </span>{" "}
             </h1>
           </div>

@@ -113,7 +113,7 @@ function page() {
       <section className=" z-50 relative h-fit space-y-6 pb-8 pt-36 md:h-screen md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col">
         <div className="container relative flex max-w-[64rem] flex-col items-center gap-2 text-center">
           <Link
-            href={"/dpkakp"}
+            href={"/"}
             className="rounded-2xl bg-blue-500 px-4 py-1.5 text-sm text-gray-200 font-medium"
             target="_blank"
           >
