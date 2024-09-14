@@ -72,17 +72,18 @@ export default function Features() {
         <div className="pt-12 md:pt-20">
           {/* Section header */}
 
-          <div className="max-w-2xl mx-auto text-center pb-5 md:pb-8">
-            <h1 className="text-3xl font-calsans leading-[110%]">
-              Pelatihan Kompetensi dan Teknis <br /> Non-Kepelautan
+          <div className="max-w-3xl w-full mx-auto text-center pflex flex-col items-center justify-center pb-5 md:pb-8">
+            <h1 className="text-4xl font-calsans leading-[100%]">
+              Sekilas Ragam
+              <br /> Pelatihan dan Sertifikasi
             </h1>
-            <p className="text-base text-gray-600">
-              Optimalkan potensi sumber daya laut. Bergabunglah dalam pelatihan
-              masyarakat kelautan dan perikanan untuk masa depan yang
-              berkelanjutan dan produktif.
+            <p className="text-base text-gray-60">
+              Pelatihan dan sertifikasi terakreditasi yang berfokus pada <br />{" "}
+              peningkatan SDM KP yang berkompetensi dan cari pelatihan dan
+              sertifikasi yang ingin kamu ikuti.
             </p>
           </div>
-          <ListProgram pelatihan={data} type="Non-Kepelautan" />
+          <ListProgram pelatihan={data} type="" />
         </div>
       </div>
     </section>

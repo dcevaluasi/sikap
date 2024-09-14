@@ -24,7 +24,7 @@ function ListProgram({
   type: string;
 }) {
   const filteredPelatihan = pelatihan.filter(
-    (item) => item.JenisSertifikat === type && item.Status == "Publish"
+    (item) => item.Status == "Publish"
   );
   return (
     <div>

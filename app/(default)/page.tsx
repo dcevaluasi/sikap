@@ -16,10 +16,9 @@ export default function Home() {
       <TrainingTypeSection />
       <Timeline />
       <BalaiPelatihan />
-      {/* <FeaturesKepelautan /> */}
       {/* <FeaturesDiklatKepelautan /> */}
       {/* <FeaturesBlocks /> */}
-      {/* <Features /> */}
+      <Features />
       <Testimonials />
       <Newsletter />
       <LogoIntegrated />

@@ -49,11 +49,14 @@ export default function Testimonials() {
       <div className="max-w-7xl mx-auto">
         <div className="py-12 md:py-20">
           {/* Section header */}
-          <div className="max-w-3xl mx-auto text-center pb-12 md:pb-16">
-            <h2 className="h2 mb-4 font-calsans">
-              Menjadi SDM Unggul <br /> di Bidang Kelautan dan Perikanan
-            </h2>
-            <p className="text-xl text-gray-600" data-aos="zoom-y-out">
+
+          <div className="max-w-3xl w-full mx-auto text-center pflex flex-col items-center justify-center pb-5 md:pb-8">
+            <h1 className="text-4xl font-calsans leading-[100%]">
+              Menjadi SDM Unggul
+              <br />
+              di Bidang Kelautan dan Perikanan
+            </h1>
+            <p className="text-base text-gray-60">
               Jelajahi Peluang Baru dengan Pelatihan dan Uji Kompetensi
               Inovatif, bergabunglah dengan Program Kami untuk Mengasah
               Kompetensi-mu di Dunia Non-Kepelautan!
