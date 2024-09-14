@@ -30,7 +30,7 @@ function BalaiPelatihan() {
                 alt=""
                 className="absolute inset-0  object-cover group-hover:scale-105 group transition-transform duration-500 ease-in-out"
               />
-              <div className="absolute inset-0 bg-blue-500 bg-opacity-20 group-hover:bg-opacity-10 duration-700"></div>
+              <div className="absolute inset-0 bg-blue-500 bg-opacity-30 group-hover:bg-opacity-10 duration-700"></div>
               <h3 className="z-10 text-2xl font-medium text-white absolute top-0 left-0 p-4 xs:text-xl md:text-3xl font-calsans leading-none">
                 BPPP Ambon
               </h3>
@@ -47,7 +47,7 @@ function BalaiPelatihan() {
                 alt=""
                 className="absolute inset-0  object-cover group-hover:scale-105 group transition-transform duration-500 ease-in-out"
               />
-              <div className="absolute inset-0 bg-blue-500 bg-opacity-20 group-hover:bg-opacity-10 duration-700"></div>
+              <div className="absolute inset-0 bg-blue-500 bg-opacity-30 group-hover:bg-opacity-10 duration-700"></div>
               <h3 className="z-10 text-2xl font-medium text-white absolute top-0 left-0 p-4 xs:text-xl md:text-3xl font-calsans leading-none">
                 BPPP Banyuwangi
               </h3>
@@ -63,7 +63,7 @@ function BalaiPelatihan() {
                   alt=""
                   className="absolute inset-0  object-cover group group-hover:scale-105 transition-transform duration-500 ease-in-out"
                 />
-                <div className="absolute inset-0 bg-blue-500 bg-opacity-20 group-hover:bg-opacity-10 duration-700"></div>
+                <div className="absolute inset-0 bg-blue-500 bg-opacity-30 group-hover:bg-opacity-10 duration-700"></div>
                 <h3 className="z-10 text-2xl font-medium text-white absolute top-0 left-0 p-4 xs:text-xl md:text-3xl font-calsans leading-none">
                   BPPP Bitung
                 </h3>
@@ -78,7 +78,7 @@ function BalaiPelatihan() {
                   alt=""
                   className="absolute inset-0  object-cover group-hover:scale-105 group transition-transform duration-500 ease-in-out"
                 />
-                <div className="absolute inset-0 bg-blue-500 bg-opacity-20 group-hover:bg-opacity-10 duration-700"></div>
+                <div className="absolute inset-0 bg-blue-500 bg-opacity-30 group-hover:bg-opacity-10 duration-700"></div>
                 <h3 className="z-10 text-2xl font-medium text-white absolute top-0 left-0 p-4 xs:text-xl md:text-3xl font-calsans leading-none">
                   BDA Sukamandi
                 </h3>
@@ -96,7 +96,7 @@ function BalaiPelatihan() {
                 alt=""
                 className="absolute inset-0 h-full group w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
               />
-              <div className="absolute inset-0 bg-blue-500 bg-opacity-20 group-hover:bg-opacity-10 duration-700"></div>
+              <div className="absolute inset-0 bg-blue-500 bg-opacity-30 group-hover:bg-opacity-10 duration-700"></div>
               <h3 className="z-10 text-2xl font-medium text-white absolute top-0 left-0 p-4 xs:text-xl md:text-3xl font-calsans leading-none">
                 BPPP Medan
               </h3>
@@ -116,7 +116,7 @@ function BalaiPelatihan() {
               alt=""
               className="absolute inset-0  object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
             />
-            <div className="absolute inset-0 bg-blue-500 bg-opacity-20 group-hover:bg-opacity-10 duration-700"></div>
+            <div className="absolute inset-0 bg-blue-500 bg-opacity-30 group-hover:bg-opacity-10 duration-700"></div>
             <h3 className="z-10 text-2xl font-medium text-white absolute top-0 left-0 p-4 xs:text-xl md:text-3xl font-calsans leading-none">
               BLU BPPP Tegal
             </h3>
