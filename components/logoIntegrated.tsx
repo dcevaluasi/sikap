@@ -20,6 +20,14 @@ function LogoIntegrated() {
       Name: "Logo Balai Sertifikasi Elektronik (BSRe)",
       Path: "./images/logo-bsre.png",
     },
+    {
+      Name: "Logo Badan Layanan Umum",
+      Path: "./images/logo-blu.png",
+    },
+    {
+      Name: "Logo Badan Nasional Sertifikasi Profesi",
+      Path: "./images/logo-bnsp.png",
+    },
   ];
 
   return (
