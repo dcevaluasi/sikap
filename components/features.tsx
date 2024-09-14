@@ -60,13 +60,13 @@ export default function Features() {
   }, []);
 
   return (
-    <section className="relative h-fit pb-10" id="explore">
+    <section className="relative h-fit pb-10 mt-10" id="explore">
       {/* Section background (needs .relative class on parent and next sibling elements) */}
       <div
-        className="absolute inset-0 bg-gray-100 pointer-events-none mb-16 pb-10 h-full"
+        className="absolute inset-0 bg-white pointer-events-none mb-16 pb-10 h-full"
         aria-hidden="true"
       ></div>
-      <div className="absolute left-0 right-0 m-auto w-px p-px h-28 bg-gray-200 transform -translate-y-1/2"></div>
+      <div className="absolute left-0 right-0 m-auto w-px p-px h-28 bg-white transform -translate-y-1/2"></div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
         <div className="pt-12 md:pt-20">

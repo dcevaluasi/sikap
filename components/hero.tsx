@@ -7,10 +7,10 @@ import React from "react";
 export default function Hero() {
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = [
-    "/images/hero-img4.jpg",
-    "/images/hero-img4.jpg",
-    "/images/hero-img4.jpg",
-    "/images/hero-img4.jpg",
+    "/images/hero-img4-preview.jpg",
+    "/images/hero-img4-preview.jpg",
+    "/images/hero-img4-preview.jpg",
+    "/images/hero-img4-preview.jpg",
   ];
 
   React.useEffect(() => {
@@ -31,7 +31,7 @@ export default function Hero() {
         priority
       />
 
-      <div className="absolute w-full h-full rounded-3xl bg-black bg-opacity-80  "></div>
+      <div className="absolute w-full h-full rounded-3xl bg-black bg-opacity-70  "></div>
 
       {/* Illustration behind hero content */}
       <div

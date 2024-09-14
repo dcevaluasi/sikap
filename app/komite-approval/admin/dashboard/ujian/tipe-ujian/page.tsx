@@ -6,15 +6,15 @@ import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Ujian Keahlian - Dewan Penguji Keahlian Awak Kapal Perikanan",
+  title: "Ujian Keahlian - Dewan Penguji Keahlian Awak Kapal Perikanan",
 };
 
 export default function Page() {
-    return (
-        <>
-            <DefaultLayout>
-                <TipeUjianKeahlian />
-            </DefaultLayout>
-        </>
-    );
+  return (
+    <>
+      <DefaultLayout>
+        <TipeUjianKeahlian />
+      </DefaultLayout>
+    </>
+  );
 }

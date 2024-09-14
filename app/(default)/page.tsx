@@ -9,6 +9,8 @@ import Testimonials from "@/components/testimonials";
 import LogoIntegrated from "@/components/logoIntegrated";
 import Timeline from "@/components/landing/Timeline";
 import BalaiPelatihan from "@/components/landing/BalaiPelatihan";
+import StatistikPelatihan from "@/components/StatistikPelatihan";
+import PencarianPelatihan from "@/components/landing/PencarianPelatihan";
 export default function Home() {
   return (
     <>
@@ -16,10 +18,12 @@ export default function Home() {
       <TrainingTypeSection />
       <Timeline />
       <BalaiPelatihan />
+      <StatistikPelatihan />
+      {/* <PencarianPelatihan /> */}
       {/* <FeaturesDiklatKepelautan /> */}
       {/* <FeaturesBlocks /> */}
-      <Features />
-      <Testimonials />
+      {/* <Features />
+      <Testimonials /> */}
       <Newsletter />
       <LogoIntegrated />
     </>

@@ -66,19 +66,19 @@ export default function Header() {
           >
             <div
               className={`font-medium ${
-                !top || usePathname().includes("bppp")
-                  ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-                  : top && usePathname().includes("layanan")
+                top && usePathname() == "/"
                   ? "text-gray-200 hover:text-white hover:scale-105"
                   : top && usePathname().includes("program")
                   ? "text-gray-200 hover:text-white hover:scale-105"
+                  : top && usePathname().includes("layanan")
+                  ? "text-gray-600 hover:text-gray-900 hover:scale-105"
                   : (top && usePathname().includes("pelatihan")) ||
                     usePathname().includes("sertifikasi") ||
                     usePathname().includes("users")
                   ? "text-gray-900 hover:text-gray-900 hover:scale-105"
                   : usePathname().includes("complete-profile")
-                  ? "text-gray-600 hover:text-white hover:scale-105"
-                  : "text-gray-200 hover:text-white hover:scale-105"
+                  ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+                  : "text-gray-600 hover:text-gray-900 hover:scale-105"
               }  px-2 py-3 flex items-center transition  duration-150 ease-in-out font-medium`}
             >
               {name} <HiMiniChevronDown className="text-lg" />
@@ -115,15 +115,16 @@ export default function Header() {
           href={href}
           onClick={(e) => setOpenModal(false)}
           className={`font-medium ${
-            !top || usePathname().includes("bppp")
+            top && usePathname().includes("layanan")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-              : top && usePathname().includes("layanan")
+              : top && usePathname().includes("program")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
               : (top && usePathname().includes("pelatihan")) ||
                 usePathname().includes("sertifikasi") ||
                 usePathname().includes("users")
               ? "text-gray-900 hover:text-gray-900 hover:scale-105"
-              : usePathname().includes("complete-profile")
+              : usePathname().includes("complete-profile") ||
+                usePathname().includes("layanan")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
               : "text-gray-600 hover:text-gray-900 hover:scale-105"
           }  px-5 py-3 flex items-center transition duration-150 ease-in-out font-medium`}
@@ -148,19 +149,20 @@ export default function Header() {
         <Link
           href={href}
           className={`font-medium ${
-            !top || usePathname().includes("bppp")
-              ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-              : top && usePathname().includes("layanan")
+            top && usePathname() == "/"
               ? "text-gray-200 hover:text-white hover:scale-105"
               : top && usePathname().includes("program")
               ? "text-gray-200 hover:text-white hover:scale-105"
+              : top && usePathname().includes("layanan")
+              ? "text-gray-600 hover:text-gray-900 hover:scale-105"
               : (top && usePathname().includes("pelatihan")) ||
                 usePathname().includes("sertifikasi") ||
                 usePathname().includes("users")
               ? "text-gray-900 hover:text-gray-900 hover:scale-105"
-              : usePathname().includes("complete-profile")
+              : usePathname().includes("complete-profile") ||
+                usePathname().includes("layanan")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-              : "text-gray-200 hover:text-white hover:scale-105"
+              : "text-gray-600 hover:text-gray-900 hover:scale-105"
           }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
         >
           {name}
@@ -187,18 +189,16 @@ export default function Header() {
           ? "hidden"
           : "block"
       } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
-        top && usePathname().includes("") ? "pt-6" : ""
+        top && usePathname().includes("layanan") ? "pt-0" : top && "pt-6"
       } ${
         !top
           ? `bg-white backdrop-blur-sm shadow-lg`
           : usePathname().includes("layanan")
-          ? "bg-white backdrop-blur-sm shadow-lg"
-          : top && usePathname().includes("program")
-          ? "pt-6"
+          ? "bg-white backdrop-blur-sm shadow-lg pt-0"
           : usePathname().includes("pelatihan") ||
             usePathname().includes("sertifikasi") ||
             usePathname().includes("users")
-          ? `bg-white backdrop-blur-sm shadow-lg`
+          ? `bg-white backdrop-blur-sm shadow-lg !pt-0`
           : usePathname().includes("complete-profile")
           ? "bg-white backdrop-blur-sm shadow-lg"
           : ""
@@ -328,9 +328,10 @@ export default function Header() {
                   <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
                     <NavLink href="/bppp" name="DPKAKP" top={top}>
                       <div className="flex gap-2 items-center">
-                        <IoMdSchool className="text-3xl" />{" "}
+                        <IoMdSchool className="text-4xl" />{" "}
                         <span>
-                          BPPP - Balai Pelatihan dan Penyuluhan Perikanan
+                          BPPP - Balai Pelatihan dan Sertifiaksi Kelautan dan
+                          Perikanan
                         </span>
                       </div>
                     </NavLink>
@@ -342,7 +343,7 @@ export default function Header() {
                         </span>
                       </div>
                     </NavLink>
-                    <NavLink href="/bppp/bitung" name="P2MKP" top={top}>
+                    <NavLink href="/p2mkp" name="P2MKP" top={top}>
                       <div className="flex gap-2 items-center">
                         <AiFillShop className="text-4xl" />{" "}
                         <span>
@@ -380,8 +381,7 @@ export default function Header() {
                           href="/login"
                           className={`btn-sm ${
                             top
-                              ? usePathname().includes("pelatihan") ||
-                                usePathname().includes("bppp")
+                              ? usePathname().includes("pelatihan")
                                 ? "text-blue-500 hover:text-white"
                                 : "text-gray-200"
                               : "text-blue-500 hover:text-white"

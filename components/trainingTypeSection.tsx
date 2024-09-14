@@ -132,7 +132,7 @@ export default function TrainingTypeSection() {
                           className="w-full relative cursor-pointer flex items-center rounded-3xl justify-center hover:scale-105 duration-700"
                           key={index}
                         >
-                          <div className="w-full h-full absolute duration-700 rounded-3xl top-0 bg-blue-500 group-hover:bg-opacity-40 bg-opacity-20"></div>
+                          <div className="w-full h-full absolute duration-700 rounded-3xl top-0 bg-black group-hover:bg-opacity-40 bg-opacity-60"></div>
                           <Image
                             className="w-full object-cover h-[400px] rounded-3xl"
                             width={0}

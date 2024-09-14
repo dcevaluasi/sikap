@@ -20,18 +20,18 @@ function LogoIntegrated() {
       Name: "Logo Balai Sertifikasi Elektronik (BSRe)",
       Path: "./images/logo-bsre.png",
     },
-    {
-      Name: "Logo Badan Layanan Umum",
-      Path: "./images/logo-blu.png",
-    },
-    {
-      Name: "Logo Badan Nasional Sertifikasi Profesi",
-      Path: "./images/logo-bnsp.png",
-    },
+    // {
+    //   Name: "Logo Badan Layanan Umum",
+    //   Path: "./images/logo-blu.png",
+    // },
+    // {
+    //   Name: "Logo Badan Nasional Sertifikasi Profesi",
+    //   Path: "./images/logo-bnsp.png",
+    // },
   ];
 
   return (
-    <section className="flex w-full items-center my-14">
+    <section className="flex w-fit items-center mb-14">
       <Marquee>
         {logos.map((logo, index) => (
           <Image
@@ -39,7 +39,7 @@ function LogoIntegrated() {
             src={logo.Path}
             alt={logo.Name}
             title={logo.Name}
-            className={`w-fit ${index == 2 ? "h-24" : "h-28"} mr-14`}
+            className={`w-fit ${index == 2 ? "h-24" : "h-28"} mr-20`}
             width={0}
             height={0}
           />
