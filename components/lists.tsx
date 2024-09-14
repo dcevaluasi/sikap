@@ -119,7 +119,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
           </h2>
           <div className="flex gap-1 my-1 text-gray-600 text-sm items-center">
             <TbClockHour2 />
-            Pendaftaran :<p>{pelatihan.TanggalMulaiPelatihan}</p>
+            Penyelenggara :<p>{pelatihan.PenyelenggaraPelatihan}</p>
           </div>
           <p
             dangerouslySetInnerHTML={{
