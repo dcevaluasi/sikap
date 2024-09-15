@@ -7,10 +7,10 @@ import ScrollDown from "../scroll-down";
 export default function HeroDPKAKP() {
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = [
-    "/images/hero-img6.jpg",
-    "/images/hero-img6.jpg",
-    "/images/hero-img6.jpg",
-    "/images/hero-img6.jpg",
+    "/dpkakp.jpeg",
+    "/dpkakp.jpeg",
+    "/dpkakp.jpeg",
+    "/dpkakp.jpeg",
   ];
 
   React.useEffect(() => {
@@ -31,7 +31,7 @@ export default function HeroDPKAKP() {
         priority
       />
 
-      <div className="absolute w-full h-full rounded-3xl bg-black bg-opacity-80  "></div>
+      <div className="absolute w-full h-full rounded-3xl bg-black bg-opacity-70  "></div>
 
       {/* Illustration behind hero content */}
       <div
@@ -74,9 +74,9 @@ export default function HeroDPKAKP() {
               className="text-4xl md:text-[3.9rem] font-normal leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
               // data-aos="zoom-y-out"
             >
-              Pusat Pelatihan Mandiri <br />
+              Dewan Penguji Keahlian <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                Kelautan dan Perikanan
+                Awak Kapal Perikanan
               </span>
             </h1>
             <div className="max-w-3xl mx-auto">
@@ -85,9 +85,12 @@ export default function HeroDPKAKP() {
                 // data-aos="zoom-y-out"
                 // data-aos-delay="150"
               >
-                Aplikasi Pelatihan serta sertifikasi KP yang dikembangkan oleh
-                BPPSDMKP untuk menjaring masyarakat KP, aparatur KP, dll untuk
-                meningkatkan kompetensi di bidang KP
+                Berdasarkan{" "}
+                <span className="font-bold">Permen KP 33 Tahun 2021</span>{" "}
+                Tentang Logbook Penangkapan Ikan, Pemantauan Di atas Kapal
+                Penangkap Ikan dan Kapal Pengangkut Ikan, Inspeksi, Pengujian,
+                dan Penandaan Kapal Perikanan, serta Tata Kelola Pengawasan
+                Kapal Perikanan.
               </p>
               <div className="flex items-center justify-center w-full">
                 <ScrollDown />

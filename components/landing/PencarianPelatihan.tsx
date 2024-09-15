@@ -122,9 +122,9 @@ function PencarianPelatihan() {
           <div className="group relative flex flex-col overflow-hidden justify-center rounded-3xl px-14  flex-grow group">
             <div className="flex flex-col gap-1  ">
               <h3 className="z-10 text-3xl font-medium text-black xs:text-xl md:text-4xl font-calsans leading-none ">
-                Cari dan Ikuti <br />
+                Cari serta Ikuti <br />
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                  Pelatihan Kelautan dan Perikanan
+                  Pelatihan dan Sertifikasi
                 </span>{" "}
               </h3>
               <p className="text-gray-500 text-base leading-[110%] ">
@@ -250,7 +250,7 @@ function PencarianPelatihan() {
                   }}
                   className="btn-sm text-sm text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
                 >
-                  <span>Cari dan Daftar Pelatihan</span>
+                  <span>Cari dan Daftar</span>
                   <svg
                     className="w-3 h-3 fill-current text-white shrink-0 ml-2 -mr-1"
                     viewBox="0 0 12 12"

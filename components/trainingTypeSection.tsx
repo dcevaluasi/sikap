@@ -125,7 +125,7 @@ export default function TrainingTypeSection() {
                 : programPelatihans.map((programPelatihan, index) => (
                     <SwiperSlide className="swiper-slide type" key={index}>
                       <Link
-                        href={`/pelatihan/program/${programPelatihan.path!}`}
+                        href={`/layanan/program/${programPelatihan.path!}`}
                         className="rounded-3xl group relative"
                       >
                         <div

@@ -66,9 +66,12 @@ export default function Header() {
           >
             <div
               className={`font-medium ${
-                top && usePathname() == "/"
-                  ? "text-gray-200 hover:text-white hover:scale-105"
-                  : top && usePathname().includes("program")
+                top &&
+                (usePathname() == "/" ||
+                  usePathname() == "/lembaga/p2mkp" ||
+                  usePathname() == "/lembaga/bppp" ||
+                  usePathname() == "/lembaga/dpkakp" ||
+                  usePathname().includes("program"))
                   ? "text-gray-200 hover:text-white hover:scale-105"
                   : top && usePathname().includes("layanan")
                   ? "text-gray-600 hover:text-gray-900 hover:scale-105"
@@ -149,9 +152,12 @@ export default function Header() {
         <Link
           href={href}
           className={`font-medium ${
-            top && usePathname() == "/"
-              ? "text-gray-200 hover:text-white hover:scale-105"
-              : top && usePathname().includes("program")
+            top &&
+            (usePathname() == "/" ||
+              usePathname() == "/lembaga/p2mkp" ||
+              usePathname() == "/lembaga/bppp" ||
+              usePathname() == "/lembaga/dpkakp" ||
+              usePathname().includes("program"))
               ? "text-gray-200 hover:text-white hover:scale-105"
               : top && usePathname().includes("layanan")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
@@ -202,9 +208,11 @@ export default function Header() {
           : usePathname().includes("complete-profile")
           ? "bg-white backdrop-blur-sm shadow-lg"
           : ""
+      } ${
+        top && usePathname().includes("layanan/program") && "bg-transparent"
       }`}
     >
-      <div className=" mx-auto px-10 max-w-7xl sm:px-6">
+      <div className=" mx-auto  max-w-7xl ">
         <div className="flex items-center justify-between h-24 md:h-24 py-3">
           <div className="shrink-0 mr-4 flex items-center gap-4">
             <Logo />
@@ -212,206 +220,128 @@ export default function Header() {
 
           <nav className="hidden md:flex md:grow">
             <ul className="flex grow gap-0 justify-end flex-wrap items-center w-fit">
-              {usePathname().includes("dpkakp") ? (
-                <>
-                  {" "}
-                  <NavLinkDefault href="/dpkakp" name="Beranda" top={top} />
-                  <NavDropDown href="#" name="Layanan" top={top}>
-                    <NavLink
-                      href="/bppp/medan"
-                      name="Balai Pelatihan"
-                      top={top}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <BiSolidShip className="text-2xl" />{" "}
-                        <span>Sertifikasi Awak Kapal Perikanan</span>
-                      </div>
-                    </NavLink>
-                    <NavLink href="/dpkakp" name="DPKAKP" top={top}>
-                      <div className="flex gap-2 items-center">
-                        <HiCalendar className="text-3xl" />{" "}
-                        <span>
-                          Jadwal Pelaksanaan Ujian Awak Kapal Perikanan
-                        </span>
-                      </div>
-                    </NavLink>
-                    <NavLink href="/bppp/bitung" name="P2MKP" top={top}>
-                      <div className="flex gap-2 items-center">
-                        <BsFillPatchCheckFill className="text-2xl" />{" "}
-                        <span>Cek Sertifikat Awak Kapal Perikanan</span>
-                      </div>
-                    </NavLink>
-                  </NavDropDown>
-                  <NavLinkDefault href="" name="Tentang DPKAKP" top={top} />
-                  {Cookies.get("XSRF081") ? (
-                    <div className="flex items-center gap-3 2xsm:gap-7">
-                      <DropdownUserPelatihan top={top} />
-                    </div>
-                  ) : (
-                    <div className="flex">
-                      <li>
-                        <Link
-                          href="/login"
-                          className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
-                        >
-                          <span>Layanan</span>
-                          <svg
-                            className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
-                            viewBox="0 0 12 12"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
-                              fillRule="nonzero"
-                            />
-                          </svg>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/"
-                          className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
-                        >
-                          <span>Kembali ke ELAUT</span>
-                          <svg
-                            className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
-                            viewBox="0 0 12 12"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
-                              fillRule="nonzero"
-                            />
-                          </svg>
-                        </Link>
-                      </li>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  {" "}
-                  <NavLinkDefault href="/" name="Beranda" top={top} />
-                  {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
-                  <NavDropDown href="#" name="Layanan" top={top}>
-                    <NavLink
-                      href="/layanan/pelatihan-masyarakat"
-                      name="BPPP Tegal"
-                      top={top}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <HiMiniUserGroup className="text-xl" />{" "}
-                        <span>Pelatihan Masyarakat</span>
-                      </div>
-                    </NavLink>
-                    <NavLink
-                      href="/layanan/uji-kompetensi"
-                      name="BPPP Ambon"
-                      top={top}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <RiVerifiedBadgeFill className="text-xl" />{" "}
-                        <span>Sertifikasi atau Uji Kompetensi</span>
-                      </div>
-                    </NavLink>
-                    <NavLink
-                      href="https://elearning.kkp.go.id/"
-                      name="BPPP Medan"
-                      top={top}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <RiGovernmentFill className="text-xl" />{" "}
-                        <span>Pelatihan Aparatur</span>
-                      </div>
-                    </NavLink>
-                  </NavDropDown>
-                  <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
-                    <NavLink href="/bppp" name="DPKAKP" top={top}>
-                      <div className="flex gap-2 items-center">
-                        <IoMdSchool className="text-4xl" />{" "}
-                        <span>
-                          BPPP - Balai Pelatihan dan Sertifiaksi Kelautan dan
-                          Perikanan
-                        </span>
-                      </div>
-                    </NavLink>
-                    <NavLink href="/dpkakp" name="DPKAKP" top={top}>
-                      <div className="flex gap-2 items-center">
-                        <BiSolidShip className="text-4xl" />{" "}
-                        <span>
-                          DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan
-                        </span>
-                      </div>
-                    </NavLink>
-                    <NavLink href="/p2mkp" name="P2MKP" top={top}>
-                      <div className="flex gap-2 items-center">
-                        <AiFillShop className="text-4xl" />{" "}
-                        <span>
-                          P2MKP - Pelaksana Pelatihan Mandiri Kelautan dan
-                          Perikanan
-                        </span>
-                      </div>
-                    </NavLink>
-                    <NavLink
-                      href="/komite-approval"
-                      name="Komite Approval"
-                      top={top}
-                    >
-                      <div className="flex gap-2 items-center">
-                        <HiMiniUserGroup className="text-3xl" />{" "}
-                        <span>Komite Approval Diklat Awak Kapal Perikanan</span>
-                      </div>
-                    </NavLink>
-                  </NavDropDown>
-                  <NavLinkDefault
-                    href="/#cek-sertifikat"
-                    name="Cek Sertifikat"
+              <>
+                {" "}
+                <NavLinkDefault href="/" name="Beranda" top={top} />
+                {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
+                <NavDropDown href="#" name="Layanan" top={top}>
+                  <NavLink
+                    href="/layanan/pelatihan"
+                    name="BPPP Tegal"
                     top={top}
-                  />
-                  {Cookies.get("XSRF081") ? (
-                    <div className="flex items-center gap-3 2xsm:gap-7">
-                      {/* <!-- User Area --> */}
-                      <DropdownUserPelatihan top={top} />
-                      {/* <!-- User Area --> */}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <HiMiniUserGroup className="text-xl" />{" "}
+                      <span>Pelatihan Masyarakat</span>
                     </div>
-                  ) : (
-                    <div className="flex">
-                      <li>
-                        <Link
-                          href="/login"
-                          className={`btn-sm ${
-                            top
-                              ? usePathname().includes("pelatihan")
-                                ? "text-blue-500 hover:text-white"
-                                : "text-gray-200"
-                              : "text-blue-500 hover:text-white"
-                          } bg-transparent border border-blue-500 hover:bg-blue-500 ml-3`}
-                        >
-                          <span>Masuk</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/registrasi"
-                          className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
-                        >
-                          <span>Registrasi</span>
-                          <svg
-                            className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
-                            viewBox="0 0 12 12"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
-                              fillRule="nonzero"
-                            />
-                          </svg>
-                        </Link>
-                      </li>
+                  </NavLink>
+                  <NavLink
+                    href="/layanan/uji-kompetensi"
+                    name="BPPP Ambon"
+                    top={top}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <RiVerifiedBadgeFill className="text-xl" />{" "}
+                      <span>Sertifikasi atau Uji Kompetensi</span>
                     </div>
-                  )}
-                </>
-              )}
+                  </NavLink>
+                  <NavLink
+                    href="https://elearning.kkp.go.id/"
+                    name="BPPP Medan"
+                    top={top}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <RiGovernmentFill className="text-xl" />{" "}
+                      <span>Pelatihan Aparatur</span>
+                    </div>
+                  </NavLink>
+                </NavDropDown>
+                <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
+                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                    <div className="flex gap-2 items-center">
+                      <IoMdSchool className="text-4xl" />{" "}
+                      <span>
+                        BPPP - Balai Pelatihan dan Sertifiaksi Kelautan dan
+                        Perikanan
+                      </span>
+                    </div>
+                  </NavLink>
+                  <NavLink href="/lembaga/dpkakp" name="DPKAKP" top={top}>
+                    <div className="flex gap-2 items-center">
+                      <BiSolidShip className="text-4xl" />{" "}
+                      <span>
+                        DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan
+                      </span>
+                    </div>
+                  </NavLink>
+                  <NavLink href="/lembaga/p2mkp" name="P2MKP" top={top}>
+                    <div className="flex gap-2 items-center">
+                      <AiFillShop className="text-4xl" />{" "}
+                      <span>
+                        P2MKP - Pelaksana Pelatihan Mandiri Kelautan dan
+                        Perikanan
+                      </span>
+                    </div>
+                  </NavLink>
+                  <NavLink
+                    href="/lembaga/komite-approval"
+                    name="Komite Approval"
+                    top={top}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <HiMiniUserGroup className="text-3xl" />{" "}
+                      <span>Komite Approval Diklat Awak Kapal Perikanan</span>
+                    </div>
+                  </NavLink>
+                </NavDropDown>
+                <NavLinkDefault
+                  href="/#cek-sertifikat"
+                  name="Cek Sertifikat"
+                  top={top}
+                />
+                {Cookies.get("XSRF081") ? (
+                  <div className="flex items-center gap-3 2xsm:gap-7">
+                    {/* <!-- User Area --> */}
+                    <DropdownUserPelatihan top={top} />
+                    {/* <!-- User Area --> */}
+                  </div>
+                ) : (
+                  <div className="flex">
+                    <li>
+                      <Link
+                        href="/login"
+                        className={`btn-sm ${
+                          top
+                            ? usePathname().includes("pelatihan")
+                              ? "text-blue-500 hover:text-white"
+                              : "text-gray-200"
+                            : "text-blue-500 hover:text-white"
+                        } bg-transparent border border-blue-500 hover:bg-blue-500 ml-3`}
+                      >
+                        <span>Masuk</span>
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        href="/registrasi"
+                        className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
+                      >
+                        <span>Registrasi</span>
+                        <svg
+                          className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
+                          viewBox="0 0 12 12"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
+                            fillRule="nonzero"
+                          />
+                        </svg>
+                      </Link>
+                    </li>
+                  </div>
+                )}
+              </>
             </ul>
           </nav>
 

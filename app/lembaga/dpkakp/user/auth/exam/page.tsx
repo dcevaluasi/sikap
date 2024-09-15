@@ -1,6 +1,6 @@
 import React from "react";
 
-import Exam from "@/app/dpkakp/pages/exam";
+import Exam from "@/app/lembaga/dpkakp/pages/exam";
 
 export const metadata = {
   title:

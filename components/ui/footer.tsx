@@ -11,81 +11,41 @@ export default function Footer() {
         <div className="grid sm:grid-cols-12 gap-8 py-8 md:py-12 border-t border-gray-200">
           {/* 1st block */}
           <div className="sm:col-span-12 lg:col-span-3">
-            <div className="mb-2">
+            <div className="mb-4">
               <LogoFooter />
             </div>
-            <p className="text-gray-200 text-sm leading-[110%] transition duration-150 ease-in-out">
+            <p className="text-gray-200 text-sm leading-normal transition duration-150 ease-in-out">
               Aplikasi Pelatihan serta sertifikasi KP yang dikembangkan oleh
               BPPSDMKP untuk menjaring masyarakat KP, aparatur KP, dll untuk
-              meningkatkan kompetensi di bidang KP
+              meningkatkan kompetensi di bidang KP.
             </p>
-            <div className="text-sm text-gray-200">
-              <a
-                href="#0"
-                className="text-gray-200 hover:text-gray-900 hover:underline transition duration-150 ease-in-out"
-              >
-                Terms
-              </a>{" "}
-              ·{" "}
-              <a
-                href="#0"
-                className="text-gray-200 hover:text-gray-900 hover:underline transition duration-150 ease-in-out"
-              >
-                Privacy Policy
-              </a>
-            </div>
           </div>
 
-          {/* 2nd block */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
-            <h6 className="text-gray-100 font-medium mb-2">Balai Pelatihan</h6>
+            <h6 className="text-gray-100 font-bold mb-2">Layanan</h6>
             <ul className="text-sm">
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
-                  BPPP Medan
+                  Pelatihan Masyarakat
                 </a>
               </li>
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
-                  BDA Sukamandi
+                  Pelatihan Aparatur
                 </a>
               </li>
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
-                  BPPP Tegal
-                </a>
-              </li>
-              <li className="mb-2">
-                <a
-                  href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  BPPP Banyuwangi
-                </a>
-              </li>
-              <li className="mb-2">
-                <a
-                  href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  BPPP Ambon
-                </a>
-              </li>
-              <li className="mb-2">
-                <a
-                  href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
-                >
-                  BPPP Bitung
+                  Sertifikasi atau Uji Kompetensi
                 </a>
               </li>
             </ul>
@@ -93,46 +53,87 @@ export default function Footer() {
 
           {/* 3rd block */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
-            <h6 className="text-gray-100 font-medium mb-2">Bidang Pelatihan</h6>
+            <h6 className="text-gray-100 font-bold mb-2">Program Pelatihan</h6>
             <ul className="text-sm">
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
-                  Budidaya
+                  Perikanan
                 </a>
               </li>
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
-                  Kepelautan
+                  Awak Kapal Perikanan
                 </a>
               </li>
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
-                  Mesin Perikanan
+                  Kelautan
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* 2nd block */}
+          <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
+            <h6 className="text-gray-100 font-bold mb-2">
+              Balai Pelatihan dan Sertifikasi
+            </h6>
+            <ul className="text-sm">
+              <li className="mb-2">
+                <a
+                  href="#0"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
+                >
+                  BPPP Medan
                 </a>
               </li>
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
-                  Penangkapan
+                  BDA Sukamandi
                 </a>
               </li>
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
-                  Konservasi
+                  BPPP Tegal
+                </a>
+              </li>
+              <li className="mb-2">
+                <a
+                  href="#0"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
+                >
+                  BPPP Banyuwangi
+                </a>
+              </li>
+              <li className="mb-2">
+                <a
+                  href="#0"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
+                >
+                  BPPP Ambon
+                </a>
+              </li>
+              <li className="mb-2">
+                <a
+                  href="#0"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
+                >
+                  BPPP Bitung
                 </a>
               </li>
             </ul>
@@ -140,12 +141,12 @@ export default function Footer() {
 
           {/* 4th block */}
           <div className="sm:col-span-6 md:col-span-3 lg:col-span-2">
-            <h6 className="text-gray-100 font-medium mb-2">Lembaga/Instansi</h6>
+            <h6 className="text-gray-100 font-bold mb-2">Lembaga/Instansi</h6>
             <ul className="text-sm">
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   BPPSDM KP
                 </a>
@@ -153,7 +154,7 @@ export default function Footer() {
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   Pusat Pelatihan KP
                 </a>
@@ -161,7 +162,7 @@ export default function Footer() {
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   DPKAKP
                 </a>
@@ -169,7 +170,7 @@ export default function Footer() {
               <li className="mb-2">
                 <a
                   href="#0"
-                  className="text-gray-200 hover:text-gray-900 transition duration-150 ease-in-out"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   P2MKP
                 </a>
@@ -187,7 +188,7 @@ export default function Footer() {
             <li>
               <a
                 href="#0"
-                className="flex justify-center items-center text-gray-900 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
+                className="flex justify-center items-center text-gray-900 hover:text-gray-400 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
                 aria-label="Twitter"
               >
                 <svg
@@ -202,7 +203,7 @@ export default function Footer() {
             <li className="ml-4">
               <a
                 href="#0"
-                className="flex justify-center items-center text-gray-900 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
+                className="flex justify-center items-center text-gray-900 hover:text-gray-400 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
                 aria-label="Github"
               >
                 <svg
@@ -217,7 +218,7 @@ export default function Footer() {
             <li className="ml-4">
               <a
                 href="#0"
-                className="flex justify-center items-center text-gray-900 hover:text-gray-900 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
+                className="flex justify-center items-center text-gray-900 hover:text-gray-400 bg-white hover:bg-white-100 rounded-full shadow transition duration-150 ease-in-out"
                 aria-label="Facebook"
               >
                 <svg
@@ -233,7 +234,7 @@ export default function Footer() {
 
           {/* Copyrights note */}
           <div className="text-sm text-gray-200 mr-4">
-            &copy; BPPSDM KP.All rights reserved.
+            &copy; BPPSDM KP. All rights reserved.
           </div>
         </div>
       </div>
