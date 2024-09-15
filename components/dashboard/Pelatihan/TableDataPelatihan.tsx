@@ -508,7 +508,7 @@ const TableDataPelatihan: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className={`text-gray-900 font-semibold`}
+            className={`text-gray-900 font-semibold w-full`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             No
@@ -517,280 +517,280 @@ const TableDataPelatihan: React.FC = () => {
         );
       },
       cell: ({ row }) => (
-        <div className={`text-center uppercase`}>{row.index + 1}</div>
+        <div className={`text-center uppercase w-full`}>{row.index + 1}</div>
       ),
     },
-    {
-      accessorKey: "IdPelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`${"flex"} w-full text-gray-900 font-semibold`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Action
-            <TbDatabaseEdit className="ml-1 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="w-full flex flex-col gap-2">
-          <div className="w-full relative ">
-            <div className="full h-48 relative">
-              <Image
-                alt={row.original.NamaPelatihan}
-                src={row.original.FotoPelatihan}
-                width={0}
-                height={0}
-                className="w-full h-48 object-cover rounded-xl"
-              />
-              <div className="flex w-fit gap-1 absolute top-3 right-3">
-                {row.original.StatusApproval == "Selesai" && (
-                  <div className="w-fit flex gap-1 bg-white shadow-custom rounded-full items-center px-2 py-1   text-xs font-medium text-purple-500">
-                    <RiRadioButtonLine /> Selesai
-                  </div>
-                )}
-                {row.original.Status == "Publish" && (
-                  <div className="w-fit flex gap-1 bg-white shadow-custom rounded-full items-center px-2 py-1   text-xs font-medium text-blue-500">
-                    <IoMdGlobe /> Published
-                  </div>
-                )}
-              </div>
+    // {
+    //   accessorKey: "IdPelatihan",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className={`${"flex"} w-full text-gray-900 font-semibold`}
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Action
+    //         <TbDatabaseEdit className="ml-1 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div className="w-full flex flex-col gap-2">
+    //       <div className="w-full relative ">
+    //         <div className="full h-48 relative">
+    //           <Image
+    //             alt={row.original.NamaPelatihan}
+    //             src={row.original.FotoPelatihan}
+    //             width={0}
+    //             height={0}
+    //             className="w-full h-48 object-cover rounded-xl"
+    //           />
+    //           <div className="flex w-fit gap-1 absolute top-3 right-3">
+    //             {row.original.StatusApproval == "Selesai" && (
+    //               <div className="w-fit flex gap-1 bg-white shadow-custom rounded-full items-center px-2 py-1   text-xs font-medium text-purple-500">
+    //                 <RiRadioButtonLine /> Selesai
+    //               </div>
+    //             )}
+    //             {row.original.Status == "Publish" && (
+    //               <div className="w-fit flex gap-1 bg-white shadow-custom rounded-full items-center px-2 py-1   text-xs font-medium text-blue-500">
+    //                 <IoMdGlobe /> Published
+    //               </div>
+    //             )}
+    //           </div>
 
-              <div className="w-full h-40 absolute bg-blue-500 bg-opacity-10 top-0 rounded-xl"></div>
-            </div>
-          </div>
+    //           <div className="w-full h-40 absolute bg-blue-500 bg-opacity-10 top-0 rounded-xl"></div>
+    //         </div>
+    //       </div>
 
-          <div className={`${"flex"} flex items-center justify-center gap-1`}>
-            <Button
-              variant="outline"
-              onClick={(e) => {
-                setIsOpenFormMateri(!isOpenFormMateri);
-                setSelectedId(row.original.IdPelatihan);
-              }}
-              className="ml-auto border border-[#000000]"
-            >
-              <FaBookOpen className="h-4 w-4" />
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="ml-auto border border-rose-600"
-                >
-                  <Trash className="h-4 w-4 text-rose-600" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Apakah kamu yakin menghapus pelatihan ini?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Penghapusan data ini akan dilakukan secara permanen,
-                    sehingga anda tidak dapat kembali melakukan undo terkait
-                    tindakan ini!
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Batal</AlertDialogCancel>
-                  <AlertDialogAction
-                    className="bg-rose-600 text-white"
-                    onClick={() => {
-                      handleDelete(
-                        row.original.IdPelatihan,
-                        row.original.UserPelatihan.length,
-                        row.original.NoSertifikat
-                      ); // Call the handleDelete function when action is clicked
-                    }}
-                  >
-                    Hapus
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-            <Button
-              onClick={(e) => {
-                setOpenFormTutupPelatihan(!openFormTutupPelatihan);
-                setFileSuratPemberitahuan(row.original.SuratPemberitahuan);
-                setSelectedStatusPelatihan(row.original.StatusApproval);
-                setSelectedIdStatusPelatihan(row.original.IdPelatihan);
-              }}
-              variant="outline"
-              className="ml-auto border border-yellow-500"
-            >
-              <HiLockClosed className="h-5 w-4 text-yellow-500" />
-            </Button>
-            <Link
-              href={`/admin/lemdiklat/pelatihan/${row.getValue(
-                "KodePelatihan"
-              )}/peserta-pelatihan/${row.getValue("IdPelatihan")}`}
-              className="ml-auto border border-green-500  h-9 px-4 py-2 rounded-md"
-            >
-              <HiUserGroup className="h-4 w-4 text-green-500" />
-            </Link>
-            {row.original.StatusApproval == "Selesai" ? (
-              row.original.NoSertifikat == "" ? (
-                <Button
-                  onClick={(e) => {
-                    setOpenFormSertifikat(true);
-                    setSelectedIdPelatihanSertifikat(row.original.IdPelatihan);
-                    setSelectedKodePelatihanSertifikat(
-                      row.original.KodePelatihan
-                    );
-                    setSelectedNamaPelatihanSertifikat(
-                      row.original.NamaPelatihan
-                    );
-                  }}
-                  variant="outline"
-                  className="ml-auto border border-blue-600"
-                >
-                  <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
-                </Button>
-              ) : (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="ml-auto border border-blue-600"
-                    >
-                      <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <div className="flex flex-col items-center justify-center w-full">
-                      <Image
-                        src={"/illustrations/web_13.jpg"}
-                        alt="Not Found"
-                        width={0}
-                        height={0}
-                        className="w-[400px]"
-                      />
-                      <AlertDialogHeader className="flex flex-col items-center justify-center text-center">
-                        <AlertDialogTitle>
-                          Penerbitan Sertifikat Pelatihan
-                        </AlertDialogTitle>
-                        <AlertDialogDescription className="-mt-2 text-center">
-                          Nomor sertifikat kamu telah digenerate, kamu tidak
-                          dapat mengatur ulang no sertifikatmu!
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                    </div>
+    //       <div className={`${"flex"} flex items-center justify-center gap-1`}>
+    //         <Button
+    //           variant="outline"
+    //           onClick={(e) => {
+    //             setIsOpenFormMateri(!isOpenFormMateri);
+    //             setSelectedId(row.original.IdPelatihan);
+    //           }}
+    //           className="ml-auto border border-[#000000]"
+    //         >
+    //           <FaBookOpen className="h-4 w-4" />
+    //         </Button>
+    //         <AlertDialog>
+    //           <AlertDialogTrigger asChild>
+    //             <Button
+    //               variant="outline"
+    //               className="ml-auto border border-rose-600"
+    //             >
+    //               <Trash className="h-4 w-4 text-rose-600" />
+    //             </Button>
+    //           </AlertDialogTrigger>
+    //           <AlertDialogContent>
+    //             <AlertDialogHeader>
+    //               <AlertDialogTitle>
+    //                 Apakah kamu yakin menghapus pelatihan ini?
+    //               </AlertDialogTitle>
+    //               <AlertDialogDescription>
+    //                 Penghapusan data ini akan dilakukan secara permanen,
+    //                 sehingga anda tidak dapat kembali melakukan undo terkait
+    //                 tindakan ini!
+    //               </AlertDialogDescription>
+    //             </AlertDialogHeader>
+    //             <AlertDialogFooter>
+    //               <AlertDialogCancel>Batal</AlertDialogCancel>
+    //               <AlertDialogAction
+    //                 className="bg-rose-600 text-white"
+    //                 onClick={() => {
+    //                   handleDelete(
+    //                     row.original.IdPelatihan,
+    //                     row.original.UserPelatihan.length,
+    //                     row.original.NoSertifikat
+    //                   ); // Call the handleDelete function when action is clicked
+    //                 }}
+    //               >
+    //                 Hapus
+    //               </AlertDialogAction>
+    //             </AlertDialogFooter>
+    //           </AlertDialogContent>
+    //         </AlertDialog>
+    //         <Button
+    //           onClick={(e) => {
+    //             setOpenFormTutupPelatihan(!openFormTutupPelatihan);
+    //             setFileSuratPemberitahuan(row.original.SuratPemberitahuan);
+    //             setSelectedStatusPelatihan(row.original.StatusApproval);
+    //             setSelectedIdStatusPelatihan(row.original.IdPelatihan);
+    //           }}
+    //           variant="outline"
+    //           className="ml-auto border border-yellow-500"
+    //         >
+    //           <HiLockClosed className="h-5 w-4 text-yellow-500" />
+    //         </Button>
+    //         <Link
+    //           href={`/admin/lemdiklat/pelatihan/${row.getValue(
+    //             "KodePelatihan"
+    //           )}/peserta-pelatihan/${row.getValue("IdPelatihan")}`}
+    //           className="ml-auto border border-green-500  h-9 px-4 py-2 rounded-md"
+    //         >
+    //           <HiUserGroup className="h-4 w-4 text-green-500" />
+    //         </Link>
+    //         {row.original.StatusApproval == "Selesai" ? (
+    //           row.original.NoSertifikat == "" ? (
+    //             <Button
+    //               onClick={(e) => {
+    //                 setOpenFormSertifikat(true);
+    //                 setSelectedIdPelatihanSertifikat(row.original.IdPelatihan);
+    //                 setSelectedKodePelatihanSertifikat(
+    //                   row.original.KodePelatihan
+    //                 );
+    //                 setSelectedNamaPelatihanSertifikat(
+    //                   row.original.NamaPelatihan
+    //                 );
+    //               }}
+    //               variant="outline"
+    //               className="ml-auto border border-blue-600"
+    //             >
+    //               <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
+    //             </Button>
+    //           ) : (
+    //             <AlertDialog>
+    //               <AlertDialogTrigger asChild>
+    //                 <Button
+    //                   variant="outline"
+    //                   className="ml-auto border border-blue-600"
+    //                 >
+    //                   <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
+    //                 </Button>
+    //               </AlertDialogTrigger>
+    //               <AlertDialogContent>
+    //                 <div className="flex flex-col items-center justify-center w-full">
+    //                   <Image
+    //                     src={"/illustrations/web_13.jpg"}
+    //                     alt="Not Found"
+    //                     width={0}
+    //                     height={0}
+    //                     className="w-[400px]"
+    //                   />
+    //                   <AlertDialogHeader className="flex flex-col items-center justify-center text-center">
+    //                     <AlertDialogTitle>
+    //                       Penerbitan Sertifikat Pelatihan
+    //                     </AlertDialogTitle>
+    //                     <AlertDialogDescription className="-mt-2 text-center">
+    //                       Nomor sertifikat kamu telah digenerate, kamu tidak
+    //                       dapat mengatur ulang no sertifikatmu!
+    //                     </AlertDialogDescription>
+    //                   </AlertDialogHeader>
+    //                 </div>
 
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              )
-            ) : (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="ml-auto border border-blue-600"
-                  >
-                    <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <div className="flex flex-col items-center justify-center w-full">
-                    <Image
-                      src={"/illustrations/web_13.jpg"}
-                      alt="Not Found"
-                      width={0}
-                      height={0}
-                      className="w-[400px]"
-                    />
-                    <AlertDialogHeader className="flex flex-col items-center justify-center text-center">
-                      <AlertDialogTitle>
-                        Penerbitan Sertifikat Pelatihan
-                      </AlertDialogTitle>
-                      <AlertDialogDescription className="-mt-2 text-center">
-                        Dalam penerbitan sertifikat, diharapkan proses pelatihan
-                        sudah selesai dan mengirimkan bukti berupa berita acara
-                        ke pusat untuk didapatkan approval melakukan generate
-                        nomor sertifikat dan pengajuan penerbitan!
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                  </div>
+    //                 <AlertDialogFooter>
+    //                   <AlertDialogCancel>Cancel</AlertDialogCancel>
+    //                   <AlertDialogAction>Continue</AlertDialogAction>
+    //                 </AlertDialogFooter>
+    //               </AlertDialogContent>
+    //             </AlertDialog>
+    //           )
+    //         ) : (
+    //           <AlertDialog>
+    //             <AlertDialogTrigger asChild>
+    //               <Button
+    //                 variant="outline"
+    //                 className="ml-auto border border-blue-600"
+    //               >
+    //                 <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
+    //               </Button>
+    //             </AlertDialogTrigger>
+    //             <AlertDialogContent>
+    //               <div className="flex flex-col items-center justify-center w-full">
+    //                 <Image
+    //                   src={"/illustrations/web_13.jpg"}
+    //                   alt="Not Found"
+    //                   width={0}
+    //                   height={0}
+    //                   className="w-[400px]"
+    //                 />
+    //                 <AlertDialogHeader className="flex flex-col items-center justify-center text-center">
+    //                   <AlertDialogTitle>
+    //                     Penerbitan Sertifikat Pelatihan
+    //                   </AlertDialogTitle>
+    //                   <AlertDialogDescription className="-mt-2 text-center">
+    //                     Dalam penerbitan sertifikat, diharapkan proses pelatihan
+    //                     sudah selesai dan mengirimkan bukti berupa berita acara
+    //                     ke pusat untuk didapatkan approval melakukan generate
+    //                     nomor sertifikat dan pengajuan penerbitan!
+    //                   </AlertDialogDescription>
+    //                 </AlertDialogHeader>
+    //               </div>
 
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            )}
+    //               <AlertDialogFooter>
+    //                 <AlertDialogCancel>Cancel</AlertDialogCancel>
+    //                 <AlertDialogAction>Continue</AlertDialogAction>
+    //               </AlertDialogFooter>
+    //             </AlertDialogContent>
+    //           </AlertDialog>
+    //         )}
 
-            <>
-              <Button
-                onClick={(e) => {
-                  setSelectedIdPelatihanStatus(row.original.IdPelatihan);
-                  setSelectedStatus(row.original.Status);
-                  setIsOpenFormPublishedPelatihan(
-                    !isOpenFormPublishedPelatihan
-                  );
-                }}
-                variant="outline"
-                className="ml-auto border border-purple-600"
-              >
-                <TbBroadcast className="h-4 w-4 text-purple-600" />
-              </Button>
-            </>
-            {/* <Button
-              onClick={() => {
-                if (row.original.MateriPelatihan.length === 0) {
-                  // Show the toast notification if MateriPelatihan is empty
-                  Toast.fire({
-                    icon: "error",
-                    title:
-                      "Upload materi pelatihan terlebih dahulu, sobat elaut!",
-                  });
-                } else {
-                  // Proceed with navigation if MateriPelatihan is not empty
-                  router.push(
-                    `/admin/lemdiklat/pelatihan/${row.getValue(
-                      "KodePelatihan"
-                    )}/bank-soal/${row.getValue("IdPelatihan")}`
-                  );
-                }
-              }}
-              variant="outline"
-              className="ml-auto border border-gray-600"
-            >
-              <FiUploadCloud className="h-4 w-4 text-gray-600" />
-            </Button> */}
-            {row.original.SuratPemberitahuan !=
-            "https://api-elaut.ikulatluh.cloud/public/static/suratPemberitahuan/" ? (
-              <Link
-                href={row.original.SuratPemberitahuan}
-                target="_blank"
-                className="ml-auto border border-gray-600  bg-white shadow-sm hover:bg-neutral-100 hover:text-neutral-900 h-9 px-4 py-2 rounded-md"
-              >
-                <LucideFileCheck2 className="h-4 w-4 text-gray-600" />
-              </Link>
-            ) : (
-              <Button
-                onClick={() => {
-                  setIsOpenFormSuratPemberitahuan(
-                    !isOpenFormSuratPemberitahuan
-                  );
-                  setFileSuratPemberitahuan(row.original.SuratPemberitahuan);
-                  setSelectedId(row.original.IdPelatihan);
-                }}
-                variant="outline"
-                className="ml-auto border border-gray-600"
-              >
-                <FiUploadCloud className="h-4 w-4 text-gray-600" />
-              </Button>
-            )}
-          </div>
-        </div>
-      ),
-    },
+    //         <>
+    //           <Button
+    //             onClick={(e) => {
+    //               setSelectedIdPelatihanStatus(row.original.IdPelatihan);
+    //               setSelectedStatus(row.original.Status);
+    //               setIsOpenFormPublishedPelatihan(
+    //                 !isOpenFormPublishedPelatihan
+    //               );
+    //             }}
+    //             variant="outline"
+    //             className="ml-auto border border-purple-600"
+    //           >
+    //             <TbBroadcast className="h-4 w-4 text-purple-600" />
+    //           </Button>
+    //         </>
+    //         {/* <Button
+    //           onClick={() => {
+    //             if (row.original.MateriPelatihan.length === 0) {
+    //               // Show the toast notification if MateriPelatihan is empty
+    //               Toast.fire({
+    //                 icon: "error",
+    //                 title:
+    //                   "Upload materi pelatihan terlebih dahulu, sobat elaut!",
+    //               });
+    //             } else {
+    //               // Proceed with navigation if MateriPelatihan is not empty
+    //               router.push(
+    //                 `/admin/lemdiklat/pelatihan/${row.getValue(
+    //                   "KodePelatihan"
+    //                 )}/bank-soal/${row.getValue("IdPelatihan")}`
+    //               );
+    //             }
+    //           }}
+    //           variant="outline"
+    //           className="ml-auto border border-gray-600"
+    //         >
+    //           <FiUploadCloud className="h-4 w-4 text-gray-600" />
+    //         </Button> */}
+    //         {row.original.SuratPemberitahuan !=
+    //         "https://api-elaut.ikulatluh.cloud/public/static/suratPemberitahuan/" ? (
+    //           <Link
+    //             href={row.original.SuratPemberitahuan}
+    //             target="_blank"
+    //             className="ml-auto border border-gray-600  bg-white shadow-sm hover:bg-neutral-100 hover:text-neutral-900 h-9 px-4 py-2 rounded-md"
+    //           >
+    //             <LucideFileCheck2 className="h-4 w-4 text-gray-600" />
+    //           </Link>
+    //         ) : (
+    //           <Button
+    //             onClick={() => {
+    //               setIsOpenFormSuratPemberitahuan(
+    //                 !isOpenFormSuratPemberitahuan
+    //               );
+    //               setFileSuratPemberitahuan(row.original.SuratPemberitahuan);
+    //               setSelectedId(row.original.IdPelatihan);
+    //             }}
+    //             variant="outline"
+    //             className="ml-auto border border-gray-600"
+    //           >
+    //             <FiUploadCloud className="h-4 w-4 text-gray-600" />
+    //           </Button>
+    //         )}
+    //       </div>
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: "NamaPelatihan",
 
@@ -807,7 +807,7 @@ const TableDataPelatihan: React.FC = () => {
         );
       },
       cell: ({ row }) => (
-        <div className={`${"ml-0"} text-left capitalize`}>
+        <Link href={`/admin/lemdiklat/pelatihan/detail/${row.original.KodePelatihan}/${row.original.IdPelatihan}`} className={`${"ml-0"} text-left capitalize bg-gray-100 cursor-pointer`}>
           <p className="text-xs text-gray-400 mt-2 leading-[100%] mb-1">
             {" "}
             {row.getValue("KodePelatihan")} • {row.original.BidangPelatihan} •
@@ -877,7 +877,7 @@ const TableDataPelatihan: React.FC = () => {
               </span> */}
             </p>
           </div>
-        </div>
+        </Link>
       ),
     },
     // {
@@ -1019,59 +1019,59 @@ const TableDataPelatihan: React.FC = () => {
     //     </div>
     //   ),
     // },
-    {
-      accessorKey: "MateriPelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[270px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Materi Pelatihan & Silabus
-            <IoIosBook className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`w-[200px] text-left capitalize`}>
-          <div className="flex flex-col gap-1">
-            <p className="text-xs text-gray-400 leading-[100%]">
-              {" "}
-              List Materi Pelatihan
-            </p>
-            <p className="text-xs font-medium text-gray-900 tracking-tight leading-[110%] mt-1">
-              {row.original.MateriPelatihan.map((materi, index) => (
-                <>
-                  <span>
-                    {" "}
-                    {index + 1}.{materi.NamaMateri};
-                  </span>
-                  <br />
-                </>
-              ))}
-            </p>
-          </div>
+    // {
+    //   accessorKey: "MateriPelatihan",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className="p-0 !text-left w-[270px] flex items-center justify-start text-gray-900 font-semibold"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Materi Pelatihan & Silabus
+    //         <IoIosBook className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div className={`w-[200px] text-left capitalize`}>
+    //       <div className="flex flex-col gap-1">
+    //         <p className="text-xs text-gray-400 leading-[100%]">
+    //           {" "}
+    //           List Materi Pelatihan
+    //         </p>
+    //         <p className="text-xs font-medium text-gray-900 tracking-tight leading-[110%] mt-1">
+    //           {row.original.MateriPelatihan.map((materi, index) => (
+    //             <>
+    //               <span>
+    //                 {" "}
+    //                 {index + 1}.{materi.NamaMateri};
+    //               </span>
+    //               <br />
+    //             </>
+    //           ))}
+    //         </p>
+    //       </div>
 
-          <div className="flex flex-col w-[200px] gap-1 mt-2">
-            <p className="text-xs text-gray-400 leading-[100%]">
-              Silabus Pelatihan
-            </p>
-            <p className="text-xs font-medium text-gray-900 tracking-tight leading-[110%] mt-1">
-              <a
-                href={row.original.SilabusPelatihan}
-                target="_blank"
-                className="text-blue-500 underline lowercase"
-                rel="noopener noreferrer"
-                style={{ overflowWrap: "break-word" }}
-              >
-                {row.original.SilabusPelatihan}
-              </a>
-            </p>
-          </div>
-        </div>
-      ),
-    },
+    //       <div className="flex flex-col w-[200px] gap-1 mt-2">
+    //         <p className="text-xs text-gray-400 leading-[100%]">
+    //           Silabus Pelatihan
+    //         </p>
+    //         <p className="text-xs font-medium text-gray-900 tracking-tight leading-[110%] mt-1">
+    //           <a
+    //             href={row.original.SilabusPelatihan}
+    //             target="_blank"
+    //             className="text-blue-500 underline lowercase"
+    //             rel="noopener noreferrer"
+    //             style={{ overflowWrap: "break-word" }}
+    //           >
+    //             {row.original.SilabusPelatihan}
+    //           </a>
+    //         </p>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
   ];
 
   const table = useReactTable({
@@ -1370,13 +1370,13 @@ const TableDataPelatihan: React.FC = () => {
               onClick={(e) =>
                 selectedStatus == "Belum Publish"
                   ? handleUpdatePublishPelatihanToELAUT(
-                      selectedIdPelatihanStatus,
-                      statusPelatihan
-                    )
+                    selectedIdPelatihanStatus,
+                    statusPelatihan
+                  )
                   : handleUpdatePublishPelatihanToELAUT(
-                      selectedIdPelatihanStatus,
-                      "Belum Publish"
-                    )
+                    selectedIdPelatihanStatus,
+                    "Belum Publish"
+                  )
               }
             >
               {selectedStatus == "Publish" ? "Unpublish" : "Publsih"}
@@ -1436,9 +1436,9 @@ const TableDataPelatihan: React.FC = () => {
               onClick={(e) =>
                 selectedStatusPelatihan != "Selesai"
                   ? handleUpdateClosePelatihanELAUT(
-                      selectedIdStatusPelatihan,
-                      statusPelatihan
-                    )
+                    selectedIdStatusPelatihan,
+                    statusPelatihan
+                  )
                   : null
               }
             >

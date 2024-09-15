@@ -9,3 +9,8 @@ export function getLastValuePath(path: string) {
   const parts = path.split('/');
   return parts[parts.length - 1];
 }
+
+export function generateInstrukturName(names: string) {
+  const instruktur = names.split('/')
+  return instruktur
+}

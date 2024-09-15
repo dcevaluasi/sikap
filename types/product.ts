@@ -58,13 +58,15 @@ export type PelatihanMasyarakat = {
   IdKonsumsi: string
   CreatedAt: string
   UpdatedAt: string
-  SuratPemberitahuan: string;
+  SuratPemberitahuan: string
   UserPelatihan: UserPelatihan[]
   MateriPelatihan: MateriPelatihan[]
   BeritaAcara: string
   CatatanPenerbitanByPusat: string
   StatusApproval: string
   PenerbitanSertifikatDiterima: string
+  TanggalMulaiPendaftaran: string
+  TanggalAkhirPendaftaran: string
 }
 
 export type UjiKompetensi = {
