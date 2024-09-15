@@ -101,12 +101,115 @@ function DetailPelatihan() {
         }
     }
 
+    const [isOpenFormPublishedPelatihan, setIsOpenFormPublishedPelatihan] =
+        React.useState<boolean>(false);
+    const [statusPelatihan, setStatusPelatihan] = React.useState("");
+    const [selectedStatus, setSelectedStatus] = React.useState("");
+
+    const handleUpdatePublishPelatihanToELAUT = async (
+        id: string,
+        status: string
+    ) => {
+        const formData = new FormData();
+        formData.append("Status", status);
+        try {
+            const response = await axios.put(
+                `${elautBaseUrl}/lemdik/UpdatePelatihan?id=${id}`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+                    },
+                }
+            );
+            Toast.fire({
+                icon: "success",
+                title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+            });
+            console.log("UPDATE PELATIHAN: ", response);
+            handleFetchDetailPelatihan();
+        } catch (error) {
+            console.error("ERROR UPDATE PELATIHAN: ", error);
+            Toast.fire({
+                icon: "success",
+                title: `Gagal mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+            });
+            handleFetchDetailPelatihan();
+        }
+    };
+
     React.useEffect(() => {
         handleFetchDetailPelatihan();
     }, []);
 
     return (
         <section className='m-5'>
+            <AlertDialog
+                open={isOpenFormPublishedPelatihan}
+                onOpenChange={setIsOpenFormPublishedPelatihan}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
+                        <AlertDialogDescription className="-mt-2">
+                            Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh masyarakat
+                            umum lakukan checklist agar tampil di website E-LAUT!
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <fieldset>
+                        <form autoComplete="off">
+                            {selectedStatus == "Belum Publish" ? (
+                                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                                    <div>
+                                        <Checkbox
+                                            id="publish"
+                                            onCheckedChange={(e) => setStatusPelatihan("Publish")}
+                                        />
+                                    </div>
+                                    <div className="space-y-1 leading-none">
+                                        <label>Publish Website E-LAUT</label>
+                                        <p className="text-xs leading-[110%] text-gray-600">
+                                            Dengan ini sebagai pihak lemdiklat saya mempublish
+                                            informasi pelatihan terbuka untuk masyarakat umum!
+                                        </p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                                    <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
+                                    <div className="space-y-1 leading-none">
+                                        <label>Published Website E-LAUT</label>
+                                        <p className="text-xs leading-[110%] text-gray-600">
+                                            Informasi Kelas Pelatihanmu telah dipublikasikan melalui
+                                            laman Website E-LAUT balai mu!
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                        </form>
+                    </fieldset>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={(e) =>
+                                selectedStatus == "Belum Publish"
+                                    ? handleUpdatePublishPelatihanToELAUT(
+                                        idPelatihan,
+                                        statusPelatihan
+                                    )
+                                    : handleUpdatePublishPelatihanToELAUT(
+                                        idPelatihan,
+                                        "Belum Publish"
+                                    )
+                            }
+                        >
+                            {selectedStatus == "Publish" ? "Unpublish" : "Publsih"}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+
+
             <div className="flex flex-col">
                 <div className="flex flex-row gap-2 items-end justify-between pb-4 border-b border-b-gray-200">
 
@@ -210,7 +313,7 @@ function DetailPelatihan() {
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <Button
-
+                                            onClick={() => { setSelectedStatus(pelatihan!.Status); setIsOpenFormPublishedPelatihan(!isOpenFormPublishedPelatihan) }}
                                             variant="outline"
                                             className="ml-auto border rounded-full border-purple-600 hover:bg-purple-600 hover:text-white text-purple-600 duration-700"
                                         >
@@ -401,5 +504,7 @@ import axios from 'axios';
 import { PelatihanMasyarakat } from '@/types/product';
 import { generateFullNameBalai, generateTanggalPelatihan } from '@/utils/text';
 import { generateInstrukturName } from '@/lib/utils';
+import { Checkbox } from '@/components/ui/checkbox';
+import Toast from '@/components/toast';
 
 export default DetailPelatihan
