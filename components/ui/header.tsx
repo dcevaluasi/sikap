@@ -71,6 +71,7 @@ export default function Header() {
                   usePathname() == "/lembaga/p2mkp" ||
                   usePathname() == "/lembaga/bppp" ||
                   usePathname() == "/lembaga/dpkakp" ||
+                  usePathname() == "/dashboard" ||
                   usePathname().includes("program"))
                   ? "text-gray-200 hover:text-white hover:scale-105"
                   : top && usePathname().includes("layanan")
@@ -157,6 +158,7 @@ export default function Header() {
               usePathname() == "/lembaga/p2mkp" ||
               usePathname() == "/lembaga/bppp" ||
               usePathname() == "/lembaga/dpkakp" ||
+              usePathname() == "/dashboard" ||
               usePathname().includes("program"))
               ? "text-gray-200 hover:text-white hover:scale-105"
               : top && usePathname().includes("layanan")
@@ -195,8 +197,11 @@ export default function Header() {
           ? "hidden"
           : "block"
       } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
-        top && usePathname().includes("layanan") ? "pt-0" : top && "pt-6"
-      } ${
+        (top && usePathname().includes("layanan")) ||
+        usePathname() == "/dashboard"
+          ? "pt-0"
+          : top && "pt-6"
+      }  ${
         !top
           ? `bg-white backdrop-blur-sm shadow-lg`
           : usePathname().includes("layanan")
@@ -312,7 +317,8 @@ export default function Header() {
                         href="/login"
                         className={`btn-sm ${
                           top
-                            ? usePathname().includes("pelatihan")
+                            ? usePathname().includes("pelatihan") ||
+                              usePathname().includes("searching")
                               ? "text-blue-500 hover:text-white"
                               : "text-gray-200"
                             : "text-blue-500 hover:text-white"

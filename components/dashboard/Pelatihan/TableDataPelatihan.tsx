@@ -597,13 +597,13 @@ const TableDataPelatihan: React.FC = () => {
     //               <AlertDialogCancel>Batal</AlertDialogCancel>
     //               <AlertDialogAction
     //                 className="bg-rose-600 text-white"
-    //                 onClick={() => {
-    //                   handleDelete(
-    //                     row.original.IdPelatihan,
-    //                     row.original.UserPelatihan.length,
-    //                     row.original.NoSertifikat
-    //                   ); // Call the handleDelete function when action is clicked
-    //                 }}
+                    // onClick={() => {
+                    //   handleDelete(
+                    //     row.original.IdPelatihan,
+                    //     row.original.UserPelatihan.length,
+                    //     row.original.NoSertifikat
+                    //   ); // Call the handleDelete function when action is clicked
+                    // }}
     //               >
     //                 Hapus
     //               </AlertDialogAction>

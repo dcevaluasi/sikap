@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { FormEvent } from "react";
 import Hero from "@/components/hero";
 import ListBPPP from "@/components/list-bppp";
 import MapIndonesia from "@/components/map";
@@ -53,22 +53,36 @@ import { LucideSchool } from "lucide-react";
 import { FaRupiahSign } from "react-icons/fa6";
 import LogoIntegrated from "@/components/logoIntegrated";
 import Newsletter from "@/components/newsletter";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { HashLoader } from "react-spinners";
+import { getMonthName } from "@/lib/utils";
+import { FiCalendar } from "react-icons/fi";
+import Toast from "../toast";
+import ReCAPTCHA from "react-google-recaptcha";
 
 function PencarianPelatihan() {
   const [data, setData] = React.useState<PelatihanMasyarakat[] | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
 
   const handleFetchingPublicTrainingData = async () => {
+    setLoading(true);
+    let bulanMulaiPelatihan = "";
+    if (selectedBulanPelatihan != "") {
+      bulanMulaiPelatihan = `${new Date().getFullYear()}-${selectedBulanPelatihan}`;
+    }
     try {
       const response: AxiosResponse = await axios.get(
-        `${elautBaseUrl}/lemdik/getPelatihan?penyelenggara_pelatihan=${selectedBalaiPelatihan}&bidang_pelatihan=${selectedBidangPelatihan}&jenis_sertifikat=${selectedJenisPelatihan}`
+        `${elautBaseUrl}/lemdik/getPelatihan?penyelenggara_pelatihan=${selectedBalaiPelatihan}&bidang_pelatihan=${selectedBidangPelatihan}&jenis_sertifikat=${selectedJenisPelatihan}&tanggal_mulai_pelatihan=${bulanMulaiPelatihan}`
       );
+      setLoading(false);
+      setShowResult(true);
       console.log({ response });
       setData(response.data.data);
     } catch (error) {
       console.error("Error posting training data:", error);
+      setLoading(false);
+      setShowResult(false);
       throw error;
     }
   };
@@ -81,6 +95,8 @@ function PencarianPelatihan() {
     React.useState<string>("");
   const [selectedBiayaPelatihan, setSelectedBiayaPelatihan] =
     React.useState<string>("");
+  const [selectedBulanPelatihan, setSelectedBulanPelatihan] =
+    React.useState<string>("");
 
   const [showOnlyPelatihan, setShowOnlyPelatihan] =
     React.useState<boolean>(false);
@@ -92,6 +108,7 @@ function PencarianPelatihan() {
     setSelectedJenisPelatihan("");
     setSelectedBalaiPelatihan("");
     setSelectedBiayaPelatihan("");
+    setSelectedBulanPelatihan("");
     setShowResult(false);
   };
 
@@ -103,7 +120,6 @@ function PencarianPelatihan() {
 
   React.useEffect(() => {
     setTimeout(() => {
-      handleFetchingPublicTrainingData();
       setLoading(false);
     }, 1000);
   }, []);
@@ -206,24 +222,32 @@ function PencarianPelatihan() {
                 </Select>
 
                 <Select
-                  value={selectedBiayaPelatihan}
-                  onValueChange={(value) => setSelectedBiayaPelatihan(value)}
+                  value={selectedBulanPelatihan}
+                  onValueChange={(value) => setSelectedBulanPelatihan(value)}
                 >
                   <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
                     <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
-                      <FaRupiahSign />
-                      {selectedBiayaPelatihan == ""
-                        ? "Biaya Pelatihan"
-                        : selectedBiayaPelatihan == "Aspirasi"
-                        ? "Gratis"
-                        : "Berbayar"}
+                      <FiCalendar />
+                      {selectedBulanPelatihan == ""
+                        ? "Pilih Bulan"
+                        : getMonthName(selectedBulanPelatihan)}
                     </div>
                   </SelectTrigger>
                   <SelectContent className="z-[10000]">
                     <SelectGroup>
-                      <SelectLabel>Biaya Pelatihan</SelectLabel>
-                      <SelectItem value={"Aspirasi"}>Gratis</SelectItem>
-                      <SelectItem value={"PNBP/BLU"}>Berbayar</SelectItem>
+                      <SelectLabel>Bulan Pelatihan</SelectLabel>
+                      <SelectItem value={"01"}>Januari</SelectItem>
+                      <SelectItem value={"02"}>Februari</SelectItem>
+                      <SelectItem value={"03"}>Maret</SelectItem>
+                      <SelectItem value={"04"}>April</SelectItem>
+                      <SelectItem value={"05"}>Mei</SelectItem>
+                      <SelectItem value={"06"}>Juni</SelectItem>
+                      <SelectItem value={"07"}>Juli</SelectItem>
+                      <SelectItem value={"08"}>Agustus</SelectItem>
+                      <SelectItem value={"09"}>September</SelectItem>
+                      <SelectItem value={"10"}>Oktober</SelectItem>
+                      <SelectItem value={"11"}>November</SelectItem>
+                      <SelectItem value={"12"}>Desember</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -231,7 +255,8 @@ function PencarianPelatihan() {
                 {(selectedJenisPelatihan !== "" ||
                   selectedBalaiPelatihan !== "" ||
                   selectedBiayaPelatihan !== "" ||
-                  selectedBidangPelatihan !== "") && (
+                  selectedBidangPelatihan !== "" ||
+                  selectedBulanPelatihan != "") && (
                   <div
                     onClick={() => handleClearFilter()}
                     className="inline-flex gap-2 w-fit px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer border border-gray-300"
@@ -243,10 +268,9 @@ function PencarianPelatihan() {
               </div>
 
               <div className="flex mt-5">
-                <div
+                <Button
                   onClick={(e) => {
                     handleFetchingPublicTrainingData();
-                    setShowResult(true);
                   }}
                   className="btn-sm text-sm text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
                 >
@@ -261,38 +285,49 @@ function PencarianPelatihan() {
                       fillRule="nonzero"
                     />
                   </svg>
-                </div>
+                </Button>
               </div>
             </div>
           </div>
         </div>
 
-        {showResult && (
-          <div className="w-full max-w-7xl mx-auto pb-4">
-            {/* Header */}
-            <div className="bg-white shadow-custom rounded-xl p-3 text-xl text-center font-calsans">
-              <span className="font-bold">SEPTEMBER 2024</span>
-            </div>
-
-            {/* Table */}
-            <div className="bg-white shadow-custom text-black text-center grid grid-cols-5 gap-2 p-4 rounded-xl font-calsans text-lg mt-4">
-              <div>Pelatihan</div>
-              <div>Penyelenggara</div>
-              <div></div>
-              <div>Pelaksanaan</div>
-              <div>Harga</div>
-            </div>
-
-            <div className="flex-col gap-4 flex w-full mt-4">
-              {data == null ? (
-                <></>
-              ) : (
-                data!.map((data, index) => (
-                  <CardPelatihan key={index} pelatihan={data} />
-                ))
-              )}
-            </div>
+        {loading ? (
+          <div className="w-full flex h-[50vh] items-center justify-center">
+            <HashLoader color="#338CF5" size={50} />
           </div>
+        ) : (
+          showResult && (
+            <div className="w-full max-w-7xl mx-auto pb-4">
+              {/* Header */}
+              {selectedBulanPelatihan != "" && (
+                <div className="bg-white shadow-custom rounded-xl p-3 text-xl text-center font-calsans">
+                  <span className="font-bold">
+                    {getMonthName(selectedBulanPelatihan)}{" "}
+                    {new Date().getFullYear()}
+                  </span>
+                </div>
+              )}
+
+              {/* Table */}
+              <div className="bg-white shadow-custom text-black text-center grid grid-cols-5 gap-2 p-4 rounded-xl font-calsans text-lg mt-4">
+                <div>Pelatihan</div>
+                <div>Penyelenggara</div>
+                <div></div>
+                <div>Pelaksanaan</div>
+                <div>Harga</div>
+              </div>
+
+              <div className="flex-col gap-4 flex w-full mt-4">
+                {data == null ? (
+                  <></>
+                ) : (
+                  data!.map((data, index) => (
+                    <CardPelatihan key={index} pelatihan={data} />
+                  ))
+                )}
+              </div>
+            </div>
+          )
         )}
       </div>
     </section>
@@ -300,6 +335,72 @@ function PencarianPelatihan() {
 }
 
 const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
+  const [nik, setNik] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [captcha, setCaptcha] = React.useState<string | null>();
+  const recaptchaRef = React.createRef();
+  const router = useRouter();
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = React.useState<string>("");
+
+  const handleLoginAkun = async (e: FormEvent) => {
+    setLoading(true);
+    e.preventDefault();
+    if (nik == "" || password == "") {
+      setErrorMsg("Tolong lengkapi data login!");
+      setLoading(false);
+    } else {
+      if (captcha) {
+        try {
+          const response: AxiosResponse = await axios.post(
+            `${elautBaseUrl}/users/login`,
+            JSON.stringify({
+              nik: nik,
+              password: password,
+            }),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log({ response });
+          setLoading(false);
+
+          Cookies.set("XSRF081", response.data.t);
+          Cookies.set("XSRF082", "true");
+
+          if (Cookies.get("XSRF081")) {
+            Toast.fire({
+              icon: "success",
+              title: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
+            });
+            setLoading(false);
+            router.push(
+              `/layanan/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
+                pelatihan?.KodePelatihan
+              }/${pelatihan?.IdPelatihan}`
+            );
+          }
+        } catch (error: any) {
+          setLoading(false);
+          console.error({ error });
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.pesan
+          ) {
+            const errorMsg = error.response.data.pesan;
+            setErrorMsg(errorMsg);
+          } else {
+            const errorMsg = error.response.data.pesan;
+            setErrorMsg(errorMsg);
+          }
+        }
+      }
+    }
+  };
+
   return (
     <div className="bg-white shadow-custom text-black p-4 rounded-xl grid grid-cols-5 items-center">
       {/* Train Info */}
@@ -356,7 +457,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
                 Registrasi
               </div>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="sm:max-w-[460px]">
               <DialogHeader>
                 <DialogTitle>Login</DialogTitle>
                 <DialogDescription>
@@ -377,9 +478,11 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
                   </Label>
                   <Input
                     id="name"
-                    value="Pedro Duarte"
+                    value={nik}
                     className="col-span-3"
+                    onChange={(e) => setNik(e.target.value)}
                     type="text"
+                    placeholder="Masukkan NIK kamu"
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
@@ -388,15 +491,54 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
                   </Label>
                   <Input
                     id="username"
-                    value="@peduarte"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="col-span-3"
+                    placeholder="***********"
                     type="password"
                   />
                 </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="text-right">
+                    Verify if you are not a robot{" "}
+                  </Label>
+                  <ReCAPTCHA
+                    style={{ width: "80% !important" }}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                    className="mr-5 w-full  font-inter text-sm"
+                    onChange={setCaptcha}
+                  />
+                </div>
+                {errorMsg != "" && (
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="username" className="text-right">
+                      {" "}
+                    </Label>
+                    <div className="w-[400px]">
+                      <DialogDescription>
+                        <span className="text-rose-500 !w-[400px]">
+                          Ups! {errorMsg}
+                        </span>
+                      </DialogDescription>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <DialogFooter>
-                <Button type="submit">Login</Button>
+                <Button
+                  type="button"
+                  className="flex items-center justify-center"
+                  onClick={(e) => handleLoginAkun(e)}
+                >
+                  {loading ? (
+                    <span>
+                      <HashLoader size={15} color="#FFF" />
+                    </span>
+                  ) : (
+                    <span>Login</span>
+                  )}
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>

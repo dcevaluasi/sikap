@@ -89,41 +89,22 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
         className="flex items-center gap-4"
         href="#"
       >
-        <span className="hidden text-right lg:block">
-          <span
-            className={`${!top
-              ? "text-gray-600 hover:text-gray-900 hover:scale-105 "
-              : usePathname().includes("complete-profile")
-                ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-                : "hover:text-white text-gray-200"
-              } block text-base font-medium text-gray-200  hover:scale-105`}
-          >
-            {userDetail?.Nama}
-          </span>
-        </span>
-
-        <span className="h-12 w-12 rounded-full">
+        <span className="h-14 w-14 rounded-full">
           <Image
-            width={112}
-            height={112}
+            width={0}
+            height={0}
             src={
-              userDetail?.Foto! ==
-                "https://api-elaut.ikulatluh.cloud/public/static/profile/fotoProfile/"
-                ? "/dummies/profile.jpg"
-                : userDetail?.Foto!
+              !userDetail?.Foto! ? "/dummies/profile.jpg" : userDetail?.Foto!
             }
-            style={{
-              width: "auto",
-              height: "auto",
-            }}
             alt="User"
-            className="rounded-full !object-cover"
+            className="rounded-full !object-cover w-14 h-14"
           />
         </span>
 
         <HiMiniChevronDown
-          className={`${!top ? "text-gray-600 hover:text-gray-900 hover:scale-105" : ""
-            } block text-lg font-medium text-gray-200 hover:text-white hover:scale-105`}
+          className={`${
+            !top ? "text-gray-600 hover:text-gray-900 hover:scale-105" : ""
+          } block text-lg font-medium text-gray-600 hover:text-white hover:scale-105`}
         />
       </Link>
 
@@ -132,10 +113,14 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default   ${dropdownOpen === true ? "block" : "hidden"
-          }`}
+        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default   ${
+          dropdownOpen === true ? "block" : "hidden"
+        }`}
       >
-        <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 ">
+        <ul className="flex flex-col gap-5 border-b border-stroke px-6 pb-7.5 pt-5">
+          <li className="text-[#000] w-full text-center border-b px-0 mx-0 pb-4 font-semibold border-b-gray-200">
+            {userDetail?.Nama}
+          </li>
           <li>
             <Link
               href="/dashboard"

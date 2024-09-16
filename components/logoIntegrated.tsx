@@ -6,19 +6,19 @@ function LogoIntegrated() {
   const logos = [
     {
       Name: "Logo Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan Perikanan (BPPSDM KP)",
-      Path: "./images/logo-bppsdm.png",
+      Path: "/images/logo-bppsdm.png",
     },
     {
       Name: "Logo Berorientasi Pelayanan Akuntabel Kompeten Harmonis Loyal Adaptif Kolaboratif",
-      Path: "./images/logo-berakhlak.png",
+      Path: "/images/logo-berakhlak.png",
     },
     {
       Name: "Logo Kementerian Kelautan dan Perikanan (KKP) Beyond",
-      Path: "./images/logo-kkp-beyond.png",
+      Path: "/images/logo-kkp-beyond.png",
     },
     {
       Name: "Logo Balai Sertifikasi Elektronik (BSRe)",
-      Path: "./images/logo-bsre.png",
+      Path: "/images/logo-bsre.png",
     },
     // {
     //   Name: "Logo Badan Layanan Umum",

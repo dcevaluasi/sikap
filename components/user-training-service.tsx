@@ -70,68 +70,11 @@ import { Pelatihan } from "@/types/pelatihan";
 import Logo from "./ui/logo";
 import Toast from "./toast";
 import ChartOne from "./dashboard/Charts/ChartOne";
+import { generateTanggalPelatihan } from "@/utils/text";
 
 export default function UserTrainingService({ user }: { user: User | null }) {
   const [indexPelatihanSelected, setIndexPelatihanSelected] =
-    React.useState<number>(0);
-  const tabMenus = [
-    {
-      id: 1,
-      name: "Pas Foto",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/illustrations/pas-foto.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-      available: true,
-    },
-    {
-      id: 2,
-      name: "Kartu Keluarga",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/illustrations/kartu-keluarga.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-      available: true,
-    },
-
-    {
-      id: 3,
-      name: "KTP",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/illustrations/ktp.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-      available: false,
-    },
-    {
-      id: 4,
-      name: "Ijazah",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/illustrations/ijazah.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-      available: true,
-    },
-    {
-      id: 4,
-      name: "Surat Keterangan Sehat",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/illustrations/surat-keterangan-sehat.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-      available: false,
-    },
-  ];
+    React.useState<number>(100000000);
 
   const pathname = usePathname();
   const location = extractPathAfterBppp(pathname);
@@ -651,6 +594,8 @@ export default function UserTrainingService({ user }: { user: User | null }) {
     );
   };
 
+  const [seeMore, setSeeMore] = React.useState<boolean>(false);
+
   return (
     <>
       <section className="relative h-fit pb-20 bg-white" id="explore">
@@ -678,8 +623,12 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                   </p>
                   <div className="rounded-full bg-gray-300 h-1 w-20 mt-3"></div>
                 </div>{" "}
-                <div className="w-full max-w-6xl mx-auto flex gap-5 mt-8">
-                  <div className="flex flex-col gap-2 w-5/12">
+                <div className="w-full max-w-7xl mx-auto flex gap-5 mt-8">
+                  <div
+                    className={`flex flex-col gap-2  ${
+                      indexPelatihanSelected != 100000000 ? "w-5/12" : "w-full"
+                    }`}
+                  >
                     <div className="relative w-full flex items-center border-gray-300 border px-2 rounded-xl">
                       <Button
                         type="button"
@@ -694,454 +643,509 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                         placeholder="Cari Pelatihan-mu"
                       />
                     </div>
-                    {userDetail?.Pelatihan.map((pelatihan, index) => (
-                      <CardPelatihan
-                        pelatihan={pelatihan}
-                        key={index}
-                        index={index}
-                      />
-                    ))}
+                    {indexPelatihanSelected != 100000000 ? (
+                      userDetail?.Pelatihan.map((pelatihan, index) => (
+                        <CardPelatihan
+                          pelatihan={pelatihan}
+                          key={index}
+                          index={index}
+                        />
+                      ))
+                    ) : (
+                      <div className="grid grid-cols-3 w-full gap-1">
+                        {userDetail?.Pelatihan.map((pelatihan, index) => (
+                          <CardPelatihan
+                            pelatihan={pelatihan}
+                            key={index}
+                            index={index}
+                          />
+                        ))}
+                      </div>
+                    )}
                   </div>
 
-                  <div className="flex items-start justify-center w-7/12">
-                    <div className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:px-6 lg:py-0">
-                      <div className="sm:flex justify-between sm:gap-4 items-center border-b-2 border-b-gray-200 pb-4">
-                        <div>
-                          <h3 className="text-3xl font-bold text-gray-900 font-calsans sm:text-3xl leading-[105%]">
-                            {
-                              userDetail?.Pelatihan[indexPelatihanSelected]
-                                ?.NamaPelatihan!
-                            }
-                          </h3>
+                  {indexPelatihanSelected != 100000000 && (
+                    <div className="flex items-start justify-center w-7/12">
+                      <div className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:px-6 lg:py-0">
+                        <div className="sm:flex justify-between sm:gap-4 items-center border-b-2 border-b-gray-200 pb-4">
+                          <div>
+                            <h3 className="text-3xl font-bold text-gray-900 font-calsans sm:text-3xl leading-[105%]">
+                              {
+                                userDetail?.Pelatihan[indexPelatihanSelected]
+                                  ?.NamaPelatihan!
+                              }
+                            </h3>
 
-                          <p className="mt-1 text-sm font-medium text-gray-600">
-                            By BPPP Medan · 29 Mei 2024 - 7 Juni 2024 ·{" "}
-                            {/* {
+                            <p className="mt-1 text-sm font-medium text-gray-600">
+                              By{" "}
+                              {selectedPelatihan != null
+                                ? selectedPelatihan.PenyelenggaraPelatihan
+                                : "-"}{" "}
+                              ·{" "}
+                              {selectedPelatihan != null
+                                ? generateTanggalPelatihan(
+                                    selectedPelatihan?.TanggalMulaiPelatihan
+                                  )
+                                : "-"}{" "}
+                              s.d.{" "}
+                              {selectedPelatihan != null
+                                ? generateTanggalPelatihan(
+                                    selectedPelatihan?.TanggalBerakhirPelatihan
+                                  )
+                                : "-"}
+                              ·{" "}
+                              {/* {
                             userDetail?.Pelatihan[indexPelatihanSelected]
                               ?.NoRegistrasi
                           } */}
-                          </p>
-                        </div>
+                            </p>
+                          </div>
 
-                        <div className="hidden sm:block sm:shrink-0">
-                          <Image
-                            width={0}
-                            height={0}
-                            alt=""
-                            src={icons(
-                              userDetail?.Pelatihan[indexPelatihanSelected]
-                                ?.BidangPelatihan!
-                            )}
-                            className="w-16 rounded-lg object-cover shadow-sm"
-                          />
+                          <div className="hidden sm:block sm:shrink-0">
+                            <Image
+                              width={0}
+                              height={0}
+                              alt=""
+                              src={icons(
+                                userDetail?.Pelatihan[indexPelatihanSelected]
+                                  ?.BidangPelatihan!
+                              )}
+                              className="w-16 rounded-lg object-cover shadow-sm"
+                            />
+                          </div>
                         </div>
-                      </div>
-                      <div className="mt-4">
-                        <p className="text-pretty text-sm text-gray-500"></p>
-                        <div className="flex gap-1">
-                          <p
-                            dangerouslySetInnerHTML={{
-                              __html:
-                                userDetail?.Pelatihan[
-                                  indexPelatihanSelected
-                                ]! &&
-                                truncateText(
-                                  userDetail?.Pelatihan[indexPelatihanSelected]
-                                    ?.DetailPelatihan!,
-                                  300,
-                                  "..."
-                                ),
-                            }}
-                            className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000"
-                          />
-                        </div>
-                      </div>
-                      <dl className="mt-6 flex gap-4 sm:gap-6">
-                        <div className="flex flex-col-reverse">
-                          <dt className="text-sm font-medium text-gray-600">
-                            {
-                              userDetail?.Pelatihan[indexPelatihanSelected]
-                                ?.BidangPelatihan!
-                            }
-                          </dt>
-                          <dd className="text-xs text-gray-500">Bidang</dd>
-                        </div>
-
-                        <div className="flex flex-col-reverse">
-                          <dt className="text-sm font-bold text-gray-600">
-                            {userDetail?.Pelatihan[indexPelatihanSelected]
-                              .NoSertifikat! == ""
-                              ? "-"
-                              : userDetail?.Pelatihan[indexPelatihanSelected]
-                                  ?.NoSertifikat!}
-                          </dt>
-                          <dd className="text-xs text-gray-500">
-                            No Sertifikat
-                          </dd>
-                        </div>
-                        <div className="flex flex-col-reverse">
-                          <dt className="text-sm font-bold text-gray-600">
-                            {userDetail?.Pelatihan[indexPelatihanSelected]
-                              .NoRegistrasi! == ""
-                              ? "-"
-                              : userDetail?.Pelatihan[indexPelatihanSelected]
-                                  ?.NoRegistrasi!}
-                          </dt>
-                          <dd className="text-xs text-gray-500">
-                            No Registrasi
-                          </dd>
-                        </div>
-                      </dl>
-                      <dl className="mt-3">
-                        <div className="flex flex-col-reverse">
-                          <dt
-                            className={`text-sm font-medium text-gray-600 ${
-                              userDetail?.Pelatihan[indexPelatihanSelected]
-                                ?.Keterangan! == ""
-                                ? "text-rose-500"
-                                : "text-green-500"
-                            }`}
-                          >
-                            {userDetail?.Pelatihan[indexPelatihanSelected]
-                              ?.Keterangan! == "" ? (
-                              <span className="flex items-center">
-                                <IoMdCloseCircle />
-                                Data belum divalidasi operator
-                              </span>
-                            ) : (
-                              <span className="flex items-center">
-                                <RiVerifiedBadgeFill />
-                                Data pendaftaran anda valid
-                              </span>
-                            )}
-                          </dt>
-                          <dd className="text-xs text-gray-500">
-                            Status Peserta
-                          </dd>
-                        </div>
-                      </dl>
-
-                      <dl className="mt-3">
-                        <div className="flex flex-col-reverse">
-                          <dt className={`text-sm font-medium text-gray-600 `}>
-                            {userDetail?.Pelatihan[indexPelatihanSelected]
-                              ?.CodeAksess! ? (
-                              <span className="flex items-center">
-                                {
-                                  userDetail?.Pelatihan[indexPelatihanSelected]
-                                    ?.CodeAksess!
-                                }{" "}
-                                |{" "}
-                                <AlertDialog>
-                                  <AlertDialogTrigger>
-                                    <div className="underline text-blue-500 ml-1">
-                                      Link Ujian Pre-Test
-                                    </div>
-                                  </AlertDialogTrigger>
-                                  <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
-                                    <AlertDialogHeader>
-                                      <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
-                                        <div className="w-28 h-28 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center">
-                                          <div className="w-20 h-20 rounded-full  bg-gradient-to-b from-gray-300 via-whiter to-white flex items-center justify-center ">
-                                            <Logo />
-                                          </div>
-                                        </div>
-
-                                        <div className="flex flex-col gap-1 w-full justify-center items-center">
-                                          {userDetail!.Pelatihan[
-                                            indexPelatihanSelected
-                                          ]!.PreTest == 0 && (
-                                            <h1 className="font-bold text-2xl text-center leading-[100%]">
-                                              {selectedPelatihan! &&
-                                                selectedPelatihan!
-                                                  .NamaPelatihan}
-                                            </h1>
-                                          )}
-
-                                          {userDetail!.Pelatihan[
-                                            indexPelatihanSelected
-                                          ]!.PreTest == 0 && (
-                                            <>
-                                              {" "}
-                                              <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
-                                                Sebagai bagian dari pelaksanaan
-                                                pelatihan agar dapat mengetahui
-                                                kemampuan peserta diawal harap
-                                                untuk mengikuti{" "}
-                                                <span className="italic">
-                                                  pre-test
-                                                </span>{" "}
-                                                dan{" "}
-                                                {isOpenGuideline
-                                                  ? "membaca petunjuk pengerjaan"
-                                                  : "memasukkan kode akses"}{" "}
-                                                terlebih dahulu
-                                              </AlertDialogDescription>
-                                              {isOpenGuideline ? (
-                                                <AlertDialogDescription className="w-full text-left font-normal text-sm mt-2">
-                                                  <span className="font-semibold text-[#000]">
-                                                    Petunjuk Pengerjaan :{" "}
-                                                  </span>
-                                                  <br />
-                                                  <span>
-                                                    {" "}
-                                                    1.Pilih salah satu jawaban
-                                                    yang Saudara anggap paling
-                                                    tepat/benar!
-                                                  </span>{" "}
-                                                  <br />
-                                                  <span>
-                                                    {" "}
-                                                    2. Dalam menjawab soal,
-                                                    gunakan gadget yang mumpuni!
-                                                  </span>{" "}
-                                                  <br />
-                                                  <span>
-                                                    {" "}
-                                                    3. Waktu yang disediakan
-                                                    untuk mengerjakan soal
-                                                    adalah 15 menit!
-                                                  </span>{" "}
-                                                  <br />
-                                                  <span>
-                                                    {" "}
-                                                    4. Tidak diperbolehkan
-                                                    membuka buku, handphone dll!
-                                                  </span>
-                                                </AlertDialogDescription>
-                                              ) : (
-                                                <fieldset className="w-full">
-                                                  <Input
-                                                    className="w-full font-normal mt-2 text-sm"
-                                                    placeholder="Masukkan kode akses "
-                                                    value={codeAccess}
-                                                    onChange={(e) =>
-                                                      setCodeAccess(
-                                                        e.target.value
-                                                      )
-                                                    }
-                                                    type="text"
-                                                  />
-                                                </fieldset>
-                                              )}
-                                            </>
-                                          )}
-                                        </div>
-                                      </AlertDialogTitle>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter className="w-full">
-                                      {userDetail!.Pelatihan[
+                        <div className="mt-4">
+                          <p className="text-pretty text-sm text-gray-500"></p>
+                          <div className="flex gap-1 flex-col">
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  userDetail?.Pelatihan[
+                                    indexPelatihanSelected
+                                  ]! && !seeMore
+                                    ? truncateText(
+                                        userDetail?.Pelatihan[
+                                          indexPelatihanSelected
+                                        ]?.DetailPelatihan!,
+                                        300,
+                                        "..."
+                                      )
+                                    : userDetail?.Pelatihan[
                                         indexPelatihanSelected
-                                      ]!.PreTest == 0 ? (
-                                        <div className="flex-col flex w-full gap-2">
-                                          {isOpenGuideline ? (
-                                            <Button
-                                              className="py-5 bg-blue-500 hover:bg-blue-500"
-                                              onClick={(e) =>
-                                                setIsOpenGuideline(
-                                                  !isOpenGuideline
-                                                )
-                                              }
-                                            >
-                                              Lanjut
-                                            </Button>
-                                          ) : (
-                                            <AlertDialogAction
-                                              className="py-5"
-                                              disabled={
-                                                codeAccess == "" ? true : false
-                                              }
-                                              onClick={(e) =>
-                                                handleDirectToExam(e)
-                                              }
-                                            >
-                                              Mulai Pre Test
-                                            </AlertDialogAction>
-                                          )}
-
-                                          <AlertDialogCancel className="py-5">
-                                            Close
-                                          </AlertDialogCancel>
-                                        </div>
-                                      ) : (
-                                        <div className="flex-col flex w-full gap-2">
-                                          <p className=" text-center font-normal text-gray-500 -mt-2">
-                                            Maaf kamu telah mengikuti ujian ini,
-                                            kamu tidak memiliki akses lagi
-                                            terkait ujian ini
-                                          </p>
-                                          <AlertDialogCancel className="py-5">
-                                            Close
-                                          </AlertDialogCancel>
-                                        </div>
-                                      )}
-                                    </AlertDialogFooter>
-                                  </AlertDialogContent>
-                                </AlertDialog>{" "}
-                                |{" "}
-                                <AlertDialog>
-                                  <AlertDialogTrigger>
-                                    <div className="underline text-blue-500 ml-1">
-                                      Link Ujian Post-Test
-                                    </div>
-                                  </AlertDialogTrigger>
-                                  <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
-                                    <AlertDialogHeader>
-                                      <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
-                                        <div className="w-28 h-28 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center">
-                                          <div className="w-20 h-20 rounded-full  bg-gradient-to-b from-gray-300 via-whiter to-white flex items-center justify-center ">
-                                            <Logo />
-                                          </div>
-                                        </div>
-
-                                        <div className="flex flex-col gap-1 w-full justify-center items-center">
-                                          {userDetail!.Pelatihan[
-                                            indexPelatihanSelected
-                                          ]!.PostTest == 0 && (
-                                            <h1 className="font-bold text-2xl text-center leading-[100%]">
-                                              {selectedPelatihan! &&
-                                                selectedPelatihan!
-                                                  .NamaPelatihan}
-                                            </h1>
-                                          )}
-
-                                          {userDetail!.Pelatihan[
-                                            indexPelatihanSelected
-                                          ]!.PostTest == 0 && (
-                                            <>
-                                              {" "}
-                                              <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
-                                                Sebagai bagian dari pelaksanaan
-                                                pelatihan agar dapat mengetahui
-                                                kemampuan peserta diawal harap
-                                                untuk mengikuti{" "}
-                                                <span className="italic">
-                                                  post-test
-                                                </span>{" "}
-                                                dan{" "}
-                                                {isOpenGuideline
-                                                  ? "membaca petunjuk pengerjaan"
-                                                  : "memasukkan kode akses"}{" "}
-                                                terlebih dahulu
-                                              </AlertDialogDescription>
-                                              {isOpenGuideline ? (
-                                                <AlertDialogDescription className="w-full text-left font-normal text-sm mt-2">
-                                                  <span className="font-semibold text-[#000]">
-                                                    Petunjuk Pengerjaan :{" "}
-                                                  </span>
-                                                  <br />
-                                                  <span>
-                                                    {" "}
-                                                    1.Pilih salah satu jawaban
-                                                    yang Saudara anggap paling
-                                                    tepat/benar!
-                                                  </span>{" "}
-                                                  <br />
-                                                  <span>
-                                                    {" "}
-                                                    2. Dalam menjawab soal,
-                                                    gunakan gadget yang mumpuni!
-                                                  </span>{" "}
-                                                  <br />
-                                                  <span>
-                                                    {" "}
-                                                    3. Waktu yang disediakan
-                                                    untuk mengerjakan soal
-                                                    adalah 15 menit!
-                                                  </span>{" "}
-                                                  <br />
-                                                  <span>
-                                                    {" "}
-                                                    4. Tidak diperbolehkan
-                                                    membuka buku, handphone dll!
-                                                  </span>
-                                                </AlertDialogDescription>
-                                              ) : (
-                                                <fieldset className="w-full">
-                                                  <Input
-                                                    className="w-full font-normal mt-2 text-sm"
-                                                    placeholder="Masukkan kode akses "
-                                                    value={codeAccess}
-                                                    onChange={(e) =>
-                                                      setCodeAccess(
-                                                        e.target.value
-                                                      )
-                                                    }
-                                                    type="text"
-                                                  />
-                                                </fieldset>
-                                              )}
-                                            </>
-                                          )}
-                                        </div>
-                                      </AlertDialogTitle>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter className="w-full">
-                                      {userDetail!.Pelatihan[
-                                        indexPelatihanSelected
-                                      ]!.PostTest == 0 ? (
-                                        <div className="flex-col flex w-full gap-2">
-                                          {isOpenGuideline ? (
-                                            <Button
-                                              className="py-5 bg-blue-500 hover:bg-blue-500"
-                                              onClick={(e) =>
-                                                setIsOpenGuideline(
-                                                  !isOpenGuideline
-                                                )
-                                              }
-                                            >
-                                              Lanjut
-                                            </Button>
-                                          ) : (
-                                            <AlertDialogAction
-                                              className="py-5"
-                                              disabled={
-                                                codeAccess == "" ? true : false
-                                              }
-                                              onClick={(e) =>
-                                                handleDirectToExamPostTest(e)
-                                              }
-                                            >
-                                              Mulai Post Test
-                                            </AlertDialogAction>
-                                          )}
-
-                                          <AlertDialogCancel className="py-5">
-                                            Close
-                                          </AlertDialogCancel>
-                                        </div>
-                                      ) : (
-                                        <div className="flex-col flex w-full gap-2">
-                                          <p className=" text-center font-normal text-gray-500 -mt-2">
-                                            Maaf kamu telah mengikuti ujian ini,
-                                            kamu tidak memiliki akses lagi
-                                            terkait ujian ini
-                                          </p>
-                                          <AlertDialogCancel className="py-5">
-                                            Close
-                                          </AlertDialogCancel>
-                                        </div>
-                                      )}
-                                    </AlertDialogFooter>
-                                  </AlertDialogContent>
-                                </AlertDialog>
-                              </span>
-                            ) : (
-                              <span className="flex items-center">-</span>
-                            )}
-                          </dt>
-                          <dd className="text-xs text-gray-500">
-                            Kode Ujian & Link Ujian
-                          </dd>
+                                      ]?.DetailPelatihan!,
+                              }}
+                              className="text-sm font-normal text-justify group-hover:text-xs text-gray-500 group-hover:duration-1000"
+                            />{" "}
+                            <p
+                              onClick={(e) => setSeeMore(!seeMore)}
+                              className="text-blue-500 text-sm cursor-pointer"
+                            >
+                              {seeMore
+                                ? "Baca lebih sedikit"
+                                : "Baca lebih lengkap"}
+                            </p>
+                          </div>
                         </div>
-                      </dl>
+                        <dl className="mt-6 flex gap-4 sm:gap-6">
+                          <div className="flex flex-col-reverse">
+                            <dt className="text-sm font-medium text-gray-600">
+                              {
+                                userDetail?.Pelatihan[indexPelatihanSelected]
+                                  ?.BidangPelatihan!
+                              }
+                            </dt>
+                            <dd className="text-xs text-gray-500">Bidang</dd>
+                          </div>
 
-                      {userDetail?.Pelatihan[indexPelatihanSelected]?.PreTest !=
-                        0 && <TablePenilaian />}
+                          <div className="flex flex-col-reverse">
+                            <dt className="text-sm font-bold text-gray-600">
+                              {userDetail?.Pelatihan[indexPelatihanSelected]
+                                .NoSertifikat! == ""
+                                ? "-"
+                                : userDetail?.Pelatihan[indexPelatihanSelected]
+                                    ?.NoSertifikat!}
+                            </dt>
+                            <dd className="text-xs text-gray-500">
+                              No Sertifikat
+                            </dd>
+                          </div>
+                          <div className="flex flex-col-reverse">
+                            <dt className="text-sm font-bold text-gray-600">
+                              {userDetail?.Pelatihan[indexPelatihanSelected]
+                                .NoRegistrasi! == ""
+                                ? "-"
+                                : userDetail?.Pelatihan[indexPelatihanSelected]
+                                    ?.NoRegistrasi!}
+                            </dt>
+                            <dd className="text-xs text-gray-500">
+                              No Registrasi
+                            </dd>
+                          </div>
+                        </dl>
+                        <dl className="mt-3">
+                          <div className="flex flex-col-reverse">
+                            <dt
+                              className={`text-sm font-medium text-gray-600 ${
+                                userDetail?.Pelatihan[indexPelatihanSelected]
+                                  ?.Keterangan! == ""
+                                  ? "text-rose-500"
+                                  : "text-green-500"
+                              }`}
+                            >
+                              {userDetail?.Pelatihan[indexPelatihanSelected]
+                                ?.Keterangan! == "" ? (
+                                <span className="flex items-center">
+                                  <IoMdCloseCircle />
+                                  Data belum divalidasi operator
+                                </span>
+                              ) : (
+                                <span className="flex items-center">
+                                  <RiVerifiedBadgeFill />
+                                  Data pendaftaran anda valid
+                                </span>
+                              )}
+                            </dt>
+                            <dd className="text-xs text-gray-500">
+                              Status Peserta
+                            </dd>
+                          </div>
+                        </dl>
 
-                      {/* <Timeline /> */}
+                        <dl className="mt-3">
+                          <div className="flex flex-col-reverse">
+                            <dt
+                              className={`text-sm font-medium text-gray-600 `}
+                            >
+                              {userDetail?.Pelatihan[indexPelatihanSelected]
+                                ?.CodeAksess! ? (
+                                <span className="flex items-center">
+                                  {
+                                    userDetail?.Pelatihan[
+                                      indexPelatihanSelected
+                                    ]?.CodeAksess!
+                                  }{" "}
+                                  |{" "}
+                                  <AlertDialog>
+                                    <AlertDialogTrigger>
+                                      <div className="underline text-blue-500 ml-1">
+                                        Link Ujian Pre-Test
+                                      </div>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
+                                          <div className="w-28 h-28 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center">
+                                            <div className="w-20 h-20 rounded-full  bg-gradient-to-b from-gray-300 via-whiter to-white flex items-center justify-center ">
+                                              <Logo />
+                                            </div>
+                                          </div>
+
+                                          <div className="flex flex-col gap-1 w-full justify-center items-center">
+                                            {userDetail!.Pelatihan[
+                                              indexPelatihanSelected
+                                            ]!.PreTest == 0 && (
+                                              <h1 className="font-bold text-2xl text-center leading-[100%]">
+                                                {selectedPelatihan! &&
+                                                  selectedPelatihan!
+                                                    .NamaPelatihan}
+                                              </h1>
+                                            )}
+
+                                            {userDetail!.Pelatihan[
+                                              indexPelatihanSelected
+                                            ]!.PreTest == 0 && (
+                                              <>
+                                                {" "}
+                                                <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
+                                                  Sebagai bagian dari
+                                                  pelaksanaan pelatihan agar
+                                                  dapat mengetahui kemampuan
+                                                  peserta diawal harap untuk
+                                                  mengikuti{" "}
+                                                  <span className="italic">
+                                                    pre-test
+                                                  </span>{" "}
+                                                  dan{" "}
+                                                  {isOpenGuideline
+                                                    ? "membaca petunjuk pengerjaan"
+                                                    : "memasukkan kode akses"}{" "}
+                                                  terlebih dahulu
+                                                </AlertDialogDescription>
+                                                {isOpenGuideline ? (
+                                                  <AlertDialogDescription className="w-full text-left font-normal text-sm mt-2">
+                                                    <span className="font-semibold text-[#000]">
+                                                      Petunjuk Pengerjaan :{" "}
+                                                    </span>
+                                                    <br />
+                                                    <span>
+                                                      {" "}
+                                                      1.Pilih salah satu jawaban
+                                                      yang Saudara anggap paling
+                                                      tepat/benar!
+                                                    </span>{" "}
+                                                    <br />
+                                                    <span>
+                                                      {" "}
+                                                      2. Dalam menjawab soal,
+                                                      gunakan gadget yang
+                                                      mumpuni!
+                                                    </span>{" "}
+                                                    <br />
+                                                    <span>
+                                                      {" "}
+                                                      3. Waktu yang disediakan
+                                                      untuk mengerjakan soal
+                                                      adalah 15 menit!
+                                                    </span>{" "}
+                                                    <br />
+                                                    <span>
+                                                      {" "}
+                                                      4. Tidak diperbolehkan
+                                                      membuka buku, handphone
+                                                      dll!
+                                                    </span>
+                                                  </AlertDialogDescription>
+                                                ) : (
+                                                  <fieldset className="w-full">
+                                                    <Input
+                                                      className="w-full font-normal mt-2 text-sm"
+                                                      placeholder="Masukkan kode akses "
+                                                      value={codeAccess}
+                                                      onChange={(e) =>
+                                                        setCodeAccess(
+                                                          e.target.value
+                                                        )
+                                                      }
+                                                      type="text"
+                                                    />
+                                                  </fieldset>
+                                                )}
+                                              </>
+                                            )}
+                                          </div>
+                                        </AlertDialogTitle>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter className="w-full">
+                                        {userDetail!.Pelatihan[
+                                          indexPelatihanSelected
+                                        ]!.PreTest == 0 ? (
+                                          <div className="flex-col flex w-full gap-2">
+                                            {isOpenGuideline ? (
+                                              <Button
+                                                className="py-5 bg-blue-500 hover:bg-blue-500"
+                                                onClick={(e) =>
+                                                  setIsOpenGuideline(
+                                                    !isOpenGuideline
+                                                  )
+                                                }
+                                              >
+                                                Lanjut
+                                              </Button>
+                                            ) : (
+                                              <AlertDialogAction
+                                                className="py-5"
+                                                disabled={
+                                                  codeAccess == ""
+                                                    ? true
+                                                    : false
+                                                }
+                                                onClick={(e) =>
+                                                  handleDirectToExam(e)
+                                                }
+                                              >
+                                                Mulai Pre Test
+                                              </AlertDialogAction>
+                                            )}
+
+                                            <AlertDialogCancel className="py-5">
+                                              Close
+                                            </AlertDialogCancel>
+                                          </div>
+                                        ) : (
+                                          <div className="flex-col flex w-full gap-2">
+                                            <p className=" text-center font-normal text-gray-500 -mt-2">
+                                              Maaf kamu telah mengikuti ujian
+                                              ini, kamu tidak memiliki akses
+                                              lagi terkait ujian ini
+                                            </p>
+                                            <AlertDialogCancel className="py-5">
+                                              Close
+                                            </AlertDialogCancel>
+                                          </div>
+                                        )}
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>{" "}
+                                  |{" "}
+                                  <AlertDialog>
+                                    <AlertDialogTrigger>
+                                      <div className="underline text-blue-500 ml-1">
+                                        Link Ujian Post-Test
+                                      </div>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
+                                      <AlertDialogHeader>
+                                        <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
+                                          <div className="w-28 h-28 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center">
+                                            <div className="w-20 h-20 rounded-full  bg-gradient-to-b from-gray-300 via-whiter to-white flex items-center justify-center ">
+                                              <Logo />
+                                            </div>
+                                          </div>
+
+                                          <div className="flex flex-col gap-1 w-full justify-center items-center">
+                                            {userDetail!.Pelatihan[
+                                              indexPelatihanSelected
+                                            ]!.PostTest == 0 && (
+                                              <h1 className="font-bold text-2xl text-center leading-[100%]">
+                                                {selectedPelatihan! &&
+                                                  selectedPelatihan!
+                                                    .NamaPelatihan}
+                                              </h1>
+                                            )}
+
+                                            {userDetail!.Pelatihan[
+                                              indexPelatihanSelected
+                                            ]!.PostTest == 0 && (
+                                              <>
+                                                {" "}
+                                                <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
+                                                  Sebagai bagian dari
+                                                  pelaksanaan pelatihan agar
+                                                  dapat mengetahui kemampuan
+                                                  peserta diawal harap untuk
+                                                  mengikuti{" "}
+                                                  <span className="italic">
+                                                    post-test
+                                                  </span>{" "}
+                                                  dan{" "}
+                                                  {isOpenGuideline
+                                                    ? "membaca petunjuk pengerjaan"
+                                                    : "memasukkan kode akses"}{" "}
+                                                  terlebih dahulu
+                                                </AlertDialogDescription>
+                                                {isOpenGuideline ? (
+                                                  <AlertDialogDescription className="w-full text-left font-normal text-sm mt-2">
+                                                    <span className="font-semibold text-[#000]">
+                                                      Petunjuk Pengerjaan :{" "}
+                                                    </span>
+                                                    <br />
+                                                    <span>
+                                                      {" "}
+                                                      1.Pilih salah satu jawaban
+                                                      yang Saudara anggap paling
+                                                      tepat/benar!
+                                                    </span>{" "}
+                                                    <br />
+                                                    <span>
+                                                      {" "}
+                                                      2. Dalam menjawab soal,
+                                                      gunakan gadget yang
+                                                      mumpuni!
+                                                    </span>{" "}
+                                                    <br />
+                                                    <span>
+                                                      {" "}
+                                                      3. Waktu yang disediakan
+                                                      untuk mengerjakan soal
+                                                      adalah 15 menit!
+                                                    </span>{" "}
+                                                    <br />
+                                                    <span>
+                                                      {" "}
+                                                      4. Tidak diperbolehkan
+                                                      membuka buku, handphone
+                                                      dll!
+                                                    </span>
+                                                  </AlertDialogDescription>
+                                                ) : (
+                                                  <fieldset className="w-full">
+                                                    <Input
+                                                      className="w-full font-normal mt-2 text-sm"
+                                                      placeholder="Masukkan kode akses "
+                                                      value={codeAccess}
+                                                      onChange={(e) =>
+                                                        setCodeAccess(
+                                                          e.target.value
+                                                        )
+                                                      }
+                                                      type="text"
+                                                    />
+                                                  </fieldset>
+                                                )}
+                                              </>
+                                            )}
+                                          </div>
+                                        </AlertDialogTitle>
+                                      </AlertDialogHeader>
+                                      <AlertDialogFooter className="w-full">
+                                        {userDetail!.Pelatihan[
+                                          indexPelatihanSelected
+                                        ]!.PostTest == 0 ? (
+                                          <div className="flex-col flex w-full gap-2">
+                                            {isOpenGuideline ? (
+                                              <Button
+                                                className="py-5 bg-blue-500 hover:bg-blue-500"
+                                                onClick={(e) =>
+                                                  setIsOpenGuideline(
+                                                    !isOpenGuideline
+                                                  )
+                                                }
+                                              >
+                                                Lanjut
+                                              </Button>
+                                            ) : (
+                                              <AlertDialogAction
+                                                className="py-5"
+                                                disabled={
+                                                  codeAccess == ""
+                                                    ? true
+                                                    : false
+                                                }
+                                                onClick={(e) =>
+                                                  handleDirectToExamPostTest(e)
+                                                }
+                                              >
+                                                Mulai Post Test
+                                              </AlertDialogAction>
+                                            )}
+
+                                            <AlertDialogCancel className="py-5">
+                                              Close
+                                            </AlertDialogCancel>
+                                          </div>
+                                        ) : (
+                                          <div className="flex-col flex w-full gap-2">
+                                            <p className=" text-center font-normal text-gray-500 -mt-2">
+                                              Maaf kamu telah mengikuti ujian
+                                              ini, kamu tidak memiliki akses
+                                              lagi terkait ujian ini
+                                            </p>
+                                            <AlertDialogCancel className="py-5">
+                                              Close
+                                            </AlertDialogCancel>
+                                          </div>
+                                        )}
+                                      </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                  </AlertDialog>
+                                </span>
+                              ) : (
+                                <span className="flex items-center">-</span>
+                              )}
+                            </dt>
+                            <dd className="text-xs text-gray-500">
+                              Kode Ujian & Link Ujian
+                            </dd>
+                          </div>
+                        </dl>
+
+                        {userDetail?.Pelatihan[indexPelatihanSelected]
+                          ?.PreTest != 0 && <TablePenilaian />}
+
+                        {/* <Timeline /> */}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               </>
             ) : (

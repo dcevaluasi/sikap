@@ -1,0 +1,136 @@
+import React from "react";
+import {
+  Tooltip,
+  TooltipProvider,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
+import Toast from "@/components/toast";
+import Cookies from "js-cookie";
+import { elautBaseUrl } from "@/constants/urls";
+import axios from "axios";
+import { PelatihanMasyarakat } from "@/types/product";
+
+interface DeleteButtonProps {
+  idPelatihan: string;
+  pelatihan: PelatihanMasyarakat | null;
+  handleFetchingData: any;
+}
+
+const DeleteButton: React.FC<DeleteButtonProps> = ({
+  idPelatihan,
+  pelatihan,
+  handleFetchingData,
+}) => {
+  const [isOpenFormDelete, setIsOpenFormDelete] =
+    React.useState<boolean>(false);
+  const handleDelete = async (pesertaPelatihan: number, sertifikat: string) => {
+    if (pesertaPelatihan > 0) {
+      Toast.fire({
+        icon: "error",
+        title:
+          "Ups, pelatihan tidak dapat dihapus karena sudah ada yang mendaftar!",
+      });
+    } else if (sertifikat != "") {
+      Toast.fire({
+        icon: "error",
+        title:
+          "Ups, pelatihan sudah terbit nomor sertifikatnya, tidak dapat dihapus!",
+      });
+    } else {
+      try {
+        const response = await axios.delete(
+          `${elautBaseUrl}/lemdik/deletePelatihan?id=${idPelatihan}`,
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+            },
+          }
+        );
+        console.log(response);
+        Toast.fire({
+          icon: "success",
+          title: "Berhasil menghapus pelatihan dari database, sobat elaut!",
+        });
+        handleFetchingData();
+        setIsOpenFormDelete(!isOpenFormDelete);
+      } catch (error) {
+        setIsOpenFormDelete(!isOpenFormDelete);
+        console.error({ error });
+        Toast.fire({
+          icon: "error",
+          title: "Ups, pelatihan tidak dapat dihapus karena kesalahan server!",
+        });
+        handleFetchingData();
+      }
+    }
+  };
+
+  return (
+    <>
+      <AlertDialog open={isOpenFormDelete} onOpenChange={setIsOpenFormDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Apakah kamu yakin menghapus pelatihan ini?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Penghapusan data ini akan dilakukan secara permanen, sehingga anda
+              tidak dapat kembali melakukan undo terkait tindakan ini!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => setIsOpenFormDelete(!isOpenFormDelete)}
+            >
+              Batal
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                handleDelete(
+                  pelatihan?.UserPelatihan.length!,
+                  pelatihan?.NoSertifikat!
+                );
+              }}
+              className="bg-rose-600 text-white"
+            >
+              Hapus
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={() => setIsOpenFormDelete(!isOpenFormDelete)}
+              variant="outline"
+              className="ml-auto text-rose-600 border rounded-full border-rose-600 hover:bg-rose-600 hover:text-white duration-700"
+            >
+              <Trash className="h-4 w-4 " />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Hapus</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </>
+  );
+};
+
+export default DeleteButton;

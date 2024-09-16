@@ -47,7 +47,7 @@ export default function Page() {
 
   return (
     <>
-      <section className="relative h-fit flex flex-col items-center justify-center -mt-10">
+      <section className="relative h-fit flex flex-col items-center justify-center -mt-10 pt-4">
         <div className="absolute w-full h-full bg-gray-900 bg-opacity-100"></div>
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 z-[40]">
