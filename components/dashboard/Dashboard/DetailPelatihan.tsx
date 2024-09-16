@@ -91,10 +91,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Toast from "@/components/toast";
 import { MateriButton, PublishButton } from "./Actions";
 import DeleteButton from "./Actions/DeleteButton";
+import CloseButton from "./Actions/CloseButton";
+import UploadSuratButton from "./Actions/UploadSuratButton";
 
 function DetailPelatihan() {
   const paths = usePathname().split("/");
   const idPelatihan = paths[paths.length - 1];
+  const kodePelatihan = paths[paths.length - 2];
   const [pelatihan, setPelatihan] = React.useState<PelatihanMasyarakat | null>(
     null
   );
@@ -145,18 +148,17 @@ function DetailPelatihan() {
               handleFetchingData={handleFetchDetailPelatihan}
             />
 
-            <Button
-              variant="outline"
-              className="ml-auto border rounded-full border-yellow-400 hover:bg-yellow-400 hover:text-white text-yellow-400 duration-700"
-            >
-              <HiLockClosed className="h-5 w-4 " />
-            </Button>
+            <CloseButton
+              idPelatihan={idPelatihan}
+              statusPelatihan={pelatihan?.StatusApproval ?? ""}
+              handleFetchingData={handleFetchDetailPelatihan}
+            />
 
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
-                    href={``}
+                    href={`/admin/lemdiklat/pelatihan/${kodePelatihan}/peserta-pelatihan/${idPelatihan}`}
                     className="ml-auto border rounded-full border-green-500  h-9 px-4 py-2  hover:bg-green-500 hover:text-white text-green-500 duration-700"
                   >
                     <HiUserGroup className="h-4 w-4 " />
@@ -181,13 +183,11 @@ function DetailPelatihan() {
               handleFetchingData={handleFetchDetailPelatihan}
             />
 
-            <Link
-              href={""}
-              target="_blank"
-              className="ml-auto border rounded-full border-gray-600  bg-white shadow-sm hover:bg-gray-600 hover:text-white text-gray-600 duration-700 h-9 px-4 py-2 "
-            >
-              <LucideFileCheck2 className="h-4 w-4 " />
-            </Link>
+            <UploadSuratButton
+              idPelatihan={idPelatihan}
+              handleFetchingData={handleFetchDetailPelatihan}
+              suratPemberitahuan={pelatihan?.SuratPemberitahuan ?? ""}
+            />
           </div>
         </div>
       </div>

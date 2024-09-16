@@ -10,8 +10,8 @@ function Layanan() {
       <div className="py-4 mx-auto max-w-7xl sm:py-4  flex flex-col gap-4">
         <div className="max-w-3xl w-full mx-auto text-center pflex flex-col items-center justify-center pb-5 md:pb-8">
           <h1 className="text-4xl font-calsans leading-[100%]">
-            Balai Penyelenggara
-            <br /> Pelatihan dan Sertifikasi
+            Layanan Publik
+            <br /> Tersedia di Balai Pelatihan
           </h1>
           <p className="text-base text-gray-60">
             Expore Balai penyelenggara pelatihan dan sertifikasi terakreditasi
@@ -27,7 +27,7 @@ function Layanan() {
             >
               <Image
                 fill={true}
-                src="/images/balai-pelatihan/ambon.jpg"
+                src="/images/program-pelatihan/dummies/akp/akp-6.jpg"
                 alt=""
                 className="absolute inset-0  object-cover group-hover:scale-105 group transition-transform duration-500 ease-in-out"
               />
@@ -50,7 +50,7 @@ function Layanan() {
             >
               <Image
                 fill={true}
-                src="/images/balai-pelatihan/banyuwangi.jpg"
+                src="/images/program-pelatihan/dummies/akp/akp-2.jpg"
                 alt=""
                 className="absolute inset-0  object-cover group-hover:scale-105 group transition-transform duration-500 ease-in-out"
               />
@@ -71,7 +71,7 @@ function Layanan() {
               >
                 <Image
                   fill={true}
-                  src="/images/balai-pelatihan/bitung.jpg"
+                  src="/images/program-pelatihan/dummies/akp/akp-4.jpg"
                   alt=""
                   className="absolute inset-0  object-cover group group-hover:scale-105 transition-transform duration-500 ease-in-out"
                 />
@@ -91,7 +91,7 @@ function Layanan() {
               >
                 <Image
                   fill={true}
-                  src="/images/balai-pelatihan/sukamandi.jpg"
+                  src="/images/layanan/profil-balai.JPG"
                   alt=""
                   className="absolute inset-0  object-cover group-hover:scale-105 group transition-transform duration-500 ease-in-out"
                 />
@@ -114,7 +114,7 @@ function Layanan() {
             >
               <Image
                 fill={true}
-                src="/images/balai-pelatihan/medan.jpg"
+                src="/images/layanan/layanan-lainnya.JPG"
                 alt=""
                 className="absolute inset-0 h-full group w-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
               />

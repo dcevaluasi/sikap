@@ -47,9 +47,10 @@ export default function HeroLandingBPPP({ bppp }: { bppp: string }) {
   } else {
     images = [
       "/images/balai-pelatihan/bda-sukamandi.jpg",
-      "/images/balai-pelatihan/bda-sukamandi.jpg",
-      "/images/balai-pelatihan/bda-sukamandi.jpg",
-      "/images/balai-pelatihan/bda-sukamandi.jpg",
+      "/images/balai-pelatihan/sukamandi/image.JPG",
+      "/images/balai-pelatihan/sukamandi/image-2.JPG",
+      "/images/balai-pelatihan/sukamandi/image-3.JPG",
+      "/images/balai-pelatihan/sukamandi/image-4.JPG",
     ];
   }
 

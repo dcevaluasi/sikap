@@ -118,6 +118,7 @@ export default function Header() {
       <li>
         <Link
           href={href}
+          target={`${name == "Pelatihan Aparatur" ? "_target" : "_self"}`}
           onClick={(e) => setOpenModal(false)}
           className={`font-medium ${
             top && usePathname().includes("layanan")
@@ -233,27 +234,18 @@ export default function Header() {
                 <NavDropDown href="#" name="Layanan" top={top}>
                   <NavLink
                     href="/layanan/pelatihan"
-                    name="BPPP Tegal"
+                    name="Pelatihan Masyarakat"
                     top={top}
                   >
                     <div className="flex gap-2 items-center">
                       <HiMiniUserGroup className="text-xl" />{" "}
-                      <span>Pelatihan Masyarakat</span>
+                      <span>Pelatihan dan Sertiffikasi</span>
                     </div>
                   </NavLink>
-                  <NavLink
-                    href="/layanan/uji-kompetensi"
-                    name="BPPP Ambon"
-                    top={top}
-                  >
-                    <div className="flex gap-2 items-center">
-                      <RiVerifiedBadgeFill className="text-xl" />{" "}
-                      <span>Sertifikasi atau Uji Kompetensi</span>
-                    </div>
-                  </NavLink>
+
                   <NavLink
                     href="https://elearning.kkp.go.id/"
-                    name="BPPP Medan"
+                    name="Pelatihan Aparatur"
                     top={top}
                   >
                     <div className="flex gap-2 items-center">

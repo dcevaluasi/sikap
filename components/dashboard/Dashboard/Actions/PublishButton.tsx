@@ -88,7 +88,7 @@ const PublishButton: React.FC<PublishButtonProps> = ({
           </AlertDialogHeader>
           <fieldset>
             <form autoComplete="off">
-              {selectedStatus == "Belum Publish" ? (
+              {statusPelatihan == "Belum Publish" ? (
                 <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
                   <div>
                     <Checkbox
@@ -122,12 +122,12 @@ const PublishButton: React.FC<PublishButtonProps> = ({
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={(e) =>
-                selectedStatus == "Belum Publish"
-                  ? handlePublish(idPelatihan, statusPelatihan)
+                statusPelatihan == "Belum Publish"
+                  ? handlePublish(idPelatihan, selectedStatus)
                   : handlePublish(idPelatihan, "Belum Publish")
               }
             >
-              {selectedStatus == "Publish" ? "Unpublish" : "Publsih"}
+              {statusPelatihan == "Publish" ? "Unpublish" : "Publish"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

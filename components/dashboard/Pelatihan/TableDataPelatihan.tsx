@@ -597,13 +597,13 @@ const TableDataPelatihan: React.FC = () => {
     //               <AlertDialogCancel>Batal</AlertDialogCancel>
     //               <AlertDialogAction
     //                 className="bg-rose-600 text-white"
-                    // onClick={() => {
-                    //   handleDelete(
-                    //     row.original.IdPelatihan,
-                    //     row.original.UserPelatihan.length,
-                    //     row.original.NoSertifikat
-                    //   ); // Call the handleDelete function when action is clicked
-                    // }}
+    // onClick={() => {
+    //   handleDelete(
+    //     row.original.IdPelatihan,
+    //     row.original.UserPelatihan.length,
+    //     row.original.NoSertifikat
+    //   ); // Call the handleDelete function when action is clicked
+    // }}
     //               >
     //                 Hapus
     //               </AlertDialogAction>
@@ -763,30 +763,30 @@ const TableDataPelatihan: React.FC = () => {
     //         >
     //           <FiUploadCloud className="h-4 w-4 text-gray-600" />
     //         </Button> */}
-    //         {row.original.SuratPemberitahuan !=
-    //         "https://api-elaut.ikulatluh.cloud/public/static/suratPemberitahuan/" ? (
-    //           <Link
-    //             href={row.original.SuratPemberitahuan}
-    //             target="_blank"
-    //             className="ml-auto border border-gray-600  bg-white shadow-sm hover:bg-neutral-100 hover:text-neutral-900 h-9 px-4 py-2 rounded-md"
-    //           >
-    //             <LucideFileCheck2 className="h-4 w-4 text-gray-600" />
-    //           </Link>
-    //         ) : (
-    //           <Button
-    //             onClick={() => {
-    //               setIsOpenFormSuratPemberitahuan(
-    //                 !isOpenFormSuratPemberitahuan
-    //               );
-    //               setFileSuratPemberitahuan(row.original.SuratPemberitahuan);
-    //               setSelectedId(row.original.IdPelatihan);
-    //             }}
-    //             variant="outline"
-    //             className="ml-auto border border-gray-600"
-    //           >
-    //             <FiUploadCloud className="h-4 w-4 text-gray-600" />
-    //           </Button>
-    //         )}
+    // {row.original.SuratPemberitahuan !=
+    // "https://api-elaut.ikulatluh.cloud/public/static/suratPemberitahuan/" ? (
+    //   <Link
+    //     href={row.original.SuratPemberitahuan}
+    //     target="_blank"
+    //     className="ml-auto border border-gray-600  bg-white shadow-sm hover:bg-neutral-100 hover:text-neutral-900 h-9 px-4 py-2 rounded-md"
+    //   >
+    //     <LucideFileCheck2 className="h-4 w-4 text-gray-600" />
+    //   </Link>
+    // ) : (
+    //   <Button
+    //     onClick={() => {
+    //       setIsOpenFormSuratPemberitahuan(
+    //         !isOpenFormSuratPemberitahuan
+    //       );
+    //       setFileSuratPemberitahuan(row.original.SuratPemberitahuan);
+    //       setSelectedId(row.original.IdPelatihan);
+    //     }}
+    //     variant="outline"
+    //     className="ml-auto border border-gray-600"
+    //   >
+    //     <FiUploadCloud className="h-4 w-4 text-gray-600" />
+    //   </Button>
+    // )}
     //       </div>
     //     </div>
     //   ),
@@ -807,7 +807,10 @@ const TableDataPelatihan: React.FC = () => {
         );
       },
       cell: ({ row }) => (
-        <Link href={`/admin/lemdiklat/pelatihan/detail/${row.original.KodePelatihan}/${row.original.IdPelatihan}`} className={`${"ml-0"} text-left capitalize bg-gray-100 cursor-pointer`}>
+        <Link
+          href={`/admin/lemdiklat/pelatihan/detail/${row.original.KodePelatihan}/${row.original.IdPelatihan}`}
+          className={`${"ml-0"} text-left capitalize bg-gray-100 cursor-pointer`}
+        >
           <p className="text-xs text-gray-400 mt-2 leading-[100%] mb-1">
             {" "}
             {row.getValue("KodePelatihan")} • {row.original.BidangPelatihan} •
@@ -1317,280 +1320,6 @@ const TableDataPelatihan: React.FC = () => {
               {isUploading ? <span>Uploading...</span> : <span>Upload</span>}
             </AlertDialogAction>
           </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog
-        open={isOpenFormPublishedPelatihan}
-        onOpenChange={setIsOpenFormPublishedPelatihan}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Publikasi ke Web E-LAUT</AlertDialogTitle>
-            <AlertDialogDescription className="-mt-2">
-              Agar pelatihan di balai/lemdiklat-mu dapat dilihat oleh masyarakat
-              umum lakukan checklist agar tampil di website E-LAUT!
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <fieldset>
-            <form autoComplete="off">
-              {selectedStatus == "Belum Publish" ? (
-                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                  <div>
-                    <Checkbox
-                      id="publish"
-                      onCheckedChange={(e) => setStatusPelatihan("Publish")}
-                    />
-                  </div>
-                  <div className="space-y-1 leading-none">
-                    <label>Publish Website E-LAUT</label>
-                    <p className="text-xs leading-[110%] text-gray-600">
-                      Dengan ini sebagai pihak lemdiklat saya mempublish
-                      informasi pelatihan terbuka untuk masyarakat umum!
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                  <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
-                  <div className="space-y-1 leading-none">
-                    <label>Published Website E-LAUT</label>
-                    <p className="text-xs leading-[110%] text-gray-600">
-                      Informasi Kelas Pelatihanmu telah dipublikasikan melalui
-                      laman Website E-LAUT balai mu!
-                    </p>
-                  </div>
-                </div>
-              )}
-            </form>
-          </fieldset>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={(e) =>
-                selectedStatus == "Belum Publish"
-                  ? handleUpdatePublishPelatihanToELAUT(
-                    selectedIdPelatihanStatus,
-                    statusPelatihan
-                  )
-                  : handleUpdatePublishPelatihanToELAUT(
-                    selectedIdPelatihanStatus,
-                    "Belum Publish"
-                  )
-              }
-            >
-              {selectedStatus == "Publish" ? "Unpublish" : "Publsih"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog
-        open={openFormTutupPelatihan}
-        onOpenChange={setOpenFormTutupPelatihan}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Pelatihan Telah Selesai?</AlertDialogTitle>
-            <AlertDialogDescription className="-mt-2">
-              Jika Pelatihan di Lembaga atau Balai Pelatihanmu telah selesai,
-              ubah status kelas-mu menjadi selesai, untuk dapat melanjutkan ke
-              proses penerbitan sertifikat.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <fieldset>
-            <form autoComplete="off" className="w-fit">
-              {selectedStatusPelatihan != "Selesai" ? (
-                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                  <div>
-                    <Checkbox
-                      id="publish"
-                      onCheckedChange={(e) => setStatusPelatihan("Selesai")}
-                    />
-                  </div>
-                  <div className="space-y-1 leading-none">
-                    <label>Tutup Pelatihan</label>
-                    <p className="text-xs leading-[110%] text-gray-600">
-                      Dengan ini sebagai pihak lemdiklat saya menyatakan bahwa
-                      pelatihan telah selesai dilaksanakan!
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                  <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
-                  <div className="space-y-1 leading-none">
-                    <label>Pelatihan Selesai</label>
-                    <p className="text-xs leading-[110%] text-gray-600">
-                      Kelas pelatihanmu telah ditutup atau selesai, kamu dapat
-                      melanjutkan ke proses penerbitan sertifikat!
-                    </p>
-                  </div>
-                </div>
-              )}
-            </form>
-          </fieldset>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={(e) =>
-                selectedStatusPelatihan != "Selesai"
-                  ? handleUpdateClosePelatihanELAUT(
-                    selectedIdStatusPelatihan,
-                    statusPelatihan
-                  )
-                  : null
-              }
-            >
-              {selectedStatusPelatihan == "Selesai" ? "OK" : "Tutup"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog open={isOpenFormMateri}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2">
-              {" "}
-              <FaBookOpen className="h-4 w-4" />
-              Tambah Materi Pelatihan
-            </AlertDialogTitle>
-            <AlertDialogDescription className="-mt-2">
-              Daftarkan materi pelatihan yang diselenggarakan yang nantinya akan
-              tercantum pada sertifikat peserta pelatihan!
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <fieldset>
-            <form autoComplete="off">
-              <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="w-full px-3">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="email"
-                  >
-                    Upload File Excel Materi{" "}
-                  </label>
-                  <div className="flex gap-1">
-                    <input
-                      type="file"
-                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                      required
-                      onChange={handleFileMateriChange}
-                    />
-                    <Link
-                      target="_blank"
-                      href={urlTemplateMateriPelatihan}
-                      className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
-                    >
-                      <PiMicrosoftExcelLogoFill />
-                      Unduh Template
-                    </Link>
-                  </div>
-                  <p className="text-gray-700 text-xs mt-1">
-                    *Download template, input data sesuai format template lalu
-                    upload
-                  </p>
-                </div>
-              </div>
-
-              <AlertDialogFooter className="mt-3">
-                <AlertDialogCancel
-                  onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
-                >
-                  Cancel
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={(e) => handleUploadMateriPelatihan(selectedId)}
-                >
-                  Upload
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </form>
-          </fieldset>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog open={isOpenFormSuratPemberitahuan}>
-        <AlertDialogContent>
-          <AlertDialogHeader className="flex gap-0 flex-col">
-            <AlertDialogTitle className="flex items-center gap-2">
-              {" "}
-              <FiUploadCloud className="h-4 w-4" />
-              Upload Surat Pemberitahuan
-            </AlertDialogTitle>
-            <AlertDialogDescription className="-mt-2">
-              Dalam pelaksanaan pelatihan Pusat Pelatihan Kelautan dan Perikanan
-              perlu tahu untuk pemberitahuan!
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <fieldset>
-            <form autoComplete="off">
-              <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="w-full px-3">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="email"
-                  >
-                    Upload Surat Pemberitahuan{" "}
-                  </label>
-
-                  <div className="flex gap-1">
-                    <input
-                      type="file"
-                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                      required
-                      onChange={handleSuratPemberitahuanChange}
-                    />
-                  </div>
-
-                  <p className="text-gray-700 text-xs mt-1">
-                    *Surat pemberitahuan yang diupload merupakan surat yang
-                    sudah ditandatangani melalui portal dengan contoh seperti
-                    <Link
-                      href={
-                        "https://drive.google.com/file/d/1Zzu6DRuaj_SwJ5Sk0XQfShtghA-HYT5F/view?usp=sharing"
-                      }
-                      target="_blank"
-                      className="ml-1 text-blue-500 underline"
-                    >
-                      berikut
-                    </Link>
-                    , hal ini dilakukan untuk pengarsipan dan bahan bukti
-                    penerbitan sertifikat nantinya!
-                  </p>
-                </div>
-              </div>
-
-              <AlertDialogFooter className="mt-3">
-                <>
-                  {" "}
-                  {!isUploading && (
-                    <AlertDialogCancel
-                      onClick={(e) =>
-                        setIsOpenFormSuratPemberitahuan(
-                          !isOpenFormSuratPemberitahuan
-                        )
-                      }
-                    >
-                      Cancel
-                    </AlertDialogCancel>
-                  )}
-                  <AlertDialogAction
-                    onClick={(e) => handleUploadSuratPemberitahuan(selectedId)}
-                    disabled={isUploading}
-                    className={`${isUploading && "px-6"}`}
-                  >
-                    {isUploading ? (
-                      <span>Uploading...</span>
-                    ) : (
-                      <span>Upload</span>
-                    )}
-                  </AlertDialogAction>
-                </>
-              </AlertDialogFooter>
-            </form>
-          </fieldset>
         </AlertDialogContent>
       </AlertDialog>
 

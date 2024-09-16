@@ -37,7 +37,7 @@ function ListProgram({
             clickable: true,
           }}
           navigation={true} // Enable navigation arrows
-          modules={[FreeMode, Pagination, Navigation]} // Add Pagination and Navigation modules
+          modules={[FreeMode, Navigation]} // Add Pagination and Navigation modules
           className="mySwiper w-full md:max-w-6xl"
           breakpoints={{
             640: {
