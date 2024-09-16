@@ -111,6 +111,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
       {/* <!-- Dropdown Start --> */}
       <div
         ref={dropdown}
+        onMouseLeave={() => setDropdownOpen(false)}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
         className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default   ${

@@ -339,9 +339,9 @@ export default function UserTrainingService({ user }: { user: User | null }) {
               {pelatihan?.NamaPelatihan}
             </h3>
 
-            <p className="mt-1 text-xs font-medium text-gray-600">
-              29 Mei 2024 - 7 Juni 2024
-            </p>
+            {/* <p className="mt-1 text-xs font-medium text-gray-600">
+              {pelatihan?.NilaiTeory}
+            </p> */}
           </div>
 
           <div className="hidden sm:block sm:shrink-0">
@@ -734,7 +734,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                                         indexPelatihanSelected
                                       ]?.DetailPelatihan!,
                               }}
-                              className="text-sm font-normal text-justify group-hover:text-xs text-gray-500 group-hover:duration-1000"
+                              className="text-sm prose   text-justify group-hover:text-xs text-gray-500 prose-strong:text-gray-500 prose-p:leading-[140%] prose-strong:font-bold group-hover:duration-1000"
                             />{" "}
                             <p
                               onClick={(e) => setSeeMore(!seeMore)}

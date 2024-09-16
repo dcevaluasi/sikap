@@ -72,6 +72,7 @@ function FormRegistrationTraining({
           id_pelatihan: id.toString(),
           totalBayar: harga.toString(),
           namaPelatihan: pelatihan?.NamaPelatihan,
+          
           bidangPelatihan: pelatihan?.BidangPelatihan,
           DetailPelatihan: pelatihan?.DetailPelatihan,
           statusAproval: pelatihan?.StatusApproval,

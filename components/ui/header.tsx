@@ -69,7 +69,7 @@ export default function Header() {
                 top &&
                 (usePathname() == "/" ||
                   usePathname() == "/lembaga/p2mkp" ||
-                  usePathname() == "/lembaga/bppp" ||
+                  usePathname().includes("bppp") ||
                   usePathname() == "/lembaga/dpkakp" ||
                   usePathname() == "/dashboard" ||
                   usePathname().includes("program"))
@@ -91,6 +91,7 @@ export default function Header() {
         </PopoverTrigger>
         {name == currentName && (
           <PopoverContent
+            onMouseLeave={() => setOpenModal(false)}
             className={`w-80 flex flex-col z-[1000000] gap-1 ${
               top ? "mt-7" : "mt-7"
             }`}
@@ -156,7 +157,7 @@ export default function Header() {
             top &&
             (usePathname() == "/" ||
               usePathname() == "/lembaga/p2mkp" ||
-              usePathname() == "/lembaga/bppp" ||
+              usePathname().includes("bppp") ||
               usePathname() == "/lembaga/dpkakp" ||
               usePathname() == "/dashboard" ||
               usePathname().includes("program"))
@@ -288,7 +289,7 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink
+                  {/* <NavLink
                     href="/lembaga/komite-approval"
                     name="Komite Approval"
                     top={top}
@@ -297,7 +298,7 @@ export default function Header() {
                       <HiMiniUserGroup className="text-3xl" />{" "}
                       <span>Komite Approval Diklat Awak Kapal Perikanan</span>
                     </div>
-                  </NavLink>
+                  </NavLink> */}
                 </NavDropDown>
                 <NavLinkDefault
                   href="/#cek-sertifikat"

@@ -1,8 +1,10 @@
 "use client";
 
 import HeroBPPP from "@/components/bppp/HeroBPPP";
+import FeaturesBlocks from "@/components/features-blocks";
 import Footer from "@/components/ui/footer";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 function page() {
@@ -13,8 +15,8 @@ function page() {
         <div className="py-4 mx-auto w-full sm:py-4  flex flex-col gap-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 h-full">
             <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-gray-50 h-auto md:h-full flex flex-col">
-              <a
-                href=""
+              <Link
+                href="/lembaga/bppp/ambon"
                 className="group relative flex flex-col overflow-hidden rounded-3xl px-4 pb-4 pt-40 flex-grow"
               >
                 <Image
@@ -33,11 +35,11 @@ function page() {
                     Balai Pelatihan dan Penyuluhan Perikanan Ambon
                   </p>
                 </div>
-              </a>
+              </Link>
             </div>
             <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-stone-50">
-              <a
-                href=""
+              <Link
+                href="/lembaga/bppp/banyuwangi"
                 className="group relative flex flex-col overflow-hidden rounded-3xl px-4 pb-4 pt-40 mb-4"
               >
                 <Image
@@ -55,10 +57,10 @@ function page() {
                     Balai Pelatihan dan Penyuluhan Perikanan Banyuwangi
                   </p>
                 </div>
-              </a>
+              </Link>
               <div className="grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-2">
-                <a
-                  href=""
+                <Link
+                  href="/lembaga/bppp/bitung"
                   className="group relative flex flex-col overflow-hidden rounded-3xl px-4 pb-4 pt-40"
                 >
                   <Image
@@ -76,9 +78,9 @@ function page() {
                       Balai Pelatihan dan Penyuluhan Perikanan Bitung
                     </p>
                   </div>
-                </a>
-                <a
-                  href=""
+                </Link>
+                <Link
+                  href="/lembaga/bppp/sukamandi"
                   className="group relative flex flex-col overflow-hidden rounded-3xl px-4 pb-4 pt-40"
                 >
                   <Image
@@ -96,12 +98,12 @@ function page() {
                       Balai Pendidikan dan Pelatihan Aparatur Sukamandi
                     </p>
                   </div>
-                </a>
+                </Link>
               </div>
             </div>
             <div className="col-span-2 sm:col-span-1 md:col-span-1 bg-sky-50 h-auto md:h-full flex flex-col">
-              <a
-                href=""
+              <Link
+                href="/lembaga/bppp/medan"
                 className="group relative flex flex-col overflow-hidden rounded-3xl px-4 pb-4 pt-40 flex-grow"
               >
                 <Image
@@ -119,13 +121,13 @@ function page() {
                     Balai Pelatihan dan Penyuluhan Perikanan Medan
                   </p>
                 </div>
-              </a>
+              </Link>
             </div>
           </div>
 
           <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-gray-50 h-auto md:h-[50vh] flex flex-col relative">
-            <a
-              href=""
+            <Link
+              href="/lembaga/bppp/tegal"
               className="group relative flex flex-col overflow-hidden rounded-3xl px-4 pb-4 pt-40 flex-grow group"
             >
               <Image
@@ -144,10 +146,11 @@ function page() {
                   Tegal
                 </p>
               </div>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
+      
       <Footer />
     </>
   );

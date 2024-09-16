@@ -11,6 +11,13 @@ import BPPPServices from "@/components/bppp-services";
 import BPPPTrainings from "@/components/bppp-trainings";
 import { convertToBPPP } from "@/utils/lemdiklat";
 import Footer from "@/components/ui/footer";
+import HeroLandingBPPP from "@/components/bppp/location/HeroLandingBPPP";
+import LogoIntegrated from "@/components/bppp/location/LogoIntegrated";
+import StatistikPelatihan from "@/components/StatistikPelatihan";
+import Keunggulan from "@/components/bppp/location/Keunggulan";
+import Layanan from "@/components/bppp/location/Layanan";
+import FeaturesBlocks from "@/components/features-blocks";
+import Features from "@/components/features";
 
 export default function Page() {
   const pathname = usePathname();
@@ -47,8 +54,11 @@ export default function Page() {
 
   return (
     <>
-      <HeroBPPP bppp={location!} />
-      <BPPPServices />
+      <HeroLandingBPPP bppp={location} />
+      <Layanan />
+      <Keunggulan />
+      <Features />
+      <LogoIntegrated />
       <Footer />
     </>
   );

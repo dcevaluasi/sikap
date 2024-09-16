@@ -16,6 +16,7 @@ import {
 } from "./ui/alert-dialog";
 import { IoLogoWhatsapp } from "react-icons/io";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 function CallCenter() {
   const [open, setOpen] = React.useState(false);
@@ -86,7 +87,15 @@ function CallCenter() {
             <AlertDialogAction className="bg-blue-500 flex gap-2 items-center group duration-700">
               <Link
                 href={
-                  "https://api.whatsapp.com/send?phone=6282123104078&text=Halo, Sobat Elaut! Ada yang bisa dibantu?"
+                  usePathname().includes("bitung")
+                    ? "https://wa.me/6285397924888"
+                    : usePathname().includes("tegal")
+                    ? "https://wa.me/6285229654056?text=Hallo,%20saya%20adalah%20pendaftar%20dari%20BPPP%20Tegal.%20Saya%20mohon%20bantuan%20karena%20terdapat%20kendala%20pada%20website%20ini."
+                    : usePathname().includes("medan")
+                    ? "https://api.whatsapp.com/send?phone=6289508166527&text=Hallo,%20saya%20adalah%20pendaftar%20dari%20BPPP%20Medan.%20Saya%20mohon%20bantuan%20karena%20terdapat%20kendala%20pada%20website%20ini."
+                    : usePathname().includes("ambon")
+                    ? "https://wa.me/6281288550286"
+                    : "https://api.whatsapp.com/send?phone=6282123104078&text=Halo, Sobat Elaut! Ada yang bisa dibantu?"
                 }
                 className="bg-transparent flex gap-2 items-center group-hover:bg-transparent duration-700"
               >

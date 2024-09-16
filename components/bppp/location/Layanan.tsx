@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-function BalaiPelatihan() {
+function Layanan() {
   return (
     <section className="bg-white w-full py-10">
       <div className="py-4 mx-auto max-w-7xl sm:py-4  flex flex-col gap-4">
@@ -35,7 +35,7 @@ function BalaiPelatihan() {
 
               <div className="flex flex-col gap-1  absolute top-0 left-0 mt-3 p-4 ">
                 <h3 className="z-10 text-2xl font-medium text-white xs:text-xl md:text-3xl font-calsans leading-none ">
-                  BPPP Ambon
+                  Pelatihan Masyarakat
                 </h3>
                 <p className="text-gray-300 text-sm leading-none">
                   Balai Pelatihan dan Penyuluhan Perikanan Ambon
@@ -57,7 +57,7 @@ function BalaiPelatihan() {
               <div className="absolute inset-0 bg-black bg-opacity-60  group-hover:bg-opacity-10 duration-700"></div>
               <div className="flex flex-col gap-1  absolute top-0 left-0 mt-3 p-4 ">
                 <h3 className="z-10 text-2xl font-medium text-white xs:text-xl md:text-3xl font-calsans leading-none ">
-                  BPPP Banyuwangi
+                  Uji Kompetensi
                 </h3>
                 <p className="text-gray-300 text-sm leading-none">
                   Balai Pelatihan dan Penyuluhan Perikanan Banyuwangi
@@ -78,7 +78,7 @@ function BalaiPelatihan() {
                 <div className="absolute inset-0 bg-black bg-opacity-60  group-hover:bg-opacity-10 duration-700"></div>
                 <div className="flex flex-col gap-1  absolute top-0 left-0 mt-3 p-4 ">
                   <h3 className="z-10 text-2xl font-medium text-white xs:text-xl md:text-3xl font-calsans leading-none ">
-                    BPPP Bitung
+                    Prasarana dan Sarana
                   </h3>
                   <p className="text-gray-300 text-sm leading-none">
                     Balai Pelatihan dan Penyuluhan Perikanan Bitung
@@ -98,7 +98,7 @@ function BalaiPelatihan() {
                 <div className="absolute inset-0 bg-black bg-opacity-60  group-hover:bg-opacity-10 duration-700"></div>
                 <div className="flex flex-col gap-1  absolute top-0 left-0 mt-3 p-4 ">
                   <h3 className="z-10 text-2xl font-medium text-white xs:text-xl md:text-3xl font-calsans leading-none ">
-                    BDA Sukamandi
+                    Profil Balai
                   </h3>
                   <p className="text-gray-300 text-sm leading-none">
                     Balai Pendidikan dan Pelatihan Aparatur Sukamandi
@@ -121,7 +121,7 @@ function BalaiPelatihan() {
               <div className="absolute inset-0 bg-black bg-opacity-60  group-hover:bg-opacity-10 duration-700"></div>
               <div className="flex flex-col gap-1  absolute top-0 left-0 mt-3 p-4 ">
                 <h3 className="z-10 text-2xl font-medium text-white xs:text-xl md:text-3xl font-calsans leading-none ">
-                  BPPP Medan
+                  Layanan Lainnya
                 </h3>
                 <p className="text-gray-300 text-sm leading-none">
                   Balai Pelatihan dan Penyuluhan Perikanan Medan
@@ -130,33 +130,9 @@ function BalaiPelatihan() {
             </Link>
           </div>
         </div>
-
-        <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-gray-50 h-auto md:h-[50vh] flex flex-col relative">
-          <Link
-            href="/lembaga/bppp/tegal"
-            className="group relative flex flex-col overflow-hidden rounded-3xl px-4 pb-4 pt-40 flex-grow group"
-          >
-            <Image
-              fill={true}
-              src="/images/balai-pelatihan/tegal.jpg"
-              alt=""
-              className="absolute inset-0  object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-60  group-hover:bg-opacity-10 duration-700"></div>
-            <div className="flex flex-col gap-1  absolute top-0 left-0 mt-3 p-4 ">
-              <h3 className="z-10 text-2xl font-medium text-white xs:text-xl md:text-3xl font-calsans leading-none ">
-                BLU BPPP Tegal
-              </h3>
-              <p className="text-gray-300 text-sm leading-none">
-                Badan Layanan Usaha Balai Pelatihan dan Penyuluhan Perikanan
-                Tegal
-              </p>
-            </div>
-          </Link>
-        </div>
       </div>
     </section>
   );
 }
 
-export default BalaiPelatihan;
+export default Layanan;

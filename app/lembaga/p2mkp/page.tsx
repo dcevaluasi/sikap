@@ -6,7 +6,7 @@ function page() {
   return (
     <>
       <HeroP2MKP />
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }
