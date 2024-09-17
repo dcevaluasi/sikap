@@ -63,9 +63,9 @@ export default function Keunggulan() {
 
           <div className="max-w-3xl w-full mx-auto text-center pflex flex-col items-center justify-center pb-5 md:pb-8">
             <h1 className="text-4xl font-calsans leading-[100%]">
-              Mari bergabung dalam platform kami
+              Platform Layanan
               <br />
-              untuk menggunakan berbagai layanan terpadu digital
+              Terpadu Digital
             </h1>
             <p className="text-base text-gray-60">
               Jelajahi Peluang Baru dengan Pelatihan dan Uji Kompetensi

@@ -358,14 +358,16 @@ function UserTrainingService({ user }: { user: User | null }) {
                           </div>
 
                           <div className="mt-2 mb-2">
-                            <p className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[140%]">
-                              {pelatihan &&
-                                truncateText(
+                            <div
+                              dangerouslySetInnerHTML={{
+                                __html: truncateText(
                                   pelatihan?.DetailPelatihan,
                                   150,
                                   "..."
-                                )}
-                            </p>
+                                ),
+                              }}
+                              className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[140%]"
+                            />
                           </div>
 
                           <dl className="mt-6 flex gap-4 sm:gap-6">
@@ -422,14 +424,16 @@ function UserTrainingService({ user }: { user: User | null }) {
                             </div>
 
                             <div className="mt-2 mb-2">
-                              <p className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[140%]">
-                                {pelatihan &&
-                                  truncateText(
+                              <div
+                                dangerouslySetInnerHTML={{
+                                  __html: truncateText(
                                     pelatihan?.DetailPelatihan,
                                     150,
                                     "..."
-                                  )}
-                              </p>
+                                  ),
+                                }}
+                                className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[140%]"
+                              />
                             </div>
 
                             <dl className="mt-6 flex gap-4 sm:gap-6">

@@ -69,8 +69,8 @@ function Timeline() {
                         Persiapan untuk Mendaftar
                       </h3>
                       <p className="text-gray-500 font-normal">
-                        Buat akun terlebih dahulu jika belum mempunya akun, jika
-                        sudah maka terdapat beberapa hal yang harus Anda
+                        Buat akun terlebih dahulu jika belum mempunyai akun,
+                        jika sudah maka terdapat beberapa hal yang harus Anda
                         persiapkan untuk Mendaftar. Mulai dari dokumen pribadi,
                         data diri dsb.
                       </p>
@@ -106,11 +106,10 @@ function Timeline() {
                         Validasi Data Peserta dan Pembayaran
                       </h3>
                       <p className="text-gray-500 font-normal">
-                        Setelah data kamu divalidasi, kamu akan dihubungi oleh
-                        pihak balai pelatihan penyelenggara untuk melanjutkan
-                        proses pembayaran untuk pelatihan/sertifikasi yang
-                        berbayar baik secara online atau datang ke balai
-                        langsung.
+                        Setelah data divalidasi, Anda akan dihubungi balai untuk
+                        info lebih lanjut terkait pelatihan, termasuk informasi
+                        pembayaran jika anda mengikuti pelatihan yang berbayar
+                        baik secara online atau datang langsung ke balai.
                       </p>
                     </div>
                   </div>
