@@ -178,9 +178,7 @@ const DetailPelatihan: React.FC = () => {
                 readOnly
                 min={new Date().toISOString().split("T")[0]}
                 placeholder={
-                  "B" + dataPelatihan != null
-                    ? dataPelatihan!.NoSertifikat
-                    : "-"
+                  dataPelatihan != null ? dataPelatihan!.NoSertifikat : "-"
                 }
               />
             </div>

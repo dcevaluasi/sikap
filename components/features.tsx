@@ -74,8 +74,7 @@ export default function Features() {
 
           <div className="max-w-3xl w-full mx-auto text-center pflex flex-col items-center justify-center pb-5 md:pb-8">
             <h1 className="text-4xl font-calsans leading-[100%]">
-              Sekilas Ragam
-              <br /> Pelatihan dan Sertifikasi
+              Pelatihan dan Sertifikasi
             </h1>
             <p className="text-base text-gray-60">
               Pelatihan dan sertifikasi terakreditasi yang berfokus pada <br />{" "}

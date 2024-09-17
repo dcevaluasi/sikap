@@ -253,9 +253,9 @@ export function DialogSertifikatPelatihan({
   React.useEffect(() => {
     if (typeof window !== "undefined" && show && componentRef.current) {
       const generatePDF = async () => {
-        const element = componentRef.current;
-
         const html2pdf = (await import("html2pdf.js")).default;
+
+        const element = componentRef.current;
 
         const opt = {
           margin: 0,
@@ -299,11 +299,18 @@ export function DialogSertifikatPelatihan({
             } catch (error) {
               console.error("Error uploading the file:", error);
             }
+
+            const downloadLink = document.createElement("a");
+            const url = URL.createObjectURL(pdfBlob);
+            downloadLink.href = url;
+            downloadLink.download = `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`;
+            downloadLink.click();
+            URL.revokeObjectURL(url); // Clean up the object URL
           });
       };
       generatePDF();
     }
-  }, [show]);
+  }, [show, userPelatihan]);
 
   return (
     <div>
