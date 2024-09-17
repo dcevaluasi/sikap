@@ -1,18 +1,20 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { Transition } from "@headlessui/react";
-import Image from "next/image";
-import FeaturesBg from "@/public/images/features-bg.png";
-import FeaturesElement from "@/public/images/features-element.png";
-import { GiLuckyFisherman, GiWaterSplash } from "react-icons/gi";
-import { HiGlobeAmericas, HiOutlineCake, HiUserGroup } from "react-icons/hi2";
+import React, { useState, useRef, useEffect, ReactElement } from "react";
 
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
-
-import "./../app/css/additional-styles/features-slider.css";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { MdVerified } from "react-icons/md";
+import { TbCloudDownload } from "react-icons/tb";
+import { getCurrentDate } from "@/utils/sertifikat";
+import html2pdf from "html2pdf.js";
 
 import {
   AlertDialog,
@@ -26,14 +28,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-// import required modules
-import "swiper/css/navigation";
-import { Pagination, Navigation } from "swiper/modules";
-import ListProgram from "./lists";
 import Link from "next/link";
-import { Slide } from "react-awesome-reveal";
-import { FaCircle, FaPlaceOfWorship } from "react-icons/fa6";
-import { GrFormEdit, GrFormTrash, GrLocation } from "react-icons/gr";
 import { Button } from "./ui/button";
 import { FiSearch, FiSlack } from "react-icons/fi";
 import { Input } from "./ui/input";
@@ -46,20 +41,9 @@ import {
 } from "@/utils/pelatihan";
 import { PelatihanMasyarakat } from "@/types/product";
 import axios, { AxiosResponse } from "axios";
-import BPPPCertificates from "./bppp-certificates";
 import { IoIosInformationCircle, IoMdCloseCircle } from "react-icons/io";
-import { Edit3Icon, LucideDot, Trash } from "lucide-react";
 import { User, UserPelatihan } from "@/types/user";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
-import {
-  MdAlternateEmail,
-  MdOutlineWoman,
-  MdOutlineWorkOutline,
-} from "react-icons/md";
-import { PiHandsPrayingBold, PiTrainRegional } from "react-icons/pi";
-import { TbGenderBigender, TbSchool } from "react-icons/tb";
-import { BiDonateBlood, BiSearch } from "react-icons/bi";
-import ListUser from "./list-users";
 import Cookies from "js-cookie";
 import TableDataPelatihan from "./dashboard/Pelatihan/TableDataPelatihan";
 import TableDataPelatihanUser from "./dashboard/Pelatihan/TableDataPelatihanUser";
@@ -69,25 +53,43 @@ import { createSlug, truncateText } from "@/utils";
 import { Pelatihan } from "@/types/pelatihan";
 import Logo from "./ui/logo";
 import Toast from "./toast";
-import ChartOne from "./dashboard/Charts/ChartOne";
 import { generateTanggalPelatihan } from "@/utils/text";
+import { elautBaseUrl } from "@/constants/urls";
+import Image from "next/image";
 
-export default function UserTrainingService({ user }: { user: User | null }) {
+function UserTrainingService({ user }: { user: User | null }) {
   const [indexPelatihanSelected, setIndexPelatihanSelected] =
     React.useState<number>(100000000);
+
+  const icons = (bidangPelatihan: string) => {
+    switch (bidangPelatihan) {
+      case "Pengolahan dan Pemasaran":
+        return "/images/bidangPelatihan/pengolahan-pemasaran.png";
+      case "Budidaya":
+        return "/images/bidangPelatihan/budidaya.png";
+      case "Penangkapan":
+        return "/images/bidangPelatihan/penangkapan.png";
+      case "Konservasi":
+        return "/images/bidangPelatihan/konservasi.png";
+      case "Mesin Perikanan":
+        return "/images/bidangPelatihan/mesin-perikanan.png";
+      case "Kepelautan":
+        return "/images/bidangPelatihan/kepelautan.png";
+      default:
+        return "/images/bidangPelatihian/sd-perikanan.png";
+    }
+  };
 
   const pathname = usePathname();
   const location = extractPathAfterBppp(pathname);
   const penyelenggara = getPenyeleggara(location!);
-
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
   const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
 
   const handleFetchingPublicTrainingDataByPenyelenggara = async () => {
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getPelatihan?penyelenggara_pelatihan=${penyelenggara}`
+        `${elautBaseUrl}/lemdik/getPelatihan?penyelenggara_pelatihan=${penyelenggara}`
       );
       console.log({ response });
       setData(response.data.data);
@@ -97,7 +99,6 @@ export default function UserTrainingService({ user }: { user: User | null }) {
     }
   };
 
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const [loading, setLoading] = React.useState<boolean>(true);
 
   const token = Cookies.get("XSRF081");
@@ -107,7 +108,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
   const handleFetchingUserDetail = async () => {
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/users/getUsersById`,
+        `${elautBaseUrl}/users/getUsersById`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -122,15 +123,13 @@ export default function UserTrainingService({ user }: { user: User | null }) {
     }
   };
 
-  const [selectedIdPelatihan, setSelectedIdPelatihan] =
-    React.useState<number>(0);
   const [selectedPelatihan, setSelectedPelatihan] =
     React.useState<PelatihanMasyarakat | null>(null);
 
   const handleFetchingDetailPelatihan = async (id: number) => {
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/getPelatihanUser?idPelatihan=${id}`,
+        `${elautBaseUrl}/getPelatihanUser?idPelatihan=${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -265,25 +264,7 @@ export default function UserTrainingService({ user }: { user: User | null }) {
     }, 1000);
   }, []);
 
-  const [tab, setTab] = useState<number>(1);
-
   const tabs = useRef<HTMLDivElement>(null);
-
-  const heightFix = () => {
-    if (tabs.current && tabs.current.parentElement)
-      tabs.current.parentElement.style.height = `${tabs.current.clientHeight}px`;
-  };
-
-  useEffect(() => {
-    heightFix();
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 500,
-      behavior: "smooth", // This smooth scrolling is optional, you can remove it if you want instant scrolling
-    });
-  };
 
   const [menuSelected, setMenuSelected] = React.useState(false);
   const [indexMenuSelected, setIndexMenuSelected] = React.useState(0);
@@ -292,297 +273,9 @@ export default function UserTrainingService({ user }: { user: User | null }) {
     setIndexMenuSelected(index);
   };
 
-  const icons = (bidangPelatihan: string) => {
-    switch (bidangPelatihan) {
-      case "Pengolahan dan Pemasaran":
-        return "/images/bidangPelatihan/pengolahan-pemasaran.png";
-      case "Budidaya":
-        return "/images/bidangPelatihan/budidaya.png";
-      case "Penangkapan":
-        return "/images/bidangPelatihan/penangkapan.png";
-      case "Konservasi":
-        return "/images/bidangPelatihan/konservasi.png";
-      case "Mesin Perikanan":
-        return "/images/bidangPelatihan/mesin-perikanan.png";
-      case "Kepelautan":
-        return "/images/bidangPelatihan/kepelautan.png";
-      default:
-        return "/images/bidangPelatihian/sd-perikanan.png";
-    }
-  };
-
   const [isOpenGuideline, setIsOpenGuideline] = React.useState<boolean>(true);
 
   console.log(user?.Pelatihan);
-
-  const CardPelatihan = ({
-    pelatihan,
-    index,
-  }: {
-    pelatihan: UserPelatihan;
-    index: number;
-  }) => {
-    return (
-      <div className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8  shadow-custom hover:scale-105 duration-700">
-        <span className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-blue-500 via-blue-500 to-teal-400"></span>
-
-        <div className="sm:flex sm:justify-between sm:gap-4">
-          <div>
-            <h3
-              onClick={(e) => {
-                setIndexPelatihanSelected(index);
-                handleFetchingDetailPelatihan(pelatihan?.IdPelatihan);
-                scrollToTop();
-              }}
-              className="text-lg hover:cursor-pointer font-bold text-gray-900 sm:text-xl leading-[100%] "
-            >
-              {pelatihan?.NamaPelatihan}
-            </h3>
-
-            {/* <p className="mt-1 text-xs font-medium text-gray-600">
-              {pelatihan?.NilaiTeory}
-            </p> */}
-          </div>
-
-          <div className="hidden sm:block sm:shrink-0">
-            <Image
-              width={0}
-              height={0}
-              alt=""
-              src={icons(pelatihan?.BidangPelatihan)}
-              className="w-14 rounded-lg object-cover shadow-sm"
-            />
-          </div>
-        </div>
-
-        <div className="mt-2 mb-2">
-          <p
-            dangerouslySetInnerHTML={{
-              __html:
-                pelatihan &&
-                truncateText(pelatihan?.DetailPelatihan, 150, "..."),
-            }}
-            className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[140%]"
-          />
-
-          <p className="text-pretty text-sm text-gray-500">{}</p>
-        </div>
-
-        <dl className="mt-6 flex gap-4 sm:gap-6">
-          <div className="flex flex-col-reverse">
-            <dt className="text-sm font-medium text-gray-600">
-              {pelatihan?.BidangPelatihan!}
-            </dt>
-            <dd className="text-xs text-gray-500">Bidang</dd>
-          </div>
-
-          <div className="flex flex-col-reverse">
-            <dt className="text-sm font-medium text-gray-600">
-              {pelatihan?.NoSertifikat == ""
-                ? "-"
-                : "No. B. " + pelatihan?.NoSertifikat!}
-            </dt>
-            <dd className="text-xs text-gray-500">No Sertifikat</dd>
-          </div>
-        </dl>
-      </div>
-    );
-  };
-
-  const Timeline = () => {
-    return (
-      <section className=" -mt-5 ">
-        <div className=" py-12 ">
-          <div className="grid gap-4 sm:grid-cols-12">
-            <div className="col-span-12 sm:col-span-3">
-              <div className="text-center sm:text-left mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:mx-auto sm:before:mx-0 before:bg-blue-500">
-                <h3 className="text-xl font-semibold leading-[100%] mb-1">
-                  Progress Pelatihan
-                </h3>
-                <p className="text-pretty text-sm text-gray-500">
-                  Lihat progress pelaksanaan pelatihan yang kamu ikuti!
-                </p>
-              </div>
-            </div>
-            <div className="relative col-span-12 px-4 space-y-6 sm:col-span-9">
-              <div className="col-span-12 space-y-12 relative px-4 sm:col-span-8 sm:space-y-8 sm:before:absolute sm:before:top-2 sm:before:bottom-0 sm:before:w-0.5 sm:before:-left-3 before:bg-gray-300">
-                <Slide direction="right">
-                  <div className="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-blue-500">
-                    <h3 className="text-xl font-semibold tracking-wide">
-                      Pendaftaran{" "}
-                    </h3>
-                    <time className="text-xs tracking-wide uppercase ">
-                      Dec 2020
-                    </time>
-                    <p className="mt-3">
-                      Pellentesque feugiat ante at nisl efficitur, in mollis
-                      orci scelerisque. Interdum et malesuada fames ac ante
-                      ipsum primis in faucibus.
-                    </p>
-                  </div>
-                </Slide>
-
-                <Slide direction="right">
-                  <div className="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-blue-500">
-                    <h3 className="text-xl font-semibold tracking-wide">
-                      Pelaksanaan
-                    </h3>
-                    <time className="text-xs tracking-wide uppercase ">
-                      Jul 2019
-                    </time>
-                    <p className="mt-3">
-                      Morbi vulputate aliquam libero non dictum. Aliquam sit
-                      amet nunc ut diam aliquet tincidunt nec nec dui. Donec
-                      mollis turpis eget egestas sodales.
-                    </p>
-                  </div>
-                </Slide>
-                <Slide direction="right">
-                  <div className="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-blue-500">
-                    <h3 className="text-xl font-semibold tracking-wide">
-                      Selesai Pelatihan
-                    </h3>
-                    <time className="text-xs tracking-wide uppercase ">
-                      Jan 2016
-                    </time>
-                    <p className="mt-3">
-                      Suspendisse tincidunt, arcu nec faucibus efficitur, justo
-                      velit consectetur nisl, sit amet condimentum lacus orci
-                      nec purus. Mauris quis quam suscipit, vehicula felis id,
-                      vehicula enim.
-                    </p>
-                  </div>
-                </Slide>
-              </div>
-              {userDetail?.Pelatihan[indexPelatihanSelected].NoSertifikat ==
-              "" ? null : (
-                <DialogSertifikatPelatihan
-                  pelatihan={selectedPelatihan!}
-                  userPelatihan={userDetail?.Pelatihan[indexPelatihanSelected]!}
-                >
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
-                  >
-                    <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-                    <span className="text-sm"> Download Sertifikat</span>
-                  </Button>
-                </DialogSertifikatPelatihan>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  };
-
-  const TablePenilaian = () => {
-    return (
-      <div className="flex flex-col mt-0">
-        <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-            <dd className="text-xs text-gray-500 mb-2">Table Penilaian</dd>
-            <div className="overflow-hidden">
-              <table className="min-w-full border border-neutral-200 rounded-md text-center text-sm font-light text-surface mb-5 ">
-                <thead className="border-b border-neutral-200 font-medium ">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="border-e border-neutral-200 px-6 py-4 "
-                    >
-                      #
-                    </th>
-                    <th
-                      scope="col"
-                      className="border-e border-neutral-200 px-6 py-4 "
-                    >
-                      Pre-test
-                    </th>
-                    <th
-                      scope="col"
-                      className="border-e border-neutral-200 px-6 py-4 "
-                    >
-                      Post-test
-                    </th>
-                    <th scope="col" className="px-6 py-4">
-                      Total
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="border-b border-neutral-200 ">
-                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 font-medium ">
-                      1
-                    </td>
-                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 ">
-                      {userDetail?.Pelatihan[indexPelatihanSelected]?.PreTest!}
-                    </td>
-                    <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 ">
-                      {userDetail?.Pelatihan[indexPelatihanSelected]?.PostTest!}
-                    </td>
-                    <td className="whitespace-nowrap px-6 py-4">
-                      {" "}
-                      {(userDetail?.Pelatihan[indexPelatihanSelected]
-                        ?.PreTest! +
-                        userDetail?.Pelatihan[indexPelatihanSelected]
-                          ?.PostTest!) /
-                        2}
-                    </td>
-                  </tr>
-
-                  <tr className="border-b border-neutral-200 ">
-                    <th
-                      colSpan={3}
-                      className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 "
-                    >
-                      Keterangan
-                    </th>
-                    <th className="whitespace-nowrap px-6 py-4">
-                      {" "}
-                      {userDetail?.Pelatihan[indexPelatihanSelected]
-                        ?.PostTest! > 60
-                        ? "LULUS"
-                        : "TIDAK LULUS"}
-                    </th>
-                  </tr>
-                </tbody>
-              </table>
-
-              {userDetail?.Pelatihan[indexPelatihanSelected].NoSertifikat ==
-              "" ? null : (
-                <>
-                  <DialogSertifikatPelatihan
-                    userPelatihan={
-                      userDetail?.Pelatihan[indexPelatihanSelected]!
-                    }
-                    pelatihan={selectedPelatihan!}
-                  >
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
-                    >
-                      <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-                      <span className="text-sm"> Download Sertifikat</span>
-                    </Button>
-                  </DialogSertifikatPelatihan>
-                  <dd className="text-xs text-gray-500 mb-2 mt-1">
-                    *Sertifikat ini terbit pada{" "}
-                    {userDetail?.Pelatihan[indexPelatihanSelected]?.IsActice!}{" "}
-                    dan akan kadaluarsa pada{" "}
-                    {addFiveYears(
-                      userDetail?.Pelatihan[indexPelatihanSelected]?.IsActice!
-                    )}
-                  </dd>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   const [seeMore, setSeeMore] = React.useState<boolean>(false);
 
@@ -635,20 +328,132 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                     </div>
                     {indexPelatihanSelected != 100000000 ? (
                       userDetail?.Pelatihan.map((pelatihan, index) => (
-                        <CardPelatihan
-                          pelatihan={pelatihan}
-                          key={index}
-                          index={index}
-                        />
+                        <div className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8  shadow-custom hover:scale-105 duration-700">
+                          <span className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-blue-500 via-blue-500 to-teal-400"></span>
+
+                          <div className="sm:flex sm:justify-between sm:gap-4">
+                            <div>
+                              <h3
+                                onClick={(e) => {
+                                  setIndexPelatihanSelected(index);
+                                  handleFetchingDetailPelatihan(
+                                    pelatihan?.IdPelatihan
+                                  );
+                                }}
+                                className="text-lg hover:cursor-pointer font-bold text-gray-900 sm:text-xl leading-[100%] "
+                              >
+                                {pelatihan?.NamaPelatihan}
+                              </h3>
+                            </div>
+
+                            <div className="hidden sm:block sm:shrink-0">
+                              <Image
+                                width={0}
+                                height={0}
+                                alt=""
+                                src={icons(pelatihan?.BidangPelatihan)}
+                                className="w-14 rounded-lg object-cover shadow-sm"
+                              />
+                            </div>
+                          </div>
+
+                          <div className="mt-2 mb-2">
+                            <p className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[140%]">
+                              {pelatihan &&
+                                truncateText(
+                                  pelatihan?.DetailPelatihan,
+                                  150,
+                                  "..."
+                                )}
+                            </p>
+                          </div>
+
+                          <dl className="mt-6 flex gap-4 sm:gap-6">
+                            <div className="flex flex-col-reverse">
+                              <dt className="text-sm font-medium text-gray-600">
+                                {pelatihan?.BidangPelatihan!}
+                              </dt>
+                              <dd className="text-xs text-gray-500">Bidang</dd>
+                            </div>
+
+                            <div className="flex flex-col-reverse">
+                              <dt className="text-sm font-medium text-gray-600">
+                                {pelatihan?.NoSertifikat == ""
+                                  ? "-"
+                                  : "No. B. " + pelatihan?.NoSertifikat!}
+                              </dt>
+                              <dd className="text-xs text-gray-500">
+                                No Sertifikat
+                              </dd>
+                            </div>
+                          </dl>
+                        </div>
                       ))
                     ) : (
                       <div className="grid grid-cols-3 w-full gap-1">
                         {userDetail?.Pelatihan.map((pelatihan, index) => (
-                          <CardPelatihan
-                            pelatihan={pelatihan}
-                            key={index}
-                            index={index}
-                          />
+                          <div className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8  shadow-custom hover:scale-105 duration-700">
+                            <span className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-blue-500 via-blue-500 to-teal-400"></span>
+
+                            <div className="sm:flex sm:justify-between sm:gap-4">
+                              <div>
+                                <h3
+                                  onClick={(e) => {
+                                    setIndexPelatihanSelected(index);
+                                    handleFetchingDetailPelatihan(
+                                      pelatihan?.IdPelatihan
+                                    );
+                                  }}
+                                  className="text-lg hover:cursor-pointer font-bold text-gray-900 sm:text-xl leading-[100%] "
+                                >
+                                  {pelatihan?.NamaPelatihan}
+                                </h3>
+                              </div>
+
+                              <div className="hidden sm:block sm:shrink-0">
+                                <Image
+                                  width={0}
+                                  height={0}
+                                  alt=""
+                                  src={icons(pelatihan?.BidangPelatihan)}
+                                  className="w-14 rounded-lg object-cover shadow-sm"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="mt-2 mb-2">
+                              <p className="text-sm font-normal group-hover:text-xs text-gray-500 group-hover:duration-1000 leading-[140%]">
+                                {pelatihan &&
+                                  truncateText(
+                                    pelatihan?.DetailPelatihan,
+                                    150,
+                                    "..."
+                                  )}
+                              </p>
+                            </div>
+
+                            <dl className="mt-6 flex gap-4 sm:gap-6">
+                              <div className="flex flex-col-reverse">
+                                <dt className="text-sm font-medium text-gray-600">
+                                  {pelatihan?.BidangPelatihan!}
+                                </dt>
+                                <dd className="text-xs text-gray-500">
+                                  Bidang
+                                </dd>
+                              </div>
+
+                              <div className="flex flex-col-reverse">
+                                <dt className="text-sm font-medium text-gray-600">
+                                  {pelatihan?.NoSertifikat == ""
+                                    ? "-"
+                                    : "No. B. " + pelatihan?.NoSertifikat!}
+                                </dt>
+                                <dd className="text-xs text-gray-500">
+                                  No Sertifikat
+                                </dd>
+                              </div>
+                            </dl>
+                          </div>
                         ))}
                       </div>
                     )}
@@ -685,9 +490,9 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                                 : "-"}
                               ·{" "}
                               {/* {
-                            userDetail?.Pelatihan[indexPelatihanSelected]
-                              ?.NoRegistrasi
-                          } */}
+                userDetail?.Pelatihan[indexPelatihanSelected]
+                  ?.NoRegistrasi
+              } */}
                             </p>
                           </div>
 
@@ -736,45 +541,45 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                             </p>
                           </div>
                         </div>
-                        <dl className="mt-6 flex gap-4 sm:gap-6">
+                        <div className="mt-6 flex gap-4 sm:gap-6">
                           <div className="flex flex-col-reverse">
-                            <dt className="text-sm font-medium text-gray-600">
+                            <div className="text-sm font-medium text-gray-600">
                               {
                                 userDetail?.Pelatihan[indexPelatihanSelected]
                                   ?.BidangPelatihan!
                               }
-                            </dt>
-                            <dd className="text-xs text-gray-500">Bidang</dd>
+                            </div>
+                            <div className="text-xs text-gray-500">Bidang</div>
                           </div>
 
                           <div className="flex flex-col-reverse">
-                            <dt className="text-sm font-bold text-gray-600">
+                            <div className="text-sm font-bold text-gray-600">
                               {userDetail?.Pelatihan[indexPelatihanSelected]
                                 .NoSertifikat! == ""
                                 ? "-"
                                 : userDetail?.Pelatihan[indexPelatihanSelected]
                                     ?.NoSertifikat!}
-                            </dt>
-                            <dd className="text-xs text-gray-500">
+                            </div>
+                            <div className="text-xs text-gray-500">
                               No Sertifikat
-                            </dd>
+                            </div>
                           </div>
                           <div className="flex flex-col-reverse">
-                            <dt className="text-sm font-bold text-gray-600">
+                            <div className="text-sm font-bold text-gray-600">
                               {userDetail?.Pelatihan[indexPelatihanSelected]
                                 .NoRegistrasi! == ""
                                 ? "-"
                                 : userDetail?.Pelatihan[indexPelatihanSelected]
                                     ?.NoRegistrasi!}
-                            </dt>
-                            <dd className="text-xs text-gray-500">
+                            </div>
+                            <div className="text-xs text-gray-500">
                               No Registrasi
-                            </dd>
+                            </div>
                           </div>
-                        </dl>
-                        <dl className="mt-3">
+                        </div>
+                        <div className="mt-3">
                           <div className="flex flex-col-reverse">
-                            <dt
+                            <div
                               className={`text-sm font-medium text-gray-600 ${
                                 userDetail?.Pelatihan[indexPelatihanSelected]
                                   ?.Keterangan! == ""
@@ -794,16 +599,16 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                                   Data pendaftaran anda valid
                                 </span>
                               )}
-                            </dt>
-                            <dd className="text-xs text-gray-500">
+                            </div>
+                            <div className="text-xs text-gray-500">
                               Status Peserta
-                            </dd>
+                            </div>
                           </div>
-                        </dl>
+                        </div>
 
-                        <dl className="mt-3">
+                        <div className="mt-3">
                           <div className="flex flex-col-reverse">
-                            <dt
+                            <div
                               className={`text-sm font-medium text-gray-600 `}
                             >
                               {userDetail?.Pelatihan[indexPelatihanSelected]
@@ -1122,17 +927,142 @@ export default function UserTrainingService({ user }: { user: User | null }) {
                               ) : (
                                 <span className="flex items-center">-</span>
                               )}
-                            </dt>
-                            <dd className="text-xs text-gray-500">
+                            </div>
+                            <div className="text-xs text-gray-500">
                               Kode Ujian & Link Ujian
-                            </dd>
+                            </div>
                           </div>
-                        </dl>
+                        </div>
 
                         {userDetail?.Pelatihan[indexPelatihanSelected]
-                          ?.PreTest != 0 && <TablePenilaian />}
+                          ?.PreTest != 0 && (
+                          <div className="flex flex-col mt-0">
+                            <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                              <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
+                                <dd className="text-xs text-gray-500 mb-2">
+                                  Table Penilaian
+                                </dd>
+                                <div className="overflow-hidden">
+                                  <table className="min-w-full border border-neutral-200 rounded-md text-center text-sm font-light text-surface mb-5 ">
+                                    <thead className="border-b border-neutral-200 font-medium ">
+                                      <tr>
+                                        <th
+                                          scope="col"
+                                          className="border-e border-neutral-200 px-6 py-4 "
+                                        >
+                                          #
+                                        </th>
+                                        <th
+                                          scope="col"
+                                          className="border-e border-neutral-200 px-6 py-4 "
+                                        >
+                                          Pre-test
+                                        </th>
+                                        <th
+                                          scope="col"
+                                          className="border-e border-neutral-200 px-6 py-4 "
+                                        >
+                                          Post-test
+                                        </th>
+                                        <th scope="col" className="px-6 py-4">
+                                          Total
+                                        </th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr className="border-b border-neutral-200 ">
+                                        <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 font-medium ">
+                                          1
+                                        </td>
+                                        <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 ">
+                                          {
+                                            userDetail?.Pelatihan[
+                                              indexPelatihanSelected
+                                            ]?.PreTest!
+                                          }
+                                        </td>
+                                        <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 ">
+                                          {
+                                            userDetail?.Pelatihan[
+                                              indexPelatihanSelected
+                                            ]?.PostTest!
+                                          }
+                                        </td>
+                                        <td className="whitespace-nowrap px-6 py-4">
+                                          {" "}
+                                          {(userDetail?.Pelatihan[
+                                            indexPelatihanSelected
+                                          ]?.PreTest! +
+                                            userDetail?.Pelatihan[
+                                              indexPelatihanSelected
+                                            ]?.PostTest!) /
+                                            2}
+                                        </td>
+                                      </tr>
 
-                        {/* <Timeline /> */}
+                                      <tr className="border-b border-neutral-200 ">
+                                        <th
+                                          colSpan={3}
+                                          className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 "
+                                        >
+                                          Keterangan
+                                        </th>
+                                        <th className="whitespace-nowrap px-6 py-4">
+                                          {" "}
+                                          {userDetail?.Pelatihan[
+                                            indexPelatihanSelected
+                                          ]?.PostTest! > 60
+                                            ? "LULUS"
+                                            : "TIDAK LULUS"}
+                                        </th>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+
+                                  {userDetail?.Pelatihan[indexPelatihanSelected]
+                                    .NoSertifikat == "" ? null : (
+                                    <div>
+                                      <DialogSertifikatPelatihan
+                                        userPelatihan={
+                                          userDetail?.Pelatihan[
+                                            indexPelatihanSelected
+                                          ]!
+                                        }
+                                        pelatihan={selectedPelatihan!}
+                                      >
+                                        <Button
+                                          type="button"
+                                          variant="outline"
+                                          className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+                                        >
+                                          <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+                                          <span className="text-sm">
+                                            {" "}
+                                            Download Sertifikat
+                                          </span>
+                                        </Button>
+                                      </DialogSertifikatPelatihan>
+                                      <div className="text-xs text-gray-500 mb-2 mt-1">
+                                        *Sertifikat ini terbit pada{" "}
+                                        {
+                                          userDetail?.Pelatihan[
+                                            indexPelatihanSelected
+                                          ]?.IsActice!
+                                        }{" "}
+                                        dan akan kadaluarsa pada{" "}
+                                        {addFiveYears(
+                                          userDetail?.Pelatihan[
+                                            indexPelatihanSelected
+                                          ]?.IsActice!
+                                        )}
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   )}
@@ -1172,3 +1102,5 @@ export default function UserTrainingService({ user }: { user: User | null }) {
     </>
   );
 }
+
+export default UserTrainingService;

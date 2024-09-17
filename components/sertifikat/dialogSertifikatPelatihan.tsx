@@ -13,91 +13,14 @@ import { Button } from "../ui/button";
 import { TbCloudDownload } from "react-icons/tb";
 import { PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 import { getCurrentDate } from "@/utils/sertifikat";
-import html2pdf from "html2pdf.js";
+
 import axios from "axios";
 import { elautBaseUrl } from "@/constants/urls";
 import Cookies from "js-cookie";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
-export function DialogSertifikatPelatihan({
-  children,
-  userPelatihan,
-  pelatihan,
-}: {
-  children: ReactElement;
-  userPelatihan: UserPelatihan;
-  pelatihan: PelatihanMasyarakat;
-}) {
-  const componentRef = useRef(null);
-  const [show, setShow] = React.useState<boolean>(false);
-
-  const handleDownloadPDF = () => {
-    setShow(true); // Set show to true to render the element
-  };
-
-  React.useEffect(() => {
-    if (show && componentRef.current) {
-      const element = componentRef.current;
-
-      const opt = {
-        margin: 0,
-        filename: `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`,
-        image: { type: "jpeg", quality: 3.98 },
-        html2canvas: { scale: 1 },
-        jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
-      };
-
-      html2pdf()
-        .from(element)
-        .set(opt)
-        .save()
-        .then(async (pdfFile: any) => {
-          const formData = new FormData();
-          formData.append(
-            "fileSertifikat",
-            pdfFile, // This is already the PDF file
-            `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`
-          );
-
-          console.log("PDF File", pdfFile);
-
-          try {
-            const response = await axios.post(
-              elautBaseUrl + "/lemdik/saveSertifikat",
-              formData,
-              {
-                headers: {
-                  Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-                  "Content-Type": "multipart/form-data",
-                },
-              }
-            );
-
-            if (response.status === 200) {
-              console.log("File uploaded successfully");
-            } else {
-              console.error("Failed to upload the file");
-            }
-          } catch (error) {
-            console.error("Error uploading the file:", error);
-          }
-        });
-    }
-  }, [show]);
-
-  return (
-    <>
-      <div onClick={(e) => handleDownloadPDF()}>{children}</div>
-      {show && (
-        <SertifikatPage1
-          ref={componentRef}
-          pelatihan={pelatihan}
-          userPelatihan={userPelatihan}
-        />
-      )}
-    </>
-  );
-}
+const html2pdf = dynamic(() => import("html2pdf.js"), { ssr: false });
 
 const SertifikatPage1 = React.forwardRef(
   (
@@ -311,4 +234,89 @@ const SertifikatPage1 = React.forwardRef(
   }
 );
 
-SertifikatPage1.displayName = "SertifikatPage1";
+export function DialogSertifikatPelatihan({
+  children,
+  userPelatihan,
+  pelatihan,
+}: {
+  children: ReactElement;
+  userPelatihan: UserPelatihan;
+  pelatihan: PelatihanMasyarakat;
+}) {
+  const componentRef = useRef(null);
+  const [show, setShow] = React.useState<boolean>(false);
+
+  const handleDownloadPDF = () => {
+    setShow(true); // Set show to true to render the element
+  };
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && show && componentRef.current) {
+      const generatePDF = async () => {
+        const element = componentRef.current;
+
+        const html2pdf = (await import("html2pdf.js")).default;
+
+        const opt = {
+          margin: 0,
+          filename: `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`,
+          image: { type: "jpeg", quality: 3.98 },
+          html2canvas: { scale: 1 },
+          jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
+        };
+
+        html2pdf()
+          .from(element)
+          .set(opt)
+          .outputPdf("blob")
+          .then(async (pdfBlob: Blob) => {
+            const formData = new FormData();
+            formData.append(
+              "fileSertifikat",
+              pdfBlob,
+              `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`
+            );
+
+            console.log("PDF Blob", pdfBlob);
+
+            try {
+              const response = await axios.post(
+                elautBaseUrl + "/lemdik/saveSertifikat",
+                formData,
+                {
+                  headers: {
+                    Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+                    "Content-Type": "multipart/form-data",
+                  },
+                }
+              );
+
+              if (response.status === 200) {
+                console.log("File uploaded successfully");
+              } else {
+                console.error("Failed to upload the file");
+              }
+            } catch (error) {
+              console.error("Error uploading the file:", error);
+            }
+          });
+      };
+      generatePDF();
+    }
+  }, [show]);
+
+  return (
+    <div>
+      <div onClick={(e) => handleDownloadPDF()}>{children}</div>
+      {show ? (
+        <SertifikatPage1
+          ref={componentRef}
+          pelatihan={pelatihan}
+          userPelatihan={userPelatihan}
+        />
+      ) : (
+        <></>
+      )}
+    </div>
+  );
+}

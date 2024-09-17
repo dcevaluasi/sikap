@@ -1,11 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { Transition } from "@headlessui/react";
 import Image from "next/image";
-import FeaturesBg from "@/public/images/features-bg.png";
-import FeaturesElement from "@/public/images/features-element.png";
-import { GiLuckyFisherman, GiWaterSplash } from "react-icons/gi";
 import { HiUserGroup } from "react-icons/hi2";
 
 // Import Swiper styles
@@ -19,15 +15,10 @@ import "swiper/css/navigation";
 import { Slide } from "react-awesome-reveal";
 import { usePathname } from "next/navigation";
 import { extractPathAfterBppp, getPenyeleggara } from "@/utils/pelatihan";
-import { PelatihanMasyarakat } from "@/types/product";
-import axios, { AxiosResponse } from "axios";
-import BPPPCertificates from "./bppp-certificates";
-import UserDocuments from "./user-documents";
 import { User } from "@/types/user";
 import UserTrainingService from "./user-training-service";
-
-import { Skeleton } from "@/components/ui/skeleton";
 import UserCertificateService from "./user-certificate-service";
+import UserDocuments from "./user-documents";
 
 export default function UserService({ user }: { user: User | null }) {
   const tabMenus = [
@@ -138,8 +129,8 @@ export default function UserService({ user }: { user: User | null }) {
       </section>
 
       {indexMenuSelected == 0 && <UserTrainingService user={user} />}
-      {/* {indexMenuSelected == 1 && <UserCertificateService user={user} />} */}
-      {/* {indexMenuSelected == 2 && <UserDocuments user={user} />} */}
+      {/* {indexMenuSelected == 1 && <UserCertificateService user={user} />}
+      {indexMenuSelected == 2 && <UserDocuments user={user} />} */}
     </div>
   );
 }
