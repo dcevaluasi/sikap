@@ -142,6 +142,50 @@ const DetailPelatihan: React.FC = () => {
             />
           </div>
 
+          <div className="flex gap-2 w-full">
+            <div className="w-full">
+              <label
+                className="block text-gray-800 text-sm font-medium mb-1"
+                htmlFor="kodePelatihan"
+              >
+                Kode Pelatihan <span className="text-red-600">*</span>
+              </label>
+              <input
+                id="tanggalMulaiPelatihan"
+                type="text"
+                className="form-input w-full text-black border-gray-300 rounded-md"
+                required
+                readOnly
+                min={new Date().toISOString().split("T")[0]}
+                placeholder={
+                  dataPelatihan != null ? dataPelatihan!.KodePelatihan : "-"
+                }
+              />
+            </div>
+
+            <div className="w-full">
+              <label
+                className="block text-gray-800 text-sm font-medium mb-1"
+                htmlFor="kodePelatihan"
+              >
+                No Sertifikat <span className="text-red-600">*</span>
+              </label>
+              <input
+                id="tanggalMulaiPelatihan"
+                type="text"
+                className="form-input w-full text-black border-gray-300 rounded-md"
+                required
+                readOnly
+                min={new Date().toISOString().split("T")[0]}
+                placeholder={
+                  "B" + dataPelatihan != null
+                    ? dataPelatihan!.NoSertifikat
+                    : "-"
+                }
+              />
+            </div>
+          </div>
+
           {/* Bidang dan Jenis Pelatihan */}
           <div className="flex gap-2 w-full">
             <div className="w-full">

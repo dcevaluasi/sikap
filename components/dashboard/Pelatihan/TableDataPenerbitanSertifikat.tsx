@@ -119,9 +119,7 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
 
       // Filter data where SuratPemberitahuan is not an empty string
       const filteredData = response.data.data.filter(
-        (item: any) =>
-          item.TtdSertifikat ==
-          "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusian Kelautan dan Perikanan"
+        (item: any) => item.TtdSertifikat == Cookies.get("Eselon")
       );
 
       setData(filteredData);

@@ -34,6 +34,38 @@ const DropdownUser = ({
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const token = Cookies.get("XSRF091");
 
+  type AdminPusat = {
+    IdAdminPusat: number;
+    Nama: string;
+    Email: string;
+    Password: string;
+    NoTelpon: string;
+    Nip: string;
+    Status: string;
+  };
+
+  const [dataAdminPusat, setDataAdminPusat] = React.useState<AdminPusat | null>(
+    null
+  );
+
+  const handleGetAdminPusat = async () => {
+    try {
+      const response = await axios.get(
+        `${elautBaseUrl}/adminPusat/getAdminPusat`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      Cookies.set("Eselon", response.data.data.Nip);
+      setDataAdminPusat(response.data.data);
+      console.log({ response });
+    } catch (error) {
+      console.error({ error });
+    }
+  };
+
   /*
     EDIT PROFILE HANDLING
   */
@@ -121,6 +153,9 @@ const DropdownUser = ({
 
   // close on click outside
   useEffect(() => {
+    if (pathname.includes("pusat")) {
+      handleGetAdminPusat();
+    }
     const clickHandler = ({ target }: MouseEvent) => {
       if (!dropdown.current) return;
       if (
@@ -484,12 +519,16 @@ const DropdownUser = ({
           <span className="block text-sm font-medium text-black">
             {pathname.includes("lemdiklat")
               ? userLoggedInInfo?.data?.NamaLemdik
-              : "Dr. I Nyoman Radiarta, S.Pi, M.Sc"}
+              : dataAdminPusat != null
+              ? dataAdminPusat!.Nama
+              : ""}
           </span>
           <span className="block text-xs">
             {pathname.includes("lemdiklat")
               ? "Admin Balai Pelatihan"
-              : "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusia KP"}
+              : dataAdminPusat != null
+              ? dataAdminPusat!.Nip
+              : ""}
           </span>
         </span>
 

@@ -74,9 +74,12 @@ function page() {
       Cookies.set("XSRF093", role == "lemdik" ? "lemdiklat" : "adminPusat");
 
       resetAllStateToEmptyString();
-      router.push(
-        `/admin/${role == "lemdik" ? "lemdiklat" : "puslat"}/dashboard`
-      );
+
+      if (role == "lemdik") {
+        router.push(`/admin/lemdiklat/dashboard`);
+      } else {
+        router.push(`/admin/pusat/pelatihan/penerbitan-sertifikat`);
+      }
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status == 401) {
