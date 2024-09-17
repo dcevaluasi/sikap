@@ -367,16 +367,6 @@ export default function UserTrainingService({ user }: { user: User | null }) {
 
           <p className="text-pretty text-sm text-gray-500">{}</p>
         </div>
-        {/* <div className="flex gap-1">
-          <Button
-            variant="outline"
-            onClick={(e) => setIndexPelatihanSelected(index)}
-            className="w-full border flex gap-2 border-gray-600 text-left capitalize items-center justify-center"
-          >
-            <BiSearch className="h-4 w-4 text-gray-600" />{" "}
-            <span className="text-xs">Cek Pelatihan</span>
-          </Button>
-        </div> */}
 
         <dl className="mt-6 flex gap-4 sm:gap-6">
           <div className="flex flex-col-reverse">

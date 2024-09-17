@@ -93,6 +93,7 @@ import { MateriButton, PublishButton } from "./Actions";
 import DeleteButton from "./Actions/DeleteButton";
 import CloseButton from "./Actions/CloseButton";
 import UploadSuratButton from "./Actions/UploadSuratButton";
+import GenerateNoSertifikatButton from "./Actions/GenerateNoSertifikatButton";
 
 function DetailPelatihan() {
   const paths = usePathname().split("/");
@@ -136,59 +137,60 @@ function DetailPelatihan() {
           </div>
 
           {/* ACTIONS */}
-          <div className={`w-fit flex items-center justify-center gap-1`}>
-            <MateriButton
-              idPelatihan={idPelatihan}
-              handleFetchingData={handleFetchDetailPelatihan}
-            />
+          {pelatihan != null && (
+            <div className={`w-fit flex items-center justify-center gap-1`}>
+              <MateriButton
+                idPelatihan={idPelatihan}
+                handleFetchingData={handleFetchDetailPelatihan}
+              />
 
-            <DeleteButton
-              idPelatihan={idPelatihan}
-              pelatihan={pelatihan}
-              handleFetchingData={handleFetchDetailPelatihan}
-            />
+              <DeleteButton
+                idPelatihan={idPelatihan}
+                pelatihan={pelatihan}
+                handleFetchingData={handleFetchDetailPelatihan}
+              />
 
-            <CloseButton
-              idPelatihan={idPelatihan}
-              statusPelatihan={pelatihan?.StatusApproval ?? ""}
-              handleFetchingData={handleFetchDetailPelatihan}
-            />
+              <CloseButton
+                idPelatihan={idPelatihan}
+                statusPelatihan={pelatihan?.StatusApproval ?? ""}
+                handleFetchingData={handleFetchDetailPelatihan}
+              />
 
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href={`/admin/lemdiklat/pelatihan/${kodePelatihan}/peserta-pelatihan/${idPelatihan}`}
-                    className="ml-auto border rounded-full border-green-500  h-9 px-4 py-2  hover:bg-green-500 hover:text-white text-green-500 duration-700"
-                  >
-                    <HiUserGroup className="h-4 w-4 " />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Peserta Pelatihan</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={`/admin/lemdiklat/pelatihan/${kodePelatihan}/peserta-pelatihan/${idPelatihan}`}
+                      className="ml-auto border rounded-full border-green-500  h-9 px-4 py-2  hover:bg-green-500 hover:text-white text-green-500 duration-700"
+                    >
+                      <HiUserGroup className="h-4 w-4 " />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Peserta Pelatihan</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
 
-            <Button
-              variant="outline"
-              className="ml-auto border rounded-full border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 duration-700"
-            >
-              <RiVerifiedBadgeFill className="h-4 w-4 " />
-            </Button>
+              <GenerateNoSertifikatButton
+                idPelatihan={idPelatihan}
+                pelatihan={pelatihan!}
+                handleFetchingData={handleFetchDetailPelatihan}
+              />
 
-            <PublishButton
-              statusPelatihan={pelatihan?.Status ?? ""}
-              idPelatihan={idPelatihan}
-              handleFetchingData={handleFetchDetailPelatihan}
-            />
+              <PublishButton
+                statusPelatihan={pelatihan?.Status ?? ""}
+                idPelatihan={idPelatihan}
+                handleFetchingData={handleFetchDetailPelatihan}
+              />
 
-            <UploadSuratButton
-              idPelatihan={idPelatihan}
-              handleFetchingData={handleFetchDetailPelatihan}
-              suratPemberitahuan={pelatihan?.SuratPemberitahuan ?? ""}
-            />
-          </div>
+              <UploadSuratButton
+                idPelatihan={idPelatihan}
+                handleFetchingData={handleFetchDetailPelatihan}
+                suratPemberitahuan={pelatihan?.SuratPemberitahuan ?? ""}
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -368,6 +370,23 @@ function DetailPelatihan() {
                   </Link>
                 </td>
               </tr>
+              <tr className="border-b border-b-gray-200 w-full">
+                <td className="font-semibold p-4 w-[20%]">
+                  Bank Soal Pelatihan
+                </td>
+                <td className="p-4 w-2/3">
+                  <Link
+                    target="_blank"
+                    className="text-blue-500 underline flex gap-2 items-center"
+                    href={`/admin/lemdiklat/pelatihan/${
+                      pelatihan!.KodePelatihan
+                    }/bank-soal/${pelatihan!.IdPelatihan}`}
+                  >
+                    <FiUploadCloud />
+                    Upload Bank Soal
+                  </Link>
+                </td>
+              </tr>
             </table>
           </div>
         </div>
@@ -402,6 +421,14 @@ function DetailPelatihan() {
                   {pelatihan!.NoSertifikat == ""
                     ? "-"
                     : pelatihan!.NoSertifikat}
+                </td>
+              </tr>
+              <tr className="border-b border-b-gray-200 w-full">
+                <td className="font-semibold p-4 w-[20%]">Status Penerbitan</td>
+                <td className="p-4 w-2/3">
+                  {pelatihan!.StatusPenerbitan == ""
+                    ? "-"
+                    : pelatihan!.StatusPenerbitan}
                 </td>
               </tr>
             </table>
