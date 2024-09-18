@@ -143,7 +143,7 @@ const SertifikatPage1 = React.forwardRef(
               </div>
             </div>
 
-            {/* <div className="w-full  flex flex-col gap-4  px-10 py-10 rounded-md font-cambria leading-[120%] !h-[120vh]">
+            <div className="w-full  flex flex-col gap-4  px-10 py-10 rounded-md font-cambria leading-[120%] !h-[120vh]">
               <div className="flex flex-row justify-center items-center">
                 <div className="flex flex-row gap-2 items-center">
                   <div className="flex flex-col font-cambria text-center">
@@ -218,7 +218,7 @@ const SertifikatPage1 = React.forwardRef(
                   </td>
                 </tr>
               </table>
-            </div> */}
+            </div>
 
             <div className="flex flex-row  absolute -bottom-12">
               <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">

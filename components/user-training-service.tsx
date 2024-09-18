@@ -939,7 +939,7 @@ function UserTrainingService({ user }: { user: User | null }) {
                         </div>
 
                         {userDetail?.Pelatihan[indexPelatihanSelected]
-                          ?.PreTest != 0 && (
+                          ?.PostTest != 0 && (
                           <div className="flex flex-col mt-0">
                             <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
                               <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
@@ -1051,13 +1051,13 @@ function UserTrainingService({ user }: { user: User | null }) {
                                         {
                                           userDetail?.Pelatihan[
                                             indexPelatihanSelected
-                                          ]?.IsActice!
+                                          ]?.CreatedAt!
                                         }{" "}
                                         dan akan kadaluarsa pada{" "}
                                         {addFiveYears(
                                           userDetail?.Pelatihan[
                                             indexPelatihanSelected
-                                          ]?.IsActice!
+                                          ]?.CreatedAt!
                                         )}
                                       </div>
                                     </div>
