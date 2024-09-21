@@ -69,9 +69,11 @@ function page() {
         title: `Berhasil login ke admin E-LAUT!`,
       });
 
-      Cookies.set("XSRF091", response.data.t);
-      Cookies.set("XSRF092", "true");
-      Cookies.set("XSRF093", role == "lemdik" ? "lemdiklat" : "adminPusat");
+      Cookies.set("XSRF091", response.data.t, { expires: 1 });
+      Cookies.set("XSRF092", "true", { expires: 1 });
+      Cookies.set("XSRF093", role == "lemdik" ? "lemdiklat" : "adminPusat", {
+        expires: 1,
+      });
 
       resetAllStateToEmptyString();
 

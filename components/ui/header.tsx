@@ -72,7 +72,9 @@ export default function Header() {
                   usePathname().includes("bppp") ||
                   usePathname() == "/lembaga/dpkakp" ||
                   usePathname() == "/dashboard" ||
-                  usePathname().includes("program"))
+                  usePathname().includes("program") ||
+                  usePathname().includes("registrasi") ||
+                  usePathname().includes("login"))
                   ? "text-gray-200 hover:text-white hover:scale-105"
                   : top && usePathname().includes("layanan")
                   ? "text-gray-600 hover:text-gray-900 hover:scale-105"
@@ -161,7 +163,9 @@ export default function Header() {
               usePathname().includes("bppp") ||
               usePathname() == "/lembaga/dpkakp" ||
               usePathname() == "/dashboard" ||
-              usePathname().includes("program"))
+              usePathname().includes("program") ||
+              usePathname().includes("registrasi") ||
+              usePathname().includes("login"))
               ? "text-gray-200 hover:text-white hover:scale-105"
               : top && usePathname().includes("layanan")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
@@ -200,7 +204,9 @@ export default function Header() {
           : "block"
       } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${
         (top && usePathname().includes("layanan")) ||
-        usePathname() == "/dashboard"
+        usePathname() == "/dashboard" ||
+        usePathname() == "/registrasi" ||
+        usePathname() == "/login"
           ? "pt-0"
           : top && "pt-6"
       }  ${

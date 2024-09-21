@@ -15,9 +15,10 @@ import ReCAPTCHA from "react-google-recaptcha";
 
 function FormLogin() {
   /* state variable to store basic user information to register */
-  const [nik, setNik] = React.useState<string>("");
+  const [noNumber, setNoNumber] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const recaptchaRef = React.createRef();
+  const [countWrongPassword, setCountPassword] = React.useState<number>(0);
 
   const [captcha, setCaptcha] = React.useState<string | null>();
 
@@ -26,70 +27,86 @@ function FormLogin() {
 
   const handleLoginAkun = async (e: FormEvent) => {
     e.preventDefault();
-    if (nik == "" || password == "") {
-      Toast.fire({
-        icon: "error",
-        title: `Tolong lengkapi data login!`,
-      });
-    } else {
-      if (captcha) {
-        try {
-          const response: AxiosResponse = await axios.post(
-            `${baseUrl}/users/login`,
-            JSON.stringify({
-              nik: nik,
-              password: password,
-            }),
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          console.log({ response });
+    if (countWrongPassword <= 3) {
+      if (noNumber == "" || password == "") {
+        Toast.fire({
+          icon: "error",
+          title: "Gagal mencoba login.",
+          text: `Tolong lengkapi data login untuk login kedalam ELAUT`,
+        });
+      } else {
+        if (captcha) {
+          try {
+            const response: AxiosResponse = await axios.post(
+              `${baseUrl}/users/loginNotelpon`,
+              JSON.stringify({
+                no_number: noNumber,
+                password: password,
+              }),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            console.log({ response });
 
-          Cookies.set("XSRF081", response.data.t);
-          Cookies.set("XSRF082", "true");
+            Cookies.set("XSRF081", response.data.t, { expires: 1 });
+            Cookies.set("XSRF082", "true", { expires: 1 });
 
-          if (Cookies.get("XSRF085")) {
-            Toast.fire({
-              icon: "success",
-              title: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
-            });
-            router.push(Cookies.get("XSRF085")!);
-          } else {
-            Toast.fire({
-              icon: "success",
-              title: `Berhasil melakukan login!`,
-            });
-            if (Cookies.get("XSRF083")) {
-              // router.push("/dashboard/complete-profile");
-              router.push("/dashboard");
+            if (Cookies.get("XSRF085")) {
+              Toast.fire({
+                icon: "success",
+                title: "Berhasil login.",
+                text: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
+              });
+              router.push(Cookies.get("XSRF085")!);
             } else {
-              router.push("/dashboard");
+              Toast.fire({
+                icon: "success",
+                title: "Berhasil login.",
+                text: `Berhasil melakukan login kedalam ELAUT!`,
+              });
+              if (Cookies.get("XSRF083")) {
+                // router.push("/dashboard/complete-profile");
+                router.push("/dashboard");
+              } else {
+                router.push("/dashboard");
+              }
             }
-          }
-        } catch (error: any) {
-          console.error({ error });
-          if (
-            error.response &&
-            error.response.data &&
-            error.response.data.Message
-          ) {
-            const errorMsg = error.response.data.Message;
-            Toast.fire({
-              icon: "error",
-              title: `Gagal melakukan login, ${errorMsg}!`,
-            });
-          } else {
-            const errorMsg = error.response.data.Message;
-            Toast.fire({
-              icon: "error",
-              title: `Gagal melakukan login. ${errorMsg}!`,
-            });
+          } catch (error: any) {
+            console.error({ error });
+            if (
+              error.response &&
+              error.response.data &&
+              error.response.data.pesan
+            ) {
+              const errorMsg = error.response.data.pesan;
+              if (errorMsg == "Incorrect password!") {
+                setCountPassword(countWrongPassword + 1);
+              }
+              Toast.fire({
+                icon: "error",
+                title: "Gagal mencoba login.",
+                text: `Gagal melakukan login, ${errorMsg}!`,
+              });
+            } else {
+              const errorMsg = error.response.data.pesan;
+              Toast.fire({
+                icon: "error",
+                title: "Gagal mencoba login.",
+                text: `Gagal melakukan login. ${errorMsg}!`,
+              });
+            }
           }
         }
       }
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: "Gagal mencoba login.",
+        text: `Ups, terlihat kamu sudah mencoba berulang kali dengan password gagal, coba lagi nanti!`,
+      });
     }
   };
 
@@ -132,22 +149,22 @@ function FormLogin() {
 
           {/* Form */}
           <div className="max-w-sm  mx-5 md:mx-auto mt-5">
-            <form onSubmit={(e) => handleLoginAkun(e)}>
+            <form onSubmit={(e) => handleLoginAkun(e)} autoComplete="off">
               <div className="flex flex-wrap -mx-3 mb-2">
                 <div className="w-full px-3">
                   <label
                     className="block text-gray-200 text-sm font-medium mb-1"
                     htmlFor="name"
                   >
-                    NIK <span className="text-red-600">*</span>
+                    No Telepon/WA <span className="text-red-600">*</span>
                   </label>
                   <input
                     id="name"
                     type="text"
                     className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                    placeholder="Masukkan NIK"
-                    value={nik}
-                    onChange={(e) => setNik(e.target.value)}
+                    placeholder="Masukkan No Telepon/WA"
+                    value={noNumber}
+                    onChange={(e) => setNoNumber(e.target.value)}
                     required
                   />
                 </div>

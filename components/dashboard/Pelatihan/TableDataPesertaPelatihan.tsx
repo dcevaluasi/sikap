@@ -78,6 +78,7 @@ const TableDataPesertaPelatihan = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const pathname = usePathname();
   const id = extractLastSegment(pathname);
+  const paths = pathname.split("/");
   const [noSertifikatTerbitkan, setNoSertifikatTerbitkan] = React.useState("");
 
   const [dataPelatihan, setDataPelatihan] =
@@ -251,19 +252,24 @@ const TableDataPesertaPelatihan = () => {
       cell: ({ row }) => (
         <div className={` flex items-center justify-center w-full gap-1`}>
           {row.original.Keterangan == "Valid" ? (
-            <Button
-              onClick={(e) => {
-                setOpenFormValidasiDataPesertaPelatihan(
-                  !openFormValidasiDataPesertaPelatihan
-                );
-                setDataPesertaSelected(row.original!);
-                setSelectedIdPeserta(row.original!.IdUserPelatihan);
-              }}
-              variant="outline"
-              className=" border border-green-500"
+            <Link
+              href={`/admin/lemdiklat/pelatihan/${
+                paths[paths.length - 3]
+              }/peserta-pelatihan/${row.original.IdPelatihan}/${
+                row.original.IdUserPelatihan
+              }/${row.original.IdUsers}`}
+              // onClick={(e) => {
+              //   setOpenFormValidasiDataPesertaPelatihan(
+              //     !openFormValidasiDataPesertaPelatihan
+              //   );
+              //   setDataPesertaSelected(row.original!);
+              //   setSelectedIdPeserta(row.original!.IdUserPelatihan);
+              // }}
+              // variant="outline"
+              className=" border border-green-500  text-green-500  bg-white shadow-sm hover:bg-green-500 hover:text-white h-9 px-4 py-2 mx-0 rounded-md"
             >
-              <RiVerifiedBadgeFill className="h-4 w-4 text-green-500" />
-            </Button>
+              <RiVerifiedBadgeFill className="h-4 w-4 " />
+            </Link>
           ) : (
             <Button
               onClick={(e) => {
@@ -323,7 +329,7 @@ const TableDataPesertaPelatihan = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-xs text-gray-400">
+          {/* <p className="text-xs text-gray-400">
             {" "}
             <span
               className={`${
@@ -338,7 +344,8 @@ const TableDataPesertaPelatihan = () => {
               {row.original.StatusPembayaran}
             </span>{" "}
             • BTPN
-          </p>{" "}
+          </p>{" "} */}
+          <p className="text-xs text-gray-400"> Total Pembayaran</p>{" "}
           <p className="text-base font-semibold tracking-tight leading-none">
             Rp. {row.original?.TotalBayar}
           </p>

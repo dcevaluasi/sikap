@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
 export function middleware(request: any) {
-  const XSRF092 = request.cookies.get('XSRF092')
+  const XSRF091 = request.cookies.get('XSRF091')
   const XSRF081 = request.cookies.get('XSRF081')
 
   const XSRF095 = request.cookies.get('XSRF095') // DPKAKP ADMIN
@@ -46,12 +46,13 @@ export function middleware(request: any) {
     }
   }
 
-  if (!XSRF092) {
+  if (!XSRF091) {
     const protectedPaths = [
       '/admin/lemdiklat/dashboard',
       '/admin/lemdiklat/pelatihan',
       '/admin/lemdiklat/pelatihan/tambah-pelatihan',
       '/admin/lemdiklat/pelatihan/penerbitan-sttpl',
+      'admin/lemdiklat/pelatihan/[kode-pelatihan]/peserta-pelatihan/[id]'
     ]
 
     if (protectedPaths.includes(request.nextUrl.pathname)) {

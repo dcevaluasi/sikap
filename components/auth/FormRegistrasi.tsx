@@ -26,10 +26,52 @@ import { TbNumber } from "react-icons/tb";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { IoMdCloseCircle } from "react-icons/io";
 
+// RECAPTCHA
+import ReCAPTCHA from "react-google-recaptcha";
+
 function FormRegistrasi() {
   const router = useRouter();
 
+  const recaptchaRef = React.createRef();
+
+  const [captcha, setCaptcha] = React.useState<string | null>();
+
   const [noKusuka, setNoKusuka] = React.useState("");
+
+  const handlePasswordCriteria = (password: string) => {
+    const criteria = [
+      {
+        regex: /.{8,}/,
+        message: `Password must be at least 8 characters long.`,
+      },
+      {
+        regex: /[A-Z]/,
+        message: "Password must contain at least one uppercase letter.",
+      },
+      {
+        regex: /[a-z]/,
+        message: "Password must contain at least one lowercase letter.",
+      },
+      { regex: /[0-9]/, message: "Password must contain at least one number." },
+      {
+        regex: /[!@#$%^&*(),.?":{}|<>]/,
+        message:
+          "Password must contain at least one special character (symbol).",
+      },
+    ];
+
+    for (const { regex, message } of criteria) {
+      if (!regex.test(password)) {
+        Toast.fire({
+          icon: "error",
+          title: message,
+        });
+        return false;
+      }
+    }
+
+    return true;
+  };
 
   const handleCheckingNoKusuka = async (e: any) => {
     e.preventDefault();
@@ -102,55 +144,59 @@ function FormRegistrasi() {
 
   const handleRegistrasiAkun = async (e: FormEvent) => {
     e.preventDefault();
-    if (name == "" || nik == "" || phoneNumber == "" || password == "") {
-      Toast.fire({
-        icon: "error",
-        title: `Tolong lengkapi data registrasi!`,
-      });
-      setIsInputError(true);
-    } else {
-      try {
-        const response: AxiosResponse = await axios.post(
-          `${baseUrl}/users/registerUser`,
-          JSON.stringify({
-            nik: nik,
-            nama: name,
-            password: password,
-            no_number: phoneNumber.toString(),
-            kusuka_users: isKUSUKA,
-          }),
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        console.log({ response });
-
-        Cookies.set("XSRF083", "true");
-
+    if (handlePasswordCriteria(password)) {
+      if (name == "" || nik == "" || phoneNumber == "" || password == "") {
         Toast.fire({
-          icon: "success",
-          title: `Berhasil melakukan registrasi akun, silahkan untuk login terlebih dahulu!`,
+          icon: "error",
+          title: `Tolong lengkapi data registrasi!`,
         });
-        router.push("/login");
-      } catch (error: any) {
-        console.error({ error });
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.Message
-        ) {
-          const errorMsg = error.response.data.Message;
-          Toast.fire({
-            icon: "error",
-            title: `Gagal melakukan registrasi akun, ${errorMsg}!`,
-          });
-        } else {
-          Toast.fire({
-            icon: "error",
-            title: `Gagal melakukan registrasi akun. Terjadi kesalahan tidak diketahui.`,
-          });
+        setIsInputError(true);
+      } else {
+        if (captcha) {
+          try {
+            const response: AxiosResponse = await axios.post(
+              `${baseUrl}/users/registerUser`,
+              JSON.stringify({
+                nik: nik,
+                nama: name,
+                password: password,
+                no_number: phoneNumber.toString(),
+                kusuka_users: isKUSUKA,
+              }),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            console.log({ response });
+
+            Cookies.set("XSRF083", "true");
+
+            Toast.fire({
+              icon: "success",
+              title: `Berhasil melakukan registrasi akun, silahkan untuk login terlebih dahulu!`,
+            });
+            router.push("/login");
+          } catch (error: any) {
+            console.error({ error });
+            if (
+              error.response &&
+              error.response.data &&
+              error.response.data.Message
+            ) {
+              const errorMsg = error.response.data.Message;
+              Toast.fire({
+                icon: "error",
+                title: `Gagal melakukan registrasi akun, ${errorMsg}!`,
+              });
+            } else {
+              Toast.fire({
+                icon: "error",
+                title: `Gagal melakukan registrasi akun. Terjadi kesalahan tidak diketahui.`,
+              });
+            }
+          }
         }
       }
     }
@@ -410,7 +456,30 @@ function FormRegistrasi() {
                   )}
                 </div>
               </div>
-              <div className="flex flex-wrap -mx-3 mt-6">
+              <div
+                className="flex flex-wrap w-full -mx-3 mb-1"
+                style={{ width: "100% !important" }}
+              >
+                <div
+                  className="w-full px-3"
+                  style={{ width: "100% !important" }}
+                >
+                  <label
+                    className="block text-gray-200 text-sm font-medium mb-1"
+                    htmlFor="password"
+                  >
+                    Verify if you are not a robot{" "}
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <ReCAPTCHA
+                    style={{ width: "100% !important" }}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                    className="mx-auto w-[600px] font-inter text-sm"
+                    onChange={setCaptcha}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-wrap -mx-3 mt-3">
                 <div className="w-full px-3 flex flex-col gap-2">
                   <button
                     type="submit"
