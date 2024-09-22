@@ -43,7 +43,7 @@
     "html2pdf-ts": "^1.2.22",
     "html2pdf.js": "^0.10.2",
     "js-cookie": "^3.0.5",
-    "jspdf": "^2.5.1",
+    "jspdf": "^2.5.2",
     "jsvectormap": "^1.5.3",
     "jvectormap-next": "^3.1.1",
     "lucide-react": "^0.372.0",

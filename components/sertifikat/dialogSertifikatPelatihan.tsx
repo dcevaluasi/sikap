@@ -24,6 +24,7 @@ import {
   generateTanggalPelatihan,
   generateTanggalPelatihanWithoutDay,
 } from "@/utils/text";
+import jsPDF from "jspdf";
 
 const html2pdf = dynamic(() => import("html2pdf.js"), { ssr: false });
 
@@ -68,6 +69,9 @@ const SertifikatPage1 = React.forwardRef(
 
     React.useEffect(() => {
       handleFetchDetailPeserta();
+      document.addEventListener("contextmenu", function (e) {
+        e.preventDefault();
+      });
     }, []);
 
     return (
@@ -170,7 +174,7 @@ const SertifikatPage1 = React.forwardRef(
                 </table>
               </div>
 
-              <div className="flex flex-col w-full items-center justify-center -mt-2">
+              <div className="flex flex-col w-full items-center justify-center -mt-3">
                 <h1 className="font-bosBold text-xl">TELAH LULUS</h1>
                 <h3 className="font-bosBold text-base italic">HAS PASSED</h3>
               </div>
@@ -303,6 +307,101 @@ const SertifikatPage1 = React.forwardRef(
                 Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
               </p>
             </div> */}
+
+            <div className="flex flex-row  absolute -bottom-12">
+              <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">
+                Dokumen ini telah ditandatangani secara elektronik menggunakan
+                sertifikat elektronik yang telah diterbitkan oleh Balai
+                Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
+              </p>
+            </div>
+          </div>
+
+          <div className="w-full flex flex-col  gap-4 relative h-full items-center justify-center">
+            <div className="w-full flex flex-col gap-4 px-10 pt-8 ">
+              <div className="flex flex-col gap-0 w-full items-center text-center justify-center mt-12">
+                <h1 className="text-base max-w-xl font-bosBold">
+                  Materi Pelatihan Cara Pembuatan Pakan Ikan yang Baik (CPPIB)
+                  bagi Peserta Didik di Satuan Pendidikan Kelautan dan
+                  Perikanan, tanggal 27 – 31 Mei 2024
+                </h1>
+                <p className=" leading-none font-bosItalic text-[0.65rem] max-w-xl">
+                  Good Aquculture Feed Manufacturing Practices (GfMP) Training
+                  For Students in the Marine and Fisheries Education Units 27 –
+                  31 May 2024
+                </p>
+              </div>
+
+              <table
+                border={1}
+                className="text-center border border-black-2 p-2 rounded-md"
+              >
+                <tr>
+                  <td
+                    rowSpan={2}
+                    className="border border-black-2 font-extrabold text-base font-bosBold"
+                  >
+                    NO
+                  </td>
+                  <td
+                    rowSpan={2}
+                    className="border border-black-2 font-extrabold text-base w-2/3"
+                  >
+                    <h2 className="font-bosBold text-base">MATA PELATIHAN</h2>
+                    <p className="font-bosItalic text-xs">COURSE</p>
+                  </td>
+                  <td
+                    colSpan={3}
+                    className="border border-black-2 font-extrabold text-lg"
+                  >
+                    <h2 className="font-bosBold text-base">
+                      ALOKASI WAKTU
+                      <br />
+                      (@ 45 menit)
+                    </h2>
+                    <p className="font-bosItalic text-xs">Duration @45 Menit</p>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border border-black-2 w-[100px] font-extrabold text-lg">
+                    <h2 className="font-bosBold text-base">TEORI</h2>
+                    <p className="font-bosItalic text-xs">Theory</p>
+                  </td>
+                  <td className="border border-black-2 w-[100px] font-extrabold text-lg">
+                    <h2 className="font-bosBold text-base">PRAKTEK</h2>
+                    <p className="font-bosItalic text-xs">Practice</p>
+                  </td>
+                </tr>
+                {pelatihan?.MateriPelatihan?.map((materi, index) => (
+                  <tr key={index}>
+                    <td className="border border-black-2 p-2">{index + 1}.</td>
+                    <td className="border border-black-2 p-2 text-left">
+                      {materi.NamaMateri}
+                    </td>
+                    <td className="border border-black-2 p-2">
+                      {materi.JamTeory}
+                    </td>
+                    <td className="border border-black-2 p-2">
+                      {materi.JamPraktek}
+                    </td>
+                  </tr>
+                ))}
+                <tr>
+                  <td
+                    colSpan={2}
+                    className="font-extrabold text-lg border border-black-2 p-2"
+                  >
+                    JUMLAH TOTAL
+                  </td>
+                  <td className="border border-black-2 p-2 font-extrabold">
+                    {totalJamTeory}
+                  </td>
+                  <td className="border border-black-2 p-2 font-extrabold">
+                    {totalJamPraktek}
+                  </td>
+                </tr>
+              </table>
+            </div>
 
             <div className="flex flex-row  absolute -bottom-12">
               <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">
@@ -450,6 +549,7 @@ export function DialogSertifikatPelatihan({
             URL.revokeObjectURL(url); // Clean up the object URL
           });
       };
+
       generatePDF();
     }
   }, [show, userPelatihan]);
