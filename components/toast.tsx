@@ -10,7 +10,9 @@ const Toast = Swal.mixin({
   showConfirmButton: false,
   showCloseButton: true,
   timer: 5000,
-  customClass: `${plus_jakarta_sans.className} text-sm  font-plusJakartaSans z-[9999999999999]`,
+  customClass: {
+    container: `${plus_jakarta_sans.className} text-sm  font-plusJakartaSans z-[9999999999999]`,
+  },
   timerProgressBar: true,
 
   heightAuto: true,
