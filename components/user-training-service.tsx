@@ -1284,24 +1284,24 @@ function UserTrainingService({ user }: { user: User | null }) {
                                               <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
                                               <span className="text-sm">
                                                 {" "}
-                                                Download Sertifikat
+                                                Lihat Sertifikat
                                               </span>
                                             </Button>
                                           </DialogSertifikatPelatihan>
-                                          <div className="text-xs text-gray-500 mb-2 mt-1">
+                                          {/* <div className="text-xs text-gray-500 mb-2 mt-1">
                                             *Sertifikat ini terbit pada{" "}
                                             {
                                               userDetail?.Pelatihan[
                                                 indexPelatihanSelected
-                                              ]?.CreatedAt!
+                                              ]?.IsActice!
                                             }{" "}
                                             dan akan kadaluarsa pada{" "}
                                             {addFiveYears(
                                               userDetail?.Pelatihan[
                                                 indexPelatihanSelected
-                                              ]?.CreatedAt!
+                                              ]?.IsActice!
                                             )}
-                                          </div>
+                                          </div> */}
                                         </div>
                                       )}
                                     </div>

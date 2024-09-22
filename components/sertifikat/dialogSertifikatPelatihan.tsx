@@ -12,6 +12,8 @@ import { MdVerified } from "react-icons/md";
 import { Button } from "../ui/button";
 import { TbCloudDownload, TbLink } from "react-icons/tb";
 import { PelatihanMasyarakat, UserPelatihan } from "@/types/product";
+import { useReactToPrint } from "react-to-print";
+
 import { getCurrentDate } from "@/utils/sertifikat";
 
 import axios from "axios";
@@ -25,6 +27,7 @@ import {
   generateTanggalPelatihanWithoutDay,
 } from "@/utils/text";
 import jsPDF from "jspdf";
+import { BsFillPrinterFill } from "react-icons/bs";
 
 const html2pdf = dynamic(() => import("html2pdf.js"), { ssr: false });
 
@@ -33,9 +36,11 @@ const SertifikatPage1 = React.forwardRef(
     {
       pelatihan,
       userPelatihan,
+      isPrinting,
     }: {
       pelatihan: PelatihanMasyarakat;
       userPelatihan: UserPelatihan;
+      isPrinting?: boolean;
     },
     ref: any
   ) => {
@@ -87,8 +92,18 @@ const SertifikatPage1 = React.forwardRef(
               </p>
             </div>
 
-            <div className="w-full flex flex-col gap-4 px-10 pt-8 ">
-              <div className="flex flex-col gap-0 w-full items-center justify-center mt-12">
+            <div className="w-full flex flex-col gap-4 px-10 pt-5 ">
+              {!isPrinting && (
+                <Image
+                  alt="Logo KKP"
+                  className="mx-auto w-28"
+                  width={0}
+                  height={0}
+                  src="./logo-kkp-2.png"
+                />
+              )}
+
+              <div className="flex flex-col gap-0 w-full items-center justify-center -mt-3">
                 <h1 className="text-sm font-bosBold">
                   KEMENTERIAN KELAUTAN DAN PERIKANAN
                 </h1>
@@ -206,13 +221,16 @@ const SertifikatPage1 = React.forwardRef(
                         : "Director for Marine And Fisheries Training Center"}
                     </p>
                   </div>
-                  <Image
-                    alt=""
-                    width={0}
-                    height={0}
-                    src={"/ttd-elektronik.png"}
-                    className="w-fit h-[80px] relative -z-10 mt-2"
-                  />
+                  {!isPrinting && (
+                    <Image
+                      alt=""
+                      width={0}
+                      height={0}
+                      src={"/ttd-elektronik.png"}
+                      className="w-fit h-[80px] relative -z-10 mt-2"
+                    />
+                  )}
+
                   <p className=" font-bosBold text-base">
                     {pelatihan?.TtdSertifikat ==
                     "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan Perikanan"
@@ -308,16 +326,18 @@ const SertifikatPage1 = React.forwardRef(
               </p>
             </div> */}
 
-            <div className="flex flex-row  absolute -bottom-12">
-              <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">
-                Dokumen ini telah ditandatangani secara elektronik menggunakan
-                sertifikat elektronik yang telah diterbitkan oleh Balai
-                Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
-              </p>
-            </div>
+            {!isPrinting && (
+              <div className="flex flex-row  absolute -bottom-12">
+                <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">
+                  Dokumen ini telah ditandatangani secara elektronik menggunakan
+                  sertifikat elektronik yang telah diterbitkan oleh Balai
+                  Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
+                </p>
+              </div>
+            )}
           </div>
 
-          <div className="w-full flex flex-col  gap-4 relative h-full items-center justify-center">
+          {/* <div className="w-full flex flex-col  gap-4 relative h-full items-center justify-center">
             <div className="w-full flex flex-col gap-4 px-10 pt-8 ">
               <div className="flex flex-col gap-0 w-full items-center text-center justify-center mt-12">
                 <h1 className="text-base max-w-xl font-bosBold">
@@ -410,7 +430,7 @@ const SertifikatPage1 = React.forwardRef(
                 Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );
@@ -486,6 +506,10 @@ export function DialogSertifikatPelatihan({
       });
   };
 
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
+
   const handleDownloadPDF = () => {
     setShow(true); // Set show to true to render the element
     generatePDF();
@@ -554,6 +578,8 @@ export function DialogSertifikatPelatihan({
     }
   }, [show, userPelatihan]);
 
+  const [isPrinting, setIsPrinting] = React.useState<boolean>(false);
+
   return (
     <div>
       <Dialog>
@@ -575,6 +601,7 @@ export function DialogSertifikatPelatihan({
               ref={componentRef}
               pelatihan={pelatihan}
               userPelatihan={userPelatihan}
+              isPrinting={isPrinting}
             />
           </div>
           <DialogFooter>
@@ -584,6 +611,14 @@ export function DialogSertifikatPelatihan({
             >
               <TbLink />
               Salin Tautan
+            </Button>
+            <Button
+              type="submit"
+              onClick={(e) => handlePrint()}
+              className="flex items-center gap-1 bg-gray-700 hover:bg-gray-700"
+            >
+              <BsFillPrinterFill />
+              Print Sertifikat
             </Button>
             <Button
               onClick={(e) => handleDownloadPDF()}
