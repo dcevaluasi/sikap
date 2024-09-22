@@ -14,7 +14,7 @@ const myFont = localFont({
 });
 
 const bos = localFont({
-  src: "./font/bookmanoldstyle.ttf",
+  src: "./font/bos.ttf",
   variable: "--font-bos",
 });
 
