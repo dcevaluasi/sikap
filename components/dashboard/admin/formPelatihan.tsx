@@ -317,8 +317,8 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
         }
         Toast.fire({
           icon: "error",
-          title:
-            "Ups, inputan belum terisi. Pastikan semua data terisi terlebih dahulu!",
+          title: "Ups!",
+          text: "Inputan belum terisi. Pastikan semua data terisi terlebih dahulu!",
         });
         console.log({ fotoPelatihan });
         window.scrollTo({
@@ -338,8 +338,8 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
         }
         Toast.fire({
           icon: "error",
-          title:
-            "Ups, inputan belum terisi. Pastikan semua data terisi terlebih dahulu!",
+          title: "Ups!",
+          text: "Inputan belum terisi. Pastikan semua data terisi terlebih dahulu!",
         });
         window.scrollTo({
           top: 0,
@@ -395,7 +395,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   };
 
   const [formTab, setFormTab] = React.useState("FormDataPelatihan");
-  const [indexFormTab, setIndexFormTab] = React.useState(0);
+  const [indexFormTab, setIndexFormTab] = React.useState(1);
 
   console.log({ indexFormTab });
   console.log({ formTab });
@@ -1068,12 +1068,14 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                                 <SelectItem value="Masyarakat Umum">
                                   Masyarakat Umum
                                 </SelectItem>
-                                <SelectItem
-                                  value="Karyawan/Pegawai dari
-                  PT/Mitra/Kelompok/Instansi/Sekolah/Universitas"
-                                >
-                                  Karyawan/Pegawai dari
-                                  PT/Mitra/Kelompok/Instansi/Sekolah/Universitas
+                                <SelectItem value="Sekolah Usaha Perikanan Menengah">
+                                  Sekolah Usaha Perikanan Menengah
+                                </SelectItem>
+                                <SelectItem value="Politeknik Kelautan dan Perikanan">
+                                  Politeknik Kelautan dan Perikanan
+                                </SelectItem>
+                                <SelectItem value="Karyawan/Pegawai/Mining Agent">
+                                  Karyawan/Pegawati/Mining Agent
                                 </SelectItem>
                               </SelectContent>
                             </Select>

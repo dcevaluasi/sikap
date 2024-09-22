@@ -597,7 +597,7 @@ export function DialogSertifikatPelatihan({
         </DialogContent>
       </Dialog>
 
-      {show ? (
+      {/* {show ? (
         <SertifikatPage1
           ref={componentRef}
           pelatihan={pelatihan}
@@ -605,7 +605,7 @@ export function DialogSertifikatPelatihan({
         />
       ) : (
         <></>
-      )}
+      )} */}
     </div>
   );
 }
