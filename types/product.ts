@@ -38,6 +38,7 @@ export type PelatihanMasyarakat = {
   JenisPelatihan: string
   BidangPelatihan: string
   DukunganProgramTerobosan: string
+  DeskripsiSertifikat: string
   TanggalMulaiPelatihan: string
   TanggalBerakhirPelatihan: string
   HargaPelatihan: string

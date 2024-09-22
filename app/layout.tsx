@@ -14,8 +14,18 @@ const myFont = localFont({
 });
 
 const bos = localFont({
-  src: "./font/bos.ttf",
+  src: "./font/BOOKOS.ttf",
   variable: "--font-bos",
+});
+
+const bosBold = localFont({
+  src: "./font/bookmanoldstyle_bold.ttf",
+  variable: "--font-bosBold",
+});
+
+const bosItalic = localFont({
+  src: "./font/bookmanoldstyle_italic.ttf",
+  variable: "--font-bosItalic",
 });
 
 const cambria = localFont({
@@ -126,7 +136,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning={true}
-        className={`${inter.className} ${myFont.variable} ${tuwir.variable} ${delius.variable} ${bos.variable} ${cambria.variable} antialiased bg-white text-gray-900 tracking-tight `}
+        className={`${inter.className} ${myFont.variable} ${tuwir.variable} ${delius.variable} ${bos.variable} ${bosBold.variable}  ${bosItalic.variable} ${cambria.variable} antialiased bg-white text-gray-900 tracking-tight `}
       >
         <div className="flex flex-col overflow-hidden supports-[overflow:clip]:overflow-clip relative">
           <Header />

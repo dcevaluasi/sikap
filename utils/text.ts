@@ -42,3 +42,21 @@ export function generateTanggalPelatihan(tanggal: string): string {
     // Mengembalikan string tanggal yang telah diformat
     return `${dayOfWeek}, ${day} ${month} ${year}`;
 }
+
+export function generateTanggalPelatihanWithoutDay(tanggal: string): string {
+    const date = new Date(tanggal);
+
+    // Array nama-nama bulan
+    const months = [
+        'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli',
+        'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    // Mengambil nama hari, tanggal, bulan, dan tahun
+    const day = date.getUTCDate();
+    const month = months[date.getUTCMonth()];
+    const year = date.getUTCFullYear();
+
+    // Mengembalikan string tanggal yang telah diformat
+    return `${day} ${month} ${year}`;
+}
