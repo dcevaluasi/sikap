@@ -131,7 +131,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
           />
 
           <Link
-            href={`/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
+            href={`/layanan/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
               pelatihan?.KodePelatihan
             }/${pelatihan?.IdPelatihan}`}
             className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
