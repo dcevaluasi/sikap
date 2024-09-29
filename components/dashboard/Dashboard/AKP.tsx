@@ -130,7 +130,7 @@ const AKP: React.FC = () => {
           <PopoverTrigger asChild>
             <span onClick={(e) => setSelectedId(0)}>
               <CardDataStats
-                title="Total Blanko Awal"
+                title="Total Persedian Blanko"
                 total={dataBlanko
                   .reduce((total, item) => total + item.JumlahPengadaan, 0)
                   .toString()}
@@ -159,8 +159,7 @@ const AKP: React.FC = () => {
                   data.reduce(
                     (total, item) => total + item.JumlahBlankoDisetujui,
                     0
-                  ) -
-                  2
+                  )
                 ).toString()}
                 rate=""
                 levelDown
@@ -179,12 +178,12 @@ const AKP: React.FC = () => {
             <span onClick={(e) => setSelectedId(0)}>
               <CardDataStats
                 title="Total Blanko Terpakai"
-                total={(
-                  data.reduce(
+                total={data
+                  .reduce(
                     (total, item) => total + item.JumlahBlankoDisetujui,
                     0
-                  ) + 2
-                ).toString()}
+                  )
+                  .toString()}
                 rate="0%"
                 levelUp
               >
@@ -201,7 +200,9 @@ const AKP: React.FC = () => {
           <CardDataStats
             title="Total Sertifikat Keahlian"
             total={data
-              .filter((item) => item.TipeBlanko === "CoC")
+              .filter(
+                (item) => item.TipeBlanko === "Certificate of Competence (CoC)"
+              )
               .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0)
               .toString()}
             rate=""
@@ -216,12 +217,18 @@ const AKP: React.FC = () => {
             title="Total Sertifikat Keterampilan"
             total={
               data
-                .filter((item) => item.TipeBlanko === "CoP")
+                .filter(
+                  (item) =>
+                    item.TipeBlanko === "Certificate of Proficiency (CoP)"
+                )
                 .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0)
                 .toString() +
               "/" +
               dataBlanko
-                .filter((item) => item.TipeBlanko === "CoP")
+                .filter(
+                  (item) =>
+                    item.TipeBlanko === "Certificate of Proficiency (CoP)"
+                )
                 .reduce((total, item) => total + item.JumlahPengadaan, 0)
                 .toString()
             }
@@ -232,7 +239,12 @@ const AKP: React.FC = () => {
           </CardDataStats>
         </span>
 
-        <CardDataStats title="Total Blanko Rusak" total={"2"} rate="" levelDown>
+        <CardDataStats
+          title="Total Blanko Rusak"
+          total={"0f"}
+          rate=""
+          levelDown
+        >
           <HiTrash className="text-primary text-3xl" />
         </CardDataStats>
       </div>

@@ -6,7 +6,7 @@ import {
   RiVerifiedBadgeFill,
 } from "react-icons/ri";
 
-import { LucideFileCheck2, TrendingUp } from "lucide-react";
+import { LucideFileCheck2, LucidePodcast, TrendingUp } from "lucide-react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
@@ -561,12 +561,12 @@ const TableDataPelatihan: React.FC = () => {
                   {" "}
                   <span>
                     {" "}
-                    {convertDate(row.original.TanggalMulaiPelatihan)}{" "}
+                    {convertDate(row.original.TanggalMulaiPendaftaran)}{" "}
                   </span>
                   <span className="lowercase">s.d</span>{" "}
                   <span>
                     {" "}
-                    {convertDate(row?.original?.TanggalBerakhirPelatihan)}
+                    {convertDate(row?.original?.TanggalAkhirPendaftaran)}
                   </span>
                 </span>
               </span>
@@ -610,6 +610,24 @@ const TableDataPelatihan: React.FC = () => {
             </p>
           </div>
         </Link>
+      ),
+    },
+    {
+      accessorKey: "KodePelatihan",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={`text-gray-900 font-semibold w-[300px]`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Status
+            <LucidePodcast className="ml-1 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`text-center uppercase w-[300px]`}>{row.index + 1}</div>
       ),
     },
   ];

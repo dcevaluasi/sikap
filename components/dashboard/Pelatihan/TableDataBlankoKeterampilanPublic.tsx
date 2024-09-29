@@ -103,7 +103,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
     setIsFetching(true);
     try {
       const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlankoKeluar?tipe_blanko=CoP`
+        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlankoKeluar?tipe_blanko=Certificate of Proficiency (CoP)`
       );
       console.log("RESPONSE BLANKO KELUAR : ", response);
       setData(response.data.data);
@@ -173,7 +173,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.TipeBlanko}
           </p>
@@ -198,7 +198,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.TanggalKeluar}
           </p>
@@ -223,7 +223,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.NamaLemdiklat}
           </p>
@@ -248,7 +248,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.NamaPelaksana}
           </p>
@@ -274,7 +274,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.TanggalPermohonan}
           </p>
@@ -322,7 +322,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.NamaProgram}
           </p>
@@ -347,7 +347,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.TanggalPelaksanaan}
           </p>
@@ -372,7 +372,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.JumlahPesertaLulus}
           </p>
@@ -397,7 +397,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.JumlahBlankoDiajukan}
           </p>
@@ -423,7 +423,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.NoSeriBlanko}
           </p>
@@ -448,7 +448,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-sm text-center text-gray-400 leading-[100%]">
+          <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.Status}
           </p>

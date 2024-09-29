@@ -87,6 +87,7 @@ import { convertDate } from "@/utils";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { Blanko, BlankoKeluar } from "@/types/blanko";
+import { generateTanggalPelatihan } from "@/utils/text";
 
 const TableDataBlankoKeluar: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -190,7 +191,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.TipeBlanko}
           </p>
@@ -215,9 +216,9 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
-            {row.original.TanggalKeluar}
+            {generateTanggalPelatihan(row.original.TanggalKeluar)}
           </p>
         </div>
       ),
@@ -228,10 +229,10 @@ const TableDataBlankoKeluar: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            className="p-0 !text-left w-[300px] flex items-center justify-start text-gray-900 font-semibold"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Nama Lemdiklat
+            Asal Sekolah/Lemdiklat/Masyarakat
             <HiUserGroup className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -240,9 +241,34 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.NamaLemdiklat}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "NamaProgram",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Nama Program
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+        >
+          <p className="text-sm text-dark leading-[100%]">
+            {" "}
+            {row.original.NamaProgram}
           </p>
         </div>
       ),
@@ -265,7 +291,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.NamaPelaksana}
           </p>
@@ -278,11 +304,10 @@ const TableDataBlankoKeluar: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            className="p-0 !text-left w-[250px] flex items-center justify-start text-gray-900 font-semibold"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Tanggal Permohonan <br />
-            Blanko Kosong/Pencetakan
+            Tanggal Permohonan
             <HiUserGroup className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -291,9 +316,9 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
-            {row.original.TanggalPermohonan}
+            {generateTanggalPelatihan(row.original.TanggalPermohonan)}
           </p>
         </div>
       ),
@@ -321,31 +346,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         </div>
       ),
     },
-    {
-      accessorKey: "NamaProgram",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Nama Program
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-xs text-gray-400 leading-[100%]">
-            {" "}
-            {row.original.NamaProgram}
-          </p>
-        </div>
-      ),
-    },
+
     {
       accessorKey: "TanggalPelaksanaan",
       header: ({ column }) => {
@@ -364,7 +365,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.TanggalPelaksanaan}
           </p>
@@ -389,7 +390,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.JumlahPesertaLulus}
           </p>
@@ -414,7 +415,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.JumlahBlankoDiajukan}
           </p>
@@ -440,7 +441,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.NoSeriBlanko}
           </p>
@@ -465,7 +466,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.Status}
           </p>
@@ -492,7 +493,7 @@ const TableDataBlankoKeluar: React.FC = () => {
     //     >
     //       <Link
     //         href={row.original.IsSd}
-    //         className="text-xs text-gray-400 leading-[100%]"
+    //         className="text-sm text-dark leading-[100%]"
     //       >
     //         {" "}
     //         {row.original.IsSd}
@@ -518,7 +519,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.IsCetak}
           </p>
@@ -543,7 +544,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.TipePengambilan}
           </p>
@@ -568,7 +569,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.PetugasYangMenerima}
           </p>
@@ -593,7 +594,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.PetugasYangMemberi}
           </p>
@@ -646,7 +647,7 @@ const TableDataBlankoKeluar: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.Keterangan}
           </p>
@@ -723,6 +724,7 @@ const TableDataBlankoKeluar: React.FC = () => {
   const [petugasYangMemberi, setPetugasYangMemberi] =
     React.useState<string>("");
   const [linkDataDukung, setLinkDataDukung] = React.useState<string>("");
+  const [tanggalKeluar, setTanggalKeluar] = React.useState<string>("");
   const [keterangan, setKeterangan] = React.useState<string>("");
 
   const handlePostBlanko = async (e: any) => {
@@ -749,6 +751,7 @@ const TableDataBlankoKeluar: React.FC = () => {
     data.append("PetugasYangMenerima", petugasYangMenerima);
     data.append("PetugasYangMemberi", petugasYangMemberi);
     data.append("LinkDataDukung", linkDataDukung);
+    data.append("TanggalKeluar", tanggalKeluar);
     data.append("Keterangan", keterangan);
 
     try {
@@ -782,7 +785,7 @@ const TableDataBlankoKeluar: React.FC = () => {
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       <AlertDialog open={isOpenFormMateri}>
-        <AlertDialogContent className="max-w-4xl">
+        <AlertDialogContent className="max-w-5xl">
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
               {" "}
@@ -797,7 +800,7 @@ const TableDataBlankoKeluar: React.FC = () => {
           <fieldset>
             <form autoComplete="off">
               <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="flex px-3 gap-2 mb-2 w-full">
+                <div className="grid grid-cols-4 px-3 gap-2 mb-2 w-full">
                   <div className="w-full">
                     <label
                       className="block text-gray-800 text-sm font-medium mb-1"
@@ -805,20 +808,19 @@ const TableDataBlankoKeluar: React.FC = () => {
                     >
                       Tipe Blanko <span className="text-red-600">*</span>
                     </label>
-                    <select
-                      id="name"
-                      className="form-input w-full text-black text-sm border-gray-300 rounded-md"
-                      placeholder="Tipe Blanko"
-                      required
-                      value={tipeBlanko}
-                      onChange={(e) => setTipeBlanko(e.target.value)}
-                    >
-                      <option value="0">Pilih Tipe Blanko</option>
-                      <option value="CoP">CoP (Certificate of Profecy)</option>
-                      <option value="CoC">
-                        CoC (Certificate of Competence)
-                      </option>
-                    </select>
+                    <Select onValueChange={setTipeBlanko}>
+                      <SelectTrigger className="w-full border-gray-300 rounded-md h-fit py-[0.65rem]">
+                        <SelectValue placeholder="Tipe Blanko" />
+                      </SelectTrigger>
+                      <SelectContent className="z-[9999999]">
+                        <SelectItem value="Certificate of Competence (CoC)">
+                          Certificate of Competence (CoC)
+                        </SelectItem>
+                        <SelectItem value="Certificate of Proficiency (CoP)">
+                          Certificate of Proficiency (CoP)
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="w-full">
@@ -826,23 +828,24 @@ const TableDataBlankoKeluar: React.FC = () => {
                       className="block text-gray-800 text-sm font-medium mb-1"
                       htmlFor="name"
                     >
-                      Blanko Pengadaan <span className="text-red-600">*</span>
+                      Pengadaan Blanko <span className="text-red-600">*</span>
                     </label>
-                    <select
-                      id="name"
-                      className="form-input w-full text-sm text-black border-gray-300 rounded-md"
-                      placeholder="Tipe Blanko"
-                      required
-                      value={idBlanko}
-                      onChange={(e) => setIdBlanko(e.target.value)}
-                    >
-                      <option value="0">Pilih Blanko Pengadaan</option>
-                      {dataBlanko.map((data, index) => (
-                        <option key={index} value={data.IdBlanko}>
-                          {data.TanggalPengadaan} -{data.NoSeri}
-                        </option>
-                      ))}
-                    </select>
+                    <Select onValueChange={setIdBlanko}>
+                      <SelectTrigger className="w-full border-gray-300 rounded-md h-fit py-[0.65rem]">
+                        <SelectValue placeholder="Pengadaan Blanko" />
+                      </SelectTrigger>
+                      <SelectContent className="z-[9999999]">
+                        {dataBlanko.map((data, index) => (
+                          <SelectItem
+                            key={index}
+                            value={data.IdBlanko.toString()}
+                          >
+                            ({generateTanggalPelatihan(data.TanggalPengadaan)}){" "}
+                            <span className="font-semibold">{data.NoSeri}</span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="w-full">
@@ -850,38 +853,127 @@ const TableDataBlankoKeluar: React.FC = () => {
                       className="block text-gray-800 text-sm font-medium mb-1"
                       htmlFor="name"
                     >
-                      Nama Lemdiklat <span className="text-red-600">*</span>
+                      Pelaksana Ujian/Diklat{" "}
+                      <span className="text-red-600">*</span>
+                    </label>
+                    <Select onValueChange={setNamaPelaksana}>
+                      <SelectTrigger className="w-full border-gray-300 rounded-md h-fit py-[0.65rem]">
+                        <SelectValue placeholder="Pelaksana Ujian/Diklat" />
+                      </SelectTrigger>
+                      {tipeBlanko == "Certificate of Competence (CoC)" && (
+                        <SelectContent className="z-[9999999]">
+                          <SelectItem value="PUKAKP I (Aceh)">
+                            PUKAKP I (Aceh)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP II (BPPP Medan)">
+                            PUKAKP II (BPPP Medan)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP III (Lampung)">
+                            PUKAKP III (Lampung)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP IV (Poltek AUP)">
+                            PUKAKP IV (Poltek AUP)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP V (BPPP Tegal)">
+                            PUKAKP V (BPPP Tegal)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP VI (SUPM Tegal)">
+                            PUKAKP VI (SUPM Tegal)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP VII (BPPP Banyuwangi)">
+                            PUKAKP VII (BPPP Banyuwangi)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP VIII (Poltek KP Kupang)">
+                            PUKAKP VIII (Poltek KP Kupang)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP IX (SUPM Pontianak)">
+                            PUKAKP IX (SUPM Pontianak)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP X (BPPP Bitung)">
+                            PUKAKP X (BPPP Bitung)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP XI (Poltek KP Bitung)">
+                            PUKAKP XI (Poltek KP Bitung)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP XII (Poltek KP Bone)">
+                            PUKAKP XII (Poltek KP Bone)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP XIII (BPPP Ambon)">
+                            PUKAKP XIII (BPPP Ambon)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP XIV (SUPM Ambon)">
+                            PUKAKP XIV (SUPM Ambon)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP XV (Poltek KP Sorong)">
+                            PUKAKP XV (Poltek KP Sorong)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP XVI (SUPM Sorong)">
+                            PUKAKP XVI (SUPM Sorong)
+                          </SelectItem>
+                          <SelectItem value="PUKAKP XVII (Poltek KP Dumai)">
+                            PUKAKP XVII (Poltek KP Dumai)
+                          </SelectItem>
+                          <SelectItem value="BPPP Tegal">BPPP Tegal</SelectItem>
+                        </SelectContent>
+                      )}
+
+                      {tipeBlanko == "Certificate of Proficiency (CoP)" && (
+                        <SelectContent className="z-[9999999]">
+                          <SelectItem value="BPPP Medan">BPPP Medan</SelectItem>
+                          <SelectItem value="BPPP Tegal">BPPP Tegal</SelectItem>
+                          <SelectItem value="BPPP Banyuwangi">
+                            BPPP Banyuwangi
+                          </SelectItem>
+                          <SelectItem value="BPPP Bitung">
+                            BPPP Bitung
+                          </SelectItem>
+                          <SelectItem value="BPPP Ambon">BPPP Ambon</SelectItem>
+                          <SelectItem value="SUPM Pontianak">
+                            SUPM Pontianak
+                          </SelectItem>
+                          <SelectItem value="Politeknik AUP Jakarta">
+                            Politeknik AUP Jakarta
+                          </SelectItem>
+                          <SelectItem value="PPN Pekalongan">
+                            PPN Pekalongan
+                          </SelectItem>
+                          <SelectItem value="PPP Sebatik">
+                            PPP Sebatik
+                          </SelectItem>
+                          <SelectItem value="PPN Brondong">
+                            PPN Brondong
+                          </SelectItem>
+                          <SelectItem value="PPN Brondong">
+                            BBPI Semarang
+                          </SelectItem>
+                          <SelectItem value="PPN Prigi">PPN Prigi</SelectItem>
+                          <SelectItem value="LMTC">LMTC</SelectItem>
+                        </SelectContent>
+                      )}
+                    </Select>
+                  </div>
+
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="name"
+                    >
+                      Sekolah/Lemdiklat/Masyarakat{" "}
+                      <span className="text-red-600">*</span>
                     </label>
                     <input
                       id="name"
                       type="text"
                       className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Nama Lemdiklat"
+                      placeholder="Asal Sekolah/Lemdiklat/Masyarakat"
                       required
                       value={namaLemdiklat}
                       onChange={(e) => setNamaLemdiklat(e.target.value)}
                     />
                   </div>
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Nama Pelaksana <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Nama Pelaksana"
-                      required
-                      value={namaPelaksana}
-                      onChange={(e) => setNamaPelaksana(e.target.value)}
-                    />
-                  </div>
                 </div>
 
-                <div className="flex px-3 gap-2 mb-2 w-full">
+                <div className="grid grid-cols-4 px-3 gap-2 mb-2 w-full">
                   <div className="w-full">
                     <label
                       className="block text-gray-800 text-sm font-medium mb-1"
@@ -923,17 +1015,57 @@ const TableDataBlankoKeluar: React.FC = () => {
                       className="block text-gray-800 text-sm font-medium mb-1"
                       htmlFor="name"
                     >
-                      Nama Program <span className="text-red-600">*</span>
+                      Jenis Sertifikasi <span className="text-red-600">*</span>
                     </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Nama Program"
-                      required
-                      value={namaProgram}
-                      onChange={(e) => setNamaProgram(e.target.value)}
-                    />
+                    <Select onValueChange={setNamaProgram}>
+                      <SelectTrigger className="w-full border-gray-300 rounded-md h-fit py-[0.65rem]">
+                        <SelectValue placeholder="Jenis Sertifikasi" />
+                      </SelectTrigger>
+                      <SelectContent className="z-[9999999]">
+                        {tipeBlanko == "Certificate of Competence (CoC)" && (
+                          <>
+                            <SelectItem value="Ahli Nautika Kapal Penangkap Ikan Tingkat I">
+                              Ahli Nautika Kapal Penangkap Ikan Tingkat I
+                            </SelectItem>
+                            <SelectItem value="Ahli Teknika Kapal Penangkap Ikan Tingkat I">
+                              Ahli Teknika Kapal Penangkap Ikan Tingkat I
+                            </SelectItem>
+                            <SelectItem value="Ahli Nautika Kapal Penangkap Ikan Tingkat II">
+                              Ahli Nautika Kapal Penangkap Ikan Tingkat II
+                            </SelectItem>
+                            <SelectItem value="Ahli Teknika Kapal Penangkap Ikan Tingkat II">
+                              Ahli Teknika Kapal Penangkap Ikan Tingkat II
+                            </SelectItem>
+                            <SelectItem value="Ahli Nautika Kapal Penangkap Ikan Tingkat III">
+                              Ahli Nautika Kapal Penangkap Ikan Tingkat III
+                            </SelectItem>
+                            <SelectItem value="Ahli Teknika Kapal Penangkap Ikan Tingkat III">
+                              Ahli Teknika Kapal Penangkap Ikan Tingkat III
+                            </SelectItem>
+                            <SelectItem value="Rating Keahlian">
+                              Rating Keahlian
+                            </SelectItem>
+                          </>
+                        )}
+
+                        {tipeBlanko == "Certificate of Proficiency (CoP)" && (
+                          <>
+                            <SelectItem value="Basic Safety Training Fisheries I">
+                              Basic Safety Training Fisheries I
+                            </SelectItem>
+                            <SelectItem value="Basic Safety Training Fisheries II">
+                              Basic Safety Training Fisheries II
+                            </SelectItem>
+                            <SelectItem value="Sertifikat Kecakapan Nelayan">
+                              Sertifikat Kecakapan Nelayan
+                            </SelectItem>
+                            <SelectItem value="Sertifikat Keterampilan Penanganan Ikan">
+                              Sertifikat Keterampilan Penanganan Ikan
+                            </SelectItem>
+                          </>
+                        )}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="w-full">
@@ -946,9 +1078,9 @@ const TableDataBlankoKeluar: React.FC = () => {
                     </label>
                     <input
                       id="name"
-                      type="date"
+                      type="text"
                       className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder=""
+                      placeholder="Tanggal Pelaksanaan"
                       required
                       value={tanggalPelaksanaan}
                       onChange={(e) => setTanggalPelaksanaan(e.target.value)}
@@ -956,7 +1088,7 @@ const TableDataBlankoKeluar: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex px-3 gap-2 mb-2 w-full">
+                <div className="grid grid-cols-4 px-3 gap-2 mb-2 w-full">
                   <div className="w-full">
                     <label
                       className="block text-gray-800 text-sm font-medium mb-1"
@@ -981,25 +1113,6 @@ const TableDataBlankoKeluar: React.FC = () => {
                       className="block text-gray-800 text-sm font-medium mb-1"
                       htmlFor="name"
                     >
-                      Jumlah Blanko Diajukan{" "}
-                      <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="0"
-                      required
-                      value={jumlahBlankoDiajukan}
-                      onChange={(e) => setJumlahBlankoDiajukan(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
                       Jumlah Blanko Disetujui
                       <span className="text-red-600">*</span>
                     </label>
@@ -1013,6 +1126,25 @@ const TableDataBlankoKeluar: React.FC = () => {
                       onChange={(e) => setJumlahBlankoDisetujui(e.target.value)}
                     />
                   </div>
+
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="name"
+                    >
+                      Tanggal Penerbitan <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="name"
+                      type="date"
+                      className="form-input w-full text-black border-gray-300 rounded-md"
+                      placeholder="Tipe Blanko"
+                      required
+                      value={tanggalKeluar}
+                      onChange={(e) => setTanggalKeluar(e.target.value)}
+                    />
+                  </div>
+
                   <div className="w-full">
                     <label
                       className="block text-gray-800 text-sm font-medium mb-1"
@@ -1040,15 +1172,19 @@ const TableDataBlankoKeluar: React.FC = () => {
                     >
                       Status <span className="text-red-600">*</span>
                     </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Status"
-                      required
-                      value={status}
-                      onChange={(e) => setStatus(e.target.value)}
-                    />
+                    <Select onValueChange={setStatus}>
+                      <SelectTrigger className="w-full border-gray-300 rounded-md h-fit py-[0.65rem]">
+                        <SelectValue placeholder="Status" />
+                      </SelectTrigger>
+                      <SelectContent className="z-[9999999]">
+                        <SelectItem value="Belum Diserahkan">
+                          Belum Diserahkan
+                        </SelectItem>
+                        <SelectItem value="Sudah Diserahkan">
+                          Sudah Diserahkan
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="w-full">
@@ -1058,15 +1194,19 @@ const TableDataBlankoKeluar: React.FC = () => {
                     >
                       Tipe Pengambilan <span className="text-red-600">*</span>
                     </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Tipe Pengambilan"
-                      required
-                      value={tipePengambilan}
-                      onChange={(e) => setTipePengambilan(e.target.value)}
-                    />
+                    <Select onValueChange={setTipePengambilan}>
+                      <SelectTrigger className="w-full border-gray-300 rounded-md h-fit py-[0.65rem]">
+                        <SelectValue placeholder="Tipe Pengambilan" />
+                      </SelectTrigger>
+                      <SelectContent className="z-[9999999]">
+                        <SelectItem value="Dikirimkan via Pos Indonesia">
+                          Dikirimkan via Pos Indonesia
+                        </SelectItem>
+                        <SelectItem value="Diterima di Kantor Puslat KP">
+                          Diterima di Kantor Puslat KP
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="w-full">
@@ -1280,7 +1420,10 @@ const TableDataBlankoKeluar: React.FC = () => {
                   </p>
                   <p className="text-sm font-medium">
                     {data
-                      .filter((item: BlankoKeluar) => item.TipeBlanko === "CoP")
+                      .filter(
+                        (item: BlankoKeluar) =>
+                          item.TipeBlanko === "Certificate of Proficiency (CoP)"
+                      )
                       .reduce(
                         (total: number, item: BlankoKeluar) =>
                           total + item.JumlahBlankoDisetujui,
@@ -1300,7 +1443,10 @@ const TableDataBlankoKeluar: React.FC = () => {
                   </p>
                   <p className="text-sm font-medium">
                     {data
-                      .filter((item: BlankoKeluar) => item.TipeBlanko === "CoC")
+                      .filter(
+                        (item: BlankoKeluar) =>
+                          item.TipeBlanko === "Certificate of Competence (CoC)"
+                      )
                       .reduce(
                         (total: number, item: BlankoKeluar) =>
                           total + item.JumlahBlankoDisetujui,

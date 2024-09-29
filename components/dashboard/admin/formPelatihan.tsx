@@ -237,8 +237,8 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     data.append("JenisPelatihan", jenisPelatihan);
     data.append("BidangPelatihan", bidangPelatihan);
     data.append("DukunganProgramTerobosan", dukunganProgramTerobosan);
-    data.append("TanggalMulaiPelatihan", tanggalMulaiPelatihan);
-    data.append("TanggalBerakhirPelatihan", tanggalBerakhirPelatihan);
+    data.append("TanggalMulaiPendaftaran", tanggalMulaiPelatihan);
+    data.append("TanggalAkhirPendaftaran", tanggalBerakhirPelatihan);
     data.append("HargaPelatihan", hargaPelatihan.toString());
     data.append("Instruktur", instruktur);
     if (fotoPelatihan !== null) {
@@ -395,7 +395,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   };
 
   const [formTab, setFormTab] = React.useState("FormDataPelatihan");
-  const [indexFormTab, setIndexFormTab] = React.useState(1);
+  const [indexFormTab, setIndexFormTab] = React.useState(0);
 
   console.log({ indexFormTab });
   console.log({ formTab });
@@ -612,7 +612,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                               className="block text-gray-800 text-sm font-medium mb-1"
                               htmlFor="kodePelatihan"
                             >
-                              Tanggal Mulai Pelatihan{" "}
+                              Tanggal Mulai Pendaftaran{" "}
                               <span className="text-red-600">*</span>
                             </label>
                             <input
@@ -634,7 +634,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                               className="block text-gray-800 text-sm font-medium mb-1"
                               htmlFor="namaPelatihan"
                             >
-                              Tanggal Berakhir Pelatihan{" "}
+                              Tanggal Berakhir Pendaftaran{" "}
                               <span className="text-red-600">*</span>
                             </label>
                             <input
@@ -1075,7 +1075,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                                   Politeknik Kelautan dan Perikanan
                                 </SelectItem>
                                 <SelectItem value="Karyawan/Pegawai/Mining Agent">
-                                  Karyawan/Pegawati/Mining Agent
+                                  Karyawan/Pegawai/Mining Agent
                                 </SelectItem>
                               </SelectContent>
                             </Select>

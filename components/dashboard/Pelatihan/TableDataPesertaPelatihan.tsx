@@ -271,19 +271,24 @@ const TableDataPesertaPelatihan = () => {
               <RiVerifiedBadgeFill className="h-4 w-4 " />
             </Link>
           ) : (
-            <Button
-              onClick={(e) => {
-                setOpenFormValidasiDataPesertaPelatihan(
-                  !openFormValidasiDataPesertaPelatihan
-                );
-                handleFetchingPesertaPelatihanDataById(row.original!.IdUsers);
-                setSelectedIdPeserta(row.original!.IdUserPelatihan);
-              }}
-              variant="outline"
-              className=" border border-rose-500"
+            <Link
+              href={`/admin/lemdiklat/pelatihan/${
+                paths[paths.length - 3]
+              }/peserta-pelatihan/${row.original.IdPelatihan}/${
+                row.original.IdUserPelatihan
+              }/${row.original.IdUsers}`}
+              // onClick={(e) => {
+              //   setOpenFormValidasiDataPesertaPelatihan(
+              //     !openFormValidasiDataPesertaPelatihan
+              //   );
+              //   setDataPesertaSelected(row.original!);
+              //   setSelectedIdPeserta(row.original!.IdUserPelatihan);
+              // }}
+              // variant="outline"
+              className=" border border-rose-500  text-rose-500  bg-white shadow-sm hover:bg-rose-500 hover:text-white h-9 px-4 py-2 mx-0 rounded-md"
             >
-              <IoMdCloseCircle className="h-4 w-4 text-rose-500" />
-            </Button>
+              <RiVerifiedBadgeFill className="h-4 w-4 " />
+            </Link>
           )}
         </div>
       ),
@@ -337,7 +342,7 @@ const TableDataPesertaPelatihan = () => {
                   ? "text-yellow-500"
                   : row.original.StatusPembayaran == "paid" ||
                     row.original.StatusPembayaran == "Done"
-                  ? "text-green-500"
+                  ? "text-rose-500"
                   : "text-rose-500"
               } capitalize`}
             >

@@ -9,6 +9,37 @@ import ReactApexChart from "react-apexcharts";
 import TableDataBlankoKeluarPublic from "../Pelatihan/TableDataBlankoKeluarPublic";
 import TableDataBlankoKeterampilanPublic from "../Pelatihan/TableDataBlankoKeterampilanPublic";
 
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
+
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+
+// const chartData = [
+//   { month: "January", desktop: 186, mobile: 80 },
+//   { month: "February", desktop: 305, mobile: 200 },
+//   { month: "March", desktop: 237, mobile: 120 },
+//   { month: "April", desktop: 73, mobile: 190 },
+//   { month: "May", desktop: 209, mobile: 130 },
+//   { month: "June", desktop: 214, mobile: 140 },
+// ];
+
+const chartConfig = {
+  desktop: {
+    label: "Desktop",
+    color: "#2563eb",
+  },
+  mobile: {
+    label: "Data",
+    color: "#60a5fa",
+  },
+} satisfies ChartConfig;
+
 interface ChartThreeState {
   series: number[];
 }
@@ -24,8 +55,10 @@ const options: ApexOptions = {
     "BSTF II",
     "SKPI",
     "SOPI",
-    "SKN Bidang Nautika",
-    "SKN Bidang Teknika",
+    "SKN",
+    "SKN Teknika",
+    "SKN Nautika",
+    "Fishing Master",
   ],
   legend: {
     show: true,
@@ -68,23 +101,40 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
   const [state, setState] = useState<ChartThreeState>({
     series: [
       data
-        .filter((item) => item.NamaProgram === "BSTF I")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter(
+          (item) => item.NamaProgram === "Basic Safety Training Fisheries I"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "BSTF II")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter(
+          (item) => item.NamaProgram === "Basic Safety Training Fisheries II"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "SKPI")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter(
+          (item) =>
+            item.NamaProgram === "Sertifikat Keterampilan Penanganan Ikan"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
         .filter((item) => item.NamaProgram === "SOPI")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "SKN Bidang Nautika")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter((item) => item.NamaProgram === "Sertifikat Kecakapan Nelayan")
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "SKN Bidang Teknika")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter(
+          (item) => item.NamaProgram === "Sertifikat Kecakapan Nelayan Teknika"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) => item.NamaProgram === "Sertifikat Kecakapan Nelayan Nautika"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter((item) => item.NamaProgram === "Fishing Master")
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
     ],
   });
 
@@ -100,6 +150,12 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
       series: [65, 34, 12, 56],
     }));
   };
+
+  const chartData = options?.labels?.map((label, index) => ({
+    month: label,
+
+    mobile: state.series[index], // series data for mobile
+  }));
 
   // Call handleReset when needed
   // If this should be called initially, uncomment the next line
@@ -119,49 +175,87 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
       <div className="mb-2">
         {data.length != 0 ? (
           <div id="chartThree" className="mx-auto flex justify-center">
-            <ReactApexChart
+            <ChartContainer config={chartConfig} className="h-[400px] w-full">
+              <BarChart accessibilityLayer data={chartData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                  minTickGap={32}
+                  tickFormatter={(value) => value} // Directly use the custom label
+                  interval={0} // Ensures that all ticks are displayed
+                  angle={-45} // Optional: Rotates labels to prevent overlap
+                  textAnchor="end" // Optional: Aligns rotated labels
+                  height={80}
+                  tick={{ fill: "#000" }}
+                />
+                <ChartTooltip content={<ChartTooltipContent />} />
+                {/* <ChartLegend content={<ChartLegendContent />} /> */}
+
+                <Bar dataKey="mobile" fill="var(--color-mobile)" radius={8}>
+                  <LabelList
+                    position="top"
+                    offset={12}
+                    className="fill-foreground text-black"
+                    fontSize={12}
+                    fill="#000"
+                  />
+                </Bar>
+              </BarChart>
+            </ChartContainer>
+
+            {/* <ReactApexChart
               options={options}
               series={[
                 data
-                  .filter((item) => item.NamaProgram === "BSTF I")
+                  .filter(
+                    (item) =>
+                      item.NamaProgram === "Basic Safety Training Fisheries I"
+                  )
                   .reduce(
-                    (total, item) => total + item.JumlahBlankoDiajukan,
+                    (total, item) => total + item.JumlahBlankoDisetujui,
                     0
                   ),
                 data
-                  .filter((item) => item.NamaProgram === "BSTF II")
+                  .filter(
+                    (item) =>
+                      item.NamaProgram === "Basic Safety Training Fisheries II"
+                  )
                   .reduce(
-                    (total, item) => total + item.JumlahBlankoDiajukan,
+                    (total, item) => total + item.JumlahBlankoDisetujui,
                     0
                   ),
                 data
-                  .filter((item) => item.NamaProgram === "SKPI")
+                  .filter(
+                    (item) =>
+                      item.NamaProgram ===
+                      "Sertifikat Keterampilan Penanganan Ikan"
+                  )
                   .reduce(
-                    (total, item) => total + item.JumlahBlankoDiajukan,
+                    (total, item) => total + item.JumlahBlankoDisetujui,
                     0
                   ),
                 data
                   .filter((item) => item.NamaProgram === "SOPI")
                   .reduce(
-                    (total, item) => total + item.JumlahBlankoDiajukan,
+                    (total, item) => total + item.JumlahBlankoDisetujui,
                     0
                   ),
 
                 data
-                  .filter((item) => item.NamaProgram === "SKN Bidang Nautika")
+                  .filter(
+                    (item) =>
+                      item.NamaProgram === "Sertifikat Kecakapan Nelayan"
+                  )
                   .reduce(
-                    (total, item) => total + item.JumlahBlankoDiajukan,
-                    0
-                  ),
-                data
-                  .filter((item) => item.NamaProgram === "SKN Bidang Teknika")
-                  .reduce(
-                    (total, item) => total + item.JumlahBlankoDiajukan,
+                    (total, item) => total + item.JumlahBlankoDisetujui,
                     0
                   ),
               ]}
-              type="donut"
-            />
+              type="bar"
+            /> */}
           </div>
         ) : (
           <div className="flex w-full items-center justify-center">
@@ -184,17 +278,17 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
         <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
           {[
             {
-              label: "BSTF I",
+              label: "Basic Safety Training Fisheries I",
               color: "bg-primary",
               multiplier: 1157000,
             },
             {
-              label: "BSTF II",
+              label: "Basic Safety Training Fisheries II",
               color: "bg-[#8FD0EF]",
               multiplier: 614000,
             },
             {
-              label: "SKPI",
+              label: "Sertifikat Keterampilan Penanganan Ikan",
               color: "bg-[#026bec]",
               multiplier: 549000,
             },
@@ -204,14 +298,9 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
               multiplier: 669000,
             },
             {
-              label: "SKN Bidang Nautika",
+              label: "Sertifikat Kecakapan Nelayan",
               color: "bg-[#25ca46]",
               multiplier: 763000,
-            },
-            {
-              label: "SKN Bidang Teknika",
-              color: "bg-[#12e7d2]",
-              multiplier: 577000,
             },
           ].map((item, index) => (
             <div className="w-full px-8 " key={index}>
@@ -229,8 +318,10 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                   {(
                     data
                       .filter((d) => d.NamaProgram === item.label)
-                      .reduce((total, d) => total + d.JumlahBlankoDiajukan, 0) *
-                    item.multiplier
+                      .reduce(
+                        (total, d) => total + d.JumlahBlankoDisetujui,
+                        0
+                      ) * item.multiplier
                   ).toLocaleString("id-ID")}
                 </span>
               </div>

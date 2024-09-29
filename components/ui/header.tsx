@@ -239,7 +239,7 @@ export default function Header() {
                 {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
                 <NavDropDown href="#" name="Layanan" top={top}>
                   <NavLink
-                    href="/layanan/pelatihan"
+                    href="/layanan/searching"
                     name="Pelatihan Masyarakat"
                     top={top}
                   >

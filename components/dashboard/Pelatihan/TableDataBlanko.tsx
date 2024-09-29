@@ -358,7 +358,7 @@ const TableDataBlanko: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-xs text-black leading-[100%]">
             {" "}
             {row.original.TipeBlanko}
           </p>
@@ -383,7 +383,7 @@ const TableDataBlanko: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-xs text-black leading-[100%]">
             {" "}
             {row.original.NoSeri}
           </p>
@@ -408,7 +408,7 @@ const TableDataBlanko: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-xs text-black leading-[100%]">
             {" "}
             {convertDate(row.original.TanggalPengadaan)}
           </p>
@@ -434,7 +434,7 @@ const TableDataBlanko: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-xs text-black leading-[100%]">
             {" "}
             {row.original.JumlahPengadaan}
           </p>
@@ -459,7 +459,7 @@ const TableDataBlanko: React.FC = () => {
         <div
           className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
         >
-          <p className="text-xs text-gray-400 leading-[100%]">
+          <p className="text-xs text-black leading-[100%]">
             {" "}
             {row.original.Jumlah}
           </p>
@@ -535,17 +535,19 @@ const TableDataBlanko: React.FC = () => {
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       <AlertDialog open={isOpenFormMateri}>
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-xl">
           <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2">
-              {" "}
-              <FaBookOpen className="h-4 w-4" />
-              Tambah Blanko
-            </AlertDialogTitle>
-            <AlertDialogDescription className="-mt-2">
-              Input data pengadaan blanko agar dapat mendapatkan ketelusuran
-              dari blanko yang ada di Puslat dan telah digunakan berapa!
-            </AlertDialogDescription>
+            <div className="flex flex-col gap-1">
+              <AlertDialogTitle className="flex items-center gap-2">
+                {" "}
+                <FaBookOpen className="h-4 w-4" />
+                Tambah Persedian Blanko
+              </AlertDialogTitle>
+              <AlertDialogDescription className="-mt-2">
+                Input data pengadaan blanko agar dapat mendapatkan ketelusuran
+                dari blanko yang ada di Puslat dan telah digunakan berapa!
+              </AlertDialogDescription>
+            </div>
           </AlertDialogHeader>
           <fieldset>
             <form autoComplete="off">
@@ -575,15 +577,20 @@ const TableDataBlanko: React.FC = () => {
                     >
                       Tipe Blanko <span className="text-red-600">*</span>
                     </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Tipe Blanko"
-                      required
-                      value={tipeBlanko}
-                      onChange={(e) => setTipeBlanko(e.target.value)}
-                    />
+
+                    <Select onValueChange={setTipeBlanko}>
+                      <SelectTrigger className="w-full border-gray-300 rounded-md h-fit py-[0.65rem]">
+                        <SelectValue placeholder="Tipe Blanko" />
+                      </SelectTrigger>
+                      <SelectContent className="z-[9999999]">
+                        <SelectItem value="Certificate of Competence (CoC)">
+                          Certificate of Competence (CoC)
+                        </SelectItem>
+                        <SelectItem value="Certificate of Proficiency (CoP)">
+                          Certificate of Proficiency (CoP)
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -625,15 +632,20 @@ const TableDataBlanko: React.FC = () => {
                 </div>
               </div>
 
-              <AlertDialogFooter className="mt-3">
-                <AlertDialogCancel
-                  onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
-                >
-                  Cancel
-                </AlertDialogCancel>
-                <AlertDialogAction onClick={(e) => handlePostBlanko(e)}>
-                  Upload
-                </AlertDialogAction>
+              <AlertDialogFooter className="mt-1 flex w-full">
+                <div className="flex flex-col gap-2 w-full">
+                  <AlertDialogAction
+                    className="w-full"
+                    onClick={(e) => handlePostBlanko(e)}
+                  >
+                    Upload
+                  </AlertDialogAction>
+                  <AlertDialogCancel
+                    onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
+                  >
+                    Cancel
+                  </AlertDialogCancel>
+                </div>
               </AlertDialogFooter>
             </form>
           </fieldset>

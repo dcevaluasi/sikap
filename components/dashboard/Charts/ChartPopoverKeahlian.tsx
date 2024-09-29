@@ -108,13 +108,13 @@ const options1: ApexOptions = {
     "#12e7d2",
   ],
   labels: [
-    "ANKAPIN I",
-    "ATKAPIN I",
-    "ANKAPIN II",
-    "ATKAPIN II",
-    "ANKAPIN III (Upgrading)",
-    "ATKAPIN III (Upgrading)",
-    "Rating",
+    "Ahli Nautika Kapal Penangkap Ikan Tingkat I",
+    "Ahli Teknika Kapal Penangkap Ikan Tingkat I",
+    "Ahli Nautika Kapal Penangkap Ikan Tingkat II",
+    "Ahli Teknika Kapal Penangkap Ikan Tingkat II",
+    "Ahli Nautika Kapal Penangkap Ikan Tingkat III",
+    "Ahli Teknika Kapal Penangkap Ikan Tingkat III",
+    "Rating Keahlian",
   ],
   legend: {
     show: true,
@@ -161,66 +161,88 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
   const [state, setState] = useState<ChartThreeState>({
     series: [
       data
-        .filter((item) => item.NamaProgram === "ANKAPIN I")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Nautika Kapal Penangkap Ikan Tingkat I"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "ATKAPIN I")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Teknika Kapal Penangkap Ikan Tingkat I"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "ANKAPIN II")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Nautika Kapal Penangkap Ikan Tingkat II"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "ATKAPIN II")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Teknika Kapal Penangkap Ikan Tingkat II"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "ANKAPIN III (Upgrading)")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Nautika Kapal Penangkap Ikan Tingkat III"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "ATKAPIN III (Upgrading)")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Teknika Kapal Penangkap Ikan Tingkat III"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "Rating")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .filter((item) => item.NamaProgram === "Rating Keahlian")
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
     ],
   });
 
   const totalSum = [
     {
-      label: "Ujian ANKAPIN I",
+      label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat I",
       color: "bg-primary",
       multiplier: 565000,
     },
     {
-      label: "Ujian ATKAPIN I",
+      label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat I",
       color: "bg-[#8FD0EF]",
       multiplier: 565000,
     },
     {
-      label: "Ujian ANKAPIN II",
+      label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat II",
       color: "bg-[#026bec]",
       multiplier: 540000,
     },
     {
-      label: "Ujian ATKAPIN II",
+      label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat II",
       color: "bg-[#991dce]",
       multiplier: 540000,
     },
     {
-      label: "Ujian ANKAPIN III (Upgrading)",
+      label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat III",
       color: "bg-[#0FADCF]",
       multiplier: 693000,
     },
     {
-      label: "Ujian ATKAPIN III (Upgrading)",
+      label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat III",
       color: "bg-[#25ca46]",
       multiplier: 693000,
     },
-    { label: "Rating", color: "bg-[#12e7d2]", multiplier: 2031000 },
+    {
+      label: "Ujian Rating Keahlian",
+      color: "bg-[#12e7d2]",
+      multiplier: 2031000,
+    },
   ].reduce(
     (acc, item) => {
       const totalBlanko = data
         .filter((d) => "Ujian " + d.NamaProgram === item.label)
-        .reduce((total, d) => total + d.JumlahBlankoDiajukan, 0);
+        .reduce((total, d) => total + d.JumlahBlankoDisetujui, 0);
 
       const totalAmount = totalBlanko * item.multiplier;
 
@@ -272,7 +294,7 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
     (acc, item) => {
       const totalBlanko = data
         .filter((d) => d.NamaProgram === item.label)
-        .reduce((total, d) => total + d.JumlahBlankoDiajukan, 0);
+        .reduce((total, d) => total + d.JumlahBlankoDisetujui, 0);
 
       const totalAmount = totalBlanko * item.multiplier;
 
@@ -321,30 +343,50 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
             options={options1}
             series={[
               data
-                .filter((item) => item.NamaProgram === "ANKAPIN I")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
-              data
-                .filter((item) => item.NamaProgram === "ATKAPIN I")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
-              data
-                .filter((item) => item.NamaProgram === "ANKAPIN II")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
-              data
-                .filter((item) => item.NamaProgram === "ATKAPIN II")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .filter(
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Nautika Kapal Penangkap Ikan Tingkat I"
+                )
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter(
-                  (item) => item.NamaProgram === "ANKAPIN III (Upgrading)"
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Teknika Kapal Penangkap Ikan Tingkat I"
                 )
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter(
-                  (item) => item.NamaProgram === "ATKAPIN III (Upgrading)"
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Nautika Kapal Penangkap Ikan Tingkat II"
                 )
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
-                .filter((item) => item.NamaProgram === "Rating")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .filter(
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Teknika Kapal Penangkap Ikan Tingkat II"
+                )
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+              data
+                .filter(
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Nautika Kapal Penangkap Ikan Tingkat III"
+                )
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+              data
+                .filter(
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Teknika Kapal Penangkap Ikan Tingkat III"
+                )
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+              data
+                .filter((item) => item.NamaProgram === "Rating Keahlian")
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
             ]}
             type="donut"
           />
@@ -358,59 +400,59 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
             series={[
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP I (Aceh)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP II (Medan)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP III (Lampung)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP IV (Jakarta)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP V (Tegal)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP VI (Tegal)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter(
                   (item) => item.NamaPelaksana === "PUKAKP VII (Banyuwangi)"
                 )
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP VIII (Kupang)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter(
                   (item) => item.NamaPelaksana === "PUKAKP IX (Pontianak)"
                 )
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP X (Bitung)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP XI (Bitung)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP XII (Bone)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP XIII (Ambon)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP XIV (Ambon)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP XV (Sorong)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP XVI (Sorong)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter((item) => item.NamaPelaksana === "PUKAKP XVII (Dumai)")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
             ]}
             type="donut"
           />
@@ -431,36 +473,40 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
         <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
           {[
             {
-              label: "Ujian ANKAPIN I",
+              label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat I",
               color: "bg-primary",
               multiplier: 565000,
             },
             {
-              label: "Ujian ATKAPIN I",
+              label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat I",
               color: "bg-[#8FD0EF]",
               multiplier: 565000,
             },
             {
-              label: "Ujian ANKAPIN II",
+              label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat II",
               color: "bg-[#026bec]",
               multiplier: 540000,
             },
             {
-              label: "Ujian ATKAPIN II",
+              label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat II",
               color: "bg-[#991dce]",
               multiplier: 540000,
             },
             {
-              label: "Ujian ANKAPIN III (Upgrading)",
+              label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat III",
               color: "bg-[#0FADCF]",
               multiplier: 693000,
             },
             {
-              label: "Ujian ATKAPIN III (Upgrading)",
+              label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat III",
               color: "bg-[#25ca46]",
               multiplier: 693000,
             },
-            { label: "Rating", color: "bg-[#12e7d2]", multiplier: 2031000 },
+            {
+              label: "Ujian Rating Keahlian",
+              color: "bg-[#12e7d2]",
+              multiplier: 2031000,
+            },
           ].map((item, index) => (
             <div className="w-full px-8 " key={index}>
               <div className="flex w-full items-center justify-between">
@@ -471,8 +517,10 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
                   <p className="flex w-full justify-between text-sm font-medium text-black">
                     <span>
                       {item.label}{" "}
-                      {item.label == "Ujian ATKAPIN III (Upgrading)" ||
-                      item.label == "Ujian ANKAPIN III (Upgrading)"
+                      {item.label ==
+                        "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat III" ||
+                      item.label ==
+                        "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat III"
                         ? "SKK 60 Mil"
                         : ""}{" "}
                       - Rp {item.multiplier.toLocaleString("id-ID")}
@@ -485,14 +533,16 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
                   {(
                     data
                       .filter((d) => "Ujian " + d.NamaProgram === item.label)
-                      .reduce((total, d) => total + d.JumlahBlankoDiajukan, 0) *
-                    item.multiplier
+                      .reduce(
+                        (total, d) => total + d.JumlahBlankoDisetujui,
+                        0
+                      ) * item.multiplier
                   ).toLocaleString("id-ID")}{" "}
                   <span className="font-semibold text-xs ml-3">
                     (
                     {data
                       .filter((d) => "Ujian " + d.NamaProgram === item.label)
-                      .reduce((total, d) => total + d.JumlahBlankoDiajukan, 0)
+                      .reduce((total, d) => total + d.JumlahBlankoDisetujui, 0)
                       .toLocaleString("id-ID")}
                     Sertifikat )
                   </span>
@@ -518,7 +568,7 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
           </div>
         </div>
       </div>
-
+      {/* 
       <div className="mb-3 justify-between gap-4 sm:flex w-full">
         <div>
           <h5 className="text-xl font-semibold text-black">
@@ -537,37 +587,57 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
             options={options1}
             series={[
               data
-                .filter((item) => item.NamaProgram === "ANKAPIN I")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
-              data
-                .filter((item) => item.NamaProgram === "ATKAPIN I")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
-              data
-                .filter((item) => item.NamaProgram === "ANKAPIN II")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
-              data
-                .filter((item) => item.NamaProgram === "ATKAPIN II")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .filter(
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Nautika Kapal Penangkap Ikan Tingkat I"
+                )
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter(
-                  (item) => item.NamaProgram === "ANKAPIN III (Upgrading)"
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Teknika Kapal Penangkap Ikan Tingkat I"
                 )
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
                 .filter(
-                  (item) => item.NamaProgram === "ATKAPIN III (Upgrading)"
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Nautika Kapal Penangkap Ikan Tingkat II"
                 )
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
               data
-                .filter((item) => item.NamaProgram === "Rating")
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+                .filter(
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Teknika Kapal Penangkap Ikan Tingkat II"
+                )
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+              data
+                .filter(
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Nautika Kapal Penangkap Ikan Tingkat III"
+                )
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+              data
+                .filter(
+                  (item) =>
+                    item.NamaProgram ===
+                    "Ahli Teknika Kapal Penangkap Ikan Tingkat III"
+                )
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+              data
+                .filter((item) => item.NamaProgram === "Rating Keahlian")
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
             ]}
             type="donut"
           />
         </div>
-      </div>
+      </div> */}
 
-      <div className="flex gap-2 flex-col mt-10 mx-12">
+      {/* <div className="flex gap-2 flex-col mt-10 mx-12">
         <div className="flex flex-col pb-2 border-b border-b-gray-300">
           <h5 className="text-xl font-semibold text-black">
             Total Perkiraan Penerimaan PNBP
@@ -639,14 +709,16 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
                   {(
                     data
                       .filter((d) => d.NamaProgram === item.label)
-                      .reduce((total, d) => total + d.JumlahBlankoDiajukan, 0) *
-                    item.multiplier
+                      .reduce(
+                        (total, d) => total + d.JumlahBlankoDisetujui,
+                        0
+                      ) * item.multiplier
                   ).toLocaleString("id-ID")}{" "}
                   <span className="font-semibold text-xs ml-3">
                     (
                     {data
                       .filter((d) => d.NamaProgram === item.label)
-                      .reduce((total, d) => total + d.JumlahBlankoDiajukan, 0)
+                      .reduce((total, d) => total + d.JumlahBlankoDisetujui, 0)
                       .toLocaleString("id-ID")}
                     Sertifikat )
                   </span>
@@ -673,7 +745,7 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
         </div>
 
         <TableDataBlankoKeluarPublic />
-      </div>
+      </div> */}
     </div>
   );
 };

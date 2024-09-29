@@ -12,6 +12,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
+import { Progress } from "@/components/ui/progress";
+
 import Image from "next/image";
 import Link from "next/link";
 import React, { ReactElement } from "react";
@@ -48,6 +50,8 @@ function page() {
   const pathname = usePathname();
   const id = extractLastSegment(pathname);
   const token = Cookies.get("XSRF081");
+
+  const [progress, setProgress] = React.useState(13);
 
   const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -109,6 +113,8 @@ function page() {
 
   React.useEffect(() => {
     handleFetchingPublicTrainingDataById();
+    const timer = setTimeout(() => setProgress(66), 500);
+    return () => clearTimeout(timer);
   }, []);
 
   const [isRegistrasi, setIsRegistrasi] = React.useState(false);
@@ -221,6 +227,10 @@ function page() {
                                     Kuota Peserta :{" "}
                                   </span>
                                   {pelatihan?.KoutaPelatihan}{" "}
+                                  <Progress
+                                    value={progress}
+                                    className="w-[60%]"
+                                  />
                                 </p>
                               </td>
                             </tr>
@@ -291,7 +301,7 @@ function page() {
                 </div>
 
                 {/* {isRegistrasi && ( */}
-                <div className="md:flex hidden flex-col gap-6 w-[40%]">
+                <div className="md:flex hidden flex-col gap-6 w-[30%]">
                   <div className="flex flex-col gap-2 -mt-1">
                     <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
                       Ikuti Pelatihan
@@ -330,6 +340,11 @@ function page() {
                                 Kuota Peserta :{" "}
                               </span>
                               {pelatihan?.KoutaPelatihan} Orang
+                              {/* <Progress
+                                value={pelatihan?.UserPelatihan?.length && 0}
+                                max={parseInt(pelatihan?.KoutaPelatihan)}
+                                className="w-full"
+                              /> */}
                             </p>
                           </td>
                         </tr>
