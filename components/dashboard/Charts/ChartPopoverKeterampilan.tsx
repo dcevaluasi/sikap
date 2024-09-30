@@ -12,6 +12,15 @@ import TableDataBlankoKeterampilanPublic from "../Pelatihan/TableDataBlankoKeter
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import {
   ChartConfig,
   ChartContainer,
   ChartLegend,
@@ -19,6 +28,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { TrendingUp } from "lucide-react";
 
 // const chartData = [
 //   { month: "January", desktop: 186, mobile: 80 },
@@ -174,89 +184,62 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
 
       <div className="mb-2">
         {data.length != 0 ? (
-          <div id="chartThree" className="mx-auto flex justify-center">
-            <ChartContainer config={chartConfig} className="h-[400px] w-full">
-              <BarChart accessibilityLayer data={chartData}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="month"
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  minTickGap={32}
-                  tickFormatter={(value) => value} // Directly use the custom label
-                  interval={0} // Ensures that all ticks are displayed
-                  angle={-45} // Optional: Rotates labels to prevent overlap
-                  textAnchor="end" // Optional: Aligns rotated labels
-                  height={80}
-                  tick={{ fill: "#000" }}
-                />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                {/* <ChartLegend content={<ChartLegendContent />} /> */}
+          <Card className="w-full">
+            <CardHeader>
+              <CardTitle>Grafik Jenis Sertifikasi Keterampilan - AKP</CardTitle>
+              <CardDescription>
+                {" "}
+                The unit prices used in this data were obtained from{" "}
+                <span className="font-semibold">BPPP Tegal</span>
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div id="chartThree" className="mx-auto flex justify-center">
+                <ChartContainer
+                  config={chartConfig}
+                  className="h-[400px] w-full"
+                >
+                  <BarChart accessibilityLayer data={chartData}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="month"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                      minTickGap={32}
+                      tickFormatter={(value) => value} // Directly use the custom label
+                      interval={0} // Ensures that all ticks are displayed
+                      angle={-45} // Optional: Rotates labels to prevent overlap
+                      textAnchor="end" // Optional: Aligns rotated labels
+                      height={80}
+                      tick={{ fill: "#000" }}
+                    />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    {/* <ChartLegend content={<ChartLegendContent />} /> */}
 
-                <Bar dataKey="mobile" fill="var(--color-mobile)" radius={8}>
-                  <LabelList
-                    position="top"
-                    offset={12}
-                    className="fill-foreground text-black"
-                    fontSize={12}
-                    fill="#000"
-                  />
-                </Bar>
-              </BarChart>
-            </ChartContainer>
-
-            {/* <ReactApexChart
-              options={options}
-              series={[
-                data
-                  .filter(
-                    (item) =>
-                      item.NamaProgram === "Basic Safety Training Fisheries I"
-                  )
-                  .reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  ),
-                data
-                  .filter(
-                    (item) =>
-                      item.NamaProgram === "Basic Safety Training Fisheries II"
-                  )
-                  .reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  ),
-                data
-                  .filter(
-                    (item) =>
-                      item.NamaProgram ===
-                      "Sertifikat Keterampilan Penanganan Ikan"
-                  )
-                  .reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  ),
-                data
-                  .filter((item) => item.NamaProgram === "SOPI")
-                  .reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  ),
-
-                data
-                  .filter(
-                    (item) =>
-                      item.NamaProgram === "Sertifikat Kecakapan Nelayan"
-                  )
-                  .reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  ),
-              ]}
-              type="bar"
-            /> */}
-          </div>
+                    <Bar dataKey="mobile" fill="var(--color-mobile)" radius={8}>
+                      <LabelList
+                        position="top"
+                        offset={12}
+                        className="fill-foreground text-black"
+                        fontSize={12}
+                        fill="#000"
+                      />
+                    </Bar>
+                  </BarChart>
+                </ChartContainer>
+              </div>
+            </CardContent>
+            <CardFooter className="flex-col items-start gap-2 text-sm">
+              <div className="flex gap-2 font-medium leading-none">
+                Trending up by 5.2% this month{" "}
+                <TrendingUp className="h-4 w-4" />
+              </div>
+              <div className="leading-none text-muted-foreground">
+                Showing total certificate issued since 27 May 2024
+              </div>
+            </CardFooter>
+          </Card>
         ) : (
           <div className="flex w-full items-center justify-center">
             <div>
@@ -271,74 +254,104 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
         )}
       </div>
 
-      <div className="flex gap-2 flex-col mt-10">
-        <h5 className="text-xl font-semibold text-black">
-          Total Perkiraan Penerimaan PNBP
-        </h5>
-        <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
-          {[
-            {
-              label: "Basic Safety Training Fisheries I",
-              color: "bg-primary",
-              multiplier: 1157000,
-            },
-            {
-              label: "Basic Safety Training Fisheries II",
-              color: "bg-[#8FD0EF]",
-              multiplier: 614000,
-            },
-            {
-              label: "Sertifikat Keterampilan Penanganan Ikan",
-              color: "bg-[#026bec]",
-              multiplier: 549000,
-            },
-            {
-              label: "SOPI",
-              color: "bg-[#991dce]",
-              multiplier: 669000,
-            },
-            {
-              label: "Sertifikat Kecakapan Nelayan",
-              color: "bg-[#25ca46]",
-              multiplier: 763000,
-            },
-          ].map((item, index) => (
-            <div className="w-full px-8 " key={index}>
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Total Perkiraan Penerimaan PNBP</CardTitle>
+          <CardDescription>
+            {" "}
+            The unit prices used in this data were obtained from{" "}
+            <span className="font-semibold">BPPP Tegal</span>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
+            {[
+              {
+                label: "Basic Safety Training Fisheries I",
+                color: "bg-primary",
+                multiplier: 1157000,
+              },
+              {
+                label: "Basic Safety Training Fisheries II",
+                color: "bg-[#8FD0EF]",
+                multiplier: 614000,
+              },
+              {
+                label: "Sertifikat Keterampilan Penanganan Ikan",
+                color: "bg-[#026bec]",
+                multiplier: 549000,
+              },
+              {
+                label: "SOPI",
+                color: "bg-[#991dce]",
+                multiplier: 669000,
+              },
+              {
+                label: "Sertifikat Kecakapan Nelayan",
+                color: "bg-[#25ca46]",
+                multiplier: 763000,
+              },
+            ].map((item, index) => (
+              <div className="w-full px-8 " key={index}>
+                <div className="flex w-full items-center">
+                  <span
+                    className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
+                  ></span>
+                  <p className="flex w-full justify-between text-sm font-medium text-black">
+                    <span>
+                      {item.label} - Rp{" "}
+                      {item.multiplier.toLocaleString("id-ID")}
+                    </span>
+                  </p>
+                  <span>
+                    Rp.
+                    {(
+                      data
+                        .filter((d) => d.NamaProgram === item.label)
+                        .reduce(
+                          (total, d) => total + d.JumlahBlankoDisetujui,
+                          0
+                        ) * item.multiplier
+                    ).toLocaleString("id-ID")}
+                  </span>
+                </div>
+              </div>
+            ))}
+            <div className="w-full px-8 sm:w-1/2">
               <div className="flex w-full items-center">
                 <span
-                  className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
+                  className={`mr-2 block h-3 w-full max-w-3 rounded-full `}
                 ></span>
-                <p className="flex w-full justify-between text-sm font-medium text-black">
-                  <span>
-                    {item.label} - Rp {item.multiplier.toLocaleString("id-ID")}
-                  </span>
-                </p>
-                <span>
-                  Rp.
-                  {(
-                    data
-                      .filter((d) => d.NamaProgram === item.label)
-                      .reduce(
-                        (total, d) => total + d.JumlahBlankoDisetujui,
-                        0
-                      ) * item.multiplier
-                  ).toLocaleString("id-ID")}
-                </span>
+                <p className="flex w-full justify-between text-sm font-medium text-white"></p>
+                <span></span>
               </div>
             </div>
-          ))}
-          <div className="w-full px-8 sm:w-1/2">
-            <div className="flex w-full items-center">
-              <span
-                className={`mr-2 block h-3 w-full max-w-3 rounded-full `}
-              ></span>
-              <p className="flex w-full justify-between text-sm font-medium text-white"></p>
-              <span></span>
-            </div>
           </div>
-        </div>
-        <TableDataBlankoKeterampilanPublic />
-      </div>
+        </CardContent>
+        <CardFooter className="flex-col items-start gap-2 text-sm">
+          <div className="flex gap-2 font-medium leading-none">
+            Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          </div>
+          <div className="leading-none text-muted-foreground">
+            Showing total certificate issued since 27 May 2024
+          </div>
+        </CardFooter>
+      </Card>
+
+      <Card className="flex gap-2 flex-col mt-2">
+        <CardHeader>
+          <CardTitle>Detail Data CoP</CardTitle>
+          <CardDescription>
+            {" "}
+            The unit prices used in this data were obtained from{" "}
+            <span className="font-semibold">BPPP Tegal</span>
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {" "}
+          <TableDataBlankoKeterampilanPublic />
+        </CardContent>
+      </Card>
     </div>
   );
 };

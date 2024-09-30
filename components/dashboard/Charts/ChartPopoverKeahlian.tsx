@@ -10,6 +10,69 @@ import CountUp from "react-countup";
 
 import TableDataBlankoKeluarPublic from "../Pelatihan/TableDataBlankoKeluarPublic";
 
+import { TrendingUp } from "lucide-react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  Rectangle,
+  XAxis,
+  Pie,
+  PieChart,
+  Label,
+} from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import TableDataBlankoKeterampilanPublic from "../Pelatihan/TableDataBlankoKeterampilanPublic";
+export const description = "A bar chart with an active bar";
+
+const chartConfig = {
+  visitors: {
+    label: "Sertifikat",
+  },
+  chrome: {
+    label: "ANKAPIN I",
+    color: "#2662D9",
+  },
+  safari: {
+    label: "ATKAPIN I",
+    color: "#2EB88A",
+  },
+  firefox: {
+    label: "ANKAPIN II",
+    color: "#e88c30",
+  },
+  edge: {
+    label: "ATKAPIN II",
+    color: "#AF57DB",
+  },
+  other: {
+    label: "ANKAPIN III",
+    color: "#E0366F",
+  },
+  other2: {
+    label: "ATKAPIN III",
+    color: "#60432F",
+  },
+  other3: {
+    label: "Rating",
+    color: "#274754",
+  },
+} satisfies ChartConfig;
+
 interface ChartThreeState {
   series: number[];
 }
@@ -254,74 +317,44 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
     { totalAmount: 0, totalBlanko: 0 }
   );
 
-  const totalSum2 = [
-    {
-      label: "Diklat ANKAPIN I",
-      color: "bg-primary",
-      multiplier: 19158000,
-    },
-    {
-      label: "Diklat ATKAPIN I",
-      color: "bg-[#8FD0EF]",
-      multiplier: 15404000,
-    },
-    {
-      label: "Diklat ANKAPIN II",
-      color: "bg-[#026bec]",
-      multiplier: 10142000,
-    },
-    {
-      label: "Diklat ATKAPIN II",
-      color: "bg-[#991dce]",
-      multiplier: 10547000,
-    },
-    {
-      label: "Diklat ANKAPIN III (Upgrading)",
-      color: "bg-[#0FADCF]",
-      multiplier: 3940000,
-    },
-    {
-      label: "Diklat ATKAPIN III (Upgrading)",
-      color: "bg-[#25ca46]",
-      multiplier: 4217000,
-    },
-    {
-      label: "Pembaharuan Portfolio Spanyol",
-      color: "bg-[#12e7d2]",
-      multiplier: 1828000,
-    },
-  ].reduce(
-    (acc, item) => {
-      const totalBlanko = data
-        .filter((d) => d.NamaProgram === item.label)
-        .reduce((total, d) => total + d.JumlahBlankoDisetujui, 0);
-
-      const totalAmount = totalBlanko * item.multiplier;
-
-      acc.totalAmount += totalAmount;
-      acc.totalBlanko += totalBlanko;
-
-      return acc;
-    },
-    { totalAmount: 0, totalBlanko: 0 }
-  );
-
   // Log state to debug
   useEffect(() => {
     console.log("Chart state:", state);
   }, [state]);
 
-  // Function to reset the chart series
-  const handleReset = () => {
-    setState((prevState) => ({
-      ...prevState,
-      series: [65, 34, 12, 56],
-    }));
-  };
+  const chartData = [
+    {
+      browser: "chrome",
+      visitors: state.series[0],
+      fill: "var(--color-chrome)",
+    },
+    {
+      browser: "safari",
+      visitors: state.series[1],
+      fill: "var(--color-safari)",
+    },
+    {
+      browser: "firefox",
+      visitors: state.series[2],
+      fill: "var(--color-firefox)",
+    },
+    { browser: "edge", visitors: state.series[3], fill: "var(--color-edge)" },
+    { browser: "other", visitors: state.series[4], fill: "var(--color-other)" },
+    {
+      browser: "other2",
+      visitors: state.series[5],
+      fill: "var(--color-other2)",
+    },
+    {
+      browser: "other3",
+      visitors: state.series[6],
+      fill: "var(--color-other3)",
+    },
+  ];
 
-  // Call handleReset when needed
-  // If this should be called initially, uncomment the next line
-  // useEffect(() => handleReset(), []);
+  const totalVisitors = React.useMemo(() => {
+    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
+  }, []);
 
   return (
     <div className="col-span-12 rounded-xl border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-5 w-full">
@@ -334,418 +367,273 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
         </div>
       </div>
 
-      <div className="mb-2 mt-4 border-t border-t-gray-200  pt-5 flex gap-3 items-start">
-        <div id="chartThree" className="mx-auto flex flex-col justify-center">
-          <h5 className="text-sm font-semibold text-black leading-[110%]">
-            Grafik Jumlah Sertifikat <br /> Diterbitkan per Jenis Pendidikan
-          </h5>
-          <ReactApexChart
-            options={options1}
-            series={[
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Nautika Kapal Penangkap Ikan Tingkat I"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Teknika Kapal Penangkap Ikan Tingkat I"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Nautika Kapal Penangkap Ikan Tingkat II"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Teknika Kapal Penangkap Ikan Tingkat II"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Nautika Kapal Penangkap Ikan Tingkat III"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Teknika Kapal Penangkap Ikan Tingkat III"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaProgram === "Rating Keahlian")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-            ]}
-            type="donut"
-          />
-        </div>
-        <div id="chartThree" className="mx-auto  flex flex-col justify-center">
-          <h5 className="text-sm font-semibold text-black leading-[110%]">
-            Grafik Jumlah Sertifikat <br /> Diterbitkan per Pelaksana Ujian
-          </h5>
-          <ReactApexChart
-            options={options2}
-            series={[
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP I (Aceh)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP II (Medan)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP III (Lampung)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP IV (Jakarta)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP V (Tegal)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP VI (Tegal)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) => item.NamaPelaksana === "PUKAKP VII (Banyuwangi)"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP VIII (Kupang)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) => item.NamaPelaksana === "PUKAKP IX (Pontianak)"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP X (Bitung)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP XI (Bitung)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP XII (Bone)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP XIII (Ambon)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP XIV (Ambon)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP XV (Sorong)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP XVI (Sorong)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaPelaksana === "PUKAKP XVII (Dumai)")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-            ]}
-            type="donut"
-          />
-        </div>
+      <div className="flex gap-2 w-full">
+        <Card className="w-[50%]">
+          <CardHeader>
+            <CardTitle>Grafik Jenis Sertifikasi Keahlian - AKP</CardTitle>
+            <CardDescription>January - Now 2024</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig}>
+              <BarChart accessibilityLayer data={chartData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="browser"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) =>
+                    chartConfig[value as keyof typeof chartConfig]?.label
+                  }
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Bar
+                  dataKey="visitors"
+                  strokeWidth={2}
+                  radius={8}
+                  activeIndex={2}
+                >
+                  <LabelList
+                    position="top"
+                    offset={12}
+                    className="fill-foreground text-black"
+                    fontSize={12}
+                    fill="#000"
+                  />
+                </Bar>
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-2 text-sm">
+            <div className="flex gap-2 font-medium leading-none">
+              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="leading-none text-muted-foreground">
+              Showing total certificate issued since 27 May 2024
+            </div>
+          </CardFooter>
+        </Card>
+
+        {/* 
+        <Card className="flex flex-col w-[40%]">
+          <CardHeader className="items-center pb-0">
+            <CardTitle>Pie Chart - Donut with Text</CardTitle>
+            <CardDescription>January - June 2024</CardDescription>
+          </CardHeader>
+          <CardContent className="flex-1 pb-0">
+            <ChartContainer
+              config={chartConfig}
+              className="mx-auto aspect-square max-h-[250px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={chartData}
+                  dataKey="visitors"
+                  nameKey="browser"
+                  innerRadius={60}
+                  strokeWidth={5}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                          >
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-foreground text-3xl font-bold"
+                            >
+                              {totalVisitors.toLocaleString()}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-muted-foreground"
+                            >
+                              Visitors
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col gap-2 text-sm">
+            <div className="flex items-center gap-2 font-medium leading-none">
+              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="leading-none text-muted-foreground">
+              Showing total visitors for the last 6 months
+            </div>
+          </CardFooter>
+        </Card> */}
       </div>
 
-      <div className="flex gap-2 flex-col mt-10 mx-12">
-        <div className="flex flex-col pb-2 border-b border-b-gray-300">
-          <h5 className="text-xl font-semibold text-black">
-            Total Perkiraan Penerimaan PNBP
-          </h5>
-          <p className="italic text-sm -mt-1">
-            The unit prices used in this data were obtained from{" "}
-            <span className="font-semibold">BPPP Tegal</span>
-          </p>
-        </div>
+      <div className="flex gap-2 flex-col mt-10">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Total Perkiraan Penerimaan PNBP</CardTitle>
+            <CardDescription>
+              {" "}
+              The unit prices used in this data were obtained from{" "}
+              <span className="font-semibold">BPPP Tegal</span>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="p-8 flex flex-wrap items-center justify-center gap-y-3 mt-0 border-t border-t-gray-200">
+              {[
+                {
+                  label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat I",
+                  color: "bg-primary",
+                  multiplier: 565000,
+                },
+                {
+                  label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat I",
+                  color: "bg-[#8FD0EF]",
+                  multiplier: 565000,
+                },
+                {
+                  label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat II",
+                  color: "bg-[#026bec]",
+                  multiplier: 540000,
+                },
+                {
+                  label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat II",
+                  color: "bg-[#991dce]",
+                  multiplier: 540000,
+                },
+                {
+                  label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat III",
+                  color: "bg-[#0FADCF]",
+                  multiplier: 693000,
+                },
+                {
+                  label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat III",
+                  color: "bg-[#25ca46]",
+                  multiplier: 693000,
+                },
+                {
+                  label: "Ujian Rating Keahlian",
+                  color: "bg-[#12e7d2]",
+                  multiplier: 2031000,
+                },
+              ].map((item, index) => (
+                <div className="w-full px-8 " key={index}>
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex gap-1 w-full items-center">
+                      <span
+                        className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
+                      ></span>
+                      <p className="flex w-full justify-between text-sm font-medium text-black">
+                        <span>
+                          {item.label}{" "}
+                          {item.label ==
+                            "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat III" ||
+                          item.label ==
+                            "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat III"
+                            ? "SKK 60 Mil"
+                            : ""}{" "}
+                          - Rp {item.multiplier.toLocaleString("id-ID")}
+                        </span>
+                      </p>
+                    </div>
 
-        <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
-          {[
-            {
-              label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat I",
-              color: "bg-primary",
-              multiplier: 565000,
-            },
-            {
-              label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat I",
-              color: "bg-[#8FD0EF]",
-              multiplier: 565000,
-            },
-            {
-              label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat II",
-              color: "bg-[#026bec]",
-              multiplier: 540000,
-            },
-            {
-              label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat II",
-              color: "bg-[#991dce]",
-              multiplier: 540000,
-            },
-            {
-              label: "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat III",
-              color: "bg-[#0FADCF]",
-              multiplier: 693000,
-            },
-            {
-              label: "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat III",
-              color: "bg-[#25ca46]",
-              multiplier: 693000,
-            },
-            {
-              label: "Ujian Rating Keahlian",
-              color: "bg-[#12e7d2]",
-              multiplier: 2031000,
-            },
-          ].map((item, index) => (
-            <div className="w-full px-8 " key={index}>
-              <div className="flex w-full items-center justify-between">
-                <div className="flex gap-1 w-full items-center">
-                  <span
-                    className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
-                  ></span>
-                  <p className="flex w-full justify-between text-sm font-medium text-black">
-                    <span>
-                      {item.label}{" "}
-                      {item.label ==
-                        "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat III" ||
-                      item.label ==
-                        "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat III"
-                        ? "SKK 60 Mil"
-                        : ""}{" "}
-                      - Rp {item.multiplier.toLocaleString("id-ID")}
+                    <span className="w-full flex items-end justify-end">
+                      Rp.
+                      {(
+                        data
+                          .filter(
+                            (d) => "Ujian " + d.NamaProgram === item.label
+                          )
+                          .reduce(
+                            (total, d) => total + d.JumlahBlankoDisetujui,
+                            0
+                          ) * item.multiplier
+                      ).toLocaleString("id-ID")}{" "}
+                      <span className="font-semibold text-xs ml-3">
+                        (
+                        {data
+                          .filter(
+                            (d) => "Ujian " + d.NamaProgram === item.label
+                          )
+                          .reduce(
+                            (total, d) => total + d.JumlahBlankoDisetujui,
+                            0
+                          )
+                          .toLocaleString("id-ID")}
+                        Sertifikat )
+                      </span>
                     </span>
-                  </p>
+                  </div>
                 </div>
-
-                <span className="w-full flex items-end justify-end">
-                  Rp.
-                  {(
-                    data
-                      .filter((d) => "Ujian " + d.NamaProgram === item.label)
-                      .reduce(
-                        (total, d) => total + d.JumlahBlankoDisetujui,
-                        0
-                      ) * item.multiplier
-                  ).toLocaleString("id-ID")}{" "}
+              ))}
+              <div className="w-full flex justify-end items-center px-8">
+                <div className="flex gap-1 items-end">
+                  <h5 className="text-3xl font-bold text-black">
+                    Rp{" "}
+                    <CountUp
+                      start={0}
+                      duration={12.75}
+                      end={totalSum.totalAmount}
+                    />
+                  </h5>
                   <span className="font-semibold text-xs ml-3">
-                    (
-                    {data
-                      .filter((d) => "Ujian " + d.NamaProgram === item.label)
-                      .reduce((total, d) => total + d.JumlahBlankoDisetujui, 0)
-                      .toLocaleString("id-ID")}
+                    ({totalSum.totalBlanko}
                     Sertifikat )
                   </span>
-                </span>
-              </div>
-            </div>
-          ))}
-          <div className="w-full flex justify-end items-center px-8">
-            <div className="flex gap-1 items-end">
-              <h5 className="text-3xl font-bold text-black">
-                Rp{" "}
-                <CountUp
-                  start={0}
-                  duration={12.75}
-                  end={totalSum.totalAmount}
-                />
-              </h5>
-              <span className="font-semibold text-xs ml-3">
-                ({totalSum.totalBlanko}
-                Sertifikat )
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      {/* 
-      <div className="mb-3 justify-between gap-4 sm:flex w-full">
-        <div>
-          <h5 className="text-xl font-semibold text-black">
-            Total Sertifikat Diklat Keahlian
-          </h5>
-          <p className="italic text-sm">{formatDateTime()}</p>
-        </div>
-      </div>
-
-      <div className="mb-2 mt-4 border-t border-t-gray-200  pt-5 flex gap-3 items-start">
-        <div id="chartThree" className="mx-auto flex flex-col justify-center">
-          <h5 className="text-sm font-semibold text-black leading-[110%]">
-            Grafik Jumlah Sertifikat <br /> Diterbitkan per Jenis Diklat
-          </h5>
-          <ReactApexChart
-            options={options1}
-            series={[
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Nautika Kapal Penangkap Ikan Tingkat I"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Teknika Kapal Penangkap Ikan Tingkat I"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Nautika Kapal Penangkap Ikan Tingkat II"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Teknika Kapal Penangkap Ikan Tingkat II"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Nautika Kapal Penangkap Ikan Tingkat III"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter(
-                  (item) =>
-                    item.NamaProgram ===
-                    "Ahli Teknika Kapal Penangkap Ikan Tingkat III"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-              data
-                .filter((item) => item.NamaProgram === "Rating Keahlian")
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-            ]}
-            type="donut"
-          />
-        </div>
-      </div> */}
-
-      {/* <div className="flex gap-2 flex-col mt-10 mx-12">
-        <div className="flex flex-col pb-2 border-b border-b-gray-300">
-          <h5 className="text-xl font-semibold text-black">
-            Total Perkiraan Penerimaan PNBP
-          </h5>
-          <p className="italic text-sm -mt-1">
-            The unit prices used in this data were obtained from{" "}
-            <span className="font-semibold">BPPP Tegal</span>
-          </p>
-        </div>
-
-        <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
-          {[
-            {
-              label: "Diklat ANKAPIN I",
-              color: "bg-primary",
-              multiplier: 19158000,
-            },
-            {
-              label: "Diklat ATKAPIN I",
-              color: "bg-[#8FD0EF]",
-              multiplier: 15404000,
-            },
-            {
-              label: "Diklat ANKAPIN II",
-              color: "bg-[#026bec]",
-              multiplier: 10142000,
-            },
-            {
-              label: "Diklat ATKAPIN II",
-              color: "bg-[#991dce]",
-              multiplier: 10547000,
-            },
-            {
-              label: "Diklat ANKAPIN III (Upgrading)",
-              color: "bg-[#0FADCF]",
-              multiplier: 3940000,
-            },
-            {
-              label: "Diklat ATKAPIN III (Upgrading)",
-              color: "bg-[#25ca46]",
-              multiplier: 4217000,
-            },
-            {
-              label: "Pembaharuan Portfolio Spanyol",
-              color: "bg-[#12e7d2]",
-              multiplier: 1828000,
-            },
-          ].map((item, index) => (
-            <div className="w-full px-8 " key={index}>
-              <div className="flex w-full items-center justify-between">
-                <div className="flex gap-1 w-full items-center">
-                  <span
-                    className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
-                  ></span>
-                  <p className="flex w-full justify-between text-sm font-medium text-black">
-                    <span>
-                      {item.label}{" "}
-                      {item.label == "Diklat ATKAPIN III (Upgrading)" ||
-                      item.label == "Diklat ANKAPIN III (Upgrading)"
-                        ? "SKK 60 Mil"
-                        : ""}{" "}
-                      - Rp {item.multiplier.toLocaleString("id-ID")}
-                    </span>
-                  </p>
                 </div>
-
-                <span className="w-full flex items-end justify-end">
-                  Rp.
-                  {(
-                    data
-                      .filter((d) => d.NamaProgram === item.label)
-                      .reduce(
-                        (total, d) => total + d.JumlahBlankoDisetujui,
-                        0
-                      ) * item.multiplier
-                  ).toLocaleString("id-ID")}{" "}
-                  <span className="font-semibold text-xs ml-3">
-                    (
-                    {data
-                      .filter((d) => d.NamaProgram === item.label)
-                      .reduce((total, d) => total + d.JumlahBlankoDisetujui, 0)
-                      .toLocaleString("id-ID")}
-                    Sertifikat )
-                  </span>
-                </span>
               </div>
             </div>
-          ))}
-          <div className="w-full flex justify-end items-center px-8">
-            <div className="flex gap-1 items-end">
-              <h5 className="text-3xl font-bold text-black">
-                Rp{" "}
-                <CountUp
-                  start={0}
-                  duration={12.75}
-                  end={totalSum2.totalAmount}
-                />
-              </h5>
-              <span className="font-semibold text-xs ml-3">
-                ({totalSum2.totalBlanko}
-                Sertifikat )
-              </span>
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-2 text-sm">
+            <div className="flex gap-2 font-medium leading-none">
+              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
             </div>
-          </div>
-        </div>
+            <div className="leading-none text-muted-foreground">
+              Showing total certificate issued since 27 May 2024
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
 
-        <TableDataBlankoKeluarPublic />
-      </div> */}
+      <div className="flex gap-2 flex-col mt-10">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Detail Data CoC</CardTitle>
+            <CardDescription>
+              {" "}
+              The unit prices used in this data were obtained from{" "}
+              <span className="font-semibold">BPPP Tegal</span>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <TableDataBlankoKeluarPublic />
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-2 text-sm">
+            <div className="flex gap-2 font-medium leading-none">
+              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="leading-none text-muted-foreground">
+              Showing total certificate issued since 27 May 2024
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
     </div>
   );
 };

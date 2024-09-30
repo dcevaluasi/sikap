@@ -611,7 +611,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
   };
 
   return (
-    <div className="col-span-12 rounded-xl mt-6 border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-xl  border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       <>
         {/* Header Tabel Data Pelatihan */}
         <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
@@ -627,7 +627,10 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
                 </p>
                 <p className="text-sm font-medium">
                   {data
-                    .filter((item: BlankoKeluar) => item.TipeBlanko === "CoP")
+                    .filter(
+                      (item: BlankoKeluar) =>
+                        item.TipeBlanko === "Certificate of Proficiency (CoP)"
+                    )
                     .reduce(
                       (total: number, item: BlankoKeluar) =>
                         total + item.JumlahBlankoDisetujui,
