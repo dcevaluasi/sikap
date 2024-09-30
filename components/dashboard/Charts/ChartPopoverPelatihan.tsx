@@ -44,32 +44,24 @@ const chartConfig = {
     label: "Sertifikat",
   },
   chrome: {
-    label: "ANKAPIN I",
+    label: "BPPP Medan",
     color: "#2662D9",
   },
   safari: {
-    label: "ATKAPIN I",
+    label: "BPPP Tegal",
     color: "#2EB88A",
   },
   firefox: {
-    label: "ANKAPIN II",
+    label: "BPPP Ambon",
     color: "#e88c30",
   },
   edge: {
-    label: "ATKAPIN II",
+    label: "BPPP Bitung",
     color: "#AF57DB",
   },
   other: {
-    label: "ANKAPIN III",
+    label: "BPPP Banyuwangi",
     color: "#E0366F",
-  },
-  other2: {
-    label: "ATKAPIN III",
-    color: "#60432F",
-  },
-  other3: {
-    label: "Rating",
-    color: "#274754",
   },
 } satisfies ChartConfig;
 
@@ -342,16 +334,6 @@ const ChartPopoverPelatihan: React.FC<{ data: BlankoKeluar[] }> = ({
     },
     { browser: "edge", visitors: state.series[3], fill: "var(--color-edge)" },
     { browser: "other", visitors: state.series[4], fill: "var(--color-other)" },
-    {
-      browser: "other2",
-      visitors: state.series[5],
-      fill: "var(--color-other2)",
-    },
-    {
-      browser: "other3",
-      visitors: state.series[6],
-      fill: "var(--color-other3)",
-    },
   ];
 
   const totalVisitors = React.useMemo(() => {
@@ -363,7 +345,7 @@ const ChartPopoverPelatihan: React.FC<{ data: BlankoKeluar[] }> = ({
       <div className="mb-3 justify-between gap-4 sm:flex w-full">
         <div>
           <h5 className="text-xl font-semibold text-black">
-            Total Sertifikat Ujian Keahlian
+            Total Masyarakat Dilatih
           </h5>
           <p className="italic text-sm">{formatDateTime()}</p>
         </div>
@@ -372,7 +354,7 @@ const ChartPopoverPelatihan: React.FC<{ data: BlankoKeluar[] }> = ({
       <div className="flex gap-2 w-full">
         <Card className="w-[50%]">
           <CardHeader>
-            <CardTitle>Grafik Jenis Sertifikasi Keahlian - AKP</CardTitle>
+            <CardTitle>Grafik Masyarakat Dilatih</CardTitle>
             <CardDescription>January - Now 2024</CardDescription>
           </CardHeader>
           <CardContent>

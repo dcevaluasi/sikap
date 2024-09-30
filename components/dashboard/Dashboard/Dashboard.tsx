@@ -112,16 +112,16 @@ const Dashboard: React.FC = () => {
     <>
       <div className="flex flex-col mb-8">
         <div className="flex flex-row gap-2 items-center">
-          <RiShipFill className="text-4xl" />
+          <MdSchool className="text-4xl" />
           <div className="flex flex-col">
             <h1 className="text-4xl text-gray-900 font-medium leading-[100%] font-calsans">
               Dashboard Pelatihan
               <br />
             </h1>
             <p className="font-normal italic leading-[110%] text-gray-400 text-base max-w-4xl">
-              The data presented is obtained through the AKAPI application and
-              processed by the Maritime and Fisheries Training Center operator,
-              and is valid to {formatDateTime()}
+              The data collected comes from the implementation of training and
+              competency tests held by training centers, and is valid to{" "}
+              {formatDateTime()}
             </p>
           </div>
         </div>
@@ -131,7 +131,7 @@ const Dashboard: React.FC = () => {
           <PopoverTrigger asChild>
             <span onClick={(e) => setSelectedId(0)}>
               <CardDataStats
-                title="Total Persedian Blanko"
+                title="Total Masyarakat Dilatih"
                 total={dataBlanko
                   .reduce((total, item) => total + item.JumlahPengadaan, 0)
                   .toString()}
@@ -147,59 +147,9 @@ const Dashboard: React.FC = () => {
           </PopoverContent>
         </Popover>
 
-        <Popover>
-          <PopoverTrigger asChild>
-            <span onClick={(e) => setSelectedId(0)}>
-              <CardDataStats
-                title="Sisa Blanko"
-                total={(
-                  dataBlanko.reduce(
-                    (total, item) => total + item.JumlahPengadaan,
-                    0
-                  ) -
-                  data.reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  )
-                ).toString()}
-                rate=""
-                levelDown
-              >
-                <GiBattery75 className="text-primary text-3xl" />
-              </CardDataStats>
-            </span>
-          </PopoverTrigger>
-          <PopoverContent className="w-150">
-            <ChartPopover data={dataBlanko} />
-          </PopoverContent>
-        </Popover>
-
-        <Popover>
-          <PopoverTrigger asChild>
-            <span onClick={(e) => setSelectedId(0)}>
-              <CardDataStats
-                title="Total Blanko Terpakai"
-                total={data
-                  .reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  )
-                  .toString()}
-                rate="0%"
-                levelUp
-              >
-                <RiLogoutCircleRFill className="text-primary text-3xl" />
-              </CardDataStats>
-            </span>
-          </PopoverTrigger>
-          <PopoverContent className="w-150">
-            <ChartPopoverKeluar data={data} />
-          </PopoverContent>
-        </Popover>
-
         <span onClick={(e) => setSelectedId(1)}>
           <CardDataStats
-            title="Total Sertifikat Keahlian"
+            title="Total Sertifikat Yang Keluar"
             total={data
               .filter(
                 (item) => item.TipeBlanko === "Certificate of Competence (CoC)"
@@ -215,39 +165,14 @@ const Dashboard: React.FC = () => {
 
         <span onClick={(e) => setSelectedId(2)}>
           <CardDataStats
-            title="Total Sertifikat Keterampilan"
-            total={
-              data
-                .filter(
-                  (item) =>
-                    item.TipeBlanko === "Certificate of Proficiency (CoP)"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0)
-                .toString() +
-              "/" +
-              dataBlanko
-                .filter(
-                  (item) =>
-                    item.TipeBlanko === "Certificate of Proficiency (CoP)"
-                )
-                .reduce((total, item) => total + item.JumlahPengadaan, 0)
-                .toString()
-            }
+            title="Total Pelatihan"
+            total={"187"}
             rate=""
             levelDown
           >
             <MdSchool className="text-primary text-3xl" />
           </CardDataStats>
         </span>
-
-        <CardDataStats
-          title="Total Blanko Rusak"
-          total={"0f"}
-          rate=""
-          levelDown
-        >
-          <HiTrash className="text-primary text-3xl" />
-        </CardDataStats>
       </div>
       <div className="w-full mt-8">
         {/* <div className="mt-4 mb-6 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
@@ -255,7 +180,7 @@ const Dashboard: React.FC = () => {
           <ChartTwo />
         </div> */}
 
-        {selectedId == 0 && <ChartCertificatesMonthly data={data!} />}
+        {selectedId == 0 && <ChartPopoverPelatihan data={data!} />}
 
         {selectedId == 1 && <ChartPopoverPelatihan data={data!} />}
 
