@@ -7,10 +7,10 @@ import ScrollDown from "../scroll-down";
 export default function HeroDPKAKP() {
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = [
-    "/dpkakp.jpeg",
-    "/dpkakp.jpeg",
-    "/dpkakp.jpeg",
-    "/dpkakp.jpeg",
+    "/dpkakp/image2.jpg",
+    "/dpkakp/image2.jpg",
+    "/dpkakp/image2.jpg",
+    "/dpkakp/image2.jpg",
   ];
 
   React.useEffect(() => {

@@ -60,10 +60,12 @@ const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
   const [state, setState] = useState<ChartThreeState>({
     series: [
       data
-        .filter((item) => item.TipeBlanko === "CoC")
+        .filter((item) => item.TipeBlanko === "Certificate of Competence (CoC)")
         .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
       data
-        .filter((item) => item.TipeBlanko === "CoP")
+        .filter(
+          (item) => item.TipeBlanko === "Certificate of Proficiency (CoP)"
+        )
         .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
       2,
     ],
@@ -110,7 +112,10 @@ const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
             <span>
               {" "}
               {data
-                .filter((item) => item.TipeBlanko === "CoC")
+                .filter(
+                  (item) =>
+                    item.TipeBlanko === "Certificate of Competence (CoC)"
+                )
                 .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0)}
             </span>
           </div>
@@ -125,7 +130,10 @@ const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
             <span className="ml-3">
               {" "}
               {data
-                .filter((item) => item.TipeBlanko === "CoP")
+                .filter(
+                  (item) =>
+                    item.TipeBlanko === "Certificate of Proficiency (CoP)"
+                )
                 .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0)}
             </span>
           </div>
@@ -137,7 +145,7 @@ const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
             <p className="flex w-full justify-between text-sm font-medium text-black ">
               <span> Blanko Rusak </span>
             </p>
-            <span>2</span>
+            <span>0</span>
           </div>
         </div>
 

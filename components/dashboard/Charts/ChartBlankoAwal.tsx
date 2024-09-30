@@ -56,10 +56,12 @@ const ChartBlankoAwal: React.FC<{ data: Blanko[] }> = ({ data }) => {
   const [state, setState] = useState<ChartThreeState>({
     series: [
       data
-        .filter((item) => item.TipeBlanko === "CoC")
+        .filter((item) => item.TipeBlanko === "Certificate of Competence (CoC)")
         .reduce((total, item) => total + item.JumlahPengadaan, 0),
       data
-        .filter((item) => item.TipeBlanko === "CoP")
+        .filter(
+          (item) => item.TipeBlanko === "Certificate of Proficiency (CoP)"
+        )
         .reduce((total, item) => total + item.JumlahPengadaan, 0),
     ],
   });
@@ -103,7 +105,10 @@ const ChartBlankoAwal: React.FC<{ data: Blanko[] }> = ({ data }) => {
             <span>
               {" "}
               {data
-                .filter((item) => item.TipeBlanko === "CoC")
+                .filter(
+                  (item) =>
+                    item.TipeBlanko === "Certificate of Competence (CoC)"
+                )
                 .reduce((total, item) => total + item.JumlahPengadaan, 0)}
             </span>
           </div>
@@ -118,7 +123,10 @@ const ChartBlankoAwal: React.FC<{ data: Blanko[] }> = ({ data }) => {
             <span className="ml-3">
               {" "}
               {data
-                .filter((item) => item.TipeBlanko === "CoP")
+                .filter(
+                  (item) =>
+                    item.TipeBlanko === "Certificate of Proficiency (CoP)"
+                )
                 .reduce((total, item) => total + item.JumlahPengadaan, 0)}
             </span>
           </div>

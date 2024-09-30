@@ -131,6 +131,8 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
     }
   };
 
+  console.log(Cookies.get("Eselon"));
+
   const publishedData = data.filter(
     (item: PelatihanMasyarakat) => item.Status === "Publish"
   ).length;

@@ -15,6 +15,7 @@ import {
 import { GiPapers } from "react-icons/gi";
 import { HiMiniComputerDesktop } from "react-icons/hi2";
 import { TbBroadcast, TbDatabase, TbSchool } from "react-icons/tb";
+import Cookies from "js-cookie";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -147,7 +148,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     return (
                       <React.Fragment>
                         <Link
-                          href="/akp/puslat/dashboard"
+                          href="/akp/pusat/dashboard"
                           className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/" ||
                               pathname.includes("dashboard")) &&
@@ -195,7 +196,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     return (
                       <React.Fragment>
                         <Link
-                          href="/admin/lemdiklat/dashboard"
+                          href={
+                            Cookies.get("XSRF093") == "adminPusat"
+                              ? "/admin/pusat/dashboard"
+                              : "admin/pusat/lemdiklat"
+                          }
                           className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/" ||
                               pathname.includes("dashboard")) &&
@@ -243,7 +248,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     return (
                       <React.Fragment>
                         <Link
-                          href="/akp/puslat/blanko"
+                          href="/akp/pusat/blanko"
                           className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             !pathname.includes("keluar") && "bg-graydark "
                           }`}
@@ -263,7 +268,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     return (
                       <React.Fragment>
                         <Link
-                          href="/akp/puslat/blanko-keluar"
+                          href="/akp/pusat/blanko-keluar"
                           className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             pathname.includes("keluar") && "bg-graydark "
                           }`}
@@ -283,7 +288,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     return (
                       <React.Fragment>
                         <Link
-                          href="/akp/puslat/blanko-rusak"
+                          href="/akp/pusat/blanko-rusak"
                           className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             pathname.includes("rusak") && "bg-graydark "
                           }`}
