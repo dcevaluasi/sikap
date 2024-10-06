@@ -7,18 +7,6 @@ import { getLastValuePath } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "swiper/css/free-mode";
-import "../../../css/navigation.css";
-
-// Import Swiper modules
-import { Pagination, Navigation, FreeMode } from "swiper/modules";
-
 import {
   FaShip,
   FaCertificate,
