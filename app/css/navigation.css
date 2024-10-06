@@ -1,9 +1,27 @@
 .swiper-button-next {
-    margin-right: 50px !important;
+    margin-left: 180px !important;
     background: #fff;
     border-radius: 100%;
     width: 50px;
     height: 50px;
     font-size: 20px !important;
     z-index: 999;
+    padding: 10px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+
+  .swiper-button-prev {
+    margin-right: 180px !important;
+    background: #fff;
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+    font-size: 20px !important;
+    z-index: 999;
+    padding: 10px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  }
+
+  .swiper-button-next::after, .swiper-button-prev::after {
+    font-size: 16px;
   }

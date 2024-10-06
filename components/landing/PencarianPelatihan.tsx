@@ -57,7 +57,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { HashLoader } from "react-spinners";
 import { getMonthName } from "@/lib/utils";
-import { FiCalendar } from "react-icons/fi";
+import { FiCalendar, FiSearch } from "react-icons/fi";
 import Toast from "../toast";
 import ReCAPTCHA from "react-google-recaptcha";
 
@@ -125,31 +125,19 @@ function PencarianPelatihan() {
   }, []);
 
   return (
-    <section className="bg-white w-full py-10 mt-20">
-      <div className="py-4 mx-auto max-w-7xl sm:py-4  flex flex-col gap-4">
-        <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-white h-auto md:h-[50vh] flex flex-col relative shadow-custom rounded-3xl overflow-hidden">
-          <Image
+    <section className="-mt-20 w-full">
+      <div className=" mx-auto max-w-7xl py-5 flex flex-col gap-4">
+        <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-white h-auto w-fit mx-auto items-center justify-center flex flex-col relative shadow-custom rounded-3xl overflow-hidden">
+          {/* <Image
             width={0}
             height={0}
             src="/illustrations/searching.png"
             alt=""
             className=" absolute right-0 bottom-0  group-hover:scale-105 transition-transform duration-500 ease-in-out w-[350px]"
-          />
-          <div className="group relative flex flex-col overflow-hidden justify-center rounded-3xl px-14  flex-grow group">
+          /> */}
+          <div className="group relative flex flex-col overflow-hidden justify-center rounded-3xl px-6  flex-grow group">
             <div className="flex flex-col gap-1  ">
-              <h3 className="z-10 text-3xl font-medium text-black xs:text-xl md:text-4xl font-calsans leading-none ">
-                Cari serta Ikuti <br />
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                  Pelatihan dan Sertifikasi
-                </span>{" "}
-              </h3>
-              <p className="text-gray-500 text-base leading-[110%] ">
-                Temukan dan ikuti ragam pelatihan dan sertifikasi uji kompetensi
-                yang tersedia dalam <br /> aplikasi ELAUT dengan cepat dan
-                mudah, hidup satset!
-              </p>
-
-              <div className="grid grid-cols-4 w-fit gap-2 mt-5 ">
+              <div className="flex w-fit gap-2 py-5 items-center justify-center">
                 <Select
                   value={selectedJenisPelatihan}
                   onValueChange={(value) => setSelectedJenisPelatihan(value)}
@@ -164,35 +152,22 @@ function PencarianPelatihan() {
                   </SelectTrigger>
                   <SelectContent className="z-[10000]">
                     <SelectGroup>
-                      <SelectLabel>Jenis Pelatihan</SelectLabel>
-                      <SelectItem value="Kepelautan">Kepelautan</SelectItem>
+                      <SelectLabel>Pilih Jenis Pelatihan</SelectLabel>
+                      <SelectItem value="Non-Kepelautan">ANKAPIN I</SelectItem>
+                      <SelectItem value="Non-Kepelautan">ATKAPIN I</SelectItem>
+                      <SelectItem value="Non-Kepelautan">ANKAPIN II</SelectItem>
+                      <SelectItem value="Non-Kepelautan">ATKAPIN II</SelectItem>
                       <SelectItem value="Non-Kepelautan">
-                        Non-Kepelautan
+                        ANKAPIN III
                       </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={selectedBidangPelatihan}
-                  onValueChange={(value) => setSelectedBidangPelatihan(value)}
-                >
-                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
-                      <TbLayoutGrid />
-                      {selectedBidangPelatihan == ""
-                        ? "Bidang Pelatihan"
-                        : selectedBidangPelatihan}
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="z-[10000]">
-                    <SelectGroup>
-                      <SelectLabel>Bidang Pelatihan</SelectLabel>
-                      {BIDANG_PELATIHAN.map((bidangPelatihan, index) => (
-                        <SelectItem key={index} value={bidangPelatihan.Name}>
-                          {bidangPelatihan.Name}
-                        </SelectItem>
-                      ))}
+                      <SelectItem value="Non-Kepelautan">
+                        ATKAPIN III
+                      </SelectItem>
+                      <SelectItem value="Kepelautan">BSTF I</SelectItem>
+                      <SelectItem value="Kepelautan">BSTF II</SelectItem>
+                      <SelectItem value="Kepelautan">
+                        Sertifikat Kecakapan Nelayan
+                      </SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -229,7 +204,7 @@ function PencarianPelatihan() {
                     <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
                       <FiCalendar />
                       {selectedBulanPelatihan == ""
-                        ? "Pilih Bulan"
+                        ? "Pilih Waktu"
                         : getMonthName(selectedBulanPelatihan)}
                     </div>
                   </SelectTrigger>
@@ -265,27 +240,18 @@ function PencarianPelatihan() {
                     Bersihkan Filter
                   </div>
                 )}
-              </div>
 
-              <div className="flex mt-5">
-                <Button
-                  onClick={(e) => {
-                    handleFetchingPublicTrainingData();
-                  }}
-                  className="btn-sm text-sm text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
-                >
-                  <span>Cari dan Daftar</span>
-                  <svg
-                    className="w-3 h-3 fill-current text-white shrink-0 ml-2 -mr-1"
-                    viewBox="0 0 12 12"
-                    xmlns="http://www.w3.org/2000/svg"
+                <div className="flex">
+                  <Button
+                    onClick={(e) => {
+                      handleFetchingPublicTrainingData();
+                    }}
+                    className="btn-sm text-sm text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
                   >
-                    <path
-                      d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
-                      fillRule="nonzero"
-                    />
-                  </svg>
-                </Button>
+                    <span className="mr-2">Cari</span>
+                    <FiSearch />
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -353,9 +319,9 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
       if (captcha) {
         try {
           const response: AxiosResponse = await axios.post(
-            `${elautBaseUrl}/users/login`,
+            `${elautBaseUrl}/users/loginNotelpon`,
             JSON.stringify({
-              nik: nik,
+              no_number: nik,
               password: password,
             }),
             {
@@ -365,25 +331,31 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
             }
           );
           console.log({ response });
-          setLoading(false);
 
-          Cookies.set("XSRF081", response.data.t);
-          Cookies.set("XSRF082", "true");
+          Cookies.set("XSRF081", response.data.t, { expires: 1 });
+          Cookies.set("XSRF082", "true", { expires: 1 });
 
-          if (Cookies.get("XSRF081")) {
+          if (Cookies.get("XSRF085")) {
             Toast.fire({
               icon: "success",
-              title: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
+              title: "Berhasil login.",
+              text: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
             });
-            setLoading(false);
-            router.push(
-              `/layanan/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
-                pelatihan?.KodePelatihan
-              }/${pelatihan?.IdPelatihan}`
-            );
+            router.push(Cookies.get("XSRF085")!);
+          } else {
+            Toast.fire({
+              icon: "success",
+              title: "Berhasil login.",
+              text: `Berhasil melakukan login kedalam ELAUT!`,
+            });
+            if (Cookies.get("XSRF083")) {
+              // router.push("/dashboard/complete-profile");
+              router.push("/");
+            } else {
+              router.push("/");
+            }
           }
         } catch (error: any) {
-          setLoading(false);
           console.error({ error });
           if (
             error.response &&
@@ -391,10 +363,19 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
             error.response.data.pesan
           ) {
             const errorMsg = error.response.data.pesan;
-            setErrorMsg(errorMsg);
+
+            Toast.fire({
+              icon: "error",
+              title: "Gagal mencoba login.",
+              text: `Gagal melakukan login, ${errorMsg}!`,
+            });
           } else {
             const errorMsg = error.response.data.pesan;
-            setErrorMsg(errorMsg);
+            Toast.fire({
+              icon: "error",
+              title: "Gagal mencoba login.",
+              text: `Gagal melakukan login. ${errorMsg}!`,
+            });
           }
         }
       }
@@ -474,7 +455,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="name" className="text-right">
-                    NIK/No Telepon
+                    No Telepon
                   </Label>
                   <Input
                     id="name"
@@ -482,7 +463,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
                     className="col-span-3"
                     onChange={(e) => setNik(e.target.value)}
                     type="text"
-                    placeholder="Masukkan NIK kamu"
+                    placeholder="Masukkan No Telpon kamu"
                   />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">

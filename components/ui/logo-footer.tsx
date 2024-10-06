@@ -25,13 +25,13 @@ export default function LogoFooter() {
         src={getLogoHeader()}
         alt="Kementrian Kelautan dan Perikanan RI Logo"
       />
-      <Image
+      {/* <Image
         className={getSizeLogoHeader()}
         width={0}
         height={0}
         src={"/images/logo/logo-elaut-color.png"}
         alt="Elektronik Layanan Pelatihan Kelautan dan Perikanan Utama Terpadu"
-      />
+      /> */}
     </Link>
   );
 }

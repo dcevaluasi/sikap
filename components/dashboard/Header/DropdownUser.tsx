@@ -148,7 +148,7 @@ const DropdownUser = ({
       icon: "success",
       title: `Berhasil logout dari dashboard Admin!`,
     });
-    router.replace("/admin/auth/login");
+    router.replace("/");
   };
 
   // close on click outside

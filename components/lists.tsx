@@ -6,7 +6,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
-import "./../app/css/additional-styles/coverflow-slider.css";
 
 // Import Swiper modules
 import { Pagination, Navigation, FreeMode } from "swiper/modules";

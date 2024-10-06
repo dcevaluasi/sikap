@@ -5,10 +5,10 @@ import { usePathname } from "next/navigation";
 export default function Logo() {
   const pathname = usePathname();
   const getLogoHeader = () => {
-    return "/logo-kkp.png";
+    return "/logo-kkp-white.png";
   };
   const getSizeLogoHeader = () => {
-    return "w-16";
+    return "w-28";
   };
   return (
     <Link
@@ -23,13 +23,13 @@ export default function Logo() {
         src={getLogoHeader()}
         alt="Kementrian Kelautan dan Perikanan RI Logo"
       />
-      <Image
+      {/* <Image
         className={getSizeLogoHeader()}
         width={0}
         height={0}
         src={"/images/logo/logo-elaut-color.png"}
         alt="Elektronik Layanan Pelatihan Kelautan dan Perikanan Utama Terpadu"
-      />
+      /> */}
     </Link>
   );
 }

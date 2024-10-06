@@ -15,17 +15,17 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <TrainingTypeSection />
+      {/* <TrainingTypeSection />
       <Timeline />
-      <BalaiPelatihan />
-      <StatistikPelatihan />
+      <BalaiPelatihan /> */}
+      {/* <StatistikPelatihan /> */}
       {/* <PencarianPelatihan /> */}
       {/* <FeaturesDiklatKepelautan /> */}
       {/* <FeaturesBlocks /> */}
       {/* <Features />
       <Testimonials /> */}
-      <Newsletter />
-      <LogoIntegrated />
+      {/* <Newsletter />
+      <LogoIntegrated /> */}
     </>
   );
 }

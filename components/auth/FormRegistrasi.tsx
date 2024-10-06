@@ -28,6 +28,8 @@ import { IoMdCloseCircle } from "react-icons/io";
 
 // RECAPTCHA
 import ReCAPTCHA from "react-google-recaptcha";
+import { Slide } from "react-awesome-reveal";
+import Footer from "../ui/footer";
 
 function FormRegistrasi() {
   const router = useRouter();
@@ -206,7 +208,7 @@ function FormRegistrasi() {
   const [isKusukaUser, setIsKusukaUser] = React.useState(false);
 
   const [imageIndex, setImageIndex] = React.useState(0);
-  const images = ["/images/program-pelatihan/dummies/kelautan/kelautan-6.jpg"];
+  const images = ["/images/hero-img6.jpg"];
 
   const [imageMobIndex, setImageMobIndex] = React.useState(0);
   const imagesMob = ["/diklat/bstf-1.jpg"];
@@ -222,9 +224,41 @@ function FormRegistrasi() {
     return () => clearInterval(interval);
   }, []);
 
+  const programPelatihan = [
+    {
+      id: "001",
+      name: "Mandiri",
+      icon: "/images/icons/perikanan.png",
+      slug: "mandiri",
+      description:
+        "Pelatihan perikanan adalah pelatihan yang meliputi kegiata penangkapan ikan, budidaya perikanan, serta inovasi sumber daya laut berkelanjutan.",
+    },
+    {
+      id: "002",
+      name: "Corporate/Manning Agent",
+      icon: "/images/icons/akp.png",
+      slug: "manning-agent",
+      description:
+        "Pendidikan dan Pelatihan Awak Kapal Perikanan adalah pendidikan dan/atau pelatihan untuk mencapai tingkat keahlian dan/atau keterampilan tertentu sesuai dengan jenjang, kompetensi, dan jabatan untuk awak Kapal Perikanan.",
+    },
+    {
+      id: "003",
+      name: "Portofolio",
+      icon: "/images/icons/kelautan.png",
+      slug: "portofolio",
+      description:
+        "Pelatihan kelautan adalah pelatihan yang meliputi eksplorasi tak terbatas yang mencakup pengelolaan sumber daya, konservasi, riset, dan inovasi teknologi di laut.",
+    },
+  ];
+
+  const [selectedProgram, setSelectedProgram] = React.useState<number | null>(
+    null
+  );
+
   return (
-    <section className="relative w-full">
-      <AlertDialog open={openInfoKusuka}>
+    <section className="flex flex-col">
+      <div className="relative w-full h-[100vh]">
+        {/* <AlertDialog open={openInfoKusuka}>
         <AlertDialogContent className="rounded-2xl">
           <AlertDialogHeader>
             <div className="flex flex-col gap-0">
@@ -276,43 +310,77 @@ function FormRegistrasi() {
             )}
           </AlertDialogFooter>
         </AlertDialogContent>
-      </AlertDialog>
+      </AlertDialog> */}
 
-      <Image
-        src={images[imageIndex]}
-        className="absolute w-full h-full hidden md:block object-cover duration-1000 -z-40"
-        alt=""
-        layout="fill"
-        priority
-      />
+        <Image
+          src={images[imageIndex]}
+          className="absolute w-full h-[100vh] hidden md:block object-cover duration-1000 -z-40"
+          alt=""
+          layout="fill"
+          priority
+        />
 
-      <Image
-        src={imagesMob[imageMobIndex]}
-        className="absolute w-full h-full block md:hidden object-cover duration-1000 -z-40"
-        alt=""
-        layout="fill"
-        priority
-      />
+        <Image
+          src={imagesMob[imageMobIndex]}
+          className="absolute w-full h-[100vh] block md:hidden object-cover duration-1000 -z-40"
+          alt=""
+          layout="fill"
+          priority
+        />
 
-      <div className="absolute w-full h-full bg-black bg-opacity-70 -z-30"></div>
+        <div className="absolute w-full h-[100vh] bg-black bg-opacity-70 -z-30"></div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8 ">
-        <div className="pt-32 pb-32 md:pt-40 md:pb-20">
-          {/* Page header */}
-          <div className="w-full mx-auto text-center pb-0 md:pb-0">
-            <h1 className="font-semibold text-4xl leading-[110%] md:text-4xl text-gray-200">
-              <span className="font-calsans text-[3.4rem] md:text-[3.7rem]">
-                Registrasi
-              </span>{" "}
-              <br />
-              <span className="z-0 bg-clip-text text-[4.2rem] w-[600px] md:text-[3.7rem] leading-[110%]  text-transparent bg-gradient-to-r font-calsans from-blue-500  to-teal-400">
-                Pelatihan dan Sertifikasi
-              </span>{" "}
-            </h1>
-          </div>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="pt-32  md:pt-40 ">
+            <div className="w-full mx-auto text-center pb-0 md:pb-0">
+              <h1 className="font-semibold text-4xl leading-[110%] md:text-4xl text-gray-200">
+                <span className="font-calsans text-[3.4rem] md:text-[3.7rem]">
+                  Registrasi
+                </span>{" "}
+                <br />
+                <span className="z-0 bg-clip-text text-[4.2rem] w-[600px] md:text-[3.7rem] leading-[110%]  text-transparent bg-gradient-to-r font-calsans from-blue-500  to-teal-400">
+                  Pelatihan dan Sertifikasi
+                </span>{" "}
+              </h1>
+              <p className="text-base text-center mx-auto text-gray-200  max-w-3xl">
+                Registrasi tersedia dalam tiga opsi: Mandiri untuk individu,
+                Corporate untuk grup, dan Portofolio untuk yang punya rekam
+                jejak atau sertifikasi. Fleksibel sesuai kebutuhan!
+              </p>
+            </div>
 
-          {/* Form */}
-          <div className="max-w-sm  mx-5 md:mx-auto mt-5">
+            <div
+              className={`w-full flex flex-row gap-14 items-center justify-center  z-[10000] ${
+                selectedProgram === null ? "mt-12" : "mt-12"
+              }`}
+            >
+              {programPelatihan.map((item, index) => (
+                <Slide direction="up" duration={index * 1200}>
+                  <Link
+                    href={`/registrasi/${item.slug}`}
+                    onClick={(e) => setSelectedProgram(index)}
+                    className={`flex flex-col gap-1 items-center justify-center hover:scale-125 duration-700 cursor-pointer hover:opacity-100 border border-gray-200 rounded-3xl p-9 ${
+                      selectedProgram == index
+                        ? "opacity-100 animate-pulse"
+                        : "opacity-40"
+                    }`}
+                  >
+                    <Image
+                      src={item.icon}
+                      alt={item.name}
+                      className={selectedProgram == index ? "w-36" : "w-32"}
+                      width={0}
+                      height={0}
+                    />
+                    <h3 className="text-white font-calsans text-xl">
+                      {item.name}
+                    </h3>
+                  </Link>
+                </Slide>
+              ))}
+            </div>
+
+            {/* <div className="max-w-sm  mx-5 md:mx-auto mt-5">
             {useKUSUKA && (
               <form
                 onSubmit={(e) => handleCheckingNoKusuka(e)}
@@ -539,9 +607,11 @@ function FormRegistrasi() {
                 Log In
               </Link>
             </div>
+          </div> */}
           </div>
         </div>
       </div>
+      <Footer />
     </section>
   );
 }

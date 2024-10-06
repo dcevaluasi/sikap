@@ -32,6 +32,7 @@ import { AiFillShop } from "react-icons/ai";
 import { BsFillPatchCheckFill } from "react-icons/bs";
 import { LucideSchool } from "lucide-react";
 import { IoMdSchool } from "react-icons/io";
+import Image from "next/image";
 
 export default function Header() {
   const [top, setTop] = React.useState<boolean>(true);
@@ -72,17 +73,17 @@ export default function Header() {
                   usePathname().includes("bppp") ||
                   usePathname() == "/lembaga/dpkakp" ||
                   usePathname() == "/dashboard" ||
-                  usePathname().includes("program") ||
                   usePathname().includes("registrasi") ||
                   usePathname().includes("login"))
                   ? "text-gray-200 hover:text-white hover:scale-105"
-                  : top && usePathname().includes("layanan")
-                  ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+                  : top && usePathname().includes("program")
+                  ? "text-gray-200 hover:text-white hover:scale-105"
                   : (top && usePathname().includes("pelatihan")) ||
                     usePathname().includes("sertifikasi") ||
                     usePathname().includes("users")
                   ? "text-gray-900 hover:text-gray-900 hover:scale-105"
-                  : usePathname().includes("complete-profile")
+                  : usePathname().includes("complete-profile") ||
+                    usePathname().includes("program")
                   ? "text-gray-600 hover:text-gray-900 hover:scale-105"
                   : "text-gray-600 hover:text-gray-900 hover:scale-105"
               }  px-2 py-3 flex items-center transition  duration-150 ease-in-out font-medium`}
@@ -95,7 +96,7 @@ export default function Header() {
           <PopoverContent
             onMouseLeave={() => setOpenModal(false)}
             className={`w-80 flex flex-col z-[1000000] gap-1 ${
-              top ? "mt-7" : "mt-7"
+              top ? "-mt-3" : "mt-7"
             }`}
           >
             <ul>{children}</ul>
@@ -125,8 +126,9 @@ export default function Header() {
           className={`font-medium ${
             top && usePathname().includes("layanan")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
-              : top && usePathname().includes("program")
-              ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+              : (top && usePathname().includes("program")) ||
+                (top && usePathname().includes("dashboard"))
+              ? "text-gray-200 hover:text-white hover:scale-105"
               : (top && usePathname().includes("pelatihan")) ||
                 usePathname().includes("sertifikasi") ||
                 usePathname().includes("users")
@@ -163,18 +165,18 @@ export default function Header() {
               usePathname().includes("bppp") ||
               usePathname() == "/lembaga/dpkakp" ||
               usePathname() == "/dashboard" ||
-              usePathname().includes("program") ||
               usePathname().includes("registrasi") ||
               usePathname().includes("login"))
               ? "text-gray-200 hover:text-white hover:scale-105"
-              : top && usePathname().includes("layanan")
-              ? "text-gray-600 hover:text-gray-900 hover:scale-105"
+              : top && usePathname().includes("program")
+              ? "text-gray-200 hover:text-white hover:scale-105"
               : (top && usePathname().includes("pelatihan")) ||
                 usePathname().includes("sertifikasi") ||
                 usePathname().includes("users")
               ? "text-gray-900 hover:text-gray-900 hover:scale-105"
               : usePathname().includes("complete-profile") ||
-                usePathname().includes("layanan")
+                usePathname().includes("layanan") ||
+                usePathname().includes("program")
               ? "text-gray-600 hover:text-gray-900 hover:scale-105"
               : "text-gray-600 hover:text-gray-900 hover:scale-105"
           }  px-5 py-3 flex items-center transition duration-150 ease-in-out`}
@@ -190,6 +192,14 @@ export default function Header() {
     window.addEventListener("scroll", scrollHandler);
     return () => window.removeEventListener("scroll", scrollHandler);
   }, [top]);
+
+  const pathname = usePathname();
+  const getLogoHeader = () => {
+    return "/logo-kkp.png";
+  };
+  const getSizeLogoHeader = () => {
+    return "w-20";
+  };
 
   return (
     <header
@@ -212,8 +222,8 @@ export default function Header() {
       }  ${
         !top
           ? `bg-white backdrop-blur-sm shadow-lg`
-          : usePathname().includes("layanan")
-          ? "bg-white backdrop-blur-sm shadow-lg pt-0"
+          : usePathname().includes("program")
+          ? "bg-none  pt-6"
           : usePathname().includes("pelatihan") ||
             usePathname().includes("sertifikasi") ||
             usePathname().includes("users")
@@ -221,86 +231,95 @@ export default function Header() {
           : usePathname().includes("complete-profile")
           ? "bg-white backdrop-blur-sm shadow-lg"
           : ""
-      } ${
-        top && usePathname().includes("layanan/program") && "bg-transparent"
-      }`}
+      } ${usePathname().includes("program") && "bg-transparent"}`}
     >
       <div className=" mx-auto  max-w-7xl ">
         <div className="flex items-center justify-between h-24 md:h-24 py-3">
-          <div className="shrink-0 mr-4 flex items-center gap-4">
-            <Logo />
-          </div>
+          {(usePathname().includes("program") ||
+            usePathname().includes("registrasi") ||
+            usePathname().includes("pelatihan") ||
+            usePathname().includes("dashboard") ||
+            usePathname().includes("login")) && (
+            <Link href={"/"} className="shrink-0 mr-4 flex items-center gap-4">
+              <Image
+                className={getSizeLogoHeader()}
+                width={0}
+                height={0}
+                src={getLogoHeader()}
+                alt="Kementrian Kelautan dan Perikanan RI Logo"
+              />
+            </Link>
+          )}
 
           <nav className="hidden md:flex md:grow">
             <ul className="flex grow gap-0 justify-end flex-wrap items-center w-fit">
               <>
                 {" "}
-                <NavLinkDefault href="/" name="Beranda" top={top} />
-                {/* <NavLinkDefault href="/" name="Tentang E-LAUT" top={top} /> */}
-                <NavDropDown href="#" name="Layanan" top={top}>
-                  <NavLink
-                    href="/layanan/searching"
-                    name="Pelatihan Masyarakat"
-                    top={top}
-                  >
+                {usePathname().includes("dashboard") && (
+                  <NavLink href="/" name="Beranda" top={top}>
                     <div className="flex gap-2 items-center">
-                      <HiMiniUserGroup className="text-xl" />{" "}
-                      <span>Pelatihan dan Sertiffikasi</span>
+                      <span>Beranda</span>
                     </div>
                   </NavLink>
-
-                  <NavLink
-                    href="https://elearning.kkp.go.id/"
-                    name="Pelatihan Aparatur"
-                    top={top}
-                  >
-                    <div className="flex gap-2 items-center">
-                      <RiGovernmentFill className="text-xl" />{" "}
-                      <span>Pelatihan Aparatur</span>
-                    </div>
-                  </NavLink>
-                </NavDropDown>
+                )}
                 <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
                   <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
-                        BPPP - Balai Pelatihan dan Sertifiaksi Kelautan dan
-                        Perikanan
+                        Balai Pelatihan dan Penyuluhan Perikanan Tegal
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/dpkakp" name="DPKAKP" top={top}>
+                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
                     <div className="flex gap-2 items-center">
-                      <BiSolidShip className="text-4xl" />{" "}
+                      <IoMdSchool className="text-4xl" />{" "}
                       <span>
-                        DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan
+                        Balai Pelatihan dan Penyuluhan Perikanan Banyuwangi
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/p2mkp" name="P2MKP" top={top}>
+                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
                     <div className="flex gap-2 items-center">
-                      <AiFillShop className="text-4xl" />{" "}
+                      <IoMdSchool className="text-4xl" />{" "}
                       <span>
-                        P2MKP - Pelaksana Pelatihan Mandiri Kelautan dan
-                        Perikanan
+                        Balai Pelatihan dan Penyuluhan Perikanan Bitung
                       </span>
                     </div>
                   </NavLink>
-                  {/* <NavLink
-                    href="/lembaga/komite-approval"
-                    name="Komite Approval"
-                    top={top}
-                  >
+                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
                     <div className="flex gap-2 items-center">
-                      <HiMiniUserGroup className="text-3xl" />{" "}
-                      <span>Komite Approval Diklat Awak Kapal Perikanan</span>
+                      <IoMdSchool className="text-4xl" />{" "}
+                      <span>
+                        Balai Pelatihan dan Penyuluhan Perikanan Medan
+                      </span>
                     </div>
-                  </NavLink> */}
+                  </NavLink>
+                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                    <div className="flex gap-2 items-center">
+                      <IoMdSchool className="text-4xl" />{" "}
+                      <span>
+                        Balai Pelatihan dan Penyuluhan Perikanan Ambon
+                      </span>
+                    </div>
+                  </NavLink>
+                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                    <div className="flex gap-2 items-center">
+                      <IoMdSchool className="text-4xl" />{" "}
+                      <span>
+                        Balai Pendidikan dan Pelatihan Aparatur Sukamandi
+                      </span>
+                    </div>
+                  </NavLink>
                 </NavDropDown>
                 <NavLinkDefault
                   href="/#cek-sertifikat"
                   name="Cek Sertifikat"
+                  top={top}
+                />
+                <NavLinkDefault
+                  href="/#cek-sertifikat"
+                  name="Buku Petunjuk"
                   top={top}
                 />
                 {Cookies.get("XSRF081") ? (
@@ -310,41 +329,42 @@ export default function Header() {
                     {/* <!-- User Area --> */}
                   </div>
                 ) : (
-                  <div className="flex">
-                    <li>
-                      <Link
-                        href="/login"
-                        className={`btn-sm ${
-                          top
-                            ? usePathname().includes("pelatihan") ||
-                              usePathname().includes("searching")
-                              ? "text-blue-500 hover:text-white"
-                              : "text-gray-200"
-                            : "text-blue-500 hover:text-white"
-                        } bg-transparent border border-blue-500 hover:bg-blue-500 ml-3`}
-                      >
-                        <span>Masuk</span>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/registrasi"
-                        className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
-                      >
-                        <span>Registrasi</span>
-                        <svg
-                          className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
-                          viewBox="0 0 12 12"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
-                            fillRule="nonzero"
-                          />
-                        </svg>
-                      </Link>
-                    </li>
-                  </div>
+                  // <div className="flex">
+                  // <li>
+                  //   <Link
+                  //     href="/login"
+                  //     className={`btn-sm ${
+                  //       top
+                  //         ? usePathname().includes("pelatihan") ||
+                  //           usePathname().includes("searching")
+                  //           ? "text-blue-500 hover:text-white"
+                  //           : "text-gray-200"
+                  //         : "text-blue-500 hover:text-white"
+                  //     } bg-transparent border border-blue-500 hover:bg-blue-500 ml-3`}
+                  //   >
+                  //     <span>Masuk</span>
+                  //   </Link>
+                  // </li>
+                  //   <li>
+                  //     <Link
+                  //       href="/registrasi"
+                  //       className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
+                  //     >
+                  //       <span>Registrasi</span>
+                  //       <svg
+                  //         className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
+                  //         viewBox="0 0 12 12"
+                  //         xmlns="http://www.w3.org/2000/svg"
+                  //       >
+                  //         <path
+                  //           d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
+                  //           fillRule="nonzero"
+                  //         />
+                  //       </svg>
+                  //     </Link>
+                  //   </li>
+                  // </div>
+                  <></>
                 )}
               </>
             </ul>

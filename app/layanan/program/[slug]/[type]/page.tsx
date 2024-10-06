@@ -48,7 +48,6 @@ import {
   FaWater,
 } from "react-icons/fa6";
 import Footer from "@/components/ui/footer";
-import PencarianPelatihan from "@/components/landing/PencarianPelatihan";
 
 function page() {
   const programPelatihanPath = getLastValuePath(usePathname());
@@ -60,11 +59,10 @@ function page() {
   }, []);
 
   return (
-    <section className="h-full flex flex-col gap-0">
+    <>
       <HeroProgramPelatihan program={programPelatihanPath!} />
-      <PencarianPelatihan />
       <Footer />
-    </section>
+    </>
   );
 }
 
