@@ -613,7 +613,7 @@ export function DialogSertifikatPelatihan({
               Print Sertifikat
             </Button>
             <Link
-              href={`https://api-elaut.ikulatluh.cloud/public/static/sertifikat-raw/${
+              href={`https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/sertifikat-ttde/${
                 userPelatihan!.FileSertifikat
               }`}
               type="submit"

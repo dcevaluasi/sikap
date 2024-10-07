@@ -69,7 +69,7 @@ const DetailPelatihan: React.FC = () => {
       });
       setPassphrase("");
     } else {
-      if (passphrase != "KRI302MDIS") {
+      if (passphrase != "Hantek1234.!") {
         Toast.fire({
           icon: "error",
           text: "Passphrase yang anda masukkan salah atau bukan milikmu harap cek kembali",
@@ -532,7 +532,7 @@ const DetailPelatihan: React.FC = () => {
               <Button
                 className={`btn text-white bg-blue-500 hover:bg-blue-600 w-full max-w-full`}
               >
-               Tanda Tangan
+                Tanda Tangan
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>

@@ -24,8 +24,8 @@ export default function Home() {
       {/* <FeaturesBlocks /> */}
       {/* <Features />
       <Testimonials /> */}
-      {/* <Newsletter />
-      <LogoIntegrated /> */}
+      <Newsletter />
+      {/* <LogoIntegrated /> */}
     </>
   );
 }
