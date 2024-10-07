@@ -532,7 +532,7 @@ const DetailPelatihan: React.FC = () => {
               <Button
                 className={`btn text-white bg-blue-500 hover:bg-blue-600 w-full max-w-full`}
               >
-                Terbitkan Sertifikat Pelatihan
+               Tanda Tangan
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
