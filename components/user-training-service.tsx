@@ -32,7 +32,7 @@ import {
 
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { FiSearch, FiSlack } from "react-icons/fi";
+import { FiMaximize, FiMinimize, FiSearch, FiSlack } from "react-icons/fi";
 import { Input } from "./ui/input";
 import BPPPTrainings from "./bppp-trainings";
 import { usePathname, useRouter } from "next/navigation";
@@ -101,6 +101,8 @@ function UserTrainingService({ user }: { user: User | null }) {
       throw error;
     }
   };
+
+  const [isExpand, setIsExpand] = React.useState<boolean>(false);
 
   const [loading, setLoading] = React.useState<boolean>(true);
 
@@ -312,10 +314,18 @@ function UserTrainingService({ user }: { user: User | null }) {
                   </p>
                   <div className="rounded-full bg-gray-300 h-1 w-20 mt-3"></div>
                 </div>{" "}
-                <div className="w-full max-w-7xl mx-auto flex gap-5 mt-8">
+                <div
+                  className={`w-full ${
+                    isExpand ? "w-full" : "max-w-7xl"
+                  } mx-auto flex gap-5 mt-8`}
+                >
                   <div
-                    className={`flex flex-col gap-2  ${
-                      indexPelatihanSelected != 100000000 ? "w-5/12" : "w-full"
+                    className={`gap-2  ${
+                      indexPelatihanSelected != 100000000
+                        ? isExpand
+                          ? "hidden"
+                          : "w-5/12 flex flex-col "
+                        : "w-full flex flex-col "
                     }`}
                   >
                     <div className="relative w-full flex items-center border-gray-300 border px-2 rounded-xl">
@@ -629,10 +639,14 @@ function UserTrainingService({ user }: { user: User | null }) {
                   </div>
 
                   {indexPelatihanSelected != 100000000 && (
-                    <div className="flex items-start justify-center w-7/12">
+                    <div
+                      className={` items-start justify-center ${
+                        isExpand ? "w-12/12" : "w-7/12 flex"
+                      }`}
+                    >
                       <div className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:px-6 lg:py-0">
                         <div className="sm:flex justify-between sm:gap-4 items-center border-b-2 border-b-gray-200 pb-4">
-                          <div>
+                          <div className="">
                             <h3 className="text-3xl font-bold text-gray-900 font-calsans sm:text-3xl leading-[105%]">
                               {
                                 userDetail?.Pelatihan[indexPelatihanSelected]
@@ -640,25 +654,36 @@ function UserTrainingService({ user }: { user: User | null }) {
                               }
                             </h3>
 
-                            <p className="mt-1 text-sm font-medium text-gray-600">
-                              By{" "}
-                              {selectedPelatihan != null
-                                ? selectedPelatihan.PenyelenggaraPelatihan
-                                : "-"}{" "}
-                              ·{" "}
-                              {selectedPelatihan != null
-                                ? generateTanggalPelatihan(
-                                    selectedPelatihan?.TanggalMulaiPelatihan
-                                  )
-                                : "-"}{" "}
-                              s.d.{" "}
-                              {selectedPelatihan != null
-                                ? generateTanggalPelatihan(
-                                    selectedPelatihan?.TanggalBerakhirPelatihan
-                                  )
-                                : "-"}
-                              ·{" "}
-                            </p>
+                            <div className="flex items-center gap-3">
+                              <p className=" text-sm font-medium text-gray-600">
+                                By{" "}
+                                {selectedPelatihan != null
+                                  ? selectedPelatihan.PenyelenggaraPelatihan
+                                  : "-"}{" "}
+                                ·{" "}
+                                {selectedPelatihan != null
+                                  ? generateTanggalPelatihan(
+                                      selectedPelatihan?.TanggalMulaiPelatihan
+                                    )
+                                  : "-"}{" "}
+                                s.d.{" "}
+                                {selectedPelatihan != null
+                                  ? generateTanggalPelatihan(
+                                      selectedPelatihan?.TanggalBerakhirPelatihan
+                                    )
+                                  : "-"}
+                              </p>
+                              {/* <div
+                                className="cursor-pointer"
+                                onClick={(e) => setIsExpand(!isExpand)}
+                              >
+                                {isExpand ? (
+                                  <FiMinimize className="text-base" />
+                                ) : (
+                                  <FiMaximize className="text-base" />
+                                )}
+                              </div> */}
+                            </div>
                           </div>
 
                           <div className="hidden sm:block sm:shrink-0">

@@ -244,7 +244,14 @@ const TableDataPesertaPelatihan = () => {
             className={`flex items-center justify-center leading-[105%] p-0 w-full text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Validasi <br /> Data & Berkas
+            {usePathname().includes("puslat") ? (
+              <span>Detail Peserta</span>
+            ) : (
+              <span>
+                Validasi <br /> Data & Berkas
+              </span>
+            )}
+
             <TbDatabaseEdit className="ml-1 h-4 w-4" />
           </Button>
         );
@@ -478,7 +485,9 @@ const TableDataPesertaPelatihan = () => {
         return (
           <Button
             variant="ghost"
-            className={`flex items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
+            className={`flex  ${
+              usePathname().includes("puslat") && "hidden"
+            } items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Input <br />
@@ -488,7 +497,11 @@ const TableDataPesertaPelatihan = () => {
         );
       },
       cell: ({ row }) => (
-        <div className={` flex items-center justify-center w-full gap-1`}>
+        <div
+          className={` flex ${
+            usePathname().includes("puslat") && "hidden"
+          } items-center justify-center w-full gap-1`}
+        >
           <Button
             onClick={(e) => {
               setIsOpenFormInputNilai(!isOpenFormInputNilai);

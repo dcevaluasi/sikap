@@ -20,6 +20,16 @@ const bos = localFont({
   variable: "--font-bos",
 });
 
+const bosBold = localFont({
+  src: "../font/bookmanoldstyle_bold.ttf",
+  variable: "--font-bosBold",
+});
+
+const bosItalic = localFont({
+  src: "../font/bookmanoldstyle_italic.ttf",
+  variable: "--font-bosItalic",
+});
+
 const inter = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -48,7 +58,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning={true}
-        className={`${inter.className} ${myFont.variable} ${bos.variable}  ${delius.variable} `}
+        className={`${inter.className} ${myFont.variable} ${bos.variable} ${bosBold.variable} ${bosItalic.variable}  ${delius.variable} `}
       >
         <div className="h-screen max-h-screen overflow-y-hidden">
           {loading ? <Loader /> : children}

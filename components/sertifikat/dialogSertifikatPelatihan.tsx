@@ -10,7 +10,7 @@ import {
 import React, { ReactElement, useRef } from "react";
 import { MdVerified } from "react-icons/md";
 import { Button } from "../ui/button";
-import { TbCloudDownload, TbLink } from "react-icons/tb";
+import { TbCloudDownload, TbCloudUpload, TbLink } from "react-icons/tb";
 import { PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 import { useReactToPrint } from "react-to-print";
 
@@ -28,6 +28,9 @@ import {
 } from "@/utils/text";
 import jsPDF from "jspdf";
 import { BsFillPrinterFill } from "react-icons/bs";
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
+import Toast from "../toast";
 
 const html2pdf = dynamic(() => import("html2pdf.js"), { ssr: false });
 
@@ -74,9 +77,9 @@ const SertifikatPage1 = React.forwardRef(
 
     React.useEffect(() => {
       handleFetchDetailPeserta();
-      document.addEventListener("contextmenu", function (e) {
-        e.preventDefault();
-      });
+      // document.addEventListener("contextmenu", function (e) {
+      //   e.preventDefault();
+      // });
     }, []);
 
     return (
@@ -92,18 +95,18 @@ const SertifikatPage1 = React.forwardRef(
               </p>
             </div>
 
-            <div className="w-full flex flex-col gap-4 px-10 pt-5 ">
+            <div className="w-full flex flex-col gap-4 px-10 -mt-7 ">
               {!isPrinting && (
                 <Image
                   alt="Logo KKP"
                   className="mx-auto w-28"
                   width={0}
                   height={0}
-                  src="./logo-kkp-2.png"
+                  src="/logo-kkp-2.png"
                 />
               )}
 
-              <div className="flex flex-col gap-0 w-full items-center justify-center -mt-3">
+              <div className="flex flex-col gap-0 w-full items-center justify-center -mt-6">
                 <h1 className="text-sm font-bosBold">
                   KEMENTERIAN KELAUTAN DAN PERIKANAN
                 </h1>
@@ -448,17 +451,18 @@ export function DialogSertifikatPelatihan({
 }) {
   const componentRef = useRef(null);
   const [show, setShow] = React.useState<boolean>(false);
+  const router = useRouter();
 
-  const generatePDF = async () => {
+  const uploadPdf = async () => {
     const html2pdf = (await import("html2pdf.js")).default;
 
     const element = componentRef.current;
 
     const opt = {
       margin: 0,
-      filename: `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`,
-      image: { type: "jpg", quality: 3 },
-      html2canvas: { scale: 2 },
+      filename: `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}.pdf`,
+      image: { type: "png", quality: 10 },
+      html2canvas: { scale: 1.9 },
       jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
     };
 
@@ -469,9 +473,14 @@ export function DialogSertifikatPelatihan({
       .then(async (pdfBlob: Blob) => {
         const formData = new FormData();
         formData.append(
+          "IdUserPelatihan",
+          String(userPelatihan?.IdUserPelatihan ?? "")
+        );
+
+        formData.append(
           "fileSertifikat",
           pdfBlob,
-          `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`
+          `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}.pdf`
         );
 
         console.log("PDF Blob", pdfBlob);
@@ -490,19 +499,17 @@ export function DialogSertifikatPelatihan({
 
           if (response.status === 200) {
             console.log("File uploaded successfully");
+            Toast.fire({
+              icon: "success",
+              title: `Sertifikat sudah diupload ke server!`,
+            });
+            router.refresh();
           } else {
             console.error("Failed to upload the file");
           }
         } catch (error) {
           console.error("Error uploading the file:", error);
         }
-
-        const downloadLink = document.createElement("a");
-        const url = URL.createObjectURL(pdfBlob);
-        downloadLink.href = url;
-        downloadLink.download = `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`;
-        downloadLink.click();
-        URL.revokeObjectURL(url); // Clean up the object URL
       });
   };
 
@@ -510,9 +517,8 @@ export function DialogSertifikatPelatihan({
     content: () => componentRef.current,
   });
 
-  const handleDownloadPDF = () => {
-    setShow(true); // Set show to true to render the element
-    generatePDF();
+  const handleUploadPDF = () => {
+    uploadPdf();
   };
 
   React.useEffect(() => {
@@ -525,9 +531,14 @@ export function DialogSertifikatPelatihan({
         const opt = {
           margin: 0,
           filename: `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`,
-          image: { type: "jpg", quality: 1 },
-          html2canvas: { scale: 1 },
-          jsPDF: { unit: "in", format: "a4", orientation: "landscape" },
+          image: { type: "jpg", quality: 10 }, // Lower quality for smaller size
+          html2canvas: { scale: 0.9 }, // Reduce scale for smaller file size
+          jsPDF: {
+            unit: "in",
+            format: "a4",
+            orientation: "landscape",
+            compression: true, // Compress PDF for smaller size
+          },
         };
 
         html2pdf()
@@ -535,42 +546,16 @@ export function DialogSertifikatPelatihan({
           .set(opt)
           .outputPdf("blob")
           .then(async (pdfBlob: Blob) => {
-            const formData = new FormData();
-            formData.append(
-              "fileSertifikat",
-              pdfBlob,
-              `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`
-            );
+            // Optional: Check size of the PDF blob
+            const fileSize = pdfBlob.size / 1024 / 1024; // Convert to MB
+            console.log("PDF Blob Size:", fileSize, "MB");
 
-            console.log("PDF Blob", pdfBlob);
-
-            try {
-              const response = await axios.post(
-                elautBaseUrl + "/lemdik/saveSertifikat",
-                formData,
-                {
-                  headers: {
-                    Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-                    "Content-Type": "multipart/form-data",
-                  },
-                }
+            if (fileSize > 1) {
+              // If file size is too large, you can notify the user or adjust settings further
+              console.warn(
+                "The file size exceeds 1MB. Consider further optimizations."
               );
-
-              if (response.status === 200) {
-                console.log("File uploaded successfully");
-              } else {
-                console.error("Failed to upload the file");
-              }
-            } catch (error) {
-              console.error("Error uploading the file:", error);
             }
-
-            const downloadLink = document.createElement("a");
-            const url = URL.createObjectURL(pdfBlob);
-            downloadLink.href = url;
-            downloadLink.download = `${userPelatihan?.Nama}_${userPelatihan?.NoRegistrasi}_${userPelatihan?.NoSertifikat}.pdf`;
-            downloadLink.click();
-            URL.revokeObjectURL(url); // Clean up the object URL
           });
       };
 
@@ -583,7 +568,14 @@ export function DialogSertifikatPelatihan({
   return (
     <div>
       <Dialog>
-        <DialogTrigger asChild>{children}</DialogTrigger>
+        {userPelatihan!.NoSertifikat == "" ? (
+          <DialogTrigger onClick={() => handleUploadPDF()}>
+            {children}
+          </DialogTrigger>
+        ) : (
+          <DialogTrigger asChild>{children}</DialogTrigger>
+        )}
+
         <DialogContent className="sm:max-w-[1225px]">
           <DialogHeader>
             <div className="flex gap-2 items-center">
@@ -620,14 +612,27 @@ export function DialogSertifikatPelatihan({
               <BsFillPrinterFill />
               Print Sertifikat
             </Button>
-            <Button
-              onClick={(e) => handleDownloadPDF()}
+            <Link
+              href={`https://api-elaut.ikulatluh.cloud/public/static/sertifikat-raw/${
+                userPelatihan!.FileSertifikat
+              }`}
               type="submit"
-              className="flex items-center gap-1"
+              className="bg-neutral-900 text-neutral-50 shadow hover:bg-neutral-900/90 h-9 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50"
             >
               <TbCloudDownload />
               Download
-            </Button>
+            </Link>
+            {usePathname().includes("lemdiklat") &&
+              userPelatihan!.FileSertifikat == "" && (
+                <Button
+                  onClick={(e) => handleUploadPDF()}
+                  type="submit"
+                  className="flex items-center gap-1"
+                >
+                  <TbCloudUpload />
+                  Upload
+                </Button>
+              )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

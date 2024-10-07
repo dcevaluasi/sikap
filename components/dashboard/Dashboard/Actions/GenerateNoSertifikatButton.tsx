@@ -57,6 +57,7 @@ const GenerateNoSertifikatButton: React.FC<GenerateNoSertifikatButtonProps> = ({
     formData.append("TtdSertifikat", ttdSertifikat);
 
     const updateData = new FormData();
+    updateData.append("PemberitahuanDiterima", "Sedang diproses pusat");
     if (beritaAcara != null) {
       updateData.append("BeritaAcara", beritaAcara);
     }
@@ -161,11 +162,11 @@ const GenerateNoSertifikatButton: React.FC<GenerateNoSertifikatButtonProps> = ({
                     <option
                       onClick={(e) =>
                         setTtdSertifikat(
-                          "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusian Kelautan dan Perikanan"
+                          "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan Perikanan"
                         )
                       }
                       value={
-                        "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusian Kelautan dan Perikanan"
+                        "Kepala Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan Perikanan"
                       }
                     >
                       Kepala BPPSDM KP

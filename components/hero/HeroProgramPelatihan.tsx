@@ -183,7 +183,7 @@ export default function HeroProgramPelatihan({ program }: { program: string }) {
           {/* Hero content */}
           <div className="flex w-full flex-col items-center justify-between">
             {/* Section header */}
-            <div className=" flex flex-col h- justify-center w-full items-start px-6 md:px-0 text-center mt-10">
+            <div className=" flex flex-col h- justify-center w-full items-center px-6 md:px-0 text-center mt-10 relative">
               <h1 className="font-bold text-black text-[4rem] md:text-[5.5rem] font-calsans leading-none w-full text-center">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-500">
                   {programPelatihan}{" "}

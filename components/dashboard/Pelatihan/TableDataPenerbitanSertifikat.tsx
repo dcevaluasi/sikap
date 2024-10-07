@@ -223,42 +223,42 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
         </div>
       ),
     },
-    {
-      accessorKey: "IdPelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`flex w-full mx-0 px-0 items-center justify-center text-gray-900 font-semibold`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Status
-            <TbBrandSafari className="ml-1 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="w-full mx-0 px-0 flex flex-col items-center justify-center gap-2">
-          <div className={`flex items-center justify-center gap-1  mt-2`}>
-            <Link
-              href={`/admin/puslat/pelatihan/penerbitan-sertifikat/detail-pelatihan/${row.getValue(
-                "KodePelatihan"
-              )}/${row.getValue("IdPelatihan")}`}
-              onClick={(e) =>
-                router.push(
-                  `/admin/puslat/pelatihan/penerbitan-sertifikat/detail-pelatihan${row.getValue(
-                    "IdPelatihan"
-                  )}/${row.getValue("KodePelatihan")}`
-                )
-              }
-              className="border w-full border-green-400 bg-green-400 group duration-700 inline-flex items-center justify-center whitespace-nowrap rounded-md  font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 text-xs"
-            >
-              <span className="text-white  duration-700">Done</span>
-            </Link>
-          </div>
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "IdPelatihan",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className={`flex w-full mx-0 px-0 items-center justify-center text-gray-900 font-semibold`}
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Status
+    //         <TbBrandSafari className="ml-1 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div className="w-full mx-0 px-0 flex flex-col items-center justify-center gap-2">
+    //       <div className={`flex items-center justify-center gap-1  mt-2`}>
+    //         <Link
+    //           href={`/admin/puslat/pelatihan/penerbitan-sertifikat/detail-pelatihan/${row.getValue(
+    //             "KodePelatihan"
+    //           )}/${row.getValue("IdPelatihan")}`}
+    //           onClick={(e) =>
+    //             router.push(
+    //               `/admin/puslat/pelatihan/penerbitan-sertifikat/detail-pelatihan${row.getValue(
+    //                 "IdPelatihan"
+    //               )}/${row.getValue("KodePelatihan")}`
+    //             )
+    //           }
+    //           className="border w-full border-green-400 bg-green-400 group duration-700 inline-flex items-center justify-center whitespace-nowrap rounded-md  font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 text-xs"
+    //         >
+    //           <span className="text-white  duration-700">Done</span>
+    //         </Link>
+    //       </div>
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: "NamaPelatihan",
       header: ({ column }) => {

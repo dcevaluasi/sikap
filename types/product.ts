@@ -69,6 +69,7 @@ export type PelatihanMasyarakat = {
   PenerbitanSertifikatDiterima: string
   TanggalMulaiPendaftaran: string
   TanggalAkhirPendaftaran: string
+  PemberitahuanDiterima: string
 }
 
 export type UjiKompetensi = {
@@ -173,6 +174,7 @@ export type UserPelatihan = {
   PreTest: number
   StatusPembayaran: string
   UpdateAt: string
+  FileSertifikat?: string
   WaktuPembayaran: string
   NamaPelatihan: string
   DetailPelatihan: string

@@ -30,6 +30,15 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Toast from "@/components/toast";
+import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { HiUserGroup } from "react-icons/hi2";
+import Cookies from "js-cookie";
 
 const DetailPelatihan: React.FC = () => {
   const [dataPelatihan, setDataPelatihan] =
@@ -48,6 +57,8 @@ const DetailPelatihan: React.FC = () => {
     }
   };
 
+  const router = useRouter();
+
   const [passphrase, setPassphrase] = React.useState<string>("");
   const handleTTDElektronik = async () => {
     if (passphrase === "") {
@@ -56,12 +67,54 @@ const DetailPelatihan: React.FC = () => {
         text: "Harap memasukkan passphrase untuk dapat melakukan penandatanganan file sertifikat!",
         title: `Tidak ada passphrase`,
       });
+      setPassphrase("");
     } else {
-      Toast.fire({
-        icon: "success",
-        text: "Berhasil melakuukan penandatangan sertifikat secara elektronik!",
-        title: `Berhasil TTDe`,
-      });
+      if (passphrase != "KRI302MDIS") {
+        Toast.fire({
+          icon: "error",
+          text: "Passphrase yang anda masukkan salah atau bukan milikmu harap cek kembali",
+          title: `Salah passphrase`,
+        });
+        setPassphrase("");
+      } else {
+        try {
+          const response = await axios.post(
+            elautBaseUrl + "/lemdik/sendSertifikatTtde",
+            {
+              idPelatihan: idPelatihan?.toString(),
+              kodeParafrase: passphrase,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+              },
+            }
+          );
+
+          if (response.status === 200) {
+            console.log("TTDE", response);
+            console.log("File uploaded successfully");
+            Toast.fire({
+              icon: "success",
+              text: "Berhasil melakuukan penandatangan sertifikat secara elektronik!",
+              title: `Berhasil TTDe`,
+            });
+            router.push("/admin/puslat/pelatihan/penerbitan-sertifikat");
+            setPassphrase("");
+          } else {
+            console.error("Failed to upload the file");
+            setPassphrase("");
+          }
+        } catch (error) {
+          console.error("Error uploading the file:", error);
+          setPassphrase("");
+          Toast.fire({
+            icon: "error",
+            text: "Failed to send file to API, dialing to the given TCP address timed out",
+            title: `Gagal TTDe`,
+          });
+        }
+      }
     }
   };
 
@@ -109,16 +162,41 @@ const DetailPelatihan: React.FC = () => {
             </Link>
           </li>
         </ul>
-        <h1 className="text-3xl mt-3 max-w-xl font-bold font-calsans leading-[100%]">
-          {dataPelatihan != null ? dataPelatihan!.NamaPelatihan : "-"}
-        </h1>
-        <p className="text-sm text-gray-400 mb-1 mt-1 leading-[110%]">
-          {" "}
-          {dataPelatihan != null ? dataPelatihan!.KodePelatihan : ""} •{" "}
-          {dataPelatihan != null ? dataPelatihan!.BidangPelatihan : ""} •
-          Mendukung Program Terobosan{" "}
-          {dataPelatihan != null ? dataPelatihan!.DukunganProgramTerobosan : ""}
-        </p>
+        <div className="w-full flex items-center justify-between">
+          <div className="w-full flex flex-col">
+            <h1 className="text-3xl mt-3 max-w-xl font-bold font-calsans leading-[100%]">
+              {dataPelatihan != null ? dataPelatihan!.NamaPelatihan : "-"}
+            </h1>
+            <p className="text-sm text-gray-400 mb-1 mt-1 leading-[110%]">
+              {" "}
+              {dataPelatihan != null ? dataPelatihan!.KodePelatihan : ""} •{" "}
+              {dataPelatihan != null ? dataPelatihan!.BidangPelatihan : ""} •
+              Mendukung Program Terobosan{" "}
+              {dataPelatihan != null
+                ? dataPelatihan!.DukunganProgramTerobosan
+                : ""}
+            </p>
+          </div>
+          {dataPelatihan != null && (
+            <div className={`w-fit flex items-center justify-center gap-1`}>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Link
+                      href={`/admin/puslat/pelatihan/${dataPelatihan.KodePelatihan}/peserta-pelatihan/${idPelatihan}`}
+                      className="ml-auto border rounded-full border-green-500  h-9 px-4 py-2  hover:bg-green-500 hover:text-white text-green-500 duration-700"
+                    >
+                      <HiUserGroup className="h-4 w-4 " />
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Peserta Pelatihan</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+          )}
+        </div>
 
         <div className="flex w-full flex-col gap-2 items-center mt-3">
           {/* Nama Pelatihan */}
@@ -449,14 +527,13 @@ const DetailPelatihan: React.FC = () => {
           </div>
 
           <AlertDialog>
-            <AlertDialogTrigger>
+            <AlertDialogTrigger className="w-full pb-10">
               {" "}
-              <button
-                type="submit"
-                className={`btn text-white w-full ${"bg-blue-500 hover:bg-blue-600"} w-full`}
+              <Button
+                className={`btn text-white bg-blue-500 hover:bg-blue-600 w-full max-w-full`}
               >
                 Terbitkan Sertifikat Pelatihan
-              </button>
+              </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>

@@ -58,7 +58,7 @@ export default function Hero() {
     {
       id: "001",
       name: "Perikanan",
-      icon: "/images/icons/perikanan.png",
+      icon: "/icons/icperikanan.png",
       slug: "perikanan",
       description:
         "Pelatihan perikanan adalah pelatihan yang meliputi kegiata penangkapan ikan, budidaya perikanan, serta inovasi sumber daya laut berkelanjutan.",
@@ -66,7 +66,7 @@ export default function Hero() {
     {
       id: "002",
       name: "Awak Kapal Perikanan",
-      icon: "/images/icons/akp.png",
+      icon: "/icons/icawak.png",
       slug: "akp",
       description:
         "Pendidikan dan Pelatihan Awak Kapal Perikanan adalah pendidikan dan/atau pelatihan untuk mencapai tingkat keahlian dan/atau keterampilan tertentu sesuai dengan jenjang, kompetensi, dan jabatan untuk awak Kapal Perikanan.",
@@ -74,7 +74,7 @@ export default function Hero() {
     {
       id: "003",
       name: "Kelautan",
-      icon: "/images/icons/kelautan.png",
+      icon: "/icons/ickelautan.png",
       slug: "kelautan",
       description:
         "Pelatihan kelautan adalah pelatihan yang meliputi eksplorasi tak terbatas yang mencakup pengelolaan sumber daya, konservasi, riset, dan inovasi teknologi di laut.",
