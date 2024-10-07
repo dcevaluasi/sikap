@@ -312,10 +312,10 @@ function UserTrainingService({ user }: { user: User | null }) {
                   </p>
                   <div className="rounded-full bg-gray-300 h-1 w-20 mt-3"></div>
                 </div>{" "}
-                <div className="w-full max-w-6xl mx-auto flex gap-5 mt-8">
+                <div className="w-full max-w-7xl mx-auto flex gap-5 mt-8">
                   <div
                     className={`flex flex-col gap-2  ${
-                      indexPelatihanSelected != 100000000 ? "w-3/12" : "w-full"
+                      indexPelatihanSelected != 100000000 ? "w-5/12" : "w-full"
                     }`}
                   >
                     <div className="relative w-full flex items-center border-gray-300 border px-2 rounded-xl">
