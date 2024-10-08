@@ -21,6 +21,7 @@ import { FiSlack } from "react-icons/fi";
 import { HiMiniUserGroup } from "react-icons/hi2";
 import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
+import { generateRandomId } from "@/lib/utils";
 
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -78,7 +79,7 @@ function page() {
       resetAllStateToEmptyString();
 
       if (role == "lemdik") {
-        router.push(`/admin/lemdiklat/dashboard`);
+        router.push(`/${generateRandomId()}/lemdiklat/dashboard`);
       } else {
         router.push(`/admin/pusat/pelatihan/penerbitan-sertifikat`);
       }

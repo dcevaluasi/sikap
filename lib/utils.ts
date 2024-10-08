@@ -33,3 +33,7 @@ export function getMonthName(monthValue: string) {
 
   return months[monthValue] || "Invalid month";
 }
+
+export const generateRandomId = (): string => {
+  return `${Math.random().toString(36).substr(2, 9)}-${Date.now()}`;
+};

@@ -673,7 +673,7 @@ function UserTrainingService({ user }: { user: User | null }) {
                                     )
                                   : "-"}
                               </p>
-                              {/* <div
+                              <div
                                 className="cursor-pointer"
                                 onClick={(e) => setIsExpand(!isExpand)}
                               >
@@ -682,7 +682,7 @@ function UserTrainingService({ user }: { user: User | null }) {
                                 ) : (
                                   <FiMaximize className="text-base" />
                                 )}
-                              </div> */}
+                              </div>
                             </div>
                           </div>
 

@@ -212,13 +212,6 @@ export default function HeroProgramPelatihan({ program }: { program: string }) {
                   teknologi kelautan, serta keamanan dan keselamatan di laut.
                 </p>
               )}
-
-              {/* <Link
-            href="/layanan/searching"
-            className={`btn-sm ${"text-blue-500 hover:text-white"} bg-transparent border border-blue-500 rounded-full hover:bg-blue-500 mt-3`}
-          >
-            <span>Cari Diklat & Uji Kompetensi</span>
-          </Link> */}
             </div>
           </div>
         </div>

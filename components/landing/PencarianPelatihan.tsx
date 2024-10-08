@@ -87,6 +87,39 @@ function PencarianPelatihan() {
     }
   };
 
+  const akpSelections = [
+    "ANKAPIN Tingkat I",
+    "ATKAPIN Tingkat I",
+    "ANKAPIN Tingkat II",
+    "ATKAPIN Tingkat II",
+    "ANKAPIN Tingkat III",
+    "ATKAPIN Tingkat III",
+    "BSTF I",
+    "BSTF II",
+    "Rating",
+    "SKN",
+    "SKPI",
+    "SOPI",
+    "Fishing Master",
+  ];
+
+  const perikananSelection = [
+    "CPIB",
+    "CBIB",
+    "CPPIB",
+    "HACCP",
+    "SPI",
+    "API",
+    "Budidaya",
+    "Pengolahan dan Pemasaran",
+    "Mesin Perikanan",
+    "Penangkapan",
+    "SD Perikanan",
+    "Wisata Bahari",
+  ];
+
+  const kelautanSection = ["BCL", "Pengelolaan Sampah", "Mitigasi Bencana"];
+
   const [selectedJenisPelatihan, setSelectedJenisPelatihan] =
     React.useState<string>("");
   const [selectedBidangPelatihan, setSelectedBidangPelatihan] =
@@ -153,21 +186,35 @@ function PencarianPelatihan() {
                   <SelectContent className="z-[10000]">
                     <SelectGroup>
                       <SelectLabel>Pilih Jenis Pelatihan</SelectLabel>
-                      <SelectItem value="Non-Kepelautan">ANKAPIN I</SelectItem>
-                      <SelectItem value="Non-Kepelautan">ATKAPIN I</SelectItem>
-                      <SelectItem value="Non-Kepelautan">ANKAPIN II</SelectItem>
-                      <SelectItem value="Non-Kepelautan">ATKAPIN II</SelectItem>
-                      <SelectItem value="Non-Kepelautan">
-                        ANKAPIN III
-                      </SelectItem>
-                      <SelectItem value="Non-Kepelautan">
-                        ATKAPIN III
-                      </SelectItem>
-                      <SelectItem value="Kepelautan">BSTF I</SelectItem>
-                      <SelectItem value="Kepelautan">BSTF II</SelectItem>
-                      <SelectItem value="Kepelautan">
-                        Sertifikat Kecakapan Nelayan
-                      </SelectItem>
+                      {usePathname().includes("akp") && (
+                        <>
+                          {akpSelections.map((akp, index) => (
+                            <SelectItem key={index} value={akp}>
+                              {akp}
+                            </SelectItem>
+                          ))}
+                        </>
+                      )}
+
+                      {usePathname().includes("perikanan") && (
+                        <>
+                          {perikananSelection.map((akp, index) => (
+                            <SelectItem key={index} value={akp}>
+                              {akp}
+                            </SelectItem>
+                          ))}
+                        </>
+                      )}
+
+                      {usePathname().includes("kelautan") && (
+                        <>
+                          {kelautanSection.map((akp, index) => (
+                            <SelectItem key={index} value={akp}>
+                              {akp}
+                            </SelectItem>
+                          ))}
+                        </>
+                      )}
                     </SelectGroup>
                   </SelectContent>
                 </Select>

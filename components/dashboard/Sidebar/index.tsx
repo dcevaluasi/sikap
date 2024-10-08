@@ -16,6 +16,7 @@ import { GiPapers } from "react-icons/gi";
 import { HiMiniComputerDesktop } from "react-icons/hi2";
 import { TbBroadcast, TbDatabase, TbSchool } from "react-icons/tb";
 import Cookies from "js-cookie";
+import { checkOperatorPusat } from "@/lib/role";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -650,7 +651,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     </SidebarLinkGroup>
                   )}
 
-                  {!pathname.includes("/dpkakp") && (
+                  {(!checkOperatorPusat() || !pathname.includes("/dpkakp")) && (
                     <li>
                       <Link
                         href="/admin/lemdiklat/pnbp"

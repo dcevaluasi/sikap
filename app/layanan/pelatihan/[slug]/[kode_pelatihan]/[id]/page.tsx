@@ -421,7 +421,7 @@ function page() {
         ))
       )}
 
-      <LogoIntegrated />
+      {/* <LogoIntegrated /> */}
 
       <Footer />
     </section>
