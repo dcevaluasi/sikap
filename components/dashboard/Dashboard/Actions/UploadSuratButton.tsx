@@ -177,7 +177,7 @@ const UploadSuratButton: React.FC<UploadSuratButtonProps> = ({
             {suratPemberitahuan != "" ? (
               <Link
                 href={
-                  "https://api-elaut.ikulatluh.cloud/public/static/suratPemberitahuan/" +
+                  "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/suratPemberitahuan/" +
                   suratPemberitahuan
                 }
                 target="_blank"

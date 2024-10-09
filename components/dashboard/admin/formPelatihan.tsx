@@ -820,7 +820,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                           {edit && (
                             <Image
                               src={
-                                "https://api-elaut.ikulatluh.cloud/public/static/pelatihan/" +
+                                "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/pelatihan/" +
                                 fotoPelatihanOld
                               }
                               alt={namaPelatihan}

@@ -370,7 +370,7 @@ function DetailPelatihan() {
                   <Link
                     target="_blank"
                     className="text-blue-500 underline"
-                    href={`https://api-elaut.ikulatluh.cloud/public/silabus/pelatihan/${
+                    href={`https://elaut-bppsdm.kkp.go.id/api-elaut/public/silabus/pelatihan/${
                       pelatihan!.SilabusPelatihan
                     }`}
                   >

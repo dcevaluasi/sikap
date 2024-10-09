@@ -252,7 +252,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
                         <Image
                           src={
                             user?.Foto! ==
-                            "https://api-elaut.ikulatluh.cloud/public/static/profile/fotoProfile/"
+                            "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/profile/fotoProfile/"
                               ? "/dummies/profile.jpg"
                               : user?.Foto!
                           }

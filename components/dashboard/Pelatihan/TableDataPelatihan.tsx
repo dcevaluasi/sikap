@@ -229,7 +229,7 @@ const TableDataPelatihan: React.FC = () => {
   ) => {
     if (
       fileSuratPemberitahuan !=
-      "https://api-elaut.ikulatluh.cloud/public/static/suratPemberitahuan/"
+      "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/suratPemberitahuan/"
     ) {
       const formData = new FormData();
       formData.append("StatusApproval", status);
