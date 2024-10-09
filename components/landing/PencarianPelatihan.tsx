@@ -172,6 +172,30 @@ function PencarianPelatihan() {
             <div className="flex flex-col gap-1  ">
               <div className="flex w-fit gap-2 py-5 items-center justify-center">
                 <Select
+                  value={selectedBalaiPelatihan}
+                  onValueChange={(value) => setSelectedBalaiPelatihan(value)}
+                >
+                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                    <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
+                      <RiSchoolLine />
+                      {selectedBalaiPelatihan == ""
+                        ? "Balai Pelatihan"
+                        : selectedBalaiPelatihan}
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent className="z-[10000]">
+                    <SelectGroup>
+                      <SelectLabel>Balai Pelatihan</SelectLabel>
+                      {BALAI_PELATIHAN.map((balaiPelatihan, index) => (
+                        <SelectItem key={index} value={balaiPelatihan.Name}>
+                          {balaiPelatihan.Name}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Select
                   value={selectedJenisPelatihan}
                   onValueChange={(value) => setSelectedJenisPelatihan(value)}
                 >
@@ -215,30 +239,6 @@ function PencarianPelatihan() {
                           ))}
                         </>
                       )}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={selectedBalaiPelatihan}
-                  onValueChange={(value) => setSelectedBalaiPelatihan(value)}
-                >
-                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
-                      <RiSchoolLine />
-                      {selectedBalaiPelatihan == ""
-                        ? "Balai Pelatihan"
-                        : selectedBalaiPelatihan}
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="z-[10000]">
-                    <SelectGroup>
-                      <SelectLabel>Balai Pelatihan</SelectLabel>
-                      {BALAI_PELATIHAN.map((balaiPelatihan, index) => (
-                        <SelectItem key={index} value={balaiPelatihan.Name}>
-                          {balaiPelatihan.Name}
-                        </SelectItem>
-                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -467,10 +467,10 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
       {/* Arrival Info */}
       <div className="text-center">
         <p className="font-bold">{pelatihan.PelaksanaanPelatihan}</p>
-        <p className="text-sm leading-[100%]">
+        {/* <p className="text-sm leading-[100%]">
           {convertDate(pelatihan.TanggalMulaiPelatihan)} -{" "}
           {convertDate(pelatihan.TanggalBerakhirPelatihan)}
-        </p>
+        </p> */}
       </div>
 
       {/* Price and Button */}

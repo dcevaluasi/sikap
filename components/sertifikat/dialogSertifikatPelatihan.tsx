@@ -95,6 +95,14 @@ const SertifikatPage1 = React.forwardRef(
               </p>
             </div>
 
+            <Image
+              alt="Logo KKP"
+              className="mx-auto w-20 absolute bottom-6 left-28"
+              width={0}
+              height={0}
+              src="/qr-code/Cek_Sertifikat_ELAUT.png"
+            />
+
             <div className="w-full flex flex-col gap-4 px-10 -mt-7 ">
               {!isPrinting && (
                 <Image

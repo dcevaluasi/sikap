@@ -37,7 +37,7 @@ export default function MobileMenu({ isTop }: { isTop: boolean }) {
   });
 
   return (
-    <div className="flex md:hidden">
+    <div className="flex md:hidden px-6 md:px-0 -mt-10 md:mt-0">
       {/* Hamburger button */}
       <button
         ref={trigger}
