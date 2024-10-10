@@ -72,9 +72,9 @@ function FormRegistrationTraining({
         JSON.stringify({
           id_pelatihan: id.toString(),
           totalBayar: (
-            parseInt(harga) +
-            selectedKonsumsi?.Harga! && 0 +
-            selectedPenginapan?.Harga! && 0
+            parseInt(harga) + selectedKonsumsi?.Harga! &&
+            0 + selectedPenginapan?.Harga! &&
+            0
           ).toString(),
           namaPelatihan: pelatihan?.NamaPelatihan,
 
@@ -364,7 +364,7 @@ function FormRegistrationTraining({
             </div>
             <FormFasilitas />
             <FormPembayaran />
-            <div className="flex -mx-3 mt-5 gap-2 px-3">
+            <div className="flex w-full -mx-3 mt-5 gap-2 px-3">
               <div className={`w-full ${indexFormTab == 0 && "hidden"}`}>
                 <button
                   type="submit"
@@ -391,9 +391,10 @@ function FormRegistrationTraining({
                   Selanjutnya
                 </button>
               </div>
-              {isAgreeWithAggreement && (
-                <AlertDialog>
-                  <AlertDialogTrigger>
+
+              <AlertDialog>
+                <AlertDialogTrigger className="w-full">
+                  {isAgreeWithAggreement && (
                     <div
                       className={`w-full ${
                         indexFormTab == 1 ? "block" : "hidden"
@@ -407,32 +408,32 @@ function FormRegistrationTraining({
                         Daftar
                       </button>
                     </div>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent className="rounded-lg">
-                    <AlertDialogHeader className="flex items-center">
-                      <AlertDialogTitle className="text-2xl leading-8">
-                        Berhasil Melakukan Registrasi
-                      </AlertDialogTitle>
-                      <Image
-                        className="w-[40%] py-4 animate-float"
-                        src={"/illustrations/approved.png"}
-                        width={0}
-                        height={0}
-                        alt="Apakah anda yakin?"
-                      />
-                      <AlertDialogDescription className="text-base leading-[130%]">
-                        Nantikan informasi lebih lanjut terkait pelatihan ini,
-                        operator akan menghubungi anda melalui whatsapp!
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel className=" py-6 text-base">
-                        Oke
-                      </AlertDialogCancel>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              )}
+                  )}
+                </AlertDialogTrigger>
+                <AlertDialogContent className="rounded-lg">
+                  <AlertDialogHeader className="flex items-center">
+                    <AlertDialogTitle className="text-2xl leading-8">
+                      Berhasil Melakukan Registrasi
+                    </AlertDialogTitle>
+                    <Image
+                      className="w-[40%] py-4 animate-float"
+                      src={"/illustrations/approved.png"}
+                      width={0}
+                      height={0}
+                      alt="Apakah anda yakin?"
+                    />
+                    <AlertDialogDescription className="text-base leading-[130%]">
+                      Nantikan informasi lebih lanjut terkait pelatihan ini,
+                      operator akan menghubungi anda melalui whatsapp!
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel className=" py-6 text-base">
+                      Oke
+                    </AlertDialogCancel>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </div>
