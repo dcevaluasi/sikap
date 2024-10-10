@@ -883,7 +883,16 @@ function UserTrainingService({ user }: { user: User | null }) {
                                       |{" "}
                                       <AlertDialog>
                                         <AlertDialogTrigger>
-                                          <div className="underline text-blue-500 ml-1">
+                                          <div
+                                            onClick={() =>
+                                              setCodeAccess(
+                                                userDetail?.Pelatihan[
+                                                  indexPelatihanSelected
+                                                ]?.CodeAksess!
+                                              )
+                                            }
+                                            className="underline text-blue-500 ml-1"
+                                          >
                                             Link Ujian Pre-Test
                                           </div>
                                         </AlertDialogTrigger>
@@ -965,17 +974,25 @@ function UserTrainingService({ user }: { user: User | null }) {
                                                       </AlertDialogDescription>
                                                     ) : (
                                                       <fieldset className="w-full">
-                                                        <Input
+                                                        {/* <Input
                                                           className="w-full font-normal mt-2 text-sm"
                                                           placeholder="Masukkan kode akses "
-                                                          value={codeAccess}
+                                                          value={
+                                                            userDetail
+                                                              ?.Pelatihan[
+                                                              indexPelatihanSelected
+                                                            ]?.CodeAksess!
+                                                          }
                                                           onChange={(e) =>
                                                             setCodeAccess(
-                                                              e.target.value
+                                                              userDetail
+                                                                ?.Pelatihan[
+                                                                indexPelatihanSelected
+                                                              ]?.CodeAksess!
                                                             )
                                                           }
-                                                          type="text"
-                                                        />
+                                                          type="password"
+                                                        /> */}
                                                       </fieldset>
                                                     )}
                                                   </>
@@ -1033,11 +1050,20 @@ function UserTrainingService({ user }: { user: User | null }) {
                                             )}
                                           </AlertDialogFooter>
                                         </AlertDialogContent>
-                                      </AlertDialog>{" "}
-                                      |{" "}
+                                      </AlertDialog>
+                                      {"  "}|{" "}
                                       <AlertDialog>
                                         <AlertDialogTrigger>
-                                          <div className="underline text-blue-500 ml-1">
+                                          <div
+                                            onClick={() =>
+                                              setCodeAccess(
+                                                userDetail?.Pelatihan[
+                                                  indexPelatihanSelected
+                                                ]?.CodeAksess!
+                                              )
+                                            }
+                                            className="underline text-blue-500 ml-1"
+                                          >
                                             Link Ujian Post-Test
                                           </div>
                                         </AlertDialogTrigger>
@@ -1119,17 +1145,25 @@ function UserTrainingService({ user }: { user: User | null }) {
                                                       </AlertDialogDescription>
                                                     ) : (
                                                       <fieldset className="w-full">
-                                                        <Input
+                                                        {/* <Input
                                                           className="w-full font-normal mt-2 text-sm"
                                                           placeholder="Masukkan kode akses "
-                                                          value={codeAccess}
+                                                          value={
+                                                            userDetail
+                                                              ?.Pelatihan[
+                                                              indexPelatihanSelected
+                                                            ]?.CodeAksess!
+                                                          }
                                                           onChange={(e) =>
                                                             setCodeAccess(
-                                                              e.target.value
+                                                              userDetail
+                                                                ?.Pelatihan[
+                                                                indexPelatihanSelected
+                                                              ]?.CodeAksess!
                                                             )
                                                           }
-                                                          type="text"
-                                                        />
+                                                          type="password"
+                                                        /> */}
                                                       </fieldset>
                                                     )}
                                                   </>
