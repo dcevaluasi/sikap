@@ -16,6 +16,8 @@ import { Bounce, Slide } from "react-awesome-reveal";
 import { MdClear, MdKeyboardArrowRight } from "react-icons/md";
 import { TbClockHour2, TbLayoutGrid } from "react-icons/tb";
 
+import { HiViewGrid } from "react-icons/hi";
+
 import {
   Sheet,
   SheetClose,
@@ -49,14 +51,10 @@ import {
   SelectLabel,
   SelectTrigger,
 } from "@/components/ui/select";
-import { LucideSchool } from "lucide-react";
-import { FaRupiahSign } from "react-icons/fa6";
-import LogoIntegrated from "@/components/logoIntegrated";
-import Newsletter from "@/components/newsletter";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { HashLoader } from "react-spinners";
-import { getMonthName } from "@/lib/utils";
+import { formatToRupiah, getMonthName } from "@/lib/utils";
 import { FiCalendar, FiSearch } from "react-icons/fi";
 import Toast from "../toast";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -64,6 +62,16 @@ import ReCAPTCHA from "react-google-recaptcha";
 function PencarianPelatihan() {
   const [data, setData] = React.useState<PelatihanMasyarakat[] | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
+  const jenisProgram =
+    usePathname() == "/layanan/program/akp"
+      ? "Awak Kapal Perikanan"
+      : usePathname() == "/layanan/program/perikanan"
+      ? "Perikanan"
+      : "Kelautan";
+
+  console.log(jenisProgram);
+
+  const [sortedData, setSortedData] = React.useState([]);
 
   const handleFetchingPublicTrainingData = async () => {
     setLoading(true);
@@ -73,12 +81,27 @@ function PencarianPelatihan() {
     }
     try {
       const response: AxiosResponse = await axios.get(
-        `${elautBaseUrl}/lemdik/getPelatihan?penyelenggara_pelatihan=${selectedBalaiPelatihan}&bidang_pelatihan=${selectedBidangPelatihan}&jenis_sertifikat=${selectedJenisPelatihan}&tanggal_mulai_pelatihan=${bulanMulaiPelatihan}`
+        `${elautBaseUrl}/lemdik/getPelatihan?${jenisProgram}&penyelenggara_pelatihan=${selectedBalaiPelatihan}&bidang_pelatihan=${selectedBidangPelatihan}&jenis_sertifikat=${selectedJenisPelatihan}&tanggal_mulai_pelatihan=${bulanMulaiPelatihan}&program=${selectedProgramPelatihan}`
       );
       setLoading(false);
       setShowResult(true);
       console.log({ response });
-      setData(response.data.data);
+
+      if (response.data.data != null) {
+        const filteredAndSortedData = response.data.data
+          .filter(
+            (item: PelatihanMasyarakat) => item.JenisProgram === jenisProgram
+          )
+          .sort((a: PelatihanMasyarakat, b: PelatihanMasyarakat) => {
+            const dateA = new Date(a.TanggalMulaiPelatihan);
+            const dateB = new Date(b.TanggalMulaiPelatihan);
+            return dateB.getTime() - dateA.getTime(); // Ascending order
+          });
+
+        setData(filteredAndSortedData);
+      } else {
+        setData(null);
+      }
     } catch (error) {
       console.error("Error posting training data:", error);
       setLoading(false);
@@ -122,6 +145,8 @@ function PencarianPelatihan() {
 
   const [selectedJenisPelatihan, setSelectedJenisPelatihan] =
     React.useState<string>("");
+  const [selectedProgramPelatihan, setSelectedProgramPelatihan] =
+    React.useState<string>("");
   const [selectedBidangPelatihan, setSelectedBidangPelatihan] =
     React.useState<string>("");
   const [selectedBalaiPelatihan, setSelectedBalaiPelatihan] =
@@ -142,7 +167,8 @@ function PencarianPelatihan() {
     setSelectedBalaiPelatihan("");
     setSelectedBiayaPelatihan("");
     setSelectedBulanPelatihan("");
-    setShowResult(false);
+    setSelectedProgramPelatihan("");
+    handleFetchingPublicTrainingData();
   };
 
   const [selectedDate, setSelectedDate] = React.useState("15 September 2024");
@@ -153,6 +179,7 @@ function PencarianPelatihan() {
 
   React.useEffect(() => {
     setTimeout(() => {
+      handleFetchingPublicTrainingData();
       setLoading(false);
     }, 1000);
   }, []);
@@ -161,13 +188,6 @@ function PencarianPelatihan() {
     <section className="-mt-20 w-full">
       <div className=" mx-auto max-w-7xl py-5 flex flex-col gap-4">
         <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-white h-auto w-fit mx-auto items-center justify-center flex flex-col relative shadow-custom rounded-3xl overflow-hidden">
-          {/* <Image
-            width={0}
-            height={0}
-            src="/illustrations/searching.png"
-            alt=""
-            className=" absolute right-0 bottom-0  group-hover:scale-105 transition-transform duration-500 ease-in-out w-[350px]"
-          /> */}
           <div className="group relative flex flex-col overflow-hidden justify-center rounded-3xl px-6  flex-grow group">
             <div className="flex flex-col gap-1  ">
               <div className="flex w-fit gap-2 py-5 items-center justify-center">
@@ -196,20 +216,21 @@ function PencarianPelatihan() {
                 </Select>
 
                 <Select
-                  value={selectedJenisPelatihan}
-                  onValueChange={(value) => setSelectedJenisPelatihan(value)}
+                  value={selectedProgramPelatihan}
+                  onValueChange={(value) => setSelectedProgramPelatihan(value)}
+                  disabled={!selectedBalaiPelatihan}
                 >
                   <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
                     <div className="inline-flex gap-2 px-3 w-full text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
                       <RiShipLine />
-                      {selectedJenisPelatihan == ""
-                        ? "Jenis Pelatihan"
-                        : selectedJenisPelatihan}
+                      {selectedProgramPelatihan == ""
+                        ? "Program Pelatihan"
+                        : selectedProgramPelatihan}
                     </div>
                   </SelectTrigger>
                   <SelectContent className="z-[10000]">
                     <SelectGroup>
-                      <SelectLabel>Pilih Jenis Pelatihan</SelectLabel>
+                      <SelectLabel>Pilih Program Pelatihan</SelectLabel>
                       {usePathname().includes("akp") && (
                         <>
                           {akpSelections.map((akp, index) => (
@@ -244,8 +265,32 @@ function PencarianPelatihan() {
                 </Select>
 
                 <Select
+                  value={selectedJenisPelatihan}
+                  onValueChange={(value) => setSelectedJenisPelatihan(value)}
+                  disabled={!selectedProgramPelatihan}
+                >
+                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                    <div className="inline-flex gap-2 px-3 w-full text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
+                      <HiViewGrid />
+                      {selectedJenisPelatihan == ""
+                        ? "Jenis Pelatihan"
+                        : selectedJenisPelatihan}
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent className="z-[10000]">
+                    <SelectGroup>
+                      <SelectLabel>Pilih Jenis Pelatihan</SelectLabel>
+                      <SelectItem value={"Aspirasi"}>Aspirasi</SelectItem>
+                      <SelectItem value={"PNBP/BLU"}>PNBP/BLU</SelectItem>
+                      <SelectItem value={"Reguler"}>Reguler</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Select
                   value={selectedBulanPelatihan}
                   onValueChange={(value) => setSelectedBulanPelatihan(value)}
+                  disabled={!selectedJenisPelatihan}
                 >
                   <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
                     <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
@@ -278,6 +323,7 @@ function PencarianPelatihan() {
                   selectedBalaiPelatihan !== "" ||
                   selectedBiayaPelatihan !== "" ||
                   selectedBidangPelatihan !== "" ||
+                  selectedProgramPelatihan !== "" ||
                   selectedBulanPelatihan != "") && (
                   <div
                     onClick={() => handleClearFilter()}
@@ -290,9 +336,7 @@ function PencarianPelatihan() {
 
                 <div className="flex">
                   <Button
-                    onClick={(e) => {
-                      handleFetchingPublicTrainingData();
-                    }}
+                    onClick={(e) => handleFetchingPublicTrainingData()}
                     className="btn-sm text-sm text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
                   >
                     <span className="mr-2">Cari</span>
@@ -331,11 +375,28 @@ function PencarianPelatihan() {
               </div>
 
               <div className="flex-col gap-4 flex w-full mt-4">
-                {data == null ? (
-                  <></>
+                {data == null || data.length === 0 ? (
+                  <div className="flex flex-col w-full items-center justify-center h-fit">
+                    <Image
+                      src={"/illustrations/not-found.png"}
+                      alt="Not Found"
+                      width={0}
+                      height={0}
+                      className="w-[400px]"
+                    />
+                    <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
+                      <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                        Belum Ada Pelatihan
+                      </h1>
+                      <div className="text-gray-600 text-center  max-w-md">
+                        Belum ada pelatihan yang tersedia saat ini, harap terus
+                        cek berkala ya websitenya Sobat E-LAUT!
+                      </div>
+                    </div>
+                  </div>
                 ) : (
-                  data!.map((data, index) => (
-                    <CardPelatihan key={index} pelatihan={data} />
+                  data.map((pelatihan, index) => (
+                    <CardPelatihan key={index} pelatihan={pelatihan} />
                   ))
                 )}
               </div>
@@ -397,9 +458,9 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
             });
             if (Cookies.get("XSRF083")) {
               // router.push("/dashboard/complete-profile");
-              router.push("/");
+              router.push("/layanan/program/akp");
             } else {
-              router.push("/");
+              router.push("/layanan/program/akp");
             }
           }
         } catch (error: any) {
@@ -467,16 +528,16 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
       {/* Arrival Info */}
       <div className="text-center">
         <p className="font-bold">{pelatihan.PelaksanaanPelatihan}</p>
-        {/* <p className="text-sm leading-[100%]">
+        <p className="text-sm leading-[100%]">
           {convertDate(pelatihan.TanggalMulaiPelatihan)} -{" "}
           {convertDate(pelatihan.TanggalBerakhirPelatihan)}
-        </p> */}
+        </p>
       </div>
 
       {/* Price and Button */}
       <div className="text-center flex items-center justify-center flex-col">
         <p className="text-blue-500 text-xl font-bold">
-          Rp {pelatihan.HargaPelatihan},-
+          {formatToRupiah(pelatihan.HargaPelatihan)},-
         </p>
         {!Cookies.get("XSRF081") ? (
           <Dialog>

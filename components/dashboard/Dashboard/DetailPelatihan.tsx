@@ -349,17 +349,18 @@ function DetailPelatihan() {
                   Materi Pelatihan
                 </td>
                 <td className="p-4 w-2/3">
-                  {pelatihan!.MateriPelatihan.length > 0 ? (
-                    <div className="flex flex-col gap-1">
-                      {pelatihan!.MateriPelatihan.map((materi, index) => (
-                        <span key={index}>
-                          {index + 1}. {materi.NamaMateri}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <>-</>
-                  )}
+                  {pelatihan.MateriPelatihan != null &&
+                    (pelatihan!.MateriPelatihan.length > 0 ? (
+                      <div className="flex flex-col gap-1">
+                        {pelatihan!.MateriPelatihan.map((materi, index) => (
+                          <span key={index}>
+                            {index + 1}. {materi.NamaMateri}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <>-</>
+                    ))}
                 </td>
               </tr>
               <tr className="border-b border-b-gray-200 w-full">

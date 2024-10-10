@@ -44,6 +44,7 @@ import { HashLoader } from "react-spinners";
 import LogoIntegrated from "@/components/logoIntegrated";
 import Features from "@/components/features";
 import FeaturesDiklatKepelautan from "@/components/features-diklat-kepelautan";
+import { replaceUrl } from "@/lib/utils";
 
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -183,7 +184,7 @@ function page() {
                       <Image
                         className="w-full rounded-3xl h-[250px] md:h-[350px] object-cover"
                         alt=""
-                        src={pelatihan?.FotoPelatihan}
+                        src={replaceUrl(pelatihan?.FotoPelatihan)}
                         width={0}
                         height={0}
                       />
@@ -195,7 +196,7 @@ function page() {
                         {pelatihan.PenyelenggaraPelatihan}
                       </div>
                       <div className="text-sm font-medium px-4 py-3 bg-blue-500 rounded-3xl text-white">
-                        {pelatihan?.HargaPelatihan == "0"
+                        {pelatihan?.HargaPelatihan == 0
                           ? "Gratis"
                           : "Rp. " + pelatihan?.HargaPelatihan}
                       </div>
@@ -412,7 +413,7 @@ function page() {
               {isRegistrasi && (
                 <FormRegistrationTraining
                   id={pelatihan?.IdPelatihan}
-                  harga={pelatihan?.HargaPelatihan}
+                  harga={pelatihan?.HargaPelatihan.toString()}
                   pelatihan={pelatihan}
                 />
               )}

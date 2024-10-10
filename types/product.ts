@@ -41,7 +41,7 @@ export type PelatihanMasyarakat = {
   DeskripsiSertifikat: string
   TanggalMulaiPelatihan: string
   TanggalBerakhirPelatihan: string
-  HargaPelatihan: string
+  HargaPelatihan: number
   Instruktur: string
   FotoPelatihan: string
   Status: string
@@ -63,6 +63,7 @@ export type PelatihanMasyarakat = {
   StatusPenerbitan: string
   UserPelatihan: UserPelatihan[]
   MateriPelatihan: MateriPelatihan[]
+  SarprasPelatihan: Sarpras[]
   BeritaAcara: string
   CatatanPenerbitanByPusat: string
   StatusApproval: string
@@ -70,6 +71,8 @@ export type PelatihanMasyarakat = {
   TanggalMulaiPendaftaran: string
   TanggalAkhirPendaftaran: string
   PemberitahuanDiterima: string
+  Program: string;
+  JenisProgram: string;
 }
 
 export type UjiKompetensi = {
@@ -226,3 +229,14 @@ export type Pelatihan = {
   SarprasPelatihan: string
   MateriPelatihan: string
 }
+
+export type Sarpras = {
+  IdSarpras: number;
+  IdLemdik: number;
+  NamaSarpras: string;
+  Harga: number;
+  Deskripsi: string;
+  Jenis: string;
+  CreatedAt: string;
+  UpdatedAt: string;
+};

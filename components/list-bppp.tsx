@@ -6,6 +6,7 @@ import Link from "next/link";
 import { createSlug, truncateText } from "@/utils";
 import { PelatihanMasyarakat } from "@/types/product";
 import { Bounce, Slide } from "react-awesome-reveal";
+import { formatToRupiah, replaceUrl } from "@/lib/utils";
 
 function ListBPPP({
   pelatihan,
@@ -38,9 +39,9 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
     <div className="coverflow flex flex-col shadow-custom relative w-[350px] h-fit rounded-3xl">
       <div className="w-fit absolute top-4 right-4 flex gap-1 z-[60]">
         <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
-          {pelatihan.HargaPelatihan == "0"
+          {pelatihan.HargaPelatihan == 0
             ? "Gratis"
-            : "Rp. " + pelatihan.HargaPelatihan}
+            : "Rp. " + formatToRupiah(pelatihan.HargaPelatihan)}
         </div>
         <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
           {pelatihan.BidangPelatihan}
@@ -51,7 +52,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
         <Image
           className="w-full rounded-tl-3xl rounded-tr-3xl h-full object-cover"
           alt=""
-          src={`${pelatihan.FotoPelatihan}`}
+          src={`${replaceUrl(pelatihan.FotoPelatihan)}`}
           width={0}
           height={0}
         />

@@ -475,7 +475,7 @@ function FormRegistrasi() {
                     </label>
                     <input
                       id="nik"
-                      type="nik"
+                      type="text"
                       className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                       placeholder="Masukkan NIK"
                       value={nik}
@@ -499,7 +499,7 @@ function FormRegistrasi() {
                     </label>
                     <input
                       id="phone number"
-                      type="number"
+                      type="text"
                       maxLength={13}
                       className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                       placeholder="Masukkan no telpon"

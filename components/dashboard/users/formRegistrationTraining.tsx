@@ -37,7 +37,8 @@ import { MdWorkOutline } from "react-icons/md";
 import { Checkbox } from "@/components/ui/checkbox";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
-import { PelatihanMasyarakat } from "@/types/product";
+import { PelatihanMasyarakat, Sarpras } from "@/types/product";
+import { formatToRupiah } from "@/lib/utils";
 
 function FormRegistrationTraining({
   id,
@@ -70,9 +71,13 @@ function FormRegistrationTraining({
         `${baseUrl}/users/addPelatihan`,
         JSON.stringify({
           id_pelatihan: id.toString(),
-          totalBayar: harga.toString(),
+          totalBayar: (
+            parseInt(harga) +
+            selectedKonsumsi?.Harga! +
+            selectedPenginapan?.Harga!
+          ).toString(),
           namaPelatihan: pelatihan?.NamaPelatihan,
-          
+
           bidangPelatihan: pelatihan?.BidangPelatihan,
           DetailPelatihan: pelatihan?.DetailPelatihan,
           statusAproval: pelatihan?.StatusApproval,
@@ -100,66 +105,36 @@ function FormRegistrationTraining({
     }
   };
 
-  type Sarpras = {
-    IdSarpras: number;
-    IdLemdik: number;
-    NamaSarpras: string;
-    Harga: number;
-    Deskripsi: string;
-    Jenis: string;
-    CreatedAt: string;
-    UpdatedAt: string;
-  };
-
-  const [sarpras, setSarpras] = React.useState<Sarpras[]>([]);
-  const [konsumsi, setKonsumsi] = React.useState<Sarpras[]>([]);
-
-  const handleFetchingSarprasData = async () => {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Penginapan`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log({ response });
-      setSarpras(response.data.data);
-    } catch (error) {
-      console.error("Error fetching data sarpras:", error);
-      throw error;
-    }
-  };
-
-  const handleFetchingKonsumsiData = async () => {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Konsumsi`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log({ response });
-      setKonsumsi(response.data.data);
-    } catch (error) {
-      console.error("Error fetching data konsumsi:", error);
-      throw error;
-    }
-  };
-
-  React.useEffect(() => {
-    handleFetchingSarprasData();
-    handleFetchingKonsumsiData();
-  }, []);
-
   const [formTab, setFormTab] = React.useState("FormFasilitas");
   const [indexFormTab, setIndexFormTab] = React.useState(0);
 
   const [isTakeFacilityHome, setIsTakeFacilityHome] = React.useState(false);
   const [isTakeFacilityFood, setIsTakeFacilityFood] = React.useState(false);
+
+  const [selectedPenginapan, setSelectedPenginapan] =
+    React.useState<Sarpras | null>(null);
+  const [selectedKonsumsi, setSelectedKonsumsi] =
+    React.useState<Sarpras | null>(null);
+
+  const handleCheckboxChange = (item: Sarpras) => {
+    if (item.Jenis === "Penginapan") {
+      if (selectedPenginapan === item) {
+        // Uncheck Penginapan if already selected
+        setSelectedPenginapan(null);
+      } else {
+        // Select Penginapan and clear Konsumsi
+        setSelectedPenginapan(item);
+      }
+    } else if (item.Jenis === "Konsumsi") {
+      if (selectedKonsumsi === item) {
+        // Uncheck Konsumsi if already selected
+        setSelectedKonsumsi(null);
+      } else {
+        // Select Konsumsi and clear Penginapan
+        setSelectedKonsumsi(item);
+      }
+    }
+  };
 
   const FormFasilitas = () => {
     return (
@@ -167,27 +142,71 @@ function FormRegistrationTraining({
         autoComplete="off"
         className={`${indexFormTab == 0 ? "block" : "hidden"}`}
       >
+        {/* Penginapan Section */}
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
             <label
               className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
+              htmlFor="penginapan"
             >
               Pilih Paket Fasilitas Penginapan{" "}
               <span className="text-red-600">*</span>
             </label>
             <div className="flex flex-col gap-2">
-              {sarpras.map((item, index) => (
+              {pelatihan.SarprasPelatihan.filter(
+                (item) => item.Jenis === "Penginapan"
+              ).map((item, index) => (
                 <div
                   key={index}
                   className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
                 >
                   <div>
-                    <Checkbox />
+                    <input
+                      type="checkbox"
+                      checked={selectedPenginapan === item}
+                      onChange={() => handleCheckboxChange(item)}
+                    />
                   </div>
                   <div className="space-y-1 leading-none">
                     <label>
-                      {item.NamaSarpras} Rp. {item.Harga}
+                      {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                    </label>
+                    <p className="text-xs text-gray-600">{item.Deskripsi}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Konsumsi Section */}
+        <div className="flex flex-wrap -mx-3 mb-1">
+          <div className="w-full px-3">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-1"
+              htmlFor="konsumsi"
+            >
+              Pilih Paket Konsumsi atau Catering{" "}
+              <span className="text-red-600">*</span>
+            </label>
+            <div className="flex flex-col gap-2">
+              {pelatihan.SarprasPelatihan.filter(
+                (item) => item.Jenis === "Konsumsi"
+              ).map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                >
+                  <div>
+                    <input
+                      type="checkbox"
+                      checked={selectedKonsumsi === item}
+                      onChange={() => handleCheckboxChange(item)}
+                    />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>
+                      {item.NamaSarpras} ({formatToRupiah(item.Harga)})
                     </label>
                     <p className="text-xs text-gray-600">{item.Deskripsi}</p>
                   </div>
@@ -212,39 +231,18 @@ function FormRegistrationTraining({
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              Metode Pembayaran <span className="text-red-600">*</span>
-            </label>
-            <Select>
-              <SelectTrigger className="w-full text-base py-6">
-                <SelectValue placeholder="Pilih metode pembayaran" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Bayar Dengan Transfer">
-                  Bayar Dengan Transfer
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            {/* <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
               Rincian Harga <span className="text-red-600"></span>
             </label>
             <Select>
-              <SelectTrigger className="w-full text-base py-16">
+              <SelectTrigger className="w-full text-base py-14">
                 <div className="flex flex-col items-start gap-1">
                   <p className="font-medium font-calsans text-lg text-left">
                     Pelatihan
                   </p>
-                  <p className="text-left">
-                    Diklat Pembesaran Udang Vaname <br />
-                    Lvl. Teknisi
+                  <p className="text-left">{pelatihan.NamaPelatihan}</p>
+                  <p className="font-medium font-calsans">
+                    {formatToRupiah(pelatihan.HargaPelatihan)}
                   </p>
-                  <p className="font-medium font-calsans">Rp. 110.000</p>
                 </div>
               </SelectTrigger>
             </Select>
@@ -255,9 +253,11 @@ function FormRegistrationTraining({
                     Penginapan
                   </p>
                   <p className="text-left">
-                    Paket BAHARI RESIDANCE-UMUM <br />B Rp 110.000
+                    {selectedPenginapan?.NamaSarpras!}
                   </p>
-                  <p className="font-medium font-calsans">Rp. 300.000</p>
+                  <p className="font-medium font-calsans">
+                    {formatToRupiah(selectedPenginapan?.Harga!)}
+                  </p>
                 </div>
               </SelectTrigger>
             </Select>
@@ -267,18 +267,23 @@ function FormRegistrationTraining({
                   <p className="font-medium font-calsans text-lg text-left">
                     Konsumsi
                   </p>
-                  <p className="text-left">
-                    Tipe Paket Fullboard, Paket 3x
-                    <br /> Makan & Snack
+                  <p className="text-left">{selectedKonsumsi?.NamaSarpras!}</p>
+                  <p className="font-medium font-calsans">
+                    {formatToRupiah(selectedKonsumsi?.Harga!)}
                   </p>
-                  <p className="font-medium font-calsans">Rp. 850.000</p>
                 </div>
               </SelectTrigger>
-            </Select> */}
+            </Select>
             <div className="h-1 w-full rounded-full my-2 bg-blue-500"></div>
             <div className="flex items-center justify-between">
               <p className="font-bold text-lg">Total</p>
-              <p className="font-bold text-blue-500 text-3xl">Rp. {harga}</p>
+              <p className="font-bold text-blue-500 text-3xl">
+                {formatToRupiah(
+                  parseInt(harga) +
+                    selectedKonsumsi?.Harga! +
+                    selectedPenginapan?.Harga!
+                )}
+              </p>
             </div>
             <div className="flex items-center space-x-2 py-3 mt-5">
               <Checkbox id="terms" />
