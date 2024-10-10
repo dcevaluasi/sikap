@@ -73,8 +73,8 @@ function FormRegistrationTraining({
           id_pelatihan: id.toString(),
           totalBayar: (
             parseInt(harga) +
-            selectedKonsumsi?.Harga! +
-            selectedPenginapan?.Harga!
+            selectedKonsumsi?.Harga! && 0 +
+            selectedPenginapan?.Harga! && 0
           ).toString(),
           namaPelatihan: pelatihan?.NamaPelatihan,
 
@@ -219,6 +219,9 @@ function FormRegistrationTraining({
     );
   };
 
+  const [isAgreeWithAggreement, setIsAgreeWithAgreement] =
+    React.useState<boolean>(false);
+
   const FormPembayaran = () => {
     return (
       <form
@@ -246,47 +249,66 @@ function FormRegistrationTraining({
                 </div>
               </SelectTrigger>
             </Select>
-            <Select>
-              <SelectTrigger className="w-full text-base  py-16 mt-2">
-                <div className="flex flex-col items-start gap-1">
-                  <p className="font-medium font-calsans text-lg text-left">
-                    Penginapan
-                  </p>
-                  <p className="text-left">
-                    {selectedPenginapan?.NamaSarpras!}
-                  </p>
-                  <p className="font-medium font-calsans">
-                    {formatToRupiah(selectedPenginapan?.Harga!)}
-                  </p>
-                </div>
-              </SelectTrigger>
-            </Select>
-            <Select>
-              <SelectTrigger className="w-full text-base py-16 mt-2">
-                <div className="flex flex-col items-start gap-1">
-                  <p className="font-medium font-calsans text-lg text-left">
-                    Konsumsi
-                  </p>
-                  <p className="text-left">{selectedKonsumsi?.NamaSarpras!}</p>
-                  <p className="font-medium font-calsans">
-                    {formatToRupiah(selectedKonsumsi?.Harga!)}
-                  </p>
-                </div>
-              </SelectTrigger>
-            </Select>
+            {selectedPenginapan != null && (
+              <Select>
+                <SelectTrigger className="w-full text-base  py-16 mt-2">
+                  <div className="flex flex-col items-start gap-1">
+                    <p className="font-medium font-calsans text-lg text-left">
+                      Penginapan
+                    </p>
+                    <p className="text-left">
+                      {selectedPenginapan?.NamaSarpras!}
+                    </p>
+                    <p className="font-medium font-calsans">
+                      {formatToRupiah(selectedPenginapan?.Harga!)}
+                    </p>
+                  </div>
+                </SelectTrigger>
+              </Select>
+            )}
+            {selectedKonsumsi != null && (
+              <Select>
+                <SelectTrigger className="w-full text-base py-16 mt-2">
+                  <div className="flex flex-col items-start gap-1">
+                    <p className="font-medium font-calsans text-lg text-left">
+                      Konsumsi
+                    </p>
+                    <p className="text-left">
+                      {selectedKonsumsi?.NamaSarpras!}
+                    </p>
+                    <p className="font-medium font-calsans">
+                      {formatToRupiah(selectedKonsumsi?.Harga!)}
+                    </p>
+                  </div>
+                </SelectTrigger>
+              </Select>
+            )}
+
             <div className="h-1 w-full rounded-full my-2 bg-blue-500"></div>
             <div className="flex items-center justify-between">
               <p className="font-bold text-lg">Total</p>
               <p className="font-bold text-blue-500 text-3xl">
-                {formatToRupiah(
-                  parseInt(harga) +
-                    selectedKonsumsi?.Harga! +
-                    selectedPenginapan?.Harga!
-                )}
+                {selectedKonsumsi != null &&
+                  selectedPenginapan != null &&
+                  formatToRupiah(
+                    parseInt(harga) +
+                      selectedKonsumsi?.Harga! +
+                      selectedPenginapan?.Harga!
+                  )}
+
+                {selectedKonsumsi == null &&
+                  selectedPenginapan == null &&
+                  formatToRupiah(parseInt(harga))}
               </p>
             </div>
             <div className="flex items-center space-x-2 py-3 mt-5">
-              <Checkbox id="terms" />
+              <Checkbox
+                id="terms"
+                checked={isAgreeWithAggreement}
+                onCheckedChange={(e) =>
+                  setIsAgreeWithAgreement(!isAgreeWithAggreement)
+                }
+              />
               <label
                 htmlFor="terms"
                 className="text-base  peer-disabled:cursor-not-allowed text-gray-500 peer-disabled:opacity-70"
@@ -369,46 +391,48 @@ function FormRegistrationTraining({
                   Selanjutnya
                 </button>
               </div>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <div
-                    className={`w-full ${
-                      indexFormTab == 1 ? "block" : "hidden"
-                    }`}
-                  >
-                    <button
-                      onClick={(e) => handleRegistrationTrainingForPeople(e)}
-                      type="submit"
-                      className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+              {isAgreeWithAggreement && (
+                <AlertDialog>
+                  <AlertDialogTrigger>
+                    <div
+                      className={`w-full ${
+                        indexFormTab == 1 ? "block" : "hidden"
+                      }`}
                     >
-                      Daftar
-                    </button>
-                  </div>
-                </AlertDialogTrigger>
-                <AlertDialogContent className="rounded-lg">
-                  <AlertDialogHeader className="flex items-center">
-                    <AlertDialogTitle className="text-2xl leading-8">
-                      Berhasil Melakukan Registrasi
-                    </AlertDialogTitle>
-                    <Image
-                      className="w-[40%] py-4 animate-float"
-                      src={"/illustrations/approved.png"}
-                      width={0}
-                      height={0}
-                      alt="Apakah anda yakin?"
-                    />
-                    <AlertDialogDescription className="text-base leading-[130%]">
-                      Nantikan informasi lebih lanjut terkait pelatihan ini,
-                      operator akan menghubungi anda melalui whatsapp!
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className=" py-6 text-base">
-                      Oke
-                    </AlertDialogCancel>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                      <button
+                        onClick={(e) => handleRegistrationTrainingForPeople(e)}
+                        type="submit"
+                        className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                      >
+                        Daftar
+                      </button>
+                    </div>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent className="rounded-lg">
+                    <AlertDialogHeader className="flex items-center">
+                      <AlertDialogTitle className="text-2xl leading-8">
+                        Berhasil Melakukan Registrasi
+                      </AlertDialogTitle>
+                      <Image
+                        className="w-[40%] py-4 animate-float"
+                        src={"/illustrations/approved.png"}
+                        width={0}
+                        height={0}
+                        alt="Apakah anda yakin?"
+                      />
+                      <AlertDialogDescription className="text-base leading-[130%]">
+                        Nantikan informasi lebih lanjut terkait pelatihan ini,
+                        operator akan menghubungi anda melalui whatsapp!
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className=" py-6 text-base">
+                        Oke
+                      </AlertDialogCancel>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              )}
             </div>
           </div>
         </div>

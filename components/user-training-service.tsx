@@ -180,7 +180,7 @@ function UserTrainingService({ user }: { user: User | null }) {
               });
               setCodeAccess("");
               router.replace(
-                `pelatihan/${createSlug(
+                `layanan/pelatihan/${createSlug(
                   selectedPelatihan!.NamaPelatihan
                 )}/${selectedPelatihan!.KodePelatihan!}/${selectedPelatihan!
                   .IdPelatihan!}/pre-test/${
@@ -235,7 +235,7 @@ function UserTrainingService({ user }: { user: User | null }) {
               });
               setCodeAccess("");
               router.replace(
-                `pelatihan/${createSlug(
+                `layanan/pelatihan/${createSlug(
                   selectedPelatihan!.NamaPelatihan
                 )}/${selectedPelatihan!.KodePelatihan!}/${selectedPelatihan!
                   .IdPelatihan!}/post-test/${

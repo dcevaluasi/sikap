@@ -218,7 +218,6 @@ function PencarianPelatihan() {
                 <Select
                   value={selectedProgramPelatihan}
                   onValueChange={(value) => setSelectedProgramPelatihan(value)}
-                  disabled={!selectedBalaiPelatihan}
                 >
                   <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
                     <div className="inline-flex gap-2 px-3 w-full text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
@@ -267,7 +266,6 @@ function PencarianPelatihan() {
                 <Select
                   value={selectedJenisPelatihan}
                   onValueChange={(value) => setSelectedJenisPelatihan(value)}
-                  disabled={!selectedProgramPelatihan}
                 >
                   <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
                     <div className="inline-flex gap-2 px-3 w-full text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
@@ -290,7 +288,6 @@ function PencarianPelatihan() {
                 <Select
                   value={selectedBulanPelatihan}
                   onValueChange={(value) => setSelectedBulanPelatihan(value)}
-                  disabled={!selectedJenisPelatihan}
                 >
                   <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
                     <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
@@ -537,110 +534,17 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
       {/* Price and Button */}
       <div className="text-center flex items-center justify-center flex-col">
         <p className="text-blue-500 text-xl font-bold">
-          {formatToRupiah(pelatihan.HargaPelatihan)},-
+          {formatToRupiah(pelatihan.HargaPelatihan)}
         </p>
-        {!Cookies.get("XSRF081") ? (
-          <Dialog>
-            <DialogTrigger asChild>
-              <div className="bg-blue-500 text-white px-4 py-2 text-base rounded-md my-1 w-fit block cursor-pointer">
-                Registrasi
-              </div>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[460px]">
-              <DialogHeader>
-                <DialogTitle>Login</DialogTitle>
-                <DialogDescription>
-                  Ups! Kamu belum login ke akun ELAUT.
-                  <Link
-                    href={"/registrasi"}
-                    className="text-blue-500 underline"
-                  >
-                    Registrasi disini
-                  </Link>{" "}
-                  jika belum mempunyai akun
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    No Telepon
-                  </Label>
-                  <Input
-                    id="name"
-                    value={nik}
-                    className="col-span-3"
-                    onChange={(e) => setNik(e.target.value)}
-                    type="text"
-                    placeholder="Masukkan No Telpon kamu"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Password
-                  </Label>
-                  <Input
-                    id="username"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="col-span-3"
-                    placeholder="***********"
-                    type="password"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Verify if you are not a robot{" "}
-                  </Label>
-                  <ReCAPTCHA
-                    style={{ width: "80% !important" }}
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                    className="mr-5 w-full  font-inter text-sm"
-                    onChange={setCaptcha}
-                  />
-                </div>
-                {errorMsg != "" && (
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="username" className="text-right">
-                      {" "}
-                    </Label>
-                    <div className="w-[400px]">
-                      <DialogDescription>
-                        <span className="text-rose-500 !w-[400px]">
-                          Ups! {errorMsg}
-                        </span>
-                      </DialogDescription>
-                    </div>
-                  </div>
-                )}
-              </div>
 
-              <DialogFooter>
-                <Button
-                  type="button"
-                  className="flex items-center justify-center"
-                  onClick={(e) => handleLoginAkun(e)}
-                >
-                  {loading ? (
-                    <span>
-                      <HashLoader size={15} color="#FFF" />
-                    </span>
-                  ) : (
-                    <span>Login</span>
-                  )}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        ) : (
-          <Link
-            href={`/layanan/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
-              pelatihan?.KodePelatihan
-            }/${pelatihan?.IdPelatihan}`}
-            className="bg-blue-500 text-white px-4 py-2 text-base rounded-md my-1 w-fit block"
-          >
-            Registrasi
-          </Link>
-        )}
+        <Link
+          href={`/layanan/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
+            pelatihan?.KodePelatihan
+          }/${pelatihan?.IdPelatihan}`}
+          className="bg-blue-500 text-white px-4 py-2 text-base rounded-md my-1 w-fit block"
+        >
+          Lihat Detail
+        </Link>
 
         <p className="text-sm">Tersedia</p>
       </div>

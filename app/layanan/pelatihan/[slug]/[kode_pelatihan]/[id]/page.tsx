@@ -16,7 +16,7 @@ import { Progress } from "@/components/ui/progress";
 
 import Image from "next/image";
 import Link from "next/link";
-import React, { ReactElement } from "react";
+import React, { FormEvent, ReactElement } from "react";
 import { FiSearch, FiSlack } from "react-icons/fi";
 import {
   TbBroadcast,
@@ -29,6 +29,16 @@ import {
 } from "react-icons/tb";
 
 import { FaFilePdf, FaPlaceOfWorship, FaRupiahSign } from "react-icons/fa6";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 import Footer from "@/components/ui/footer";
 import { MdOutlineAppRegistration, MdVerified } from "react-icons/md";
@@ -44,7 +54,12 @@ import { HashLoader } from "react-spinners";
 import LogoIntegrated from "@/components/logoIntegrated";
 import Features from "@/components/features";
 import FeaturesDiklatKepelautan from "@/components/features-diklat-kepelautan";
-import { replaceUrl } from "@/lib/utils";
+import { formatToRupiah, replaceUrl } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import ReCAPTCHA from "react-google-recaptcha";
+import { Button } from "@/components/ui/button";
+import { elautBaseUrl } from "@/constants/urls";
 
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -93,7 +108,6 @@ function page() {
     }
   };
 
-  const router = useRouter();
   const [isOpenRegistrationCommand, setIsOpenRegistrationCommand] =
     React.useState(false);
 
@@ -108,6 +122,86 @@ function page() {
         setIsRegistrasi(true);
       } else {
         setIsOpenRegistrationCommand(true);
+      }
+    }
+  };
+
+  const [nik, setNik] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [captcha, setCaptcha] = React.useState<string | null>();
+  const recaptchaRef = React.createRef();
+  const router = useRouter();
+  const [errorMsg, setErrorMsg] = React.useState<string>("");
+
+  const handleLoginAkun = async (e: FormEvent) => {
+    setLoading(true);
+    e.preventDefault();
+    if (nik == "" || password == "") {
+      setErrorMsg("Tolong lengkapi data login!");
+      setLoading(false);
+    } else {
+      if (captcha) {
+        try {
+          const response: AxiosResponse = await axios.post(
+            `${elautBaseUrl}/users/loginNotelpon`,
+            JSON.stringify({
+              no_number: nik,
+              password: password,
+            }),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log({ response });
+
+          Cookies.set("XSRF081", response.data.t, { expires: 1 });
+          Cookies.set("XSRF082", "true", { expires: 1 });
+
+          if (Cookies.get("XSRF085")) {
+            Toast.fire({
+              icon: "success",
+              title: "Berhasil login.",
+              text: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
+            });
+            router.push(Cookies.get("XSRF085")!);
+          } else {
+            Toast.fire({
+              icon: "success",
+              title: "Berhasil login.",
+              text: `Berhasil melakukan login kedalam ELAUT!`,
+            });
+            if (Cookies.get("XSRF083")) {
+              // router.push("/dashboard/complete-profile");
+              router.push("/layanan/program/akp");
+            } else {
+              router.push("/layanan/program/akp");
+            }
+          }
+        } catch (error: any) {
+          console.error({ error });
+          if (
+            error.response &&
+            error.response.data &&
+            error.response.data.pesan
+          ) {
+            const errorMsg = error.response.data.pesan;
+
+            Toast.fire({
+              icon: "error",
+              title: "Gagal mencoba login.",
+              text: `Gagal melakukan login, ${errorMsg}!`,
+            });
+          } else {
+            const errorMsg = error.response.data.pesan;
+            Toast.fire({
+              icon: "error",
+              title: "Gagal mencoba login.",
+              text: `Gagal melakukan login. ${errorMsg}!`,
+            });
+          }
+        }
       }
     }
   };
@@ -129,45 +223,6 @@ function page() {
       ) : (
         data?.map((pelatihan, index) => (
           <div className="flex gap-2 max-w-7xl mx-auto">
-            <AlertDialog open={isOpenRegistrationCommand}>
-              <AlertDialogContent className="rounded-xl">
-                <AlertDialogHeader className="flex flex-col items-center justify-center">
-                  <AlertDialogTitle>Anda Belum Login</AlertDialogTitle>
-                  <Image
-                    src={"/login.jpg"}
-                    alt="Login Illustration"
-                    width={0}
-                    height={0}
-                    className="w-[300px] md:w-[400px]"
-                  />
-                  <AlertDialogDescription>
-                    Untuk dapat melanjutkan proses pendaftaran
-                    <span className="font-semibold">
-                      {" "}
-                      {pelatihan?.NamaPelatihan} di{" "}
-                      {pelatihan?.PenyelenggaraPelatihan}
-                    </span>{" "}
-                    harap melakukan proses login terlebih dahulu sobat ELAUT!
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel
-                    onClick={(e) => setIsOpenRegistrationCommand(false)}
-                  >
-                    Cancel
-                  </AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={(e) => {
-                      Cookies.set("XSRF085", pathname);
-                      router.push("/login");
-                    }}
-                  >
-                    Masuk
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-
             <div className="w-full pb-5 md:pb-8 flex flex-col ">
               <h1 className="h2 text-4xl md:text-[3rem] mb-2 font-calsans leading-[100%] max-w-3xl">
                 {pelatihan.NamaPelatihan}
@@ -198,7 +253,7 @@ function page() {
                       <div className="text-sm font-medium px-4 py-3 bg-blue-500 rounded-3xl text-white">
                         {pelatihan?.HargaPelatihan == 0
                           ? "Gratis"
-                          : "Rp. " + pelatihan?.HargaPelatihan}
+                          : formatToRupiah(pelatihan?.HargaPelatihan)}
                       </div>
                       <div className="text-sm font-medium px-4 py-3 bg-blue-500 rounded-3xl text-white">
                         {pelatihan.BidangPelatihan}
@@ -271,12 +326,126 @@ function page() {
                           </table>
                         </div>
                         <div className="flex flex-col gap-2">
-                          <button
-                            onClick={(e) => handleRegistration()}
-                            className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
-                          >
-                            <MdOutlineAppRegistration /> Daftar Pelatihan
-                          </button>
+                          {!Cookies.get("XSRF081") ? (
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <button
+                                  onClick={(e) => handleRegistration()}
+                                  className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
+                                >
+                                  <MdOutlineAppRegistration /> Daftar Pelatihan
+                                </button>
+                              </DialogTrigger>
+                              <DialogContent className="sm:max-w-[460px]">
+                                <DialogHeader>
+                                  <DialogTitle>Login</DialogTitle>
+                                  <DialogDescription>
+                                    Ups! Kamu belum login ke akun ELAUT.
+                                    <Link
+                                      href={"/registrasi"}
+                                      className="text-blue-500 underline"
+                                    >
+                                      Registrasi disini
+                                    </Link>{" "}
+                                    jika belum mempunyai akun
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-4">
+                                  <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label
+                                      htmlFor="name"
+                                      className="text-right"
+                                    >
+                                      No Telepon
+                                    </Label>
+                                    <Input
+                                      id="name"
+                                      value={nik}
+                                      className="col-span-3"
+                                      onChange={(e) => setNik(e.target.value)}
+                                      type="text"
+                                      placeholder="Masukkan No Telpon kamu"
+                                    />
+                                  </div>
+                                  <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label
+                                      htmlFor="username"
+                                      className="text-right"
+                                    >
+                                      Password
+                                    </Label>
+                                    <Input
+                                      id="username"
+                                      value={password}
+                                      onChange={(e) =>
+                                        setPassword(e.target.value)
+                                      }
+                                      className="col-span-3"
+                                      placeholder="***********"
+                                      type="password"
+                                    />
+                                  </div>
+                                  <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label
+                                      htmlFor="username"
+                                      className="text-right"
+                                    >
+                                      Verify if you are not a robot{" "}
+                                    </Label>
+                                    <ReCAPTCHA
+                                      style={{ width: "80% !important" }}
+                                      sitekey={
+                                        process.env
+                                          .NEXT_PUBLIC_RECAPTCHA_SITE_KEY!
+                                      }
+                                      className="mr-5 w-full  font-inter text-sm"
+                                      onChange={setCaptcha}
+                                    />
+                                  </div>
+                                  {errorMsg != "" && (
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                      <Label
+                                        htmlFor="username"
+                                        className="text-right"
+                                      >
+                                        {" "}
+                                      </Label>
+                                      <div className="w-[400px]">
+                                        <DialogDescription>
+                                          <span className="text-rose-500 !w-[400px]">
+                                            Ups! {errorMsg}
+                                          </span>
+                                        </DialogDescription>
+                                      </div>
+                                    </div>
+                                  )}
+                                </div>
+
+                                <DialogFooter>
+                                  <Button
+                                    type="button"
+                                    className="flex items-center justify-center"
+                                    onClick={(e) => handleLoginAkun(e)}
+                                  >
+                                    {loading ? (
+                                      <span>
+                                        <HashLoader size={15} color="#FFF" />
+                                      </span>
+                                    ) : (
+                                      <span>Login</span>
+                                    )}
+                                  </Button>
+                                </DialogFooter>
+                              </DialogContent>
+                            </Dialog>
+                          ) : (
+                            <button
+                              onClick={(e) => handleRegistration()}
+                              className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
+                            >
+                              <MdOutlineAppRegistration /> Daftar Pelatihan
+                            </button>
+                          )}
 
                           <Link
                             target="_blank"
@@ -314,12 +483,114 @@ function page() {
                     <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <button
-                      onClick={(e) => handleRegistration()}
-                      className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
-                    >
-                      <MdOutlineAppRegistration /> Daftar Pelatihan
-                    </button>
+                    {!Cookies.get("XSRF081") ? (
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <button
+                            onClick={(e) => handleRegistration()}
+                            className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
+                          >
+                            <MdOutlineAppRegistration /> Daftar Pelatihan
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[460px]">
+                          <DialogHeader>
+                            <DialogTitle>Login</DialogTitle>
+                            <DialogDescription>
+                              Ups! Kamu belum login ke akun ELAUT.
+                              <Link
+                                href={"/registrasi"}
+                                className="text-blue-500 underline"
+                              >
+                                Registrasi disini
+                              </Link>{" "}
+                              jika belum mempunyai akun
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="name" className="text-right">
+                                No Telepon
+                              </Label>
+                              <Input
+                                id="name"
+                                value={nik}
+                                className="col-span-3"
+                                onChange={(e) => setNik(e.target.value)}
+                                type="text"
+                                placeholder="Masukkan No Telpon kamu"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="username" className="text-right">
+                                Password
+                              </Label>
+                              <Input
+                                id="username"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="col-span-3"
+                                placeholder="***********"
+                                type="password"
+                              />
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="username" className="text-right">
+                                Verify if you are not a robot{" "}
+                              </Label>
+                              <ReCAPTCHA
+                                style={{ width: "80% !important" }}
+                                sitekey={
+                                  process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!
+                                }
+                                className="mr-5 w-full  font-inter text-sm"
+                                onChange={setCaptcha}
+                              />
+                            </div>
+                            {errorMsg != "" && (
+                              <div className="grid grid-cols-4 items-center gap-4">
+                                <Label
+                                  htmlFor="username"
+                                  className="text-right"
+                                >
+                                  {" "}
+                                </Label>
+                                <div className="w-[400px]">
+                                  <DialogDescription>
+                                    <span className="text-rose-500 !w-[400px]">
+                                      Ups! {errorMsg}
+                                    </span>
+                                  </DialogDescription>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+
+                          <DialogFooter>
+                            <Button
+                              type="button"
+                              className="flex items-center justify-center"
+                              onClick={(e) => handleLoginAkun(e)}
+                            >
+                              {loading ? (
+                                <span>
+                                  <HashLoader size={15} color="#FFF" />
+                                </span>
+                              ) : (
+                                <span>Login</span>
+                              )}
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    ) : (
+                      <button
+                        onClick={(e) => handleRegistration()}
+                        className="text-base font-medium px-4 py-3 hover:cursor-pointer items-center justify-center text-center flex gap-1 bg-blue-500 rounded-3xl text-white"
+                      >
+                        <MdOutlineAppRegistration /> Daftar Pelatihan
+                      </button>
+                    )}
 
                     <Link
                       target="_blank"
