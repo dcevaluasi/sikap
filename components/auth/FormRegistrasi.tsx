@@ -363,21 +363,20 @@ function FormRegistrasi() {
 
             <div className="max-w-sm  mx-5 md:mx-auto mt-5">
               <div className="flex flex-col gap-1">
-                <p className="font-jakarta  leading-[100%] text-gray-300  sm:text-sm sm:leading-8 ">
-                  Daftar Sebagai
-                </p>
+                <label
+                  className="block text-gray-200 text-sm font-medium mb-1"
+                  htmlFor="name"
+                >
+                  Daftar Sebagai <span className="text-red-600"></span>
+                </label>
                 <Select
                   value={role}
                   onValueChange={(value: string) => setRole(value)}
                 >
-                  <SelectTrigger className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200">
+                  <SelectTrigger className="form-input w-full py-6 bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200">
                     <p className="mr-3 flex items-center gap-1 text-base text-gray-300">
                       <HiMiniUserGroup />
-                      {role != ""
-                        ? role == "adminPusat"
-                          ? "Admin Pusat"
-                          : "Lemdiklat"
-                        : "Pilih Mendaftar Sebagai"}
+                      {role != "" ? role : "Pilih Mendaftar Sebagai"}
                     </p>
                   </SelectTrigger>
                   <SelectContent side="bottom">

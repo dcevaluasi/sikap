@@ -71,11 +71,7 @@ function FormRegistrationTraining({
         `${baseUrl}/users/addPelatihan`,
         JSON.stringify({
           id_pelatihan: id.toString(),
-          totalBayar: (
-            parseInt(harga) + selectedKonsumsi?.Harga! &&
-            0 + selectedPenginapan?.Harga! &&
-            0
-          ).toString(),
+          totalBayar: pelatihan?.HargaPelatihan,
           namaPelatihan: pelatihan?.NamaPelatihan,
 
           bidangPelatihan: pelatihan?.BidangPelatihan,
@@ -364,7 +360,7 @@ function FormRegistrationTraining({
             </div>
             <FormFasilitas />
             <FormPembayaran />
-            <div className="flex w-full -mx-3 mt-5 gap-2 px-3">
+            <div className="flex  -mx-3 mt-5 gap-2 px-3">
               <div className={`w-full ${indexFormTab == 0 && "hidden"}`}>
                 <button
                   type="submit"
@@ -393,7 +389,11 @@ function FormRegistrationTraining({
               </div>
 
               <AlertDialog>
-                <AlertDialogTrigger className="w-full">
+                <AlertDialogTrigger
+                  className={`w-full ${
+                    (indexFormTab == 0 || !isAgreeWithAggreement) && "hidden"
+                  }`}
+                >
                   {isAgreeWithAggreement && (
                     <div
                       className={`w-full ${

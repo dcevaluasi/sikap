@@ -18,29 +18,7 @@ import { TbClockHour2, TbLayoutGrid } from "react-icons/tb";
 
 import { HiViewGrid } from "react-icons/hi";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 import { RiSchoolLine, RiShipLine } from "react-icons/ri";
 import {
@@ -57,11 +35,11 @@ import { HashLoader } from "react-spinners";
 import { formatToRupiah, getMonthName } from "@/lib/utils";
 import { FiCalendar, FiSearch } from "react-icons/fi";
 import Toast from "../toast";
-import ReCAPTCHA from "react-google-recaptcha";
 
 function PencarianPelatihan() {
   const [data, setData] = React.useState<PelatihanMasyarakat[] | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
+
   const jenisProgram =
     usePathname() == "/layanan/program/akp"
       ? "Awak Kapal Perikanan"
@@ -70,8 +48,6 @@ function PencarianPelatihan() {
       : "Kelautan";
 
   console.log(jenisProgram);
-
-  const [sortedData, setSortedData] = React.useState([]);
 
   const handleFetchingPublicTrainingData = async () => {
     setLoading(true);
@@ -95,7 +71,23 @@ function PencarianPelatihan() {
           .sort((a: PelatihanMasyarakat, b: PelatihanMasyarakat) => {
             const dateA = new Date(a.TanggalMulaiPelatihan);
             const dateB = new Date(b.TanggalMulaiPelatihan);
-            return dateB.getTime() - dateA.getTime(); // Ascending order
+
+            // First, check the StatusApproval condition
+            if (
+              a.StatusApproval === "Selesai" &&
+              b.StatusApproval !== "Selesai"
+            ) {
+              return 1; // 'Selesai' should be placed later
+            }
+            if (
+              a.StatusApproval !== "Selesai" &&
+              b.StatusApproval === "Selesai"
+            ) {
+              return -1; // 'Selesai' should be placed later
+            }
+
+            // Otherwise, sort by date in ascending order
+            return dateA.getTime() - dateB.getTime(); // Ascending order
           });
 
         setData(filteredAndSortedData);
@@ -180,6 +172,7 @@ function PencarianPelatihan() {
   React.useEffect(() => {
     setTimeout(() => {
       handleFetchingPublicTrainingData();
+
       setLoading(false);
     }, 1000);
   }, []);
@@ -406,87 +399,6 @@ function PencarianPelatihan() {
 }
 
 const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
-  const [nik, setNik] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
-  const [captcha, setCaptcha] = React.useState<string | null>();
-  const recaptchaRef = React.createRef();
-  const router = useRouter();
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = React.useState<string>("");
-
-  const handleLoginAkun = async (e: FormEvent) => {
-    setLoading(true);
-    e.preventDefault();
-    if (nik == "" || password == "") {
-      setErrorMsg("Tolong lengkapi data login!");
-      setLoading(false);
-    } else {
-      if (captcha) {
-        try {
-          const response: AxiosResponse = await axios.post(
-            `${elautBaseUrl}/users/loginNotelpon`,
-            JSON.stringify({
-              no_number: nik,
-              password: password,
-            }),
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          console.log({ response });
-
-          Cookies.set("XSRF081", response.data.t, { expires: 1 });
-          Cookies.set("XSRF082", "true", { expires: 1 });
-
-          if (Cookies.get("XSRF085")) {
-            Toast.fire({
-              icon: "success",
-              title: "Berhasil login.",
-              text: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
-            });
-            router.push(Cookies.get("XSRF085")!);
-          } else {
-            Toast.fire({
-              icon: "success",
-              title: "Berhasil login.",
-              text: `Berhasil melakukan login kedalam ELAUT!`,
-            });
-            if (Cookies.get("XSRF083")) {
-              // router.push("/dashboard/complete-profile");
-              router.push("/layanan/program/akp");
-            } else {
-              router.push("/layanan/program/akp");
-            }
-          }
-        } catch (error: any) {
-          console.error({ error });
-          if (
-            error.response &&
-            error.response.data &&
-            error.response.data.pesan
-          ) {
-            const errorMsg = error.response.data.pesan;
-
-            Toast.fire({
-              icon: "error",
-              title: "Gagal mencoba login.",
-              text: `Gagal melakukan login, ${errorMsg}!`,
-            });
-          } else {
-            const errorMsg = error.response.data.pesan;
-            Toast.fire({
-              icon: "error",
-              title: "Gagal mencoba login.",
-              text: `Gagal melakukan login. ${errorMsg}!`,
-            });
-          }
-        }
-      }
-    }
-  };
-
   return (
     <div className="bg-white shadow-custom text-black p-4 rounded-xl grid grid-cols-5 items-center">
       {/* Train Info */}
@@ -533,20 +445,27 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
 
       {/* Price and Button */}
       <div className="text-center flex items-center justify-center flex-col">
-        <p className="text-blue-500 text-xl font-bold">
-          {formatToRupiah(pelatihan.HargaPelatihan)}
-        </p>
+        {pelatihan?.StatusApproval != "Selesai" && (
+          <p className="text-blue-500 text-xl font-bold">
+            {formatToRupiah(pelatihan.HargaPelatihan)}
+          </p>
+        )}
 
         <Link
+          onClick={(e) => Cookies.set("JenisProgram", pelatihan?.JenisProgram)}
           href={`/layanan/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
             pelatihan?.KodePelatihan
           }/${pelatihan?.IdPelatihan}`}
-          className="bg-blue-500 text-white px-4 py-2 text-base rounded-md my-1 w-fit block"
+          className={`${
+            pelatihan?.StatusApproval == "Selesai"
+              ? "bg-gray-500"
+              : "bg-blue-500"
+          } text-white px-4 py-2 text-base rounded-md my-1 w-fit block`}
         >
-          Lihat Detail
+          {pelatihan.StatusApproval == "Selesai"
+            ? "Sudah Selesai"
+            : "Lihat Detail"}
         </Link>
-
-        <p className="text-sm">Tersedia</p>
       </div>
     </div>
   );

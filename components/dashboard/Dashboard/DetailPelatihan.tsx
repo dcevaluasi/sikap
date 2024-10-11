@@ -86,7 +86,7 @@ import { FaBookOpen } from "react-icons/fa6";
 import axios from "axios";
 import { PelatihanMasyarakat } from "@/types/product";
 import { generateFullNameBalai, generateTanggalPelatihan } from "@/utils/text";
-import { generateInstrukturName } from "@/lib/utils";
+import { formatToRupiah, generateInstrukturName } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import Toast from "@/components/toast";
 import { MateriButton, PublishButton } from "./Actions";
@@ -299,7 +299,7 @@ function DetailPelatihan() {
               <tr className="border-b border-b-gray-200 w-full">
                 <td className="font-semibold p-4 w-[20%]">Tarif Pelatihan</td>
                 <td className="p-4 w-2/3">
-                  Rp. {pelatihan!.HargaPelatihan || ""}
+                  {formatToRupiah(pelatihan!.HargaPelatihan) || ""}
                 </td>
               </tr>
               <tr className="border-b border-b-gray-200 w-full">

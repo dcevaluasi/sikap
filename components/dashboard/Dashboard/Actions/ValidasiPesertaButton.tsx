@@ -33,6 +33,7 @@ import Image from "next/image";
 import { User } from "@/types/user";
 import { MdClose, MdOutlineClose } from "react-icons/md";
 import { Textarea } from "@/components/ui/textarea";
+import { Editor } from "@tinymce/tinymce-react";
 
 interface ValidasiPesertaButtonProps {
   idUser: string;
@@ -91,7 +92,7 @@ const ValidasiPesertaButton: React.FC<ValidasiPesertaButtonProps> = ({
         open={openFormSertifikat}
         onOpenChange={setOpenFormSertifikat}
       >
-        <AlertDialogContent>
+        <AlertDialogContent className="max-w-5xl">
           <>
             <AlertDialogHeader>
               <AlertDialogTitle>Validasi Data Peserta</AlertDialogTitle>
@@ -138,10 +139,22 @@ const ValidasiPesertaButton: React.FC<ValidasiPesertaButtonProps> = ({
                   Catatan <span className="text-red-600">*</span>
                 </label>
 
-                <Textarea
-                  onChange={(e) => setCatatan(e.target.value)}
+                <Editor
+                  apiKey={process.env.NEXT_PUBLIC_TINY_MCE_KEY}
                   value={catatan}
-                  placeholder="Masukkan catatan"
+                  onEditorChange={(content: string, editor: any) =>
+                    setCatatan(content)
+                  }
+                  init={{
+                    height: 250,
+                    menubar: false,
+                    plugins:
+                      "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount linkchecker",
+                    toolbar:
+                      "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
+                    content_style:
+                      "body { font-family:Plus Jakarta Sans,Arial,sans-serif; font-size:14px }",
+                  }}
                 />
               </div>
             </fieldset>
