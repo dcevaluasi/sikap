@@ -28,7 +28,12 @@ import {
   TbMap2,
 } from "react-icons/tb";
 
-import { FaFilePdf, FaPlaceOfWorship, FaRupiahSign } from "react-icons/fa6";
+import {
+  FaChevronRight,
+  FaFilePdf,
+  FaPlaceOfWorship,
+  FaRupiahSign,
+} from "react-icons/fa6";
 
 import {
   Dialog,
@@ -151,7 +156,7 @@ function page() {
             // Sort by date in ascending order
             return dateA.getTime() - dateB.getTime(); // Ascending order
           })
-          .slice(0, 3); // Limit to the first 3 items (or change to 4 if needed)
+          .slice(0, 2); // Limit to the first 3 items (or change to 4 if needed)
 
         setDataRelated(filteredAndSortedData);
       } else {
@@ -738,23 +743,36 @@ function page() {
                   )} */}
                     </div>
 
-                    <div className="md:flex hidden flex-col mt-6 gap-6 ">
-                      <div className="flex flex-col gap-2 -mt-1">
-                        <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
-                          Pelatihan Serupa
-                        </h1>
-                        <p className="text-base text-gray-600 max-w-4xl -mt-3">
-                          Daftar dan ikuti pelatihan serupa lainnya agar
-                          menambah keterampilanmu!
-                        </p>
-                        <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
+                    {!isRegistrasi && (
+                      <div className="md:flex hidden flex-col mt-6 gap-6 ">
+                        <div className="flex flex-col gap-2 -mt-1">
+                          <h1 className="text-black font-bold text-3xl font-calsans leading-[110%]">
+                            Pelatihan Lainnya
+                          </h1>
+                          <p className="text-base text-gray-600 max-w-4xl -mt-3">
+                            Daftar dan ikuti pelatihan serupa lainnya agar
+                            menambah keterampilanmu!
+                          </p>
+                          <div className="w-[100px] h-1 bg-blue-500 rounded-full"></div>
+                        </div>
+                        <div className="flex flex-col gap-3 border-b border-b-gray-300 pb-3">
+                          {dataRelated.map((pelatihan, index) => (
+                            <CardPelatihan key={index} pelatihan={pelatihan} />
+                          ))}
+                        </div>
+                        <Link
+                          href={`/layanan/pelatihan/${createSlug(
+                            pelatihan.NamaPelatihan
+                          )}/${pelatihan?.KodePelatihan}/${
+                            pelatihan?.IdPelatihan
+                          }`}
+                          className="w-full flex gap-2  items-center justify-center text-sm text-center font-medium px-6 py-2 bg-transparent hover:bg-blue-500 border border-blue-500 rounded-lg text-blue-500 hover:text-white duration-700"
+                        >
+                          <span>Lihat Pelatihan Lainnya</span>{" "}
+                          <FaChevronRight />
+                        </Link>
                       </div>
-                      <div className="flex flex-col gap-3">
-                        {dataRelated.map((pelatihan, index) => (
-                          <CardPelatihan key={index} pelatihan={pelatihan} />
-                        ))}
-                      </div>
-                    </div>
+                    )}
                   </div>
                 }
               </div>
