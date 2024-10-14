@@ -744,25 +744,38 @@ function UserTrainingService({ user }: { user: User | null }) {
                           </div>
                         )}
 
-                        {userDetail?.Pelatihan[indexPelatihanSelected]
-                          ?.Keterangan! == "Valid" && (
-                          <div className="mt-4 w-full">
-                            <div className="flex gap-1 flex-col">
-                              <p
-                                dangerouslySetInnerHTML={{
-                                  __html:
-                                    userDetail?.Pelatihan[
-                                      indexPelatihanSelected
-                                    ]! &&
-                                    userDetail?.Pelatihan[
-                                      indexPelatihanSelected
-                                    ]?.DetailPelatihan!,
-                                }}
-                                className="text-sm prose   text-justify group-hover:text-xs text-gray-500 prose-strong:text-gray-500 prose-p:leading-[140%] prose-strong:font-bold group-hover:duration-1000"
-                              />{" "}
+                        <div className="flex gap-6 w-full">
+                          {userDetail?.Pelatihan[indexPelatihanSelected]
+                            ?.Keterangan! == "Valid" && (
+                            <div className="mt-4 w-full">
+                              <div className="flex gap-1 flex-col">
+                                <p
+                                  dangerouslySetInnerHTML={{
+                                    __html:
+                                      userDetail?.Pelatihan[
+                                        indexPelatihanSelected
+                                      ]! &&
+                                      userDetail?.Pelatihan[
+                                        indexPelatihanSelected
+                                      ]?.DetailPelatihan!,
+                                  }}
+                                  className="text-sm prose   text-justify group-hover:text-xs text-gray-500 prose-strong:text-gray-500 prose-p:leading-[140%] prose-strong:font-bold group-hover:duration-1000"
+                                />{" "}
+                              </div>
                             </div>
+                          )}
+
+                          <div className="-mt-6 w-[90%]">
+                            {selectedPelatihan != null && (
+                              <TimelineProgressPesertaPelatihan
+                                userDetail={
+                                  userDetail?.Pelatihan[indexPelatihanSelected]!
+                                }
+                                pelatihan={selectedPelatihan!}
+                              />
+                            )}
                           </div>
-                        )}
+                        </div>
 
                         {typePelatihanSelected == "Online" && (
                           <div className="mt-3">

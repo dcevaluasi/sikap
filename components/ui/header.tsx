@@ -257,7 +257,11 @@ export default function Header() {
                 {" "}
                 <NavLinkDefault href="/" name="Beranda" top={top} />
                 <NavDropDown href="#" name="Balai Pelatihan" top={top}>
-                  <NavLink href="/lembaga/bppp/tegal" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://bppptegal.id/tentang-kami"
+                    name="DPKAKP"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -265,7 +269,11 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://www.bpppbanyuwangi.com/"
+                    name="DPKAKP"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -273,7 +281,11 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://bpppbitung.id/#"
+                    name="DPKAKP"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -281,7 +293,11 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://ppid.sipelatihaksi.com/"
+                    name="DPKAKP"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -289,7 +305,11 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://bp3ambon.kkp.go.id/"
+                    name="DPKAKP"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -297,7 +317,11 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://sites.google.com/view/ppidbppakkp"
+                    name="DPKAKP"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>

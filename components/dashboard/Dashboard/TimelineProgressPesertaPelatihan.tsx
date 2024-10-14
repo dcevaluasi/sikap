@@ -27,6 +27,7 @@ import { PelatihanMasyarakat } from "@/types/product";
 import Logo from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { generateTanggalPelatihan } from "@/utils/text";
+import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
 
 export const TimelineProgressPesertaPelatihan = ({
   userDetail,
@@ -192,13 +193,13 @@ export const TimelineProgressPesertaPelatihan = ({
       <div className=" max-w-5xl py-12 mx-auto">
         <div className="grid gap-4 sm:grid-cols-12">
           <div className="col-span-12 sm:col-span-3">
-            <div className="text-center sm:text-left mb-14 before:block before:w-24 before:h-3 before:mb-5 before:rounded-md before:mx-auto sm:before:mx-0 before:bg-blue-500">
-              <h3 className="text-3xl font-semibold font-calsans leading-none">
+            <div className="text-center sm:text-left mb-14 before:block before:w-24 before:h-3 before:mb-2 before:rounded-md before:mx-auto sm:before:mx-0 before:bg-blue-500">
+              <h3 className="text-2xl font-semibold font-calsans leading-none">
                 Progress Pelatihan
               </h3>
-              <span className="text-sm font-normal leading-[100%] text-gray-400">
+              <p className="text-sm font-normal leading-[115%] text-gray-400">
                 Lihat progress kamu sebagai peserta pelatihan
-              </span>
+              </p>
             </div>
           </div>
           <div className="relative col-span-12 px-4 space-y-6 sm:col-span-9">
@@ -762,13 +763,48 @@ export const TimelineProgressPesertaPelatihan = ({
                           type="Post-Test"
                         />
                         <span className="text-xs">
-                          Nilai pre-testmu kurang bagus, jangan menyerah, ikuti
+                          Nilai post-testmu kurang bagus, jangan menyerah, ikuti
                           pelatihan dengan cermat dan semangat untuk bisa
                           meningkatkan pengetahuan mu pada post-test nanti!
                         </span>
                       </div>
                     )}
                   </p>
+                </div>
+                <div
+                  className={`flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] ${
+                    pelatihan!.StatusApproval == "Selesai"
+                      ? "before:bg-green-400"
+                      : "before:bg-gray-700"
+                  } bg-white shadow-custom p-4 rounded-xl duration-700 cursor-pointer `}
+                >
+                  <h3 className="text-lg font-semibold">
+                    Sertifikat Pelatihan {pelatihan!.NamaPelatihan}
+                  </h3>
+                  <time className="text-xs text-gray-600">
+                    Bidang {pelatihan!.BidangPelatihan}
+                  </time>
+                  <span className="text-xs">
+                    Selamat, anda telah mengikuti dan menyelesaikan rangkaian
+                    pelatihan. Berikut sertifikat yang dapat kamu akses
+                  </span>
+                  {userDetail.NoSertifikat == "" ? null : pelatihan != null ? (
+                    <div>
+                      <DialogSertifikatPelatihan
+                        userPelatihan={userDetail!}
+                        pelatihan={pelatihan!}
+                      >
+                        <Button
+                          type="button"
+                          variant="outline"
+                          className="w-full border mt-3 flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+                        >
+                          <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+                          <span className="text-sm"> Lihat Sertifikat</span>
+                        </Button>
+                      </DialogSertifikatPelatihan>
+                    </div>
+                  ) : null}
                 </div>
                 {/* <div className="flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] before:bg-blue-500 bg-white shadow-custom p-4 rounded-xl duration-700 cursor-pointer">
                     <h3 className="text-lg font-semibold">
