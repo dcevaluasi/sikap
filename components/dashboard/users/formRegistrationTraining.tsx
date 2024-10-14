@@ -71,7 +71,7 @@ function FormRegistrationTraining({
         `${baseUrl}/users/addPelatihan`,
         JSON.stringify({
           id_pelatihan: id.toString(),
-          totalBayar: pelatihan?.HargaPelatihan,
+          totalBayar: pelatihan?.HargaPelatihan.toString(),
           namaPelatihan: pelatihan?.NamaPelatihan,
 
           bidangPelatihan: pelatihan?.BidangPelatihan,

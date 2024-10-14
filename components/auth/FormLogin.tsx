@@ -69,9 +69,17 @@ function FormLogin() {
               });
               if (Cookies.get("XSRF083")) {
                 // router.push("/dashboard/complete-profile");
-                router.push("/layanan/program/akp");
+                if (Cookies.get("LastPath")) {
+                  const path = Cookies.get("LastPath");
+                  router.push(path!);
+                }
               } else {
-                router.push("/layanan/program/akp");
+                if (Cookies.get("LastPath")) {
+                  const path = Cookies.get("LastPath");
+                  router.push(path!);
+                } else {
+                  router.push("layanan/program/akp");
+                }
               }
             }
           } catch (error: any) {

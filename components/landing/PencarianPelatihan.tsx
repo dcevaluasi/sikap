@@ -154,12 +154,13 @@ function PencarianPelatihan() {
   const [showResult, setShowResult] = React.useState<boolean>(false);
 
   const handleClearFilter = () => {
+    setSelectedProgramPelatihan("");
     setSelectedBidangPelatihan("");
     setSelectedJenisPelatihan("");
     setSelectedBalaiPelatihan("");
     setSelectedBiayaPelatihan("");
     setSelectedBulanPelatihan("");
-    setSelectedProgramPelatihan("");
+
     handleFetchingPublicTrainingData();
   };
 

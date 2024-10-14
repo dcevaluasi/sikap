@@ -255,15 +255,9 @@ export default function Header() {
             <ul className="flex grow gap-0 justify-end flex-wrap items-center w-fit">
               <>
                 {" "}
-                {usePathname().includes("dashboard") && (
-                  <NavLink href="/" name="Beranda" top={top}>
-                    <div className="flex gap-2 items-center">
-                      <span>Beranda</span>
-                    </div>
-                  </NavLink>
-                )}
-                <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                <NavLinkDefault href="/" name="Beranda" top={top} />
+                <NavDropDown href="#" name="Balai Pelatihan" top={top}>
+                  <NavLink href="/lembaga/bppp/tegal" name="DPKAKP" top={top}>
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>

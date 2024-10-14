@@ -363,14 +363,14 @@ function DetailPelatihan() {
                     ))}
                 </td>
               </tr>
-              <tr className="border-b border-b-gray-200 w-full">
+              <tr className="border-b border-b-gray-200 w-fit whitespace-normal overflow-hidden">
                 <td className="font-semibold p-4 w-[20%]">
                   Silabus/Modul/Bahan Ajar Pelatihan
                 </td>
-                <td className="p-4 w-2/3">
+                <td className="p-4 w-2/3 ">
                   <Link
                     target="_blank"
-                    className="text-blue-500 underline"
+                    className="text-blue-500 underline "
                     href={`https://elaut-bppsdm.kkp.go.id/api-elaut/public/silabus/pelatihan/${
                       pelatihan!.SilabusPelatihan
                     }`}
