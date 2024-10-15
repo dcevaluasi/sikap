@@ -10,8 +10,19 @@ import { useRouter } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  SelectLabel,
+} from "@/components/ui/select";
+
 // RECAPTCHA
 import ReCAPTCHA from "react-google-recaptcha";
+import { HiMiniUserGroup } from "react-icons/hi2";
 
 function FormLogin() {
   /* state variable to store basic user information to register */
@@ -118,6 +129,106 @@ function FormLogin() {
     }
   };
 
+  const [email, setEmail] = React.useState<string>("");
+  const [passwordManningAgent, setPasswordManningAgent] =
+    React.useState<string>("");
+
+  const handleLoginAkunManningAgent = async (e: FormEvent) => {
+    e.preventDefault();
+    if (countWrongPassword <= 3) {
+      if (email == "" || passwordManningAgent == "") {
+        Toast.fire({
+          icon: "error",
+          title: "Gagal mencoba login.",
+          text: `Tolong lengkapi data login untuk login kedalam ELAUT`,
+        });
+      } else {
+        if (captcha) {
+          try {
+            const response: AxiosResponse = await axios.post(
+              `${baseUrl}/manningAgent/loginManningAgent`,
+              JSON.stringify({
+                email: email,
+                password: passwordManningAgent,
+              }),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            console.log({ response });
+
+            Cookies.set("XSRF081", response.data.t, { expires: 1 });
+            Cookies.set("XSRF082", "true", { expires: 1 });
+            Cookies.set("isManningAgent", "true", { expires: 1 });
+
+            if (Cookies.get("XSRF085")) {
+              Toast.fire({
+                icon: "success",
+                title: "Berhasil login.",
+                text: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
+              });
+              router.push(Cookies.get("XSRF085")!);
+            } else {
+              Toast.fire({
+                icon: "success",
+                title: "Berhasil login.",
+                text: `Berhasil melakukan login kedalam ELAUT!`,
+              });
+              if (Cookies.get("XSRF083")) {
+                // router.push("/dashboard/complete-profile");
+                if (Cookies.get("LastPath")) {
+                  const path = Cookies.get("LastPath");
+                  router.push(path!);
+                }
+              } else {
+                if (Cookies.get("LastPath")) {
+                  const path = Cookies.get("LastPath");
+                  router.push(path!);
+                } else {
+                  router.push("layanan/program/akp");
+                }
+              }
+            }
+          } catch (error: any) {
+            console.error({ error });
+            if (
+              error.response &&
+              error.response.data &&
+              error.response.data.pesan
+            ) {
+              const errorMsg = error.response.data.pesan;
+              if (errorMsg == "Incorrect password!") {
+                setCountPassword(countWrongPassword + 1);
+              }
+              Toast.fire({
+                icon: "error",
+                title: "Gagal mencoba login.",
+                text: `Gagal melakukan login, ${errorMsg}!`,
+              });
+            } else {
+              const errorMsg = error.response.data.pesan;
+              Toast.fire({
+                icon: "error",
+                title: "Gagal mencoba login.",
+                text: `Gagal melakukan login. ${errorMsg}!`,
+              });
+            }
+          }
+        }
+      }
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: "Gagal mencoba login.",
+        text: `Ups, terlihat kamu sudah mencoba berulang kali dengan password gagal, coba lagi nanti!`,
+      });
+    }
+  };
+
+  const [role, setRole] = React.useState<string>("");
+
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = ["/images/hero-img3.jpg"];
 
@@ -156,97 +267,222 @@ function FormLogin() {
           </div>
 
           {/* Form */}
+
           <div className="max-w-sm  mx-5 md:mx-auto mt-5">
-            <form onSubmit={(e) => handleLoginAkun(e)} autoComplete="off">
-              <div className="flex flex-wrap -mx-3 mb-2">
-                <div className="w-full px-3">
-                  <label
-                    className="block text-gray-200 text-sm font-medium mb-1"
-                    htmlFor="name"
-                  >
-                    No Telepon/WA <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    id="name"
-                    type="text"
-                    className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                    placeholder="Masukkan No Telepon/WA"
-                    value={noNumber}
-                    onChange={(e) => setNoNumber(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="flex flex-wrap -mx-3 mb-2">
-                <div className="w-full px-3">
-                  <label
-                    className="block text-gray-200 text-sm font-medium mb-1"
-                    htmlFor="password"
-                  >
-                    Password <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    id="password"
-                    type="password"
-                    className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                    placeholder="Masukkan password"
-                    required
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div
-                className="flex flex-wrap w-full -mx-3 mb-2"
-                style={{ width: "100% !important" }}
+            <div className="flex flex-col gap-1 mb-2">
+              <label
+                className="block text-gray-200 text-sm font-medium mb-1"
+                htmlFor="name"
               >
+                Daftar Sebagai <span className="text-red-600">*</span>
+              </label>
+              <Select
+                value={role}
+                onValueChange={(value: string) => setRole(value)}
+              >
+                <SelectTrigger className="form-input w-full py-6 bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200">
+                  <p className="mr-3 flex items-center gap-1 text-base text-gray-300">
+                    <HiMiniUserGroup />
+                    {role != "" ? role : "Pilih Mendaftar Sebagai"}
+                  </p>
+                </SelectTrigger>
+                <SelectContent side="bottom">
+                  <SelectGroup>
+                    <SelectLabel>Mendaftar Sebagai</SelectLabel>
+                    <SelectItem value="Mandiri">Mandiri</SelectItem>
+                    <SelectItem value="Corporate/Manning Agent">
+                      Corporate/Manning Agent
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            {role == "Mandiri" ? (
+              <form onSubmit={(e) => handleLoginAkun(e)} autoComplete="off">
+                <div className="flex flex-wrap -mx-3 mb-2">
+                  <div className="w-full px-3">
+                    <label
+                      className="block text-gray-200 text-sm font-medium mb-1"
+                      htmlFor="name"
+                    >
+                      No Telepon/WA <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                      placeholder="Masukkan No Telepon/WA"
+                      value={noNumber}
+                      onChange={(e) => setNoNumber(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-wrap -mx-3 mb-2">
+                  <div className="w-full px-3">
+                    <label
+                      className="block text-gray-200 text-sm font-medium mb-1"
+                      htmlFor="password"
+                    >
+                      Password <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="password"
+                      type="password"
+                      className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                      placeholder="Masukkan password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </div>
+                </div>
                 <div
-                  className="w-full px-3"
+                  className="flex flex-wrap w-full -mx-3 mb-2"
                   style={{ width: "100% !important" }}
                 >
-                  <label
-                    className="block text-gray-200 text-sm font-medium mb-1"
-                    htmlFor="password"
-                  >
-                    Verify if you are not a robot{" "}
-                    <span className="text-red-600">*</span>
-                  </label>
-                  <ReCAPTCHA
+                  <div
+                    className="w-full px-3"
                     style={{ width: "100% !important" }}
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                    className="mx-auto w-full font-inter text-sm"
-                    onChange={setCaptcha}
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-wrap -mx-3 mt-3">
-                <div className="w-full px-3">
-                  <button
-                    type="submit"
-                    className={`btn text-white ${
-                      captcha
-                        ? "bg-blue-500 hover:bg-blue-600"
-                        : "bg-gray-500 hover:bg-gray-600"
-                    } w-full`}
-                    disabled={captcha ? false : true}
                   >
-                    Login
-                  </button>
+                    <label
+                      className="block text-gray-200 text-sm font-medium mb-1"
+                      htmlFor="password"
+                    >
+                      Verify if you are not a robot{" "}
+                      <span className="text-red-600">*</span>
+                    </label>
+                    <ReCAPTCHA
+                      style={{ width: "100% !important" }}
+                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                      className="mx-auto w-full font-inter text-sm"
+                      onChange={setCaptcha}
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="text-sm text-gray-200 text-center mt-3">
-                By creating an account, you agree to the{" "}
-                <a className="underline" href="#0">
-                  terms & conditions
-                </a>
-                , and our{" "}
-                <a className="underline" href="#0">
-                  privacy policy
-                </a>
-                .
-              </div>
-            </form>
+
+                <div className="flex flex-wrap -mx-3 mt-3">
+                  <div className="w-full px-3">
+                    <button
+                      type="submit"
+                      className={`btn text-white ${
+                        captcha
+                          ? "bg-blue-500 hover:bg-blue-600"
+                          : "bg-gray-500 hover:bg-gray-600"
+                      } w-full`}
+                      disabled={captcha ? false : true}
+                    >
+                      Login
+                    </button>
+                  </div>
+                </div>
+                <div className="text-sm text-gray-200 text-center mt-3">
+                  By creating an account, you agree to the{" "}
+                  <a className="underline" href="#0">
+                    terms & conditions
+                  </a>
+                  , and our{" "}
+                  <a className="underline" href="#0">
+                    privacy policy
+                  </a>
+                  .
+                </div>
+              </form>
+            ) : (
+              <form
+                onSubmit={(e) => handleLoginAkunManningAgent(e)}
+                autoComplete="off"
+              >
+                <div className="flex flex-wrap -mx-3 mb-2">
+                  <div className="w-full px-3">
+                    <label
+                      className="block text-gray-200 text-sm font-medium mb-1"
+                      htmlFor="name"
+                    >
+                      Email <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="name"
+                      type="email"
+                      className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                      placeholder="Masukkan Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex flex-wrap -mx-3 mb-2">
+                  <div className="w-full px-3">
+                    <label
+                      className="block text-gray-200 text-sm font-medium mb-1"
+                      htmlFor="password"
+                    >
+                      Password <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="password"
+                      type="password"
+                      className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                      placeholder="Masukkan password"
+                      required
+                      value={passwordManningAgent}
+                      onChange={(e) => setPasswordManningAgent(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div
+                  className="flex flex-wrap w-full -mx-3 mb-2"
+                  style={{ width: "100% !important" }}
+                >
+                  <div
+                    className="w-full px-3"
+                    style={{ width: "100% !important" }}
+                  >
+                    <label
+                      className="block text-gray-200 text-sm font-medium mb-1"
+                      htmlFor="password"
+                    >
+                      Verify if you are not a robot{" "}
+                      <span className="text-red-600">*</span>
+                    </label>
+                    <ReCAPTCHA
+                      style={{ width: "100% !important" }}
+                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                      className="mx-auto w-full font-inter text-sm"
+                      onChange={setCaptcha}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap -mx-3 mt-3">
+                  <div className="w-full px-3">
+                    <button
+                      type="submit"
+                      className={`btn text-white ${
+                        captcha
+                          ? "bg-blue-500 hover:bg-blue-600"
+                          : "bg-gray-500 hover:bg-gray-600"
+                      } w-full`}
+                      disabled={captcha ? false : true}
+                    >
+                      Login
+                    </button>
+                  </div>
+                </div>
+                <div className="text-sm text-gray-200 text-center mt-3">
+                  By creating an account, you agree to the{" "}
+                  <a className="underline" href="#0">
+                    terms & conditions
+                  </a>
+                  , and our{" "}
+                  <a className="underline" href="#0">
+                    privacy policy
+                  </a>
+                  .
+                </div>
+              </form>
+            )}
             <div className="flex items-center my-6">
               <div
                 className="border-t border-gray-300 grow mr-3"

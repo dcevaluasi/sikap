@@ -39,6 +39,9 @@ import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import { PelatihanMasyarakat, Sarpras } from "@/types/product";
 import { formatToRupiah } from "@/lib/utils";
+import { HiMiniUserGroup } from "react-icons/hi2";
+import Link from "next/link";
+import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 
 function FormRegistrationTraining({
   id,
@@ -64,40 +67,84 @@ function FormRegistrationTraining({
 
   const [totalBayar, setTotalBayar] = React.useState(0);
 
-  const handleRegistrationTrainingForPeople = async (e: any) => {
+  const [isOpenFormPeserta, setIsOpenFormPeserta] =
+    React.useState<boolean>(false);
+  const [fileExcelPesertaPelatihan, setFileExcelPesertaPelatihan] =
+    React.useState<File | null>(null);
+  const handleFileChange = (e: any) => {
+    setFileExcelPesertaPelatihan(e.target.files[0]);
+  };
+  const handleUploadImportPesertaPelatihan = async (e: any) => {
     e.preventDefault();
-    try {
-      const response: AxiosResponse = await axios.post(
-        `${baseUrl}/users/addPelatihan`,
-        JSON.stringify({
-          id_pelatihan: id.toString(),
-          totalBayar: pelatihan?.HargaPelatihan.toString(),
-          namaPelatihan: pelatihan?.NamaPelatihan,
+    const formData = new FormData();
+    formData.append("IdPelatihan", "0");
+    if (fileExcelPesertaPelatihan != null) {
+      formData.append("file", fileExcelPesertaPelatihan);
+    }
 
-          bidangPelatihan: pelatihan?.BidangPelatihan,
-          DetailPelatihan: pelatihan?.DetailPelatihan,
-          statusAproval: pelatihan?.StatusApproval,
-        }),
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/exportPesertaPelatihan`,
+        formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
           },
         }
       );
-
+      console.log("FILE UPLOADED PESERTA : ", response);
       Toast.fire({
         icon: "success",
-        title: `Berhasil melakukan pendaftaran, tunggu kabar selanjutnya sobat ELAUT!`,
+        title: `Selamat anda berhasil mengupload peserta pelatihan!`,
       });
-      console.log({ response });
-      router.push("/dashboard");
+      setIsOpenFormPeserta(!isOpenFormPeserta);
     } catch (error) {
-      console.error({ error });
+      console.log("FILE IMPORT PESERTA PELATIHAN : ", error);
       Toast.fire({
         icon: "error",
-        title: "Anda telah mendaftar pelatihan ini sebelumnya!",
+        title: `Gagal mengupload peserta pelatihan!`,
       });
+    }
+  };
+
+  const handleRegistrationTrainingForPeople = async (e: any) => {
+    e.preventDefault();
+    if (Cookies.get("isManningAgent")) {
+      setIsOpenFormPeserta(!isOpenFormPeserta);
+    } else {
+      try {
+        const response: AxiosResponse = await axios.post(
+          `${baseUrl}/users/addPelatihan`,
+          JSON.stringify({
+            id_pelatihan: id.toString(),
+            totalBayar: pelatihan?.HargaPelatihan.toString(),
+            namaPelatihan: pelatihan?.NamaPelatihan,
+
+            bidangPelatihan: pelatihan?.BidangPelatihan,
+            DetailPelatihan: pelatihan?.DetailPelatihan,
+            statusAproval: pelatihan?.StatusApproval,
+          }),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        Toast.fire({
+          icon: "success",
+          title: `Berhasil melakukan pendaftaran, tunggu kabar selanjutnya sobat ELAUT!`,
+        });
+        console.log({ response });
+        router.push("/dashboard");
+      } catch (error) {
+        console.error({ error });
+        Toast.fire({
+          icon: "error",
+          title: "Anda telah mendaftar pelatihan ini sebelumnya!",
+        });
+      }
     }
   };
 
@@ -130,6 +177,93 @@ function FormRegistrationTraining({
         setSelectedKonsumsi(item);
       }
     }
+  };
+
+  const FormPesertaPelatihan = () => {
+    return (
+      <form
+        autoComplete="off"
+        className={`${
+          indexFormTab == 1 && Cookies.get("isManningAgent")
+            ? "block"
+            : "hidden"
+        }`}
+      >
+        {/* Penginapan Section */}
+        <div className="flex flex-wrap -mx-3 mb-1">
+          <div className="w-full px-3">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-1"
+              htmlFor="penginapan"
+            >
+              Pilih Paket Fasilitas Penginapan{" "}
+              <span className="text-red-600">*</span>
+            </label>
+            <div className="flex flex-col gap-2">
+              {pelatihan.SarprasPelatihan.filter(
+                (item) => item.Jenis === "Penginapan"
+              ).map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                >
+                  <div>
+                    <input
+                      type="checkbox"
+                      checked={selectedPenginapan === item}
+                      onChange={() => handleCheckboxChange(item)}
+                    />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>
+                      {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                    </label>
+                    <p className="text-xs text-gray-600">{item.Deskripsi}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Konsumsi Section */}
+        <div className="flex flex-wrap -mx-3 mb-1">
+          <div className="w-full px-3">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-1"
+              htmlFor="konsumsi"
+            >
+              Pilih Paket Konsumsi atau Catering{" "}
+              <span className="text-red-600">*</span>
+            </label>
+            <div className="flex flex-col gap-2">
+              {pelatihan.SarprasPelatihan.filter(
+                (item) => item.Jenis === "Konsumsi"
+              ).map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                >
+                  <div>
+                    <input
+                      type="checkbox"
+                      checked={selectedKonsumsi === item}
+                      onChange={() => handleCheckboxChange(item)}
+                    />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>
+                      {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                    </label>
+                    <p className="text-xs text-gray-600">{item.Deskripsi}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </form>
+    );
   };
 
   const FormFasilitas = () => {
@@ -325,6 +459,66 @@ function FormRegistrationTraining({
 
   return (
     <section className="relative w-full -mt-5">
+      <AlertDialog open={isOpenFormPeserta}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              {" "}
+              <HiMiniUserGroup className="h-4 w-4" />
+              Import Peserta Pelatihan
+            </AlertDialogTitle>
+            <AlertDialogDescription className="-mt-2">
+              Import peserta yang akan mengikuti pelatihan ini!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <fieldset>
+            <form autoComplete="off">
+              <div className="flex flex-wrap -mx-3 mb-1">
+                <div className="w-full px-3">
+                  <label
+                    className="block text-gray-800 text-sm font-medium mb-1"
+                    htmlFor="email"
+                  >
+                    Data By Name By Address <span>*</span>
+                  </label>
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                      required
+                      onChange={handleFileChange}
+                    />
+                    <Link
+                      target="_blank"
+                      href={
+                        "https://docs.google.com/spreadsheets/d/1KlEBRcgXLZK6NCL0r4nglKa6XazHgUH7fqvHlrIHmNI/edit?usp=sharing"
+                      }
+                      className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
+                    >
+                      <PiMicrosoftExcelLogoFill />
+                      Unduh Template
+                    </Link>
+                  </div>
+                  <p className="text-gray-700 text-xs mt-1">
+                    *Download terlebih dahulu template lalu isi file excel dan
+                    upload
+                  </p>
+                </div>
+              </div>
+
+              <AlertDialogFooter className="mt-3 pt-3 border-t border-t-gray-300">
+                <AlertDialogCancel
+                  onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
+                >
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction>Upload</AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </fieldset>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="max-w-6xl md:max-w-[81rem]  md:-mt-8">
         <div className="pb-12 md:pb-20">
           {/* Form */}
@@ -342,23 +536,43 @@ function FormRegistrationTraining({
                 </h2>
               )}
 
-              <p className="text-base">
-                {indexFormTab == 0 ? (
-                  <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
-                    1
-                  </span>
-                ) : (
-                  <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
-                    2
-                  </span>
-                )}{" "}
-                of 2
-              </p>
+              {Cookies.get("isManningAgent") ? (
+                <p className="text-base">
+                  {indexFormTab == 0 ? (
+                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                      1
+                    </span>
+                  ) : indexFormTab == 1 ? (
+                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                      2
+                    </span>
+                  ) : (
+                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                      3
+                    </span>
+                  )}{" "}
+                  of 3
+                </p>
+              ) : (
+                <p className="text-base">
+                  {indexFormTab == 0 ? (
+                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                      1
+                    </span>
+                  ) : (
+                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                      2
+                    </span>
+                  )}{" "}
+                  of 2
+                </p>
+              )}
             </div>
             <div className="flex w-full -mt-2 mb-4">
               <Progress value={(indexFormTab + 1) * 50} max={2} />
             </div>
             <FormFasilitas />
+            <FormPesertaPelatihan />
             <FormPembayaran />
             <div className="flex  -mx-3 mt-5 gap-2 px-3">
               <div className={`w-full ${indexFormTab == 0 && "hidden"}`}>

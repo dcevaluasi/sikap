@@ -216,6 +216,96 @@ function FormRegistrasi() {
     }
   };
 
+  const [emailManningAgent, setEmailManningAgent] = React.useState<string>("");
+  const [passwordManningAgent, setPasswordManningAgent] =
+    React.useState<string>("");
+  const [namaManningAgent, setNamaManningAgent] = React.useState<string>("");
+  const [noTelponManingAgent, setNoTelponManningAgent] =
+    React.useState<string>("");
+  const [namaPenanggungJawabManningAgent, setNamaPenanggungJawabManningAgent] =
+    React.useState<string>("");
+  const [alamat, setAlamat] = React.useState<string>("");
+
+  const clearFormManningAgent = () => {
+    setEmailManningAgent("");
+    setPasswordManningAgent("");
+    setNamaManningAgent("");
+    setNoTelponManningAgent("");
+    setNamaPenanggungJawabManningAgent("");
+    setAlamat("");
+  };
+
+  const handleRegistrasiAkunManningAgent = async (e: FormEvent) => {
+    e.preventDefault();
+    if (handlePasswordCriteria(passwordManningAgent)) {
+      if (
+        emailManningAgent == "" ||
+        passwordManningAgent == "" ||
+        namaManningAgent == "" ||
+        noTelponManingAgent == "" ||
+        namaPenanggungJawabManningAgent == "" ||
+        alamat == ""
+      ) {
+        Toast.fire({
+          icon: "error",
+          title: `Tolong lengkapi data registrasi!`,
+        });
+        setIsInputError(true);
+      } else {
+        if (captcha) {
+          try {
+            const response: AxiosResponse = await axios.post(
+              `${baseUrl}/manningAgent/registerManningAgent`,
+              JSON.stringify({
+                email: emailManningAgent,
+                password: passwordManningAgent,
+                nama_manning_agent: namaManningAgent,
+                no_telpon: noTelponManingAgent,
+                nama_penanggung_jawab: namaPenanggungJawabManningAgent,
+                alamat: alamat,
+              }),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            console.log({ response });
+
+            Cookies.set("XSRF083", "true");
+
+            Toast.fire({
+              icon: "success",
+              title: `Berhasil melakukan registrasi akun, silahkan untuk login terlebih dahulu!`,
+            });
+            router.push("/login/manning-agent");
+            clearFormManningAgent();
+          } catch (error: any) {
+            console.error({ error });
+            if (
+              error.response &&
+              error.response.data &&
+              error.response.data.Message
+            ) {
+              const errorMsg = error.response.data.Message;
+              Toast.fire({
+                icon: "error",
+                title: `Gagal melakukan registrasi akun, ${errorMsg}!`,
+              });
+              clearFormManningAgent();
+            } else {
+              Toast.fire({
+                icon: "error",
+                title: `Gagal melakukan registrasi akun. Terjadi kesalahan tidak diketahui.`,
+              });
+              clearFormManningAgent();
+            }
+          }
+        }
+      }
+    }
+  };
+
   const [openInfoKusuka, setOpenInfoKusuka] = React.useState(false);
   const [isKusukaUser, setIsKusukaUser] = React.useState(false);
 
@@ -330,7 +420,11 @@ function FormRegistrasi() {
               </p>
             </div>
 
-            <div className="max-w-sm  mx-5 md:mx-auto mt-5">
+            <div
+              className={`${
+                role == "Mandiri" || role == "" ? "max-w-sm" : "max-w-4xl"
+              }  mx-5 md:mx-auto mt-5`}
+            >
               <div className="flex flex-col gap-1">
                 <label
                   className="block text-gray-200 text-sm font-medium mb-1"
@@ -470,7 +564,6 @@ function FormRegistrasi() {
                         <input
                           id="phone number"
                           type="text"
-                          maxLength={13}
                           className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                           placeholder="Masukkan no telpon"
                           value={phoneNumber}
@@ -509,11 +602,11 @@ function FormRegistrasi() {
                       </div>
                     </div>
                     <div
-                      className="flex flex-wrap w-full -mx-3 mb-1"
+                      className="flex flex-wrap w-full mb-1"
                       style={{ width: "100% !important" }}
                     >
                       <div
-                        className="w-full px-3"
+                        className="w-full"
                         style={{ width: "100% !important" }}
                       >
                         <label
@@ -526,7 +619,7 @@ function FormRegistrasi() {
                         <ReCAPTCHA
                           style={{ width: "100% !important" }}
                           sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                          className="mx-auto w-[600px] font-inter text-sm"
+                          className=" w-[600px] font-inter text-sm"
                           onChange={setCaptcha}
                         />
                       </div>
@@ -576,7 +669,7 @@ function FormRegistrasi() {
               )}
 
               {role == "Corporate/Manning Agent" && (
-                <>
+                <div className="">
                   <div className="flex items-center my-6">
                     <div
                       className="border-t border-gray-300 grow mr-3"
@@ -588,7 +681,7 @@ function FormRegistrasi() {
                     ></div>
                   </div>
                   <form
-                    onSubmit={(e) => handleRegistrasiAkun(e)}
+                    onSubmit={(e) => handleRegistrasiAkunManningAgent(e)}
                     autoComplete="off"
                   >
                     <div className="grid grid-cols-2 gap-2">
@@ -596,18 +689,20 @@ function FormRegistrasi() {
                         <div className="w-full px-3">
                           <label
                             className="block text-gray-200 text-sm font-medium mb-1"
-                            htmlFor="name"
+                            htmlFor="namaManningAgent"
                           >
                             Nama Manning Agent{" "}
                             <span className="text-red-600">*</span>
                           </label>
                           <input
-                            id="name"
+                            id="namaManningAgent"
                             type="text"
                             className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                             placeholder="Masukkan nama lengkap"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            value={namaManningAgent}
+                            onChange={(e) =>
+                              setNamaManningAgent(e.target.value)
+                            }
                             required
                           />
                           {isInputError && (
@@ -621,17 +716,19 @@ function FormRegistrasi() {
                         <div className="w-full px-3">
                           <label
                             className="block text-gray-200 text-sm font-medium mb-1"
-                            htmlFor="nik"
+                            htmlFor="noTelponManingAgent"
                           >
                             No Telpon <span className="text-red-600">*</span>
                           </label>
                           <input
-                            id="nik"
+                            id="noTelponManingAgent"
                             type="text"
                             className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                             placeholder="Masukkan No Telpon"
-                            value={nik}
-                            onChange={(e) => setNik(e.target.value)}
+                            value={noTelponManingAgent}
+                            onChange={(e) =>
+                              setNoTelponManningAgent(e.target.value)
+                            }
                             required
                           />
                           {isInputError && (
@@ -645,18 +742,19 @@ function FormRegistrasi() {
                         <div className="w-full px-3">
                           <label
                             className="block text-gray-200 text-sm font-medium mb-1"
-                            htmlFor="email"
+                            htmlFor="emailManningAgent"
                           >
                             Email <span className="text-red-600">*</span>
                           </label>
                           <input
-                            id="phone number"
+                            id="emailManningAgent"
                             type="email"
-                            maxLength={13}
                             className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                             placeholder="Masukkan email"
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            value={emailManningAgent}
+                            onChange={(e) =>
+                              setEmailManningAgent(e.target.value)
+                            }
                             required
                           />
                           {isInputError && (
@@ -670,19 +768,20 @@ function FormRegistrasi() {
                         <div className="w-full px-3">
                           <label
                             className="block text-gray-200 text-sm font-medium mb-1"
-                            htmlFor="email"
+                            htmlFor="namaPenanggungJawabManningAgent"
                           >
                             Nama Penanggung Jawab{" "}
                             <span className="text-red-600">*</span>
                           </label>
                           <input
-                            id="phone number"
-                            type="email"
-                            maxLength={13}
+                            id="namaPenanggungJawabManningAgent"
+                            type="text"
                             className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                             placeholder="Masukkan nama penanggung jawab"
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            value={namaPenanggungJawabManningAgent}
+                            onChange={(e) =>
+                              setNamaPenanggungJawabManningAgent(e.target.value)
+                            }
                             required
                           />
                           {isInputError && (
@@ -696,18 +795,17 @@ function FormRegistrasi() {
                         <div className="w-full px-3">
                           <label
                             className="block text-gray-200 text-sm font-medium mb-1"
-                            htmlFor="email"
+                            htmlFor="alamat"
                           >
                             Alamat <span className="text-red-600">*</span>
                           </label>
                           <input
-                            id="phone number"
-                            type="email"
-                            maxLength={13}
+                            id="alamat"
+                            type="text"
                             className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                            placeholder="Masukkan nama penanggung jawab"
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            placeholder="Masukkan alamat"
+                            value={alamat}
+                            onChange={(e) => setAlamat(e.target.value)}
                             required
                           />
                           {isInputError && (
@@ -731,8 +829,10 @@ function FormRegistrasi() {
                             className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
                             placeholder="Masukkan password"
                             required
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={passwordManningAgent}
+                            onChange={(e) =>
+                              setPasswordManningAgent(e.target.value)
+                            }
                           />
                           {isInputError && (
                             <span className="text-[#FF0000] font-medium">
@@ -744,11 +844,11 @@ function FormRegistrasi() {
                     </div>
 
                     <div
-                      className="flex flex-wrap w-full -mx-3 mb-1"
+                      className="flex flex-wrap w-full mb-1"
                       style={{ width: "100% !important" }}
                     >
                       <div
-                        className="w-full px-3"
+                        className="w-full"
                         style={{ width: "100% !important" }}
                       >
                         <label
@@ -761,7 +861,7 @@ function FormRegistrasi() {
                         <ReCAPTCHA
                           style={{ width: "100% !important" }}
                           sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                          className="mx-auto w-[600px] font-inter text-sm"
+                          className=" w-[600px] font-inter text-sm"
                           onChange={setCaptcha}
                         />
                       </div>
@@ -774,25 +874,6 @@ function FormRegistrasi() {
                         >
                           Registrasi
                         </button>
-                        {!useKUSUKA && (
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              setUseKUSUKA(!useKUSUKA);
-                              window.scrollTo(0, 0);
-                            }}
-                            className="btn text-white bg-transparent border border-blue-500 hover:bg-blue-500 flex w-full gap-2"
-                          >
-                            <Image
-                              src={"/logo-kkp-full-white.png"}
-                              className="w-6"
-                              alt=""
-                              width={0}
-                              height={0}
-                            />
-                            <span>Daftar Dengan KUSUKA</span>
-                          </button>
-                        )}
                       </div>
                     </div>
                     <div className="text-sm text-gray-200 text-center mt-3">
@@ -807,7 +888,7 @@ function FormRegistrasi() {
                       kami .
                     </div>
                   </form>
-                </>
+                </div>
               )}
               <div className="flex items-center my-6">
                 <div
@@ -822,7 +903,7 @@ function FormRegistrasi() {
               <div className="text-gray-200 text-center mt-6">
                 Sudah punya akun sebelumnya?{" "}
                 <Link
-                  href="/login"
+                  href={role == "Mandiri" ? "/login" : "/login/manning-agent"}
                   className="text-blue-500 hover:underline transition duration-150 ease-in-out"
                 >
                   Log In
