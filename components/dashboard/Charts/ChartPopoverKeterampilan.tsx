@@ -92,12 +92,16 @@ const chartConfigLemdiklat = {
   },
   other: {
     label: "BPPP Ambon",
-    color: "#E0366F",
+    color: "#10375C",
   },
 
   other2: {
     label: "Politeknik AUP Jakarta",
     color: "#1E0342",
+  },
+  other3: {
+    label: "LMTC",
+    color: "#EB8317",
   },
 } satisfies ChartConfig;
 
@@ -157,6 +161,9 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
         .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
         .filter((item) => item.NamaPelaksana === "Politeknik AUP Jakarta")
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter((item) => item.NamaPelaksana === "LMTC")
         .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
     ],
   });
@@ -271,7 +278,9 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
   ].reduce(
     (acc, item) => {
       const totalBlanko = data
-        .filter((d) => d.NamaProgram === item.label)
+        .filter(
+          (d) => d.NamaProgram === item.label && d.NamaPelaksana != "LMTC"
+        )
         .reduce((total, d) => total + d.JumlahBlankoDisetujui, 0);
 
       const totalAmount = totalBlanko * item.multiplier;
@@ -344,6 +353,11 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
       browser: "other2",
       visitors: stateLemdiklat.series[5],
       fill: "var(--color-other2)",
+    },
+    {
+      browser: "other3",
+      visitors: stateLemdiklat.series[6],
+      fill: "var(--color-other3)",
     },
   ];
 
@@ -509,7 +523,11 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                       Rp.
                       {(
                         data
-                          .filter((d) => d.NamaProgram === item.label)
+                          .filter(
+                            (d) =>
+                              d.NamaProgram === item.label &&
+                              d.NamaPelaksana !== "LMTC"
+                          )
                           .reduce(
                             (total, d) => total + d.JumlahBlankoDisetujui,
                             0
@@ -518,7 +536,11 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                       <span className="font-semibold text-xs ml-3">
                         (
                         {data
-                          .filter((d) => d.NamaProgram === item.label)
+                          .filter(
+                            (d) =>
+                              d.NamaProgram === item.label &&
+                              d.NamaPelaksana !== "LMTC"
+                          )
                           .reduce(
                             (total, d) => total + d.JumlahBlankoDisetujui,
                             0
@@ -661,7 +683,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                       {data
                         .filter(
                           (item) =>
-                            item.NamaPelaksana === "BPPP Tegal" &&
+                            item.NamaPelaksana === "BPPP Medan" &&
                             item.NamaProgram ===
                               "Basic Safety Training Fisheries I"
                         )
@@ -677,7 +699,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                           data
                             .filter(
                               (item) =>
-                                item.NamaPelaksana === "BPPP Tegal" &&
+                                item.NamaPelaksana === "BPPP Medan" &&
                                 item.NamaProgram ===
                                   "Basic Safety Training Fisheries I"
                             )
@@ -1000,6 +1022,57 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                         ).toLocaleString("id-ID")}
                         )
                       </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-6 py-4">
+                      Liam Maritime Training Center (LMTC)
+                    </td>
+                    <td className="px-6 py-4">
+                      {data
+                        .filter(
+                          (item) =>
+                            item.NamaPelaksana === "LMTC" &&
+                            item.NamaProgram ===
+                              "Basic Safety Training Fisheries I"
+                        )
+                        .reduce(
+                          (total, item) => total + item.JumlahBlankoDisetujui,
+                          0
+                        )}{" "}
+                      Sertifikat
+                    </td>
+                    <td className="px-6 py-4">
+                      {data
+                        .filter(
+                          (item) =>
+                            item.NamaPelaksana === "LMTC" &&
+                            item.NamaProgram ===
+                              "Basic Safety Training Fisheries II"
+                        )
+                        .reduce(
+                          (total, item) => total + item.JumlahBlankoDisetujui,
+                          0
+                        )}{" "}
+                      Sertifikat
+                    </td>
+                  </tr>
+                  <tr className="text-xl">
+                    <td className="px-6 py-4 font-bold">TOTAL</td>
+                    <td className="px-6 py-4">
+                      138 Sertifikat{" "}
+                      <span className="font-bold">(Rp.77.970.000)</span>
+                    </td>
+                    <td className="px-6 py-4">
+                      1.759 Sertifikat{" "}
+                      <span className="font-bold"> (Rp.993.835.000)</span>
+                    </td>
+                  </tr>
+                  <tr className="text-xl border">
+                    <td className="px-6 py-4 font-bold">GRAND TOTAL</td>
+                    <td className="px-6 py-4"></td>
+                    <td className="px-6 py-4 font-bold">
+                      1.897 Sertifikat (Rp 1,071,805,000)
                     </td>
                   </tr>
                 </tbody>
