@@ -395,7 +395,7 @@ function DetailPelatihan() {
                   </Link>
                 </td>
               </tr>
-            </table>
+            </>
           </div>
         </div>
       )}

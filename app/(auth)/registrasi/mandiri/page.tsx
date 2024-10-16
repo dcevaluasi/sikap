@@ -80,7 +80,7 @@ export default function page() {
       if (response.data.data == "Anda tidak memiliki akses") {
         Toast.fire({
           icon: "error",
-          title: `Internal server error, token tidak memiliki akses!`,
+          title: `Internal server error,  tidak memiliki akses!`,
         });
         setOpenInfoKusuka(false);
       }
