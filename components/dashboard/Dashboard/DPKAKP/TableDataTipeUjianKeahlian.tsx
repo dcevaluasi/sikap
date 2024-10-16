@@ -160,7 +160,7 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
                     <span className="flex flex-row gap-1">
                       {fungsi.Bagian.map((bagian, index) => (
                         <Link
-                          href={`/dpkakp/admin/dashboard/bank-soal/${row.original.IdTypeUjian}/${bagian.IdBagian}`}
+                          href={`/lembaga/dpkakp/admin/dashboard/bank-soal/${row.original.IdTypeUjian}/${bagian.IdBagian}`}
                           className="flex gap-2 px-3 my-2 text-xs items-center rounded-md border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 duration-700 p-1.5  cursor-pointer w-fit"
                           key={index}
                         >

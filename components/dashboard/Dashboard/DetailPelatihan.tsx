@@ -86,7 +86,7 @@ import { FaBookOpen } from "react-icons/fa6";
 import axios from "axios";
 import { PelatihanMasyarakat } from "@/types/product";
 import { generateFullNameBalai, generateTanggalPelatihan } from "@/utils/text";
-import { generateInstrukturName } from "@/lib/utils";
+import { formatToRupiah, generateInstrukturName } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import Toast from "@/components/toast";
 import { MateriButton, PublishButton } from "./Actions";
@@ -299,7 +299,7 @@ function DetailPelatihan() {
               <tr className="border-b border-b-gray-200 w-full">
                 <td className="font-semibold p-4 w-[20%]">Tarif Pelatihan</td>
                 <td className="p-4 w-2/3">
-                  Rp. {pelatihan!.HargaPelatihan || ""}
+                  {formatToRupiah(pelatihan!.HargaPelatihan) || ""}
                 </td>
               </tr>
               <tr className="border-b border-b-gray-200 w-full">
@@ -349,27 +349,28 @@ function DetailPelatihan() {
                   Materi Pelatihan
                 </td>
                 <td className="p-4 w-2/3">
-                  {pelatihan!.MateriPelatihan.length > 0 ? (
-                    <div className="flex flex-col gap-1">
-                      {pelatihan!.MateriPelatihan.map((materi, index) => (
-                        <span key={index}>
-                          {index + 1}. {materi.NamaMateri}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <>-</>
-                  )}
+                  {pelatihan.MateriPelatihan != null &&
+                    (pelatihan!.MateriPelatihan.length > 0 ? (
+                      <div className="flex flex-col gap-1">
+                        {pelatihan!.MateriPelatihan.map((materi, index) => (
+                          <span key={index}>
+                            {index + 1}. {materi.NamaMateri}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <>-</>
+                    ))}
                 </td>
               </tr>
-              <tr className="border-b border-b-gray-200 w-full">
+              <tr className="border-b border-b-gray-200 w-fit whitespace-normal overflow-hidden">
                 <td className="font-semibold p-4 w-[20%]">
                   Silabus/Modul/Bahan Ajar Pelatihan
                 </td>
-                <td className="p-4 w-2/3">
+                <td className="p-4 w-2/3 ">
                   <Link
                     target="_blank"
-                    className="text-blue-500 underline"
+                    className="text-blue-500 underline "
                     href={`https://elaut-bppsdm.kkp.go.id/api-elaut/public/silabus/pelatihan/${
                       pelatihan!.SilabusPelatihan
                     }`}

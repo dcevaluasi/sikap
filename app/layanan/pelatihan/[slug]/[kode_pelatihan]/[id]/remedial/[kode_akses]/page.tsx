@@ -92,13 +92,13 @@ function Page() {
       );
       Toast.fire({
         icon: "success",
-        title: `Berhasil mensubmit jawaban post-test mu, silahkan lihat score pada dashboard pelatihanmu!`,
+        title: `Berhasil mensubmit jawaban remedial mu, silahkan lihat score pada dashboard pelatihanmu!`,
       });
       router.replace("/dashboard");
     } catch (e) {
       Toast.fire({
         icon: "error",
-        title: `Kesalahan di server, gagal mensubmit jawaban post-test mu!`,
+        title: `Kesalahan di server, gagal mensubmit jawaban remedial mu!`,
       });
     }
   };

@@ -216,6 +216,96 @@ function FormRegistrasi() {
     }
   };
 
+  const [emailManningAgent, setEmailManningAgent] = React.useState<string>("");
+  const [passwordManningAgent, setPasswordManningAgent] =
+    React.useState<string>("");
+  const [namaManningAgent, setNamaManningAgent] = React.useState<string>("");
+  const [noTelponManingAgent, setNoTelponManningAgent] =
+    React.useState<string>("");
+  const [namaPenanggungJawabManningAgent, setNamaPenanggungJawabManningAgent] =
+    React.useState<string>("");
+  const [alamat, setAlamat] = React.useState<string>("");
+
+  const clearFormManningAgent = () => {
+    setEmailManningAgent("");
+    setPasswordManningAgent("");
+    setNamaManningAgent("");
+    setNoTelponManningAgent("");
+    setNamaPenanggungJawabManningAgent("");
+    setAlamat("");
+  };
+
+  const handleRegistrasiAkunManningAgent = async (e: FormEvent) => {
+    e.preventDefault();
+    if (handlePasswordCriteria(passwordManningAgent)) {
+      if (
+        emailManningAgent == "" ||
+        passwordManningAgent == "" ||
+        namaManningAgent == "" ||
+        noTelponManingAgent == "" ||
+        namaPenanggungJawabManningAgent == "" ||
+        alamat == ""
+      ) {
+        Toast.fire({
+          icon: "error",
+          title: `Tolong lengkapi data registrasi!`,
+        });
+        setIsInputError(true);
+      } else {
+        if (captcha) {
+          try {
+            const response: AxiosResponse = await axios.post(
+              `${baseUrl}/manningAgent/registerManningAgent`,
+              JSON.stringify({
+                email: emailManningAgent,
+                password: passwordManningAgent,
+                nama_manning_agent: namaManningAgent,
+                no_telpon: noTelponManingAgent,
+                nama_penanggung_jawab: namaPenanggungJawabManningAgent,
+                alamat: alamat,
+              }),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            console.log({ response });
+
+            Cookies.set("XSRF083", "true");
+
+            Toast.fire({
+              icon: "success",
+              title: `Berhasil melakukan registrasi akun, silahkan untuk login terlebih dahulu!`,
+            });
+            router.push("/login/manning-agent");
+            clearFormManningAgent();
+          } catch (error: any) {
+            console.error({ error });
+            if (
+              error.response &&
+              error.response.data &&
+              error.response.data.Message
+            ) {
+              const errorMsg = error.response.data.Message;
+              Toast.fire({
+                icon: "error",
+                title: `Gagal melakukan registrasi akun, ${errorMsg}!`,
+              });
+              clearFormManningAgent();
+            } else {
+              Toast.fire({
+                icon: "error",
+                title: `Gagal melakukan registrasi akun. Terjadi kesalahan tidak diketahui.`,
+              });
+              clearFormManningAgent();
+            }
+          }
+        }
+      }
+    }
+  };
+
   const [openInfoKusuka, setOpenInfoKusuka] = React.useState(false);
   const [isKusukaUser, setIsKusukaUser] = React.useState(false);
 
@@ -235,37 +325,6 @@ function FormRegistrasi() {
 
     return () => clearInterval(interval);
   }, []);
-
-  const programPelatihan = [
-    {
-      id: "001",
-      name: "Mandiri",
-      icon: "/images/icons/perikanan.png",
-      slug: "mandiri",
-      description:
-        "Pelatihan perikanan adalah pelatihan yang meliputi kegiata penangkapan ikan, budidaya perikanan, serta inovasi sumber daya laut berkelanjutan.",
-    },
-    {
-      id: "002",
-      name: "Corporate/Manning Agent",
-      icon: "/images/icons/akp.png",
-      slug: "manning-agent",
-      description:
-        "Pendidikan dan Pelatihan Awak Kapal Perikanan adalah pendidikan dan/atau pelatihan untuk mencapai tingkat keahlian dan/atau keterampilan tertentu sesuai dengan jenjang, kompetensi, dan jabatan untuk awak Kapal Perikanan.",
-    },
-    {
-      id: "003",
-      name: "Portofolio",
-      icon: "/images/icons/kelautan.png",
-      slug: "portofolio",
-      description:
-        "Pelatihan kelautan adalah pelatihan yang meliputi eksplorasi tak terbatas yang mencakup pengelolaan sumber daya, konservasi, riset, dan inovasi teknologi di laut.",
-    },
-  ];
-
-  const [selectedProgram, setSelectedProgram] = React.useState<number | null>(
-    null
-  );
 
   return (
     <section className="flex flex-col">
@@ -361,23 +420,26 @@ function FormRegistrasi() {
               </p>
             </div>
 
-            <div className="max-w-sm  mx-5 md:mx-auto mt-5">
+            <div
+              className={`${
+                role == "Mandiri" || role == "" ? "max-w-sm" : "max-w-4xl"
+              }  mx-5 md:mx-auto mt-5`}
+            >
               <div className="flex flex-col gap-1">
-                <p className="font-jakarta  leading-[100%] text-gray-300  sm:text-sm sm:leading-8 ">
-                  Daftar Sebagai
-                </p>
+                <label
+                  className="block text-gray-200 text-sm font-medium mb-1"
+                  htmlFor="name"
+                >
+                  Daftar Sebagai <span className="text-red-600"></span>
+                </label>
                 <Select
                   value={role}
                   onValueChange={(value: string) => setRole(value)}
                 >
-                  <SelectTrigger className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200">
+                  <SelectTrigger className="form-input w-full py-6 bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200">
                     <p className="mr-3 flex items-center gap-1 text-base text-gray-300">
                       <HiMiniUserGroup />
-                      {role != ""
-                        ? role == "adminPusat"
-                          ? "Admin Pusat"
-                          : "Lemdiklat"
-                        : "Pilih Mendaftar Sebagai"}
+                      {role != "" ? role : "Pilih Mendaftar Sebagai"}
                     </p>
                   </SelectTrigger>
                   <SelectContent side="bottom">
@@ -427,181 +489,407 @@ function FormRegistrasi() {
                 </form>
               )}
 
-              <div className="flex items-center my-6">
-                <div
-                  className="border-t border-gray-300 grow mr-3"
-                  aria-hidden="true"
-                ></div>
-                <div
-                  className="border-t border-gray-300 grow ml-3"
-                  aria-hidden="true"
-                ></div>
-              </div>
-              <form
-                onSubmit={(e) => handleRegistrasiAkun(e)}
-                autoComplete="off"
-              >
-                <div className="flex flex-wrap -mx-3 mb-1">
-                  <div className="w-full px-3">
-                    <label
-                      className="block text-gray-200 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Nama Lengkap <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                      placeholder="Masukkan nama lengkap"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                    />
-                    {isInputError && (
-                      <span className="text-[#FF0000] font-medium">
-                        *Masukkan nama lengkap!
-                      </span>
-                    )}
+              {role == "Mandiri" && (
+                <>
+                  <div className="flex items-center my-6">
+                    <div
+                      className="border-t border-gray-300 grow mr-3"
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      className="border-t border-gray-300 grow ml-3"
+                      aria-hidden="true"
+                    ></div>
                   </div>
-                </div>
-                <div className="flex flex-wrap -mx-3 mb-1">
-                  <div className="w-full px-3">
-                    <label
-                      className="block text-gray-200 text-sm font-medium mb-1"
-                      htmlFor="nik"
-                    >
-                      NIK <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="nik"
-                      type="nik"
-                      className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                      placeholder="Masukkan NIK"
-                      value={nik}
-                      onChange={(e) => setNik(e.target.value)}
-                      required
-                    />
-                    {isInputError && (
-                      <span className="text-[#FF0000] font-medium">
-                        *Masukkan NIK!
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex flex-wrap -mx-3 mb-1">
-                  <div className="w-full px-3">
-                    <label
-                      className="block text-gray-200 text-sm font-medium mb-1"
-                      htmlFor="email"
-                    >
-                      No Telpon <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="phone number"
-                      type="number"
-                      maxLength={13}
-                      className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                      placeholder="Masukkan no telpon"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      required
-                    />
-                    {isInputError && (
-                      <span className="text-[#FF0000] font-medium">
-                        *Masukkan no telpon!
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div className="flex flex-wrap -mx-3 mb-1">
-                  <div className="w-full px-3">
-                    <label
-                      className="block text-gray-200 text-sm font-medium mb-1"
-                      htmlFor="password"
-                    >
-                      Password <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="password"
-                      type="password"
-                      className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                      placeholder="Masukkan password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                    {isInputError && (
-                      <span className="text-[#FF0000] font-medium">
-                        *Masukkan password!
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <div
-                  className="flex flex-wrap w-full -mx-3 mb-1"
-                  style={{ width: "100% !important" }}
-                >
-                  <div
-                    className="w-full px-3"
-                    style={{ width: "100% !important" }}
+                  <form
+                    onSubmit={(e) => handleRegistrasiAkun(e)}
+                    autoComplete="off"
                   >
-                    <label
-                      className="block text-gray-200 text-sm font-medium mb-1"
-                      htmlFor="password"
-                    >
-                      Verify if you are not a robot{" "}
-                      <span className="text-red-600">*</span>
-                    </label>
-                    <ReCAPTCHA
-                      style={{ width: "100% !important" }}
-                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                      className="mx-auto w-[600px] font-inter text-sm"
-                      onChange={setCaptcha}
-                    />
-                  </div>
-                </div>
-                <div className="flex flex-wrap -mx-3 mt-3">
-                  <div className="w-full px-3 flex flex-col gap-2">
-                    <button
-                      type="submit"
-                      className="btn text-white bg-blue-500 hover:bg-blue-600 w-full"
-                    >
-                      Registrasi
-                    </button>
-                    {!useKUSUKA && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          setUseKUSUKA(!useKUSUKA);
-                          window.scrollTo(0, 0);
-                        }}
-                        className="btn text-white bg-transparent border border-blue-500 hover:bg-blue-500 flex w-full gap-2"
-                      >
-                        <Image
-                          src={"/logo-kkp-full-white.png"}
-                          className="w-6"
-                          alt=""
-                          width={0}
-                          height={0}
+                    <div className="flex flex-wrap -mx-3 mb-1">
+                      <div className="w-full px-3">
+                        <label
+                          className="block text-gray-200 text-sm font-medium mb-1"
+                          htmlFor="name"
+                        >
+                          Nama Lengkap <span className="text-red-600">*</span>
+                        </label>
+                        <input
+                          id="name"
+                          type="text"
+                          className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                          placeholder="Masukkan nama lengkap"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
                         />
-                        <span>Daftar Dengan KUSUKA</span>
-                      </button>
-                    )}
+                        {isInputError && (
+                          <span className="text-[#FF0000] font-medium">
+                            *Masukkan nama lengkap!
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap -mx-3 mb-1">
+                      <div className="w-full px-3">
+                        <label
+                          className="block text-gray-200 text-sm font-medium mb-1"
+                          htmlFor="nik"
+                        >
+                          NIK <span className="text-red-600">*</span>
+                        </label>
+                        <input
+                          id="nik"
+                          type="text"
+                          className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                          placeholder="Masukkan NIK"
+                          value={nik}
+                          onChange={(e) => setNik(e.target.value)}
+                          required
+                        />
+                        {isInputError && (
+                          <span className="text-[#FF0000] font-medium">
+                            *Masukkan NIK!
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap -mx-3 mb-1">
+                      <div className="w-full px-3">
+                        <label
+                          className="block text-gray-200 text-sm font-medium mb-1"
+                          htmlFor="email"
+                        >
+                          No Telpon <span className="text-red-600">*</span>
+                        </label>
+                        <input
+                          id="phone number"
+                          type="text"
+                          className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                          placeholder="Masukkan no telpon"
+                          value={phoneNumber}
+                          onChange={(e) => setPhoneNumber(e.target.value)}
+                          required
+                        />
+                        {isInputError && (
+                          <span className="text-[#FF0000] font-medium">
+                            *Masukkan no telpon!
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap -mx-3 mb-1">
+                      <div className="w-full px-3">
+                        <label
+                          className="block text-gray-200 text-sm font-medium mb-1"
+                          htmlFor="password"
+                        >
+                          Password <span className="text-red-600">*</span>
+                        </label>
+                        <input
+                          id="password"
+                          type="password"
+                          className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                          placeholder="Masukkan password"
+                          required
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                        {isInputError && (
+                          <span className="text-[#FF0000] font-medium">
+                            *Masukkan password!
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      className="flex flex-wrap w-full mb-1"
+                      style={{ width: "100% !important" }}
+                    >
+                      <div
+                        className="w-full"
+                        style={{ width: "100% !important" }}
+                      >
+                        <label
+                          className="block text-gray-200 text-sm font-medium mb-1"
+                          htmlFor="password"
+                        >
+                          Verify if you are not a robot{" "}
+                          <span className="text-red-600">*</span>
+                        </label>
+                        <ReCAPTCHA
+                          style={{ width: "100% !important" }}
+                          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                          className=" w-[600px] font-inter text-sm"
+                          onChange={setCaptcha}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap -mx-3 mt-3">
+                      <div className="w-full px-3 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          className="btn text-white bg-blue-500 hover:bg-blue-600 w-full"
+                        >
+                          Registrasi
+                        </button>
+                        {!useKUSUKA && role == "Mandiri" && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              setUseKUSUKA(!useKUSUKA);
+                              window.scrollTo(0, 0);
+                            }}
+                            className="btn text-white bg-transparent border border-blue-500 hover:bg-blue-500 flex w-full gap-2"
+                          >
+                            <Image
+                              src={"/logo-kkp-full-white.png"}
+                              className="w-6"
+                              alt=""
+                              width={0}
+                              height={0}
+                            />
+                            <span>Daftar Dengan KUSUKA</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-200 text-center mt-3">
+                      Dengan membuat akun, anda menyetujui{" "}
+                      <a className="underline" href="#0">
+                        Ketentuan & Kondisi
+                      </a>
+                      , serta{" "}
+                      <a className="underline" href="#0">
+                        Keamanan Privasi
+                      </a>{" "}
+                      kami .
+                    </div>
+                  </form>
+                </>
+              )}
+
+              {role == "Corporate/Manning Agent" && (
+                <div className="">
+                  <div className="flex items-center my-6">
+                    <div
+                      className="border-t border-gray-300 grow mr-3"
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      className="border-t border-gray-300 grow ml-3"
+                      aria-hidden="true"
+                    ></div>
                   </div>
+                  <form
+                    onSubmit={(e) => handleRegistrasiAkunManningAgent(e)}
+                    autoComplete="off"
+                  >
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="flex flex-wrap -mx-3 mb-1">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-200 text-sm font-medium mb-1"
+                            htmlFor="namaManningAgent"
+                          >
+                            Nama Manning Agent{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="namaManningAgent"
+                            type="text"
+                            className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                            placeholder="Masukkan nama lengkap"
+                            value={namaManningAgent}
+                            onChange={(e) =>
+                              setNamaManningAgent(e.target.value)
+                            }
+                            required
+                          />
+                          {isInputError && (
+                            <span className="text-[#FF0000] font-medium">
+                              *Masukkan nama lengkap!
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap -mx-3 mb-1">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-200 text-sm font-medium mb-1"
+                            htmlFor="noTelponManingAgent"
+                          >
+                            No Telpon <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="noTelponManingAgent"
+                            type="text"
+                            className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                            placeholder="Masukkan No Telpon"
+                            value={noTelponManingAgent}
+                            onChange={(e) =>
+                              setNoTelponManningAgent(e.target.value)
+                            }
+                            required
+                          />
+                          {isInputError && (
+                            <span className="text-[#FF0000] font-medium">
+                              *Masukkan No Telpon!
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap -mx-3 mb-1">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-200 text-sm font-medium mb-1"
+                            htmlFor="emailManningAgent"
+                          >
+                            Email <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="emailManningAgent"
+                            type="email"
+                            className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                            placeholder="Masukkan email"
+                            value={emailManningAgent}
+                            onChange={(e) =>
+                              setEmailManningAgent(e.target.value)
+                            }
+                            required
+                          />
+                          {isInputError && (
+                            <span className="text-[#FF0000] font-medium">
+                              *Masukkan email!
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap -mx-3 mb-1">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-200 text-sm font-medium mb-1"
+                            htmlFor="namaPenanggungJawabManningAgent"
+                          >
+                            Nama Penanggung Jawab{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="namaPenanggungJawabManningAgent"
+                            type="text"
+                            className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                            placeholder="Masukkan nama penanggung jawab"
+                            value={namaPenanggungJawabManningAgent}
+                            onChange={(e) =>
+                              setNamaPenanggungJawabManningAgent(e.target.value)
+                            }
+                            required
+                          />
+                          {isInputError && (
+                            <span className="text-[#FF0000] font-medium">
+                              *Masukkan nama penanggung jawab!
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap -mx-3 mb-1">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-200 text-sm font-medium mb-1"
+                            htmlFor="alamat"
+                          >
+                            Alamat <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="alamat"
+                            type="text"
+                            className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                            placeholder="Masukkan alamat"
+                            value={alamat}
+                            onChange={(e) => setAlamat(e.target.value)}
+                            required
+                          />
+                          {isInputError && (
+                            <span className="text-[#FF0000] font-medium">
+                              *Masukkan alamat!
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap -mx-3 mb-1">
+                        <div className="w-full px-3">
+                          <label
+                            className="block text-gray-200 text-sm font-medium mb-1"
+                            htmlFor="password"
+                          >
+                            Password <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="password"
+                            type="password"
+                            className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                            placeholder="Masukkan password"
+                            required
+                            value={passwordManningAgent}
+                            onChange={(e) =>
+                              setPasswordManningAgent(e.target.value)
+                            }
+                          />
+                          {isInputError && (
+                            <span className="text-[#FF0000] font-medium">
+                              *Masukkan password!
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div
+                      className="flex flex-wrap w-full mb-1"
+                      style={{ width: "100% !important" }}
+                    >
+                      <div
+                        className="w-full"
+                        style={{ width: "100% !important" }}
+                      >
+                        <label
+                          className="block text-gray-200 text-sm font-medium mb-1"
+                          htmlFor="password"
+                        >
+                          Verify if you are not a robot{" "}
+                          <span className="text-red-600">*</span>
+                        </label>
+                        <ReCAPTCHA
+                          style={{ width: "100% !important" }}
+                          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                          className=" w-[600px] font-inter text-sm"
+                          onChange={setCaptcha}
+                        />
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap -mx-3 mt-3">
+                      <div className="w-full px-3 flex flex-col gap-2">
+                        <button
+                          type="submit"
+                          className="btn text-white bg-blue-500 hover:bg-blue-600 w-full"
+                        >
+                          Registrasi
+                        </button>
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-200 text-center mt-3">
+                      Dengan membuat akun, anda menyetujui{" "}
+                      <a className="underline" href="#0">
+                        Ketentuan & Kondisi
+                      </a>
+                      , serta{" "}
+                      <a className="underline" href="#0">
+                        Keamanan Privasi
+                      </a>{" "}
+                      kami .
+                    </div>
+                  </form>
                 </div>
-                <div className="text-sm text-gray-200 text-center mt-3">
-                  Dengan membuat akun, anda menyetujui{" "}
-                  <a className="underline" href="#0">
-                    Ketentuan & Kondisi
-                  </a>
-                  , serta{" "}
-                  <a className="underline" href="#0">
-                    Keamanan Privasi
-                  </a>{" "}
-                  kami .
-                </div>
-              </form>
+              )}
               <div className="flex items-center my-6">
                 <div
                   className="border-t border-gray-300 grow mr-3"
@@ -615,7 +903,7 @@ function FormRegistrasi() {
               <div className="text-gray-200 text-center mt-6">
                 Sudah punya akun sebelumnya?{" "}
                 <Link
-                  href="/login"
+                  href={role == "Mandiri" ? "/login" : "/login/manning-agent"}
                   className="text-blue-500 hover:underline transition duration-150 ease-in-out"
                 >
                   Log In

@@ -113,7 +113,7 @@ const options: ApexOptions = {
       },
     },
     min: 0,
-    max: 100,
+    max: 4000,
   },
 };
 
@@ -167,7 +167,10 @@ const ChartCertificatesMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
                 <p className="font-semibold text-primary">Total Keahlian</p>
                 <p className="text-sm font-medium">
                   {data
-                    .filter((item: BlankoKeluar) => item.TipeBlanko === "CoC")
+                    .filter(
+                      (item: BlankoKeluar) =>
+                        item.TipeBlanko === "Certificate of Competence (CoC)"
+                    )
                     .reduce(
                       (total: number, item: BlankoKeluar) =>
                         total + item.JumlahBlankoDisetujui,
@@ -187,7 +190,10 @@ const ChartCertificatesMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
                 </p>
                 <p className="text-sm font-medium">
                   {data
-                    .filter((item: BlankoKeluar) => item.TipeBlanko === "CoP")
+                    .filter(
+                      (item: BlankoKeluar) =>
+                        item.TipeBlanko === "Certificate of Proficiency (CoP)"
+                    )
                     .reduce(
                       (total: number, item: BlankoKeluar) =>
                         total + item.JumlahBlankoDisetujui,
@@ -235,121 +241,121 @@ const ChartCertificatesMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "01"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "02"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "03"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "04"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "05"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "06"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "07"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "08"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "09"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "10"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "11"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoC" &&
+                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "12"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                 ],
@@ -361,121 +367,133 @@ const ChartCertificatesMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "01"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "02"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "03"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "04"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "05"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "06"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "07"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "08"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "09"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "10"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "11"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                   data
                     .filter(
                       (item) =>
-                        item.TipeBlanko === "CoP" &&
+                        item.TipeBlanko ===
+                          "Certificate of Proficiency (CoP)" &&
                         getMonthFromDateString(item.TanggalKeluar) === "12"
                     )
                     .reduce(
-                      (total, item) => total + item.JumlahBlankoDiajukan,
+                      (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     ),
                 ],

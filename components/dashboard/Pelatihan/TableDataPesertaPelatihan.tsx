@@ -135,6 +135,7 @@ const TableDataPesertaPelatihan = () => {
     id: number,
     status: string
   ) => {
+    console.log({ id });
     const formData = new FormData();
     formData.append("NoSertifikat", status);
     console.log({ status });

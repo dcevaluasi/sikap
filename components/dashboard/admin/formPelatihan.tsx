@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -106,6 +108,10 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   const [tanggalMulaiPelatihan, setTanggalMulaiPelatihan] = React.useState("");
   const [tanggalBerakhirPelatihan, setTanggalBerakhirPelatihan] =
     React.useState("");
+  const [tanggalMulaiPendaftaran, setTanggalMulaiPendaftaran] =
+    React.useState("");
+  const [tanggalBerakhirPendaftaran, setTanggalBerakhirPendaftaran] =
+    React.useState("");
   const [hargaPelatihan, setHargaPelatihan] = React.useState<number>(0);
   const [instruktur, setInstruktur] = React.useState("");
   const [fotoPelatihan, setFotoPelatihan] = React.useState(null);
@@ -122,6 +128,8 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   const [noSertifikat, setNoSertifikat] = React.useState("");
   const [idSaranaPrasarana, setIdSaranaPrasarana] = React.useState("");
   const [idKonsumsi, setIdKonsumsi] = React.useState("");
+  const [program, setProgram] = React.useState<string>("");
+  const [jenisProgram, setJenisProgram] = React.useState<string>("");
 
   /*
     method for resting all state data public traning (RESET)
@@ -137,9 +145,13 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     console.log("dukunganProgramTerobosan:", dukunganProgramTerobosan);
     console.log("tanggalMulaiPelatihan:", tanggalMulaiPelatihan);
     console.log("tanggalBerakhirPelatihan:", tanggalBerakhirPelatihan);
+    console.log("tanggalMulaiPendaftaran:", tanggalMulaiPendaftaran);
+    console.log("tanggalBerakhirPendaftaran:", tanggalBerakhirPendaftaran);
     console.log("hargaPelatihan:", hargaPelatihan);
     console.log("instruktur:", instruktur);
     console.log("fotoPelatihan:", fotoPelatihan);
+    console.log("program", program);
+    console.log("jenisProgram", jenisProgram);
     console.log("status:", status);
     console.log("memoPusat:", memoPusat);
     console.log("silabusPelatihan:", silabusPelatihan);
@@ -166,10 +178,14 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     setDukunganProgramTerobosan("");
     setTanggalMulaiPelatihan("");
     setTanggalBerakhirPelatihan("");
+    setTanggalMulaiPendaftaran("");
+    setTanggalBerakhirPendaftaran("");
     setHargaPelatihan(0);
     setInstruktur("");
     setFotoPelatihan(null);
     setStatus("");
+    setProgram("");
+    setJenisProgram("");
     setMemoPusat("");
     setSilabusPelatihan(null);
     setLokasiPelatihan("");
@@ -237,10 +253,14 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     data.append("JenisPelatihan", jenisPelatihan);
     data.append("BidangPelatihan", bidangPelatihan);
     data.append("DukunganProgramTerobosan", dukunganProgramTerobosan);
-    data.append("TanggalMulaiPendaftaran", tanggalMulaiPelatihan);
-    data.append("TanggalAkhirPendaftaran", tanggalBerakhirPelatihan);
+    data.append("TanggalMulaiPendaftaran", tanggalMulaiPendaftaran);
+    data.append("TanggalAkhirPendaftaran", tanggalBerakhirPendaftaran);
+    data.append("TanggalMulaiPelatihan", tanggalMulaiPelatihan);
+    data.append("TanggalBerakhirPelatihan", tanggalBerakhirPelatihan);
     data.append("HargaPelatihan", hargaPelatihan.toString());
     data.append("Instruktur", instruktur);
+    data.append("Program", program);
+    data.append("JenisProgram", jenisProgram);
     if (fotoPelatihan !== null) {
       data.append("photo_pelatihan", fotoPelatihan);
     }
@@ -413,6 +433,42 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
 
   const [isFacility, setIsFacility] = React.useState("Tidak");
   const [isConsume, setIsConsume] = React.useState("Tidak");
+
+  const akpSelections = [
+    "ANKAPIN Tingkat I",
+    "ATKAPIN Tingkat I",
+    "ANKAPIN Tingkat II",
+    "ATKAPIN Tingkat II",
+    "ANKAPIN Tingkat III",
+    "ATKAPIN Tingkat III",
+    "BST",
+    "BST KLM",
+    "BSTF I",
+    "BSTF II",
+    "Rating",
+    "SKN",
+    "SKPI",
+    "SOPI",
+    "Fishing Master",
+    "Lainnya",
+  ];
+
+  const perikananSelection = [
+    "CPIB",
+    "CBIB",
+    "CPPIB",
+    "HACCP",
+    "SPI",
+    "API",
+    "Budidaya",
+    "Pengolahan dan Pemasaran",
+    "Mesin Perikanan",
+    "Penangkapan",
+    "SD Perikanan",
+    "Wisata Bahari",
+  ];
+
+  const kelautanSection = ["BCL", "Pengelolaan Sampah", "Mitigasi Bencana"];
 
   const [sarpras, setSarpras] = React.useState<Sarpras[]>([]);
   const [konsumsi, setKonsumsi] = React.useState<Sarpras[]>([]);
@@ -621,6 +677,60 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                               className="form-input w-full text-black border-gray-300 rounded-md"
                               required
                               min={new Date().toISOString().split("T")[0]}
+                              value={tanggalMulaiPendaftaran}
+                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                setTanggalMulaiPendaftaran(e.target.value)
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                          <div className="w-full px-3">
+                            <label
+                              className="block text-gray-800 text-sm font-medium mb-1"
+                              htmlFor="namaPelatihan"
+                            >
+                              Tanggal Berakhir Pendaftaran{" "}
+                              <span className="text-red-600">*</span>
+                            </label>
+                            <input
+                              id="tanggalBerakhirPelatihan"
+                              type="date"
+                              className="form-input w-full text-black border-gray-300 rounded-md"
+                              required
+                              min={
+                                tanggalMulaiPendaftaran ||
+                                new Date().toISOString().split("T")[0]
+                              }
+                              value={tanggalBerakhirPendaftaran}
+                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                                setTanggalBerakhirPendaftaran(e.target.value)
+                              }
+                              disabled={!tanggalMulaiPendaftaran}
+                            />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 w-full">
+                        <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                          <div className="w-full px-3">
+                            <label
+                              className="block text-gray-800 text-sm font-medium mb-1"
+                              htmlFor="kodePelatihan"
+                            >
+                              Tanggal Mulai Pelatihan{" "}
+                              <span className="text-red-600">*</span>
+                            </label>
+                            <input
+                              id="tanggalMulaiPelatihan"
+                              type="date"
+                              className="form-input w-full text-black border-gray-300 rounded-md"
+                              required
+                              min={
+                                tanggalBerakhirPendaftaran ||
+                                new Date().toISOString().split("T")[0]
+                              }
                               value={tanggalMulaiPelatihan}
                               onChange={(e: ChangeEvent<HTMLInputElement>) =>
                                 setTanggalMulaiPelatihan(e.target.value)
@@ -634,7 +744,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                               className="block text-gray-800 text-sm font-medium mb-1"
                               htmlFor="namaPelatihan"
                             >
-                              Tanggal Berakhir Pendaftaran{" "}
+                              Tanggal Berakhir Pelatihan{" "}
                               <span className="text-red-600">*</span>
                             </label>
                             <input
@@ -743,6 +853,9 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                                 </SelectItem>
                                 <SelectItem value="Wisata Bahari">
                                   Wisata Bahari
+                                </SelectItem>
+                                <SelectItem value="Manajemen Perikanan">
+                                  Manajemen Perikanan
                                 </SelectItem>
                               </SelectContent>
                             </Select>
@@ -968,6 +1081,96 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                                   Pengawasan Pesisir
                                 </SelectItem>
                                 <SelectItem value="BCL">BCL</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-2 w-full">
+                        <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                          <div className="w-full px-3">
+                            <label
+                              className="block text-gray-800 text-sm font-medium mb-1"
+                              htmlFor="jensiPelatihan"
+                            >
+                              Jenis Program{" "}
+                              <span className="text-red-600">*</span>
+                            </label>
+                            <Select
+                              value={jenisProgram}
+                              onValueChange={(value: string) =>
+                                setJenisProgram(value)
+                              }
+                            >
+                              <SelectTrigger className="w-full text-base py-5">
+                                <SelectValue placeholder="Pilih jenis program" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Awak Kapal Perikanan">
+                                  Awak Kapal Perikanan
+                                </SelectItem>
+                                <SelectItem value="Perikanan">
+                                  Perikanan
+                                </SelectItem>
+                                <SelectItem value="Kelautan">
+                                  Kelautan
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                          <div className="w-full px-3">
+                            <label
+                              className="block text-gray-800 text-sm font-medium mb-1"
+                              htmlFor="program"
+                            >
+                              Program <span className="text-red-600">*</span>
+                            </label>
+                            <Select
+                              value={program}
+                              onValueChange={(value) => setProgram(value)}
+                            >
+                              <SelectTrigger className="w-full text-base py-5">
+                                <SelectValue placeholder="Pilih program" />
+                              </SelectTrigger>
+                              <SelectContent className="z-[10000]">
+                                <SelectGroup>
+                                  <SelectLabel>
+                                    Pilih Program Pelatihan
+                                  </SelectLabel>
+                                  {jenisProgram == "Awak Kapal Perikanan" && (
+                                    <>
+                                      {akpSelections.map((akp, index) => (
+                                        <SelectItem key={index} value={akp}>
+                                          {akp}
+                                        </SelectItem>
+                                      ))}
+                                    </>
+                                  )}
+
+                                  {jenisProgram == "Perikanan" && (
+                                    <>
+                                      {perikananSelection.map((akp, index) => (
+                                        <SelectItem key={index} value={akp}>
+                                          {akp}
+                                        </SelectItem>
+                                      ))}
+                                    </>
+                                  )}
+
+                                  {jenisProgram == "Kelautan" && (
+                                    <>
+                                      {kelautanSection.map((akp, index) => (
+                                        <SelectItem key={index} value={akp}>
+                                          {akp}
+                                        </SelectItem>
+                                      ))}
+                                    </>
+                                  )}
+                                </SelectGroup>
                               </SelectContent>
                             </Select>
                           </div>

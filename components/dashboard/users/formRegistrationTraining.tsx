@@ -37,7 +37,11 @@ import { MdWorkOutline } from "react-icons/md";
 import { Checkbox } from "@/components/ui/checkbox";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
-import { PelatihanMasyarakat } from "@/types/product";
+import { PelatihanMasyarakat, Sarpras } from "@/types/product";
+import { formatToRupiah } from "@/lib/utils";
+import { HiMiniUserGroup } from "react-icons/hi2";
+import Link from "next/link";
+import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 
 function FormRegistrationTraining({
   id,
@@ -63,97 +67,86 @@ function FormRegistrationTraining({
 
   const [totalBayar, setTotalBayar] = React.useState(0);
 
-  const handleRegistrationTrainingForPeople = async (e: any) => {
+  const [isOpenFormPeserta, setIsOpenFormPeserta] =
+    React.useState<boolean>(false);
+  const [fileExcelPesertaPelatihan, setFileExcelPesertaPelatihan] =
+    React.useState<File | null>(null);
+  const handleFileChange = (e: any) => {
+    setFileExcelPesertaPelatihan(e.target.files[0]);
+  };
+  const handleUploadImportPesertaPelatihan = async (e: any) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("IdPelatihan", "0");
+    if (fileExcelPesertaPelatihan != null) {
+      formData.append("file", fileExcelPesertaPelatihan);
+    }
+
     try {
-      const response: AxiosResponse = await axios.post(
-        `${baseUrl}/users/addPelatihan`,
-        JSON.stringify({
-          id_pelatihan: id.toString(),
-          totalBayar: harga.toString(),
-          namaPelatihan: pelatihan?.NamaPelatihan,
-          
-          bidangPelatihan: pelatihan?.BidangPelatihan,
-          DetailPelatihan: pelatihan?.DetailPelatihan,
-          statusAproval: pelatihan?.StatusApproval,
-        }),
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/exportPesertaPelatihan`,
+        formData,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
           },
         }
       );
-
+      console.log("FILE UPLOADED PESERTA : ", response);
       Toast.fire({
         icon: "success",
-        title: `Berhasil melakukan pendaftaran, tunggu kabar selanjutnya sobat ELAUT!`,
+        title: `Selamat anda berhasil mengupload peserta pelatihan!`,
       });
-      console.log({ response });
-      router.push("/dashboard");
+      setIsOpenFormPeserta(!isOpenFormPeserta);
     } catch (error) {
-      console.error({ error });
+      console.log("FILE IMPORT PESERTA PELATIHAN : ", error);
       Toast.fire({
         icon: "error",
-        title: "Anda telah mendaftar pelatihan ini sebelumnya!",
+        title: `Gagal mengupload peserta pelatihan!`,
       });
     }
   };
 
-  type Sarpras = {
-    IdSarpras: number;
-    IdLemdik: number;
-    NamaSarpras: string;
-    Harga: number;
-    Deskripsi: string;
-    Jenis: string;
-    CreatedAt: string;
-    UpdatedAt: string;
-  };
+  const handleRegistrationTrainingForPeople = async (e: any) => {
+    e.preventDefault();
+    if (Cookies.get("isManningAgent")) {
+      setIsOpenFormPeserta(!isOpenFormPeserta);
+    } else {
+      try {
+        const response: AxiosResponse = await axios.post(
+          `${baseUrl}/users/addPelatihan`,
+          JSON.stringify({
+            id_pelatihan: id.toString(),
+            totalBayar: pelatihan?.HargaPelatihan.toString(),
+            namaPelatihan: pelatihan?.NamaPelatihan,
 
-  const [sarpras, setSarpras] = React.useState<Sarpras[]>([]);
-  const [konsumsi, setKonsumsi] = React.useState<Sarpras[]>([]);
+            bidangPelatihan: pelatihan?.BidangPelatihan,
+            DetailPelatihan: pelatihan?.DetailPelatihan,
+            statusAproval: pelatihan?.StatusApproval,
+          }),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-  const handleFetchingSarprasData = async () => {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Penginapan`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log({ response });
-      setSarpras(response.data.data);
-    } catch (error) {
-      console.error("Error fetching data sarpras:", error);
-      throw error;
+        Toast.fire({
+          icon: "success",
+          title: `Berhasil melakukan pendaftaran, tunggu kabar selanjutnya sobat ELAUT!`,
+        });
+        console.log({ response });
+        router.push("/dashboard");
+      } catch (error) {
+        console.error({ error });
+        Toast.fire({
+          icon: "error",
+          title: "Anda telah mendaftar pelatihan ini sebelumnya!",
+        });
+      }
     }
   };
-
-  const handleFetchingKonsumsiData = async () => {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getSarpras?jenis_sarpras=Konsumsi`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log({ response });
-      setKonsumsi(response.data.data);
-    } catch (error) {
-      console.error("Error fetching data konsumsi:", error);
-      throw error;
-    }
-  };
-
-  React.useEffect(() => {
-    handleFetchingSarprasData();
-    handleFetchingKonsumsiData();
-  }, []);
 
   const [formTab, setFormTab] = React.useState("FormFasilitas");
   const [indexFormTab, setIndexFormTab] = React.useState(0);
@@ -161,33 +154,106 @@ function FormRegistrationTraining({
   const [isTakeFacilityHome, setIsTakeFacilityHome] = React.useState(false);
   const [isTakeFacilityFood, setIsTakeFacilityFood] = React.useState(false);
 
-  const FormFasilitas = () => {
+  const [selectedPenginapan, setSelectedPenginapan] =
+    React.useState<Sarpras | null>(null);
+  const [selectedKonsumsi, setSelectedKonsumsi] =
+    React.useState<Sarpras | null>(null);
+
+  const handleCheckboxChange = (item: Sarpras) => {
+    if (item.Jenis === "Penginapan") {
+      if (selectedPenginapan === item) {
+        // Uncheck Penginapan if already selected
+        setSelectedPenginapan(null);
+      } else {
+        // Select Penginapan and clear Konsumsi
+        setSelectedPenginapan(item);
+      }
+    } else if (item.Jenis === "Konsumsi") {
+      if (selectedKonsumsi === item) {
+        // Uncheck Konsumsi if already selected
+        setSelectedKonsumsi(null);
+      } else {
+        // Select Konsumsi and clear Penginapan
+        setSelectedKonsumsi(item);
+      }
+    }
+  };
+
+  const FormPesertaPelatihan = () => {
     return (
       <form
         autoComplete="off"
-        className={`${indexFormTab == 0 ? "block" : "hidden"}`}
+        className={`${
+          indexFormTab == 1 && Cookies.get("isManningAgent")
+            ? "block"
+            : "hidden"
+        }`}
       >
+        {/* Penginapan Section */}
         <div className="flex flex-wrap -mx-3 mb-1">
           <div className="w-full px-3">
             <label
               className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
+              htmlFor="penginapan"
             >
               Pilih Paket Fasilitas Penginapan{" "}
               <span className="text-red-600">*</span>
             </label>
             <div className="flex flex-col gap-2">
-              {sarpras.map((item, index) => (
+              {pelatihan.SarprasPelatihan.filter(
+                (item) => item.Jenis === "Penginapan"
+              ).map((item, index) => (
                 <div
                   key={index}
                   className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
                 >
                   <div>
-                    <Checkbox />
+                    <input
+                      type="checkbox"
+                      checked={selectedPenginapan === item}
+                      onChange={() => handleCheckboxChange(item)}
+                    />
                   </div>
                   <div className="space-y-1 leading-none">
                     <label>
-                      {item.NamaSarpras} Rp. {item.Harga}
+                      {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                    </label>
+                    <p className="text-xs text-gray-600">{item.Deskripsi}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Konsumsi Section */}
+        <div className="flex flex-wrap -mx-3 mb-1">
+          <div className="w-full px-3">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-1"
+              htmlFor="konsumsi"
+            >
+              Pilih Paket Konsumsi atau Catering{" "}
+              <span className="text-red-600">*</span>
+            </label>
+            <div className="flex flex-col gap-2">
+              {pelatihan.SarprasPelatihan.filter(
+                (item) => item.Jenis === "Konsumsi"
+              ).map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                >
+                  <div>
+                    <input
+                      type="checkbox"
+                      checked={selectedKonsumsi === item}
+                      onChange={() => handleCheckboxChange(item)}
+                    />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>
+                      {item.NamaSarpras} ({formatToRupiah(item.Harga)})
                     </label>
                     <p className="text-xs text-gray-600">{item.Deskripsi}</p>
                   </div>
@@ -199,6 +265,92 @@ function FormRegistrationTraining({
       </form>
     );
   };
+
+  const FormFasilitas = () => {
+    return (
+      <form
+        autoComplete="off"
+        className={`${indexFormTab == 0 ? "block" : "hidden"}`}
+      >
+        {/* Penginapan Section */}
+        <div className="flex flex-wrap -mx-3 mb-1">
+          <div className="w-full px-3">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-1"
+              htmlFor="penginapan"
+            >
+              Pilih Paket Fasilitas Penginapan{" "}
+              <span className="text-red-600">*</span>
+            </label>
+            <div className="flex flex-col gap-2">
+              {pelatihan.SarprasPelatihan.filter(
+                (item) => item.Jenis === "Penginapan"
+              ).map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                >
+                  <div>
+                    <input
+                      type="checkbox"
+                      checked={selectedPenginapan === item}
+                      onChange={() => handleCheckboxChange(item)}
+                    />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>
+                      {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                    </label>
+                    <p className="text-xs text-gray-600">{item.Deskripsi}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Konsumsi Section */}
+        <div className="flex flex-wrap -mx-3 mb-1">
+          <div className="w-full px-3">
+            <label
+              className="block text-gray-800 text-sm font-medium mb-1"
+              htmlFor="konsumsi"
+            >
+              Pilih Paket Konsumsi atau Catering{" "}
+              <span className="text-red-600">*</span>
+            </label>
+            <div className="flex flex-col gap-2">
+              {pelatihan.SarprasPelatihan.filter(
+                (item) => item.Jenis === "Konsumsi"
+              ).map((item, index) => (
+                <div
+                  key={index}
+                  className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                >
+                  <div>
+                    <input
+                      type="checkbox"
+                      checked={selectedKonsumsi === item}
+                      onChange={() => handleCheckboxChange(item)}
+                    />
+                  </div>
+                  <div className="space-y-1 leading-none">
+                    <label>
+                      {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                    </label>
+                    <p className="text-xs text-gray-600">{item.Deskripsi}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </form>
+    );
+  };
+
+  const [isAgreeWithAggreement, setIsAgreeWithAgreement] =
+    React.useState<boolean>(false);
 
   const FormPembayaran = () => {
     return (
@@ -212,76 +364,81 @@ function FormRegistrationTraining({
               className="block text-gray-800 text-sm font-medium mb-1"
               htmlFor="email"
             >
-              Metode Pembayaran <span className="text-red-600">*</span>
-            </label>
-            <Select>
-              <SelectTrigger className="w-full text-base py-6">
-                <SelectValue placeholder="Pilih metode pembayaran" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Bayar Dengan Transfer">
-                  Bayar Dengan Transfer
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            {/* <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
               Rincian Harga <span className="text-red-600"></span>
             </label>
             <Select>
-              <SelectTrigger className="w-full text-base py-16">
+              <SelectTrigger className="w-full text-base py-14">
                 <div className="flex flex-col items-start gap-1">
                   <p className="font-medium font-calsans text-lg text-left">
                     Pelatihan
                   </p>
-                  <p className="text-left">
-                    Diklat Pembesaran Udang Vaname <br />
-                    Lvl. Teknisi
+                  <p className="text-left">{pelatihan.NamaPelatihan}</p>
+                  <p className="font-medium font-calsans">
+                    {formatToRupiah(pelatihan.HargaPelatihan)}
                   </p>
-                  <p className="font-medium font-calsans">Rp. 110.000</p>
                 </div>
               </SelectTrigger>
             </Select>
-            <Select>
-              <SelectTrigger className="w-full text-base  py-16 mt-2">
-                <div className="flex flex-col items-start gap-1">
-                  <p className="font-medium font-calsans text-lg text-left">
-                    Penginapan
-                  </p>
-                  <p className="text-left">
-                    Paket BAHARI RESIDANCE-UMUM <br />B Rp 110.000
-                  </p>
-                  <p className="font-medium font-calsans">Rp. 300.000</p>
-                </div>
-              </SelectTrigger>
-            </Select>
-            <Select>
-              <SelectTrigger className="w-full text-base py-16 mt-2">
-                <div className="flex flex-col items-start gap-1">
-                  <p className="font-medium font-calsans text-lg text-left">
-                    Konsumsi
-                  </p>
-                  <p className="text-left">
-                    Tipe Paket Fullboard, Paket 3x
-                    <br /> Makan & Snack
-                  </p>
-                  <p className="font-medium font-calsans">Rp. 850.000</p>
-                </div>
-              </SelectTrigger>
-            </Select> */}
+            {selectedPenginapan != null && (
+              <Select>
+                <SelectTrigger className="w-full text-base  py-16 mt-2">
+                  <div className="flex flex-col items-start gap-1">
+                    <p className="font-medium font-calsans text-lg text-left">
+                      Penginapan
+                    </p>
+                    <p className="text-left">
+                      {selectedPenginapan?.NamaSarpras!}
+                    </p>
+                    <p className="font-medium font-calsans">
+                      {formatToRupiah(selectedPenginapan?.Harga!)}
+                    </p>
+                  </div>
+                </SelectTrigger>
+              </Select>
+            )}
+            {selectedKonsumsi != null && (
+              <Select>
+                <SelectTrigger className="w-full text-base py-16 mt-2">
+                  <div className="flex flex-col items-start gap-1">
+                    <p className="font-medium font-calsans text-lg text-left">
+                      Konsumsi
+                    </p>
+                    <p className="text-left">
+                      {selectedKonsumsi?.NamaSarpras!}
+                    </p>
+                    <p className="font-medium font-calsans">
+                      {formatToRupiah(selectedKonsumsi?.Harga!)}
+                    </p>
+                  </div>
+                </SelectTrigger>
+              </Select>
+            )}
+
             <div className="h-1 w-full rounded-full my-2 bg-blue-500"></div>
             <div className="flex items-center justify-between">
               <p className="font-bold text-lg">Total</p>
-              <p className="font-bold text-blue-500 text-3xl">Rp. {harga}</p>
+              <p className="font-bold text-blue-500 text-3xl">
+                {selectedKonsumsi != null &&
+                  selectedPenginapan != null &&
+                  formatToRupiah(
+                    parseInt(harga) +
+                      selectedKonsumsi?.Harga! +
+                      selectedPenginapan?.Harga!
+                  )}
+
+                {selectedKonsumsi == null &&
+                  selectedPenginapan == null &&
+                  formatToRupiah(parseInt(harga))}
+              </p>
             </div>
             <div className="flex items-center space-x-2 py-3 mt-5">
-              <Checkbox id="terms" />
+              <Checkbox
+                id="terms"
+                checked={isAgreeWithAggreement}
+                onCheckedChange={(e) =>
+                  setIsAgreeWithAgreement(!isAgreeWithAggreement)
+                }
+              />
               <label
                 htmlFor="terms"
                 className="text-base  peer-disabled:cursor-not-allowed text-gray-500 peer-disabled:opacity-70"
@@ -302,6 +459,66 @@ function FormRegistrationTraining({
 
   return (
     <section className="relative w-full -mt-5">
+      <AlertDialog open={isOpenFormPeserta}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              {" "}
+              <HiMiniUserGroup className="h-4 w-4" />
+              Import Peserta Pelatihan
+            </AlertDialogTitle>
+            <AlertDialogDescription className="-mt-2">
+              Import peserta yang akan mengikuti pelatihan ini!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <fieldset>
+            <form autoComplete="off">
+              <div className="flex flex-wrap -mx-3 mb-1">
+                <div className="w-full px-3">
+                  <label
+                    className="block text-gray-800 text-sm font-medium mb-1"
+                    htmlFor="email"
+                  >
+                    Data By Name By Address <span>*</span>
+                  </label>
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                      required
+                      onChange={handleFileChange}
+                    />
+                    <Link
+                      target="_blank"
+                      href={
+                        "https://docs.google.com/spreadsheets/d/1KlEBRcgXLZK6NCL0r4nglKa6XazHgUH7fqvHlrIHmNI/edit?usp=sharing"
+                      }
+                      className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
+                    >
+                      <PiMicrosoftExcelLogoFill />
+                      Unduh Template
+                    </Link>
+                  </div>
+                  <p className="text-gray-700 text-xs mt-1">
+                    *Download terlebih dahulu template lalu isi file excel dan
+                    upload
+                  </p>
+                </div>
+              </div>
+
+              <AlertDialogFooter className="mt-3 pt-3 border-t border-t-gray-300">
+                <AlertDialogCancel
+                  onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
+                >
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction>Upload</AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </fieldset>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <div className="max-w-6xl md:max-w-[81rem]  md:-mt-8">
         <div className="pb-12 md:pb-20">
           {/* Form */}
@@ -319,25 +536,45 @@ function FormRegistrationTraining({
                 </h2>
               )}
 
-              <p className="text-base">
-                {indexFormTab == 0 ? (
-                  <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
-                    1
-                  </span>
-                ) : (
-                  <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
-                    2
-                  </span>
-                )}{" "}
-                of 2
-              </p>
+              {Cookies.get("isManningAgent") ? (
+                <p className="text-base">
+                  {indexFormTab == 0 ? (
+                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                      1
+                    </span>
+                  ) : indexFormTab == 1 ? (
+                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                      2
+                    </span>
+                  ) : (
+                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                      3
+                    </span>
+                  )}{" "}
+                  of 3
+                </p>
+              ) : (
+                <p className="text-base">
+                  {indexFormTab == 0 ? (
+                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                      1
+                    </span>
+                  ) : (
+                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                      2
+                    </span>
+                  )}{" "}
+                  of 2
+                </p>
+              )}
             </div>
             <div className="flex w-full -mt-2 mb-4">
               <Progress value={(indexFormTab + 1) * 50} max={2} />
             </div>
             <FormFasilitas />
+            <FormPesertaPelatihan />
             <FormPembayaran />
-            <div className="flex -mx-3 mt-5 gap-2 px-3">
+            <div className="flex  -mx-3 mt-5 gap-2 px-3">
               <div className={`w-full ${indexFormTab == 0 && "hidden"}`}>
                 <button
                   type="submit"
@@ -364,21 +601,28 @@ function FormRegistrationTraining({
                   Selanjutnya
                 </button>
               </div>
+
               <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <div
-                    className={`w-full ${
-                      indexFormTab == 1 ? "block" : "hidden"
-                    }`}
-                  >
-                    <button
-                      onClick={(e) => handleRegistrationTrainingForPeople(e)}
-                      type="submit"
-                      className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                <AlertDialogTrigger
+                  className={`w-full ${
+                    (indexFormTab == 0 || !isAgreeWithAggreement) && "hidden"
+                  }`}
+                >
+                  {isAgreeWithAggreement && (
+                    <div
+                      className={`w-full ${
+                        indexFormTab == 1 ? "block" : "hidden"
+                      }`}
                     >
-                      Daftar
-                    </button>
-                  </div>
+                      <button
+                        onClick={(e) => handleRegistrationTrainingForPeople(e)}
+                        type="submit"
+                        className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                      >
+                        Daftar
+                      </button>
+                    </div>
+                  )}
                 </AlertDialogTrigger>
                 <AlertDialogContent className="rounded-lg">
                   <AlertDialogHeader className="flex items-center">

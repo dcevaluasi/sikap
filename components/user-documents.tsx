@@ -250,12 +250,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
                     <div className="flex flex-col gap-1 w-full items-center justify-center">
                       <div className=" relative rounded-full w-fit  -mt-28">
                         <Image
-                          src={
-                            user?.Foto! ==
-                            "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/profile/fotoProfile/"
-                              ? "/dummies/profile.jpg"
-                              : user?.Foto!
-                          }
+                          src={"/dummies/profile.jpg"}
                           alt={"profile picture"}
                           width={0}
                           height={0}

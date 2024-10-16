@@ -63,25 +63,6 @@ function Exam() {
     }, 2000); // Adjust the timeout duration as needed
   }, []);
 
-  //   const handleAnswerChange = (soalId: number, answer: string) => {
-  //     setSelectedAnswers((prevAnswers) => {
-  //       const existingAnswerIndex = prevAnswers.findIndex(
-  //         (a: any) => a.id_soal_bagian === soalId
-  //       );
-  //       const newAnswers: any = [...prevAnswers];
-
-  //       if (existingAnswerIndex >= 0) {
-  //         newAnswers[existingAnswerIndex] = {
-  //           id_soal_bagian: soalId,
-  //           jawaban_pengguna: answer,
-  //         };
-  //       } else {
-  //         newAnswers.push({ id_soal_bagian: soalId, jawaban_pengguna: answer });
-  //       }
-
-  //       return newAnswers;
-  //     });
-  //   };
 
   const handleAnswerChange = (idSoal: number, answer: string) => {
     setSelectedAnswers((prevAnswers) => {

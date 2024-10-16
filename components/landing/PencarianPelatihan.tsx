@@ -16,29 +16,9 @@ import { Bounce, Slide } from "react-awesome-reveal";
 import { MdClear, MdKeyboardArrowRight } from "react-icons/md";
 import { TbClockHour2, TbLayoutGrid } from "react-icons/tb";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { HiViewGrid } from "react-icons/hi";
 
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 import { RiSchoolLine, RiShipLine } from "react-icons/ri";
 import {
@@ -49,21 +29,25 @@ import {
   SelectLabel,
   SelectTrigger,
 } from "@/components/ui/select";
-import { LucideSchool } from "lucide-react";
-import { FaRupiahSign } from "react-icons/fa6";
-import LogoIntegrated from "@/components/logoIntegrated";
-import Newsletter from "@/components/newsletter";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { HashLoader } from "react-spinners";
-import { getMonthName } from "@/lib/utils";
+import { formatToRupiah, getMonthName } from "@/lib/utils";
 import { FiCalendar, FiSearch } from "react-icons/fi";
 import Toast from "../toast";
-import ReCAPTCHA from "react-google-recaptcha";
 
 function PencarianPelatihan() {
   const [data, setData] = React.useState<PelatihanMasyarakat[] | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
+
+  const jenisProgram =
+    usePathname() == "/layanan/program/akp"
+      ? "Awak Kapal Perikanan"
+      : usePathname() == "/layanan/program/perikanan"
+      ? "Perikanan"
+      : "Kelautan";
+
+  console.log(jenisProgram);
 
   const handleFetchingPublicTrainingData = async () => {
     setLoading(true);
@@ -73,12 +57,43 @@ function PencarianPelatihan() {
     }
     try {
       const response: AxiosResponse = await axios.get(
-        `${elautBaseUrl}/lemdik/getPelatihan?penyelenggara_pelatihan=${selectedBalaiPelatihan}&bidang_pelatihan=${selectedBidangPelatihan}&jenis_sertifikat=${selectedJenisPelatihan}&tanggal_mulai_pelatihan=${bulanMulaiPelatihan}`
+        `${elautBaseUrl}/lemdik/getPelatihan?${jenisProgram}&penyelenggara_pelatihan=${selectedBalaiPelatihan}&bidang_pelatihan=${selectedBidangPelatihan}&jenis_sertifikat=${selectedJenisPelatihan}&tanggal_mulai_pelatihan=${bulanMulaiPelatihan}&program=${selectedProgramPelatihan}`
       );
       setLoading(false);
       setShowResult(true);
       console.log({ response });
-      setData(response.data.data);
+
+      if (response.data.data != null) {
+        const filteredAndSortedData = response.data.data
+          .filter(
+            (item: PelatihanMasyarakat) => item.JenisProgram === jenisProgram
+          )
+          .sort((a: PelatihanMasyarakat, b: PelatihanMasyarakat) => {
+            const dateA = new Date(a.TanggalMulaiPelatihan);
+            const dateB = new Date(b.TanggalMulaiPelatihan);
+
+            // First, check the StatusApproval condition
+            if (
+              a.StatusApproval === "Selesai" &&
+              b.StatusApproval !== "Selesai"
+            ) {
+              return 1; // 'Selesai' should be placed later
+            }
+            if (
+              a.StatusApproval !== "Selesai" &&
+              b.StatusApproval === "Selesai"
+            ) {
+              return -1; // 'Selesai' should be placed later
+            }
+
+            // Otherwise, sort by date in ascending order
+            return dateA.getTime() - dateB.getTime(); // Ascending order
+          });
+
+        setData(filteredAndSortedData);
+      } else {
+        setData(null);
+      }
     } catch (error) {
       console.error("Error posting training data:", error);
       setLoading(false);
@@ -122,6 +137,8 @@ function PencarianPelatihan() {
 
   const [selectedJenisPelatihan, setSelectedJenisPelatihan] =
     React.useState<string>("");
+  const [selectedProgramPelatihan, setSelectedProgramPelatihan] =
+    React.useState<string>("");
   const [selectedBidangPelatihan, setSelectedBidangPelatihan] =
     React.useState<string>("");
   const [selectedBalaiPelatihan, setSelectedBalaiPelatihan] =
@@ -137,12 +154,14 @@ function PencarianPelatihan() {
   const [showResult, setShowResult] = React.useState<boolean>(false);
 
   const handleClearFilter = () => {
+    setSelectedProgramPelatihan("");
     setSelectedBidangPelatihan("");
     setSelectedJenisPelatihan("");
     setSelectedBalaiPelatihan("");
     setSelectedBiayaPelatihan("");
     setSelectedBulanPelatihan("");
-    setShowResult(false);
+
+    handleFetchingPublicTrainingData();
   };
 
   const [selectedDate, setSelectedDate] = React.useState("15 September 2024");
@@ -153,6 +172,8 @@ function PencarianPelatihan() {
 
   React.useEffect(() => {
     setTimeout(() => {
+      handleFetchingPublicTrainingData();
+
       setLoading(false);
     }, 1000);
   }, []);
@@ -161,13 +182,6 @@ function PencarianPelatihan() {
     <section className="-mt-20 w-full">
       <div className=" mx-auto max-w-7xl py-5 flex flex-col gap-4">
         <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-white h-auto w-fit mx-auto items-center justify-center flex flex-col relative shadow-custom rounded-3xl overflow-hidden">
-          {/* <Image
-            width={0}
-            height={0}
-            src="/illustrations/searching.png"
-            alt=""
-            className=" absolute right-0 bottom-0  group-hover:scale-105 transition-transform duration-500 ease-in-out w-[350px]"
-          /> */}
           <div className="group relative flex flex-col overflow-hidden justify-center rounded-3xl px-6  flex-grow group">
             <div className="flex flex-col gap-1  ">
               <div className="flex w-fit gap-2 py-5 items-center justify-center">
@@ -196,20 +210,20 @@ function PencarianPelatihan() {
                 </Select>
 
                 <Select
-                  value={selectedJenisPelatihan}
-                  onValueChange={(value) => setSelectedJenisPelatihan(value)}
+                  value={selectedProgramPelatihan}
+                  onValueChange={(value) => setSelectedProgramPelatihan(value)}
                 >
                   <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
                     <div className="inline-flex gap-2 px-3 w-full text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
                       <RiShipLine />
-                      {selectedJenisPelatihan == ""
-                        ? "Jenis Pelatihan"
-                        : selectedJenisPelatihan}
+                      {selectedProgramPelatihan == ""
+                        ? "Program Pelatihan"
+                        : selectedProgramPelatihan}
                     </div>
                   </SelectTrigger>
                   <SelectContent className="z-[10000]">
                     <SelectGroup>
-                      <SelectLabel>Pilih Jenis Pelatihan</SelectLabel>
+                      <SelectLabel>Pilih Program Pelatihan</SelectLabel>
                       {usePathname().includes("akp") && (
                         <>
                           {akpSelections.map((akp, index) => (
@@ -239,6 +253,28 @@ function PencarianPelatihan() {
                           ))}
                         </>
                       )}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+
+                <Select
+                  value={selectedJenisPelatihan}
+                  onValueChange={(value) => setSelectedJenisPelatihan(value)}
+                >
+                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                    <div className="inline-flex gap-2 px-3 w-full text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
+                      <HiViewGrid />
+                      {selectedJenisPelatihan == ""
+                        ? "Jenis Pelatihan"
+                        : selectedJenisPelatihan}
+                    </div>
+                  </SelectTrigger>
+                  <SelectContent className="z-[10000]">
+                    <SelectGroup>
+                      <SelectLabel>Pilih Jenis Pelatihan</SelectLabel>
+                      <SelectItem value={"Aspirasi"}>Aspirasi</SelectItem>
+                      <SelectItem value={"PNBP/BLU"}>PNBP/BLU</SelectItem>
+                      <SelectItem value={"Reguler"}>Reguler</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -278,6 +314,7 @@ function PencarianPelatihan() {
                   selectedBalaiPelatihan !== "" ||
                   selectedBiayaPelatihan !== "" ||
                   selectedBidangPelatihan !== "" ||
+                  selectedProgramPelatihan !== "" ||
                   selectedBulanPelatihan != "") && (
                   <div
                     onClick={() => handleClearFilter()}
@@ -290,9 +327,7 @@ function PencarianPelatihan() {
 
                 <div className="flex">
                   <Button
-                    onClick={(e) => {
-                      handleFetchingPublicTrainingData();
-                    }}
+                    onClick={(e) => handleFetchingPublicTrainingData()}
                     className="btn-sm text-sm text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
                   >
                     <span className="mr-2">Cari</span>
@@ -331,11 +366,28 @@ function PencarianPelatihan() {
               </div>
 
               <div className="flex-col gap-4 flex w-full mt-4">
-                {data == null ? (
-                  <></>
+                {data == null || data.length === 0 ? (
+                  <div className="flex flex-col w-full items-center justify-center h-fit">
+                    <Image
+                      src={"/illustrations/not-found.png"}
+                      alt="Not Found"
+                      width={0}
+                      height={0}
+                      className="w-[400px]"
+                    />
+                    <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
+                      <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                        Belum Ada Pelatihan
+                      </h1>
+                      <div className="text-gray-600 text-center  max-w-md">
+                        Belum ada pelatihan yang tersedia saat ini, harap terus
+                        cek berkala ya websitenya Sobat E-LAUT!
+                      </div>
+                    </div>
+                  </div>
                 ) : (
-                  data!.map((data, index) => (
-                    <CardPelatihan key={index} pelatihan={data} />
+                  data.map((pelatihan, index) => (
+                    <CardPelatihan key={index} pelatihan={pelatihan} />
                   ))
                 )}
               </div>
@@ -348,87 +400,6 @@ function PencarianPelatihan() {
 }
 
 const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
-  const [nik, setNik] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
-  const [captcha, setCaptcha] = React.useState<string | null>();
-  const recaptchaRef = React.createRef();
-  const router = useRouter();
-  const [loading, setLoading] = React.useState<boolean>(false);
-  const [errorMsg, setErrorMsg] = React.useState<string>("");
-
-  const handleLoginAkun = async (e: FormEvent) => {
-    setLoading(true);
-    e.preventDefault();
-    if (nik == "" || password == "") {
-      setErrorMsg("Tolong lengkapi data login!");
-      setLoading(false);
-    } else {
-      if (captcha) {
-        try {
-          const response: AxiosResponse = await axios.post(
-            `${elautBaseUrl}/users/loginNotelpon`,
-            JSON.stringify({
-              no_number: nik,
-              password: password,
-            }),
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          console.log({ response });
-
-          Cookies.set("XSRF081", response.data.t, { expires: 1 });
-          Cookies.set("XSRF082", "true", { expires: 1 });
-
-          if (Cookies.get("XSRF085")) {
-            Toast.fire({
-              icon: "success",
-              title: "Berhasil login.",
-              text: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
-            });
-            router.push(Cookies.get("XSRF085")!);
-          } else {
-            Toast.fire({
-              icon: "success",
-              title: "Berhasil login.",
-              text: `Berhasil melakukan login kedalam ELAUT!`,
-            });
-            if (Cookies.get("XSRF083")) {
-              // router.push("/dashboard/complete-profile");
-              router.push("/");
-            } else {
-              router.push("/");
-            }
-          }
-        } catch (error: any) {
-          console.error({ error });
-          if (
-            error.response &&
-            error.response.data &&
-            error.response.data.pesan
-          ) {
-            const errorMsg = error.response.data.pesan;
-
-            Toast.fire({
-              icon: "error",
-              title: "Gagal mencoba login.",
-              text: `Gagal melakukan login, ${errorMsg}!`,
-            });
-          } else {
-            const errorMsg = error.response.data.pesan;
-            Toast.fire({
-              icon: "error",
-              title: "Gagal mencoba login.",
-              text: `Gagal melakukan login. ${errorMsg}!`,
-            });
-          }
-        }
-      }
-    }
-  };
-
   return (
     <div className="bg-white shadow-custom text-black p-4 rounded-xl grid grid-cols-5 items-center">
       {/* Train Info */}
@@ -467,121 +438,35 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
       {/* Arrival Info */}
       <div className="text-center">
         <p className="font-bold">{pelatihan.PelaksanaanPelatihan}</p>
-        {/* <p className="text-sm leading-[100%]">
+        <p className="text-sm leading-[100%]">
           {convertDate(pelatihan.TanggalMulaiPelatihan)} -{" "}
           {convertDate(pelatihan.TanggalBerakhirPelatihan)}
-        </p> */}
+        </p>
       </div>
 
       {/* Price and Button */}
       <div className="text-center flex items-center justify-center flex-col">
-        <p className="text-blue-500 text-xl font-bold">
-          Rp {pelatihan.HargaPelatihan},-
-        </p>
-        {!Cookies.get("XSRF081") ? (
-          <Dialog>
-            <DialogTrigger asChild>
-              <div className="bg-blue-500 text-white px-4 py-2 text-base rounded-md my-1 w-fit block cursor-pointer">
-                Registrasi
-              </div>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[460px]">
-              <DialogHeader>
-                <DialogTitle>Login</DialogTitle>
-                <DialogDescription>
-                  Ups! Kamu belum login ke akun ELAUT.
-                  <Link
-                    href={"/registrasi"}
-                    className="text-blue-500 underline"
-                  >
-                    Registrasi disini
-                  </Link>{" "}
-                  jika belum mempunyai akun
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    No Telepon
-                  </Label>
-                  <Input
-                    id="name"
-                    value={nik}
-                    className="col-span-3"
-                    onChange={(e) => setNik(e.target.value)}
-                    type="text"
-                    placeholder="Masukkan No Telpon kamu"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Password
-                  </Label>
-                  <Input
-                    id="username"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="col-span-3"
-                    placeholder="***********"
-                    type="password"
-                  />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Verify if you are not a robot{" "}
-                  </Label>
-                  <ReCAPTCHA
-                    style={{ width: "80% !important" }}
-                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                    className="mr-5 w-full  font-inter text-sm"
-                    onChange={setCaptcha}
-                  />
-                </div>
-                {errorMsg != "" && (
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="username" className="text-right">
-                      {" "}
-                    </Label>
-                    <div className="w-[400px]">
-                      <DialogDescription>
-                        <span className="text-rose-500 !w-[400px]">
-                          Ups! {errorMsg}
-                        </span>
-                      </DialogDescription>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <DialogFooter>
-                <Button
-                  type="button"
-                  className="flex items-center justify-center"
-                  onClick={(e) => handleLoginAkun(e)}
-                >
-                  {loading ? (
-                    <span>
-                      <HashLoader size={15} color="#FFF" />
-                    </span>
-                  ) : (
-                    <span>Login</span>
-                  )}
-                </Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        ) : (
-          <Link
-            href={`/layanan/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
-              pelatihan?.KodePelatihan
-            }/${pelatihan?.IdPelatihan}`}
-            className="bg-blue-500 text-white px-4 py-2 text-base rounded-md my-1 w-fit block"
-          >
-            Registrasi
-          </Link>
+        {pelatihan?.StatusApproval != "Selesai" && (
+          <p className="text-blue-500 text-xl font-bold">
+            {formatToRupiah(pelatihan.HargaPelatihan)}
+          </p>
         )}
 
-        <p className="text-sm">Tersedia</p>
+        <Link
+          onClick={(e) => Cookies.set("JenisProgram", pelatihan?.JenisProgram)}
+          href={`/layanan/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
+            pelatihan?.KodePelatihan
+          }/${pelatihan?.IdPelatihan}`}
+          className={`${
+            pelatihan?.StatusApproval == "Selesai"
+              ? "bg-gray-500"
+              : "bg-blue-500"
+          } text-white px-4 py-2 text-base rounded-md my-1 w-fit block`}
+        >
+          {pelatihan.StatusApproval == "Selesai"
+            ? "Sudah Selesai"
+            : "Lihat Detail"}
+        </Link>
       </div>
     </div>
   );

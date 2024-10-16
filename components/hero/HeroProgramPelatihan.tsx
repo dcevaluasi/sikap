@@ -128,14 +128,12 @@ export default function HeroProgramPelatihan({ program }: { program: string }) {
     null
   );
 
-  console.log({ selectedProgram });
-
   return (
-    <div className="flex flex-col gap-2 w-full  p-4 rounded-3xl">
+    <div className="flex flex-col gap-2 w-full ">
       <section className="relative h-[80vh]  flex items-center ">
         <Image
           src={images[imageIndex]}
-          className="absolute w-full h-[80vh] rounded-3xl object-cover duration-1000  "
+          className="absolute w-full h-[80vh]  object-cover duration-1000  "
           alt=""
           layout="fill"
           priority
@@ -143,7 +141,7 @@ export default function HeroProgramPelatihan({ program }: { program: string }) {
         />
 
         <div
-          className="absolute w-full h-[80vh] rounded-3xl bg-black bg-opacity-70  "
+          className="absolute w-full h-[80vh]  bg-black bg-opacity-70  "
           onClick={(e) => setSelectedProgram(null)}
         ></div>
 
@@ -183,7 +181,7 @@ export default function HeroProgramPelatihan({ program }: { program: string }) {
           {/* Hero content */}
           <div className="flex w-full flex-col items-center justify-between">
             {/* Section header */}
-            <div className=" flex flex-col h- justify-center w-full items-center px-6 md:px-0 text-center mt-10 relative">
+            <div className=" flex flex-col h- justify-center w-full items-center px-6 md:px-0 text-center -mt-10 relative">
               <h1 className="font-bold text-black text-[4rem] md:text-[5.5rem] font-calsans leading-none w-full text-center">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-500">
                   {programPelatihan}{" "}
@@ -475,6 +473,7 @@ function RagamBidangPelatihan() {
       img: "/images/program-pelatihan/dummies/kelautan/kelautan-8.jpg",
     },
   ];
+  
 
   return (
     <div className="w-full   gap-5 mb-10 ">

@@ -106,31 +106,28 @@ function page() {
   };
 
   return (
-    <section className="w-full p-4">
-      <main className="bg-darkDPKAKP w-full  h-[95vh] rounded-3xl relative">
+    <section className="w-full">
+      <main className="bg-darkDPKAKP w-full  h-screen  relative">
         <Image
           src={"/images/hero-img3.jpg"}
-          className="absolute w-full h-[95vh] rounded-3xl z-10 object-cover duration-1000"
+          className="absolute w-full h-screen  z-10 object-cover duration-1000"
           alt=""
           fill={true}
           priority
         />
-        <div className="absolute w-full h-[95vh] rounded-3xl bg-black opacity-70 inset-0 z-20"></div>
+        <div className="absolute w-full h-screen  bg-black opacity-70 inset-0 z-20"></div>
 
-        <section className=" z-50 relative h-fit space-y-6 pb-8 pt-36 md:h-[95vh] rounded-3xl md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col">
+        <section className=" z-50 relative h-fit space-y-6 pb-8 pt-36 md:h-screen md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col">
           <div className="container relative flex max-w-[64rem] flex-col items-center gap-2 text-center">
             <div className="rounded-2xl bg-blue-500 px-4 py-1.5 text-sm text-gray-200 font-medium">
               E-LAUT
             </div>
-            <Image
-              className=" w-[90px] my-1 z-10"
-              src={"/images/logo/logo-elaut-color.png"}
-              width={0}
-              height={0}
-              alt="DPKAKP Logo"
-            />
-            <h1 className="font-bold  text-gray-200 text-4xl -mt-2">
-              Login Admin E-LAUT
+
+            <h1 className="font-bold font-calsans text-gray-200 text-[3.7rem] -mt-2">
+              Login Admin{" "}
+              <span className=" bg-clip-text text-transparent bg-gradient-to-r leading-none pt-0 from-blue-500 to-teal-400">
+                E-LAUT
+              </span>
             </h1>
             <p className="font-jakarta max-w-[42rem] leading-[115%] text-gray-300  sm:text-base -mt-2">
               Selamat datang kembali, silahkan login untuk mengakses dashboard
@@ -177,7 +174,7 @@ function page() {
                     {role != ""
                       ? role == "adminPusat"
                         ? "Admin Pusat"
-                        : "Lemdiklat"
+                        : "Admin Balai Pelatihan"
                       : "Pilih Role"}
                   </p>
                 </SelectTrigger>
@@ -185,7 +182,9 @@ function page() {
                   <SelectGroup>
                     <SelectLabel>Role</SelectLabel>
                     <SelectItem value="adminPusat">Admin Pusat</SelectItem>
-                    <SelectItem value="lemdik">Admin Balai</SelectItem>
+                    <SelectItem value="lemdik">
+                      Admin Balai Pelatihan
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

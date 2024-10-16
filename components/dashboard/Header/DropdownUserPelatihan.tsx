@@ -93,9 +93,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
           <Image
             width={0}
             height={0}
-            src={
-              !userDetail?.Foto! ? "/dummies/profile.jpg" : userDetail?.Foto!
-            }
+            src={"/dummies/profile.jpg"}
             alt="User"
             className="rounded-full !object-cover w-14 h-14"
           />

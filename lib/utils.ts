@@ -37,3 +37,17 @@ export function getMonthName(monthValue: string) {
 export const generateRandomId = (): string => {
   return `${Math.random().toString(36).substr(2, 9)}-${Date.now()}`;
 };
+
+export function replaceUrl(input: string): string {
+  const oldUrl = 'https://192.168.12.97:81/';
+  const newUrl = 'https://elaut-bppsdm.kkp.go.id/api-elaut/';
+
+  return input.replace(oldUrl, newUrl);
+}
+
+export function formatToRupiah(amount: number): string {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR'
+  }).format(amount);
+}

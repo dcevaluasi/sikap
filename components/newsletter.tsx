@@ -59,7 +59,7 @@ export default function Newsletter() {
   return (
     <section
       id="cek-sertifikat"
-      className="scroll-smooth w-full max-w-7xl mx-auto mt-10"
+      className="scroll-smooth w-full max-w-7xl mx-auto mt-6"
     >
       <AlertDialog open={isShowValidForm}>
         <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
@@ -180,7 +180,7 @@ export default function Newsletter() {
       <div className="w-full mx-auto">
         <div className="pb-12 md:pb-20">
           {/* CTA box */}
-          <div className="relative bg-gray-900 rounded-3xl py-10 px-8 md:py-16 md:px-12 shadow-2xl overflow-hidden">
+          <div className="relative bg-transparent border border-b-gray-100 rounded-3xl py-10 px-8 md:py-16 md:px-12 shadow-2xl overflow-hidden">
             {/* Background illustration */}
             <div
               className="absolute right-0 bottom-0 pointer-events-none hidden lg:block"
@@ -281,7 +281,7 @@ export default function Newsletter() {
                   <div className="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:mx-0">
                     <input
                       type="text"
-                      className="form-input w-full appearance-none bg-gray-800 border border-gray-700 focus:border-gray-600 rounded-sm px-4 py-3 mb-2 sm:mb-0 sm:mr-2 text-white placeholder-gray-500"
+                      className="form-input w-full appearance-none bg-transparent border border-gray-200 focus:border-gray-600 rounded-sm px-4 py-3 mb-2 sm:mb-0 sm:mr-2 text-white placeholder:text-gray-200"
                       placeholder="No Registrasi"
                       aria-label="No Register"
                       value={noRegistrasi}
@@ -296,7 +296,7 @@ export default function Newsletter() {
                   </div>
                   {/* Success message */}
                   {/* <p className="text-sm text-gray-400 mt-3">Thanks for subscribing!</p> */}
-                  <p className="text-sm text-gray-400 mt-3">
+                  <p className="text-sm text-gray-300 mt-3">
                     Masukkan nomor registrasi kamu
                   </p>
                 </form>

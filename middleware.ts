@@ -24,10 +24,10 @@ export function middleware(request: any) {
 
   if (!XSRF095) {
     const protectedPaths = [
-      '/dpkakp/admin/dashboard',
-      '/dpkakp/admin/dashboard/bank-soal',
-      '/dpkakp/admin/dashboard/master',
-      '/dpkakp/admin/dashboard/ujian',
+      '/lembaga/dpkakp/admin/dashboard',
+      '/lembaga/dpkakp/admin/dashboard/bank-soal',
+      '/lembaga/dpkakp/admin/dashboard/master',
+      '/lembaga/dpkakp/admin/dashboard/ujian',
     ]
 
     if (protectedPaths.includes(request.nextUrl.pathname)) {

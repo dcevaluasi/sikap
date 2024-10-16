@@ -57,7 +57,7 @@ export default function Footer() {
             <ul className="text-sm">
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="/layanan/program/perikanan"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   Perikanan
@@ -65,7 +65,7 @@ export default function Footer() {
               </li>
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="/layanan/program/akp"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   Awak Kapal Perikanan
@@ -73,7 +73,7 @@ export default function Footer() {
               </li>
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="/layanan/program/kelautan"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   Kelautan

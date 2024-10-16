@@ -91,6 +91,7 @@ export default function Hero() {
 
     "/images/hero-img.jpg",
     "/images/hero-img3.jpg",
+    "/images/hero-img7.jpg",
     "/images/hero-img4-preview.jpg",
   ];
 

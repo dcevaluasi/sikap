@@ -74,7 +74,8 @@ export default function Header() {
                   usePathname() == "/lembaga/dpkakp" ||
                   usePathname() == "/dashboard" ||
                   usePathname().includes("registrasi") ||
-                  usePathname().includes("login"))
+                  usePathname().includes("login") ||
+                  usePathname().includes("cek-sertifikat"))
                   ? "text-gray-200 hover:text-white hover:scale-105"
                   : top && usePathname().includes("program")
                   ? "text-gray-200 hover:text-white hover:scale-105"
@@ -121,7 +122,16 @@ export default function Header() {
       <li>
         <Link
           href={href}
-          target={`${name == "Pelatihan Aparatur" ? "_target" : "_self"}`}
+          target={`${
+            name == "Balai Pelatihan dan Penyuluhan Perikanan Tegal" ||
+            name == "Balai Pelatihan dan Penyuluhan Perikanan Banyuwangi" ||
+            name == "Balai Pelatihan dan Penyuluhan Perikanan Ambon" ||
+            name == "Balai Pelatihan dan Penyuluhan Perikanan Medan" ||
+            name == "Balai Pelatihan dan Penyuluhan Perikanan Bitung" ||
+            name == "Balai Pendidikan dan Pelatihan Aparatur Sukamandi"
+              ? "_target"
+              : "_self"
+          }`}
           onClick={(e) => setOpenModal(false)}
           className={`font-medium ${
             top && usePathname().includes("layanan")
@@ -166,7 +176,8 @@ export default function Header() {
               usePathname() == "/lembaga/dpkakp" ||
               usePathname() == "/dashboard" ||
               usePathname().includes("registrasi") ||
-              usePathname().includes("login"))
+              usePathname().includes("login") ||
+              usePathname().includes("cek-sertifikat"))
               ? "text-gray-200 hover:text-white hover:scale-105"
               : top && usePathname().includes("program")
               ? "text-gray-200 hover:text-white hover:scale-105"
@@ -239,6 +250,7 @@ export default function Header() {
             usePathname().includes("registrasi") ||
             usePathname().includes("pelatihan") ||
             usePathname().includes("dashboard") ||
+            usePathname().includes("cek-sertifikat") ||
             usePathname().includes("login")) && (
             <Link href={"/"} className="shrink-0 mr-4 flex items-center gap-4">
               <Image
@@ -255,15 +267,13 @@ export default function Header() {
             <ul className="flex grow gap-0 justify-end flex-wrap items-center w-fit">
               <>
                 {" "}
-                {usePathname().includes("dashboard") && (
-                  <NavLink href="/" name="Beranda" top={top}>
-                    <div className="flex gap-2 items-center">
-                      <span>Beranda</span>
-                    </div>
-                  </NavLink>
-                )}
-                <NavDropDown href="#" name="Lembaga Pelatihan" top={top}>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                <NavLinkDefault href="/" name="Beranda" top={top} />
+                <NavDropDown href="#" name="Balai Pelatihan" top={top}>
+                  <NavLink
+                    href="https://bppptegal.id/tentang-kami"
+                    name="Balai Pelatihan dan Penyuluhan Perikanan Tegal"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -271,7 +281,11 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://www.bpppbanyuwangi.com/"
+                    name="Balai Pelatihan dan Penyuluhan Perikanan Banyuwangi"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -279,7 +293,11 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://bpppbitung.id/#"
+                    name="Balai Pelatihan dan Penyuluhan Perikanan Bitung"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -287,7 +305,11 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://ppid.sipelatihaksi.com/"
+                    name="Balai Pelatihan dan Penyuluhan Perikanan Medan"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -295,7 +317,11 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://bp3ambon.kkp.go.id/"
+                    name="Balai Pelatihan dan Penyuluhan Perikanan Ambon"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -303,7 +329,11 @@ export default function Header() {
                       </span>
                     </div>
                   </NavLink>
-                  <NavLink href="/lembaga/bppp" name="DPKAKP" top={top}>
+                  <NavLink
+                    href="https://sites.google.com/view/ppidbppakkp"
+                    name="Balai Pendidikan dan Pelatihan Aparatur Sukamandi"
+                    top={top}
+                  >
                     <div className="flex gap-2 items-center">
                       <IoMdSchool className="text-4xl" />{" "}
                       <span>
@@ -313,7 +343,7 @@ export default function Header() {
                   </NavLink>
                 </NavDropDown>
                 <NavLinkDefault
-                  href="/#cek-sertifikat"
+                  href="/layanan/cek-sertifikat"
                   name="Cek Sertifikat"
                   top={top}
                 />
@@ -329,41 +359,6 @@ export default function Header() {
                     {/* <!-- User Area --> */}
                   </div>
                 ) : (
-                  // <div className="flex">
-                  // <li>
-                  //   <Link
-                  //     href="/login"
-                  //     className={`btn-sm ${
-                  //       top
-                  //         ? usePathname().includes("pelatihan") ||
-                  //           usePathname().includes("searching")
-                  //           ? "text-blue-500 hover:text-white"
-                  //           : "text-gray-200"
-                  //         : "text-blue-500 hover:text-white"
-                  //     } bg-transparent border border-blue-500 hover:bg-blue-500 ml-3`}
-                  //   >
-                  //     <span>Masuk</span>
-                  //   </Link>
-                  // </li>
-                  //   <li>
-                  //     <Link
-                  //       href="/registrasi"
-                  //       className="btn-sm text-gray-200 bg-gray-900 hover:bg-gray-800 ml-3"
-                  //     >
-                  //       <span>Registrasi</span>
-                  //       <svg
-                  //         className="w-3 h-3 fill-current text-gray-400 shrink-0 ml-2 -mr-1"
-                  //         viewBox="0 0 12 12"
-                  //         xmlns="http://www.w3.org/2000/svg"
-                  //       >
-                  //         <path
-                  //           d="M11.707 5.293L7 .586 5.586 2l3 3H0v2h8.586l-3 3L7 11.414l4.707-4.707a1 1 0 000-1.414z"
-                  //           fillRule="nonzero"
-                  //         />
-                  //       </svg>
-                  //     </Link>
-                  //   </li>
-                  // </div>
                   <></>
                 )}
               </>

@@ -94,18 +94,18 @@ function page() {
     }
   };
   return (
-    <section className="w-full p-4">
-      <main className="bg-darkDPKAKP w-full  h-[95vh] rounded-3xl relative">
+    <section className="w-full">
+      <main className="bg-darkDPKAKP w-full  h-screen  relative">
         <Image
           src={"/akp/akp.jpg"}
-          className="absolute w-full h-[95vh] rounded-3xl z-10 object-cover duration-1000"
+          className="absolute w-full h-screen  z-10 object-cover duration-1000"
           alt=""
           fill={true}
           priority
         />
-        <div className="absolute w-full h-[95vh] rounded-3xl bg-black opacity-70 inset-0 z-20"></div>
+        <div className="absolute w-full h-screen  bg-black opacity-70 inset-0 z-20"></div>
 
-        <section className=" z-50 relative h-fit space-y-6 pb-8 pt-36 md:h-[95vh] rounded-3xl md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col">
+        <section className=" z-50 relative h-fit space-y-6 pb-8 pt-36 md:h-screen  md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col">
           <div className="container relative flex max-w-[64rem] flex-col items-center gap-2 text-center">
             <div className="rounded-2xl bg-blue-950 px-4 py-1.5 text-sm text-gray-200 font-medium">
               Sertifikasi AKP
