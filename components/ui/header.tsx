@@ -250,6 +250,7 @@ export default function Header() {
             usePathname().includes("registrasi") ||
             usePathname().includes("pelatihan") ||
             usePathname().includes("dashboard") ||
+            usePathname().includes("cek-sertifikat") ||
             usePathname().includes("login")) && (
             <Link href={"/"} className="shrink-0 mr-4 flex items-center gap-4">
               <Image

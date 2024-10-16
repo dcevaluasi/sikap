@@ -854,6 +854,9 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                                 <SelectItem value="Wisata Bahari">
                                   Wisata Bahari
                                 </SelectItem>
+                                <SelectItem value="Manajemen Perikanan">
+                                  Manajemen Perikanan
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                           </div>

@@ -238,26 +238,10 @@ const AKP: React.FC = () => {
             <MdSchool className="text-primary text-3xl" />
           </CardDataStats>
         </span>
-
-        <CardDataStats
-          title="Total Blanko Rusak"
-          total={"0f"}
-          rate=""
-          levelDown
-        >
-          <HiTrash className="text-primary text-3xl" />
-        </CardDataStats>
       </div>
       <div className="w-full mt-8">
-        {/* <div className="mt-4 mb-6 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-          <ChartOne />
-          <ChartTwo />
-        </div> */}
-
         {selectedId == 0 && <ChartCertificatesMonthly data={data!} />}
-
         {selectedId == 1 && <ChartPopoverKeahlian data={data!} />}
-
         {selectedId == 2 && <ChartPopoverKeterampilan data={data!} />}
       </div>
     </>

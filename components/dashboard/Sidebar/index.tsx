@@ -17,6 +17,7 @@ import { HiMiniComputerDesktop } from "react-icons/hi2";
 import { TbBroadcast, TbDatabase, TbSchool } from "react-icons/tb";
 import Cookies from "js-cookie";
 import { checkOperatorPusat } from "@/lib/role";
+import { generateRandomId } from "@/lib/utils";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -199,7 +200,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <Link
                           href={
                             Cookies.get("XSRF093") == "adminPusat"
-                              ? "/admin/pusat/dashboard"
+                              ? `/${generateRandomId()}/pusat/dashboard`
                               : "admin/pusat/lemdiklat"
                           }
                           className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
@@ -360,7 +361,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               <ul className="mb-5.5 mt-4 flex flex-col gap-2.5 pl-6">
                                 <li>
                                   <Link
-                                    href="/admin/lemdiklat/pelatihan"
+                                    href={`/${generateRandomId()}/lemdiklat/pelatihan`}
                                     className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                       pathname ===
                                         "/admin/lemdiklat/pelatihan" &&

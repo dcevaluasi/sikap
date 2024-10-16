@@ -103,11 +103,6 @@ function FormCekSertifikat() {
                   Sertifikat Pelatihan
                 </span>{" "}
               </h1>
-              <p className="text-base text-center mx-auto text-gray-200  max-w-3xl">
-                Registrasi tersedia dalam tiga opsi: Mandiri untuk individu,
-                Corporate untuk grup, dan Portofolio untuk yang punya rekam
-                jejak atau sertifikasi. Fleksibel sesuai kebutuhan!
-              </p>
             </div>
 
             <Newsletter />

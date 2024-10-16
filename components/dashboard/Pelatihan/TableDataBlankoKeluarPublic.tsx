@@ -379,31 +379,7 @@ const TableDataBlankoKeluarPublic: React.FC = () => {
         </div>
       ),
     },
-    {
-      accessorKey: "JumlahBlankoDiajukan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-center max-w-full flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Jumlah Blanko Diajukan
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-black leading-[100%]">
-            {" "}
-            {row.original.JumlahBlankoDiajukan}
-          </p>
-        </div>
-      ),
-    },
+   
 
     {
       accessorKey: "NoSeriBlanko",

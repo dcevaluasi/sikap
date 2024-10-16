@@ -59,7 +59,7 @@ export default function Newsletter() {
   return (
     <section
       id="cek-sertifikat"
-      className="scroll-smooth w-full max-w-7xl mx-auto mt-10"
+      className="scroll-smooth w-full max-w-7xl mx-auto mt-6"
     >
       <AlertDialog open={isShowValidForm}>
         <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
@@ -296,7 +296,7 @@ export default function Newsletter() {
                   </div>
                   {/* Success message */}
                   {/* <p className="text-sm text-gray-400 mt-3">Thanks for subscribing!</p> */}
-                  <p className="text-sm text-gray-400 mt-3">
+                  <p className="text-sm text-gray-300 mt-3">
                     Masukkan nomor registrasi kamu
                   </p>
                 </form>

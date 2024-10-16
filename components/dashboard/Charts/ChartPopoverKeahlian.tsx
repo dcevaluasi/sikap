@@ -370,7 +370,9 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
       <div className="flex gap-2 w-full">
         <Card className="w-[50%]">
           <CardHeader>
-            <CardTitle>Grafik Jenis Sertifikasi Keahlian - AKP</CardTitle>
+            <CardTitle>
+              Jumlah Sertifikat Berdasarkan Program Keahlian - AKP
+            </CardTitle>
             <CardDescription>January - Now 2024</CardDescription>
           </CardHeader>
           <CardContent>

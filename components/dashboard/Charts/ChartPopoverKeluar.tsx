@@ -61,13 +61,12 @@ const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
     series: [
       data
         .filter((item) => item.TipeBlanko === "Certificate of Competence (CoC)")
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
         .filter(
           (item) => item.TipeBlanko === "Certificate of Proficiency (CoP)"
         )
-        .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0),
-      2,
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
     ],
   });
 
@@ -116,7 +115,7 @@ const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
                   (item) =>
                     item.TipeBlanko === "Certificate of Competence (CoC)"
                 )
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0)}
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0)}
             </span>
           </div>
         </div>
@@ -134,28 +133,8 @@ const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
                   (item) =>
                     item.TipeBlanko === "Certificate of Proficiency (CoP)"
                 )
-                .reduce((total, item) => total + item.JumlahBlankoDiajukan, 0)}
+                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0)}
             </span>
-          </div>
-        </div>
-
-        <div className="w-full px-8 sm:w-1/2">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#FFb703]"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-black ">
-              <span> Blanko Rusak </span>
-            </p>
-            <span>0</span>
-          </div>
-        </div>
-
-        <div className="w-full px-8 sm:w-1/2">
-          <div className="flex w-full items-center">
-            <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-white"></span>
-            <p className="flex w-full justify-between text-sm font-medium text-white ">
-              <span> Blanko Rusak </span>
-            </p>
-            <span className="text-white"> 0</span>
           </div>
         </div>
       </div>
