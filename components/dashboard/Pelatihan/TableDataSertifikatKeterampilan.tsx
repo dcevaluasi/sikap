@@ -63,7 +63,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
@@ -87,8 +87,9 @@ import { convertDate } from "@/utils";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { Blanko, BlankoKeluar } from "@/types/blanko";
+import { generateTanggalPelatihan } from "@/utils/text";
 
-const TableDataBlankoKeterampilanPublic: React.FC = () => {
+const TableDataSertifikatKeterampilan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
     React.useState<boolean>(false);
   const [showCertificateSetting, setShowCertificateSetting] =
@@ -132,6 +133,8 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
   const [isOpenFormPublishedPelatihan, setIsOpenFormPublishedPelatihan] =
     React.useState<boolean>(false);
 
+  const pathPublic = usePathname();
+
   const router = useRouter();
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -161,7 +164,9 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className="p-0 !text-center max-w-full flex items-center justify-start text-gray-900 font-semibold"
+            className={`p-0 !text-center max-w-full  ${
+              pathPublic == "/akp" ? "hidden" : "flex"
+            } items-center justify-start text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Tipe Blanko
@@ -171,36 +176,12 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
       },
       cell: ({ row }) => (
         <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+          className={`text-left  capitalize ${
+            pathPublic == "/akp" ? "hidden" : "flex flex-wrap flex-col"
+          }`}
         >
           <p className="text-sm text-black leading-[100%]">
-            {" "}
             {row.original.TipeBlanko}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "TanggalKeluar",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-center max-w-full flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Tanggal Penerbitan
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-black leading-[100%]">
-            {" "}
-            {row.original.TanggalKeluar}
           </p>
         </div>
       ),
@@ -231,6 +212,32 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
       ),
     },
     {
+      accessorKey: "TanggalKeluar",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-center max-w-full flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Tanggal Penerbitan
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={`text-left flex flex-wrap items-center flex-col capitalize`}
+        >
+          <p className="text-sm text-black leading-[100%]">
+            {" "}
+            {generateTanggalPelatihan(row.original.TanggalKeluar)}
+          </p>
+        </div>
+      ),
+    },
+
+    {
       accessorKey: "NamaPelaksana",
       header: ({ column }) => {
         return (
@@ -246,10 +253,9 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
       },
       cell: ({ row }) => (
         <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+          className={` text-left flex flex-wrap items-center justify-center flex-col capitalize`}
         >
           <p className="text-sm text-black leading-[100%]">
-            {" "}
             {row.original.NamaPelaksana}
           </p>
         </div>
@@ -272,11 +278,10 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
       },
       cell: ({ row }) => (
         <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+          className={`text-left flex flex-wrap items-center justify-center flex-col capitalize`}
         >
           <p className="text-sm text-black leading-[100%]">
-            {" "}
-            {row.original.TanggalPermohonan}
+            {generateTanggalPelatihan(row.original.TanggalPermohonan)}
           </p>
         </div>
       ),
@@ -287,7 +292,11 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className="p-0 !text-center max-w-full flex items-center justify-start text-gray-900 font-semibold"
+            className={` ${
+              pathPublic == "/akp"
+                ? "hidden"
+                : "flex items-center justify-start"
+            } p-0 !text-center max-w-full  text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Link Permohonan
@@ -296,7 +305,11 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         );
       },
       cell: ({ row }) => (
-        <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
+        <div
+          className={` ${
+            pathPublic == "/akp" ? "hidden" : "flex flex-wrap flex-col"
+          }   text-left`}
+        >
           <p className="text-sm text-blue-500 underline leading-[100%] ">
             {" "}
             {row.original.LinkPermohonan}
@@ -369,9 +382,7 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         );
       },
       cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
+        <div className={`text-center flex flex-wrap flex-col capitalize`}>
           <p className="text-sm text-black leading-[100%]">
             {" "}
             {row.original.JumlahPesertaLulus}
@@ -379,7 +390,6 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         </div>
       ),
     },
-  
 
     {
       accessorKey: "NoSeriBlanko",
@@ -438,7 +448,11 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className="p-0 !text-center max-w-full flex items-center justify-start text-gray-900 font-semibold"
+            className={`${
+              pathPublic == "/akp"
+                ? "hidden"
+                : "flex items-center justify-start"
+            } p-0 !text-center max-w-full  text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Sertifikat Digital <br /> Sudah Diterbitkan
@@ -448,7 +462,9 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
       },
       cell: ({ row }) => (
         <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col text-blue-500`}
+          className={`${
+            pathPublic == "/akp" ? "hidden" : "flex flex-wrap flex-col"
+          }  text-left  text-blue-500`}
         >
           <Link
             href={row.original.LinkDataDukung}
@@ -659,4 +675,4 @@ const TableDataBlankoKeterampilanPublic: React.FC = () => {
   );
 };
 
-export default TableDataBlankoKeterampilanPublic;
+export default TableDataSertifikatKeterampilan;

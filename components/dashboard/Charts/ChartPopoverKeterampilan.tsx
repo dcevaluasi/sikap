@@ -36,8 +36,9 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import TableDataBlankoKeterampilanPublic from "../Pelatihan/TableDataBlankoKeterampilanPublic";
 import TableDataBlankoKeluar from "../Pelatihan/TableDataBlankoKeluar";
+import { usePathname } from "next/navigation";
+import TableDataSertifikatKeterampilan from "../Pelatihan/TableDataSertifikatKeterampilan";
 export const description = "A bar chart with an active bar";
 
 const chartConfig = {
@@ -1097,7 +1098,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <TableDataBlankoKeterampilanPublic />
+            <TableDataSertifikatKeterampilan />
           </CardContent>
         </Card>
       </div>

@@ -36,7 +36,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import TableDataBlankoKeterampilanPublic from "../Pelatihan/TableDataBlankoKeterampilanPublic";
+import TableDataBlankoKeterampilanPublic from "../Pelatihan/TableDataSeretifikatKeterampilanPublic";
 export const description = "A bar chart with an active bar";
 
 const chartConfig = {
