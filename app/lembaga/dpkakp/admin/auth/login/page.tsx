@@ -54,7 +54,7 @@ function page() {
           });
           await handleClearFormLoginAdminDPKAKP();
           Cookies.set("XSRF095", response?.data?.t);
-          router.replace("/lembaga/dpkakp/admin/dashboard");
+          router.replace("/lembaga/dpkakp/admin/dashboard/ujian");
         } else {
           Toast.fire({
             icon: "error",
