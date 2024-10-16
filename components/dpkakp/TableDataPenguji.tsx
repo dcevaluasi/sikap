@@ -1,5 +1,4 @@
 import React, { ReactElement, useState } from "react";
-import TableData from "../Tables/TableData";
 import {
   RiRadioButtonLine,
   RiShipLine,
@@ -81,7 +80,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import { MdOutlineSaveAlt } from "react-icons/md";
-import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
 import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
@@ -110,6 +108,8 @@ import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifi
 import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import { Blanko } from "@/types/blanko";
+import FormPelatihan from "../dashboard/admin/formPelatihan";
+import TableData from "../dashboard/Tables/TableData";
 
 const TableDataPenguji: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -865,4 +865,4 @@ const TableDataPenguji: React.FC = () => {
     </div>
   );
 };
-export default TableDataBlanko;
+export default TableDataPenguji;
