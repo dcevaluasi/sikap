@@ -420,7 +420,7 @@ const TableDataBankSoalUjianKeahlian = () => {
 
       handleFetchingBagianUjian();
       setIsOpenFormDelete(!isOpenFormDelete);
-      route.replace("/dpkakp/admin/dashboard/bank-soal");
+      route.replace("/lembaga/dpkakp/admin/dashboard/bank-soal");
     } catch (error) {
       console.error(error);
       Toast.fire({

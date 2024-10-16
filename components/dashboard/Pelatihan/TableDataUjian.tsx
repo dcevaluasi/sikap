@@ -317,7 +317,7 @@ const TableDataUjian: React.FC = () => {
             <Button
               onClick={() =>
                 router.push(
-                  `/dpkakp/admin/dashboard/ujian/peserta-ujian/${row.getValue(
+                  `/lembaga/dpkakp/admin/dashboard/ujian/peserta-ujian/${row.getValue(
                     "IdUjian"
                   )}/${row.original.IdTypeUjian}`
                 )
