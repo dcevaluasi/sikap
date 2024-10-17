@@ -90,7 +90,7 @@ export default function Footer() {
             <ul className="text-sm">
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="https://ppid.sipelatihaksi.com/"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   BPPP Medan
@@ -98,7 +98,7 @@ export default function Footer() {
               </li>
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="https://sites.google.com/view/ppidbppakkp"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   BDA Sukamandi
@@ -106,7 +106,7 @@ export default function Footer() {
               </li>
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="https://bppptegal.id/tentang-kami"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   BPPP Tegal
@@ -114,7 +114,7 @@ export default function Footer() {
               </li>
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="https://www.bpppbanyuwangi.com/"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   BPPP Banyuwangi
@@ -122,7 +122,7 @@ export default function Footer() {
               </li>
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="https://bp3ambon.kkp.go.id/"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   BPPP Ambon
@@ -130,7 +130,7 @@ export default function Footer() {
               </li>
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="https://bpppbitung.id/#"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   BPPP Bitung
@@ -145,7 +145,7 @@ export default function Footer() {
             <ul className="text-sm">
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="/"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   BPPSDM KP
@@ -153,7 +153,7 @@ export default function Footer() {
               </li>
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="/"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   Pusat Pelatihan KP
@@ -161,7 +161,7 @@ export default function Footer() {
               </li>
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="/lembaga/dpkakp"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   DPKAKP
@@ -169,7 +169,15 @@ export default function Footer() {
               </li>
               <li className="mb-2">
                 <a
-                  href="#0"
+                  href="/lembaga/komite-approval"
+                  className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
+                >
+                  Komite Approval
+                </a>
+              </li>
+              <li className="mb-2">
+                <a
+                  href="/lembaga/p2mkp"
                   className="text-gray-200 hover:text-gray-400 transition duration-150 ease-in-out"
                 >
                   P2MKP

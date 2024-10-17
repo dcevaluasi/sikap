@@ -342,6 +342,33 @@ export default function Header() {
                     </div>
                   </NavLink>
                 </NavDropDown>
+                <NavDropDown
+                  href="/lembaga/dpkakp"
+                  name="Lembaga AKP"
+                  top={top}
+                >
+                  <NavLink
+                    href="https://bppptegal.id/tentang-kami"
+                    name="Balai Pelatihan dan Penyuluhan Perikanan Tegal"
+                    top={top}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <IoMdSchool className="text-4xl" />{" "}
+                      <span>Dewan Penguji Keahlian Awak Kapal Perikanan</span>
+                    </div>
+                  </NavLink>
+                  <NavLink
+                    href="/lembaga/komite-approval"
+                    name="Balai Pelatihan dan Penyuluhan Perikanan Banyuwangi"
+                    top={top}
+                  >
+                    <div className="flex gap-2 items-center">
+                      <IoMdSchool className="text-4xl" />{" "}
+                      <span>Komite Approval Pengesahan Program Diklat</span>
+                    </div>
+                  </NavLink>
+                </NavDropDown>
+                <NavLinkDefault href="/lembaga/p2mkp" name="P2MKP" top={top} />
                 <NavLinkDefault
                   href="/layanan/cek-sertifikat"
                   name="Cek Sertifikat"

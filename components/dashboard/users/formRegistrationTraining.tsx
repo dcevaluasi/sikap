@@ -87,12 +87,7 @@ function FormRegistrationTraining({
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/exportPesertaPelatihan`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-          },
-        }
+        formData
       );
       console.log("FILE UPLOADED PESERTA : ", response);
       Toast.fire({
@@ -603,7 +598,11 @@ function FormRegistrationTraining({
                 >
                   Cancel
                 </AlertDialogCancel>
-                <AlertDialogAction>Upload</AlertDialogAction>
+                <AlertDialogAction
+                  onClick={(e) => handleUploadImportPesertaPelatihan(e)}
+                >
+                  Upload
+                </AlertDialogAction>
               </AlertDialogFooter>
             </form>
           </fieldset>
@@ -627,43 +626,23 @@ function FormRegistrationTraining({
                 </h2>
               )}
 
-              {Cookies.get("isManningAgent") ? (
-                <p className="text-base">
-                  {indexFormTab == 0 ? (
-                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
-                      1
-                    </span>
-                  ) : indexFormTab == 1 ? (
-                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
-                      2
-                    </span>
-                  ) : (
-                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
-                      3
-                    </span>
-                  )}{" "}
-                  of 3
-                </p>
-              ) : (
-                <p className="text-base">
-                  {indexFormTab == 0 ? (
-                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
-                      1
-                    </span>
-                  ) : (
-                    <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
-                      2
-                    </span>
-                  )}{" "}
-                  of 2
-                </p>
-              )}
+              <p className="text-base">
+                {indexFormTab == 0 ? (
+                  <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                    1
+                  </span>
+                ) : (
+                  <span className="font-bold  leading-[100%] my-6 text-blue-500 ">
+                    2
+                  </span>
+                )}{" "}
+                of 2
+              </p>
             </div>
             <div className="flex w-full -mt-2 mb-4">
               <Progress value={(indexFormTab + 1) * 50} max={2} />
             </div>
             <FormFasilitas />
-            <FormPesertaPelatihan />
             <FormPembayaran />
             <div className="flex  -mx-3 mt-5 gap-2 px-3">
               <div className={`w-full ${indexFormTab == 0 && "hidden"}`}>
