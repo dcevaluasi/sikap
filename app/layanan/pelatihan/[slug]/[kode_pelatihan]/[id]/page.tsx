@@ -70,6 +70,14 @@ import { Input } from "@/components/ui/input";
 import ReCAPTCHA from "react-google-recaptcha";
 import { Button } from "@/components/ui/button";
 import { elautBaseUrl } from "@/constants/urls";
+import { hitungHariPelatihan } from "@/utils/pelatihan";
+import { PiQuestion, PiQuestionBold } from "react-icons/pi";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -392,7 +400,7 @@ function page() {
                               <td>
                                 <p className="text-base text-gray-600">
                                   <span className="font-semibold">
-                                    Tanggal Pelaksanaan :{" "}
+                                    Tanggal Pendaftaran :{" "}
                                   </span>
                                   {convertDate(
                                     pelatihan?.TanggalMulaiPelatihan
@@ -406,6 +414,52 @@ function page() {
                             </tr>
                             <tr>
                               <td className="text-gray-600">
+                                <TbCalendarUser className="text-lg w-6" />
+                              </td>
+                              <td>
+                                <div className="text-base flex gap-1 items-center text-gray-600">
+                                  <span className="flex">
+                                    {" "}
+                                    <span className="font-semibold">
+                                      Lama Pelaksanaan :{" "}
+                                    </span>
+                                    <span>
+                                      {" "}
+                                      {hitungHariPelatihan(
+                                        pelatihan?.TanggalMulaiPelatihan,
+                                        pelatihan?.TanggalBerakhirPelatihan
+                                      )}{" "}
+                                      Hari{" "}
+                                    </span>
+                                  </span>
+
+                                  <Popover>
+                                    <PopoverTrigger asChild>
+                                      <span className="cursor-pointer">
+                                        <PiQuestionBold />
+                                      </span>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-80">
+                                      <p>
+                                        Tanggal pelaksaan pelatihan akan
+                                        diinfokan lebih lanjut melalui informasi
+                                        pada dashboard/no handpone/manning agent
+                                        kamu atau hub{" "}
+                                        <Link
+                                          href={"#"}
+                                          className="text-blue-500 underline"
+                                        >
+                                          helpdesk{" "}
+                                          {pelatihan?.PenyelenggaraPelatihan}
+                                        </Link>
+                                      </p>
+                                    </PopoverContent>
+                                  </Popover>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="text-gray-600">
                                 <TbMap2 className="text-lg w-6" />
                               </td>
                               <td>
@@ -413,7 +467,7 @@ function page() {
                                   <span className="font-semibold">
                                     Lokasi Pelatihan :
                                   </span>{" "}
-                                  {pelatihan.LokasiPelatihan}{" "}
+                                  {pelatihan.LokasiPelatihan}
                                 </p>
                               </td>
                             </tr>

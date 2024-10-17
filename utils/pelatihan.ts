@@ -63,3 +63,17 @@ export function getNumberFromURLDetailPelatihanAdmin(url: string): number | null
     return null; // Return null if the extracted part is not a number
   }
 }
+
+export function hitungHariPelatihan(tanggalMulai: string, tanggalBerakhir: string) {
+  const mulai: any = new Date(tanggalMulai);
+  const berakhir: any = new Date(tanggalBerakhir);
+
+  // Menghitung selisih waktu dalam milidetik
+  const selisihWaktu = berakhir - mulai;
+
+  // Mengonversi milidetik ke hari
+  const jumlahHari = (selisihWaktu / (1000 * 60 * 60 * 24)) + 1;
+
+  return jumlahHari;
+}
+
