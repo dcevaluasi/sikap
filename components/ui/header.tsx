@@ -72,6 +72,7 @@ export default function Header() {
                   usePathname() == "/lembaga/p2mkp" ||
                   usePathname().includes("bppp") ||
                   usePathname() == "/lembaga/dpkakp" ||
+                  usePathname() == "/lembaga/pukakp" ||
                   usePathname() == "/dashboard" ||
                   usePathname().includes("registrasi") ||
                   usePathname().includes("login") ||
@@ -174,6 +175,7 @@ export default function Header() {
               usePathname() == "/lembaga/p2mkp" ||
               usePathname().includes("bppp") ||
               usePathname() == "/lembaga/dpkakp" ||
+              usePathname() == "/lembaga/pukakp" ||
               usePathname() == "/dashboard" ||
               usePathname().includes("registrasi") ||
               usePathname().includes("login") ||
@@ -220,6 +222,9 @@ export default function Header() {
         usePathname().includes("/dpkakp/admin") ||
         usePathname().includes("/dpkakp/user") ||
         usePathname().includes("/dpkakp/penguji") ||
+        usePathname().includes("/pukakp/admin") ||
+        usePathname().includes("/pukakp/user") ||
+        usePathname().includes("/pukakp/penguji") ||
         usePathname().includes("/komite-approval")
           ? "hidden"
           : "block"

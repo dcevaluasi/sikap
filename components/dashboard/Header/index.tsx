@@ -9,11 +9,14 @@ import React from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Toast from "@/components/toast";
+import DropdownUserDPKAKP from "./DropdownUserDPKAKP";
+import { UserInformationDPKAKP } from "@/types/dpkakp";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
-  lemdikInfo: LemdiklatDetailInfo;
+  lemdikInfo?: LemdiklatDetailInfo;
+  dpkakpInfo?: UserInformationDPKAKP;
 }) => {
   const pathname = usePathname();
 
@@ -76,7 +79,13 @@ const Header = (props: {
 
         <div className="flex items-center gap-3 2xsm:gap-7">
           {/* <!-- User Area --> */}
-          <DropdownUser userLoggedInInfo={props?.lemdikInfo!} />
+          {usePathname().includes("dpkakp") ||
+          usePathname().includes("pukakp") ? (
+            <DropdownUserDPKAKP dpkakpLoggedInfo={props?.dpkakpInfo!} />
+          ) : (
+            <DropdownUser userLoggedInInfo={props?.lemdikInfo!} />
+          )}
+
           {/* <!-- User Area --> */}
         </div>
       </div>

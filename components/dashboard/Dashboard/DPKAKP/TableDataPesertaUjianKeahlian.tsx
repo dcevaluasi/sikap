@@ -156,7 +156,9 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="flex w-full text-gray-900 font-semibold"
+          className={`${
+            usePathname().includes("pukakp") ? "flex" : "hidden"
+          } w-full text-gray-900 font-semibold`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Action
@@ -164,7 +166,11 @@ const TableDataPesertaUjianKeahlian = () => {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="w-full flex flex-col gap-2">
+        <div
+          className={`w-full ${
+            usePathname().includes("pukakp") ? "flex" : "hidden"
+          }  flex-col gap-2`}
+        >
           <div className="flex items-center justify-center gap-1">
             <Button variant="outline" className="border border-[#000000]">
               <TbInfoCircleFilled className="h-4 w-4" />
@@ -853,54 +859,56 @@ const TableDataPesertaUjianKeahlian = () => {
               </Select>
             </div> */}
 
-            <div className="w-full flex justify-end gap-2">
-              <div className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit">
-                <PiMicrosoftExcelLogoFill />
-                Export
-              </div>
+            {usePathname().includes("pukakp") && (
+              <div className="w-full flex justify-end gap-2">
+                <div className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit">
+                  <PiMicrosoftExcelLogoFill />
+                  Export
+                </div>
 
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                    <FaMapPin />
-                    Sematkan Soal Ujian
-                  </div>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Apakah anda yakin akan menyematkan soal ujian?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Pastikan jumlah anggota mu sudah sesuai dengan data
-                      peserta ujian yang sudah didaftarkan dan merpukan anggota
-                      yang sah tercantum dalam Surat Keputusan Dewan sebagai
-                      peserta yang mengikuti ujian keahlian awak kapal Perikanan
-                      !
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Batal</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={(e) =>
-                        handleSematkanSoalUjianKeahlianToPeserta(e)
-                      }
-                      className="bg-gray-900"
-                    >
-                      Sematkan
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
+                      <FaMapPin />
+                      Sematkan Soal Ujian
+                    </div>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Apakah anda yakin akan menyematkan soal ujian?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Pastikan jumlah anggota mu sudah sesuai dengan data
+                        peserta ujian yang sudah didaftarkan dan merpukan
+                        anggota yang sah tercantum dalam Surat Keputusan Dewan
+                        sebagai peserta yang mengikuti ujian keahlian awak kapal
+                        Perikanan !
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Batal</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={(e) =>
+                          handleSematkanSoalUjianKeahlianToPeserta(e)
+                        }
+                        className="bg-gray-900"
+                      >
+                        Sematkan
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
 
-              <div
-                onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-              >
-                <FiUploadCloud />
-                Tambah Peserta Ujian
+                <div
+                  onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
+                  className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
+                >
+                  <FiUploadCloud />
+                  Tambah Peserta Ujian
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* List Data Pelatihan */}

@@ -58,7 +58,7 @@ import {
   IoMdGlobe,
   IoMdSchool,
 } from "react-icons/io";
-import { FiUploadCloud } from "react-icons/fi";
+import { FiFile, FiUploadCloud } from "react-icons/fi";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -70,7 +70,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { MdOutlinePayments, MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
@@ -99,6 +99,10 @@ import {
   SelectLabel,
   SelectTrigger,
 } from "@/components/ui/select";
+import { UserInformationDPKAKP } from "@/types/dpkakp";
+import { generateTanggalPelatihan } from "@/utils/text";
+import { FaEdit } from "react-icons/fa";
+import { DewanPenguji } from "@/types/dewanPenguji";
 
 const TableDataUjian: React.FC = () => {
   /**
@@ -113,6 +117,28 @@ const TableDataUjian: React.FC = () => {
   const [selectedKeahlian, setSelectedKeahlian] = React.useState<string | null>(
     null
   );
+  const pathPukakp = usePathname().includes("pukakp");
+
+  const [dpkakpData, setDpkakpData] =
+    React.useState<UserInformationDPKAKP | null>(null);
+
+  const fetchInformationDPKAKP = async () => {
+    try {
+      const response = await axios.get(
+        `${dpkakpBaseUrl}/adminPusat/getAdminPusat`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      setDpkakpData(response.data.data);
+
+      console.log("DPKAKP INFO: ", response);
+    } catch (error) {
+      console.error("DPKAKP INFO: ", error);
+    }
+  };
 
   /*================== LOADER VARIABLES ================= */
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
@@ -120,6 +146,7 @@ const TableDataUjian: React.FC = () => {
   /*=============== HANDLING FETCHING UJIAN ============== */
   const handleFetchingUjianKeahlianData = async () => {
     setIsFetching(true);
+
     try {
       const response: AxiosResponse = await axios.get(
         `${dpkakpBaseUrl}/adminPusat/GetUjian`,
@@ -129,7 +156,17 @@ const TableDataUjian: React.FC = () => {
           },
         }
       );
-      setData(response.data.data);
+
+      const filteredData = response.data.data.filter(
+        (item: any) => item.PUKAKP === Cookies.get("PUKAKP")
+      );
+
+      if (pathPukakp) {
+        setData(filteredData);
+      } else {
+        setData(response.data.data);
+      }
+
       setIsFetching(false);
     } catch (error) {
       setIsFetching(false);
@@ -202,26 +239,31 @@ const TableDataUjian: React.FC = () => {
     setIsPosting(true);
     const [nameTypeUjianValue, idTypeUjianValue] = typeUjian.split(",");
 
+    const formData = new FormData();
+    formData.append("IdTypeUjian", idTypeUjianValue);
+    formData.append("TypeUjian", nameTypeUjianValue);
+    formData.append("NamaUjian", namaUjian);
+    formData.append("TempatUjian", tempatUjian);
+    formData.append("PUKAKP", Cookies.get("PUKAKP")!);
+    formData.append("NamaPengawas", namaPengawas);
+    formData.append("NamaVasilitator", namaVasilitator);
+    formData.append("TanggalMulai", tanggalMulai);
+    formData.append("TanggalBerakhir", tanggalBerakhir);
+    formData.append("WaktuUjian", waktuUjian);
+    formData.append("JumlahPeserta", jumlahPeserta);
+    formData.append("Status", status);
+    if (filePermohonan != null) {
+      formData.append("filePermohonan", filePermohonan!);
+    }
+
     try {
       const response = await axios.post(
         `${dpkakpBaseUrl}/adminPusat/createUjian`,
-        {
-          IdTypeUjian: idTypeUjianValue,
-          TypeUjian: nameTypeUjianValue,
-          NamaUjian: namaUjian,
-          TempatUjian: tempatUjian,
-          PUKAKP: pukakp,
-          NamaPengawas: namaPengawas,
-          NamaVasilitator: namaVasilitator,
-          TanggalMulai: tanggalMulai,
-          TanggalBerakhir: tanggalBerakhir,
-          WaktuUjian: waktuUjian,
-          JumlahPeserta: jumlahPeserta,
-          Status: status,
-        },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -245,10 +287,50 @@ const TableDataUjian: React.FC = () => {
     }
   };
 
+  const handleUpdateNewUjianKeahlian = async (e: any) => {
+    setIsPosting(true);
+    const [nameTypeUjianValue, idTypeUjianValue] = typeUjian.split(",");
+
+    try {
+      const response = await axios.put(
+        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedId}`,
+        {
+          nama_pengawas_ujian: namaPengawas,
+          nama_vasilitator_ujian: namaVasilitator,
+          status: "Aktif",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil mengupdate data pelaksanaan ujian keahlian baru!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+      setIsPosting(false);
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal mengupdate data pelaksanaan ujian keahlian baru!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+      setIsPosting(true);
+    }
+  };
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
+  const [selectedId, setSelectedId] = React.useState<number>(0);
 
   const router = useRouter();
   const [columnVisibility, setColumnVisibility] =
@@ -256,7 +338,7 @@ const TableDataUjian: React.FC = () => {
   const [rowSelection, setRowSelection] = React.useState({});
   const columns: ColumnDef<Ujian>[] = [
     {
-      accessorKey: "IdUjian",
+      accessorKey: "TempatUjian",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -314,19 +396,43 @@ const TableDataUjian: React.FC = () => {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-            <Button
-              onClick={() =>
-                router.push(
-                  `/lembaga/dpkakp/admin/dashboard/ujian/peserta-ujian/${row.getValue(
-                    "IdUjian"
-                  )}/${row.original.IdTypeUjian}`
-                )
-              }
-              variant="outline"
-              className="border border-blue-500"
-            >
-              <HiUserGroup className="h-4 w-4 text-blue-500" />
-            </Button>
+            {row.original.Status == "Aktif" && (
+              <Link
+                href={`/lembaga/${
+                  usePathname().includes("pukakp") ? "pukakp" : "dpkakp"
+                }/admin/dashboard/ujian/peserta-ujian/${row.getValue(
+                  "IdUjian"
+                )}/${row.original.IdTypeUjian}`}
+                className="border border-blue-500 rounded-md  bg-white shadow-sm  h-9 px-4 py-2"
+              >
+                <HiUserGroup className="h-4 w-4 text-blue-500" />
+              </Link>
+            )}
+
+            {row.original.FilePermohonan != null ? (
+              <Link
+                target="_blank"
+                href={row.original.FilePermohonan!}
+                className="border border-gray-500 rounded-md bg-white shadow-sm  h-9 px-4 py-2"
+              >
+                <FiFile className="h-4 w-4 text-gray-500" />
+              </Link>
+            ) : (
+              <></>
+            )}
+
+            {usePathname().includes("dpkakp") && (
+              <Button
+                onClick={(e) => {
+                  setSelectedId(row.original.IdUjian);
+                  setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+                }}
+                variant="outline"
+                className="border border-yellow-400 rounded-md"
+              >
+                <FaEdit className="h-4 w-4 text-yellow-400" />
+              </Button>
+            )}
           </div>
         </div>
       ),
@@ -351,8 +457,8 @@ const TableDataUjian: React.FC = () => {
           <p className="text-base font-semibold tracking-tight leading-none">
             {row.getValue("NamaUjian")}
           </p>
-          <div className="ml-0 text-left capitalize mt-1">
-            <p className="text-xs font-medium capitalize">
+          <div className="ml-0 text-left mt-1">
+            <p className="text-xs font-medium ">
               <span className="flex items-center gap-1 leading-[105%]">
                 <TbTargetArrow className="text-lg" />
                 <span>{row.original.TempatUjian}</span>
@@ -360,8 +466,8 @@ const TableDataUjian: React.FC = () => {
               <span className="flex items-center gap-1 leading-[105%]">
                 <TbCalendarCheck className="text-lg" />
                 <span>
-                  {row.original.TanggalMulaiUjian} s.d{" "}
-                  {row.original.TanggalBerakhirUjian}
+                  {generateTanggalPelatihan(row.original.TanggalMulaiUjian)} s.d{" "}
+                  {generateTanggalPelatihan(row.original.TanggalBerakhirUjian)}
                 </span>
               </span>
               <span className="flex items-center gap-1 leading-[105%]">
@@ -377,12 +483,43 @@ const TableDataUjian: React.FC = () => {
     },
   ];
 
+  const [filePermohonan, setFilePermohonan] = React.useState<File | null>(null);
+  const handleFileChange = (e: any) => {
+    setFilePermohonan(e.target.files[0]);
+  };
+
   const handleSelectChange = (value: string) => {
     setSelectedKeahlian(value);
     console.log(value);
     console.log(data);
     setData(value ? data.filter((ujian) => ujian.TypeUjian === value) : data);
     console.log(data);
+  };
+
+  const [dataPenguji, setDataPenguji] = React.useState<DewanPenguji[] | null>(
+    []
+  );
+
+  const handleGetDataPenguji = async () => {
+    setIsFetching(true);
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${dpkakpBaseUrl}/adminpusat/getDataPenguji`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`, // Add Bearer token in Authorization header
+          },
+        }
+      );
+
+      console.log("RESPONSE Data Penguji ", response);
+      setDataPenguji(response.data.data);
+      setIsFetching(false);
+    } catch (error) {
+      console.error("ERROR BLANKO KELUAR : ", error);
+      setIsFetching(false);
+      throw error;
+    }
   };
 
   const table = useReactTable({
@@ -405,7 +542,9 @@ const TableDataUjian: React.FC = () => {
   });
 
   React.useEffect(() => {
+    fetchInformationDPKAKP();
     handleFetchingUjianKeahlianData();
+    handleGetDataPenguji();
     handleFetchingTypeUjianKeahlianData();
   }, []);
 
@@ -425,242 +564,278 @@ const TableDataUjian: React.FC = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <fieldset>
-            <form autoComplete="off">
-              <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="flex px-3 gap-2 mb-2 w-full">
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Tipe Ujian <span className="text-red-600">*</span>
-                    </label>
-                    <select
-                      id="name"
-                      className="form-input w-full text-black text-sm border-gray-300 rounded-md"
-                      placeholder="Tipe Blanko"
-                      required
-                      value={typeUjian}
-                      onChange={(e) => setTypeUjian(e.target.value)}
-                    >
-                      <option value="0">Pilih Tipe Ujian</option>
-                      {dataTypeUjian.map((typeUjian, index) => (
-                        <option
-                          value={
-                            typeUjian.NamaTypeUjian +
-                            "," +
-                            typeUjian.IdTypeUjian
-                          }
-                        >
-                          {typeUjian.NamaTypeUjian}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+            {usePathname().includes("pukakp") ? (
+              <form autoComplete="off">
+                <div className="flex flex-wrap -mx-3 mb-1">
+                  <div className="flex px-3 gap-2 mb-2 w-full">
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Tipe Ujian <span className="text-red-600">*</span>
+                      </label>
+                      <select
+                        id="name"
+                        className="form-input w-full text-black text-sm border-gray-300 rounded-md"
+                        placeholder="Tipe Blanko"
+                        required
+                        value={typeUjian}
+                        onChange={(e) => setTypeUjian(e.target.value)}
+                      >
+                        <option value="0">Pilih Tipe Ujian</option>
+                        {dataTypeUjian.map((typeUjian, index) => (
+                          <option
+                            value={
+                              typeUjian.NamaTypeUjian +
+                              "," +
+                              typeUjian.IdTypeUjian
+                            }
+                          >
+                            {typeUjian.NamaTypeUjian}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                  <div className="w-full">
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Nama Ujian <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Nama Ujian"
+                        required
+                        value={namaUjian}
+                        onChange={(e) => setNamaUjian(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap -mx-3 mb-1">
+                  <div className="flex px-3 gap-2 mb-2 w-full">
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Tempat Ujian <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Tempat Ujian"
+                        required
+                        value={tempatUjian}
+                        onChange={(e) => setTempatUjian(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        PUKAKP <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Tempat Ujian"
+                        required
+                        value={Cookies.get("PUKAKP")}
+                        onChange={(e) => setPukakp(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap -mx-3 mb-1">
+                  <div className="flex px-3 gap-2 mb-2 w-full">
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Tanggal Mulai <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="date"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Tanggall Mulai"
+                        required
+                        min={new Date().toISOString().split("T")[0]}
+                        value={tanggalMulai}
+                        onChange={(e) => setTanggalMulai(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Tanggal Berakhir <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="tanggalBerakhir"
+                        type="date"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Tanggal Berakhir"
+                        required
+                        value={tanggalBerakhir}
+                        min={tanggalMulai}
+                        onChange={(e) => setTanggalBerakhir(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap -mx-3 mb-1">
+                  <div className="flex px-3 gap-2 mb-2 w-full">
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Waktu Ujian per Materi{" "}
+                        <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="number"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Waktu Ujian"
+                        required
+                        value={waktuUjian}
+                        onChange={(e) => setWaktuUjian(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Jumlah Peserta <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Jumlah Peserta"
+                        required
+                        value={jumlahPeserta}
+                        onChange={(e) => setJumlahPeserta(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="w-full mx-3">
                     <label
                       className="block text-gray-800 text-sm font-medium mb-1"
                       htmlFor="name"
                     >
-                      Nama Ujian <span className="text-red-600">*</span>
+                      Surat Permohonan <span className="text-red-600">*</span>
                     </label>
                     <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Nama Ujian"
+                      type="file"
+                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
                       required
-                      value={namaUjian}
-                      onChange={(e) => setNamaUjian(e.target.value)}
+                      onChange={handleFileChange}
                     />
                   </div>
                 </div>
-              </div>
 
-              <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="flex px-3 gap-2 mb-2 w-full">
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Tempat Ujian <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Tempat Ujian"
-                      required
-                      value={tempatUjian}
-                      onChange={(e) => setTempatUjian(e.target.value)}
-                    />
-                  </div>
+                <AlertDialogFooter className="mt-3">
+                  <AlertDialogCancel
+                    onClick={(e) =>
+                      setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian)
+                    }
+                  >
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={(e) => handlePostNewUjianKeahlian(e)}
+                  >
+                    Upload
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
+            ) : (
+              <form autoComplete="off">
+                <div className="flex flex-wrap -mx-3 mb-1">
+                  <div className="flex px-3 gap-2 mb-2 w-full">
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Nama Penguji <span className="text-red-600">*</span>
+                      </label>
+                      <select
+                        id="name"
+                        className="form-select w-full text-black border-gray-300 rounded-md"
+                        required
+                        value={namaPengawas}
+                        onChange={(e) => setNamaPengawas(e.target.value)}
+                      >
+                        <option value="">Pilih Penguji</option>
+                        {dataPenguji!.map((penguji: any, index: number) => (
+                          <option
+                            key={penguji.IdUsersDpkakp}
+                            value={penguji.NamaUsersDpkakp}
+                          >
+                            {penguji.NamaUsersDpkakp}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      PUKAKP <span className="text-red-600">*</span>
-                    </label>
-                    <select
-                      id="name"
-                      className="form-input w-full text-black text-sm border-gray-300 rounded-md"
-                      placeholder="Pelaksana Ujian Keahlian"
-                      required
-                      value={pukakp}
-                      onChange={(e) => setPukakp(e.target.value)}
-                    >
-                      <option value="0">Pilih Pelaksana Ujian Keahlian</option>
-                      {wilayahPukakp.map((pukakp, index) => (
-                        <option value={pukakp.wilayah + " " + pukakp.tempat}>
-                          {pukakp.wilayah + " " + pukakp.tempat}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="flex px-3 gap-2 mb-2 w-full">
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Nama Pengawas <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Nama Pengawas"
-                      required
-                      value={namaPengawas}
-                      onChange={(e) => setNamaPengawas(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Nama Fasilitator <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Nama Fasilitator"
-                      required
-                      value={namaVasilitator}
-                      onChange={(e) => setNamaVasilitator(e.target.value)}
-                    />
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Nama Fasilitator <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Nama Fasilitator"
+                        required
+                        value={namaVasilitator}
+                        onChange={(e) => setNamaVasilitator(e.target.value)}
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="flex px-3 gap-2 mb-2 w-full">
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Tanggal Mulai <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="date"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Tanggall Mulai"
-                      required
-                      min={new Date().toISOString().split("T")[0]}
-                      value={tanggalMulai}
-                      onChange={(e) => setTanggalMulai(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Tanggal Berakhir <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="tanggalBerakhir"
-                      type="date"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Tanggal Berakhir"
-                      required
-                      value={tanggalBerakhir}
-                      min={tanggalMulai}
-                      onChange={(e) => setTanggalBerakhir(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap -mx-3 mb-1">
-                <div className="flex px-3 gap-2 mb-2 w-full">
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Waktu Ujian <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="number"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Waktu Ujian"
-                      required
-                      value={waktuUjian}
-                      onChange={(e) => setWaktuUjian(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Jumlah Peserta <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      placeholder="Jumlah Peserta"
-                      required
-                      value={jumlahPeserta}
-                      onChange={(e) => setJumlahPeserta(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <AlertDialogFooter className="mt-3">
-                <AlertDialogCancel
-                  onClick={(e) =>
-                    setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian)
-                  }
-                >
-                  Cancel
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={(e) => handlePostNewUjianKeahlian(e)}
-                >
-                  Upload
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </form>
+                <AlertDialogFooter className="mt-3">
+                  <AlertDialogCancel
+                    onClick={(e) =>
+                      setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian)
+                    }
+                  >
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={(e) => handleUpdateNewUjianKeahlian(e)}
+                  >
+                    Upload
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
+            )}
           </fieldset>
         </AlertDialogContent>
       </AlertDialog>
@@ -690,17 +865,19 @@ const TableDataUjian: React.FC = () => {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <div className="w-full flex justify-end gap-2">
-              <div
-                onClick={(e) =>
-                  setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian)
-                }
-                className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-              >
-                <FiUploadCloud />
-                Tambah Ujian Baru
+            {usePathname().includes("pukakp") && (
+              <div className="w-full flex justify-end gap-2">
+                <div
+                  onClick={(e) =>
+                    setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian)
+                  }
+                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                >
+                  <FiUploadCloud />
+                  Tambah Ujian Baru
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <TableData

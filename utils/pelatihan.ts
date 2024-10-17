@@ -72,7 +72,7 @@ export function hitungHariPelatihan(tanggalMulai: string, tanggalBerakhir: strin
   const selisihWaktu = berakhir - mulai;
 
   // Mengonversi milidetik ke hari
-  const jumlahHari = (selisihWaktu / (1000 * 60 * 60 * 24)) + 1;
+  const jumlahHari = (selisihWaktu / (1000 * 60 * 60 * 24) + 1);
 
   return jumlahHari;
 }

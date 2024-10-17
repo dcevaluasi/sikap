@@ -27,3 +27,13 @@ export type GolonganDewanPenguji = {
     UpdatedAt: string;
     DeletedAt: string;
 }
+
+export type UserInformationDPKAKP = {
+    IdAdminPusat: number;
+    Nama: string;
+    Email: string;
+    Password: string;
+    NoTelpon: string;
+    Nip: string;
+    Status: string;
+}

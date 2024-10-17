@@ -5,8 +5,10 @@ import Header from "../Header";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
+import { dpkakpBaseUrl } from "@/constants/urls";
+import { UserInformationDPKAKP } from "@/types/dpkakp";
 
-export default function DefaultLayout({
+export default function DefaultLayoutDPKAKP({
   children,
 }: {
   children: React.ReactNode;
@@ -14,28 +16,31 @@ export default function DefaultLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const token = Cookies.get("XSRF091");
+  const token = Cookies.get("XSRF095");
 
-  const [lemdikData, setLemdikData] =
-    React.useState<LemdiklatDetailInfo | null>(null);
+  const [dpkakpData, setDpkakpData] =
+    React.useState<UserInformationDPKAKP | null>(null);
 
-  const fetchInformationLemdiklat = async () => {
+  const fetchInformationDPKAKP = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/lemdik/getLemdik`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setLemdikData(response.data);
-      Cookies.set("IDLemdik", response.data.data.IdLemdik);
-      console.log("LEMDIK INFO: ", response);
+      const response = await axios.get(
+        `${dpkakpBaseUrl}/adminPusat/getAdminPusat`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setDpkakpData(response.data.data);
+
+      console.log("DPKAKP INFO: ", response);
     } catch (error) {
-      console.error("LEMDIK INFO: ", error);
+      console.error("DPKAKP INFO: ", error);
     }
   };
 
   React.useEffect(() => {
-    fetchInformationLemdiklat();
+    fetchInformationDPKAKP();
   }, []);
 
   return (
@@ -51,11 +56,11 @@ export default function DefaultLayout({
           className={`relative flex flex-1 h-screen flex-col overflow-x-hidden`}
         >
           {/* <!-- ===== Header Start ===== --> */}
-          
+
           <Header
             sidebarOpen={sidebarOpen}
             setSidebarOpen={setSidebarOpen}
-            lemdikInfo={lemdikData!}
+            dpkakpInfo={dpkakpData!}
           />
           {/* <!-- ===== Header End ===== --> */}
 

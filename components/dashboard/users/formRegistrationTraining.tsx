@@ -725,14 +725,14 @@ function FormRegistrationTraining({
                                   <option value={"Transfer Bank"}>
                                     Transfer Bank
                                   </option>
-                                  <option value={"Bukti Pembayaran"}>
+                                  <option value={"Virtual Account"}>
                                     Bukti Pembayaran
                                   </option>
                                 </select>
                               </div>
                             </div>
 
-                            {metodePembayaran == "Bukti Pembayaran" ? (
+                            {metodePembayaran == "Transfer Bank" ? (
                               <>
                                 {" "}
                                 <div className="grid grid-cols-1 space-y-2">

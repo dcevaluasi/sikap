@@ -74,6 +74,7 @@ type Ujian = {
   Status: string
   CreateAt: string
   UpdateAt: string
+  FilePermohonan: string;
   UsersUjian: UsersUjian[]
 }
 
