@@ -697,169 +697,181 @@ function FormRegistrationTraining({
                 <div
                   className={`w-full ${indexFormTab == 1 ? "block" : "hidden"}`}
                 >
-                  <AlertDialog
-                    open={isOpenFormPembayaran}
-                    onOpenChange={setIsOpenFormPembayaran}
-                  >
-                    <AlertDialogTrigger className="w-full">
-                      <button
-                        onClick={(e) =>
-                          setIsOpenFormPembayaran(!isOpenFormPembayaran)
-                        }
-                        className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
-                      >
-                        Daftar
-                      </button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Pembayaran Pelatihan
-                          </AlertDialogTitle>
-                          <AlertDialogDescription className="-mt-2">
-                            Lakukan pembayaran untuk menyelesaikan rangkaian
-                            registrasi pelatihan ini segera!
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <fieldset>
-                          <div className="flex flex-wrap  mb-1 w-full">
-                            <div className="w-full">
-                              <label
-                                className="block text-gray-800 text-sm font-medium mb-1"
-                                htmlFor="noSertifikat"
-                              >
-                                Metode Pembayaran{" "}
-                                <span className="text-red-600">*</span>
-                              </label>
-                              <select
-                                name=""
-                                id=""
-                                onChange={(e) =>
-                                  setMetodePembayaran(e.target.value)
-                                }
-                                className="w-full overflow-hidden rounded-lg border border-gray-300"
-                              >
-                                <option value={""}>Pilih Metode</option>
-
-                                <option value={"Transfer Bank"}>
-                                  Transfer Bank
-                                </option>
-                                <option value={"Bukti Pembayaran"}>
-                                  Bukti Pembayaran
-                                </option>
-                              </select>
-                            </div>
-                          </div>
-
-                          {metodePembayaran == "Bukti Pembayaran" ? (
-                            <>
-                              {" "}
-                              <div className="grid grid-cols-1 space-y-2">
+                  {pelatihan?.JenisPelatihan == "PNBP/BLU" ? (
+                    <AlertDialog
+                      open={isOpenFormPembayaran}
+                      onOpenChange={setIsOpenFormPembayaran}
+                    >
+                      <AlertDialogTrigger className="w-full">
+                        <button
+                          onClick={(e) =>
+                            setIsOpenFormPembayaran(!isOpenFormPembayaran)
+                          }
+                          className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                        >
+                          Daftar
+                        </button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Pembayaran Pelatihan
+                            </AlertDialogTitle>
+                            <AlertDialogDescription className="-mt-2">
+                              Lakukan pembayaran untuk menyelesaikan rangkaian
+                              registrasi pelatihan ini segera!
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <fieldset>
+                            <div className="flex flex-wrap  mb-1 w-full">
+                              <div className="w-full">
                                 <label
                                   className="block text-gray-800 text-sm font-medium mb-1"
-                                  htmlFor="name"
+                                  htmlFor="noSertifikat"
                                 >
-                                  File Bukti Pembayaran{" "}
+                                  Metode Pembayaran{" "}
                                   <span className="text-red-600">*</span>
                                 </label>
-                                <div className="flex items-center justify-center w-full">
-                                  <label className="flex flex-col rounded-lg border-2 border-dashed w-full h-40 p-10 group text-center">
-                                    <div className="h-full w-full text-center flex flex-col items-center justify-center">
-                                      <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth="2"
-                                          d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                        />
-                                      </svg>
-                                      {isAgreeWithAggreement == null ? (
-                                        <p className="pointer-none text-gray-500 text-sm">
-                                          <span className="text-sm">
-                                            Drag and drop
-                                          </span>{" "}
-                                          files here <br /> or{" "}
-                                          <a
-                                            href=""
-                                            id=""
-                                            className="text-blue-600 hover:underline"
-                                          >
-                                            select a file
-                                          </a>{" "}
-                                          from your computer
-                                        </p>
-                                      ) : (
-                                        <p className="pointer-none text-gray-500 text-sm"></p>
-                                      )}{" "}
-                                    </div>
-                                    <input
-                                      type="file"
-                                      className="hidden"
-                                      onChange={handleFileChange}
-                                    />
-                                  </label>
-                                </div>
-                              </div>
-                              <p className="text-sm text-gray-300">
-                                <span>File type: doc,pdf,types of images</span>
-                              </p>
-                            </>
-                          ) : (
-                            <>
-                              <div className="grid grid-cols-3"></div>
-                            </>
-                          )}
-                        </fieldset>
+                                <select
+                                  name=""
+                                  id=""
+                                  onChange={(e) =>
+                                    setMetodePembayaran(e.target.value)
+                                  }
+                                  className="w-full overflow-hidden rounded-lg border border-gray-300"
+                                >
+                                  <option value={""}>Pilih Metode</option>
 
-                        <p className="text-gray-700 text-xs mt-1">
-                          *Proses pembayaan perlu dilakukan, harap memilih
-                          metode pembayaran yang sesuai dengan keadaanmu dan
-                          kirimkan pada no rekening berikut
-                          <Link
-                            href={
-                              "https://drive.google.com/file/d/1_LXUE02cNIIuMeg6ejMcENVAA3JJH7TC/view?usp=sharing"
-                            }
-                            target="_blank"
-                            className="ml-1 text-blue-500 underline"
-                          >
-                            0918039118320 ({pelatihan?.PenyelenggaraPelatihan})
-                          </Link>
-                          . Untuk pembayaran dengan metode bukti pembayaran akan
-                          tertolak dalam proses verifikasi jika dinyatakan tidak
-                          benar
-                        </p>
-                      </>
-                      <AlertDialogFooter>
-                        <div className="flex flex-col gap-1 w-full">
-                          <Button
-                            onClick={(e) =>
-                              handleRegistrationTrainingForPeople(e)
-                            }
-                            disabled={metodePembayaran == ""}
-                            className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
-                          >
-                            Daftar
-                          </Button>
-                          <Button
-                            type="button"
-                            onClick={(e) =>
-                              setIsOpenFormPembayaran(!isOpenFormPembayaran)
-                            }
-                            className="btn bg-transparent hover:!bg-white text-blue-600 border border-blue-600 w-full"
-                          >
-                            Tutup
-                          </Button>
-                        </div>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                                  <option value={"Transfer Bank"}>
+                                    Transfer Bank
+                                  </option>
+                                  <option value={"Bukti Pembayaran"}>
+                                    Bukti Pembayaran
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+
+                            {metodePembayaran == "Bukti Pembayaran" ? (
+                              <>
+                                {" "}
+                                <div className="grid grid-cols-1 space-y-2">
+                                  <label
+                                    className="block text-gray-800 text-sm font-medium mb-1"
+                                    htmlFor="name"
+                                  >
+                                    File Bukti Pembayaran{" "}
+                                    <span className="text-red-600">*</span>
+                                  </label>
+                                  <div className="flex items-center justify-center w-full">
+                                    <label className="flex flex-col rounded-lg border-2 border-dashed w-full h-40 p-10 group text-center">
+                                      <div className="h-full w-full text-center flex flex-col items-center justify-center">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          className="w-10 h-10 text-blue-400 group-hover:text-blue-600"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke="currentColor"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                          />
+                                        </svg>
+                                        {isAgreeWithAggreement == null ? (
+                                          <p className="pointer-none text-gray-500 text-sm">
+                                            <span className="text-sm">
+                                              Drag and drop
+                                            </span>{" "}
+                                            files here <br /> or{" "}
+                                            <a
+                                              href=""
+                                              id=""
+                                              className="text-blue-600 hover:underline"
+                                            >
+                                              select a file
+                                            </a>{" "}
+                                            from your computer
+                                          </p>
+                                        ) : (
+                                          <p className="pointer-none text-gray-500 text-sm"></p>
+                                        )}{" "}
+                                      </div>
+                                      <input
+                                        type="file"
+                                        className="hidden"
+                                        onChange={handleFileChange}
+                                      />
+                                    </label>
+                                  </div>
+                                </div>
+                                <p className="text-sm text-gray-300">
+                                  <span>
+                                    File type: doc,pdf,types of images
+                                  </span>
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <div className="grid grid-cols-3"></div>
+                              </>
+                            )}
+                          </fieldset>
+
+                          <p className="text-gray-700 text-xs mt-1">
+                            *Proses pembayaan perlu dilakukan, harap memilih
+                            metode pembayaran yang sesuai dengan keadaanmu dan
+                            kirimkan pada no rekening berikut
+                            <Link
+                              href={
+                                "https://drive.google.com/file/d/1_LXUE02cNIIuMeg6ejMcENVAA3JJH7TC/view?usp=sharing"
+                              }
+                              target="_blank"
+                              className="ml-1 text-blue-500 underline"
+                            >
+                              0918039118320 ({pelatihan?.PenyelenggaraPelatihan}
+                              )
+                            </Link>
+                            . Untuk pembayaran dengan metode bukti pembayaran
+                            akan tertolak dalam proses verifikasi jika
+                            dinyatakan tidak benar
+                          </p>
+                        </>
+                        <AlertDialogFooter>
+                          <div className="flex flex-col gap-1 w-full">
+                            <Button
+                              onClick={(e) =>
+                                handleRegistrationTrainingForPeople(e)
+                              }
+                              disabled={metodePembayaran == ""}
+                              className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                            >
+                              Daftar
+                            </Button>
+                            <Button
+                              type="button"
+                              onClick={(e) =>
+                                setIsOpenFormPembayaran(!isOpenFormPembayaran)
+                              }
+                              className="btn bg-transparent hover:!bg-white text-blue-600 border border-blue-600 w-full"
+                            >
+                              Tutup
+                            </Button>
+                          </div>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  ) : (
+                    <button
+                      onClick={(e) => handleRegistrationTrainingForPeople(e)}
+                      className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                    >
+                      Daftar
+                    </button>
+                  )}
                 </div>
               )}
             </div>

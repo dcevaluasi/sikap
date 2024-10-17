@@ -79,6 +79,8 @@ function UserTrainingService({ user }: { user: User | null }) {
         return "/images/bidangPelatihan/mesin-perikanan.png";
       case "Kepelautan":
         return "/images/bidangPelatihan/kepelautan.png";
+      case "Manajemen Perikanan":
+        return "/images/bidangPelatihan/sd-perikanan.png";
       default:
         return "/images/bidangPelatihian/sd-perikanan.png";
     }
