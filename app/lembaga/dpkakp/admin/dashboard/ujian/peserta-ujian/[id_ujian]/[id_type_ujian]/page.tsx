@@ -2,6 +2,7 @@ import PesertaUjianKeahlian from "@/components/dashboard/Dashboard/DPKAKP/Pesert
 import Pelatihan from "@/components/dashboard/Dashboard/Pelatihan";
 import PesertaPelatihan from "@/components/dashboard/Dashboard/PesertaPelatihan";
 import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
+import DefaultLayoutDPKAKP from "@/components/dashboard/Layouts/DefaultLayoutDPKAKP";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,9 +12,9 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      <DefaultLayout>
+      <DefaultLayoutDPKAKP>
         <PesertaUjianKeahlian />
-      </DefaultLayout>
+      </DefaultLayoutDPKAKP>
     </>
   );
 }

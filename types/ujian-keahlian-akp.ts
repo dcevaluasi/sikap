@@ -102,6 +102,14 @@ type UsersUjian = {
   CodeAksesUsersBagian: CodeAksesUsersBagian[];
 }
 
+type ImageSoalUjian = {
+  CodeUnik: string;
+  CreateAt: string;
+  Gambar: string;
+  IdGambarSoal: number;
+  UpdateAt: string;
+}
+
 type CodeAksesUsersBagian = {
   IdCodeAksesUsersBagian: number,
   IdUserUjian: number,

@@ -37,12 +37,12 @@ export function middleware(request: any) {
 
   if (!XSRF096) {
     const protectedPaths = [
-      '/dpkakp/user/auth/guide',
-      '/dpkakp/user/auth/exam',
+      '/lembaga/dpkakp/user/auth/guide',
+      '/lembaga/dpkakp/user/auth/exam',
     ]
 
     if (protectedPaths.includes(request.nextUrl.pathname)) {
-      return NextResponse.redirect(new URL('/dpkakp/user/auth', request.url))
+      return NextResponse.redirect(new URL('/lembaga/dpkakp/user/auth', request.url))
     }
   }
 

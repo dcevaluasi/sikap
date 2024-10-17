@@ -1,6 +1,7 @@
 import BankSoalPelatihan from "@/components/dashboard/Dashboard/BankSoalPelatihan";
 import BankSoalUjianKeahlian from "@/components/dashboard/Dashboard/DPKAKP/BankSoalUjianKeahlian";
 import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
+import DefaultLayoutDPKAKP from "@/components/dashboard/Layouts/DefaultLayoutDPKAKP";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,9 +12,9 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <DefaultLayout>
+      <DefaultLayoutDPKAKP>
         <BankSoalUjianKeahlian />
-      </DefaultLayout>
+      </DefaultLayoutDPKAKP>
     </>
   );
 }

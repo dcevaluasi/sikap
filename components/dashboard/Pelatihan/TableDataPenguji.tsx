@@ -38,6 +38,7 @@ import {
   TbBook,
   TbBookFilled,
   TbBroadcast,
+  TbCalendarCheck,
   TbChartBubble,
   TbChartDonut,
   TbDatabase,
@@ -64,7 +65,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
-import { MdOutlineSaveAlt } from "react-icons/md";
+import { MdOutlineSaveAlt, MdWork } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
@@ -73,7 +74,7 @@ import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 
-import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
+import { FaBookOpen, FaCreditCard, FaRupiahSign } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -90,14 +91,11 @@ import Link from "next/link";
 import { DewanPenguji } from "@/types/dewanPenguji";
 
 import { generateTanggalPelatihan } from "@/utils/text";
+import { IoMdContact } from "react-icons/io";
+import { RiVerifiedBadgeFill } from "react-icons/ri";
+import { IoSchoolSharp } from "react-icons/io5";
 
 const TableDataDewanenguji: React.FC = () => {
-  const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
-    React.useState<boolean>(false);
-  const [showCertificateSetting, setShowCertificateSetting] =
-    React.useState<boolean>(false);
-
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [data, setData] = React.useState<DewanPenguji[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
@@ -106,7 +104,7 @@ const TableDataDewanenguji: React.FC = () => {
     setIsFetching(true);
     try {
       //const token = await _secureStorage.read(key: 'token'); // Replace this with how you retrieve the token
-  
+
       const response: AxiosResponse = await axios.get(
         `${process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL}/adminpusat/getDataPenguji`,
         {
@@ -115,7 +113,7 @@ const TableDataDewanenguji: React.FC = () => {
           },
         }
       );
-  
+
       console.log("RESPONSE Data Penguji ", response);
       setData(response.data.data);
       setIsFetching(false);
@@ -125,7 +123,6 @@ const TableDataDewanenguji: React.FC = () => {
       throw error;
     }
   };
-  
 
   const handleDeletingBlankoKeluar = async (id: number) => {
     setIsFetching(true);
@@ -184,130 +181,86 @@ const TableDataDewanenguji: React.FC = () => {
       ),
     },
     {
-        accessorKey: "Foto",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Foto
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className="text-left capitalize">
-            <img
-              src={row.original.Foto}
-              alt="Foto"
-              className="w-16 h-16 object-cover rounded-full"
-            />
-          </div>
-        ),
+      accessorKey: "Foto",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-center text-gray-900 font-semibold "
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Foto
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
       },
+      cell: ({ row }) => (
+        <div className="text-left capitalize w-full flex items-center justify-center">
+          <Image
+            width={0}
+            height={0}
+            src={row.original.Foto}
+            alt={row.original.NamaUsersDpkakp}
+            className="w-32 h-32 object-cover rounded-md"
+          />
+        </div>
+      ),
+    },
     {
       accessorKey: "NamaUsersDpkakp",
       header: ({ column }) => {
         return (
           <Button
             variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            className="p-0 !text-left w-[400px] flex items-center justify-start text-gray-900 font-semibold"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Nama 
+            Nama
             <HiUserGroup className="ml-2 h-4 w-4" />
           </Button>
         );
       },
       cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
+        <div className="ml-0 text-left capitalize w-full">
+          <p className="text-xs text-gray-400 mt-2 leading-[100%] mb-1">
+            {row.original.TipeKeahlian}
+          </p>
+          <p className="text-base font-semibold tracking-tight leading-none">
             {row.original.NamaUsersDpkakp}
           </p>
+          <div className="ml-0 text-left mt-1">
+            <p className="text-xs font-medium ">
+              <span className="flex items-center gap-1 leading-[105%]">
+                <FaCreditCard className="text-sm ml-[0.15rem]" />
+                <span>{row.original.Nik}</span>
+              </span>
+              <span className="flex items-center gap-1 leading-[105%]">
+                <TbCalendarCheck className="text-lg" />
+                <span>{row.original.Alamat}</span>
+              </span>
+              <span className="flex items-center gap-1 leading-[105%]">
+                <IoMdContact className="text-lg" />
+                <span>
+                  {row.original.NomorTelpon} • {row.original.Email}
+                </span>
+              </span>
+              <span className="flex items-center gap-1 leading-[105%]">
+                <MdWork className="text-base ml-[0.1rem]" />
+                <span>
+                  {row.original.Jabatan},{row.original.Golongan} -{" "}
+                  {row.original.AsalInstansi}
+                </span>
+              </span>
+              <span className="flex items-center gap-1 leading-[105%]">
+                <IoSchoolSharp className="text-base ml-[0.1rem]" />
+                <span>Pendidikan terakhir :{row.original.Pendidikan}</span>
+              </span>
+            </p>
+          </div>
         </div>
       ),
     },
 
-    {
-      accessorKey: "TypeDpkapk",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Type DPKAKP
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {generateTanggalPelatihan(row.original.TypeDpkapk)}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Nik",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[300px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Nik
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.Nik}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Alamat",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Alamat
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.Alamat}
-          </p>
-        </div>
-      ),
-    },
     {
       accessorKey: "Provinsi",
       header: ({ column }) => {
@@ -317,7 +270,7 @@ const TableDataDewanenguji: React.FC = () => {
             className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-           Provinsi
+            Provinsi
             <HiUserGroup className="ml-2 h-4 w-4" />
           </Button>
         );
@@ -358,6 +311,27 @@ const TableDataDewanenguji: React.FC = () => {
         </div>
       ),
     },
+
+    {
+      accessorKey: "PengalamanBerlayar",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Pengalaman Berlayar
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="text-left capitalize">
+          <p className="text-sm text-dark">{row.original.PengalamanBerlayar}</p>
+        </div>
+      ),
+    },
     {
       accessorKey: "Ijazah",
       header: ({ column }) => {
@@ -381,402 +355,169 @@ const TableDataDewanenguji: React.FC = () => {
         </div>
       ),
     },
+    {
+      accessorKey: "SertifikatKeahlian",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sertifikat Keahlian
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
+          <p className="text-xs text-blue-500 underline leading-[100%] ">
+            {" "}
+            {row.original.SertifikatKeahlian}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "SertifikatTot",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sertifikat Tot
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
+          <p className="text-xs text-blue-500 underline leading-[100%] ">
+            {" "}
+            {row.original.SertifikatTot}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "SertifikatToe",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sertifikat Toe
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
+          <p className="text-xs text-blue-500 underline leading-[100%] ">
+            {" "}
+            {row.original.SertifikatToe}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "SertifikatToeSimulator",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sertifikat Toe Simulator
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
+          <p className="text-xs text-blue-500 underline leading-[100%] ">
+            {" "}
+            {row.original.SertifikatToeSimulator}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "SerifikatAuditor",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sertifikat Auditor
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
+          <p className="text-xs text-blue-500 underline leading-[100%] ">
+            {" "}
+            {row.original.SerifikatAuditor}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "SertifikatLainnya",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sertifikat Lainnya
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
+          <p className="text-xs text-blue-500 underline leading-[100%] ">
+            {" "}
+            {row.original.SertifikatLainnya}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "BukuPelaut",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Buku Pelaut
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
+          <p className="text-xs text-blue-500 underline leading-[100%] ">
+            {" "}
+            {row.original.BukuPelaut}
+          </p>
+        </div>
+      ),
+    },
 
-    {
-      accessorKey: "Nip",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Nip
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.Nip}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "AsalInstansi",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Asal Instansi
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.AsalInstansi}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "NomorTelpon",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Nomor Telpon
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.NomorTelpon}
-          </p>
-        </div>
-      ),
-    },
-
-    {
-      accessorKey: "Email",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Email
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.Email}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Jabatan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Jabatan
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.Jabatan}
-          </p>
-        </div>
-      ),
-    },
-    {
-        accessorKey: "Golongan",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Golongan
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className="text-left capitalize">
-            <p className="text-sm text-dark">{row.original.Golongan}</p>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "Pendidikan",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Pendidikan
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className="text-left capitalize">
-            <p className="text-sm text-dark">{row.original.Pendidikan}</p>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "TipeKeahlian",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Tipe Keahlian
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className="text-left capitalize">
-            <p className="text-sm text-dark">{row.original.TipeKeahlian}</p>
-          </div>
-        ),
-      },
-      
-      {
-        accessorKey: "PengalamanBerlayar",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Pengalaman Berlayar
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className="text-left capitalize">
-            <p className="text-sm text-dark">{row.original.PengalamanBerlayar}</p>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "Ijazah",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Ijazah
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
-            <p className="text-xs text-blue-500 underline leading-[100%] ">
-              {" "}
-              {row.original.Ijazah}
-            </p>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "SertifikatKeahlian",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Sertifikat Keahlian
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
-            <p className="text-xs text-blue-500 underline leading-[100%] ">
-              {" "}
-              {row.original.SertifikatKeahlian}
-            </p>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "SertifikatTot",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Sertifikat Tot
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
-            <p className="text-xs text-blue-500 underline leading-[100%] ">
-              {" "}
-              {row.original.SertifikatTot}
-            </p>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "SertifikatToe",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Sertifikat Toe
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
-            <p className="text-xs text-blue-500 underline leading-[100%] ">
-              {" "}
-              {row.original.SertifikatToe}
-            </p>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "SertifikatToeSimulator",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Sertifikat Toe Simulator
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
-            <p className="text-xs text-blue-500 underline leading-[100%] ">
-              {" "}
-              {row.original.SertifikatToeSimulator}
-            </p>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "SerifikatAuditor",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Sertifikat Auditor
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
-            <p className="text-xs text-blue-500 underline leading-[100%] ">
-              {" "}
-              {row.original.SerifikatAuditor}
-            </p>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "SertifikatLainnya",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Sertifikat Lainnya
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
-            <p className="text-xs text-blue-500 underline leading-[100%] ">
-              {" "}
-              {row.original.SertifikatLainnya}
-            </p>
-          </div>
-        ),
-      },
-      {
-        accessorKey: "BukuPelaut",
-        header: ({ column }) => {
-          return (
-            <Button
-              variant="ghost"
-              className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-              onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-            >
-              Buku Pelaut
-              <HiUserGroup className="ml-2 h-4 w-4" />
-            </Button>
-          );
-        },
-        cell: ({ row }) => (
-          <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
-            <p className="text-xs text-blue-500 underline leading-[100%] ">
-              {" "}
-              {row.original.BukuPelaut}
-            </p>
-          </div>
-        ),
-      },
-      
-      // Continue in the same way for the other fields like SertifikatKeahlian, SertifikatTot, SertifikatToe, etc.
-      
-  
+    // Continue in the same way for the other fields like SertifikatKeahlian, SertifikatTot, SertifikatToe, etc.
   ];
 
   const table = useReactTable({
@@ -822,46 +563,41 @@ const TableDataDewanenguji: React.FC = () => {
 
   const [dataBlanko, setDataBlanko] = React.useState<DewanPenguji[]>([]);
 
- 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
-
-        
-
-            <TableData
-              isLoading={isFetching}
-              columns={columns}
-              table={table}
-              type={"short"}
-            />
-            <div className="flex items-center justify-end space-x-2 py-4">
-              <div className="text-muted-foreground flex-1 text-sm">
-                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-              </div>
-              <div className="space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          </div>
-
+      <TableData
+        isLoading={isFetching}
+        columns={columns}
+        table={table}
+        type={"short"}
+      />
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <div className="text-muted-foreground flex-1 text-sm">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
+        <div className="space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="font-inter"
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="font-inter"
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 };
 

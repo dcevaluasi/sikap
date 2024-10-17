@@ -1,5 +1,4 @@
-import BagianUjianKeahlian from "@/components/dashboard/Dashboard/DPKAKP/BagianUjianKeahlian";
-import FungsiUjianKeahlian from "@/components/dashboard/Dashboard/DPKAKP/FungsiUjianKeahlian";
+import GambarSoalUjianKeahlian from "@/components/dashboard/Dashboard/DPKAKP/GambarSoalUjianKeahlian";
 import TipeUjianKeahlian from "@/components/dashboard/Dashboard/DPKAKP/TipeUjianKeahlian";
 import ECommerce from "@/components/dashboard/Dashboard/E-commerce";
 import Pelatihan from "@/components/dashboard/Dashboard/Pelatihan";
@@ -9,14 +8,14 @@ import DefaultLayoutDPKAKP from "@/components/dashboard/Layouts/DefaultLayoutDPK
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Bagian Ujian Keahlian - Dewan Penguji Keahlian Awak Kapal Perikanan",
+  title: "Ujian Keahlian - Dewan Penguji Keahlian Awak Kapal Perikanan",
 };
 
 export default function Page() {
   return (
     <>
       <DefaultLayoutDPKAKP>
-        <BagianUjianKeahlian />
+        <GambarSoalUjianKeahlian />
       </DefaultLayoutDPKAKP>
     </>
   );

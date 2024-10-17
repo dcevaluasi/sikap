@@ -57,6 +57,11 @@ export function extractLastSegment(path: string): string {
     return segments[segments.length - 1];
 }
 
+export function extractSecondLastSegment(path: string): string {
+    const segments = path.split('/');
+    return segments[segments.length - 2];
+}
+
 export function formatDateTime() {
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

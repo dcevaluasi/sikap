@@ -157,15 +157,42 @@ const TableDataUjian: React.FC = () => {
         }
       );
 
+      // Filter the data by PUKAKP value from cookies
       const filteredData = response.data.data.filter(
         (item: any) => item.PUKAKP === Cookies.get("PUKAKP")
       );
 
+      // Sort the data first by status ('tidak aktif' first) and then by CreateAt in descending order
+      const sortedData = filteredData.sort((a: any, b: any) => {
+        // Sort by status: 'tidak aktif' first
+        if (a.Status === "Tidak Aktif" && b.Status !== "Tidak Aktif") return -1;
+        if (a.Status !== "Tidak Aktif" && b.Status === "Tidak Aktif") return 1;
+
+        // Sort by CreateAt in descending order
+        return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime();
+      });
+
+      // Set the sorted data depending on the pathPukakp condition
       if (pathPukakp) {
-        setData(filteredData);
+        setData(sortedData);
       } else {
-        setData(response.data.data);
+        // Also sort the original data by status and CreateAt if no filter is applied
+        const sortedOriginalData = response.data.data.sort((a: any, b: any) => {
+          // Sort by status: 'tidak aktif' first
+          if (a.Status === "tidak aktif" && b.Status !== "tidak aktif")
+            return -1;
+          if (a.Status !== "tidak aktif" && b.Status === "tidak aktif")
+            return 1;
+
+          // Sort by CreateAt in descending order
+          return (
+            new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
+          );
+        });
+        setData(sortedOriginalData);
       }
+
+      console.log({ response });
 
       setIsFetching(false);
     } catch (error) {
@@ -247,11 +274,11 @@ const TableDataUjian: React.FC = () => {
     formData.append("PUKAKP", Cookies.get("PUKAKP")!);
     formData.append("NamaPengawas", namaPengawas);
     formData.append("NamaVasilitator", namaVasilitator);
-    formData.append("TanggalMulai", tanggalMulai);
-    formData.append("TanggalBerakhir", tanggalBerakhir);
+    formData.append("TanggalMulaiUjian", tanggalMulai);
+    formData.append("TanggalBerakhirUjian", tanggalBerakhir);
     formData.append("WaktuUjian", waktuUjian);
-    formData.append("JumlahPeserta", jumlahPeserta);
-    formData.append("Status", status);
+    formData.append("JumlahPesertaUjian", jumlahPeserta.toString());
+    formData.append("Status", "Tidak Aktif");
     if (filePermohonan != null) {
       formData.append("filePermohonan", filePermohonan!);
     }
@@ -275,6 +302,7 @@ const TableDataUjian: React.FC = () => {
       handleFetchingUjianKeahlianData();
       setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
       setIsPosting(false);
+      setStatus("");
     } catch (error) {
       console.error(error);
       Toast.fire({
@@ -284,12 +312,12 @@ const TableDataUjian: React.FC = () => {
       handleFetchingUjianKeahlianData();
       setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
       setIsPosting(true);
+      setStatus("");
     }
   };
 
   const handleUpdateNewUjianKeahlian = async (e: any) => {
     setIsPosting(true);
-    const [nameTypeUjianValue, idTypeUjianValue] = typeUjian.split(",");
 
     try {
       const response = await axios.put(
@@ -297,7 +325,6 @@ const TableDataUjian: React.FC = () => {
         {
           nama_pengawas_ujian: namaPengawas,
           nama_vasilitator_ujian: namaVasilitator,
-          status: "Aktif",
         },
         {
           headers: {
@@ -313,6 +340,7 @@ const TableDataUjian: React.FC = () => {
       handleFetchingUjianKeahlianData();
       setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
       setIsPosting(false);
+      setStatus("");
     } catch (error) {
       console.error(error);
       Toast.fire({
@@ -322,6 +350,7 @@ const TableDataUjian: React.FC = () => {
       handleFetchingUjianKeahlianData();
       setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
       setIsPosting(true);
+      setStatus("");
     }
   };
 
@@ -409,7 +438,8 @@ const TableDataUjian: React.FC = () => {
               </Link>
             )}
 
-            {row.original.FilePermohonan != null ? (
+            {row.original.FilePermohonan != null &&
+            row.original.Status == "Aktif" ? (
               <Link
                 target="_blank"
                 href={row.original.FilePermohonan!}
@@ -421,18 +451,37 @@ const TableDataUjian: React.FC = () => {
               <></>
             )}
 
-            {usePathname().includes("dpkakp") && (
-              <Button
-                onClick={(e) => {
-                  setSelectedId(row.original.IdUjian);
-                  setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
-                }}
-                variant="outline"
-                className="border border-yellow-400 rounded-md"
-              >
-                <FaEdit className="h-4 w-4 text-yellow-400" />
-              </Button>
-            )}
+            {usePathname().includes("dpkakp") &&
+              row.original.Status != "Aktif" && (
+                <Button
+                  onClick={(e) => {
+                    setSelectedId(row.original.IdUjian);
+                    setSelectedSuratPermohonan(row.original.FilePermohonan);
+                    setOpenFormValidasiPelaksanaanUjian(
+                      !openFormValidasiPelaksanaanUjian
+                    );
+                  }}
+                  variant="outline"
+                  className="border border-green-400 rounded-md"
+                >
+                  <RiVerifiedBadgeFill className="h-4 w-4 text-green-400" />
+                </Button>
+              )}
+
+            {usePathname().includes("dpkakp") &&
+              row.original.Status == "Aktif" && (
+                <Button
+                  onClick={(e) => {
+                    setSelectedId(row.original.IdUjian);
+                    setStatus(row.original.Status);
+                    setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+                  }}
+                  variant="outline"
+                  className="border border-yellow-400 rounded-md"
+                >
+                  <FaEdit className="h-4 w-4 text-yellow-400" />
+                </Button>
+              )}
           </div>
         </div>
       ),
@@ -548,19 +597,152 @@ const TableDataUjian: React.FC = () => {
     handleFetchingTypeUjianKeahlianData();
   }, []);
 
+  const [
+    openFormValidasiPelaksanaanUjian,
+    setOpenFormValidasiPelaksanaanUjian,
+  ] = React.useState<boolean>(false);
+  const [isValidating, setIsValidating] = React.useState<boolean>(false);
+  const [selectedSuratPermohonan, setSelectedSuratPermohonan] =
+    React.useState<string>("");
+
+  const handleValidasiPelaksaanUjian = async (e: any) => {
+    setIsValidating(true);
+
+    try {
+      const response = await axios.put(
+        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedId}`,
+        {
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil memvalidasi pelaksanaan ujian keahlian!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setStatus("Tidak Aktif");
+      setSelectedId(0);
+      setSelectedSuratPermohonan("");
+      setOpenFormValidasiPelaksanaanUjian(false);
+      setIsValidating(false);
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal memvalidasi  pelaksanaan ujian keahlian!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setOpenFormValidasiPelaksanaanUjian(false);
+      setIsValidating(false);
+    }
+  };
+
   return (
     <section className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+      <AlertDialog
+        open={openFormValidasiPelaksanaanUjian}
+        onOpenChange={setOpenFormValidasiPelaksanaanUjian}
+      >
+        <AlertDialogContent className="max-w-md">
+          <>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Validasi Pelaksaan Ujian</AlertDialogTitle>
+              <AlertDialogDescription className="-mt-2">
+                Proses validasi diperlukan untuk melihat permohonan pelaksanaan
+                serta membuat akses PUKAKP melakukan import data peserta pada
+                aplikasi untuk persiapan ujian.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <fieldset>
+              <div className="flex gap-2  mb-1 w-full">
+                <div className="w-full">
+                  <label
+                    className="block text-gray-800 text-sm font-medium mb-1"
+                    htmlFor="noSertifikat"
+                  >
+                    Status Pelaksanaan <span className="text-red-600">*</span>
+                  </label>
+                  <div className="flex w-full gap-2">
+                    <select
+                      name=""
+                      id=""
+                      onChange={(e) => setStatus(e.target.value)}
+                      className="w-full overflow-hidden rounded-lg border border-gray-300"
+                    >
+                      <option value={""}>Pilih Status</option>
+                      <option
+                        onClick={(e) => setStatus("Aktif")}
+                        value={"Aktif"}
+                      >
+                        Valid
+                      </option>
+                      <option
+                        onClick={(e) => setStatus("Tidak Aktif")}
+                        value={"Tidak Aktif"}
+                      >
+                        Tidak Valid
+                      </option>
+                    </select>
+                    <Link
+                      target="_blank"
+                      href={selectedSuratPermohonan}
+                      className="border border-gray-300 rounded-md bg-white shadow-sm w-14 flex items-center justify-center h-12"
+                    >
+                      <FiFile className="h-4 w-4 text-gray-800 text-xl" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+
+            <p className="text-gray-700 text-xs mt-1">
+              *Periksa terlebih dahulu surat permohonan pada tombol surat
+              sebelum melakukan validasi
+            </p>
+          </>
+          <AlertDialogFooter>
+            {!isValidating && (
+              <AlertDialogCancel
+                onClick={(e) =>
+                  setOpenFormValidasiPelaksanaanUjian(
+                    !openFormValidasiPelaksanaanUjian
+                  )
+                }
+              >
+                Cancel
+              </AlertDialogCancel>
+            )}
+            <AlertDialogAction onClick={(e) => handleValidasiPelaksaanUjian(e)}>
+              {isValidating ? (
+                <span>Validating...</span>
+              ) : (
+                <span>Validasi</span>
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <AlertDialog open={isOpenFormUjianKeahlian}>
-        <AlertDialogContent className="max-w-3xl">
+        <AlertDialogContent className="max-w-xl">
           <AlertDialogHeader className="gap-0 flex flex-col">
             <AlertDialogTitle className="flex items-center gap-2 text-2xl">
               {" "}
               <FaBookOpen className="h-4 w-4" />
-              Tambah Pelaksanaan Ujian Keahlian
+              {status == "Aktif"
+                ? " Tetakan Penguji dan Fasilitator"
+                : " Tambah Pelaksanaan Ujian Keahlian"}
             </AlertDialogTitle>
             <AlertDialogDescription className="-mt-6">
-              Tambah data baru pelaksanaan ujian keahlian awak kapal perikanan
-              untuk ANKAPIN dan ATKAPIN tingkat I, II, atau tingkat III.
+              {status == "Aktif"
+                ? "Tugaskan penguji dan fasilitator pusat dalam pelaksanaan ujian keahlian awak kapal perikanan untuk ANKAPIN dan ATKAPIN tingkat I, II, atau tingkat III."
+                : "Tambah data baru pelaksanaan ujian keahlian awak kapal perikanan untuk ANKAPIN dan ATKAPIN tingkat I, II, atau tingkat III."}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <fieldset>
@@ -591,6 +773,7 @@ const TableDataUjian: React.FC = () => {
                               "," +
                               typeUjian.IdTypeUjian
                             }
+                            className="capitalize"
                           >
                             {typeUjian.NamaTypeUjian}
                           </option>
@@ -793,6 +976,7 @@ const TableDataUjian: React.FC = () => {
                           <option
                             key={penguji.IdUsersDpkakp}
                             value={penguji.NamaUsersDpkakp}
+                            className="capitalize"
                           >
                             {penguji.NamaUsersDpkakp}
                           </option>
@@ -829,7 +1013,9 @@ const TableDataUjian: React.FC = () => {
                     Cancel
                   </AlertDialogCancel>
                   <AlertDialogAction
-                    onClick={(e) => handleUpdateNewUjianKeahlian(e)}
+                    onClick={(e) => {
+                      handleUpdateNewUjianKeahlian(e);
+                    }}
                   >
                     Upload
                   </AlertDialogAction>
