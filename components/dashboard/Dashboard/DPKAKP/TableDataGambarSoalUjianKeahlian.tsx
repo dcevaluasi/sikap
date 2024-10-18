@@ -191,7 +191,7 @@ const TableDataGambarSoalUjianKeahlian: React.FC = () => {
 
     try {
       const response = await axios.post(
-        `${dpkakpBaseUrl}/getGambar`,
+        `${dpkakpBaseUrl}/uploadGambar`,
         formData,
         {
           headers: {

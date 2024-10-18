@@ -43,6 +43,7 @@ import {
   TbChartDonut,
   TbDatabase,
   TbDatabaseEdit,
+  TbEditCircle,
   TbFileCertificate,
   TbFileDigit,
   TbFishChristianity,
@@ -479,7 +480,7 @@ const TableDataUjian: React.FC = () => {
                   variant="outline"
                   className="border border-yellow-400 rounded-md"
                 >
-                  <FaEdit className="h-4 w-4 text-yellow-400" />
+                  <TbEditCircle className="h-5 w-5 text-yellow-400" />
                 </Button>
               )}
           </div>
