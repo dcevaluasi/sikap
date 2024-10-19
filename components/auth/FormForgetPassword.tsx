@@ -25,21 +25,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { HiMiniUserGroup, HiOutlineEye } from "react-icons/hi2";
 import { HiOutlineEyeOff } from "react-icons/hi";
 
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { elautBaseUrl } from "@/constants/urls";
-
-function FormLogin() {
+function FormForgetPassword() {
   /* state variable to store basic user information to register */
   const [noNumber, setNoNumber] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
@@ -250,79 +236,6 @@ function FormLogin() {
   // Showing password state management
   const [isShowPassword, setIsShowPassword] = React.useState<boolean>(false);
 
-  // Forget password state management
-  const [isForgetPassword, setIsForgetPassword] =
-    React.useState<boolean>(false);
-  const [nik, setNik] = React.useState<string>("");
-  const [passwordReset, setPasswordReset] = React.useState<string>("");
-  const [tokenResetPassword, setTokenResetPassword] =
-    React.useState<string>("");
-  const handleGetTokenResetPassword = async (e: any) => {
-    try {
-      const response = await axios.post(
-        `${elautBaseUrl}/users/getTokenPassword`,
-        {
-          nik: nik,
-        }
-      );
-      Toast.fire({
-        icon: "success",
-        title: "Akun ditemukan.",
-        text: `Berhasil, silahkan reset ulang password mu!`,
-      });
-      setTokenResetPassword(response.data.token);
-      setNoNumber("");
-      setPassword("");
-      console.log({ response });
-    } catch (error: any) {
-      console.log({ error });
-      const errorMsg = error.response.data.Pesan;
-      Toast.fire({
-        icon: "error",
-        title: "Akun tidak ditemukan.",
-        text: `Gagal. ${errorMsg}!`,
-      });
-      setNoNumber("");
-      setPassword("");
-    }
-  };
-  const handleResetPassword = async (e: any) => {
-    try {
-      const response = await axios.post(
-        `${elautBaseUrl}/users/resetPassword`,
-        { password: passwordReset },
-        {
-          headers: {
-            Authorization: `Bearer ${tokenResetPassword}`,
-          },
-        }
-      );
-      Toast.fire({
-        icon: "success",
-        title: "Berhasil mereset.",
-        text: `Silahkan menggunakan password yang sudah direset, jangan sampai lupa lagi!`,
-      });
-      setNik("");
-      setPasswordReset("");
-      setNoNumber("");
-      setPassword("");
-      setIsForgetPassword(false);
-      setRole("Mandiri");
-      console.log({ response });
-    } catch (error: any) {
-      console.log({ error });
-      setNik("");
-      setPasswordReset("");
-      setNoNumber("");
-      setPassword("");
-      Toast.fire({
-        icon: "error",
-        title: "Gagal mereset.",
-        text: `Password mu gagal untuk direset, nampaknya terdapat gangguan`,
-      });
-    }
-  };
-
   React.useEffect(() => {
     const interval = setInterval(() => {
       setImageIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -333,76 +246,6 @@ function FormLogin() {
 
   return (
     <section className="relative w-full h-screen md:h-full">
-      <Dialog open={isForgetPassword} onOpenChange={setIsForgetPassword}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Reset Password</DialogTitle>
-            <DialogDescription>
-              Harap masukkan NIK kamu sebelum melakukan reset, untuk mengetahui
-              NIK tersebut terdaftar atau tidak
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                NIK
-              </Label>
-              <Input
-                id="nik"
-                value={nik}
-                onChange={(e) => setNik(e.target.value)}
-                placeholder="Masukkan NIK kamu"
-                className="col-span-3"
-                readOnly={tokenResetPassword != ""}
-              />
-            </div>
-            {tokenResetPassword != "" && (
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Password Baru
-                </Label>
-                <Input
-                  id="passwordReset"
-                  value={passwordReset}
-                  type="password"
-                  onChange={(e) => setPasswordReset(e.target.value)}
-                  placeholder="Masukkan password baru"
-                  className="col-span-3"
-                />
-              </div>
-            )}
-          </div>
-          <DialogFooter>
-            <div className="flex gap-2 -mt-4">
-              {tokenResetPassword == "" ? (
-                <Button
-                  type="button"
-                  onClick={(e) => handleGetTokenResetPassword(e)}
-                  className=" bg-blue-500 hover:bg-blue-600"
-                >
-                  Cek Akunmu
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  onClick={(e) => handleResetPassword(e)}
-                  className=" bg-blue-500 hover:bg-blue-600"
-                >
-                  Reset Password
-                </Button>
-              )}
-              <Button
-                type="button"
-                onClick={(e) => setIsForgetPassword(false)}
-                className=" bg-gray-500 hover:bg-gray-600"
-              >
-                Close
-              </Button>
-            </div>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
       <Image
         src={images[imageIndex]}
         className="absolute w-full h-full object-cover duration-1000 -z-40"
@@ -418,7 +261,7 @@ function FormLogin() {
           <div className="w-full mx-auto text-center pb-0 md:pb-0">
             <h1 className="font-semibold text-4xl leading-[110%] md:text-4xl text-gray-200">
               <span className="font-calsans text-[3.4rem] md:text-[3.7rem]">
-                Login dan Ikuti
+                Forget Password
               </span>{" "}
               <br />
               <span className="z-0 bg-clip-text text-[4.2rem] w-[600px] md:text-[3.7rem] leading-[110%]  text-transparent bg-gradient-to-r font-calsans from-blue-500  to-teal-400">
@@ -430,34 +273,6 @@ function FormLogin() {
           {/* Form */}
 
           <div className="max-w-sm  mx-5 md:mx-auto mt-5">
-            <div className="flex flex-col gap-1 mb-2">
-              <label
-                className="block text-gray-200 text-sm font-medium mb-1"
-                htmlFor="name"
-              >
-                Daftar Sebagai <span className="text-red-600">*</span>
-              </label>
-              <Select
-                value={role}
-                onValueChange={(value: string) => setRole(value)}
-              >
-                <SelectTrigger className="form-input w-full py-6 bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200">
-                  <p className="mr-3 flex items-center gap-1 text-base text-gray-300">
-                    <HiMiniUserGroup />
-                    {role != "" ? role : "Pilih Mendaftar Sebagai"}
-                  </p>
-                </SelectTrigger>
-                <SelectContent side="bottom">
-                  <SelectGroup>
-                    <SelectLabel>Mendaftar Sebagai</SelectLabel>
-                    <SelectItem value="Mandiri">Mandiri</SelectItem>
-                    <SelectItem value="Corporate/Manning Agent">
-                      Corporate/Manning Agent
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
             {role == "Mandiri" ? (
               <form onSubmit={(e) => handleLoginAkun(e)} autoComplete="off">
                 <div className="flex flex-wrap -mx-3 mb-2">
@@ -507,40 +322,38 @@ function FormLogin() {
                     </span>
                     <span className="block text-gray-200 text-xs font-medium">
                       Lupa password? klik{" "}
-                      <span
-                        onClick={(e) => setIsForgetPassword(true)}
+                      <Link
+                        href={"/forget-password"}
                         className="text-blue-500 cursor-pointer"
                       >
                         disini
-                      </span>
+                      </Link>
                     </span>
                   </div>
                 </div>
-                {password != "" && (
+                <div
+                  className="flex flex-wrap w-full -mx-3 mb-2"
+                  style={{ width: "100% !important" }}
+                >
                   <div
-                    className="flex flex-wrap w-full -mx-3 mb-2"
+                    className="w-full px-3"
                     style={{ width: "100% !important" }}
                   >
-                    <div
-                      className="w-full px-3"
-                      style={{ width: "100% !important" }}
+                    <label
+                      className="block text-gray-200 text-sm font-medium mb-1"
+                      htmlFor="password"
                     >
-                      <label
-                        className="block text-gray-200 text-sm font-medium mb-1"
-                        htmlFor="password"
-                      >
-                        Verify if you are not a robot{" "}
-                        <span className="text-red-600">*</span>
-                      </label>
-                      <ReCAPTCHA
-                        style={{ width: "100% !important" }}
-                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                        className="mx-auto w-full font-inter text-sm"
-                        onChange={setCaptcha}
-                      />
-                    </div>
+                      Verify if you are not a robot{" "}
+                      <span className="text-red-600">*</span>
+                    </label>
+                    <ReCAPTCHA
+                      style={{ width: "100% !important" }}
+                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                      className="mx-auto w-full font-inter text-sm"
+                      onChange={setCaptcha}
+                    />
                   </div>
-                )}
+                </div>
 
                 <div className="flex flex-wrap -mx-3 mt-3">
                   <div className="w-full px-3">
@@ -690,4 +503,4 @@ function FormLogin() {
   );
 }
 
-export default FormLogin;
+export default FormForgetPassword;

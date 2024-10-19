@@ -76,6 +76,7 @@ export default function Header() {
                   usePathname() == "/dashboard" ||
                   usePathname().includes("registrasi") ||
                   usePathname().includes("login") ||
+                  usePathname().includes("forget-password") ||
                   usePathname().includes("cek-sertifikat"))
                   ? "text-gray-200 hover:text-white hover:scale-105"
                   : top && usePathname().includes("program")
@@ -179,6 +180,7 @@ export default function Header() {
               usePathname() == "/dashboard" ||
               usePathname().includes("registrasi") ||
               usePathname().includes("login") ||
+              usePathname().includes("forget-password") ||
               usePathname().includes("cek-sertifikat"))
               ? "text-gray-200 hover:text-white hover:scale-105"
               : top && usePathname().includes("program")
@@ -232,6 +234,7 @@ export default function Header() {
         (top && usePathname().includes("layanan")) ||
         usePathname() == "/dashboard" ||
         usePathname() == "/registrasi" ||
+        usePathname().includes("forget-password") ||
         usePathname() == "/login"
           ? "pt-0"
           : top && "pt-6"
@@ -255,6 +258,7 @@ export default function Header() {
             usePathname().includes("registrasi") ||
             usePathname().includes("pelatihan") ||
             usePathname().includes("dashboard") ||
+            usePathname().includes("forget-password") ||
             usePathname().includes("cek-sertifikat") ||
             usePathname().includes("login")) && (
             <Link href={"/"} className="shrink-0 mr-4 flex items-center gap-4">
