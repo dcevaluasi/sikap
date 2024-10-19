@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Edit Profile - Elektronik Layanan Pelatihan Umum Terpadu",
+  title: "Edit Profile - Elektronik Layanan Pelatihan Utama Terpadu",
   description: "Page description",
 };
 

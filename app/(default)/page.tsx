@@ -1,7 +1,7 @@
 import Hero from "@/components/hero";
 
 export const metadata = {
-  title: "E-LAUT - Elektronik Layanan Pelatihan Umum Terpadu",
+  title: "E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
   description:
     "E-LAUT, layanan elektronik dari BPPSDM KP untuk membantu mu mencari pelatihan dan sertifikasi di sektor Kelautan dan Perikanan. Ragam pelatihan menarik dapat kamu ikuti mulai dari perikanan, kelautan, hingga awak kapal perikanan.",
   keywords: [
@@ -27,7 +27,7 @@ export const metadata = {
   robots: "index, follow",
   canonical: "https://elaut-bppsdm.kkp.go.id",
   openGraph: {
-    title: "E-LAUT - Elektronik Layanan Pelatihan Umum Terpadu",
+    title: "E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
     description:
       "E-LAUT, layanan elektronik dari BPPSDM KP untuk membantu mu mencari pelatihan dan sertifikasi di sektor Kelautan dan Perikanan.",
     url: "https://elaut-bppsdm.kkp.go.id",
@@ -38,20 +38,20 @@ export const metadata = {
         url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ1qXD5spmbdpPwx426e-daa6Cd23RLxBeFw&s",
         width: 1200,
         height: 630,
-        alt: "E-LAUT - Elektronik Layanan Pelatihan Umum Terpadu",
+        alt: "E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "E-LAUT - Elektronik Layanan Pelatihan Umum Terpadu",
+    title: "E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
     description:
       "E-LAUT, layanan elektronik dari BPPSDM KP untuk membantu mencari pelatihan dan sertifikasi di sektor Kelautan dan Perikanan.",
     site: "https://elaut-bppsdm.kkp.go.id",
     images: [
       {
         url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ1qXD5spmbdpPwx426e-daa6Cd23RLxBeFw&s",
-        alt: "E-LAUT - Elektronik Layanan Pelatihan Umum Terpadu",
+        alt: "E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
       },
     ],
   },

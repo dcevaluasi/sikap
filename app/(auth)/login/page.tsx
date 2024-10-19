@@ -1,7 +1,7 @@
 import FormLogin from "@/components/auth/FormLogin";
 
 export const metadata = {
-  title: "Login E-LAUT - Elektronik Layanan Pelatihan Umum Terpadu",
+  title: "Login E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
   description:
     "Ayo login segera ke E-LAUT untuk dapat melakukan pendaftaran pelatihan dan sertifikasi yang menarik, login sebagai perorangan ataupun corporate/manning agent.",
   keywords: [
@@ -28,7 +28,7 @@ export const metadata = {
   robots: "index, follow",
   canonical: "https://elaut-bppsdm.kkp.go.id/login",
   openGraph: {
-    title: "Login E-LAUT - Elektronik Layanan Pelatihan Umum Terpadu",
+    title: "Login E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
     description:
       "Ayo login segera ke E-LAUT untuk melakukan pendaftaran pelatihan dan sertifikasi, baik untuk perorangan maupun corporate/manning agent.",
     url: "https://elaut-bppsdm.kkp.go.id/login",
@@ -39,20 +39,20 @@ export const metadata = {
         url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ1qXD5spmbdpPwx426e-daa6Cd23RLxBeFw&s",
         width: 1200,
         height: 630,
-        alt: "Login E-LAUT - Elektronik Layanan Pelatihan Umum Terpadu",
+        alt: "Login E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Login E-LAUT - Elektronik Layanan Pelatihan Umum Terpadu",
+    title: "Login E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
     description:
       "Login ke E-LAUT untuk pendaftaran pelatihan dan sertifikasi di sektor Kelautan dan Perikanan, untuk individu maupun corporate/manning agent.",
     site: "https://elaut-bppsdm.kkp.go.id/login",
     images: [
       {
         url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ1qXD5spmbdpPwx426e-daa6Cd23RLxBeFw&s",
-        alt: "Login E-LAUT - Elektronik Layanan Pelatihan Umum Terpadu",
+        alt: "Login E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
       },
     ],
   },
