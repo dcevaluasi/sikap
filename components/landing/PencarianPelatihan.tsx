@@ -133,7 +133,12 @@ function PencarianPelatihan() {
     "Wisata Bahari",
   ];
 
-  const kelautanSection = ["BCL", "Pengelolaan Sampah", "Mitigasi Bencana"];
+  const kelautanSection = [
+    "BCL",
+    "Pengelolaan Sampah",
+    "Mitigasi Bencana",
+    "Konservasi",
+  ];
 
   const [selectedJenisPelatihan, setSelectedJenisPelatihan] =
     React.useState<string>("");

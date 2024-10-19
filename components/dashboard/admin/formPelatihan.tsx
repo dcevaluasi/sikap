@@ -468,7 +468,12 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     "Wisata Bahari",
   ];
 
-  const kelautanSection = ["BCL", "Pengelolaan Sampah", "Mitigasi Bencana"];
+  const kelautanSection = [
+    "BCL",
+    "Pengelolaan Sampah",
+    "Mitigasi Bencana",
+    "Konservasi",
+  ];
 
   const [sarpras, setSarpras] = React.useState<Sarpras[]>([]);
   const [konsumsi, setKonsumsi] = React.useState<Sarpras[]>([]);

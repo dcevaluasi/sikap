@@ -240,3 +240,11 @@ export type Sarpras = {
   CreatedAt: string;
   UpdatedAt: string;
 };
+
+export type BalaiPelatihanBank = {
+  id_lemdik: number;
+  lemdik: string;
+  virtual_account_bank: string;
+  nama_bank: string;
+  nama_virtual_account_bank: string
+}

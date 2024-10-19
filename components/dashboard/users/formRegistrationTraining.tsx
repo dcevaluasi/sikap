@@ -37,13 +37,18 @@ import { MdWorkOutline } from "react-icons/md";
 import { Checkbox } from "@/components/ui/checkbox";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
-import { PelatihanMasyarakat, Sarpras } from "@/types/product";
+import {
+  BalaiPelatihanBank,
+  PelatihanMasyarakat,
+  Sarpras,
+} from "@/types/product";
 import { formatToRupiah } from "@/lib/utils";
 import { HiMiniUserGroup } from "react-icons/hi2";
 import Link from "next/link";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import { hitungHariPelatihan } from "@/utils/pelatihan";
 import { Button } from "@/components/ui/button";
+import { elautBaseUrl } from "@/constants/urls";
 
 function FormRegistrationTraining({
   id,
@@ -68,6 +73,11 @@ function FormRegistrationTraining({
   const router = useRouter();
 
   const [totalBayar, setTotalBayar] = React.useState(0);
+
+  const [fileBuktiBayar, setFileBuktiBayar] = React.useState<File | null>(null);
+  const handleFileChangeBuktiBayar = (e: any) => {
+    setFileBuktiBayar(e.target.files[0]);
+  };
 
   const [isOpenFormPeserta, setIsOpenFormPeserta] =
     React.useState<boolean>(false);
@@ -104,6 +114,19 @@ function FormRegistrationTraining({
     }
   };
 
+  const [balaiPelatihanBank, setBalaiPelatihanBank] = React.useState<
+    BalaiPelatihanBank[]
+  >([]);
+  const handleFetchAllBalaiPelatihanBank = async () => {
+    try {
+      const response = await axios.get(`${elautBaseUrl}/lemdik/getBankLemdik`);
+      setBalaiPelatihanBank(response.data.data);
+      console.log({ response });
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
   const handleRegistrationTrainingForPeople = async (e: any) => {
     e.preventDefault();
     const totalBayarPeserta =
@@ -122,13 +145,13 @@ function FormRegistrationTraining({
         const response: AxiosResponse = await axios.post(
           `${baseUrl}/users/addPelatihan`,
           JSON.stringify({
-            id_pelatihan: id.toString(),
-            totalBayar: totalBayarPeserta.toString(),
-            namaPelatihan: pelatihan?.NamaPelatihan,
-
-            bidangPelatihan: pelatihan?.BidangPelatihan,
+            IdPelatihan: id.toString(),
+            TotalBayar: totalBayarPeserta.toString(),
+            NamaPelatihan: pelatihan?.NamaPelatihan,
+            BidangPelatihan: pelatihan?.BidangPelatihan,
             DetailPelatihan: pelatihan?.DetailPelatihan,
-            statusAproval: pelatihan?.StatusApproval,
+            StatusAproval: pelatihan?.StatusApproval,
+            bukti_bayar: fileBuktiBayar
           }),
           {
             headers: {
@@ -416,8 +439,8 @@ function FormRegistrationTraining({
               Rincian Harga <span className="text-red-600"></span>
             </label>
             <Select>
-              <SelectTrigger className="w-full text-base py-14">
-                <div className="flex flex-col items-start gap-1">
+              <SelectTrigger className="w-full text-base py-14 flex items-center justify-between">
+                <div className="flex flex-col items-start gap-1 w-full">
                   <p className="font-medium font-calsans text-lg text-left">
                     Pelatihan
                   </p>
@@ -426,12 +449,16 @@ function FormRegistrationTraining({
                     {formatToRupiah(pelatihan.HargaPelatihan)}
                   </p>
                 </div>
+
+                <p className="font-medium text-2xl w-fit font-calsans">
+                  {formatToRupiah(pelatihan.HargaPelatihan)}
+                </p>
               </SelectTrigger>
             </Select>
             {selectedPenginapan != null && (
               <Select>
-                <SelectTrigger className="w-full text-base  py-16 mt-2">
-                  <div className="flex flex-col items-start gap-1">
+                <SelectTrigger className="w-full text-base flex items-center justify-between  py-16 mt-2">
+                  <div className="flex w-full flex-col items-start gap-1">
                     <p className="font-medium font-calsans text-lg text-left">
                       Penginapan
                     </p>
@@ -447,13 +474,24 @@ function FormRegistrationTraining({
                       Hari{" "}
                     </p>
                   </div>
+
+                  <p className="font-medium text-2xl w-fit font-calsans">
+                    {formatToRupiah(
+                      selectedPenginapan?.Harga! *
+                        hitungHariPelatihan(
+                          pelatihan?.TanggalMulaiPelatihan,
+                          pelatihan?.TanggalBerakhirPelatihan
+                        ) -
+                        1
+                    )}
+                  </p>
                 </SelectTrigger>
               </Select>
             )}
             {selectedKonsumsi != null && (
               <Select>
-                <SelectTrigger className="w-full text-base py-16 mt-2">
-                  <div className="flex flex-col items-start gap-1">
+                <SelectTrigger className="w-full text-base py-16 mt-2 flex items-center justify-between">
+                  <div className="flex flex-col items-start gap-1 w-full">
                     <p className="font-medium font-calsans text-lg text-left">
                       Konsumsi
                     </p>
@@ -469,6 +507,16 @@ function FormRegistrationTraining({
                       Hari{" "}
                     </p>
                   </div>
+
+                  <p className="font-medium text-2xl w-fit font-calsans">
+                    {formatToRupiah(
+                      selectedKonsumsi?.Harga! *
+                        hitungHariPelatihan(
+                          pelatihan?.TanggalMulaiPelatihan,
+                          pelatihan?.TanggalBerakhirPelatihan
+                        )
+                    )}
+                  </p>
                 </SelectTrigger>
               </Select>
             )}
@@ -542,6 +590,9 @@ function FormRegistrationTraining({
     React.useState<boolean>(false);
 
   const [metodePembayaran, setMetodePembayaran] = React.useState<string>("");
+  React.useEffect(() => {
+    handleFetchAllBalaiPelatihanBank();
+  }, []);
 
   return (
     <section className="relative w-full -mt-5">
@@ -726,7 +777,7 @@ function FormRegistrationTraining({
                                     Transfer Bank
                                   </option>
                                   <option value={"Virtual Account"}>
-                                    Bukti Pembayaran
+                                    Virtual Account
                                   </option>
                                 </select>
                               </div>
@@ -735,6 +786,33 @@ function FormRegistrationTraining({
                             {metodePembayaran == "Transfer Bank" ? (
                               <>
                                 {" "}
+                                <div className="w-full mb-1">
+                                  <label
+                                    className="block text-gray-800 text-sm font-medium mb-1"
+                                    htmlFor="noSertifikat"
+                                  >
+                                    Informasi Pembayaran{" "}
+                                    <span className="text-red-600">*</span>
+                                  </label>
+                                  <div className="flex items-center gap-2">
+                                    <input
+                                      name=""
+                                      id=""
+                                      className="w-[30%] overflow-hidden rounded-lg border border-gray-300"
+                                      value={pelatihan?.PenyelenggaraPelatihan}
+                                      disabled
+                                      readOnly
+                                    />
+                                    <input
+                                      name=""
+                                      id=""
+                                      value={"028023012840 (BNI)"}
+                                      className="w-[70%] overflow-hidden rounded-lg border border-gray-300"
+                                      disabled
+                                      readOnly
+                                    />
+                                  </div>
+                                </div>
                                 <div className="grid grid-cols-1 space-y-2">
                                   <label
                                     className="block text-gray-800 text-sm font-medium mb-1"
@@ -782,7 +860,7 @@ function FormRegistrationTraining({
                                       <input
                                         type="file"
                                         className="hidden"
-                                        onChange={handleFileChange}
+                                        onChange={handleFileChangeBuktiBayar}
                                       />
                                     </label>
                                   </div>
@@ -800,36 +878,56 @@ function FormRegistrationTraining({
                             )}
                           </fieldset>
 
-                          <p className="text-gray-700 text-xs mt-1">
-                            *Proses pembayaan perlu dilakukan, harap memilih
-                            metode pembayaran yang sesuai dengan keadaanmu dan
-                            kirimkan pada no rekening berikut
-                            <Link
-                              href={
-                                "https://drive.google.com/file/d/1_LXUE02cNIIuMeg6ejMcENVAA3JJH7TC/view?usp=sharing"
-                              }
-                              target="_blank"
-                              className="ml-1 text-blue-500 underline"
-                            >
-                              0918039118320 ({pelatihan?.PenyelenggaraPelatihan}
-                              )
-                            </Link>
-                            . Untuk pembayaran dengan metode bukti pembayaran
-                            akan tertolak dalam proses verifikasi jika
-                            dinyatakan tidak benar
-                          </p>
+                          {metodePembayaran == "Transfer Bank" ? (
+                            <p className="text-gray-700 text-xs -mt-2">
+                              *Upload file bukti pembayaran sebagai bukti kamu
+                              telah menyelesaikan proses pembayaran ke akun
+                              Balai Pelatihan
+                            </p>
+                          ) : (
+                            <p className="text-gray-700 text-xs mt-1">
+                              *Proses pembayaan perlu dilakukan, harap memilih
+                              metode pembayaran yang sesuai dengan keadaanmu dan
+                              kirimkan pada no rekening berikut
+                              <Link
+                                href={
+                                  "https://drive.google.com/file/d/1_LXUE02cNIIuMeg6ejMcENVAA3JJH7TC/view?usp=sharing"
+                                }
+                                target="_blank"
+                                className="ml-1 text-blue-500 underline"
+                              >
+                                0918039118320 (
+                                {pelatihan?.PenyelenggaraPelatihan})
+                              </Link>
+                              . Untuk pembayaran dengan metode bukti pembayaran
+                              akan tertolak dalam proses verifikasi jika
+                              dinyatakan tidak benar
+                            </p>
+                          )}
                         </>
                         <AlertDialogFooter>
                           <div className="flex flex-col gap-1 w-full">
-                            <Button
-                              onClick={(e) =>
-                                handleRegistrationTrainingForPeople(e)
-                              }
-                              disabled={metodePembayaran == ""}
-                              className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
-                            >
-                              Daftar
-                            </Button>
+                            {metodePembayaran == "Transfer Bank" && (
+                              <Button
+                                onClick={(e) =>
+                                  handleRegistrationTrainingForPeople(e)
+                                }
+                                disabled={fileBuktiBayar == null}
+                                className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                              >
+                                Daftar
+                              </Button>
+                            )}
+                            {metodePembayaran == "Virtual Account" && (
+                              <Button
+                                onClick={(e) =>
+                                  handleRegistrationTrainingForPeople(e)
+                                }
+                                className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                              >
+                                Daftar
+                              </Button>
+                            )}
                             <Button
                               type="button"
                               onClick={(e) =>

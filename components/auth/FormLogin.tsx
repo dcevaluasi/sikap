@@ -307,12 +307,15 @@ function FormLogin() {
       setNoNumber("");
       setPassword("");
       setIsForgetPassword(false);
+      setTokenResetPassword("");
       setRole("Mandiri");
       console.log({ response });
     } catch (error: any) {
       console.log({ error });
       setNik("");
       setPasswordReset("");
+      setIsForgetPassword(false);
+      setTokenResetPassword("");
       setNoNumber("");
       setPassword("");
       Toast.fire({
@@ -354,6 +357,7 @@ function FormLogin() {
                 placeholder="Masukkan NIK kamu"
                 className="col-span-3"
                 readOnly={tokenResetPassword != ""}
+                autoComplete="off"
               />
             </div>
             {tokenResetPassword != "" && (
@@ -368,6 +372,7 @@ function FormLogin() {
                   onChange={(e) => setPasswordReset(e.target.value)}
                   placeholder="Masukkan password baru"
                   className="col-span-3"
+                  autoComplete="off"
                 />
               </div>
             )}
@@ -378,6 +383,7 @@ function FormLogin() {
                 <Button
                   type="button"
                   onClick={(e) => handleGetTokenResetPassword(e)}
+                  disabled={nik == ""}
                   className=" bg-blue-500 hover:bg-blue-600"
                 >
                   Cek Akunmu
@@ -393,7 +399,11 @@ function FormLogin() {
               )}
               <Button
                 type="button"
-                onClick={(e) => setIsForgetPassword(false)}
+                onClick={(e) => {
+                  setNik("");
+                  setPasswordReset("");
+                  setIsForgetPassword(false);
+                }}
                 className=" bg-gray-500 hover:bg-gray-600"
               >
                 Close
@@ -612,29 +622,31 @@ function FormLogin() {
                     />
                   </div>
                 </div>
-                <div
-                  className="flex flex-wrap w-full -mx-3 mb-2"
-                  style={{ width: "100% !important" }}
-                >
+                {passwordManningAgent != "" && (
                   <div
-                    className="w-full px-3"
+                    className="flex flex-wrap w-full -mx-3 mb-2"
                     style={{ width: "100% !important" }}
                   >
-                    <label
-                      className="block text-gray-200 text-sm font-medium mb-1"
-                      htmlFor="password"
-                    >
-                      Verify if you are not a robot{" "}
-                      <span className="text-red-600">*</span>
-                    </label>
-                    <ReCAPTCHA
+                    <div
+                      className="w-full px-3"
                       style={{ width: "100% !important" }}
-                      sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                      className="mx-auto w-full font-inter text-sm"
-                      onChange={setCaptcha}
-                    />
+                    >
+                      <label
+                        className="block text-gray-200 text-sm font-medium mb-1"
+                        htmlFor="password"
+                      >
+                        Verify if you are not a robot{" "}
+                        <span className="text-red-600">*</span>
+                      </label>
+                      <ReCAPTCHA
+                        style={{ width: "100% !important" }}
+                        sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                        className="mx-auto w-full font-inter text-sm"
+                        onChange={setCaptcha}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="flex flex-wrap -mx-3 mt-3">
                   <div className="w-full px-3">
