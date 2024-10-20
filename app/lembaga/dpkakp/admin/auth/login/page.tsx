@@ -69,6 +69,7 @@ function page() {
           await handleClearFormLoginAdminDPKAKP();
         }
       } catch (e) {
+        console.error("LOGIN ADMIN", e);
         if (e instanceof AxiosError) {
           if (e.response?.status == 401) {
             Toast.fire({

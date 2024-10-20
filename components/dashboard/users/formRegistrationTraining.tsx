@@ -142,21 +142,24 @@ function FormRegistrationTraining({
       setIsOpenFormPeserta(!isOpenFormPeserta);
     } else {
       try {
+        const formData = new FormData();
+        formData.append("IdPelatihan", id.toString());
+        formData.append("TotalBayar", totalBayarPeserta.toString());
+        formData.append("NamaPelatihan", pelatihan?.NamaPelatihan || "");
+        formData.append("BidangPelatihan", pelatihan?.BidangPelatihan || "");
+        formData.append("DetailPelatihan", pelatihan?.DetailPelatihan || "");
+        formData.append("StatusAproval", pelatihan?.StatusApproval || "");
+        formData.append("MetodoPembayaran", metodePembayaran || "");
+        if (fileBuktiBayar != null) {
+          formData.append("bukti_bayar", fileBuktiBayar);
+        }
         const response: AxiosResponse = await axios.post(
           `${baseUrl}/users/addPelatihan`,
-          JSON.stringify({
-            IdPelatihan: id.toString(),
-            TotalBayar: totalBayarPeserta.toString(),
-            NamaPelatihan: pelatihan?.NamaPelatihan,
-            BidangPelatihan: pelatihan?.BidangPelatihan,
-            DetailPelatihan: pelatihan?.DetailPelatihan,
-            StatusAproval: pelatihan?.StatusApproval,
-            bukti_bayar: fileBuktiBayar
-          }),
+          formData,
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
+              "Content-Type": "multipart/form-data",
             },
           }
         );
@@ -258,7 +261,7 @@ function FormRegistrationTraining({
                   </div>
                   <div className="space-y-1 leading-none">
                     <label>
-                      {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                      {item.NamaSarpras} ({formatToRupiah(item.Harga)}) / hari
                     </label>
                     <p className="text-xs text-gray-600">{item.Deskripsi}</p>
                   </div>
@@ -294,7 +297,7 @@ function FormRegistrationTraining({
                   </div>
                   <div className="space-y-1 leading-none">
                     <label>
-                      {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                      {item.NamaSarpras} ({formatToRupiah(item.Harga)}) / hari
                     </label>
                     <p className="text-xs text-gray-600">{item.Deskripsi}</p>
                   </div>
@@ -354,7 +357,7 @@ function FormRegistrationTraining({
                     </div>
                     <div className="space-y-1 leading-none">
                       <label>
-                        {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                        {item.NamaSarpras} ({formatToRupiah(item.Harga)}) /hari
                       </label>
                       <p className="text-xs text-gray-600">{item.Deskripsi}</p>
                     </div>
@@ -405,7 +408,7 @@ function FormRegistrationTraining({
                     </div>
                     <div className="space-y-1 leading-none">
                       <label>
-                        {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                        {item.NamaSarpras} ({formatToRupiah(item.Harga)}) / hari
                       </label>
                       <p className="text-xs text-gray-600">{item.Deskripsi}</p>
                     </div>
@@ -470,7 +473,7 @@ function FormRegistrationTraining({
                       {hitungHariPelatihan(
                         pelatihan?.TanggalMulaiPelatihan,
                         pelatihan?.TanggalBerakhirPelatihan
-                      )}{" "}
+                      ) - 1}{" "}
                       Hari{" "}
                     </p>
                   </div>
@@ -478,11 +481,11 @@ function FormRegistrationTraining({
                   <p className="font-medium text-2xl w-fit font-calsans">
                     {formatToRupiah(
                       selectedPenginapan?.Harga! *
-                        hitungHariPelatihan(
+                        (hitungHariPelatihan(
                           pelatihan?.TanggalMulaiPelatihan,
                           pelatihan?.TanggalBerakhirPelatihan
                         ) -
-                        1
+                          1)
                     )}
                   </p>
                 </SelectTrigger>
@@ -534,10 +537,11 @@ function FormRegistrationTraining({
                             pelatihan.TanggalBerakhirPelatihan
                           ) +
                         selectedPenginapan.Harga *
-                          hitungHariPelatihan(
+                          (hitungHariPelatihan(
                             pelatihan.TanggalMulaiPelatihan,
                             pelatihan.TanggalBerakhirPelatihan
-                          )
+                          ) -
+                            1)
                     )
                   : selectedKonsumsi != null
                   ? formatToRupiah(
@@ -552,10 +556,11 @@ function FormRegistrationTraining({
                   ? formatToRupiah(
                       parseInt(harga) +
                         selectedPenginapan.Harga *
-                          hitungHariPelatihan(
+                          (hitungHariPelatihan(
                             pelatihan.TanggalMulaiPelatihan,
                             pelatihan.TanggalBerakhirPelatihan
-                          )
+                          ) -
+                            1)
                     )
                   : formatToRupiah(parseInt(harga))}
               </p>
@@ -854,7 +859,11 @@ function FormRegistrationTraining({
                                             from your computer
                                           </p>
                                         ) : (
-                                          <p className="pointer-none text-gray-500 text-sm"></p>
+                                          <p className="pointer-none text-gray-500 text-sm">
+                                            {fileBuktiBayar != null
+                                              ? fileBuktiBayar!.name
+                                              : ""}
+                                          </p>
                                         )}{" "}
                                       </div>
                                       <input

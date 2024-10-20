@@ -517,7 +517,7 @@ function FormRegistrasi() {
                           id="name"
                           type="text"
                           className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                          placeholder="Masukkan nama lengkap"
+                          placeholder="Masukkan nama lengkap tanpa gelar"
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           required
@@ -565,7 +565,7 @@ function FormRegistrasi() {
                           id="phone number"
                           type="text"
                           className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                          placeholder="Masukkan no telpon"
+                          placeholder="Masukkan no telpon/WA"
                           value={phoneNumber}
                           onChange={(e) => setPhoneNumber(e.target.value)}
                           required
@@ -589,41 +589,50 @@ function FormRegistrasi() {
                           id="password"
                           type="password"
                           className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                          placeholder="Masukkan password"
+                          placeholder="Buat password"
                           required
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                         />
-                        {isInputError && (
+                        {isInputError ? (
                           <span className="text-[#FF0000] font-medium">
                             *Masukkan password!
                           </span>
+                        ) : (
+                          <p className="text-gray-300 leading-[100%] text-xs font-medium mt-2">
+                            *Password minimal 8 karakter, harus terdiri dari
+                            satu angka, huruf kapital dan kecil, serta karakter
+                          </p>
                         )}
                       </div>
                     </div>
-                    <div
-                      className="flex flex-wrap w-full mb-1"
-                      style={{ width: "100% !important" }}
-                    >
+                    {password != "" && (
                       <div
-                        className="w-full"
+                        className="flex flex-wrap w-full mb-1"
                         style={{ width: "100% !important" }}
                       >
-                        <label
-                          className="block text-gray-200 text-sm font-medium mb-1"
-                          htmlFor="password"
-                        >
-                          Verify if you are not a robot{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <ReCAPTCHA
+                        <div
+                          className="w-full"
                           style={{ width: "100% !important" }}
-                          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                          className=" w-[600px] font-inter text-sm"
-                          onChange={setCaptcha}
-                        />
+                        >
+                          <label
+                            className="block text-gray-200 text-sm font-medium mb-1"
+                            htmlFor="password"
+                          >
+                            Verify if you are not a robot{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <ReCAPTCHA
+                            style={{ width: "100% !important" }}
+                            sitekey={
+                              process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!
+                            }
+                            className=" w-[600px] font-inter text-sm"
+                            onChange={setCaptcha}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div className="flex flex-wrap -mx-3 mt-3">
                       <div className="w-full px-3 flex flex-col gap-2">
                         <button

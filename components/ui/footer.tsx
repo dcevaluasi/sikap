@@ -5,7 +5,7 @@ import LogoFooter from "./logo-footer";
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900">
+    <footer className="bg-gray-900 px-10 md:px-0">
       <div className="max-w-7xl mx-auto ">
         {/* Top area: Blocks */}
         <div className="grid sm:grid-cols-12 gap-8 py-8 md:py-12 border-t border-gray-200">

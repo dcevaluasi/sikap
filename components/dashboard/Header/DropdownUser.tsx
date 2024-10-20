@@ -144,11 +144,14 @@ const DropdownUser = ({
   const handleLogOut = async () => {
     Cookies.remove("XSRF091");
     Cookies.remove("XSRF092");
+    Cookies.remove("XSRF093");
+    Cookies.remove("IDLemdik");
+    Cookies.remove("Eselon");
     Toast.fire({
       icon: "success",
       title: `Berhasil logout dari dashboard Admin!`,
     });
-    router.replace("/");
+    router.replace("/admin/auth/login");
   };
 
   // close on click outside

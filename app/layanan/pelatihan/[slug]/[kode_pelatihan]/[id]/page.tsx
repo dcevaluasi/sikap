@@ -1,17 +1,5 @@
 "use client";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-
 import { Progress } from "@/components/ui/progress";
 
 import Image from "next/image";
@@ -34,16 +22,6 @@ import {
   FaPlaceOfWorship,
   FaRupiahSign,
 } from "react-icons/fa6";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 
 import Footer from "@/components/ui/footer";
 import { MdOutlineAppRegistration, MdVerified } from "react-icons/md";

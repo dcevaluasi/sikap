@@ -28,6 +28,8 @@ import Logo from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { generateTanggalPelatihan } from "@/utils/text";
 import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
+import DropdownUserPelatihan from "../Header/DropdownUserPelatihan";
+import { IoReloadCircle } from "react-icons/io5";
 
 export const TimelineProgressPesertaPelatihan = ({
   userDetail,
@@ -36,6 +38,7 @@ export const TimelineProgressPesertaPelatihan = ({
   userDetail: UserPelatihan;
   pelatihan: PelatihanMasyarakat;
 }) => {
+  console.log({ pelatihan });
   const router = useRouter();
   const [codeAccess, setCodeAccess] = React.useState<string>("");
   const [isOpenGuideline, setIsOpenGuideline] = React.useState<boolean>(true);
@@ -311,9 +314,11 @@ export const TimelineProgressPesertaPelatihan = ({
                   </h3>
                   <time
                     className={`text-sm font-medium text-gray-600 ${
-                      userDetail?.PreTest! == 0 && userDetail?.PostTest == 0
+                      userDetail?.PreTest! == 0 &&
+                      userDetail?.PostTest == 0 &&
+                      pelatihan!.StatusApproval != "Selesai"
                         ? "text-gray-700"
-                        : userDetail?.PreTest > 65
+                        : userDetail?.PreTest >= 65
                         ? "text-green-500"
                         : "text-rose-500"
                     }`}
@@ -325,10 +330,10 @@ export const TimelineProgressPesertaPelatihan = ({
                           <span>Belum Melaksanakan Pre-Test</span>
                         </span>
                       </span>
-                    ) : userDetail?.PreTest > 65 ? (
+                    ) : userDetail?.PreTest >= 65 ? (
                       <span className="flex items-center">
                         <RiVerifiedBadgeFill className="text-xs" />
-                        Data pendaftaran anda valid
+                        Nilai kamu memuaskan pada pre-test!
                       </span>
                     ) : (
                       <span className="flex items-start gap-1">
@@ -344,8 +349,9 @@ export const TimelineProgressPesertaPelatihan = ({
                       <div className="flex flex-col items-start justify-start text-xs">
                         <p className="">
                           Lakukan pelaksanaan pre-test sebagai syarat mengikuti
-                          pelatihan {userDetail?.NamaPelatihan} pada link
-                          berikut{" "}
+                          pelatihan {userDetail?.NamaPelatihan} untuk melihat
+                          kemampuan/pengetahuan awal mu terkait diklat ini pada
+                          link berikut{" "}
                         </p>
                         {userDetail?.Keterangan === "Valid" ? (
                           <AlertDialog>
@@ -354,7 +360,7 @@ export const TimelineProgressPesertaPelatihan = ({
                                 onClick={() =>
                                   setCodeAccess(userDetail.CodeAksess!)
                                 }
-                                className="text-blue-500 block "
+                                className="text-blue-500 block text-left"
                               >
                                 Link Ujian Pre-Test {pelatihan!.NamaPelatihan}
                               </div>
@@ -378,21 +384,34 @@ export const TimelineProgressPesertaPelatihan = ({
                                     {userDetail.PreTest == 0 && (
                                       <>
                                         {" "}
-                                        <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
-                                          Sebagai bagian dari pelaksanaan
-                                          pelatihan agar dapat mengetahui
-                                          kemampuan peserta diawal harap untuk
-                                          mengikuti{" "}
-                                          <span className="italic">
-                                            pre-test
-                                          </span>{" "}
-                                          dan{" "}
-                                          {isOpenGuideline
-                                            ? "membaca petunjuk pengerjaan"
-                                            : "memasukkan kode akses"}{" "}
-                                          terlebih dahulu
-                                        </AlertDialogDescription>
-                                        {isOpenGuideline ? (
+                                        {codeAccess != "" && (
+                                          <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
+                                            Sebagai bagian dari pelaksanaan
+                                            pelatihan agar dapat mengetahui
+                                            kemampuan peserta diawal harap untuk
+                                            mengikuti{" "}
+                                            <span className="italic">
+                                              pre-test
+                                            </span>{" "}
+                                            dan{" "}
+                                            {isOpenGuideline
+                                              ? "membaca petunjuk pengerjaan"
+                                              : "memasukkan kode akses"}{" "}
+                                            terlebih dahulu
+                                          </AlertDialogDescription>
+                                        )}
+                                        {codeAccess == "" ? (
+                                          <div className="mt-2">
+                                            <p className="font-normal text-neutral-500 text-sm text-center ">
+                                              Pelaksanaan pre-test dilaksanaan
+                                              secara serentak, tunggu arahan
+                                              dari instruktur dan panitia
+                                              pelaksana untuk memulai dan
+                                              mengerjakan ujian pre-test pada
+                                              waktu yang ditentukan!
+                                            </p>
+                                          </div>
+                                        ) : isOpenGuideline ? (
                                           <AlertDialogDescription className="w-full text-left font-normal text-sm mt-2">
                                             <span className="font-semibold text-[#000]">
                                               Petunjuk Pengerjaan :{" "}
@@ -423,27 +442,7 @@ export const TimelineProgressPesertaPelatihan = ({
                                             </span>
                                           </AlertDialogDescription>
                                         ) : (
-                                          <fieldset className="w-full">
-                                            {/* <Input
-                                                        className="w-full font-normal mt-2 text-sm"
-                                                        placeholder="Masukkan kode akses "
-                                                        value={
-                                                          userDetail
-                                                            ?.Pelatihan[
-                                                            indexPelatihanSelected
-                                                          ]?.CodeAksess!
-                                                        }
-                                                        onChange={(e) =>
-                                                          setCodeAccess(
-                                                            userDetail
-                                                              ?.Pelatihan[
-                                                              indexPelatihanSelected
-                                                            ]?.CodeAksess!
-                                                          )
-                                                        }
-                                                        type="password"
-                                                      /> */}
-                                          </fieldset>
+                                          <fieldset className="w-full"></fieldset>
                                         )}
                                       </>
                                     )}
@@ -451,7 +450,14 @@ export const TimelineProgressPesertaPelatihan = ({
                                 </AlertDialogTitle>
                               </AlertDialogHeader>
                               <AlertDialogFooter className="w-full">
-                                {userDetail!.PreTest == 0 ? (
+                                {codeAccess == "" ? (
+                                  <AlertDialogCancel
+                                    onClick={() => setIsOpenGuideline(true)}
+                                    className="py-5 w-full"
+                                  >
+                                    Close
+                                  </AlertDialogCancel>
+                                ) : userDetail!.PreTest == 0 ? (
                                   <div className="flex-col flex w-full gap-2">
                                     {isOpenGuideline ? (
                                       <Button
@@ -474,7 +480,10 @@ export const TimelineProgressPesertaPelatihan = ({
                                       </AlertDialogAction>
                                     )}
 
-                                    <AlertDialogCancel className="py-5">
+                                    <AlertDialogCancel
+                                      onClick={() => setIsOpenGuideline(true)}
+                                      className="py-5"
+                                    >
                                       Close
                                     </AlertDialogCancel>
                                   </div>
@@ -498,10 +507,17 @@ export const TimelineProgressPesertaPelatihan = ({
                         )}
                       </div>
                     ) : userDetail?.PreTest > 65 ? (
-                      <span className="flex items-center ">
-                        <RiVerifiedBadgeFill className="text" />
-                        Data pendaftaran anda valid
-                      </span>
+                      <div className="flex flex-col items-start gap-1 ">
+                        <TablePenilaian
+                          userDetail={userDetail}
+                          type="Pre-Test"
+                        />
+                        <span className="text-xs">
+                          Selamat, nilai pre-testmu cukup baik, ikuti pelatihan
+                          dengan semangat dan dapatkan pengetahuan serta wawasan
+                          baru dari pelatihan ini!
+                        </span>
+                      </div>
                     ) : (
                       <div className="flex flex-col items-start gap-1 ">
                         <TablePenilaian
@@ -527,44 +543,57 @@ export const TimelineProgressPesertaPelatihan = ({
                   <h3 className="text-lg font-semibold">
                     Pelaksanaan Pelatihan {pelatihan!.NamaPelatihan}
                   </h3>
-                  <time className="text-xs text-gray-600">
+                  <time className="text-sm text-gray-600">
                     {generateTanggalPelatihan(pelatihan!.TanggalMulaiPelatihan)}{" "}
                     -{" "}
                     {generateTanggalPelatihan(
                       pelatihan!.TanggalBerakhirPelatihan
                     )}
                   </time>
-                  <span className="text-xs">
-                    Pelatihan{" "}
-                    <span className="font-bold">
-                      {pelatihan!.NamaPelatihan}
-                    </span>{" "}
-                    ini dilaksanakan secara{" "}
-                    <span className="font-bold">
-                      {" "}
-                      {pelatihan!.PelaksanaanPelatihan}
-                    </span>{" "}
-                    harap dapat mengikuti pelatihan dengan seksama dan semangat
-                    sobat E-LAUT!
-                  </span>
+                  {pelatihan!.StatusApproval == "Selesai" ? (
+                    <span className="text-xs">
+                      Pelatihan{" "}
+                      <span className="font-bold">
+                        {pelatihan!.NamaPelatihan}
+                      </span>{" "}
+                      sudah selesai dilaksanakan, harap mengikuti arahan
+                      selanjutnya oleh panitia atau instruktur pelatihan!
+                    </span>
+                  ) : (
+                    <span className="text-xs">
+                      Pelatihan{" "}
+                      <span className="font-bold">
+                        {pelatihan!.NamaPelatihan}
+                      </span>{" "}
+                      ini dilaksanakan secara{" "}
+                      <span className="font-bold">
+                        {" "}
+                        {pelatihan!.PelaksanaanPelatihan}
+                      </span>{" "}
+                      harap dapat mengikuti pelatihan dengan seksama dan
+                      semangat sobat E-LAUT!
+                    </span>
+                  )}
                 </div>
                 <div
                   className={`flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1]  ${
-                    userDetail.PreTest < 65 && userDetail.PreTest > 0
-                      ? "before:bg-rose-500"
-                      : userDetail.PreTest > 65
-                      ? "before:bg-green-400"
-                      : "before:bg-gray-700"
+                    pelatihan!.StatusApproval != "Selesai" &&
+                    userDetail?.PostTest == 0
+                      ? "before:bg-gray-700"
+                      : userDetail?.PostTest >= 65
+                      ? "before:bg-green-500"
+                      : "before:bg-rose-500"
                   } bg-white shadow-custom p-4 rounded-xl duration-700 cursor-pointer `}
                 >
                   <h3 className="text-lg font-semibold">
                     Pelaksanaan Post-Test
                   </h3>
                   <time
-                    className={`text-sm font-medium text-gray-600 ${
+                    className={`text-sm font-medium text-gray-600  ${
+                      pelatihan!.StatusApproval != "Selesai" &&
                       userDetail?.PostTest == 0
                         ? "text-gray-700"
-                        : userDetail?.PreTest > 65
+                        : userDetail?.PostTest >= 65
                         ? "text-green-500"
                         : "text-rose-500"
                     }`}
@@ -576,10 +605,10 @@ export const TimelineProgressPesertaPelatihan = ({
                           <span>Belum Melaksanakan Post-Test</span>
                         </span>
                       </span>
-                    ) : userDetail?.PostTest > 65 ? (
+                    ) : userDetail?.PostTest >= 65 ? (
                       <span className="flex items-center">
                         <RiVerifiedBadgeFill className="text-xs" />
-                        Data pendaftaran anda valid
+                        Nilai kamu memuaskan pada post-test!
                       </span>
                     ) : (
                       <span className="flex items-start gap-1">
@@ -632,21 +661,36 @@ export const TimelineProgressPesertaPelatihan = ({
                                     {userDetail!.PostTest == 0 && (
                                       <>
                                         {" "}
-                                        <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
-                                          Sebagai bagian dari pelaksanaan
-                                          pelatihan agar dapat mengetahui
-                                          kemampuan peserta diawal harap untuk
-                                          mengikuti{" "}
-                                          <span className="italic">
-                                            post-test
-                                          </span>{" "}
-                                          dan{" "}
-                                          {isOpenGuideline
-                                            ? "membaca petunjuk pengerjaan"
-                                            : "memasukkan kode akses"}{" "}
-                                          terlebih dahulu
-                                        </AlertDialogDescription>
-                                        {isOpenGuideline ? (
+                                        {pelatihan.StatusApproval ==
+                                          "Selesai" && (
+                                          <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
+                                            Sebagai bagian dari pelaksanaan
+                                            pelatihan agar dapat mengetahui
+                                            kemampuan peserta diawal harap untuk
+                                            mengikuti{" "}
+                                            <span className="italic">
+                                              post-test
+                                            </span>{" "}
+                                            dan{" "}
+                                            {isOpenGuideline
+                                              ? "membaca petunjuk pengerjaan"
+                                              : "memasukkan kode akses"}{" "}
+                                            terlebih dahulu
+                                          </AlertDialogDescription>
+                                        )}
+                                        {pelatihan.StatusApproval !=
+                                        "Selesai" ? (
+                                          <div className="mt-2">
+                                            <p className="font-normal text-neutral-500 text-sm text-center ">
+                                              Pelaksanaan post-test dilaksanaan
+                                              secara serentak, tunggu arahan
+                                              dari instruktur dan panitia
+                                              pelaksana untuk memulai dan
+                                              mengerjakan ujian post-test pada
+                                              waktu yang ditentukan!
+                                            </p>
+                                          </div>
+                                        ) : isOpenGuideline ? (
                                           <AlertDialogDescription className="w-full text-left font-normal text-sm mt-2">
                                             <span className="font-semibold text-[#000]">
                                               Petunjuk Pengerjaan :{" "}
@@ -677,27 +721,7 @@ export const TimelineProgressPesertaPelatihan = ({
                                             </span>
                                           </AlertDialogDescription>
                                         ) : (
-                                          <fieldset className="w-full">
-                                            {/* <Input
-                                                        className="w-full font-normal mt-2 text-sm"
-                                                        placeholder="Masukkan kode akses "
-                                                        value={
-                                                          userDetail
-                                                            ?.Pelatihan[
-                                                            indexPelatihanSelected
-                                                          ]?.CodeAksess!
-                                                        }
-                                                        onChange={(e) =>
-                                                          setCodeAccess(
-                                                            userDetail
-                                                              ?.Pelatihan[
-                                                              indexPelatihanSelected
-                                                            ]?.CodeAksess!
-                                                          )
-                                                        }
-                                                        type="password"
-                                                      /> */}
-                                          </fieldset>
+                                          <fieldset className="w-full"></fieldset>
                                         )}
                                       </>
                                     )}
@@ -705,7 +729,14 @@ export const TimelineProgressPesertaPelatihan = ({
                                 </AlertDialogTitle>
                               </AlertDialogHeader>
                               <AlertDialogFooter className="w-full">
-                                {userDetail!.PostTest == 0 ? (
+                                {pelatihan!.StatusApproval != "Selesai" ? (
+                                  <AlertDialogCancel
+                                    onClick={() => setIsOpenGuideline(true)}
+                                    className="py-5 w-full"
+                                  >
+                                    Close
+                                  </AlertDialogCancel>
+                                ) : userDetail!.PostTest == 0 ? (
                                   <div className="flex-col flex w-full gap-2">
                                     {isOpenGuideline ? (
                                       <Button
@@ -720,7 +751,9 @@ export const TimelineProgressPesertaPelatihan = ({
                                       <AlertDialogAction
                                         className="py-5"
                                         disabled={
-                                          codeAccess == "" ? true : false
+                                          pelatihan!.StatusApproval != "Selesai"
+                                            ? true
+                                            : false
                                         }
                                         onClick={(e) =>
                                           handleDirectToExamPostTest(e)
@@ -730,7 +763,10 @@ export const TimelineProgressPesertaPelatihan = ({
                                       </AlertDialogAction>
                                     )}
 
-                                    <AlertDialogCancel className="py-5">
+                                    <AlertDialogCancel
+                                      onClick={() => setIsOpenGuideline(true)}
+                                      className="py-5"
+                                    >
                                       Close
                                     </AlertDialogCancel>
                                   </div>
@@ -754,10 +790,17 @@ export const TimelineProgressPesertaPelatihan = ({
                         )}
                       </div>
                     ) : userDetail?.PostTest > 65 ? (
-                      <span className="flex items-center ">
-                        <RiVerifiedBadgeFill className="text" />
-                        Data pendaftaran anda valid
-                      </span>
+                      <div className="flex flex-col items-start gap-1 ">
+                        <TablePenilaian
+                          userDetail={userDetail}
+                          type="Post-Test"
+                        />
+                        <span className="text-xs">
+                          Selamat, nilai pre-testmu cukup baik, ikuti pelatihan
+                          dengan semangat dan dapatkan pengetahuan serta wawasan
+                          baru dari pelatihan ini!
+                        </span>
+                      </div>
                     ) : (
                       <div className="flex flex-col items-start gap-1 ">
                         <TablePenilaian
@@ -769,28 +812,192 @@ export const TimelineProgressPesertaPelatihan = ({
                           pelatihan dengan cermat dan semangat untuk bisa
                           meningkatkan pengetahuan mu pada post-test nanti!
                         </span>
+                        <AlertDialog>
+                          <AlertDialogTrigger className="w-full">
+                            <Button
+                              type="button"
+                              onClick={() =>
+                                setCodeAccess(userDetail!.CodeAksess!)
+                              }
+                              variant="outline"
+                              className="w-full border mt-3 flex gap-2 border-gray-600 text-left capitalize items-center justify-center"
+                            >
+                              <IoReloadCircle className="h-4 w-4 text-gray-600" />{" "}
+                              <span className="text-sm"> Lakukan Remedial</span>
+                            </Button>
+                          </AlertDialogTrigger>
+                          <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
+                            <AlertDialogHeader>
+                              <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
+                                <div className="w-28 h-28 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center">
+                                  <div className="w-20 h-20 rounded-full  bg-gradient-to-b from-gray-300 via-whiter to-white flex items-center justify-center ">
+                                    <Logo />
+                                  </div>
+                                </div>
+
+                                <div className="flex flex-col gap-1 w-full justify-center items-center">
+                                  {userDetail!.PostTest < 65 && (
+                                    <h1 className="font-bold text-2xl text-center leading-[100%]">
+                                      {pelatihan! && pelatihan!.NamaPelatihan}
+                                    </h1>
+                                  )}
+
+                                  {userDetail!.PostTest < 65 && (
+                                    <>
+                                      {" "}
+                                      {pelatihan.StatusApproval ==
+                                        "Selesai" && (
+                                        <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
+                                          Sebagai bagian dari pelaksanaan
+                                          pelatihan agar dapat memperbaiki nilai
+                                          remedial silahkan lakukan{" "}
+                                          <span className="italic">
+                                            remedial
+                                          </span>{" "}
+                                          dan{" "}
+                                          {isOpenGuideline
+                                            ? "membaca petunjuk pengerjaan"
+                                            : "memasukkan kode akses"}{" "}
+                                          terlebih dahulu
+                                        </AlertDialogDescription>
+                                      )}
+                                      {pelatihan.StatusApproval != "Selesai" ? (
+                                        <div className="mt-2">
+                                          <p className="font-normal text-neutral-500 text-sm text-center ">
+                                            Pelaksanaan remedial dilaksanaan
+                                            secara serentak, tunggu arahan dari
+                                            instruktur dan panitia pelaksana
+                                            untuk memulai dan mengerjakan ujian
+                                            remedial pada waktu yang ditentukan!
+                                          </p>
+                                        </div>
+                                      ) : isOpenGuideline ? (
+                                        <AlertDialogDescription className="w-full text-left font-normal text-sm mt-2">
+                                          <span className="font-semibold text-[#000]">
+                                            Petunjuk Pengerjaan :{" "}
+                                          </span>
+                                          <br />
+                                          <span>
+                                            {" "}
+                                            1.Pilih salah satu jawaban yang
+                                            Saudara anggap paling tepat/benar!
+                                          </span>{" "}
+                                          <br />
+                                          <span>
+                                            {" "}
+                                            2. Dalam menjawab soal, gunakan
+                                            gadget yang mumpuni!
+                                          </span>{" "}
+                                          <br />
+                                          <span>
+                                            {" "}
+                                            3. Waktu yang disediakan untuk
+                                            mengerjakan soal adalah 15 menit!
+                                          </span>{" "}
+                                          <br />
+                                          <span>
+                                            {" "}
+                                            4. Tidak diperbolehkan membuka buku,
+                                            handphone dll!
+                                          </span>
+                                        </AlertDialogDescription>
+                                      ) : (
+                                        <fieldset className="w-full"></fieldset>
+                                      )}
+                                    </>
+                                  )}
+                                </div>
+                              </AlertDialogTitle>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter className="w-full">
+                              {pelatihan!.StatusApproval != "Selesai" ? (
+                                <AlertDialogCancel
+                                  onClick={() => setIsOpenGuideline(true)}
+                                  className="py-5 w-full"
+                                >
+                                  Close
+                                </AlertDialogCancel>
+                              ) : userDetail!.PostTest < 65 ? (
+                                <div className="flex-col flex w-full gap-2">
+                                  {isOpenGuideline ? (
+                                    <Button
+                                      className="py-5 bg-blue-500 hover:bg-blue-500"
+                                      onClick={(e) =>
+                                        setIsOpenGuideline(!isOpenGuideline)
+                                      }
+                                    >
+                                      Lanjut
+                                    </Button>
+                                  ) : (
+                                    <AlertDialogAction
+                                      className="py-5"
+                                      disabled={
+                                        pelatihan!.StatusApproval != "Selesai"
+                                          ? true
+                                          : false
+                                      }
+                                      onClick={(e) =>
+                                        handleDirectToExamPostTest(e)
+                                      }
+                                    >
+                                      Mulai Remedial
+                                    </AlertDialogAction>
+                                  )}
+
+                                  <AlertDialogCancel
+                                    onClick={() => setIsOpenGuideline(true)}
+                                    className="py-5"
+                                  >
+                                    Close
+                                  </AlertDialogCancel>
+                                </div>
+                              ) : (
+                                <div className="flex-col flex w-full gap-2">
+                                  <p className=" text-center font-normal text-gray-500 -mt-2">
+                                    Maaf kamu telah mengikuti ujian ini, kamu
+                                    tidak memiliki akses lagi terkait ujian ini
+                                  </p>
+                                  <AlertDialogCancel className="py-5">
+                                    Close
+                                  </AlertDialogCancel>
+                                </div>
+                              )}
+                            </AlertDialogFooter>
+                          </AlertDialogContent>
+                        </AlertDialog>
                       </div>
                     )}
                   </p>
                 </div>
                 <div
                   className={`flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] ${
-                    pelatihan!.StatusApproval == "Selesai"
-                      ? "before:bg-green-400"
+                    pelatihan!.StatusApproval == "Selesai" &&
+                    userDetail.PostTest != 0 &&
+                    userDetail.PreTest != 0
+                      ? "before:bg-gray-700"
+                      : userDetail?.PostTest >= 65 &&
+                        userDetail?.NoSertifikat != ""
+                      ? "before:bg-green-500"
                       : "before:bg-gray-700"
                   } bg-white shadow-custom p-4 rounded-xl duration-700 cursor-pointer `}
                 >
                   <h3 className="text-lg font-semibold">
                     Sertifikat Pelatihan {pelatihan!.NamaPelatihan}
                   </h3>
-                  <time className="text-xs text-gray-600">
+                  <time className="text-sm text-gray-600">
                     Bidang {pelatihan!.BidangPelatihan}
                   </time>
                   <span className="text-xs">
-                    Selamat, anda telah mengikuti dan menyelesaikan rangkaian
-                    pelatihan. Berikut sertifikat yang dapat kamu akses
+                    {pelatihan!.StatusApproval != "Selesai" ||
+                    (userDetail.PostTest == 0 && userDetail.PreTest == 0)
+                      ? "Harap mengikuti rangkaian pelaksanaan pelatihan untuk mendapatkan sertifikat."
+                      : userDetail?.PostTest >= 65 &&
+                        userDetail?.FileSertifikat != ""
+                      ? "Selamat, anda telah mengikuti dan menyelesaikan rangkaian pelatihan. Berikut sertifikat yang dapat kamu akses"
+                      : "Oops. Sertifikat kamu masih dalam proses penerbitan, harap ditunggu ya paling lambat 3x24 jam. Pantau terus dashboard-mu ya sobat E-LAUT!"}
                   </span>
-                  {userDetail.NoSertifikat == "" ? null : pelatihan != null ? (
+                  {userDetail.FileSertifikat == "" ? null : pelatihan !=
+                    null ? (
                     <div>
                       <DialogSertifikatPelatihan
                         userPelatihan={userDetail!}

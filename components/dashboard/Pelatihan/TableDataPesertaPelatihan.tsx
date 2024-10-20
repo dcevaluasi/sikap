@@ -73,6 +73,7 @@ import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifi
 import Cookies from "js-cookie";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import { User } from "@/types/user";
+import { formatToRupiah } from "@/lib/utils";
 
 const TableDataPesertaPelatihan = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -360,7 +361,7 @@ const TableDataPesertaPelatihan = () => {
           </p>{" "} */}
           <p className="text-xs text-gray-400"> Total Pembayaran</p>{" "}
           <p className="text-base font-semibold tracking-tight leading-none">
-            Rp. {row.original?.TotalBayar}
+            {formatToRupiah(parseInt(row.original.TotalBayar))}
           </p>
         </div>
       ),
@@ -480,42 +481,42 @@ const TableDataPesertaPelatihan = () => {
           </DialogSertifikatPelatihan>
         ),
     },
-    {
-      accessorKey: "IdUserPelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`flex  ${
-              usePathname().includes("puslat") && "hidden"
-            } items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Input <br />
-            Penilaian
-            <TbDatabaseEdit className="ml-1 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={` flex ${
-            usePathname().includes("puslat") && "hidden"
-          } items-center justify-center w-full gap-1`}
-        >
-          <Button
-            onClick={(e) => {
-              setIsOpenFormInputNilai(!isOpenFormInputNilai);
-              setSelectedIdPeserta(row.original?.IdUserPelatihan);
-            }}
-            variant="outline"
-            className=" border border-purple-600"
-          >
-            <LucideListChecks className="h-4 w-4 text-purple-600" />
-          </Button>
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "IdUserPelatihan",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className={`flex  ${
+    //           usePathname().includes("puslat") && "hidden"
+    //         } items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Input <br />
+    //         Penilaian
+    //         <TbDatabaseEdit className="ml-1 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div
+    //       className={` flex ${
+    //         usePathname().includes("puslat") && "hidden"
+    //       } items-center justify-center w-full gap-1`}
+    //     >
+    //       <Button
+    //         onClick={(e) => {
+    //           setIsOpenFormInputNilai(!isOpenFormInputNilai);
+    //           setSelectedIdPeserta(row.original?.IdUserPelatihan);
+    //         }}
+    //         variant="outline"
+    //         className=" border border-purple-600"
+    //       >
+    //         <LucideListChecks className="h-4 w-4 text-purple-600" />
+    //       </Button>
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: "PreTest",
       header: ({ column }) => {

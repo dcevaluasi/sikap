@@ -203,8 +203,8 @@ const TableDataPelatihanUser: React.FC = () => {
               variant="outline"
               className="w-full border border-purple-600"
             >
-              <RiVerifiedBadgeFill className="h-4 w-4 text-purple-600" />{" "}
-              Download Sertifikat
+              <RiVerifiedBadgeFill className="h-4 w-4 text-purple-600" /> Lihat
+              Sertifikat
             </Button>
           </DialogSertifikat>
         </div>

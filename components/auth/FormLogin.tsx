@@ -253,9 +253,13 @@ function FormLogin() {
   // Forget password state management
   const [isForgetPassword, setIsForgetPassword] =
     React.useState<boolean>(false);
+  const [isForgetPhoneNumber, setIsForgetPhoneNumber] =
+    React.useState<boolean>(false);
   const [nik, setNik] = React.useState<string>("");
   const [passwordReset, setPasswordReset] = React.useState<string>("");
   const [tokenResetPassword, setTokenResetPassword] =
+    React.useState<string>("");
+  const [phoneNumberInformation, setPhoneNumberInformation] =
     React.useState<string>("");
   const handleGetTokenResetPassword = async (e: any) => {
     try {
@@ -265,15 +269,28 @@ function FormLogin() {
           nik: nik,
         }
       );
-      Toast.fire({
-        icon: "success",
-        title: "Akun ditemukan.",
-        text: `Berhasil, silahkan reset ulang password mu!`,
-      });
-      setTokenResetPassword(response.data.token);
-      setNoNumber("");
-      setPassword("");
+
       console.log({ response });
+
+      if (isForgetPhoneNumber) {
+        Toast.fire({
+          icon: "success",
+          title: "No Telpon ditemukan.",
+          text: `Berhasil, silahkan mendapatkan nomormu yang terdaftar, silahkan login!`,
+        });
+        setIsForgetPassword(false);
+        setPhoneNumberInformation(response.data.no_telpon);
+        setNoNumber(response.data.no_telpon);
+        setIsForgetPhoneNumber(false);
+      } else {
+        Toast.fire({
+          icon: "success",
+          title: "Akun ditemukan.",
+          text: `Berhasil, silahkan reset ulang password mu!`,
+        });
+        setTokenResetPassword(response.data.token);
+        setPassword("");
+      }
     } catch (error: any) {
       console.log({ error });
       const errorMsg = error.response.data.Pesan;
@@ -339,10 +356,13 @@ function FormLogin() {
       <Dialog open={isForgetPassword} onOpenChange={setIsForgetPassword}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Reset Password</DialogTitle>
+            <DialogTitle>
+              {isForgetPhoneNumber ? "Cek No Telpon/WA" : "Reset Password"}
+            </DialogTitle>
             <DialogDescription>
-              Harap masukkan NIK kamu sebelum melakukan reset, untuk mengetahui
-              NIK tersebut terdaftar atau tidak
+              {isForgetPhoneNumber
+                ? "Harap masukkan NIK kamu sebelum melihat no telpon/WA mu yang terdaftar pada ELAUT"
+                : "Harap masukkan NIK kamu sebelum melakukan reset, untuk mengetahui NIK tersebut terdaftar atau tidak"}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -487,6 +507,18 @@ function FormLogin() {
                       onChange={(e) => setNoNumber(e.target.value)}
                       required
                     />
+                    <span className="block text-gray-200 text-xs font-medium">
+                      Lupa no telpon/WA? klik{" "}
+                      <span
+                        onClick={(e) => {
+                          setIsForgetPhoneNumber(true);
+                          setIsForgetPassword(true);
+                        }}
+                        className="text-blue-500 cursor-pointer"
+                      >
+                        disini
+                      </span>
+                    </span>
                   </div>
                 </div>
                 <div className="flex flex-wrap -mx-3 mb-2">

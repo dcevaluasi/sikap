@@ -171,6 +171,7 @@ export type UserPelatihan = {
   MetodoPembayaran: string
   NilaiPraktek: number
   NilaiTeory: number
+  BuktiBayar?: string
   NoRegistrasi: string
   NoSertifikat: string
   PostTest: number

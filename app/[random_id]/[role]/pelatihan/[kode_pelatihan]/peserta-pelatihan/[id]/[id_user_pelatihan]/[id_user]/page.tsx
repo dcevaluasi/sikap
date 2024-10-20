@@ -79,13 +79,13 @@ import Cookies from "js-cookie";
 import { Progress } from "@/components/ui/progress";
 import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
-import { elautBaseUrl } from "@/constants/urls";
+import { elautBaseUrl, fileBaseUrl } from "@/constants/urls";
 
 import { FaBookOpen } from "react-icons/fa6";
 import axios from "axios";
 import { PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 import { generateFullNameBalai, generateTanggalPelatihan } from "@/utils/text";
-import { generateInstrukturName } from "@/lib/utils";
+import { formatToRupiah, generateInstrukturName } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import Toast from "@/components/toast";
 import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
@@ -211,6 +211,58 @@ function DetailPeserta() {
                 <tr className="border-b border-b-gray-200 w-full">
                   <td className="font-semibold p-4 w-[20%]">Golongan Darah</td>
                   <td className="p-4 w-2/3">{peserta!.GolonganDarah || "-"}</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {peserta != null && (
+          <div className="mt-4 md:mt-6 2xl:mt-7.5 w-full">
+            <div className="w-full border border-gray-200 rounded-xl">
+              <div className="bg-gray-100 p-4 w-full ">
+                <h2 className="font-bold font-calsans text-xl leading-none">
+                  Pembayaran Pelatihan
+                </h2>
+              </div>
+              <table className="w-full">
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Metode Pembayaran
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {" "}
+                    {pesertaPelatihan!.MetodoPembayaran}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Jumlah Pembayaran
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {formatToRupiah(parseInt(pesertaPelatihan!.TotalBayar))}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Bukti Pembayaran
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {" "}
+                    <Link
+                      target="_blank"
+                      className="text-blue-500"
+                      href={
+                        fileBaseUrl +
+                        "/bukti-bayar/" +
+                        pesertaPelatihan!.BuktiBayar
+                      }
+                    >
+                      {fileBaseUrl +
+                        "/bukti-bayar/" +
+                        pesertaPelatihan!.BuktiBayar}
+                    </Link>{" "}
+                  </td>
                 </tr>
               </table>
             </div>

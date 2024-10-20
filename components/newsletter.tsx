@@ -53,6 +53,7 @@ export default function Newsletter() {
           title: "An unknown error occurred",
         });
       }
+      setNoRegistrasi("");
       console.error({ error });
     }
   };
@@ -268,7 +269,7 @@ export default function Newsletter() {
             <div className="relative flex flex-col lg:flex-row justify-between items-center">
               {/* CTA content */}
               <div className="text-center lg:text-left lg:max-w-xl">
-                <h3 className="h3 text-white mb-2">
+                <h3 className="h3 text-white mb-2 leading-none md:leading-normal">
                   Cek validitas sertifikatmu sekarang
                 </h3>
                 <p className="text-gray-300 text-lg mb-6">

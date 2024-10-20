@@ -353,7 +353,7 @@ export default function Header() {
                 </NavDropDown>
                 <NavLinkDefault
                   href="/lembaga/dpkakp"
-                  name="Lembaga AKP"
+                  name="Dewan Penguji dan Komite Approval"
                   top={top}
                 />
                 <NavLinkDefault

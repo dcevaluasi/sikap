@@ -61,6 +61,9 @@ function Page() {
   const countdownEndTimeRef = useRef<number>(Date.now() + 900000);
   const router = useRouter();
 
+  const TIMER_KEY_POST = "countdown_end_time_post";
+  const DEFAULT_TIME_LIMIT = 900000; // 15 minutes
+
   const handleAnswerChange = (idSoal: string, jawabanPengguna: string) => {
     setSelectedAnswers((prevAnswers) => {
       const updatedAnswers = prevAnswers.filter(
@@ -113,14 +116,69 @@ function Page() {
           },
         }
       );
-      setSoalUser(response.data);
+
+      // Acak urutan soal sebelum menetapkannya ke setSoalUser
+      const shuffledSoal = response.data.Soal.sort(() => Math.random() - 0.5);
+      setSoalUser({ ...response.data, Soal: shuffledSoal });
     } catch (e) {
       console.log("ERROR FETCH SOAL USER : ", e);
     }
   };
 
+  const [endTime, setEndTime] = useState<number | null>(null);
+
   useEffect(() => {
     handleFetchingSoalUsers();
+
+    // Check if there's an existing end time in localStorage
+    const savedEndTime = localStorage.getItem(TIMER_KEY_POST);
+    const currentTime = Date.now();
+
+    if (savedEndTime) {
+      const parsedEndTime = parseInt(savedEndTime, 10);
+      if (parsedEndTime > currentTime) {
+        // Continue with the stored end time
+        setEndTime(parsedEndTime);
+      } else {
+        // Timer has expired, start a new countdown
+        const newEndTime = currentTime + DEFAULT_TIME_LIMIT;
+        setEndTime(newEndTime);
+        localStorage.setItem(TIMER_KEY_POST, newEndTime.toString());
+      }
+    } else {
+      // No saved timer, start a new countdown
+      const newEndTime = currentTime + DEFAULT_TIME_LIMIT;
+      setEndTime(newEndTime);
+      localStorage.setItem(TIMER_KEY_POST, newEndTime.toString());
+    }
+
+    // Add event listener to warn user if they try to refresh or leave the page
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = ""; // Standard message
+      return ""; // Legacy browser support
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    // Disable right-click and copy actions
+    const handleContextMenu = (event: MouseEvent) => {
+      event.preventDefault();
+    };
+
+    const handleCopy = (event: ClipboardEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("contextmenu", handleContextMenu);
+    window.addEventListener("copy", handleCopy);
+
+    // Clean up the event listeners
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("contextmenu", handleContextMenu);
+      window.removeEventListener("copy", handleCopy);
+    };
   }, []);
 
   return (
@@ -128,7 +186,7 @@ function Page() {
       <div className="flex flex-col max-w-6xl w-full h-fit mx-auto items-center justify-center gap-10 relative">
         <div className="w-fit flex gap-2 justify-end text-2xl font-medium text-white items-center absolute right-0 top-0">
           <TbClock />
-          <Countdown date={countdownEndTimeRef.current} />
+          {endTime && <Countdown date={endTime} />}
         </div>
         <div className="rounded-md h-[400px] w-full px-6 pt-10 pb-5">
           <h2 className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 text-4xl">
@@ -163,7 +221,7 @@ function Page() {
               )}
           </div>
           <div className="flex w-full items-center justify-end">
-            {soalUser && soalUser.Soal.length === countSoal ? (
+            {soalUser && soalUser.Soal.length === countSoal - 1 ? (
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button

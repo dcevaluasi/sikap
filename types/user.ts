@@ -35,6 +35,7 @@ export type UserPelatihan = {
   CreatedAt: string
   IdUserPelatihan: number
   IdPelatihan: number
+  FileSertifikat?: string
   IdUsers: number
   IsActice: string
   IsKeterangan: string

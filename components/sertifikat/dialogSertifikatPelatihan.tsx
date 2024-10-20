@@ -201,8 +201,14 @@ const SertifikatPage1 = React.forwardRef(
               </div>
 
               <div className="flex flex-col w-full items-center justify-center -mt-3">
-                <h1 className="font-bosBold text-xl">TELAH LULUS</h1>
-                <h3 className="font-bosBold text-base italic">HAS PASSED</h3>
+                <h1 className="font-bosBold text-xl">
+                  {userPelatihan!.PostTest < 65
+                    ? "TELAH MENGIKUTI"
+                    : "TELAH LULUS"}
+                </h1>
+                <h3 className="font-bosBold text-base italic">
+                  {userPelatihan!.PostTest < 65 ? "HAS FOLLOWED" : "HAS PASSED"}
+                </h3>
               </div>
 
               <div className="flex w-full flex-col items-start -mt-2 text-center">
@@ -460,8 +466,10 @@ export function DialogSertifikatPelatihan({
   const componentRef = useRef(null);
   const [show, setShow] = React.useState<boolean>(false);
   const router = useRouter();
+  const [isUploading, setIsUploading] = React.useState<boolean>(false);
 
   const uploadPdf = async () => {
+    setIsUploading(true);
     const html2pdf = (await import("html2pdf.js")).default;
 
     const element = componentRef.current;
@@ -513,10 +521,20 @@ export function DialogSertifikatPelatihan({
             });
             router.refresh();
           } else {
+            Toast.fire({
+              icon: "error",
+              title: `Sertifikat gagal diupload ke server!`,
+            });
             console.error("Failed to upload the file");
           }
+          setIsUploading(false);
         } catch (error) {
+          Toast.fire({
+            icon: "error",
+            title: `Sertifikat gagal diupload ke server! Terdapat masalah di server!`,
+          });
           console.error("Error uploading the file:", error);
+          setIsUploading(false);
         }
       });
   };
@@ -604,44 +622,54 @@ export function DialogSertifikatPelatihan({
               isPrinting={isPrinting}
             />
           </div>
-          <DialogFooter>
-            <Button
-              type="submit"
-              className="flex items-center gap-1 bg-blue-500 hover:bg-blue-500"
-            >
-              <TbLink />
-              Salin Tautan
-            </Button>
-            <Button
-              type="submit"
-              onClick={(e) => handlePrint()}
-              className="flex items-center gap-1 bg-gray-700 hover:bg-gray-700"
-            >
-              <BsFillPrinterFill />
-              Print Sertifikat
-            </Button>
-            <Link
-              href={`https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/sertifikat-ttde/${
-                userPelatihan!.FileSertifikat
-              }`}
-              type="submit"
-              className="bg-neutral-900 text-neutral-50 shadow hover:bg-neutral-900/90 h-9 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50"
-            >
-              <TbCloudDownload />
-              Download
-            </Link>
-            {usePathname().includes("lemdiklat") &&
-              userPelatihan!.FileSertifikat == "" && (
-                <Button
-                  onClick={(e) => handleUploadPDF()}
-                  type="submit"
-                  className="flex items-center gap-1"
-                >
-                  <TbCloudUpload />
-                  Upload
-                </Button>
-              )}
-          </DialogFooter>
+          {userPelatihan != null && (
+            <DialogFooter>
+              <Button
+                type="submit"
+                className="flex items-center gap-1 bg-blue-500 hover:bg-blue-500"
+              >
+                <TbLink />
+                Salin Tautan
+              </Button>
+              <Button
+                type="submit"
+                onClick={(e) => handlePrint()}
+                className="flex items-center gap-1 bg-gray-700 hover:bg-gray-700"
+              >
+                <BsFillPrinterFill />
+                Print Sertifikat
+              </Button>
+              <Link
+                href={`https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/sertifikat-ttde/${
+                  userPelatihan!.FileSertifikat
+                }`}
+                target="_blank"
+                type="submit"
+                className="bg-neutral-900 text-neutral-50 shadow hover:bg-neutral-900/90 h-9 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50"
+              >
+                <TbCloudDownload />
+                Download
+              </Link>
+              {usePathname().includes("lemdiklat") &&
+                userPelatihan!.FileSertifikat == "" && (
+                  <Button
+                    onClick={(e) => handleUploadPDF()}
+                    type="submit"
+                    disabled={isUploading}
+                    className="flex items-center gap-1"
+                  >
+                    {isUploading ? (
+                      <>Uploading...</>
+                    ) : (
+                      <>
+                        <TbCloudUpload />
+                        Upload
+                      </>
+                    )}
+                  </Button>
+                )}
+            </DialogFooter>
+          )}
         </DialogContent>
       </Dialog>
 

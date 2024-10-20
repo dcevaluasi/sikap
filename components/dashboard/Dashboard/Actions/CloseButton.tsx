@@ -44,7 +44,7 @@ const CloseButton: React.FC<CloseButtonProps> = ({
 
   const handleClosePelatihan = async (id: string, status: string) => {
     const formData = new FormData();
-    formData.append("StatusApproval", status);
+    formData.append("StatusApproval", selectedStatus);
     try {
       const response = await axios.put(
         `${elautBaseUrl}/lemdik/UpdatePelatihan?id=${id}`,

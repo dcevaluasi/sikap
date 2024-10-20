@@ -95,11 +95,11 @@ function FormCekSertifikat() {
           <div className="pt-32  md:pt-40 ">
             <div className="w-full mx-auto text-center pb-0 md:pb-0">
               <h1 className="font-semibold text-4xl leading-[110%] md:text-4xl text-gray-200">
-                <span className="font-calsans text-[3.4rem] md:text-[3.7rem]">
+                <span className="font-calsans text-[3rem] md:text-[3.7rem]">
                   Cek Validitas
                 </span>{" "}
                 <br />
-                <span className="z-0 bg-clip-text text-[4.2rem] w-[600px] md:text-[3.7rem] leading-[110%]  text-transparent bg-gradient-to-r font-calsans from-blue-500  to-teal-400">
+                <span className="z-0 bg-clip-text text-[2.8rem] w-[600px] md:text-[3.7rem] leading-[110%]  text-transparent bg-gradient-to-r font-calsans from-blue-500  to-teal-400">
                   Sertifikat Pelatihan
                 </span>{" "}
               </h1>
