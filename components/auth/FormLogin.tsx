@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { elautBaseUrl } from "@/constants/urls";
+import { elautBaseUrl, manningAgentDevUrl } from "@/constants/urls";
 
 function FormLogin() {
   /* state variable to store basic user information to register */
@@ -161,7 +161,7 @@ function FormLogin() {
         if (captcha) {
           try {
             const response: AxiosResponse = await axios.post(
-              `${baseUrl}/manningAgent/loginManningAgent`,
+              `${manningAgentDevUrl}/manningAgent/loginManningAgent`,
               JSON.stringify({
                 email: email,
                 password: passwordManningAgent,
@@ -643,15 +643,26 @@ function FormLogin() {
                     >
                       Password <span className="text-red-600">*</span>
                     </label>
-                    <input
-                      id="password"
-                      type="password"
-                      className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
-                      placeholder="Masukkan password"
-                      required
-                      value={passwordManningAgent}
-                      onChange={(e) => setPasswordManningAgent(e.target.value)}
-                    />
+                    <span className="relative w-full h-fit">
+                      <input
+                        id="password"
+                        type={isShowPassword ? "text" : "password"}
+                        className="form-input w-full bg-transparent placeholder:text-gray-200 border-gray-400 focus:border-gray-200  active:border-gray-200 text-gray-200"
+                        placeholder="Masukkan password"
+                        required
+                        value={passwordManningAgent}
+                        onChange={(e) =>
+                          setPasswordManningAgent(e.target.value)
+                        }
+                      />
+                      <span onClick={(e) => setIsShowPassword(!isShowPassword)}>
+                        {isShowPassword ? (
+                          <HiOutlineEyeOff className="text-gray-200 my-auto top-0 mr-5 absolute right-0 text-xl cursor-pointer" />
+                        ) : (
+                          <HiOutlineEye className="text-gray-200 my-auto top-0 mr-5 absolute right-0 text-xl cursor-pointer" />
+                        )}
+                      </span>
+                    </span>
                   </div>
                 </div>
                 {passwordManningAgent != "" && (

@@ -198,7 +198,7 @@ function page() {
         </div>
       ) : (
         data?.map((pelatihan, index) => (
-          <div className="flex gap-2 max-w-7xl mx-auto">
+          <div className="flex gap-2 max-w-7xl mx-auto" key={index}>
             <div className="w-full pb-5 md:pb-8 flex flex-col ">
               <h1 className="h2 text-4xl md:text-[3rem] mb-2 font-calsans leading-[100%] max-w-3xl">
                 {pelatihan.NamaPelatihan}

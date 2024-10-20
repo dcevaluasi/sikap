@@ -41,6 +41,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Slide } from "react-awesome-reveal";
 import Footer from "../ui/footer";
 import { HiMiniUserGroup } from "react-icons/hi2";
+import { manningAgentDevUrl } from "@/constants/urls";
 
 function FormRegistrasi() {
   const router = useRouter();
@@ -255,7 +256,7 @@ function FormRegistrasi() {
         if (captcha) {
           try {
             const response: AxiosResponse = await axios.post(
-              `${baseUrl}/manningAgent/registerManningAgent`,
+              `${manningAgentDevUrl}/manningAgent/registerManningAgent`,
               JSON.stringify({
                 email: emailManningAgent,
                 password: passwordManningAgent,
@@ -278,7 +279,7 @@ function FormRegistrasi() {
               icon: "success",
               title: `Berhasil melakukan registrasi akun, silahkan untuk login terlebih dahulu!`,
             });
-            router.push("/login/manning-agent");
+            router.push("/login");
             clearFormManningAgent();
           } catch (error: any) {
             console.error({ error });
@@ -843,46 +844,57 @@ function FormRegistrasi() {
                               setPasswordManningAgent(e.target.value)
                             }
                           />
-                          {isInputError && (
+                          {isInputError ? (
                             <span className="text-[#FF0000] font-medium">
                               *Masukkan password!
                             </span>
+                          ) : (
+                            <p className="text-gray-300 leading-[100%] text-xs font-medium mt-2">
+                              *Password minimal 8 karakter, harus terdiri dari
+                              satu angka, huruf kapital dan kecil, serta
+                              karakter
+                            </p>
                           )}
                         </div>
                       </div>
                     </div>
 
-                    <div
-                      className="flex flex-wrap w-full mb-1"
-                      style={{ width: "100% !important" }}
-                    >
+                    {passwordManningAgent != "" && (
                       <div
-                        className="w-full"
+                        className="flex flex-wrap w-full mb-1"
                         style={{ width: "100% !important" }}
                       >
-                        <label
-                          className="block text-gray-200 text-sm font-medium mb-1"
-                          htmlFor="password"
-                        >
-                          Verify if you are not a robot{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <ReCAPTCHA
+                        <div
+                          className="w-full"
                           style={{ width: "100% !important" }}
-                          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-                          className=" w-[600px] font-inter text-sm"
-                          onChange={setCaptcha}
-                        />
+                        >
+                          <label
+                            className="block text-gray-200 text-sm font-medium mb-1"
+                            htmlFor="password"
+                          >
+                            Verify if you are not a robot{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <ReCAPTCHA
+                            style={{ width: "100% !important" }}
+                            sitekey={
+                              process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!
+                            }
+                            className=" w-[600px] font-inter text-sm"
+                            onChange={setCaptcha}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                     <div className="flex flex-wrap -mx-3 mt-3">
                       <div className="w-full px-3 flex flex-col gap-2">
-                        <button
+                        <Button
                           type="submit"
-                          className="btn text-white bg-blue-500 hover:bg-blue-600 w-full"
+                          disabled={captcha == null}
+                          className="btn text-white bg-blue-500 py-5 hover:bg-blue-600 bg-opacity-100 w-full"
                         >
                           Registrasi
-                        </button>
+                        </Button>
                       </div>
                     </div>
                     <div className="text-sm text-gray-200 text-center mt-3">
@@ -912,7 +924,7 @@ function FormRegistrasi() {
               <div className="text-gray-200 text-center mt-6">
                 Sudah punya akun sebelumnya?{" "}
                 <Link
-                  href={role == "Mandiri" ? "/login" : "/login/manning-agent"}
+                  href={"/login"}
                   className="text-blue-500 hover:underline transition duration-150 ease-in-out"
                 >
                   Log In

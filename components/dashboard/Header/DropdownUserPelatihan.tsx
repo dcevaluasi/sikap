@@ -48,6 +48,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
   const handleLogOut = async () => {
     Cookies.remove("XSRF081");
     Cookies.remove("XSRF082");
+    Cookies.remove("isManningAgent");
     Toast.fire({
       icon: "success",
       title: `Berhasil logout dari dashboard!`,
