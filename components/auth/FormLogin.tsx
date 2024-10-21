@@ -161,7 +161,7 @@ function FormLogin() {
         if (captcha) {
           try {
             const response: AxiosResponse = await axios.post(
-              `${manningAgentDevUrl}/manningAgent/loginManningAgent`,
+              `${elautBaseUrl}/manningAgent/loginManningAgent`,
               JSON.stringify({
                 email: email,
                 password: passwordManningAgent,
@@ -184,7 +184,7 @@ function FormLogin() {
                 title: "Berhasil login.",
                 text: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
               });
-              router.push(Cookies.get("XSRF085")!);
+              router.push("/dashboard");
             } else {
               Toast.fire({
                 icon: "success",
@@ -202,7 +202,7 @@ function FormLogin() {
                   const path = Cookies.get("LastPath");
                   router.push(path!);
                 } else {
-                  router.push("layanan/program/akp");
+                  router.push("/dashboard");
                 }
               }
             }

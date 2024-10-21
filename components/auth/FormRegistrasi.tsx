@@ -41,7 +41,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { Slide } from "react-awesome-reveal";
 import Footer from "../ui/footer";
 import { HiMiniUserGroup } from "react-icons/hi2";
-import { manningAgentDevUrl } from "@/constants/urls";
+import { elautBaseUrl, manningAgentDevUrl } from "@/constants/urls";
 
 function FormRegistrasi() {
   const router = useRouter();
@@ -256,7 +256,7 @@ function FormRegistrasi() {
         if (captcha) {
           try {
             const response: AxiosResponse = await axios.post(
-              `${manningAgentDevUrl}/manningAgent/registerManningAgent`,
+              `${elautBaseUrl}/manningAgent/registerManningAgent`,
               JSON.stringify({
                 email: emailManningAgent,
                 password: passwordManningAgent,

@@ -7,12 +7,18 @@ import Toast from "@/components/toast";
 import { User } from "@/types/user";
 import axios, { AxiosResponse } from "axios";
 import { HiMiniChevronDown } from "react-icons/hi2";
+import { ManningAgent } from "@/types/product";
+import { elautBaseUrl } from "@/constants/urls";
 
 const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
   const token = Cookies.get("XSRF081");
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
+  const isManningAgent = Cookies.get("isManningAgent");
+
   const [userDetail, setUserDetail] = React.useState<User | null>(null);
+  const [manningAgentDetail, setManningAgentDetail] =
+    React.useState<ManningAgent | null>(null);
 
   const handleFetchingUserDetail = async () => {
     try {
@@ -32,9 +38,31 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
     }
   };
 
+  const handleFetchingManningAgentDetail = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${elautBaseUrl}/manningAgent/getManningAgentById`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log({ response });
+      setManningAgentDetail(response.data);
+    } catch (error) {
+      console.error("Error posting training data:", error);
+      throw error;
+    }
+  };
+
   React.useEffect(() => {
     setTimeout(() => {
-      handleFetchingUserDetail();
+      if (isManningAgent == "true") {
+        handleFetchingManningAgentDetail();
+      } else {
+        handleFetchingUserDetail();
+      }
     }, 1000);
   }, []);
 
@@ -48,6 +76,7 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
   const handleLogOut = async () => {
     Cookies.remove("XSRF081");
     Cookies.remove("XSRF082");
+    Cookies.remove("XSRF083");
     Cookies.remove("isManningAgent");
     Toast.fire({
       icon: "success",

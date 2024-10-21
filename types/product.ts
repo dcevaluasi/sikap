@@ -249,3 +249,21 @@ export type BalaiPelatihanBank = {
   nama_bank: string;
   nama_virtual_account_bank: string
 }
+
+export type ManningAgent = {
+  IdManningAgent: number
+  NamaManingAgent: string;
+  NoTelpon: number;
+  NamaPenanggungJawab: string;
+  Email: string;
+  Password: string;
+  Alamat: string;
+  Status: string;
+  CreateAt: string;
+  UpdateAt: string;
+  ManingAgentPelatihan: ManningAgentPelatihan[]
+}
+
+export type ManningAgentPelatihan = {
+
+}

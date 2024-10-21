@@ -177,6 +177,7 @@ function UserTrainingService({ user }: { user: User | null }) {
     React.useState<string>("");
 
   const [isOpenGuideline, setIsOpenGuideline] = React.useState<boolean>(true);
+  const isManningAgent = Cookies.get("isManningAgent");
 
   console.log(user?.Pelatihan);
 
@@ -198,7 +199,24 @@ function UserTrainingService({ user }: { user: User | null }) {
           <div className="pt-12 md:pt-20">
             {/* Section header */}
 
-            {userDetail?.Pelatihan!.length != 0 ? (
+            {isManningAgent == "true" ? (
+              <>
+                {!isExpand && (
+                  <div className="max-w-3xl mx-auto text-center flex items-center justify-center flex-col pb-5 md:pb-8">
+                    <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                      Pelatihan Masyarakat, Teknis, <br /> dan Kepelatuan yang
+                      Diikuti
+                    </h1>
+                    <p className="text-base text-gray-600">
+                      Jelajahi layanan serta informasi yang ada pada Balai
+                      Pelatihan Kelautan dan Perikanan dan jadilah SDM kompeten
+                      bidang kelautan dan perikanan!
+                    </p>
+                    <div className="rounded-full bg-gray-300 h-1 w-20 mt-3"></div>
+                  </div>
+                )}
+              </>
+            ) : userDetail?.Pelatihan!.length != 0 ? (
               <>
                 {!isExpand && (
                   <div className="max-w-3xl mx-auto text-center flex items-center justify-center flex-col pb-5 md:pb-8">

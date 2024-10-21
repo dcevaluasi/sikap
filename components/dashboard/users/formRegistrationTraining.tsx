@@ -110,6 +110,8 @@ function FormRegistrationTraining({
     }
   };
 
+  const [jumlahPeserta, setJumlahPeserta] = React.useState<number>(0);
+
   const [balaiPelatihanBank, setBalaiPelatihanBank] = React.useState<
     BalaiPelatihanBank[]
   >([]);
@@ -177,6 +179,64 @@ function FormRegistrationTraining({
     }
   };
 
+  const handleRegistrationTrainingForManningAgent = async (e: any) => {
+    e.preventDefault();
+    const totalBayarPeserta =
+      selectedKonsumsi != null && selectedPenginapan != null
+        ? (parseInt(harga) +
+            selectedKonsumsi.Harga +
+            selectedPenginapan.Harga) *
+          jumlahPeserta
+        : selectedKonsumsi != null
+        ? (parseInt(harga) + selectedKonsumsi.Harga) * jumlahPeserta
+        : selectedPenginapan != null
+        ? (parseInt(harga) + selectedPenginapan.Harga) * jumlahPeserta
+        : pelatihan?.HargaPelatihan * jumlahPeserta;
+
+    if (Cookies.get("isManningAgent")) {
+      setIsOpenFormPeserta(!isOpenFormPeserta);
+    } else {
+      try {
+        const formData = new FormData();
+        formData.append("IdPelatihan", id.toString());
+        formData.append("TotalBayar", totalBayarPeserta.toString());
+        formData.append("NamaPelatihan", pelatihan?.NamaPelatihan || "");
+        formData.append("BidangPelatihan", pelatihan?.BidangPelatihan || "");
+        formData.append("DetailPelatihan", pelatihan?.DetailPelatihan || "");
+        formData.append("StatusAproval", pelatihan?.StatusApproval || "");
+        formData.append("JumlahPeserta", jumlahPeserta.toString());
+        formData.append("MetodePembayaran", metodePembayaran || "");
+        if (fileBuktiBayar != null) {
+          formData.append("bukti_bayar", fileBuktiBayar);
+        }
+        const response: AxiosResponse = await axios.post(
+          `${baseUrl}/users/addPelatihan`,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        Toast.fire({
+          icon: "success",
+          title: `Berhasil melakukan pendaftaran, tunggu kabar selanjutnya sobat ELAUT!`,
+        });
+        console.log({ response });
+        setIsOpenFormPembayaran(!isOpenFormPembayaran);
+        router.push("/dashboard");
+      } catch (error) {
+        console.error({ error });
+        Toast.fire({
+          icon: "error",
+          title: "Anda telah mendaftar pelatihan ini sebelumnya!",
+        });
+      }
+    }
+  };
+
   const [indexFormTab, setIndexFormTab] = React.useState(0);
 
   const [selectedPenginapan, setSelectedPenginapan] =
@@ -206,52 +266,6 @@ function FormRegistrationTraining({
 
   const isManningAgent = Cookies.get("isManningAgent");
   console.log({ isManningAgent });
-
-  const FormPesertaPelatihan = () => {
-    return (
-      <form
-        autoComplete="off"
-        className={`${
-          indexFormTab == 1 && Cookies.get("isManningAgent")
-            ? "block"
-            : "hidden"
-        }`}
-      >
-        {/* Penginapan Section */}
-        <div className="flex flex-wrap -mx-3 mb-1">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="email"
-            >
-              Data By Name By Address <span>*</span>
-            </label>
-            <div className="flex gap-1">
-              <input
-                type="file"
-                className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                required
-                onChange={handleFileChange}
-              />
-              <Link
-                target="_blank"
-                href={
-                  "https://docs.google.com/spreadsheets/d/1KlEBRcgXLZK6NCL0r4nglKa6XazHgUH7fqvHlrIHmNI/edit?usp=sharing"
-                }
-                className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
-              >
-                <PiMicrosoftExcelLogoFill />
-                Unduh Template
-              </Link>
-            </div>
-            <p className="text-gray-700 text-xs mt-1">
-              *Download terlebih dahulu template lalu isi file excel dan upload
-            </p>
-          </div>
-        </div>
-      </form>
-    );
-  };
 
   const FormFasilitas = () => {
     return (
@@ -300,7 +314,7 @@ function FormRegistrationTraining({
                     </div>
                     <div className="space-y-1 leading-none">
                       <label>
-                        {item.NamaSarpras} ({formatToRupiah(item.Harga)}) /hari
+                        {item.NamaSarpras} ({formatToRupiah(item.Harga)})
                       </label>
                       <p className="text-xs text-gray-600">{item.Deskripsi}</p>
                     </div>
@@ -351,7 +365,7 @@ function FormRegistrationTraining({
                     </div>
                     <div className="space-y-1 leading-none">
                       <label>
-                        {item.NamaSarpras} ({formatToRupiah(item.Harga)}) / hari
+                        {item.NamaSarpras} ({formatToRupiah(item.Harga)})
                       </label>
                       <p className="text-xs text-gray-600">{item.Deskripsi}</p>
                     </div>
@@ -398,12 +412,16 @@ function FormRegistrationTraining({
                   </p>
                   <p className="text-left">{pelatihan.NamaPelatihan}</p>
                   <p className="font-medium text-lg font-calsans">
-                    {formatToRupiah(pelatihan.HargaPelatihan)}
+                    {formatToRupiah(pelatihan.HargaPelatihan)} x{" "}
+                    {isManningAgent == "true" ? jumlahPeserta : 1} Orang
                   </p>
                 </div>
 
                 <p className="font-medium text-2xl w-fit font-calsans">
-                  {formatToRupiah(pelatihan.HargaPelatihan)}
+                  {formatToRupiah(
+                    pelatihan.HargaPelatihan *
+                      (isManningAgent == "true" ? jumlahPeserta : 1)
+                  )}
                 </p>
               </SelectTrigger>
             </Select>
@@ -424,6 +442,9 @@ function FormRegistrationTraining({
                         pelatihan?.TanggalBerakhirPelatihan
                       ) - 1}{" "}
                       Hari{" "}
+                      {isManningAgent == "true"
+                        ? " X " + jumlahPeserta + " Orang"
+                        : ""}
                     </p>
                   </div>
 
@@ -434,7 +455,8 @@ function FormRegistrationTraining({
                           pelatihan?.TanggalMulaiPelatihan,
                           pelatihan?.TanggalBerakhirPelatihan
                         ) -
-                          1)
+                          1) *
+                        (isManningAgent == "true" ? jumlahPeserta : 1)
                     )}
                   </p>
                 </SelectTrigger>
@@ -457,6 +479,9 @@ function FormRegistrationTraining({
                         pelatihan?.TanggalBerakhirPelatihan
                       )}{" "}
                       Hari{" "}
+                      {isManningAgent == "true"
+                        ? " X " + jumlahPeserta + " Orang"
+                        : ""}
                     </p>
                   </div>
 
@@ -466,7 +491,8 @@ function FormRegistrationTraining({
                         hitungHariPelatihan(
                           pelatihan?.TanggalMulaiPelatihan,
                           pelatihan?.TanggalBerakhirPelatihan
-                        )
+                        ) *
+                        (isManningAgent == "true" ? jumlahPeserta : 1)
                     )}
                   </p>
                 </SelectTrigger>
@@ -479,7 +505,7 @@ function FormRegistrationTraining({
               <p className="font-bold text-blue-500 text-3xl">
                 {selectedKonsumsi != null && selectedPenginapan != null
                   ? formatToRupiah(
-                      parseInt(harga) +
+                      (parseInt(harga) +
                         selectedKonsumsi.Harga *
                           hitungHariPelatihan(
                             pelatihan.TanggalMulaiPelatihan,
@@ -490,28 +516,34 @@ function FormRegistrationTraining({
                             pelatihan.TanggalMulaiPelatihan,
                             pelatihan.TanggalBerakhirPelatihan
                           ) -
-                            1)
+                            1)) *
+                        (isManningAgent == "true" ? jumlahPeserta : 1)
                     )
                   : selectedKonsumsi != null
                   ? formatToRupiah(
-                      parseInt(harga) +
+                      (parseInt(harga) +
                         selectedKonsumsi.Harga *
                           hitungHariPelatihan(
                             pelatihan.TanggalMulaiPelatihan,
                             pelatihan.TanggalBerakhirPelatihan
-                          )
+                          )) *
+                        (isManningAgent == "true" ? jumlahPeserta : 1)
                     )
                   : selectedPenginapan != null
                   ? formatToRupiah(
-                      parseInt(harga) +
+                      (parseInt(harga) +
                         selectedPenginapan.Harga *
                           (hitungHariPelatihan(
                             pelatihan.TanggalMulaiPelatihan,
                             pelatihan.TanggalBerakhirPelatihan
                           ) -
-                            1)
+                            1)) *
+                        (isManningAgent == "true" ? jumlahPeserta : 1)
                     )
-                  : formatToRupiah(parseInt(harga))}
+                  : formatToRupiah(
+                      parseInt(harga) *
+                        (isManningAgent == "true" ? jumlahPeserta : 1)
+                    )}
               </p>
             </div>
             <div className="flex items-center space-x-2 py-3 mt-5">
@@ -622,7 +654,49 @@ function FormRegistrationTraining({
               />
             </div>
             <FormFasilitas />
-            {isManningAgent == "true" && <FormPesertaPelatihan />}
+            {isManningAgent == "true" && (
+              <form
+                autoComplete="off"
+                className={`${
+                  indexFormTab == 1 && Cookies.get("isManningAgent")
+                    ? "block"
+                    : "hidden"
+                }`}
+              >
+                {/* Penginapan Section */}
+                <div className="flex flex-wrap -mx-3 mb-1">
+                  <div className="w-full px-3">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="email"
+                    >
+                      Masukkan Jumlah Peserta Pelatihan <span>*</span>
+                    </label>
+                    <div className="flex gap-1">
+                      <input
+                        type="number"
+                        className="text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                        required
+                        min={0}
+                        max={1000}
+                        onChange={(e) =>
+                          setJumlahPeserta(parseInt(e.target.value))
+                        }
+                        value={jumlahPeserta}
+                      />
+                    </div>
+                    <p className="text-gray-700 text-xs mt-1">
+                      *Harap isi jumlah peserta pelatihan dalam angka yang akan
+                      kamu daftarkan pada pelatihan ini, jumlah yang dimasukkan
+                      harus sudah sesuai dan tidak ada pengulangan jika sudah
+                      berhasil mendaftar dalam penginputannya. Untuk data by
+                      name by address peserta dapat diimport setelah sukses
+                      melakukan pembayaran pada menu dashboard-mu
+                    </p>
+                  </div>
+                </div>
+              </form>
+            )}
             <FormPembayaran />
             <div className="flex  -mx-3 mt-5 gap-2 px-3">
               <div className={`w-full ${indexFormTab == 0 && "hidden"}`}>
@@ -640,11 +714,15 @@ function FormRegistrationTraining({
 
               {isManningAgent == "true" ? (
                 <div
-                  className={`w-full ${indexFormTab == 2 ? "hidden" : "block"}`}
+                  className={`w-full ${
+                    indexFormTab == 2 ? "hidden" : "block"
+                  } ${
+                    indexFormTab == 1 && jumlahPeserta == 0 ? "hidden" : "block"
+                  }`}
                 >
                   <button
                     type="submit"
-                    className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                    className={`btn text-white bg-blue-600 hover:bg-blue-700 w-full`}
                     onClick={(e) => {
                       setIndexFormTab(indexFormTab + 1);
                       scrollToTop();
@@ -844,48 +922,49 @@ function FormRegistrationTraining({
                               Balai Pelatihan
                             </p>
                           ) : (
-                            <p className="text-gray-700 text-xs mt-1">
-                              *Proses pembayaan perlu dilakukan, harap memilih
-                              metode pembayaran yang sesuai dengan keadaanmu dan
-                              kirimkan pada no rekening berikut
-                              <Link
-                                href={
-                                  "https://drive.google.com/file/d/1_LXUE02cNIIuMeg6ejMcENVAA3JJH7TC/view?usp=sharing"
-                                }
-                                target="_blank"
-                                className="ml-1 text-blue-500 underline"
-                              >
-                                0918039118320 (
-                                {pelatihan?.PenyelenggaraPelatihan})
-                              </Link>
-                              . Untuk pembayaran dengan metode bukti pembayaran
-                              akan tertolak dalam proses verifikasi jika
-                              dinyatakan tidak benar
+                            <p className="text-gray-700 text-xs -mt-2">
+                              *Pilihan metode ini masih dalam tahap
+                              pengembangan, harap pantau terus E-LAUT
                             </p>
                           )}
                         </>
                         <AlertDialogFooter>
                           <div className="flex flex-col gap-1 w-full">
-                            {metodePembayaran == "Transfer Bank" && (
-                              <Button
-                                onClick={(e) =>
-                                  handleRegistrationTrainingForPeople(e)
-                                }
-                                disabled={fileBuktiBayar == null}
-                                className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
-                              >
-                                Daftar
-                              </Button>
+                            {metodePembayaran == "Transfer Bank" ? (
+                              isManningAgent == "true" ? (
+                                <Button
+                                  onClick={(e) =>
+                                    handleRegistrationTrainingForManningAgent(e)
+                                  }
+                                  disabled={fileBuktiBayar == null}
+                                  className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                                >
+                                  Daftar
+                                </Button>
+                              ) : (
+                                <Button
+                                  onClick={(e) =>
+                                    handleRegistrationTrainingForPeople(e)
+                                  }
+                                  disabled={fileBuktiBayar == null}
+                                  className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                                >
+                                  Daftar
+                                </Button>
+                              )
+                            ) : (
+                              <></>
                             )}
                             {metodePembayaran == "Virtual Account" && (
-                              <Button
-                                onClick={(e) =>
-                                  handleRegistrationTrainingForPeople(e)
-                                }
-                                className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
-                              >
-                                Daftar
-                              </Button>
+                              // <Button
+                              //   onClick={(e) =>
+                              //     handleRegistrationTrainingForPeople(e)
+                              //   }
+                              //   className="btn text-white bg-blue-600 hover:bg-blue-700 w-full"
+                              // >
+                              //   Daftar
+                              // </Button>
+                              <></>
                             )}
                             <Button
                               type="button"
