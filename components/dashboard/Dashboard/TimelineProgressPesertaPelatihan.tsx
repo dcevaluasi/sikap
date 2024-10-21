@@ -812,159 +812,167 @@ export const TimelineProgressPesertaPelatihan = ({
                           pelatihan dengan cermat dan semangat untuk bisa
                           meningkatkan pengetahuan mu pada post-test nanti!
                         </span>
-                        <AlertDialog>
-                          <AlertDialogTrigger className="w-full">
-                            <Button
-                              type="button"
-                              onClick={() =>
-                                setCodeAccess(userDetail!.CodeAksess!)
-                              }
-                              variant="outline"
-                              className="w-full border mt-3 flex gap-2 border-gray-600 text-left capitalize items-center justify-center"
-                            >
-                              <IoReloadCircle className="h-4 w-4 text-gray-600" />{" "}
-                              <span className="text-sm"> Lakukan Remedial</span>
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
-                            <AlertDialogHeader>
-                              <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
-                                <div className="w-28 h-28 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center">
-                                  <div className="w-20 h-20 rounded-full  bg-gradient-to-b from-gray-300 via-whiter to-white flex items-center justify-center ">
-                                    <Logo />
+                        {userDetail.FileSertifikat == "" && (
+                          <AlertDialog>
+                            <AlertDialogTrigger className="w-full">
+                              <Button
+                                type="button"
+                                onClick={() =>
+                                  setCodeAccess(userDetail!.CodeAksess!)
+                                }
+                                variant="outline"
+                                className="w-full border mt-3 flex gap-2 border-gray-600 text-left capitalize items-center justify-center"
+                              >
+                                <IoReloadCircle className="h-4 w-4 text-gray-600" />{" "}
+                                <span className="text-sm">
+                                  {" "}
+                                  Lakukan Remedial
+                                </span>
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
+                                  <div className="w-28 h-28 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center">
+                                    <div className="w-20 h-20 rounded-full  bg-gradient-to-b from-gray-300 via-whiter to-white flex items-center justify-center ">
+                                      <Logo />
+                                    </div>
                                   </div>
-                                </div>
 
-                                <div className="flex flex-col gap-1 w-full justify-center items-center">
-                                  {userDetail!.PostTest < 65 && (
-                                    <h1 className="font-bold text-2xl text-center leading-[100%]">
-                                      {pelatihan! && pelatihan!.NamaPelatihan}
-                                    </h1>
-                                  )}
+                                  <div className="flex flex-col gap-1 w-full justify-center items-center">
+                                    {userDetail!.PostTest < 65 && (
+                                      <h1 className="font-bold text-2xl text-center leading-[100%]">
+                                        {pelatihan! && pelatihan!.NamaPelatihan}
+                                      </h1>
+                                    )}
 
-                                  {userDetail!.PostTest < 65 && (
-                                    <>
-                                      {" "}
-                                      {pelatihan.StatusApproval ==
-                                        "Selesai" && (
-                                        <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
-                                          Sebagai bagian dari pelaksanaan
-                                          pelatihan agar dapat memperbaiki nilai
-                                          remedial silahkan lakukan{" "}
-                                          <span className="italic">
-                                            remedial
-                                          </span>{" "}
-                                          dan{" "}
-                                          {isOpenGuideline
-                                            ? "membaca petunjuk pengerjaan"
-                                            : "memasukkan kode akses"}{" "}
-                                          terlebih dahulu
-                                        </AlertDialogDescription>
-                                      )}
-                                      {pelatihan.StatusApproval != "Selesai" ? (
-                                        <div className="mt-2">
-                                          <p className="font-normal text-neutral-500 text-sm text-center ">
-                                            Pelaksanaan remedial dilaksanaan
-                                            secara serentak, tunggu arahan dari
-                                            instruktur dan panitia pelaksana
-                                            untuk memulai dan mengerjakan ujian
-                                            remedial pada waktu yang ditentukan!
-                                          </p>
-                                        </div>
-                                      ) : isOpenGuideline ? (
-                                        <AlertDialogDescription className="w-full text-left font-normal text-sm mt-2">
-                                          <span className="font-semibold text-[#000]">
-                                            Petunjuk Pengerjaan :{" "}
-                                          </span>
-                                          <br />
-                                          <span>
-                                            {" "}
-                                            1.Pilih salah satu jawaban yang
-                                            Saudara anggap paling tepat/benar!
-                                          </span>{" "}
-                                          <br />
-                                          <span>
-                                            {" "}
-                                            2. Dalam menjawab soal, gunakan
-                                            gadget yang mumpuni!
-                                          </span>{" "}
-                                          <br />
-                                          <span>
-                                            {" "}
-                                            3. Waktu yang disediakan untuk
-                                            mengerjakan soal adalah 15 menit!
-                                          </span>{" "}
-                                          <br />
-                                          <span>
-                                            {" "}
-                                            4. Tidak diperbolehkan membuka buku,
-                                            handphone dll!
-                                          </span>
-                                        </AlertDialogDescription>
-                                      ) : (
-                                        <fieldset className="w-full"></fieldset>
-                                      )}
-                                    </>
-                                  )}
-                                </div>
-                              </AlertDialogTitle>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter className="w-full">
-                              {pelatihan!.StatusApproval != "Selesai" ? (
-                                <AlertDialogCancel
-                                  onClick={() => setIsOpenGuideline(true)}
-                                  className="py-5 w-full"
-                                >
-                                  Close
-                                </AlertDialogCancel>
-                              ) : userDetail!.PostTest < 65 ? (
-                                <div className="flex-col flex w-full gap-2">
-                                  {isOpenGuideline ? (
-                                    <Button
-                                      className="py-5 bg-blue-500 hover:bg-blue-500"
-                                      onClick={(e) =>
-                                        setIsOpenGuideline(!isOpenGuideline)
-                                      }
-                                    >
-                                      Lanjut
-                                    </Button>
-                                  ) : (
-                                    <AlertDialogAction
-                                      className="py-5"
-                                      disabled={
-                                        pelatihan!.StatusApproval != "Selesai"
-                                          ? true
-                                          : false
-                                      }
-                                      onClick={(e) =>
-                                        handleDirectToExamPostTest(e)
-                                      }
-                                    >
-                                      Mulai Remedial
-                                    </AlertDialogAction>
-                                  )}
-
+                                    {userDetail!.PostTest < 65 && (
+                                      <>
+                                        {" "}
+                                        {pelatihan.StatusApproval ==
+                                          "Selesai" && (
+                                          <AlertDialogDescription className="w-full text-center font-normal text-sm mt-2 border-b border-b-gray-300 pb-3">
+                                            Sebagai bagian dari pelaksanaan
+                                            pelatihan agar dapat memperbaiki
+                                            nilai remedial silahkan lakukan{" "}
+                                            <span className="italic">
+                                              remedial
+                                            </span>{" "}
+                                            dan{" "}
+                                            {isOpenGuideline
+                                              ? "membaca petunjuk pengerjaan"
+                                              : "memasukkan kode akses"}{" "}
+                                            terlebih dahulu
+                                          </AlertDialogDescription>
+                                        )}
+                                        {pelatihan.StatusApproval !=
+                                        "Selesai" ? (
+                                          <div className="mt-2">
+                                            <p className="font-normal text-neutral-500 text-sm text-center ">
+                                              Pelaksanaan remedial dilaksanaan
+                                              secara serentak, tunggu arahan
+                                              dari instruktur dan panitia
+                                              pelaksana untuk memulai dan
+                                              mengerjakan ujian remedial pada
+                                              waktu yang ditentukan!
+                                            </p>
+                                          </div>
+                                        ) : isOpenGuideline ? (
+                                          <AlertDialogDescription className="w-full text-left font-normal text-sm mt-2">
+                                            <span className="font-semibold text-[#000]">
+                                              Petunjuk Pengerjaan :{" "}
+                                            </span>
+                                            <br />
+                                            <span>
+                                              {" "}
+                                              1.Pilih salah satu jawaban yang
+                                              Saudara anggap paling tepat/benar!
+                                            </span>{" "}
+                                            <br />
+                                            <span>
+                                              {" "}
+                                              2. Dalam menjawab soal, gunakan
+                                              gadget yang mumpuni!
+                                            </span>{" "}
+                                            <br />
+                                            <span>
+                                              {" "}
+                                              3. Waktu yang disediakan untuk
+                                              mengerjakan soal adalah 15 menit!
+                                            </span>{" "}
+                                            <br />
+                                            <span>
+                                              {" "}
+                                              4. Tidak diperbolehkan membuka
+                                              buku, handphone dll!
+                                            </span>
+                                          </AlertDialogDescription>
+                                        ) : (
+                                          <fieldset className="w-full"></fieldset>
+                                        )}
+                                      </>
+                                    )}
+                                  </div>
+                                </AlertDialogTitle>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter className="w-full">
+                                {pelatihan!.StatusApproval != "Selesai" ? (
                                   <AlertDialogCancel
                                     onClick={() => setIsOpenGuideline(true)}
-                                    className="py-5"
+                                    className="py-5 w-full"
                                   >
                                     Close
                                   </AlertDialogCancel>
-                                </div>
-                              ) : (
-                                <div className="flex-col flex w-full gap-2">
-                                  <p className=" text-center font-normal text-gray-500 -mt-2">
-                                    Maaf kamu telah mengikuti ujian ini, kamu
-                                    tidak memiliki akses lagi terkait ujian ini
-                                  </p>
-                                  <AlertDialogCancel className="py-5">
-                                    Close
-                                  </AlertDialogCancel>
-                                </div>
-                              )}
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
+                                ) : userDetail!.PostTest < 65 ? (
+                                  <div className="flex-col flex w-full gap-2">
+                                    {isOpenGuideline ? (
+                                      <Button
+                                        className="py-5 bg-blue-500 hover:bg-blue-500"
+                                        onClick={(e) =>
+                                          setIsOpenGuideline(!isOpenGuideline)
+                                        }
+                                      >
+                                        Lanjut
+                                      </Button>
+                                    ) : (
+                                      <AlertDialogAction
+                                        className="py-5"
+                                        disabled={
+                                          pelatihan!.StatusApproval != "Selesai"
+                                            ? true
+                                            : false
+                                        }
+                                        onClick={(e) =>
+                                          handleDirectToExamPostTest(e)
+                                        }
+                                      >
+                                        Mulai Remedial
+                                      </AlertDialogAction>
+                                    )}
+
+                                    <AlertDialogCancel
+                                      onClick={() => setIsOpenGuideline(true)}
+                                      className="py-5"
+                                    >
+                                      Close
+                                    </AlertDialogCancel>
+                                  </div>
+                                ) : (
+                                  <div className="flex-col flex w-full gap-2">
+                                    <p className=" text-center font-normal text-gray-500 -mt-2">
+                                      Maaf kamu telah mengikuti ujian ini, kamu
+                                      tidak memiliki akses lagi terkait ujian
+                                      ini
+                                    </p>
+                                    <AlertDialogCancel className="py-5">
+                                      Close
+                                    </AlertDialogCancel>
+                                  </div>
+                                )}
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
                       </div>
                     )}
                   </p>
