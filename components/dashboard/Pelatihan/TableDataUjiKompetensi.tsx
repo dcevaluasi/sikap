@@ -670,8 +670,8 @@ const TableDataUjiKompetensi: React.FC = () => {
                             </label>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-300">
-                          <span>File type: doc,pdf,types of images</span>
+                        <p className="text-sm text-gray-800">
+                          <span>Tipe file: doc,pdf, tipe gambar</span>
                         </p>
                       </fieldset>
                     </>

@@ -2,33 +2,7 @@
 
 import React, { useState, useRef, useEffect, ReactElement } from "react";
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { MdVerified } from "react-icons/md";
-import { TbCloudDownload } from "react-icons/tb";
-import { getCurrentDate } from "@/utils/sertifikat";
-import html2pdf from "html2pdf.js";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 import Link from "next/link";
 import { Button } from "./ui/button";
@@ -41,7 +15,11 @@ import {
   extractPathAfterBppp,
   getPenyeleggara,
 } from "@/utils/pelatihan";
-import { PelatihanMasyarakat } from "@/types/product";
+import {
+  ManningAgent,
+  ManningAgentPelatihan,
+  PelatihanMasyarakat,
+} from "@/types/product";
 import axios, { AxiosResponse } from "axios";
 import { IoIosInformationCircle, IoMdCloseCircle } from "react-icons/io";
 import { User, UserPelatihan } from "@/types/user";
@@ -60,8 +38,13 @@ import { elautBaseUrl } from "@/constants/urls";
 import Image from "next/image";
 import { PiQuestionFill } from "react-icons/pi";
 import { TimelineProgressPesertaPelatihan } from "./dashboard/Dashboard/TimelineProgressPesertaPelatihan";
+import { TimelineProgressManningAgent } from "./dashboard/Dashboard/TimelineProgressManningAgent";
 
-function UserTrainingService({ user }: { user: User | null }) {
+function ManningAgentTrainingService({
+  manningAgent,
+}: {
+  manningAgent: ManningAgent | null;
+}) {
   const [indexPelatihanSelected, setIndexPelatihanSelected] =
     React.useState<number>(100000000);
 
@@ -111,40 +94,35 @@ function UserTrainingService({ user }: { user: User | null }) {
 
   const token = Cookies.get("XSRF081");
 
-  const [userDetail, setUserDetail] = React.useState<User | null>(null);
-
-  const handleFetchingUserDetail = async () => {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${elautBaseUrl}/users/getUsersById`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      console.log({ response });
-      setUserDetail(response.data);
-    } catch (error) {
-      console.error("Error posting training data:", error);
-      throw error;
-    }
-  };
-
   const [selectedPelatihan, setSelectedPelatihan] =
+    React.useState<ManningAgentPelatihan | null>(null);
+  const [selectedDetailPelatihan, setSelectedDetailPelatihan] =
     React.useState<PelatihanMasyarakat | null>(null);
 
-  const handleFetchingDetailPelatihan = async (id: number) => {
+  const handleFetchingDetailPelatihan = async (
+    id: number,
+    idPelatihan: number
+  ) => {
     try {
       const response: AxiosResponse = await axios.get(
-        `${elautBaseUrl}/getPelatihanUser?idPelatihan=${id}`,
+        `${elautBaseUrl}/manningAgent/getDataManingAgentPelatihan?id=${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      setSelectedPelatihan(response.data);
+      const responseDetail: AxiosResponse = await axios.get(
+        `${elautBaseUrl}/getPelatihanUser?idPelatihan=${idPelatihan}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log({ responseDetail });
+      setSelectedDetailPelatihan(responseDetail.data);
+      setSelectedPelatihan(response.data.data[0]);
       console.log("SELECTED PELATIHAN : ", response);
     } catch (error) {
       console.error("Error posting training data:", error);
@@ -152,14 +130,9 @@ function UserTrainingService({ user }: { user: User | null }) {
     }
   };
 
-  const [codeAccess, setCodeAccess] = React.useState<string>("");
-
-  const router = useRouter();
-
   React.useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      handleFetchingUserDetail();
       handleFetchingPublicTrainingDataByPenyelenggara();
     }, 1000);
   }, []);
@@ -168,10 +141,6 @@ function UserTrainingService({ user }: { user: User | null }) {
 
   const [menuSelected, setMenuSelected] = React.useState(false);
   const [indexMenuSelected, setIndexMenuSelected] = React.useState(0);
-  const handleSelectedMenu = (index: number) => {
-    setMenuSelected(!menuSelected);
-    setIndexMenuSelected(index);
-  };
 
   const [typePelatihanSelected, setTypePelatihanSelected] =
     React.useState<string>("");
@@ -179,12 +148,8 @@ function UserTrainingService({ user }: { user: User | null }) {
   const [isOpenGuideline, setIsOpenGuideline] = React.useState<boolean>(true);
   const isManningAgent = Cookies.get("isManningAgent");
 
-  console.log(user?.Pelatihan);
-
   const [seeMore, setSeeMore] = React.useState<boolean>(false);
   const [keywordSearch, setKeywordSearch] = React.useState<string>("");
-
-  console.log({ keywordSearch });
 
   return (
     <>
@@ -198,25 +163,7 @@ function UserTrainingService({ user }: { user: User | null }) {
         <div className="relative w-full mx-auto px-4 sm:px-6">
           <div className="pt-12 md:pt-20">
             {/* Section header */}
-
-            {isManningAgent == "true" ? (
-              <>
-                {!isExpand && (
-                  <div className="max-w-3xl mx-auto text-center flex items-center justify-center flex-col pb-5 md:pb-8">
-                    <h1 className="text-3xl font-calsans leading-[110%] text-black">
-                      Pelatihan Masyarakat, Teknis, <br /> dan Kepelautan yang
-                      Diikuti
-                    </h1>
-                    <p className="text-base text-gray-600">
-                      Jelajahi layanan serta informasi yang ada pada Balai
-                      Pelatihan Kelautan dan Perikanan dan jadilah SDM kompeten
-                      bidang kelautan dan perikanan!
-                    </p>
-                    <div className="rounded-full bg-gray-300 h-1 w-20 mt-3"></div>
-                  </div>
-                )}
-              </>
-            ) : userDetail?.Pelatihan!.length != 0 ? (
+            {manningAgent?.ManingAgentPelatihan!.length != 0 ? (
               <>
                 {!isExpand && (
                   <div className="max-w-3xl mx-auto text-center flex items-center justify-center flex-col pb-5 md:pb-8">
@@ -280,7 +227,7 @@ function UserTrainingService({ user }: { user: User | null }) {
                       </TabsList>
                       <TabsContent value="Klasikal">
                         {indexPelatihanSelected != 100000000 ? (
-                          userDetail?.Pelatihan.slice()
+                          manningAgent?.ManingAgentPelatihan.slice()
                             .reverse()
                             .filter((pelatihan) => {
                               // Split the keywordSearch into words and check if all are present in NamaPelatihan
@@ -295,14 +242,17 @@ function UserTrainingService({ user }: { user: User | null }) {
                             })
                             .map((pelatihan, reverseIndex) => {
                               const actualIndex =
-                                userDetail.Pelatihan.length - 1 - reverseIndex;
+                                manningAgent?.ManingAgentPelatihan.length! -
+                                1 -
+                                reverseIndex;
 
                               return (
                                 <div
                                   onClick={() => {
                                     setIndexPelatihanSelected(actualIndex);
                                     handleFetchingDetailPelatihan(
-                                      pelatihan?.IdPelatihan
+                                      pelatihan?.IdMiningAgentPelatihan,
+                                      parseInt(pelatihan?.IdPelatihan)
                                     );
                                   }}
                                   className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 shadow-custom hover:scale-105 duration-700 cursor-pointer"
@@ -350,17 +300,6 @@ function UserTrainingService({ user }: { user: User | null }) {
                                             Bidang
                                           </dd>
                                         </div>
-
-                                        <div className="flex flex-col-reverse">
-                                          <dt className="text-sm font-medium text-gray-600">
-                                            {pelatihan?.NoRegistrasi == ""
-                                              ? "-"
-                                              : pelatihan?.NoRegistrasi!}
-                                          </dt>
-                                          <dd className="text-xs text-gray-500">
-                                            No Registrasi
-                                          </dd>
-                                        </div>
                                       </dl>
                                     </div>
                                   </div>
@@ -369,7 +308,8 @@ function UserTrainingService({ user }: { user: User | null }) {
                             })
                         ) : (
                           <div className="grid grid-cols-3 w-full gap-4">
-                            {userDetail?.Pelatihan.slice()
+                            {manningAgent
+                              ?.ManingAgentPelatihan!.slice()
                               .reverse()
                               .filter((pelatihan) => {
                                 // Split the keywordSearch into words and check if all are present in NamaPelatihan
@@ -384,7 +324,7 @@ function UserTrainingService({ user }: { user: User | null }) {
                               })
                               .map((pelatihan, reverseIndex) => {
                                 const actualIndex =
-                                  userDetail.Pelatihan.length -
+                                  manningAgent?.ManingAgentPelatihan.length! -
                                   1 -
                                   reverseIndex;
 
@@ -393,7 +333,8 @@ function UserTrainingService({ user }: { user: User | null }) {
                                     onClick={() => {
                                       setIndexPelatihanSelected(actualIndex);
                                       handleFetchingDetailPelatihan(
-                                        pelatihan?.IdPelatihan
+                                        pelatihan?.IdMiningAgentPelatihan,
+                                        parseInt(pelatihan?.IdPelatihan)
                                       );
                                     }}
                                     className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:p-8 shadow-custom hover:scale-105 duration-700 cursor-pointer"
@@ -443,17 +384,6 @@ function UserTrainingService({ user }: { user: User | null }) {
                                               Bidang
                                             </dd>
                                           </div>
-
-                                          <div className="flex flex-col-reverse">
-                                            <dt className="text-sm font-medium text-gray-600">
-                                              {pelatihan?.NoRegistrasi == ""
-                                                ? "-"
-                                                : pelatihan?.NoRegistrasi!}
-                                            </dt>
-                                            <dd className="text-xs text-gray-500">
-                                              No Registrasi
-                                            </dd>
-                                          </div>
                                         </dl>
                                       </div>
                                     </div>
@@ -478,27 +408,28 @@ function UserTrainingService({ user }: { user: User | null }) {
                           <div className="">
                             <h3 className="text-3xl font-bold text-gray-900 font-calsans sm:text-3xl leading-[105%]">
                               {
-                                userDetail?.Pelatihan[indexPelatihanSelected]
-                                  ?.NamaPelatihan!
+                                manningAgent?.ManingAgentPelatihan[
+                                  indexPelatihanSelected
+                                ]?.NamaPelatihan!
                               }
                             </h3>
 
                             <div className="flex items-center gap-3">
                               <p className=" text-sm font-medium text-gray-600">
                                 By{" "}
-                                {selectedPelatihan != null
-                                  ? selectedPelatihan.PenyelenggaraPelatihan
+                                {selectedDetailPelatihan != null
+                                  ? selectedDetailPelatihan.PenyelenggaraPelatihan
                                   : "-"}{" "}
                                 ·{" "}
-                                {selectedPelatihan != null
+                                {selectedDetailPelatihan != null
                                   ? generateTanggalPelatihan(
-                                      selectedPelatihan?.TanggalMulaiPelatihan
+                                      selectedDetailPelatihan?.TanggalMulaiPelatihan
                                     )
                                   : "-"}{" "}
                                 s.d.{" "}
-                                {selectedPelatihan != null
+                                {selectedDetailPelatihan != null
                                   ? generateTanggalPelatihan(
-                                      selectedPelatihan?.TanggalBerakhirPelatihan
+                                      selectedDetailPelatihan?.TanggalBerakhirPelatihan
                                     )
                                   : "-"}
                               </p>
@@ -521,76 +452,53 @@ function UserTrainingService({ user }: { user: User | null }) {
                               height={0}
                               alt=""
                               src={icons(
-                                userDetail?.Pelatihan[indexPelatihanSelected]
-                                  ?.BidangPelatihan!
+                                manningAgent?.ManingAgentPelatihan[
+                                  indexPelatihanSelected
+                                ]?.BidangPelatihan!
                               )}
                               className="w-16 rounded-lg object-cover shadow-sm"
                             />
                           </div>
                         </div>
 
-                        {userDetail?.Pelatihan[indexPelatihanSelected]
-                          ?.Keterangan! == "Valid" && (
+                        {manningAgent?.ManingAgentPelatihan[
+                          indexPelatihanSelected
+                        ]?.Keterangan! == "Valid" && (
                           <div className="mt-6 flex gap-4 sm:gap-6">
                             <div className="flex flex-col-reverse">
                               <div className="text-sm font-medium text-gray-600">
                                 {
-                                  userDetail?.Pelatihan[indexPelatihanSelected]
-                                    ?.BidangPelatihan!
+                                  manningAgent?.ManingAgentPelatihan[
+                                    indexPelatihanSelected
+                                  ]?.BidangPelatihan!
                                 }
                               </div>
                               <div className="text-xs text-gray-500">
                                 Bidang
                               </div>
                             </div>
-
-                            <div className="flex flex-col-reverse">
-                              <div className="text-sm font-bold text-gray-600">
-                                {userDetail?.Pelatihan[indexPelatihanSelected]
-                                  .NoSertifikat! == ""
-                                  ? "-"
-                                  : userDetail?.Pelatihan[
-                                      indexPelatihanSelected
-                                    ]?.NoSertifikat!}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                No Sertifikat
-                              </div>
-                            </div>
-                            <div className="flex flex-col-reverse">
-                              <div className="text-sm font-bold text-gray-600">
-                                {userDetail?.Pelatihan[indexPelatihanSelected]
-                                  .NoRegistrasi! == ""
-                                  ? "-"
-                                  : userDetail?.Pelatihan[
-                                      indexPelatihanSelected
-                                    ]?.NoRegistrasi!}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                No Registrasi
-                              </div>
-                            </div>
                           </div>
                         )}
 
-                        {userDetail?.Pelatihan[indexPelatihanSelected]
-                          ?.Keterangan! == "Valid" && (
+                        {manningAgent?.ManingAgentPelatihan[
+                          indexPelatihanSelected
+                        ]?.Keterangan! == "Valid" && (
                           <div className="mt-4">
                             <div className="flex gap-1 flex-col">
                               <p
                                 dangerouslySetInnerHTML={{
                                   __html:
-                                    userDetail?.Pelatihan[
+                                    manningAgent?.ManingAgentPelatihan[
                                       indexPelatihanSelected
                                     ]! && !seeMore
                                       ? truncateText(
-                                          userDetail?.Pelatihan[
+                                          manningAgent?.ManingAgentPelatihan[
                                             indexPelatihanSelected
                                           ]?.DetailPelatihan!,
                                           300,
                                           "..."
                                         )
-                                      : userDetail?.Pelatihan[
+                                      : manningAgent?.ManingAgentPelatihan[
                                           indexPelatihanSelected
                                         ]?.DetailPelatihan!,
                                 }}
@@ -609,52 +517,15 @@ function UserTrainingService({ user }: { user: User | null }) {
                         )}
 
                         {selectedPelatihan != null && (
-                          <TimelineProgressPesertaPelatihan
-                            userDetail={
-                              userDetail?.Pelatihan[indexPelatihanSelected]!
+                          <TimelineProgressManningAgent
+                            manningAgent={
+                              manningAgent?.ManingAgentPelatihan[
+                                indexPelatihanSelected
+                              ]!
                             }
                             pelatihan={selectedPelatihan!}
+                            detailPelatihan={selectedDetailPelatihan!}
                           />
-                        )}
-
-                        {typePelatihanSelected == "Online" && (
-                          <div className="mt-3">
-                            <div className="flex flex-col">
-                              <div className="text-xs text-gray-500">
-                                Materi Pelatihan
-                              </div>
-
-                              <div className="grid grid-cols-2 w-full gap-2 mt-2">
-                                {[1, 2, 3, 4, 5, 6].map((pelatihan, index) => (
-                                  <Link
-                                    href={`/dashboard/pelatihan/online/${
-                                      userDetail?.Pelatihan[
-                                        indexPelatihanSelected
-                                      ]!.IdPelatihan
-                                    }`}
-                                    className="flex shadow-custom w-full rounded-md p-5 cursor-pointer flex-col gap-1 hover:scale-105 duration-700 hover:bg-blue-500 hover:text-white group"
-                                  >
-                                    <h3 className="font-bold font-calsans leading-[105%]">
-                                      Materi {pelatihan}. <br />
-                                      Kebijakan Pelatihan Sosial Kultural II
-                                    </h3>
-                                    <p
-                                      dangerouslySetInnerHTML={{
-                                        __html: truncateText(
-                                          userDetail?.Pelatihan[
-                                            indexPelatihanSelected
-                                          ]?.DetailPelatihan!,
-                                          100,
-                                          "..."
-                                        ),
-                                      }}
-                                      className="text-sm prose group-hover:text-white  text-justify  text-gray-500 prose-strong:text-gray-500 prose-p:leading-[140%] prose-strong:font-bold group-hover:duration-1000 prose-p:font-normal"
-                                    />
-                                  </Link>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
                         )}
                       </div>
                     </div>
@@ -669,27 +540,28 @@ function UserTrainingService({ user }: { user: User | null }) {
                           <div className="">
                             <h3 className="text-3xl font-bold text-gray-900 font-calsans sm:text-3xl leading-[105%]">
                               {
-                                userDetail?.Pelatihan[indexPelatihanSelected]
-                                  ?.NamaPelatihan!
+                                manningAgent?.ManingAgentPelatihan[
+                                  indexPelatihanSelected
+                                ]?.NamaPelatihan!
                               }
                             </h3>
 
                             <div className="flex items-center gap-3">
                               <p className=" text-sm font-medium text-gray-600">
                                 By{" "}
-                                {selectedPelatihan != null
-                                  ? selectedPelatihan.PenyelenggaraPelatihan
+                                {selectedDetailPelatihan != null
+                                  ? selectedDetailPelatihan.PenyelenggaraPelatihan
                                   : "-"}{" "}
                                 ·{" "}
-                                {selectedPelatihan != null
+                                {selectedDetailPelatihan != null
                                   ? generateTanggalPelatihan(
-                                      selectedPelatihan?.TanggalMulaiPelatihan
+                                      selectedDetailPelatihan?.TanggalMulaiPelatihan
                                     )
                                   : "-"}{" "}
                                 s.d.{" "}
-                                {selectedPelatihan != null
+                                {selectedDetailPelatihan != null
                                   ? generateTanggalPelatihan(
-                                      selectedPelatihan?.TanggalBerakhirPelatihan
+                                      selectedDetailPelatihan?.TanggalBerakhirPelatihan
                                     )
                                   : "-"}
                               </p>
@@ -712,70 +584,47 @@ function UserTrainingService({ user }: { user: User | null }) {
                               height={0}
                               alt=""
                               src={icons(
-                                userDetail?.Pelatihan[indexPelatihanSelected]
-                                  ?.BidangPelatihan!
+                                manningAgent!.ManingAgentPelatihan[
+                                  indexPelatihanSelected
+                                ]?.BidangPelatihan!
                               )}
                               className="w-16 rounded-lg object-cover shadow-sm"
                             />
                           </div>
                         </div>
 
-                        {userDetail?.Pelatihan[indexPelatihanSelected]
-                          ?.Keterangan! == "Valid" && (
+                        {manningAgent!.ManingAgentPelatihan[
+                          indexPelatihanSelected
+                        ]?.Keterangan! == "Valid" && (
                           <div className="mt-6 flex gap-4 sm:gap-6">
                             <div className="flex flex-col-reverse">
                               <div className="text-sm font-medium text-gray-600">
                                 {
-                                  userDetail?.Pelatihan[indexPelatihanSelected]
-                                    ?.BidangPelatihan!
+                                  manningAgent!.ManingAgentPelatihan[
+                                    indexPelatihanSelected
+                                  ]?.BidangPelatihan!
                                 }
                               </div>
                               <div className="text-xs text-gray-500">
                                 Bidang
                               </div>
                             </div>
-
-                            <div className="flex flex-col-reverse">
-                              <div className="text-sm font-bold text-gray-600">
-                                {userDetail?.Pelatihan[indexPelatihanSelected]
-                                  .NoSertifikat! == ""
-                                  ? "-"
-                                  : userDetail?.Pelatihan[
-                                      indexPelatihanSelected
-                                    ]?.NoSertifikat!}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                No Sertifikat
-                              </div>
-                            </div>
-                            <div className="flex flex-col-reverse">
-                              <div className="text-sm font-bold text-gray-600">
-                                {userDetail?.Pelatihan[indexPelatihanSelected]
-                                  .NoRegistrasi! == ""
-                                  ? "-"
-                                  : userDetail?.Pelatihan[
-                                      indexPelatihanSelected
-                                    ]?.NoRegistrasi!}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                No Registrasi
-                              </div>
-                            </div>
                           </div>
                         )}
 
                         <div className="flex gap-6 w-full">
-                          {userDetail?.Pelatihan[indexPelatihanSelected]
-                            ?.Keterangan! == "Valid" && (
+                          {manningAgent!.ManingAgentPelatihan[
+                            indexPelatihanSelected
+                          ]?.Keterangan! == "Valid" && (
                             <div className="mt-4 w-full">
                               <div className="flex gap-1 flex-col">
                                 <p
                                   dangerouslySetInnerHTML={{
                                     __html:
-                                      userDetail?.Pelatihan[
+                                      manningAgent!.ManingAgentPelatihan[
                                         indexPelatihanSelected
                                       ]! &&
-                                      userDetail?.Pelatihan[
+                                      manningAgent!.ManingAgentPelatihan[
                                         indexPelatihanSelected
                                       ]?.DetailPelatihan!,
                                   }}
@@ -787,11 +636,14 @@ function UserTrainingService({ user }: { user: User | null }) {
 
                           <div className="-mt-6 w-[90%]">
                             {selectedPelatihan != null && (
-                              <TimelineProgressPesertaPelatihan
-                                userDetail={
-                                  userDetail?.Pelatihan[indexPelatihanSelected]!
+                              <TimelineProgressManningAgent
+                                manningAgent={
+                                  manningAgent?.ManingAgentPelatihan[
+                                    indexPelatihanSelected
+                                  ]!
                                 }
                                 pelatihan={selectedPelatihan!}
+                                detailPelatihan={selectedDetailPelatihan!}
                               />
                             )}
                           </div>
@@ -808,7 +660,7 @@ function UserTrainingService({ user }: { user: User | null }) {
                                 {[1, 2, 3, 4, 5, 6].map((pelatihan, index) => (
                                   <Link
                                     href={`/dashboard/pelatihan/online/${
-                                      userDetail?.Pelatihan[
+                                      manningAgent!.ManingAgentPelatihan[
                                         indexPelatihanSelected
                                       ]!.IdPelatihan
                                     }`}
@@ -821,7 +673,7 @@ function UserTrainingService({ user }: { user: User | null }) {
                                     <p
                                       dangerouslySetInnerHTML={{
                                         __html: truncateText(
-                                          userDetail?.Pelatihan[
+                                          manningAgent!.ManingAgentPelatihan[
                                             indexPelatihanSelected
                                           ]?.DetailPelatihan!,
                                           100,
@@ -832,138 +684,6 @@ function UserTrainingService({ user }: { user: User | null }) {
                                     />
                                   </Link>
                                 ))}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {userDetail?.Pelatihan[indexPelatihanSelected]
-                          ?.PostTest != 0 && (
-                          <div className="flex flex-col mt-0">
-                            <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-                              <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-                                <dd className="text-xs text-gray-500 mb-2">
-                                  Table Penilaian
-                                </dd>
-                                <div className="overflow-hidden">
-                                  <table className="min-w-full border border-neutral-200 rounded-md text-center text-sm font-light text-surface mb-5 ">
-                                    <thead className="border-b border-neutral-200 font-medium ">
-                                      <tr>
-                                        <th
-                                          scope="col"
-                                          className="border-e border-neutral-200 px-6 py-4 "
-                                        >
-                                          #
-                                        </th>
-                                        <th
-                                          scope="col"
-                                          className="border-e border-neutral-200 px-6 py-4 "
-                                        >
-                                          Pre-test
-                                        </th>
-                                        <th
-                                          scope="col"
-                                          className="border-e border-neutral-200 px-6 py-4 "
-                                        >
-                                          Post-test
-                                        </th>
-                                        {userDetail?.Pelatihan[
-                                          indexPelatihanSelected
-                                        ]?.PostTest! < 65 && (
-                                          <th
-                                            scope="col"
-                                            className="border-e border-neutral-200 px-6 py-4 "
-                                          >
-                                            Remedial
-                                          </th>
-                                        )}
-                                        <th scope="col" className="px-6 py-4">
-                                          Total
-                                        </th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      <tr className="border-b border-neutral-200 ">
-                                        <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 font-medium ">
-                                          1
-                                        </td>
-                                        <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 ">
-                                          {
-                                            userDetail?.Pelatihan[
-                                              indexPelatihanSelected
-                                            ]?.PreTest!
-                                          }
-                                        </td>
-                                        <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 ">
-                                          {
-                                            userDetail?.Pelatihan[
-                                              indexPelatihanSelected
-                                            ]?.PostTest!
-                                          }
-                                        </td>
-                                        {userDetail?.Pelatihan[
-                                          indexPelatihanSelected
-                                        ]?.PostTest! < 65 && (
-                                          <td className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 "></td>
-                                        )}
-
-                                        <td className="whitespace-nowrap px-6 py-4">
-                                          {" "}
-                                          {(userDetail?.Pelatihan[
-                                            indexPelatihanSelected
-                                          ]?.PreTest! +
-                                            userDetail?.Pelatihan[
-                                              indexPelatihanSelected
-                                            ]?.PostTest!) /
-                                            2}
-                                        </td>
-                                      </tr>
-
-                                      <tr className="border-b border-neutral-200 ">
-                                        <th
-                                          colSpan={3}
-                                          className="whitespace-nowrap border-e border-neutral-200 px-6 py-4 "
-                                        >
-                                          Keterangan
-                                        </th>
-                                        <th className="whitespace-nowrap px-6 py-4">
-                                          {" "}
-                                          {userDetail?.Pelatihan[
-                                            indexPelatihanSelected
-                                          ]?.PostTest! > 60
-                                            ? "LULUS"
-                                            : "TIDAK LULUS"}
-                                        </th>
-                                      </tr>
-                                    </tbody>
-                                  </table>
-
-                                  {userDetail?.Pelatihan[indexPelatihanSelected]
-                                    .NoSertifikat == "" ? null : (
-                                    <div>
-                                      <DialogSertifikatPelatihan
-                                        userPelatihan={
-                                          userDetail?.Pelatihan[
-                                            indexPelatihanSelected
-                                          ]!
-                                        }
-                                        pelatihan={selectedPelatihan!}
-                                      >
-                                        <Button
-                                          type="button"
-                                          variant="outline"
-                                          className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
-                                        >
-                                          <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-                                          <span className="text-sm">
-                                            {" "}
-                                            Lihat Sertifikat
-                                          </span>
-                                        </Button>
-                                      </DialogSertifikatPelatihan>
-                                    </div>
-                                  )}
-                                </div>
                               </div>
                             </div>
                           </div>
@@ -1008,4 +728,4 @@ function UserTrainingService({ user }: { user: User | null }) {
   );
 }
 
-export default UserTrainingService;
+export default ManningAgentTrainingService;

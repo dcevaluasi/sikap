@@ -51,6 +51,41 @@ function FormLogin() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
 
+  const handlePasswordCriteria = (password: string) => {
+    const criteria = [
+      {
+        regex: /.{8,}/,
+        message: `Password must be at least 8 characters long.`,
+      },
+      {
+        regex: /[A-Z]/,
+        message: "Password must contain at least one uppercase letter.",
+      },
+      {
+        regex: /[a-z]/,
+        message: "Password must contain at least one lowercase letter.",
+      },
+      { regex: /[0-9]/, message: "Password must contain at least one number." },
+      {
+        regex: /[!@#$%^&*(),.?":{}|<>]/,
+        message:
+          "Password must contain at least one special character (symbol).",
+      },
+    ];
+
+    for (const { regex, message } of criteria) {
+      if (!regex.test(password)) {
+        Toast.fire({
+          icon: "error",
+          title: message,
+        });
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   const handleLoginAkun = async (e: FormEvent) => {
     e.preventDefault();
     if (countWrongPassword <= 3) {
@@ -86,7 +121,7 @@ function FormLogin() {
                 title: "Berhasil login.",
                 text: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
               });
-              router.push(Cookies.get("XSRF085")!);
+              router.replace(Cookies.get("XSRF085")!);
             } else {
               Toast.fire({
                 icon: "success",
@@ -94,17 +129,17 @@ function FormLogin() {
                 text: `Berhasil melakukan login kedalam ELAUT!`,
               });
               if (Cookies.get("XSRF083")) {
-                // router.push("/dashboard/complete-profile");
+                // router.replace("/dashboard/complete-profile");
                 if (Cookies.get("LastPath")) {
                   const path = Cookies.get("LastPath");
-                  router.push(path!);
+                  router.replace(path!);
                 }
               } else {
                 if (Cookies.get("LastPath")) {
                   const path = Cookies.get("LastPath");
-                  router.push(path!);
+                  router.replace(path!);
                 } else {
-                  router.push("layanan/program/akp");
+                  router.replace("layanan/program/akp");
                 }
               }
             }
@@ -184,7 +219,7 @@ function FormLogin() {
                 title: "Berhasil login.",
                 text: `Berhasil melakukan login, ayo segera daftarkan dirimu!`,
               });
-              router.push("/dashboard");
+              router.replace("/dashboard");
             } else {
               Toast.fire({
                 icon: "success",
@@ -192,17 +227,17 @@ function FormLogin() {
                 text: `Berhasil melakukan login kedalam ELAUT!`,
               });
               if (Cookies.get("XSRF083")) {
-                // router.push("/dashboard/complete-profile");
+                // router.replace("/dashboard/complete-profile");
                 if (Cookies.get("LastPath")) {
                   const path = Cookies.get("LastPath");
-                  router.push(path!);
+                  router.replace(path!);
                 }
               } else {
                 if (Cookies.get("LastPath")) {
                   const path = Cookies.get("LastPath");
-                  router.push(path!);
+                  router.replace(path!);
                 } else {
-                  router.push("/dashboard");
+                  router.replace("/dashboard");
                 }
               }
             }
@@ -304,42 +339,44 @@ function FormLogin() {
     }
   };
   const handleResetPassword = async (e: any) => {
-    try {
-      const response = await axios.post(
-        `${elautBaseUrl}/users/resetPassword`,
-        { password: passwordReset },
-        {
-          headers: {
-            Authorization: `Bearer ${tokenResetPassword}`,
-          },
-        }
-      );
-      Toast.fire({
-        icon: "success",
-        title: "Berhasil mereset.",
-        text: `Silahkan menggunakan password yang sudah direset, jangan sampai lupa lagi!`,
-      });
-      setNik("");
-      setPasswordReset("");
-      setNoNumber("");
-      setPassword("");
-      setIsForgetPassword(false);
-      setTokenResetPassword("");
-      setRole("Mandiri");
-      console.log({ response });
-    } catch (error: any) {
-      console.log({ error });
-      setNik("");
-      setPasswordReset("");
-      setIsForgetPassword(false);
-      setTokenResetPassword("");
-      setNoNumber("");
-      setPassword("");
-      Toast.fire({
-        icon: "error",
-        title: "Gagal mereset.",
-        text: `Password mu gagal untuk direset, nampaknya terdapat gangguan`,
-      });
+    if (handlePasswordCriteria(passwordReset)) {
+      try {
+        const response = await axios.post(
+          `${elautBaseUrl}/users/resetPassword`,
+          { password: passwordReset },
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResetPassword}`,
+            },
+          }
+        );
+        Toast.fire({
+          icon: "success",
+          title: "Berhasil mereset.",
+          text: `Silahkan menggunakan password yang sudah direset, jangan sampai lupa lagi!`,
+        });
+        setNik("");
+        setPasswordReset("");
+        setNoNumber("");
+        setPassword("");
+        setIsForgetPassword(false);
+        setTokenResetPassword("");
+        setRole("Mandiri");
+        console.log({ response });
+      } catch (error: any) {
+        console.log({ error });
+        setNik("");
+        setPasswordReset("");
+        setIsForgetPassword(false);
+        setTokenResetPassword("");
+        setNoNumber("");
+        setPassword("");
+        Toast.fire({
+          icon: "error",
+          title: "Gagal mereset.",
+          text: `Password mu gagal untuk direset, nampaknya terdapat gangguan`,
+        });
+      }
     }
   };
 
@@ -352,7 +389,7 @@ function FormLogin() {
   }, []);
 
   return (
-    <section className="relative w-full h-screen md:h-full">
+    <section className="relative w-full h-screen md:h-full bg-none">
       <Dialog open={isForgetPassword} onOpenChange={setIsForgetPassword}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -381,19 +418,25 @@ function FormLogin() {
               />
             </div>
             {tokenResetPassword != "" && (
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                  Password Baru
-                </Label>
-                <Input
-                  id="passwordReset"
-                  value={passwordReset}
-                  type="password"
-                  onChange={(e) => setPasswordReset(e.target.value)}
-                  placeholder="Masukkan password baru"
-                  className="col-span-3"
-                  autoComplete="off"
-                />
+              <div className="flex flex-col gap-1">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="text-right">
+                    Password Baru
+                  </Label>
+                  <Input
+                    id="passwordReset"
+                    value={passwordReset}
+                    type="password"
+                    onChange={(e) => setPasswordReset(e.target.value)}
+                    placeholder="Masukkan password baru"
+                    className="col-span-3"
+                    autoComplete="off"
+                  />
+                </div>
+                <p className="text-gray-500 leading-[100%] text-xs font-medium mt-2">
+                  *Password minimal 8 karakter, harus terdiri dari satu angka,
+                  huruf kapital dan kecil, serta karakter
+                </p>
               </div>
             )}
           </div>
@@ -423,6 +466,7 @@ function FormLogin() {
                   setNik("");
                   setPasswordReset("");
                   setIsForgetPassword(false);
+                  setTokenResetPassword("");
                 }}
                 className=" bg-gray-500 hover:bg-gray-600"
               >
@@ -437,7 +481,8 @@ function FormLogin() {
         src={images[imageIndex]}
         className="absolute w-full h-full object-cover duration-1000 -z-40"
         alt=""
-        layout={"fill"}
+        width={0}
+        height={0}
         priority
       />
 
@@ -488,7 +533,9 @@ function FormLogin() {
                 </SelectContent>
               </Select>
             </div>
-            {role == "Mandiri" ? (
+            {role == "" ? (
+              <></>
+            ) : role == "Mandiri" ? (
               <form onSubmit={(e) => handleLoginAkun(e)} autoComplete="off">
                 <div className="flex flex-wrap -mx-3 mb-2">
                   <div className="w-full px-3">

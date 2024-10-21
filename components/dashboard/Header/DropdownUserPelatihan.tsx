@@ -49,7 +49,8 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
         }
       );
       console.log({ response });
-      setManningAgentDetail(response.data);
+      Cookies.set("IdManningAgent", response.data.data.IdManingAgent);
+      setManningAgentDetail(response.data.data);
     } catch (error) {
       console.error("Error posting training data:", error);
       throw error;
@@ -147,8 +148,18 @@ const DropdownUserPelatihan = ({ top }: { top: boolean }) => {
         }`}
       >
         <ul className="flex flex-col gap-5 border-b border-stroke px-6 pb-7.5 pt-5">
-          <li className="text-[#000] w-full text-center border-b px-0 mx-0 pb-4 font-semibold border-b-gray-200">
-            {userDetail?.Nama}
+          <li className="text-[#000] w-full text-center border-b px-0 mx-0 pb-4 font-semibold border-b-gray-200 flex flex-col">
+            <span className="">
+              {isManningAgent == "true"
+                ? manningAgentDetail?.NamaManingAgent!
+                : userDetail?.Nama}
+            </span>
+
+            {isManningAgent == "true" && (
+              <span className="text-gray-500 -mt-1">
+                {manningAgentDetail?.Alamat!}
+              </span>
+            )}
           </li>
           <li>
             <Link

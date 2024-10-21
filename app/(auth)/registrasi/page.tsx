@@ -1,4 +1,5 @@
 import FormRegistrasi from "@/components/auth/FormRegistrasi";
+import Footer from "@/components/ui/footer";
 
 export const metadata = {
   title: "Registrasi E-Laut - Elektronik Layanan Pelatihan Utama Terpadu",
@@ -62,6 +63,7 @@ export default function SignUp() {
   return (
     <>
       <FormRegistrasi />
+      <Footer />
     </>
   );
 }

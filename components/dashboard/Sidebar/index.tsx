@@ -142,7 +142,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
       <div className="scrollbar-hide flex flex-col overflow-y-auto duration-300 ease-linear -mt-7">
         {/* <!-- Sidebar Menu --> */}
-        <nav className="mt-5 px-4 py-4 lg:mt-9 lg:px-6">
+        <nav className="mt-5  py-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
             <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
@@ -162,7 +162,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="/akp/pusat/dashboard"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/" ||
                               pathname.includes("dashboard")) &&
                             "bg-graydark "
@@ -214,7 +214,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               ? `/${generateRandomId()}/pusat/dashboard`
                               : "admin/pusat/lemdiklat"
                           }
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/" ||
                               pathname.includes("dashboard")) &&
                             "bg-graydark "
@@ -262,7 +262,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="/akp/pusat/blanko"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             !pathname.includes("keluar") && "bg-graydark "
                           }`}
                         >
@@ -282,7 +282,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="/akp/pusat/blanko-keluar"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             pathname.includes("keluar") && "bg-graydark "
                           }`}
                         >
@@ -302,7 +302,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="/akp/pusat/blanko-rusak"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             pathname.includes("rusak") && "bg-graydark "
                           }`}
                         >
@@ -331,7 +331,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           <React.Fragment>
                             <Link
                               href="#"
-                              className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                              className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                 (pathname === "/pelatihan" ||
                                   pathname.includes("pelatihan")) &&
                                 "bg-graydark "
@@ -373,14 +373,25 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <li>
                                   <Link
                                     href={`/${generateRandomId()}/lemdiklat/pelatihan`}
-                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                    className={`group relative flex items-center gap-2.5 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                       pathname ===
                                         "/admin/lemdiklat/pelatihan" &&
                                       "text-white"
                                     }`}
                                   >
-                                    • Database Pelatihan dan Sertifikasi Uji
-                                    Kompetensi
+                                    • Database Pelatihan Masyarakat
+                                  </Link>
+                                </li>
+                                <li>
+                                  <Link
+                                    href={`/${generateRandomId()}/lemdiklat/uji-kompetensi`}
+                                    className={`group relative flex items-center gap-2.5 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                      pathname ===
+                                        "/admin/lemdiklat/pelatihan" &&
+                                      "text-white"
+                                    }`}
+                                  >
+                                    • Database Uji Kompetensi
                                   </Link>
                                 </li>
                               </ul>
@@ -404,7 +415,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <React.Fragment>
                               <Link
                                 href="#"
-                                className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                   (pathname === "/admin/pusat/pelatihan" ||
                                     pathname.includes("pelatihan")) &&
                                   "bg-graydark "
@@ -446,7 +457,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   <li>
                                     <Link
                                       href="/lembaga/dpkakp/admin/dashboard/ujian"
-                                      className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                      className={`group relative flex items-center gap-2.5 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                         pathname ===
                                           "/lembaga/dpkakp/admin/dashboard/ujian" &&
                                         "text-white"
@@ -473,7 +484,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <React.Fragment>
                               <Link
                                 href="#"
-                                className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                   (pathname === "/admin/pusat/pelatihan" ||
                                     pathname.includes("pelatihan")) &&
                                   "bg-graydark "
@@ -515,7 +526,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   <li>
                                     <Link
                                       href="/lembaga/dpkakp/admin/dashboard/bank-soal"
-                                      className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                      className={`group relative flex items-center gap-2.5 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                         pathname ===
                                           "/lembaga/dpkakp/admin/dashboard/bank-soal" &&
                                         "text-white"
@@ -527,7 +538,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   <li>
                                     <Link
                                       href="/lembaga/dpkakp/admin/dashboard/bank-soal/gambar"
-                                      className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                      className={`group relative flex items-center gap-2.5 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                         pathname ===
                                           "/lembaga/dpkakp/admin/dashboard/bank-soal/gambar" &&
                                         "text-white"
@@ -545,7 +556,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       </SidebarLinkGroup>{" "}
                       <Link
                         href="/lembaga/dpkakp/admin/penguji/"
-                        className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                        className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                           (pathname === "/admin/pusat/pelatihan" ||
                             pathname.includes("pelatihan")) &&
                           "bg-graydark "
@@ -569,7 +580,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <React.Fragment>
                               <Link
                                 href="#"
-                                className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                   (pathname === "/admin/pusat/pelatihan" ||
                                     pathname.includes("pelatihan")) &&
                                   "bg-graydark "
@@ -611,7 +622,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   <li>
                                     <Link
                                       href="/lembaga/pukakp/admin/dashboard/ujian"
-                                      className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                      className={`group relative flex items-center gap-2.5 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                         pathname ===
                                           "/lembaga/pukakp/admin/dashboard/ujian" &&
                                         "text-white"
@@ -640,7 +651,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           <React.Fragment>
                             <Link
                               href="#"
-                              className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                              className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                 (pathname === "/admin/pusat/pelatihan" ||
                                   pathname.includes("pelatihan")) &&
                                 "bg-graydark "
@@ -682,7 +693,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <li>
                                   <Link
                                     href="/admin/pusat/pelatihan/pemberitahuan-pelatihan"
-                                    className={`group relative w-fit flex items-center gap-2 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                    className={`group relative w-fit flex items-center gap-2 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                       pathname ===
                                         "/admin/pusat/pelatihan/pemberitahuan-pelatihan" &&
                                       "text-white"
@@ -700,7 +711,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <li>
                                   <Link
                                     href="/admin/pusat/pelatihan/penerbitan-sertifikat"
-                                    className={`group relative  w-fit  flex items-center gap-2 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                    className={`group relative  w-fit  flex items-center gap-2 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                       pathname ===
                                         "/admin/pusat/pelatihan/penerbitan-sertifikat" &&
                                       "text-white"
@@ -734,7 +745,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           <React.Fragment>
                             <Link
                               href="#"
-                              className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                              className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                 (pathname === "/forms" ||
                                   pathname.includes("forms")) &&
                                 "bg-graydark "
@@ -776,7 +787,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <li>
                                   <Link
                                     href="/admin/lemdiklat/fasilitas/penginapan"
-                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                    className={`group relative flex items-center gap-2.5 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                       pathname ===
                                         "/admin/lemdiklat/fasilitas/penginapan" &&
                                       "text-white"
@@ -788,7 +799,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <li>
                                   <Link
                                     href="/admin/lemdiklat/fasilitas/konsumsi"
-                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                    className={`group relative flex items-center gap-2.5 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                       pathname ===
                                         "/admin/lemdiklat/fasilitas/konsumsi" &&
                                       "text-white"
@@ -800,7 +811,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <li>
                                   <Link
                                     href="/forms/form-elements"
-                                    className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
+                                    className={`group relative flex items-center gap-2.5 rounded-md  font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
                                       pathname === "/forms/form-elements" &&
                                       "text-white"
                                     }`}
@@ -823,7 +834,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <li>
                         <Link
                           href="/admin/lemdiklat/pnbp"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/admin/lemdiklat/pnbp" ||
                               pathname.includes("pnbp")) &&
                             "bg-graydark "

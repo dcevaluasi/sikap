@@ -251,7 +251,7 @@ export type BalaiPelatihanBank = {
 }
 
 export type ManningAgent = {
-  IdManningAgent: number
+  IdManingAgent: number
   NamaManingAgent: string;
   NoTelpon: number;
   NamaPenanggungJawab: string;
@@ -265,5 +265,60 @@ export type ManningAgent = {
 }
 
 export type ManningAgentPelatihan = {
+  IdMiningAgentPelatihan: number
+  IdManingAgent: number
+  IdPelatihan: string
+  NamaPelatihan: string
+  BidangPelatihan: string
+  DetailPelatihan: string
+  TanggalMulai: string
+  TanggalBerakhir: string
+  StatusAproval: string
+  MetodePembayaran: string
+  WaktuPembayaran: string
+  Keterangan: string
+  IsActice: string
+  TotalBayar: string
+  CreteAt: string
+  UpdateAt: string
+  NoVaBayar: string
+  JumlahPeserta: string
+  BuktiBayar: string
+  Kode_billing_pelatihan: string
+  Kode_billing_sarpras: string
+  ManningAgentUsers: ManningAgentUsers[]
+}
 
+export type ManningAgentUsers = {
+  Agama: string
+  Alamat: string
+  CreateAt: string
+  Email: string
+  Foto: string
+  GolonganDarah: string
+  IbuKandung: string
+  IdManningAgentUsers: number
+  IdMiningAgentPelatihan: number
+  Ijazah: string
+  JenisKelamin: string
+  KK: string
+  Kewarganegaraan: string
+  Kota: string
+  Ktp: string
+  KusukaUsers: string
+  Nama: string
+  NegaraTujuanBekerja:
+  string
+  Nik: string
+  NoTelpon: string
+  Password: string
+  Pekerjaan: string
+  PendidikanTerakhir: string
+  Provinsi: string
+  Status: string
+  StatusMenika: string
+  SuratKesehatan: string
+  TanggalLahir: string
+  TempatLahir: string
+  UpdateAt: string
 }

@@ -7,12 +7,18 @@ import { User } from "@/types/user";
 import UserService from "@/components/user-service";
 import Footer from "@/components/ui/footer";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ManningAgent } from "@/types/product";
+import ManningAgentService from "@/components/manning-agent-service";
 
 export default function Page() {
   const token = Cookies.get("XSRF081");
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  const isManningAgent = Cookies.get("isManningAgent");
+  const idManningAgent = Cookies.get("IdManningAgent");
 
   const [userDetail, setUserDetail] = React.useState<User | null>(null);
+  const [manningAgentDetail, setManningAgentDetail] =
+    React.useState<ManningAgent | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const handleFetchingUserDetail = async () => {
@@ -36,12 +42,38 @@ export default function Page() {
     }
   };
 
+  const handleFetchingManningAgentDetail = async () => {
+    setIsLoading(true);
+
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${baseUrl}/manningAgent/getManningAgent?id=${idManningAgent}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log({ response });
+      setManningAgentDetail(response.data.data[0]);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error posting training data:", error);
+      throw error;
+    }
+  };
+
   const [loading, setLoading] = React.useState<boolean>(true);
 
   React.useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      handleFetchingUserDetail();
+      if (isManningAgent == "true") {
+        handleFetchingManningAgentDetail();
+      } else {
+        handleFetchingUserDetail();
+      }
     }, 1000);
   }, []);
 
@@ -60,6 +92,12 @@ export default function Page() {
                 Dashboard <br />
                 {isLoading ? (
                   <Skeleton className="w-[100px] h-[100px] rounded-full" />
+                ) : isManningAgent == "true" ? (
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
+                    {manningAgentDetail == null
+                      ? ""
+                      : manningAgentDetail.NamaManingAgent}
+                  </span>
                 ) : (
                   <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
                     {userDetail == null ? "" : userDetail.Nama}
@@ -76,7 +114,11 @@ export default function Page() {
             </div>
           </div>
         </div>
-        <UserService user={userDetail} />
+        {isManningAgent == "true" ? (
+          <ManningAgentService manningAgent={manningAgentDetail} />
+        ) : (
+          <UserService user={userDetail} />
+        )}
       </section>
       <Footer />
     </>

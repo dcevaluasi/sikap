@@ -260,7 +260,7 @@ function FormRegistrasi() {
               JSON.stringify({
                 email: emailManningAgent,
                 password: passwordManningAgent,
-                nama_manning_agent: namaManningAgent,
+                nama_maning_agent: namaManningAgent,
                 no_telpon: noTelponManingAgent,
                 nama_penanggung_jawab: namaPenanggungJawabManningAgent,
                 alamat: alamat,

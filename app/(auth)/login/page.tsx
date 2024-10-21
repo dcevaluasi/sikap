@@ -1,4 +1,5 @@
 import FormLogin from "@/components/auth/FormLogin";
+import Footer from "@/components/ui/footer";
 
 export const metadata = {
   title: "Login E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
@@ -62,6 +63,7 @@ export default function SignUp() {
   return (
     <>
       <FormLogin />
+      <Footer />
     </>
   );
 }

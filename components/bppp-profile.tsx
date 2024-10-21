@@ -114,7 +114,7 @@ const Tab = () => {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Bidang Sertifikasi</SelectLabel>
-            <SelectItem value="Kepelatuan">Kepelautan</SelectItem>
+            <SelectItem value="Kepelautan">Kepelautan</SelectItem>
             <SelectItem value="Non-Kepelautan">Non-Kepelautan</SelectItem>
           </SelectGroup>
         </SelectContent>

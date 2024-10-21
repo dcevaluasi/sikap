@@ -193,47 +193,43 @@ function FormRegistrationTraining({
         ? (parseInt(harga) + selectedPenginapan.Harga) * jumlahPeserta
         : pelatihan?.HargaPelatihan * jumlahPeserta;
 
-    if (Cookies.get("isManningAgent")) {
-      setIsOpenFormPeserta(!isOpenFormPeserta);
-    } else {
-      try {
-        const formData = new FormData();
-        formData.append("IdPelatihan", id.toString());
-        formData.append("TotalBayar", totalBayarPeserta.toString());
-        formData.append("NamaPelatihan", pelatihan?.NamaPelatihan || "");
-        formData.append("BidangPelatihan", pelatihan?.BidangPelatihan || "");
-        formData.append("DetailPelatihan", pelatihan?.DetailPelatihan || "");
-        formData.append("StatusAproval", pelatihan?.StatusApproval || "");
-        formData.append("JumlahPeserta", jumlahPeserta.toString());
-        formData.append("MetodePembayaran", metodePembayaran || "");
-        if (fileBuktiBayar != null) {
-          formData.append("bukti_bayar", fileBuktiBayar);
-        }
-        const response: AxiosResponse = await axios.post(
-          `${baseUrl}/users/addPelatihan`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        Toast.fire({
-          icon: "success",
-          title: `Berhasil melakukan pendaftaran, tunggu kabar selanjutnya sobat ELAUT!`,
-        });
-        console.log({ response });
-        setIsOpenFormPembayaran(!isOpenFormPembayaran);
-        router.push("/dashboard");
-      } catch (error) {
-        console.error({ error });
-        Toast.fire({
-          icon: "error",
-          title: "Anda telah mendaftar pelatihan ini sebelumnya!",
-        });
+    try {
+      const formData = new FormData();
+      formData.append("IdPelatihan", id.toString());
+      formData.append("TotalBayar", totalBayarPeserta.toString());
+      formData.append("NamaPelatihan", pelatihan?.NamaPelatihan || "");
+      formData.append("BidangPelatihan", pelatihan?.BidangPelatihan || "");
+      formData.append("DetailPelatihan", pelatihan?.DetailPelatihan || "");
+      formData.append("StatusAproval", pelatihan?.StatusApproval || "");
+      formData.append("JumlahPeserta", jumlahPeserta.toString());
+      formData.append("MetodePembayaran", metodePembayaran || "");
+      if (fileBuktiBayar != null) {
+        formData.append("bukti_bayar", fileBuktiBayar);
       }
+      const response: AxiosResponse = await axios.post(
+        `${baseUrl}/manningAgent/createManingAgentPelatihan`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil melakukan pendaftaran, tunggu kabar selanjutnya sobat ELAUT!`,
+      });
+      console.log({ response });
+      setIsOpenFormPembayaran(!isOpenFormPembayaran);
+      router.push("/dashboard");
+    } catch (error) {
+      console.error({ error });
+      Toast.fire({
+        icon: "error",
+        title: "Anda telah mendaftar pelatihan ini sebelumnya!",
+      });
     }
   };
 
@@ -902,10 +898,8 @@ function FormRegistrationTraining({
                                     </label>
                                   </div>
                                 </div>
-                                <p className="text-sm text-gray-300">
-                                  <span>
-                                    File type: doc,pdf,types of images
-                                  </span>
+                                <p className="text-sm text-gray-800">
+                                  <span>Tipe file: doc,pdf, tipe gambar</span>
                                 </p>
                               </>
                             ) : (
