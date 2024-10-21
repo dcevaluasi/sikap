@@ -81,3 +81,38 @@ export function getMonthFromDateString(dateString: string) {
     const date = new Date(dateString);
     return (date.getMonth() + 1).toString().padStart(2, '0');
 }
+
+// <AlertDialog>
+// <AlertDialogTrigger asChild>
+ 
+// </AlertDialogTrigger>
+// <AlertDialogContent>
+//   <AlertDialogHeader>
+//     <AlertDialogTitle className="flex items-center gap-2">
+//       Update Foto Profile
+//     </AlertDialogTitle>
+//     <AlertDialogDescription>
+//       Upload foto profile terbaru mu, direkomendasikan agar
+//       dapat mengupload dengan pas foto yang telah dikrop!
+//     </AlertDialogDescription>
+//   </AlertDialogHeader>
+//   <fieldset>
+//     <form autoComplete="off">
+//       <input
+//         type="file"
+//         className="text-black h-10 text-base cursor-pointer w-full border border-neutral-200 rounded-md"
+//         required
+//         onChange={handleFileChange}
+//       />
+//       <AlertDialogFooter className="mt-3">
+//         <AlertDialogCancel>Cancel</AlertDialogCancel>
+//         <AlertDialogAction
+//           onClick={(e) => handleUpdateUser(e)}
+//         >
+//           Update
+//         </AlertDialogAction>
+//       </AlertDialogFooter>
+//     </form>
+//   </fieldset>
+// </AlertDialogContent>
+// </AlertDialog>

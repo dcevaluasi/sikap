@@ -461,60 +461,50 @@ function ManningAgentTrainingService({
                           </div>
                         </div>
 
-                        {manningAgent?.ManingAgentPelatihan[
-                          indexPelatihanSelected
-                        ]?.Keterangan! == "Valid" && (
-                          <div className="mt-6 flex gap-4 sm:gap-6">
-                            <div className="flex flex-col-reverse">
-                              <div className="text-sm font-medium text-gray-600">
-                                {
+                        <div className="mt-6 flex gap-4 sm:gap-6">
+                          <div className="flex flex-col-reverse">
+                            <div className="text-sm font-medium text-gray-600">
+                              {
+                                manningAgent?.ManingAgentPelatihan[
+                                  indexPelatihanSelected
+                                ]?.BidangPelatihan!
+                              }
+                            </div>
+                            <div className="text-xs text-gray-500">Bidang</div>
+                          </div>
+                        </div>
+
+                        <div className="mt-4">
+                          <div className="flex gap-1 flex-col">
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html:
                                   manningAgent?.ManingAgentPelatihan[
                                     indexPelatihanSelected
-                                  ]?.BidangPelatihan!
-                                }
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                Bidang
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {manningAgent?.ManingAgentPelatihan[
-                          indexPelatihanSelected
-                        ]?.Keterangan! == "Valid" && (
-                          <div className="mt-4">
-                            <div className="flex gap-1 flex-col">
-                              <p
-                                dangerouslySetInnerHTML={{
-                                  __html:
-                                    manningAgent?.ManingAgentPelatihan[
-                                      indexPelatihanSelected
-                                    ]! && !seeMore
-                                      ? truncateText(
-                                          manningAgent?.ManingAgentPelatihan[
-                                            indexPelatihanSelected
-                                          ]?.DetailPelatihan!,
-                                          300,
-                                          "..."
-                                        )
-                                      : manningAgent?.ManingAgentPelatihan[
+                                  ]! && !seeMore
+                                    ? truncateText(
+                                        manningAgent?.ManingAgentPelatihan[
                                           indexPelatihanSelected
                                         ]?.DetailPelatihan!,
-                                }}
-                                className="text-sm prose   text-justify group-hover:text-xs text-gray-500 prose-strong:text-gray-500 prose-p:leading-[140%] prose-strong:font-bold group-hover:duration-1000"
-                              />{" "}
-                              <p
-                                onClick={(e) => setSeeMore(!seeMore)}
-                                className="text-blue-500 text-sm cursor-pointer"
-                              >
-                                {seeMore
-                                  ? "Baca lebih sedikit"
-                                  : "Baca lebih lengkap"}
-                              </p>
-                            </div>
+                                        300,
+                                        "..."
+                                      )
+                                    : manningAgent?.ManingAgentPelatihan[
+                                        indexPelatihanSelected
+                                      ]?.DetailPelatihan!,
+                              }}
+                              className="text-sm prose   text-justify group-hover:text-xs text-gray-500 prose-strong:text-gray-500 prose-p:leading-[140%] prose-strong:font-bold group-hover:duration-1000"
+                            />{" "}
+                            <p
+                              onClick={(e) => setSeeMore(!seeMore)}
+                              className="text-blue-500 text-sm cursor-pointer"
+                            >
+                              {seeMore
+                                ? "Baca lebih sedikit"
+                                : "Baca lebih lengkap"}
+                            </p>
                           </div>
-                        )}
+                        </div>
 
                         {selectedPelatihan != null && (
                           <TimelineProgressManningAgent
@@ -593,46 +583,36 @@ function ManningAgentTrainingService({
                           </div>
                         </div>
 
-                        {manningAgent!.ManingAgentPelatihan[
-                          indexPelatihanSelected
-                        ]?.Keterangan! == "Valid" && (
-                          <div className="mt-6 flex gap-4 sm:gap-6">
-                            <div className="flex flex-col-reverse">
-                              <div className="text-sm font-medium text-gray-600">
-                                {
-                                  manningAgent!.ManingAgentPelatihan[
-                                    indexPelatihanSelected
-                                  ]?.BidangPelatihan!
-                                }
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                Bidang
-                              </div>
+                        <div className="mt-6 flex gap-4 sm:gap-6">
+                          <div className="flex flex-col-reverse">
+                            <div className="text-sm font-medium text-gray-600">
+                              {
+                                manningAgent!.ManingAgentPelatihan[
+                                  indexPelatihanSelected
+                                ]?.BidangPelatihan!
+                              }
                             </div>
+                            <div className="text-xs text-gray-500">Bidang</div>
                           </div>
-                        )}
+                        </div>
 
                         <div className="flex gap-6 w-full">
-                          {manningAgent!.ManingAgentPelatihan[
-                            indexPelatihanSelected
-                          ]?.Keterangan! == "Valid" && (
-                            <div className="mt-4 w-full">
-                              <div className="flex gap-1 flex-col">
-                                <p
-                                  dangerouslySetInnerHTML={{
-                                    __html:
-                                      manningAgent!.ManingAgentPelatihan[
-                                        indexPelatihanSelected
-                                      ]! &&
-                                      manningAgent!.ManingAgentPelatihan[
-                                        indexPelatihanSelected
-                                      ]?.DetailPelatihan!,
-                                  }}
-                                  className="text-sm prose   text-justify group-hover:text-xs text-gray-500 prose-strong:text-gray-500 prose-p:leading-[140%] prose-strong:font-bold group-hover:duration-1000"
-                                />{" "}
-                              </div>
+                          <div className="mt-4 w-full">
+                            <div className="flex gap-1 flex-col">
+                              <p
+                                dangerouslySetInnerHTML={{
+                                  __html:
+                                    manningAgent!.ManingAgentPelatihan[
+                                      indexPelatihanSelected
+                                    ]! &&
+                                    manningAgent!.ManingAgentPelatihan[
+                                      indexPelatihanSelected
+                                    ]?.DetailPelatihan!,
+                                }}
+                                className="text-sm prose   text-justify group-hover:text-xs text-gray-500 prose-strong:text-gray-500 prose-p:leading-[140%] prose-strong:font-bold group-hover:duration-1000"
+                              />{" "}
                             </div>
-                          )}
+                          </div>
 
                           <div className="-mt-6 w-[90%]">
                             {selectedPelatihan != null && (

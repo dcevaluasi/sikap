@@ -8,6 +8,19 @@ import { RiVerifiedBadgeFill } from "react-icons/ri";
 import Link from "next/link";
 import Cookies from "js-cookie";
 
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,10 +38,13 @@ import {
   ManningAgentPelatihan,
   PelatihanMasyarakat,
 } from "@/types/product";
-import { Button } from "@/components/ui/button";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
 import Toast from "@/components/toast";
 import axios, { AxiosError } from "axios";
+import TableDataPesertaPelatihan from "../Pelatihan/TableDataPesertaPelatihan";
+import TablelDataPesertaPelatihanManningAgent from "../Pelatihan/TablelDataPesertaPelatihanManningAgent";
+import { TbDatabaseExport } from "react-icons/tb";
+import { generateTanggalPelatihan } from "@/utils/text";
 
 export const TimelineProgressManningAgent = ({
   manningAgent,
@@ -273,14 +289,59 @@ export const TimelineProgressManningAgent = ({
                           menunggu data peserta yang diupload diverifikasi oleh
                           balai pelatihan sebelum melanjutkan ke pelaksanaan
                         </span>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
-                        >
-                          <HiUserGroup className="h-4 w-4 text-blue-600" />{" "}
-                          <span className="text-sm">Lihat Data Peserta</span>
-                        </Button>
+
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+                            >
+                              <HiUserGroup className="h-4 w-4 text-blue-600" />{" "}
+                              <span className="text-sm">
+                                Lihat Data Peserta
+                              </span>
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[1225px]">
+                            <DialogHeader>
+                              <div className="flex gap-2 items-center">
+                                <HiMiniUserGroup className="text-3xl text-blue-500" />
+                                <div className="flex flex-col">
+                                  <DialogTitle>
+                                    Pelatihan {pelatihan?.NamaPelatihan}
+                                  </DialogTitle>
+                                  <DialogDescription className="max-w-xl mt-1">
+                                    Daftar data peserta pelatihan{" "}
+                                    {pelatihan?.NamaPelatihan}, harap berikan
+                                    data ini kepada peserta pelatihan yang kamu
+                                    daftarkan untuk mengikuti rangkaian
+                                    pelatihan yang sedang diikuti
+                                  </DialogDescription>
+                                </div>
+                              </div>
+                            </DialogHeader>
+                            <div className="flex flex-col gap-2">
+                              <TablelDataPesertaPelatihanManningAgent
+                                data={pelatihan!.ManningAgentUsers!}
+                              />
+                              <p className="italic text-xs max-w-xl leading-none">
+                                *Untuk password pada data peserta yang baru
+                                mempunyai akun harap diinfokan untuk mereset
+                                password dengan memasukkan nomor NIK dan
+                                lanjutkan dengan proses login dengan nomor
+                                telpon yang sudah didaftarkan dengan password
+                                yang sudah direset
+                              </p>
+                            </div>
+                            <DialogFooter>
+                              <Button type="submit">
+                                <TbDatabaseExport className="mr-1" />
+                                Export Data
+                              </Button>
+                            </DialogFooter>
+                          </DialogContent>
+                        </Dialog>
                       </div>
                     ) : (
                       <></>
@@ -290,44 +351,24 @@ export const TimelineProgressManningAgent = ({
 
                 <div
                   className={`flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] ${
-                    manningAgent!.Keterangan == "Valid"
-                      ? "before:bg-green-400"
-                      : manningAgent!.Keterangan == "Tidak Valid"
-                      ? "before:bg-rose-500"
+                    pelatihan?.ManningAgentUsers.length > 0
+                      ? "before:bg-blue-500"
                       : "before:bg-gray-700"
                   } bg-white shadow-custom p-4 rounded-xl duration-700 cursor-pointer`}
                 >
                   <h3 className="text-lg font-semibold">Validasi Peserta </h3>
 
                   <time
-                    className={`text-sm font-medium text-gray-600 ${
-                      manningAgent?.Keterangan! == "Tidak Valid"
-                        ? "text-rose-500"
-                        : manningAgent?.Keterangan! == "Valid"
-                        ? "text-green-500"
+                    className={`text-sm font-medium ${
+                      pelatihan?.ManningAgentUsers.length > 0
+                        ? "text-blue-500"
                         : "text-gray-700"
                     }`}
                   >
-                    {manningAgent?.Keterangan! == "Tidak Valid" ? (
-                      <span className="flex items-start gap-1">
-                        <IoMdCloseCircle className="mt-[0.134rem]" />
-                        <span className="flex flex-col">
-                          <span>Kelengkapan data tidak valid</span>
-                        </span>
-                      </span>
-                    ) : manningAgent?.Keterangan! == "Valid" ? (
-                      <span className="flex items-center">
-                        <RiVerifiedBadgeFill className="text" />
-                        Data pendaftaran anda valid
-                      </span>
-                    ) : (
-                      <span className="flex items-start gap-1">
-                        <PiQuestionFill className="mt-[0.134rem]" />
-                        <span className="flex flex-col">
-                          <span> Data belum divalidasi operator</span>
-                        </span>
-                      </span>
-                    )}
+                    <span className="flex items-center">
+                      <RiVerifiedBadgeFill className="text" />
+                      Cek pada akun masing-masing
+                    </span>
                   </time>
                   <p className="text-gray-700">
                     {manningAgent?.Keterangan! == "Tidak Valid" ? (
@@ -363,13 +404,92 @@ export const TimelineProgressManningAgent = ({
                           <span className="text-xs">
                             Proses ini dilakukan oleh balai pelatihan, untuk
                             memastikan kelengkapan data dan dokumen yang
-                            diperlukan sudah memenuhi persyaratan atau belum,
+                            diperlukan sudah memenuhi persyaratan atau belum
+                            pada masing-masing akun yang sudah kamu daftarkan
+                            sebelumnya silahkan cek pada kaun masing-masing dan
                             harap menunggu dalam 1x24 jam.
                           </span>
                         </span>
                       </span>
                     )}
                   </p>
+                </div>
+
+                <div
+                  className={`flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] ${
+                    detailPelatihan!.StatusApproval == "Selesai"
+                      ? "before:bg-blue-400"
+                      : "before:bg-gray-700"
+                  } bg-white shadow-custom p-4 rounded-xl duration-700 cursor-pointer `}
+                >
+                  <h3 className="text-lg font-semibold">
+                    Pelaksanaan Pelatihan {detailPelatihan!.NamaPelatihan}
+                  </h3>
+                  <time className="text-sm text-gray-600">
+                    {generateTanggalPelatihan(
+                      detailPelatihan!.TanggalMulaiPelatihan
+                    )}{" "}
+                    -{" "}
+                    {generateTanggalPelatihan(
+                      detailPelatihan!.TanggalBerakhirPelatihan
+                    )}
+                  </time>
+                  {detailPelatihan!.StatusApproval == "Selesai" ? (
+                    <span className="text-xs">
+                      Pelatihan{" "}
+                      <span className="font-bold">
+                        {detailPelatihan!.NamaPelatihan}
+                      </span>{" "}
+                      sudah selesai dilaksanakan, harap mengikuti arahan
+                      selanjutnya oleh panitia atau instruktur pelatihan! Yang
+                      pelaksanaanya terdiri dari : <br />
+                      <span>1.Ujian Pre-test</span> <br />
+                      <span>2. Pelaksaan Pelatihan (Teori & Praktek)</span>
+                      <br />
+                      <span>3. Ujian Post-test</span>
+                    </span>
+                  ) : (
+                    <span className="text-xs">
+                      Pelatihan{" "}
+                      <span className="font-bold">
+                        {detailPelatihan!.NamaPelatihan}
+                      </span>{" "}
+                      ini dilaksanakan secara{" "}
+                      <span className="font-bold">
+                        {" "}
+                        {detailPelatihan!.PelaksanaanPelatihan}
+                      </span>{" "}
+                      harap dapat mengikuti pelatihan dengan seksama dan
+                      semangat sobat E-LAUT! Yang pelaksanaanya terdiri dari :{" "}
+                      <br />
+                      <span>1. Ujian Pre-test</span> <br />
+                      <span>2. Pelaksaan Pelatihan (Teori & Praktek)</span>
+                      <br />
+                      <span>3. Ujian Post-test</span>
+                    </span>
+                  )}
+                </div>
+
+                <div
+                  className={`flex flex-col sm:relative sm:before:absolute sm:before:top-2 sm:before:w-4 sm:before:h-4 sm:before:rounded-full sm:before:left-[-35px] sm:before:z-[1] ${
+                    detailPelatihan!.StatusApproval == "Selesai" &&
+                    detailPelatihan.NoSertifikat != ""
+                      ? "before:bg-blue-500"
+                      : "before:bg-gray-700"
+                  } bg-white shadow-custom p-4 rounded-xl duration-700 cursor-pointer `}
+                >
+                  <h3 className="text-lg font-semibold">
+                    Sertifikat Pelatihan {pelatihan!.NamaPelatihan}
+                  </h3>
+                  <time className="text-sm text-gray-600">
+                    Bidang {pelatihan!.BidangPelatihan}
+                  </time>
+                  <span className="text-xs">
+                    {detailPelatihan!.StatusApproval == "Selesai" &&
+                    detailPelatihan.NoSertifikat != ""
+                      ? "Selamat, peserta-mu telah mengikuti dan menyelesaikan rangkaian pelatihan. Sertifikat pelatihan dapat diakses melalui akun masing - masing peserta!"
+                      : "Harap mengikuti rangkaian pelaksanaan pelatihan untuk mendapatkan sertifikat serta pastikan peserta mu dapat mengikuti rangkaian pelatihan dengan baik."}
+                  </span>
                 </div>
               </div>
             </div>

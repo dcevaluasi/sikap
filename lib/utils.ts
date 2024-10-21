@@ -51,3 +51,20 @@ export function formatToRupiah(amount: number): string {
     currency: 'IDR'
   }).format(amount);
 }
+
+export function formatIndonesianDateFromString(input: string): string {
+  const months = [
+    "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+    "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+  ];
+
+  // Split the input by "-"
+  const [month, day, year] = input.split("-").map(Number);
+
+  // Format the year (assuming 20XX for two-digit years)
+  const fullYear = year < 50 ? 2000 + year : 1900 + year;
+
+  const monthName = months[month - 1];
+
+  return `${day} ${monthName} ${fullYear}`;
+}
