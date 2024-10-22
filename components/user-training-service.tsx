@@ -60,6 +60,7 @@ import { elautBaseUrl } from "@/constants/urls";
 import Image from "next/image";
 import { PiQuestionFill } from "react-icons/pi";
 import { TimelineProgressPesertaPelatihan } from "./dashboard/Dashboard/TimelineProgressPesertaPelatihan";
+import { TimelineProgressPortfolio } from "./dashboard/Dashboard/TimelineProgressPortfolio";
 
 function UserTrainingService({ user }: { user: User | null }) {
   const [indexPelatihanSelected, setIndexPelatihanSelected] =
@@ -608,14 +609,22 @@ function UserTrainingService({ user }: { user: User | null }) {
                           </div>
                         )}
 
-                        {selectedPelatihan != null && (
-                          <TimelineProgressPesertaPelatihan
-                            userDetail={
-                              userDetail?.Pelatihan[indexPelatihanSelected]!
-                            }
-                            pelatihan={selectedPelatihan!}
-                          />
-                        )}
+                        {selectedPelatihan != null &&
+                          (selectedPelatihan!.UjiKompotensi == "Portfolio" ? (
+                            <TimelineProgressPortfolio
+                              userDetail={
+                                userDetail?.Pelatihan[indexPelatihanSelected]!
+                              }
+                              pelatihan={selectedPelatihan!}
+                            />
+                          ) : (
+                            <TimelineProgressPesertaPelatihan
+                              userDetail={
+                                userDetail?.Pelatihan[indexPelatihanSelected]!
+                              }
+                              pelatihan={selectedPelatihan!}
+                            />
+                          ))}
 
                         {typePelatihanSelected == "Online" && (
                           <div className="mt-3">

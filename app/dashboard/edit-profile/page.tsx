@@ -4,11 +4,13 @@ export const metadata = {
 };
 
 import FormCompleteProfile from "@/components/dashboard/users/formCompleteProfile";
+import Footer from "@/components/ui/footer";
 
 export default function Page() {
   return (
     <>
       <FormCompleteProfile />
+      <Footer />
     </>
   );
 }

@@ -271,7 +271,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     }
     data.append("LokasiPelatihan", lokasiPelatihan);
     data.append("PelaksanaanPelatihan", pelaksanaanPelatihan);
-    data.append("UjiKompetensi", ujiKompetensi);
+    data.append("UjiKompotensi", ujiKompetensi);
     data.append("KoutaPelatihan", kuotaPelatihan);
     data.append("AsalPelatihan", asalPelatihan);
     data.append("JenisSertifikat", jenisSertifikat);
@@ -1183,33 +1183,39 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                       </div>
 
                       <p className="text-base flex gap-2 border-b border-b-gray-300 pb-2 mb-2 items-center text-gray-900 font-semibold max-w-md mt-2">
-                        <RiVerifiedBadgeLine />{" "}
-                        <span>Pelaksanaan Test Pelatihan</span>
+                        <RiVerifiedBadgeLine /> <span>Penilaian Pelatihan</span>
                       </p>
 
-                      <div className="w-full">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="ujiKompetensi"
-                        >
-                          Test Pelatihan <span className="text-red-600">*</span>
-                        </label>
-                        <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                          <div>
-                            <Checkbox
-                              onCheckedChange={(checked: CheckedState) =>
-                                setUjiKompetensi(checked.toString())
-                              }
-                            />
-                          </div>
-                          <div className="space-y-1 leading-none">
-                            <label>Pre Test dan Post Test Pelatihan</label>
-                            <p className="text-xs text-gray-600">
-                              Jika pelatihan yang diselenggarakan terdapat
-                              pelaksanaan pre-test dan post-test, silahkan
-                              dicheck
-                            </p>
-                          </div>
+                      <div className="flex flex-wrap mb-1 w-full">
+                        <div className="w-full">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="jensiPelatihan"
+                          >
+                            Jenis Penilaian{" "}
+                            <span className="text-red-600">*</span>
+                          </label>
+                          <Select
+                            value={ujiKompetensi}
+                            onValueChange={(value: string) =>
+                              setUjiKompetensi(value)
+                            }
+                          >
+                            <SelectTrigger className="w-full text-base py-5">
+                              <SelectValue placeholder="Pilih jenis penilaian" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="Ujian Pre-test dan Post-test">
+                                Ujian Pre-test dan Post-test
+                              </SelectItem>
+                              <SelectItem value="Portfolio">
+                                Portfolio
+                              </SelectItem>
+                              <SelectItem value="Kelautan">
+                                Tidak Ada Penilaian Teknis
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
                       </div>
 

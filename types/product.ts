@@ -49,7 +49,7 @@ export type PelatihanMasyarakat = {
   SilabusPelatihan: string
   LokasiPelatihan: string
   PelaksanaanPelatihan: string
-  UjiKompetensi: string
+  UjiKompotensi: string
   KoutaPelatihan: string // type from be, should be KuotaPelatihan
   AsalPelatihan: string
   JenisSertifikat: string

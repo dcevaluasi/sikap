@@ -378,23 +378,27 @@ function DetailPelatihan() {
                   </Link>
                 </td>
               </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">
-                  Bank Soal Pelatihan
-                </td>
-                <td className="p-4 w-2/3">
-                  <Link
-                    target="_blank"
-                    className="text-blue-500 underline flex gap-2 items-center"
-                    href={`/admin/lemdiklat/pelatihan/${
-                      pelatihan!.KodePelatihan
-                    }/bank-soal/${pelatihan!.IdPelatihan}`}
-                  >
-                    <FiUploadCloud />
-                    Upload Bank Soal
-                  </Link>
-                </td>
-              </tr>
+              {pelatihan?.UjiKompotensi == "Portfolio" ? (
+                <></>
+              ) : (
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Bank Soal Pelatihan
+                  </td>
+                  <td className="p-4 w-2/3">
+                    <Link
+                      target="_blank"
+                      className="text-blue-500 underline flex gap-2 items-center"
+                      href={`/admin/lemdiklat/pelatihan/${
+                        pelatihan!.KodePelatihan
+                      }/bank-soal/${pelatihan!.IdPelatihan}`}
+                    >
+                      <FiUploadCloud />
+                      Upload Bank Soal
+                    </Link>
+                  </td>
+                </tr>
+              )}
             </table>
           </div>
         </div>

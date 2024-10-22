@@ -160,9 +160,12 @@ export default function UserDocuments({ user }: { user: User | null }) {
                   height={0}
                   className="w-32 h-32 rounded-full object-cover"
                 />
-                <div className="w-fit bg-white rounded-full p-2 shadow-custom absolute right-0 cursor-pointer bottom-4">
+                <Link
+                  href={"/dashboard/edit-profile"}
+                  className="w-fit bg-white rounded-full p-2 shadow-custom absolute right-0 cursor-pointer bottom-4"
+                >
                   <Edit3Icon />
-                </div>
+                </Link>
               </div>
 
               <div className="mt-4">

@@ -74,6 +74,7 @@ import Cookies from "js-cookie";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import { User } from "@/types/user";
 import { formatToRupiah } from "@/lib/utils";
+import { elautBaseUrl } from "@/constants/urls";
 
 const TableDataPesertaPelatihan = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -131,6 +132,10 @@ const TableDataPesertaPelatihan = () => {
   );
 
   const router = useRouter();
+
+  const [pelatihan, setPelatihan] = React.useState<PelatihanMasyarakat | null>(
+    null
+  );
 
   const handleUpdatePublishPelatihanToELAUT = async (
     id: number,
@@ -481,42 +486,42 @@ const TableDataPesertaPelatihan = () => {
           </DialogSertifikatPelatihan>
         ),
     },
-    // {
-    //   accessorKey: "IdUserPelatihan",
-    //   header: ({ column }) => {
-    //     return (
-    //       <Button
-    //         variant="ghost"
-    //         className={`flex  ${
-    //           usePathname().includes("puslat") && "hidden"
-    //         } items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
-    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //       >
-    //         Input <br />
-    //         Penilaian
-    //         <TbDatabaseEdit className="ml-1 h-4 w-4" />
-    //       </Button>
-    //     );
-    //   },
-    //   cell: ({ row }) => (
-    //     <div
-    //       className={` flex ${
-    //         usePathname().includes("puslat") && "hidden"
-    //       } items-center justify-center w-full gap-1`}
-    //     >
-    //       <Button
-    //         onClick={(e) => {
-    //           setIsOpenFormInputNilai(!isOpenFormInputNilai);
-    //           setSelectedIdPeserta(row.original?.IdUserPelatihan);
-    //         }}
-    //         variant="outline"
-    //         className=" border border-purple-600"
-    //       >
-    //         <LucideListChecks className="h-4 w-4 text-purple-600" />
-    //       </Button>
-    //     </div>
-    //   ),
-    // },
+    {
+      accessorKey: "IdUserPelatihan",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={`flex  ${
+              usePathname().includes("puslat") && "hidden"
+            } items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Input <br />
+            Penilaian
+            <TbDatabaseEdit className="ml-1 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={` flex ${
+            usePathname().includes("puslat") && "hidden"
+          } items-center justify-center w-full gap-1`}
+        >
+          <Button
+            onClick={(e) => {
+              setIsOpenFormInputNilai(!isOpenFormInputNilai);
+              setSelectedIdPeserta(row.original?.IdUserPelatihan);
+            }}
+            variant="outline"
+            className=" border border-purple-600"
+          >
+            <LucideListChecks className="h-4 w-4 text-purple-600" />
+          </Button>
+        </div>
+      ),
+    },
     {
       accessorKey: "PreTest",
       header: ({ column }) => {
@@ -526,7 +531,12 @@ const TableDataPesertaPelatihan = () => {
             className={`flex items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            Pre Test
+            {dataPelatihan != null
+              ? dataPelatihan!.UjiKompotensi == "Portfolio"
+                ? "Portfolio"
+                : "Pre Test"
+              : ""}
+
             <MdOutlineNumbers className="ml-1 h-4 w-4" />
           </Button>
         );
@@ -551,7 +561,13 @@ const TableDataPesertaPelatihan = () => {
         return (
           <Button
             variant="ghost"
-            className={`flex items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
+            className={`${
+              dataPelatihan != null
+                ? dataPelatihan!.UjiKompotensi == "Portfolio"
+                  ? "hidden"
+                  : "flex items-center justify-center"
+                : ""
+            }  p-0 leading-[105%] w-full text-gray-900 font-semibold`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Post Test
@@ -561,7 +577,13 @@ const TableDataPesertaPelatihan = () => {
       },
       cell: ({ row }) => (
         <div
-          className={` flex items-center justify-center w-full gap-1 font-semibold ${
+          className={` ${
+            dataPelatihan != null
+              ? dataPelatihan!.UjiKompotensi == "Portfolio"
+                ? "hidden"
+                : "flex items-center justify-center"
+              : ""
+          }  w-full gap-1 font-semibold ${
             row.original.PostTest > 70
               ? "text-green-500"
               : row.original.PostTest > 50
@@ -579,7 +601,13 @@ const TableDataPesertaPelatihan = () => {
         return (
           <Button
             variant="ghost"
-            className={`text-black font-semibold`}
+            className={`text-black font-semibold ${
+              dataPelatihan != null
+                ? dataPelatihan!.UjiKompotensi == "Portfolio"
+                  ? "hidden"
+                  : "flex items-center justify-center"
+                : ""
+            } `}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Keterangan
@@ -590,6 +618,12 @@ const TableDataPesertaPelatihan = () => {
       cell: ({ row }) => (
         <div
           className={`text-center uppercase text-base font-semibold ${
+            dataPelatihan != null
+              ? dataPelatihan!.UjiKompotensi == "Portfolio"
+                ? "hidden"
+                : "flex items-center justify-center"
+              : ""
+          }  ${
             row.original.PostTest > 65 ? "text-green-500" : "text-rose-500"
           }`}
         >
@@ -630,7 +664,6 @@ const TableDataPesertaPelatihan = () => {
   const handleUploadNilaiPeserta = async (id: number) => {
     const formData = new FormData();
     formData.append("PreTest", nilaiPretest);
-    formData.append("PostTest", nilaiPosttest);
 
     try {
       const response = await axios.put(
@@ -644,7 +677,7 @@ const TableDataPesertaPelatihan = () => {
       );
       Toast.fire({
         icon: "success",
-        title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+        title: `Berhasil mengupdate data penilaian!`,
       });
       console.log("UPDATE PELATIHAN: ", response);
       handleFetchingPublicTrainingDataById();
@@ -653,7 +686,7 @@ const TableDataPesertaPelatihan = () => {
       console.error("ERROR UPDATE PELATIHAN: ", error);
       Toast.fire({
         icon: "success",
-        title: `Gagal mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
+        title: `Gagal mengupdate data penilaian!`,
       });
       handleFetchingPublicTrainingDataById();
       setIsOpenFormInputNilai(!isOpenFormInputNilai);
@@ -713,8 +746,8 @@ const TableDataPesertaPelatihan = () => {
               Upload Nilai Peserta
             </AlertDialogTitle>
             <AlertDialogDescription className="-mt-2">
-              Upload nilai peserta pelatihan yang diselenggarakan yang nantinya
-              akan tercantum pada sertifikat peserta pelatihan!
+              Upload nilai peserta pelatihan dari dokumen portfolio yang
+              dikirimkan sebagai bahan penilaian!
             </AlertDialogDescription>
           </AlertDialogHeader>
           <fieldset>
@@ -726,7 +759,7 @@ const TableDataPesertaPelatihan = () => {
                       className="block text-gray-800 text-sm font-medium mb-1"
                       htmlFor="name"
                     >
-                      Nilai Pre Test <span className="text-red-600">*</span>
+                      Nilai Portfolio <span className="text-red-600">*</span>
                     </label>
                     <input
                       id="name"
@@ -735,22 +768,6 @@ const TableDataPesertaPelatihan = () => {
                       required
                       value={nilaiPretest}
                       onChange={(e) => setNilaiPretest(e.target.value)}
-                    />
-                  </div>
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Nilai Post Test <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      required
-                      value={nilaiPosttest}
-                      onChange={(e) => setNilaiPosttest(e.target.value)}
                     />
                   </div>
                 </div>
