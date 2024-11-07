@@ -109,7 +109,7 @@ const ChartPopover: React.FC<{ data: Blanko[] }> = ({ data }) => {
                   (item) =>
                     item.TipeBlanko === "Certificate of Competence (CoC)"
                 )
-                .reduce((total, item) => total + item.Jumlah, 0) - 2}
+                .reduce((total, item) => total + item.Jumlah, 0) }
             </span>
           </div>
         </div>

@@ -17,6 +17,7 @@ export const metadata = {
     "pelatihan awak kapal",
     "e-learning kelautan",
     "e-learning perikanan",
+    "elaut",
     "BPPSDM KP",
     "pendidikan kelautan",
     "pendidikan perikanan",
