@@ -68,3 +68,19 @@ export function formatIndonesianDateFromString(input: string): string {
 
   return `${day} ${monthName} ${fullYear}`;
 }
+
+export function generateRandomString(source: string, length: number): string {
+  if (length <= 0) {
+    throw new Error("Length must be greater than 0");
+  }
+
+  let result = "";
+  const sourceLength = source.length;
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * sourceLength);
+    result += source[randomIndex];
+  }
+
+  return result;
+}

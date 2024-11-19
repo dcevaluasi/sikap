@@ -9,7 +9,7 @@ import { HiMiniComputerDesktop } from "react-icons/hi2";
 const UjianKeahlianAKP: React.FC = () => {
   return (
     <>
-      <div className="flex flex-col">
+      {/* <div className="flex flex-col">
         <div className="flex flex-row gap-2 items-center">
           <HiMiniComputerDesktop className="text-4xl" />
           <div className="flex flex-col">
@@ -21,7 +21,7 @@ const UjianKeahlianAKP: React.FC = () => {
             </p>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="mt-4 md:mt-6 2xl:mt-7.5">
         <TableDataUjian />

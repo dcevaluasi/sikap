@@ -225,6 +225,7 @@ export default function Header() {
         usePathname().includes("post-test") ||
         usePathname().includes("/dpkakp/admin") ||
         usePathname().includes("/dpkakp/user") ||
+        usePathname().includes("/dpkakp/public") ||
         usePathname().includes("/dpkakp/penguji") ||
         usePathname().includes("/pukakp/admin") ||
         usePathname().includes("/pukakp/user") ||
