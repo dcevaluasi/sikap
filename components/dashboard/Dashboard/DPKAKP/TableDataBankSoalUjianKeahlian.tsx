@@ -93,40 +93,20 @@ import {
   getIdUjianKeahlianInBankSoal2,
 } from "@/components/utils/dpkakp/pathname";
 import { dpkakpBaseUrl } from "@/constants/urls";
+import Image from "next/image";
+import {
+  Bagian,
+  PaketBagianDetail,
+  SoalUjianBagian,
+} from "@/types/ujian-keahlian-akp";
+import { SelectValue } from "@radix-ui/react-select";
 
 const TableDataBankSoalUjianKeahlian = () => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const pathname = usePathname();
-  const id = extractLastSegment(pathname);
   const [data, setData] = React.useState<SoalUjianBagian[]>([]);
   const [dataBagian, setDataBagian] = React.useState<Bagian | null>(null);
-  const route = useRouter();
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
-
-  const handleFetchingTypeUjian = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${
-          process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL
-        }/adminPusat/getTypeUjian?id=${getIdUjianKeahlianInBankSoal2(
-          pathname!
-        )}`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-      console.log(response);
-      setData(response.data.data[0]!.Fungsi[0]!.Bagian[0]!.SoalUjianBagian);
-    } catch (error) {
-      console.error("Error posting tipe ujian:", error);
-      setIsFetching(false);
-      throw error;
-    }
-  };
 
   const handleFetchingBagianUjian = async () => {
     setIsFetching(true);
@@ -143,7 +123,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       );
       console.log(response);
       setDataBagian(response.data.data[0]!);
-      setData(response.data!.data[0]!.SoalUjianBagian!);
+      setData(response.data!.data[0]!.PaketBagian[0]!.SoalUjianBagian);
     } catch (error) {
       console.error("Error posting tipe ujian:", error);
       setIsFetching(false);
@@ -151,18 +131,15 @@ const TableDataBankSoalUjianKeahlian = () => {
     }
   };
 
+  console.log({ dataBagian });
+  console.log({ data });
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
-  const [
-    openFormValidasiDataPesertaPelatihan,
-    setOpenFormValidasiDataPesertaPelatihan,
-  ] = React.useState<boolean>(false);
 
-  const [validitasDataPeserta, setValiditasDataPeserta] =
-    React.useState<string>("");
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -202,13 +179,55 @@ const TableDataBankSoalUjianKeahlian = () => {
         );
       },
       cell: ({ row }) => (
-        <div className={`${"ml-0"} text-left capitalize`}>
+        <div className={`${"ml-0"} text-left capitalize flex flex-col gap-1`}>
+          {row.original.GambarSoal ? (
+            <Image
+              src={row.original.GambarSoal!}
+              alt={row.original.Soal}
+              width={0}
+              height={0}
+              className="w-48"
+            />
+          ) : (
+            <></>
+          )}
           <p className="text-base font-semibold tracking-tight leading-none">
             {row.original.Soal}
           </p>
         </div>
       ),
     },
+    // {
+    //   accessorKey: "Gambar Soal",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className={`text-black font-semibold w-fit p-0 flex justify-start items-center`}
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         <p className="leading-[105%]">Gambar Soal</p>
+
+    //         <RiVerifiedBadgeFill className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div className={`${"ml-0"} text-left capitalize w-[200px]`}>
+    //       {row.original.GambarSoal ? (
+    //         <Image
+    //           src={row.original.GambarSoal!}
+    //           alt={row.original.Soal}
+    //           width={0}
+    //           height={0}
+    //           className="w-48"
+    //         />
+    //       ) : (
+    //         <></>
+    //       )}
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: "IdUsers",
       header: ({ column }) => {
@@ -348,12 +367,6 @@ const TableDataBankSoalUjianKeahlian = () => {
     },
   });
 
-  const [isOpenFormInputNilai, setIsOpenFormInputNilai] = React.useState(false);
-  const [nilaiPretest, setNilaiPretest] = React.useState("");
-  const [nilaiPosttest, setNilaiPosttest] = React.useState("");
-
-  const [selectedIdPeserta, setSelectedIdPeserta] = React.useState(0);
-
   const [isOpenFormPeserta, setIsOpenFormPeserta] =
     React.useState<boolean>(false);
   const [fileExcelBankSoalPelatihan, setFileExcelBankPelatihan] =
@@ -399,43 +412,11 @@ const TableDataBankSoalUjianKeahlian = () => {
   const [isOpenFormDelete, setIsOpenFormDelete] =
     React.useState<boolean>(false);
 
-  const handleDeleteBankSoal = async (e: any) => {
-    e.preventDefault();
-    try {
-      const response = await axios.delete(
-        `${dpkakpBaseUrl}/adminPusat/deleteBagian?id=${getIdUjianKeahlianInBankSoal(
-          pathname!
-        )}`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-      console.log(response);
-      Toast.fire({
-        icon: "success",
-        title: `Selamat anda berhasil menghapus bank soal ujian keahlian!`,
-      });
-
-      handleFetchingBagianUjian();
-      setIsOpenFormDelete(!isOpenFormDelete);
-      route.replace("/lembaga/dpkakp/admin/dashboard/bank-soal");
-    } catch (error) {
-      console.error(error);
-      Toast.fire({
-        icon: "error",
-        title: `Gagal menghapus bank soal ujian keahlian!`,
-      });
-      handleFetchingBagianUjian();
-      setIsOpenFormDelete(!isOpenFormDelete);
-    }
-  };
-
   React.useEffect(() => {
-    // handleFetchingTypeUjian();
     handleFetchingBagianUjian();
   }, []);
+
+  const [selectedPaket, setSelectedPaket] = React.useState<string>("");
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
@@ -508,102 +489,65 @@ const TableDataBankSoalUjianKeahlian = () => {
         <h1>TEST</h1>
       ) : (
         <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex items-center mb-3 justify-between gap-3 ">
-            {/* Statistik Pelatihan */}
-            <div className="flex w-full gap-3 sm:gap-5">
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-primary">Total Soal</p>
-                  <p className="text-sm font-medium">{data?.length} soal</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex w-full items-center mb-2 -mt-3">
-            <div className="w-full flex justify-end gap-2">
-              <AlertDialog open={isOpenFormDelete}>
-                <AlertDialogTrigger asChild>
-                  <div
-                    onClick={(e) => setIsOpenFormDelete(!isOpenFormDelete)}
-                    className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                  >
-                    <TbTrash />
-                    Hapus Bank Soal
-                  </div>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Are you absolutely sure?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete
-                      your account and remove your data from our servers.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel
-                      onClick={(e) => setIsOpenFormDelete(!isOpenFormDelete)}
-                    >
-                      Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction onClick={(e) => handleDeleteBankSoal(e)}>
-                      Continue
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-
-              <div
-                onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-              >
-                <FiUploadCloud />
-                Import Bank Soal
-              </div>
-            </div>
-          </div>
-
           {/* List Data Pelatihan */}
-          <div>
-            <div id="chartOne" className="-ml-5"></div>
-            <TableData
-              isLoading={false}
-              columns={columns}
-              table={table}
-              type={"short"}
-            />
-            <div className="flex items-center justify-end space-x-2 py-4">
-              <div className="text-muted-foreground flex-1 text-sm">
-                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-              </div>
-              <div className="space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
+          <div className="flex flex-col gap-2">
+            <Select onValueChange={setSelectedPaket} value={selectedPaket}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue
+                  placeholder={
+                    selectedPaket != "" ? selectedPaket : "Pilih Paket"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {dataBagian?.PaketBagian.map(
+                  (paket: PaketBagianDetail, index: number) => (
+                    <SelectItem value={`${index}`} key={index}>
+                      Paket {index + 1}
+                    </SelectItem>
+                  )
+                )}
+              </SelectContent>
+            </Select>
+
+            {selectedPaket != "" ? (
+              <>
+                <TableData
+                  isLoading={false}
+                  columns={columns}
+                  table={table}
+                  type={"short"}
+                />{" "}
+                <div className="flex items-center justify-end space-x-2 py-4">
+                  <div className="text-muted-foreground flex-1 text-sm">
+                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                    {table.getFilteredRowModel().rows.length} row(s) selected.
+                  </div>
+                  <div className="space-x-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="font-inter"
+                      onClick={() => table.previousPage()}
+                      disabled={!table.getCanPreviousPage()}
+                    >
+                      Previous
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="font-inter"
+                      onClick={() => table.nextPage()}
+                      disabled={!table.getCanNextPage()}
+                    >
+                      Next
+                    </Button>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
           </div>
         </>
       )}

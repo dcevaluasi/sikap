@@ -23,7 +23,7 @@ export default function Page() {
   return (
     <>
       <LayoutAdmin>
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col h-full overflow-y-scroll">
           {/* section body top nav */}
           <nav
             aria-label="top bar"
@@ -324,6 +324,7 @@ export default function Page() {
               Bank Soal
             </h1>
           </header>
+
           {/* main content */}
           <TipeUjianKeahlian />
         </div>

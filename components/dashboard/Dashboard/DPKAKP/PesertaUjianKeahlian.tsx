@@ -12,20 +12,25 @@ const PesertaUjianKeahlian: React.FC = () => {
     <>
       <div className="flex flex-col">
         <div className="flex flex-row gap-2 items-center">
-          <HiUserGroup className="text-4xl" />
-          <div className="flex flex-col">
-            <h1 className="text-3xl font-medium leading-[100%] font-calsans">
-              Peserta Ujian
-            </h1>
-            <p className="font-normal -mt-1 text-gray-400 text-base">
-              Verifikasi, Monitoring, dan Lihat Data Peserta Ujian Keahlian Awak
-              Kapal Perikanan!
-            </p>
-          </div>
+          <header
+            aria-label="page caption"
+            className="flex-row  flex h-20 items-center gap-2 bg-gray-100 border-t px-4"
+          >
+            <HiUserGroup className="text-3xl" />
+            <div className="flex flex-col">
+              <h1 id="page-caption" className="font-semibold text-lg">
+                Peserta Ujian
+              </h1>
+              <p className="font-normal -mt-1 text-gray-400 text-base">
+                Verifikasi, Monitoring, dan Lihat Data Peserta Ujian Keahlian
+                Awak Kapal Perikanan!
+              </p>
+            </div>
+          </header>
         </div>
       </div>
 
-      <div className="mt-4 md:mt-6 2xl:mt-7.5">
+      <div className="">
         <TableDataPesertaUjianKeahlian />
       </div>
     </>

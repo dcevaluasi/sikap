@@ -8,5 +8,10 @@ export function replaceProgramName(word: string): string {
     } else if (word.includes("ATKAPIN")) {
         return word.replace("ATKAPIN", "Ahli Teknika Kapal Penangkap Ikan");
     }
-    return word; // Return the word unchanged if it doesn't match
+    return word;
+}
+
+export function containsHttps(sentence: string): boolean {
+    const httpsRegex = /https:\/\/[^\s]+/g;
+    return httpsRegex.test(sentence);
 }

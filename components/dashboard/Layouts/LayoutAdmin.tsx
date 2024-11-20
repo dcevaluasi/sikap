@@ -1,16 +1,4 @@
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function LayoutAdmin({
   children,
@@ -38,7 +26,7 @@ export default function LayoutAdmin({
           <li>
             <a
               title="Home"
-              href="#home"
+              href="/lembaga/dpkakp/admin/dashboard/ujian"
               className="h-16 px-6 flex items-center text-white bg-blue-500 w-full"
             >
               <i className="mx-auto">

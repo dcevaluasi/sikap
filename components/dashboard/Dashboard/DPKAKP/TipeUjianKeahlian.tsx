@@ -6,7 +6,7 @@ import TableDataTipeUjianKeahlian from "./TableDataTipeUjianKeahlian";
 const TipeUjianKeahlian: React.FC = () => {
   return (
     <>
-      <div className="mt-4 md:mt-6 2xl:mt-7.5">
+      <div className="mt-4 md:mt-6 2xl:mt-7.5 h-full">
         <TableDataTipeUjianKeahlian />
       </div>
     </>

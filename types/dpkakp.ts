@@ -37,3 +37,4 @@ export type UserInformationDPKAKP = {
     Nip: string;
     Status: string;
 }
+

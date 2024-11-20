@@ -1,24 +1,5 @@
 import React, { ReactElement, useState } from "react";
 
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -62,9 +43,10 @@ import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import TableData from "../../Tables/TableData";
-import { PiBookOpen } from "react-icons/pi";
+import { PiBookOpen, PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import { dpkakpBaseUrl } from "@/constants/urls";
 import { replaceProgramName } from "@/utils/dpkakp";
+import { TbDatabase } from "react-icons/tb";
 
 const TableDataTipeUjianKeahlian: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -95,154 +77,11 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
     }
   };
 
-  const [namaMateri, setNamaMateri] = React.useState<string>("");
-  const [jamTeori, setJamTeori] = React.useState<string>("");
-  const [jamPraktek, setJamPraktek] = React.useState<string>("");
-
   const [isOpenFormMateri, setIsOpenFormMateri] =
     React.useState<boolean>(false);
-  const [selectedId, setSelectedId] = React.useState<number>(0);
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-
-  const [sertifikatUntukPelatihan, setSertifikatUntukPelatihan] =
-    React.useState("");
-  const [ttdSertifikat, setTtdSertifikat] = React.useState("");
-  const [openFormSertifikat, setOpenFormSertifikat] = React.useState(false);
-
-  const [isOpenFormPublishedPelatihan, setIsOpenFormPublishedPelatihan] =
-    React.useState<boolean>(false);
-
-  const router = useRouter();
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const columns: ColumnDef<TypeUjian>[] = [
-    {
-      accessorKey: "IdTypeUjian",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`text-gray-900 font-semibold w-full`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            No
-            <ArrowUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`text-center uppercase`}>{row.index + 1}</div>
-      ),
-    },
-    {
-      accessorKey: "NamaTypeUjian",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`text-gray-900 text-left mx-0 px-0 font-semibold w-fit`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Ujian Keahlian
-            <ArrowUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="flex flex-col gap-2 w-fit">
-          <div
-            className={`text-center uppercase w-fit font-semibold text-base`}
-          >
-            {row.original.NamaTypeUjian}
-          </div>
-          <div className={`text-left capitalize flex-wrap w-full -mt-2`}>
-            <div
-              className={`text-left w-full capitalize font-semibold text-xs`}
-            >
-              Fungsi Ujian :
-            </div>
-            <div className="w-full flex flex-col">
-              {row.original.Fungsi.map((fungsi, index) => (
-                <p className="text-xs font-normal" key={index}>
-                  {index + 1}. {fungsi.NamaFungsi}{" "}
-                  <div className="flex flex-row gap-1">
-                    <span className="flex flex-row gap-1">
-                      {fungsi.Bagian.map((bagian, index) => (
-                        <Link
-                          href={`/lembaga/dpkakp/admin/dashboard/bank-soal/${row.original.IdTypeUjian}/${bagian.IdBagian}`}
-                          className="flex gap-2 px-3 my-2 text-xs items-center rounded-md border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 duration-700 p-1.5  cursor-pointer w-fit"
-                          key={index}
-                        >
-                          <PiBookOpen />
-                          {bagian.NamaBagian}
-                        </Link>
-                      ))}
-                    </span>
-                    {fungsi.Bagian.length < 3 && (
-                      <span className="flex flex-row gap-1 my-2">
-                        <div
-                          onClick={(e) => {
-                            setIsOpenFormMateri(!isOpenFormMateri);
-                            setIdFungsiSelected(fungsi.IdFungsi.toString());
-                          }}
-                          className="flex gap-2 px-3 text-xs items-center rounded-md border border-gray-600 hover:bg-gray-600 hover:text-white text-gray-600 duration-700 p-1.5  cursor-pointer w-fit"
-                        >
-                          <FiUploadCloud />
-                          Tambah Bagian Fungsi
-                        </div>
-                      </span>
-                    )}
-                  </div>
-                </p>
-              ))}
-            </div>
-          </div>
-        </div>
-      ),
-    },
-
-    {
-      accessorKey: "CreateAt",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`text-gray-900 font-semibold w-full`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Created At
-            <ArrowUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`text-center uppercase`}>{row.original.CreateAt}</div>
-      ),
-    },
-    {
-      accessorKey: "UpdateAt",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`text-gray-900 font-semibold w-full`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Updated At
-            <ArrowUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`text-center uppercase`}>{row.original.UpdateAt}</div>
-      ),
-    },
-  ];
+  const [selectedIdTypeUjian, setSelectedIdTypeUjian] =
+    React.useState<string>("");
 
   const [namaBagian, setNamaBagian] = React.useState<string>("");
   const [idFungsiSelected, setIdFungsiSelected] = React.useState<string>("");
@@ -282,57 +121,93 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
     handleFetchingTypeUjian();
   }, []);
 
+  const [isOpenFormPeserta, setIsOpenFormPeserta] =
+    React.useState<boolean>(false);
+  const [fileExcelBankSoalPelatihan, setFileExcelBankPelatihan] =
+    React.useState<File | null>(null);
+  const handleFileChange = (e: any) => {
+    setFileExcelBankPelatihan(e.target.files[0]);
+  };
+  const handleUploadBankSoal = async (e: any) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("IdTypeUjian", selectedIdTypeUjian);
+    if (fileExcelBankSoalPelatihan != null) {
+      formData.append("file", fileExcelBankSoalPelatihan);
+    }
+
+    try {
+      const response = await axios.post(
+        `${dpkakpBaseUrl}/importUjian`,
+        formData
+      );
+      console.log("FILE UPLOADED BANK SOAL : ", response);
+      Toast.fire({
+        icon: "success",
+        title: `Selamat anda berhasil mengupload bank soal ujian keahlian!`,
+      });
+      setIsOpenFormPeserta(false);
+      handleFetchingTypeUjian();
+    } catch (error) {
+      console.log("FILE IMPORT BANK SOAL PELATIHAN : ", error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal mengupload bank soal ujian keahlian!`,
+      });
+      setIsOpenFormPeserta(false);
+      handleFetchingTypeUjian();
+    }
+  };
+
+  const [selectedNoPaket, setSelectedNoPaket] = React.useState<string>("");
+
   return (
     <div className="">
-      <AlertDialog open={isOpenFormMateri}>
+      <AlertDialog open={isOpenFormPeserta}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
               {" "}
-              <FaBookOpen className="h-4 w-4" />
-              Tambah Bagian Fungsi Ujian Keahlian
+              <TbDatabase className="h-4 w-4" />
+              Import Bank Soal Ujian
             </AlertDialogTitle>
             <AlertDialogDescription className="-mt-2">
-              Sebelum melakukan storing bank soal per bagian dan per fungsi
-              ujian keahlian awak kapal perikanan, tambahkan terlebih dahulu
-              bagian dari fungsi tersebut!
+              Import soal yang akan digunakan pada pelaksanaan ujian keahlian
+              ini!
             </AlertDialogDescription>
           </AlertDialogHeader>
           <fieldset>
             <form autoComplete="off">
-              <div className="flex flex-wrap mb-1 w-full">
-                <div className="w-full">
+              <div className="flex flex-wrap -mx-3 mb-1">
+                <div className="w-full px-3">
                   <label
                     className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="name"
+                    htmlFor="email"
                   >
-                    Nama Bagian <span className="text-red-600">*</span>
+                    Data Soal <span>*</span>
                   </label>
-                  <select
-                    id="name"
-                    className="form-input w-full text-black text-sm border-gray-300 rounded-md"
-                    placeholder="Tipe Blanko"
-                    required
-                    value={namaBagian}
-                    onChange={(e) => setNamaBagian(e.target.value)}
-                  >
-                    <option value="0">Pilih Tipe Ujian</option>
-                    <option value="Bagian 1">Bagian 1</option>
-                    <option value="Bagian 2">Bagian 2</option>
-                    <option value="Bagian 3">Bagian 3</option>
-                  </select>
+                  <div className="flex gap-1">
+                    <input
+                      type="file"
+                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                      required
+                      onChange={handleFileChange}
+                    />
+                  </div>
+                  <p className="text-gray-700 text-xs mt-1">
+                    *Download terlebih dahulu template lalu isi file excel dan
+                    upload
+                  </p>
                 </div>
               </div>
 
-              <AlertDialogFooter className="mt-3">
+              <AlertDialogFooter className="mt-3 pt-3 border-t border-t-gray-300">
                 <AlertDialogCancel
-                  onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
+                  onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
                 >
                   Cancel
                 </AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={(e) => handlePostNewBagianUjianKeahlian(e)}
-                >
+                <AlertDialogAction onClick={(e) => handleUploadBankSoal(e)}>
                   Upload
                 </AlertDialogAction>
               </AlertDialogFooter>
@@ -341,13 +216,13 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      <main className="flex-grow flex min-h-0 border-t  h-full overflow-y-scroll overflow-x-scroll">
+      <main className="flex-grow flex min-h-0 border-t ">
         {/* section update to tickets */}
-        <section className="flex flex-col p-4 w-full max-w-sm flex-none bg-gray-100 min-h-0 overflow-auto">
-          <h1 className="font-semibold leading-[120%] -mb-3">
+        <section className="flex flex-col p-4 w-full flex-none bg-gray-100 h-full">
+          <h1 className="font-semibold leading-[120%] mb-1">
             Jenis Program <br /> Keahlian Awak Kapal Perikanan
           </h1>
-          <ul className="w-full flex flex-col gap-2">
+          <ul className="w-full grid grid-cols-2 gap-2 mt-3 ">
             {data.map((bankSoal, index) => (
               <li key={index}>
                 <article
@@ -372,49 +247,58 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
                     </header>
 
                     {/* <div className="w-full flex flex-col  border-b border-b-gray-300">
-                  {bankSoal.Fungsi.map((fungsi, index) => (
-                    <p className="text-xs font-normal" key={index}>
-                      {index + 1}. {fungsi.NamaFungsi}{" "}
-                      <div className="flex flex-row gap-1">
-                        <span className="flex flex-row gap-1">
-                          {fungsi.Bagian.map((bagian, index) => (
-                            <Link
-                              href={`/lembaga/dpkakp/admin/dashboard/bank-soal/${bankSoal.IdTypeUjian}/${bagian.IdBagian}`}
-                              className="flex gap-2 px-3 my-2 text-xs items-center rounded-md border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 duration-700 p-1.5  cursor-pointer w-fit"
-                              key={index}
-                            >
-                              <PiBookOpen />
-                              {bagian.NamaBagian}
-                            </Link>
-                          ))}
-                        </span>
-                        {fungsi.Bagian.length < 3 && (
-                          <span className="flex flex-row gap-1 my-2">
-                            <div
-                              onClick={(e) => {
-                                setIsOpenFormMateri(!isOpenFormMateri);
-                                setIdFungsiSelected(fungsi.IdFungsi.toString());
-                              }}
-                              className="flex gap-2 px-3 text-xs items-center rounded-md border border-gray-600 hover:bg-gray-600 hover:text-white text-gray-600 duration-700 p-1.5  cursor-pointer w-fit"
-                            >
-                              <FiUploadCloud />
-                              Tambah Bagian Fungsi
-                            </div>
-                          </span>
-                        )}
-                      </div>
-                    </p>
-                  ))}
-                </div>
+                      <span className="flex flex-row gap-1">
+                        {[1, 2, 3, 4, 5].map((bagian, index) => (
+                          <div
+                            onClick={() => {
+                              setSelectedIdTypeUjian(
+                                bankSoal.IdTypeUjian.toString()
+                              );
+                              setSelectedNoPaket(bagian.toString());
+                            }}
+                            className={`flex gap-2 px-3 my-2 text-xs items-center rounded-md border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 duration-700 p-1.5  cursor-pointer w-fit`}
+                            key={index}
+                          >
+                            <PiBookOpen />
+                            Paket {bagian}
+                          </div>
+                        ))}
+                      </span>
+                    </div> */}
 
-                <Link
-                  href={``}
-                  className="flex gap-2 px-3 my-2 text-xs items-center rounded-md border border-green-400 hover:bg-green-400 hover:text-white text-green-400 duration-700 p-1.5  cursor-pointer w-full text-center justify-center"
-                  key={index}
-                >
-                  <LucideUploadCloud className="text-xs" />
-                  Import Bank Soal
-                </Link> */}
+                    <div className="w-full flex flex-col  border-b border-b-gray-300 mt-2">
+                      {bankSoal.Fungsi.map((fungsi, index) => (
+                        <p className="text-xs font-normal" key={index}>
+                          {index + 1}. {fungsi.NamaFungsi}{" "}
+                          <div className="flex flex-row gap-1">
+                            <span className="flex flex-row gap-1">
+                              {fungsi.Bagian.map((bagian, index) => (
+                                <Link
+                                  href={`/lembaga/dpkakp/admin/dashboard/bank-soal/${bankSoal.IdTypeUjian}/${bagian.IdBagian}`}
+                                  className="flex gap-2 px-3 my-2 text-xs items-center rounded-md border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 duration-700 p-1.5  cursor-pointer w-fit"
+                                  key={index}
+                                >
+                                  <PiBookOpen />
+                                  {bagian.NamaBagian}
+                                </Link>
+                              ))}
+                            </span>
+                          </div>
+                        </p>
+                      ))}
+                    </div>
+
+                    <div
+                      onClick={() => {
+                        setIsOpenFormPeserta(true);
+                        setSelectedIdTypeUjian(bankSoal.IdTypeUjian.toString());
+                      }}
+                      className="flex gap-2 px-3 my-2 text-xs items-center rounded-md border border-green-400 hover:bg-green-400 hover:text-white text-green-400 duration-700 p-1.5  cursor-pointer w-full text-center justify-center"
+                      key={index}
+                    >
+                      <LucideUploadCloud className="text-xs w-4" />
+                      Import Bank Soal
+                    </div>
                   </div>
                 </article>
               </li>
@@ -423,13 +307,13 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
         </section>
 
         {/* section content */}
-        <section
+        {/* <section
           aria-label="main content"
           className="flex min-h-0 flex-col flex-auto border-l"
         >
-          {/* content navigation */}
+         
           <nav className="bg-gray-100 flex p-4">
-            {/* open tickets nav */}
+    
             <section
               aria-labelledby="open-tickets-tabs-label"
               className="mr-4 focus:outline-none"
@@ -456,7 +340,7 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
                 </li>
               </ul>
             </section>
-            {/* stats nav */}
+           
             <section
               aria-labelledby="ticket-statistics-tabs-label"
               className="pb-2"
@@ -490,7 +374,7 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
               </ul>
             </section>
           </nav>
-          {/* content caption */}
+        
           <header className="bg-white border-t flex items-center py-1 px-4">
             <div className="flex">
               <h2 id="content-caption" className="font-semibold">
@@ -538,9 +422,7 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
               </button>
             </div>
           </header>
-          {/* content overflow section 
-          remove table and thead but keep tbody and change tbody to section, in order
-          to have scrollable overflow section */}
+          
           <div className="px-4 mt-2">
             <Tabs defaultValue="account" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
@@ -557,7 +439,7 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-2">
-                    {/* <TipeUjianKeahlian /> */}
+                    
                   </CardContent>
                   <CardFooter>
                     <Button>Save changes</Button>
@@ -591,14 +473,14 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
             </Tabs>
           </div>
 
-          {/* content footer, currently hidden */}
+        
           <footer
             aria-label="content footer"
             className="flex p-3 bg-white border-t hidden"
           >
             footer
           </footer>
-        </section>
+        </section> */}
       </main>
     </div>
   );

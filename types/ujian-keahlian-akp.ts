@@ -1,5 +1,5 @@
 // GET ADMIN PUSAT DPKAKP
-type AdminPusatDPKAKP = {
+export type AdminPusatDPKAKP = {
   IdAdminPusat: number
   Nama: string
   Email: string
@@ -9,10 +9,11 @@ type AdminPusatDPKAKP = {
   Status: string
 }
 
-// TYPE SOAL
-type SoalUjianBagian = {
+// export TYPE SOAL
+export type SoalUjianBagian = {
   IdSoalUjianBagian: number
   IdBagian: number
+  GambarSoal?: string
   Soal: string
   JawabanBenar: string
   Status: string
@@ -21,7 +22,7 @@ type SoalUjianBagian = {
   Jawaban: Jawaban[]
 }
 
-type Jawaban = {
+export type Jawaban = {
   IdJawaban: number,
   IdSoalUjianBagian: number,
   NameJawaban: string,
@@ -30,21 +31,21 @@ type Jawaban = {
   UpdateAt: string
 }
 
-type JawabanUser = {
+export type JawabanUser = {
   id_soal_bagian: string,
   jawaban_pengguna: string,
 }
 
-type Bagian = {
+export type Bagian = {
   IdBagian: number
   IdFungsi: number
   NamaBagian: string
   CreateAt: string
   UpdateAt: string
-  SoalUjianBagian: []
+  PaketBagian: PaketBagianDetail[]
 }
 
-type FungsiUjian = {
+export type FungsiUjian = {
   IdFungsi: number
   IdTypeUjian: number
   NamaFungsi: string
@@ -53,12 +54,12 @@ type FungsiUjian = {
   Bagian: Bagian[]
 }
 
-type UjianKeahlian = {
+export type UjianKeahlian = {
   Pesan: string;
   data: Ujian[]
 }
 
-type Ujian = {
+export type Ujian = {
   IdUjian: number
   IdTypeUjian: number
   TypeUjian: string
@@ -78,7 +79,7 @@ type Ujian = {
   UsersUjian: UsersUjian[]
 }
 
-type UsersUjian = {
+export type UsersUjian = {
   IdUserUjian: number;
   Nama: string;
   Nik: string;
@@ -102,7 +103,7 @@ type UsersUjian = {
   CodeAksesUsersBagian: CodeAksesUsersBagian[];
 }
 
-type ImageSoalUjian = {
+export type ImageSoalUjian = {
   CodeUnik: string;
   CreateAt: string;
   Gambar: string;
@@ -110,7 +111,7 @@ type ImageSoalUjian = {
   UpdateAt: string;
 }
 
-type CodeAksesUsersBagian = {
+export type CodeAksesUsersBagian = {
   IdCodeAksesUsersBagian: number,
   IdUserUjian: number,
   IdBagian: number,
@@ -120,7 +121,7 @@ type CodeAksesUsersBagian = {
   UpdateAt: string
 }
 
-type TypeUjian = {
+export type TypeUjian = {
   IdTypeUjian: number
   NamaTypeUjian: string
   CreateAt: string
@@ -129,10 +130,17 @@ type TypeUjian = {
   Ujian: Ujian[]
 }
 
-type SoalBagian = {
+export type SoalBagian = {
   Bagian: string;
   Fungsi: string;
   Soal: SoalUjianBagian[];
   Ujian: string;
   jumlah: number;
+}
+
+export type PaketBagianDetail = {
+  IdBagian: number;
+  IdPaketBagian: number
+  Paket: number
+  SoalUjianBagian: SoalUjianBagian[]
 }

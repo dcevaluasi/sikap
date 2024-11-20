@@ -11,6 +11,7 @@ import {
   getIdUjianKeahlianInBankSoal2,
 } from "@/components/utils/dpkakp/pathname";
 import Cookies from "js-cookie";
+import { Bagian, FungsiUjian, TypeUjian } from "@/types/ujian-keahlian-akp";
 
 const BankSoalUjianKeahlian: React.FC = () => {
   const [data, setData] = React.useState<TypeUjian | null>(null);
@@ -92,17 +93,22 @@ const BankSoalUjianKeahlian: React.FC = () => {
     <>
       <div className="flex flex-col">
         <div className="flex flex-row gap-2 items-center">
-          <TbDatabase className="text-4xl" />
-          <div className="flex flex-col">
-            <h1 className="text-3xl font-medium leading-[100%] font-calsans">
-              Bank Soal {data?.NamaTypeUjian} {dataFungsi?.NamaFungsi}{" "}
-              {dataBagian?.NamaBagian}
-            </h1>
-            <p className="font-medium text-gray-400 text-base">
-              Upload Bank Soal Untuk Pelaksanaan Ujian Keahlian Awak Kapal
-              Perikanan Yang Diselenggarakan!
-            </p>
-          </div>
+          <header
+            aria-label="page caption"
+            className="flex-row  flex h-20 items-center gap-2 bg-gray-100 border-t px-4"
+          >
+            <TbDatabase className="text-3xl" />
+            <div className="flex flex-col">
+              <h1 id="page-caption" className="font-semibold text-lg">
+                Bank Soal {data?.NamaTypeUjian} {dataFungsi?.NamaFungsi}{" "}
+                {dataBagian?.NamaBagian}
+              </h1>
+              <p className="font-medium text-gray-400 text-base">
+                Upload Bank Soal Untuk Pelaksanaan Ujian Keahlian Awak Kapal
+                Perikanan Yang Diselenggarakan!
+              </p>
+            </div>
+          </header>
         </div>
       </div>
 
