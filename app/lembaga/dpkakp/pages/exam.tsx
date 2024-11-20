@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { dpkakpBaseUrl } from "@/constants/urls";
+import { JawabanUser, SoalBagian } from "@/types/ujian-keahlian-akp";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
@@ -62,7 +63,6 @@ function Exam() {
       setLoading(false);
     }, 2000); // Adjust the timeout duration as needed
   }, []);
-
 
   const handleAnswerChange = (idSoal: number, answer: string) => {
     setSelectedAnswers((prevAnswers) => {

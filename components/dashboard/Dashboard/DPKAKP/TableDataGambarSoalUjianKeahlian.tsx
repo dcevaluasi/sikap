@@ -103,6 +103,7 @@ import { generateTanggalPelatihan } from "@/utils/text";
 import { FaEdit } from "react-icons/fa";
 import { DewanPenguji } from "@/types/dewanPenguji";
 import TableData from "../../Tables/TableData";
+import { ImageSoalUjian } from "@/types/ujian-keahlian-akp";
 
 const TableDataGambarSoalUjianKeahlian: React.FC = () => {
   /*============== STORE DATA VARIABLES ================ */

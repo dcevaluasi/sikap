@@ -104,6 +104,7 @@ import { UserInformationDPKAKP } from "@/types/dpkakp";
 import { generateTanggalPelatihan } from "@/utils/text";
 import { FaEdit } from "react-icons/fa";
 import { DewanPenguji } from "@/types/dewanPenguji";
+import { TypeUjian, Ujian } from "@/types/ujian-keahlian-akp";
 
 const TableDataUjian: React.FC = () => {
   /**

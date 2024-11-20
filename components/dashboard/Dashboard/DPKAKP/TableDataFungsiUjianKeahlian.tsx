@@ -77,6 +77,7 @@ import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifi
 import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import TableData from "../../Tables/TableData";
+import { FungsiUjian } from "@/types/ujian-keahlian-akp";
 
 const TableDataFungsiUjianKeahlian: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =

@@ -47,6 +47,7 @@ import { PiBookOpen, PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import { dpkakpBaseUrl } from "@/constants/urls";
 import { replaceProgramName } from "@/utils/dpkakp";
 import { TbDatabase } from "react-icons/tb";
+import { TypeUjian } from "@/types/ujian-keahlian-akp";
 
 const TableDataTipeUjianKeahlian: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =

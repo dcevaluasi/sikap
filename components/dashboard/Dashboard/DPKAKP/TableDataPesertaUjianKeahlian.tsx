@@ -79,6 +79,7 @@ import TableData from "../../Tables/TableData";
 import { dpkakpBaseUrl } from "@/constants/urls";
 import { getIdUjianKeahlianInPathPesertaUjian } from "@/components/utils/dpkakp/pathname";
 import { BsFileExcel, BsPersonVcard } from "react-icons/bs";
+import { Ujian, UsersUjian } from "@/types/ujian-keahlian-akp";
 
 const TableDataPesertaUjianKeahlian = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;

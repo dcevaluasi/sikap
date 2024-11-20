@@ -80,6 +80,7 @@ import Link from "next/link";
 import TableData from "../../Tables/TableData";
 import { BsQuestionLg } from "react-icons/bs";
 import { BiSolidPaperPlane } from "react-icons/bi";
+import { FungsiUjian } from "@/types/ujian-keahlian-akp";
 
 const TableDataBagianUjianKeahlian: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
