@@ -280,97 +280,105 @@ function FormRegistrationTraining({
               <span className="text-red-600"></span>
             </label>
             <div className="flex flex-col gap-2">
-              {pelatihan.SarprasPelatihan.length === 0 ||
-              pelatihan.SarprasPelatihan.filter(
-                (item) => item.Jenis === "Penginapan"
-              ).length === 0 ? (
-                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                  <div className="space-y-1 leading-none">
-                    <label>Fasilitas Penginapan Tidak Tersedia</label>
-                    <p className="text-xs text-gray-600">
-                      Dalam mendukung kegiatan pelatihan ini, balai pelatihan
-                      tidak menyediakan fasilitas penginapan
-                    </p>
-                  </div>
-                </div>
-              ) : (
+              {pelatihan.SarprasPelatihan != null ? (
+                pelatihan.SarprasPelatihan.length === 0 ||
                 pelatihan.SarprasPelatihan.filter(
                   (item) => item.Jenis === "Penginapan"
-                ).map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
-                  >
-                    <div>
-                      <input
-                        type="checkbox"
-                        checked={selectedPenginapan === item}
-                        onChange={() => handleCheckboxChange(item)}
-                      />
-                    </div>
+                ).length === 0 ? (
+                  <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
                     <div className="space-y-1 leading-none">
-                      <label>
-                        {item.NamaSarpras} ({formatToRupiah(item.Harga)})
-                      </label>
-                      <p className="text-xs text-gray-600">{item.Deskripsi}</p>
+                      <label>Fasilitas Penginapan Tidak Tersedia</label>
+                      <p className="text-xs text-gray-600">
+                        Dalam mendukung kegiatan pelatihan ini, balai pelatihan
+                        tidak menyediakan fasilitas penginapan
+                      </p>
                     </div>
                   </div>
-                ))
-              )}
+                ) : (
+                  pelatihan.SarprasPelatihan.filter(
+                    (item) => item.Jenis === "Penginapan"
+                  ).map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                    >
+                      <div>
+                        <input
+                          type="checkbox"
+                          checked={selectedPenginapan === item}
+                          onChange={() => handleCheckboxChange(item)}
+                        />
+                      </div>
+                      <div className="space-y-1 leading-none">
+                        <label>
+                          {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                        </label>
+                        <p className="text-xs text-gray-600">
+                          {item.Deskripsi}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )
+              ) : null}
             </div>
           </div>
         </div>
 
         {/* Konsumsi Section */}
-        <div className="flex flex-wrap -mx-3 mb-1 mt-4">
-          <div className="w-full px-3">
-            <label
-              className="block text-gray-800 text-sm font-medium mb-1"
-              htmlFor="konsumsi"
-            >
-              Pilih Paket Konsumsi atau Catering{" "}
-            </label>
-            <div className="flex flex-col gap-2">
-              {pelatihan.SarprasPelatihan.length === 0 ||
-              pelatihan.SarprasPelatihan.filter(
-                (item) => item.Jenis === "Konsumsi"
-              ).length === 0 ? (
-                <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
-                  <div className="space-y-1 leading-none">
-                    <label>Fasilitas Konsumsi Tidak Tersedia</label>
-                    <p className="text-xs text-gray-600">
-                      Dalam mendukung kegiatan pelatihan ini, balai pelatihan
-                      tidak menyediakan fasilitas atau paket konsumsi
-                    </p>
-                  </div>
-                </div>
-              ) : (
+        {pelatihan.SarprasPelatihan != null ? (
+          <div className="flex flex-wrap -mx-3 mb-1 mt-4">
+            <div className="w-full px-3">
+              <label
+                className="block text-gray-800 text-sm font-medium mb-1"
+                htmlFor="konsumsi"
+              >
+                Pilih Paket Konsumsi atau Catering{" "}
+              </label>
+              <div className="flex flex-col gap-2">
+                {pelatihan.SarprasPelatihan.length === 0 ||
                 pelatihan.SarprasPelatihan.filter(
                   (item) => item.Jenis === "Konsumsi"
-                ).map((item, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
-                  >
-                    <div>
-                      <input
-                        type="checkbox"
-                        checked={selectedKonsumsi === item}
-                        onChange={() => handleCheckboxChange(item)}
-                      />
-                    </div>
+                ).length === 0 ? (
+                  <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
                     <div className="space-y-1 leading-none">
-                      <label>
-                        {item.NamaSarpras} ({formatToRupiah(item.Harga)})
-                      </label>
-                      <p className="text-xs text-gray-600">{item.Deskripsi}</p>
+                      <label>Fasilitas Konsumsi Tidak Tersedia</label>
+                      <p className="text-xs text-gray-600">
+                        Dalam mendukung kegiatan pelatihan ini, balai pelatihan
+                        tidak menyediakan fasilitas atau paket konsumsi
+                      </p>
                     </div>
                   </div>
-                ))
-              )}
+                ) : (
+                  pelatihan.SarprasPelatihan.filter(
+                    (item) => item.Jenis === "Konsumsi"
+                  ).map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow"
+                    >
+                      <div>
+                        <input
+                          type="checkbox"
+                          checked={selectedKonsumsi === item}
+                          onChange={() => handleCheckboxChange(item)}
+                        />
+                      </div>
+                      <div className="space-y-1 leading-none">
+                        <label>
+                          {item.NamaSarpras} ({formatToRupiah(item.Harga)})
+                        </label>
+                        <p className="text-xs text-gray-600">
+                          {item.Deskripsi}
+                        </p>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
       </form>
     );
   };

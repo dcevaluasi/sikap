@@ -12,12 +12,25 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import {
   ArrowUpDown,
   Edit3Icon,
   Fullscreen,
   LucideClipboardEdit,
   LucideNewspaper,
   LucidePrinter,
+  LucideUploadCloud,
   Trash,
   X,
 } from "lucide-react";
@@ -51,6 +64,7 @@ import Link from "next/link";
 import TableData from "../../Tables/TableData";
 import { PiBookOpen } from "react-icons/pi";
 import { dpkakpBaseUrl } from "@/constants/urls";
+import { replaceProgramName } from "@/utils/dpkakp";
 
 const TableDataTipeUjianKeahlian: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -230,25 +244,6 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
     },
   ];
 
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-
   const [namaBagian, setNamaBagian] = React.useState<string>("");
   const [idFungsiSelected, setIdFungsiSelected] = React.useState<string>("");
   const handlePostNewBagianUjianKeahlian = async (e: any) => {
@@ -288,7 +283,7 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
   }, []);
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+    <div className="">
       <AlertDialog open={isOpenFormMateri}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -346,75 +341,265 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      {showFormAjukanPelatihan ? (
-        <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-          </div>
-
-          {/* List Data Pelatihan */}
-          <div>{/* <FormPelatihan edit={false} /> */}</div>
-        </>
-      ) : (
-        <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Statistik Pelatihan */}
-          </div>
-
-          {/* List Data Pelatihan */}
-          <div>
-            <div id="chartOne" className="-ml-5"></div>
-            <div className="flex w-full items-center mb-2">
-              <div className="flex w-full gap-1 items-start">
-                <div
-                  onClick={(e) => {
-                    router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
-                  }}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+      <main className="flex-grow flex min-h-0 border-t  h-full overflow-y-scroll overflow-x-scroll">
+        {/* section update to tickets */}
+        <section className="flex flex-col p-4 w-full max-w-sm flex-none bg-gray-100 min-h-0 overflow-auto">
+          <h1 className="font-semibold leading-[120%] -mb-3">
+            Jenis Program <br /> Keahlian Awak Kapal Perikanan
+          </h1>
+          <ul className="w-full flex flex-col gap-2">
+            {data.map((bankSoal, index) => (
+              <li key={index}>
+                <article
+                  tabIndex={0}
+                  className="cursor-pointer border rounded-md p-3 bg-white flex text-gray-700 mb-2 hover:border-blue-500 focus:outline-none focus:border-blue-500"
                 >
-                  <FiUploadCloud />
-                  Tambah Master Tipe Ujian
+                  <span className="flex-none pt-1 pr-2">
+                    <img
+                      className="h-8 w-8 rounded-md"
+                      src="https://raw.githubusercontent.com/bluebrown/tailwind-zendesk-clone/master/public/assets/avatar.png"
+                    />
+                  </span>
+                  <div className="flex-1">
+                    <header className="mb-1">
+                      <span className="font-semibold text-sm">
+                        {bankSoal.NamaTypeUjian}
+                      </span>
+                      <br />
+                      <span className="text-xs leading-none block">
+                        {replaceProgramName(bankSoal.NamaTypeUjian!)}{" "}
+                      </span>
+                    </header>
+
+                    {/* <div className="w-full flex flex-col  border-b border-b-gray-300">
+                  {bankSoal.Fungsi.map((fungsi, index) => (
+                    <p className="text-xs font-normal" key={index}>
+                      {index + 1}. {fungsi.NamaFungsi}{" "}
+                      <div className="flex flex-row gap-1">
+                        <span className="flex flex-row gap-1">
+                          {fungsi.Bagian.map((bagian, index) => (
+                            <Link
+                              href={`/lembaga/dpkakp/admin/dashboard/bank-soal/${bankSoal.IdTypeUjian}/${bagian.IdBagian}`}
+                              className="flex gap-2 px-3 my-2 text-xs items-center rounded-md border border-blue-500 hover:bg-blue-500 hover:text-white text-blue-500 duration-700 p-1.5  cursor-pointer w-fit"
+                              key={index}
+                            >
+                              <PiBookOpen />
+                              {bagian.NamaBagian}
+                            </Link>
+                          ))}
+                        </span>
+                        {fungsi.Bagian.length < 3 && (
+                          <span className="flex flex-row gap-1 my-2">
+                            <div
+                              onClick={(e) => {
+                                setIsOpenFormMateri(!isOpenFormMateri);
+                                setIdFungsiSelected(fungsi.IdFungsi.toString());
+                              }}
+                              className="flex gap-2 px-3 text-xs items-center rounded-md border border-gray-600 hover:bg-gray-600 hover:text-white text-gray-600 duration-700 p-1.5  cursor-pointer w-fit"
+                            >
+                              <FiUploadCloud />
+                              Tambah Bagian Fungsi
+                            </div>
+                          </span>
+                        )}
+                      </div>
+                    </p>
+                  ))}
                 </div>
-              </div>
-            </div>
 
-            <TableData
-              isLoading={isFetching}
-              columns={columns}
-              table={table}
-              type={"short"}
-            />
-            <div className="flex items-center justify-end space-x-2 py-4">
-              <div className="text-muted-foreground flex-1 text-sm">
-                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-              </div>
-              <div className="space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
+                <Link
+                  href={``}
+                  className="flex gap-2 px-3 my-2 text-xs items-center rounded-md border border-green-400 hover:bg-green-400 hover:text-white text-green-400 duration-700 p-1.5  cursor-pointer w-full text-center justify-center"
+                  key={index}
                 >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
+                  <LucideUploadCloud className="text-xs" />
+                  Import Bank Soal
+                </Link> */}
+                  </div>
+                </article>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {/* section content */}
+        <section
+          aria-label="main content"
+          className="flex min-h-0 flex-col flex-auto border-l"
+        >
+          {/* content navigation */}
+          <nav className="bg-gray-100 flex p-4">
+            {/* open tickets nav */}
+            <section
+              aria-labelledby="open-tickets-tabs-label"
+              className="mr-4 focus:outline-none"
+            >
+              <label
+                id="open-tickets-tabs-label"
+                className="font-semibold block mb-1 text-sm"
+              >
+                Ujian Berlangsung
+                <span className="font-normal text-gray-700">(current)</span>
+              </label>
+              <ul className="flex">
+                <li>
+                  <button className="focus:outline-none focus:bg-yellow-200 p-2 rounded-l-md border border-r-0 bg-white flex flex-col items-center w-24">
+                    <p className="font-semibold text-lg">6</p>
+                    <p className="text-sm uppercase text-gray-600">You</p>
+                  </button>
+                </li>
+                <li>
+                  <button className="focus:outline-none focus:bg-yellow-200 p-2 border rounded-r-md bg-white flex flex-col items-center w-24 cursor-pointer">
+                    <p className="font-semibold text-lg">23</p>
+                    <p className="text-sm uppercase text-gray-600">Groups</p>
+                  </button>
+                </li>
+              </ul>
+            </section>
+            {/* stats nav */}
+            <section
+              aria-labelledby="ticket-statistics-tabs-label"
+              className="pb-2"
+            >
+              <label
+                id="ticket-statistics-tabs-label"
+                className="font-semibold block mb-1 text-sm"
+              >
+                Statistik Ujian
+                <span className="font-normal text-gray-700">(this week)</span>
+              </label>
+              <ul className="flex">
+                <li>
+                  <button className="focus:outline-none focus:bg-yellow-200 p-2 rounded-l-md border border-r-0 bg-white flex flex-col items-center w-24">
+                    <p className="font-semibold text-lg">16</p>
+                    <p className="uppercase text-gray-600 text-sm">good</p>
+                  </button>
+                </li>
+                <li>
+                  <button className="focus:outline-none focus:bg-yellow-200 p-2 border border-r-0 bg-white flex flex-col items-center w-24">
+                    <p className="font-semibold text-lg">2</p>
+                    <p className="uppercase text-gray-600 text-sm">bad</p>
+                  </button>
+                </li>
+                <li>
+                  <button className="focus:outline-none focus:bg-yellow-200 p-2 border rounded-r-md bg-white flex flex-col items-center w-24">
+                    <p className="font-semibold text-lg">32</p>
+                    <p className="uppercase text-gray-600 text-sm">solved</p>
+                  </button>
+                </li>
+              </ul>
+            </section>
+          </nav>
+          {/* content caption */}
+          <header className="bg-white border-t flex items-center py-1 px-4">
+            <div className="flex">
+              <h2 id="content-caption" className="font-semibold">
+                Tickets requiring your attention (6)
+              </h2>
+              <span className="ml-3 group relative">
+                <button
+                  role="details"
+                  aria-controls="info-popup"
+                  className="text-blue-700 border-b border-dotted border-blue-700 focus:outline-none text-sm"
                 >
-                  Next
-                </Button>
-              </div>
+                  What is this?
+                </button>
+                <div
+                  role="tooltip"
+                  id="info-popup"
+                  className="absolute pt-1 rounded-md rounded-t-lg right-0 transform translate-x-40 mx-auto hidden group-hover:block z-50"
+                >
+                  <div className="border rounded-md rounded-t-lg shadow-lg bg-white w-full max-w-xs w-screen">
+                    <header className="font-semibold rounded-t-lg bg-gray-300 px-4 py-2">
+                      People are waiting for replies!
+                    </header>
+                    <div className="p-4 border-t">
+                      <p className="mb-4">
+                        These are new or open tickets that are assigned to you,
+                        unassinged in your group(s) or not assigned to any
+                        group.
+                      </p>
+                      <p className="mb-1">
+                        They are ordered by priority and requester update date
+                        (oldest first).
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </span>
             </div>
+            <div className="ml-auto">
+              <button
+                title="See available tickets in this view"
+                aria-label="play"
+                className="border rounded-md px-3 py-2 leading-none"
+              >
+                Play
+              </button>
+            </div>
+          </header>
+          {/* content overflow section 
+          remove table and thead but keep tbody and change tbody to section, in order
+          to have scrollable overflow section */}
+          <div className="px-4 mt-2">
+            <Tabs defaultValue="account" className="w-full">
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="account">Account</TabsTrigger>
+                <TabsTrigger value="password">Password</TabsTrigger>
+              </TabsList>
+              <TabsContent value="account">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Account</CardTitle>
+                    <CardDescription>
+                      Make changes to your account here. Click save when you're
+                      done.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {/* <TipeUjianKeahlian /> */}
+                  </CardContent>
+                  <CardFooter>
+                    <Button>Save changes</Button>
+                  </CardFooter>
+                </Card>
+              </TabsContent>
+              <TabsContent value="password">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Password</CardTitle>
+                    <CardDescription>
+                      Change your password here. After saving, you'll be logged
+                      out.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="space-y-1">
+                      <Label htmlFor="current">Current password</Label>
+                      <Input id="current" type="password" />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="new">New password</Label>
+                      <Input id="new" type="password" />
+                    </div>
+                  </CardContent>
+                  <CardFooter>
+                    <Button>Save password</Button>
+                  </CardFooter>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </div>
-        </>
-      )}
+
+          {/* content footer, currently hidden */}
+          <footer
+            aria-label="content footer"
+            className="flex p-3 bg-white border-t hidden"
+          >
+            footer
+          </footer>
+        </section>
+      </main>
     </div>
   );
 };
