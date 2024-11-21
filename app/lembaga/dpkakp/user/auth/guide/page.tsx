@@ -1,6 +1,7 @@
 "use client";
 
 import Toast from "@/components/toast";
+import { SoalBagian } from "@/types/ujian-keahlian-akp";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
@@ -13,11 +14,6 @@ function page() {
 
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
-
-  const handleClearFormLoginAdminDPKAKP = async () => {
-    setEmail("");
-    setPassword("");
-  };
 
   const [data, setData] = React.useState<SoalBagian | null>(null);
   const handleFetchExamInformation = async () => {
@@ -34,63 +30,6 @@ function page() {
       console.log({ response });
     } catch (error) {
       console.log({ error });
-    }
-  };
-
-  const handleLoginAdminDPKAKP = async (e: any) => {
-    if (password == "") {
-      Toast.fire({
-        icon: "error",
-        title: `Isi terlebih dahulu kode aksesmu!`,
-      });
-      return;
-    } else {
-      try {
-        const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL}/AuthExam`,
-          {
-            code_akses: password,
-          }
-        );
-        if (response.status == 200) {
-          Toast.fire({
-            icon: "success",
-            title: `Berhasil memasukkan kode akses, silahkan lanjut melaksanakan ujian!`,
-          });
-          await handleClearFormLoginAdminDPKAKP();
-          Cookies.set("XSRF096", response?.data?.t);
-          router.replace("/lembaga/dpkakp/admin/dashboard");
-        } else {
-          Toast.fire({
-            icon: "error",
-            title: response.statusText,
-          });
-
-          await handleClearFormLoginAdminDPKAKP();
-        }
-      } catch (e) {
-        if (e instanceof AxiosError) {
-          if (e.response?.status == 401) {
-            Toast.fire({
-              icon: "error",
-              title: `Unauthorized, ${e.response?.data.pesan}!`,
-            });
-            await handleClearFormLoginAdminDPKAKP();
-          } else {
-            Toast.fire({
-              icon: "error",
-              title: `${e.response?.data.pesan}!`,
-            });
-            await handleClearFormLoginAdminDPKAKP();
-          }
-        } else {
-          Toast.fire({
-            icon: "error",
-            title: `${e}!`,
-          });
-          await handleClearFormLoginAdminDPKAKP();
-        }
-      }
     }
   };
 
@@ -150,7 +89,7 @@ function page() {
             </div>
           </div>
           <button
-            onClick={(e) => router.push("/dpkakp/user/auth/exam")}
+            onClick={(e) => router.push("/lembaga/dpkakp/user/auth/exam")}
             className="text-white w-full bg-blue-950 rounded-xl bg-opacity-100 py-2"
           >
             Lanjutkan

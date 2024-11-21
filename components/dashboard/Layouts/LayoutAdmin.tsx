@@ -27,8 +27,6 @@ export default function LayoutAdmin({
     }
   };
 
-
-
   React.useEffect(() => {
     handleGetAdminPusat();
   }, []);

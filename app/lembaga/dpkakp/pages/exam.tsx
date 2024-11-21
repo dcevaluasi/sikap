@@ -119,7 +119,7 @@ function Exam() {
       });
       Cookies.remove("XSRF096");
       setTimeout(() => {
-        router.replace("/dpkakp/user/auth");
+        router.replace("/lembaga/dpkakp/user/auth");
       }, 1500); // Adjust the timeout duration as needed
       // Handle the response as needed
     } catch (error) {
