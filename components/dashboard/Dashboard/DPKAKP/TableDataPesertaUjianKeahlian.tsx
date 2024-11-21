@@ -335,7 +335,7 @@ const TableDataPesertaUjianKeahlian = () => {
           className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <p className="leading-[105%]">Nilai Fungsi 1</p>
+          <p className="leading-[105%]">Nilai F1B1</p>
           <TbClipboardCheck className="ml-2 h-4 w-4" />
         </Button>
       ),
@@ -355,7 +355,7 @@ const TableDataPesertaUjianKeahlian = () => {
           className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <p className="leading-[105%]">Nilai Fungsi 2</p>
+          <p className="leading-[105%]">Nilai F1B2</p>
           <TbClipboardCheck className="ml-2 h-4 w-4" />
         </Button>
       ),
@@ -375,7 +375,7 @@ const TableDataPesertaUjianKeahlian = () => {
           className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <p className="leading-[105%]">Nilai Fungsi 3</p>
+          <p className="leading-[105%]">Nilai F1B3</p>
           <TbClipboardCheck className="ml-2 h-4 w-4" />
         </Button>
       ),
@@ -383,6 +383,66 @@ const TableDataPesertaUjianKeahlian = () => {
         <div className="ml-auto capitalize w-full flex items-center justify-center">
           <p className="text-sm font-normal tracking-tight leading-none">
             {row.getValue("NilaiF1B3")}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "NilaiF2B1",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          <p className="leading-[105%]">Nilai F2B1</p>
+          <TbClipboardCheck className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="ml-auto capitalize w-full flex items-center justify-center">
+          <p className="text-sm font-normal tracking-tight leading-none">
+            {row.getValue("NilaiF2B1")}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "NilaiF3B1",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          <p className="leading-[105%]">Nilai F3B1</p>
+          <TbClipboardCheck className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="ml-auto capitalize w-full flex items-center justify-center">
+          <p className="text-sm font-normal tracking-tight leading-none">
+            {row.getValue("NilaiF3B1")}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "NilaiF3B2",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          <p className="leading-[105%]">Nilai F3B2</p>
+          <TbClipboardCheck className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="ml-auto capitalize w-full flex items-center justify-center">
+          <p className="text-sm font-normal tracking-tight leading-none">
+            {row.getValue("NilaiF3B2")}
           </p>
         </div>
       ),
