@@ -44,8 +44,10 @@ function Exam() {
         jawaban_pengguna: "",
       }));
 
+      const shuffledSoal = response.data.Soal.sort(() => Math.random() - 0.5);
+
       setSelectedAnswers(initialAnswers);
-      setData(response.data);
+      setData(shuffledSoal);
       console.log({ response });
     } catch (error) {
       console.log({ error });
