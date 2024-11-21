@@ -1,10 +1,38 @@
+"use client";
+
+import { dpkakpBaseUrl } from "@/constants/urls";
+import axios from "axios";
+import Cookies from "js-cookie";
 import Image from "next/image";
+import React from "react";
 
 export default function LayoutAdmin({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const handleGetAdminPusat = async () => {
+    try {
+      const response = await axios.get(
+        `${dpkakpBaseUrl}/adminPusat/getAdminPusat`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      Cookies.set("PUKAKP", response.data.data.Nama);
+    } catch (error) {
+      console.error({ error });
+    }
+  };
+
+
+
+  React.useEffect(() => {
+    handleGetAdminPusat();
+  }, []);
+
   return (
     <div className="h-screen w-full flex overflow-hidden antialiased text-gray-800 bg-white">
       {/* section body side nav */}

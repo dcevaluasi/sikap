@@ -144,3 +144,4 @@ export type PaketBagianDetail = {
   Paket: number
   SoalUjianBagian: SoalUjianBagian[]
 }
+

@@ -159,6 +159,8 @@ const TableDataUjian: React.FC = () => {
         }
       );
 
+      console.log({ response });
+
       // Filter the data by PUKAKP value from cookies
       const filteredData = response.data.data.filter(
         (item: any) => item.PUKAKP === Cookies.get("PUKAKP")
@@ -202,6 +204,8 @@ const TableDataUjian: React.FC = () => {
       throw error;
     }
   };
+
+  console.log({ data });
 
   const handleFetchingTypeUjianKeahlianData = async () => {
     setIsFetching(true);
