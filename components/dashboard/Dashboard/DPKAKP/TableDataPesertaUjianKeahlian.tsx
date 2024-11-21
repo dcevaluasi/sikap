@@ -80,6 +80,7 @@ import { dpkakpBaseUrl } from "@/constants/urls";
 import { getIdUjianKeahlianInPathPesertaUjian } from "@/components/utils/dpkakp/pathname";
 import { BsFileExcel, BsPersonVcard } from "react-icons/bs";
 import { Ujian, UsersUjian } from "@/types/ujian-keahlian-akp";
+import { HashLoader } from "react-spinners";
 
 const TableDataPesertaUjianKeahlian = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -553,7 +554,11 @@ const TableDataPesertaUjianKeahlian = () => {
     }
   };
 
+  const [isLoadingSematkanSoal, setIsLoadingSematkanSoal] =
+    React.useState<boolean>(false);
+
   const handleSematkanSoalUjianKeahlianToPeserta = async (e: any) => {
+    setIsLoadingSematkanSoal(true);
     if (data.length > 0) {
       if (data[0]!.CodeAksesUsersBagian.length > 0) {
         Toast.fire({
@@ -561,6 +566,7 @@ const TableDataPesertaUjianKeahlian = () => {
           title: `Maaf sematkan soal peserta hanya dapat dilakukan sekali, kamu tidak bisa menyematkan kembali`,
         });
         handleFetchingUjianKeahlianData();
+        setIsLoadingSematkanSoal(false);
         return;
       }
     }
@@ -583,12 +589,14 @@ const TableDataPesertaUjianKeahlian = () => {
         icon: "success",
         title: `Selamat anda berhasil menyematkan soal ujian ke peserta ujian keahlian!`,
       });
+      setIsLoadingSematkanSoal(false);
     } catch (error) {
       console.error(error);
       Toast.fire({
         icon: "error",
         title: `Gagal anda berhasil menyematkan soal ujian ke peserta ujian keahlian!`,
       });
+      setIsLoadingSematkanSoal(false);
     }
   };
 
@@ -888,15 +896,26 @@ const TableDataPesertaUjianKeahlian = () => {
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                      <AlertDialogCancel>Batal</AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={(e) =>
-                          handleSematkanSoalUjianKeahlianToPeserta(e)
-                        }
-                        className="bg-gray-900"
-                      >
-                        Sematkan
-                      </AlertDialogAction>
+                      {isLoadingSematkanSoal ? (
+                        <>
+                          <AlertDialogAction className="bg-gray-900">
+                            Loading ...
+                          </AlertDialogAction>
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          <AlertDialogCancel>Batal</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={(e) =>
+                              handleSematkanSoalUjianKeahlianToPeserta(e)
+                            }
+                            className="bg-gray-900"
+                          >
+                            Sematkan
+                          </AlertDialogAction>
+                        </>
+                      )}
                     </AlertDialogFooter>
                   </AlertDialogContent>
                 </AlertDialog>
