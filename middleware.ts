@@ -6,6 +6,7 @@ export function middleware(request: any) {
 
   const XSRF095 = request.cookies.get('XSRF095') // DPKAKP ADMIN
   const XSRF096 = request.cookies.get('XSRF096') // DPKAKP USERS
+  const XSRF097 = request.cookies.get('XSRF097') // DPKAKP USERS
 
 
   if (!XSRF081) {
@@ -28,10 +29,11 @@ export function middleware(request: any) {
       '/lembaga/dpkakp/admin/dashboard/bank-soal',
       '/lembaga/dpkakp/admin/dashboard/master',
       '/lembaga/dpkakp/admin/dashboard/ujian',
+      '/lembaga/pukakp/admin/dashboard/ujian',
     ]
 
     if (protectedPaths.includes(request.nextUrl.pathname)) {
-      return NextResponse.redirect(new URL('/dpkakp', request.url))
+      return NextResponse.redirect(new URL('/lembaga/dpkakp/admin/auth/login', request.url))
     }
   }
 
@@ -43,6 +45,17 @@ export function middleware(request: any) {
 
     if (protectedPaths.includes(request.nextUrl.pathname)) {
       return NextResponse.redirect(new URL('/lembaga/dpkakp/user/auth', request.url))
+    }
+  }
+
+  if (XSRF097) {
+    const protectedPaths = [
+      '/lembaga/dpkakp/user/auth/guide',
+      '/lembaga/dpkakp/user/auth',
+    ]
+
+    if (protectedPaths.includes(request.nextUrl.pathname)) {
+      return NextResponse.redirect(new URL('/lembaga/dpkakp/user/auth/exam', request.url))
     }
   }
 

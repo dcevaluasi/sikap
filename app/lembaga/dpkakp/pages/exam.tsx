@@ -14,7 +14,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { dpkakpBaseUrl } from "@/constants/urls";
-import { JawabanUser, SoalBagian } from "@/types/ujian-keahlian-akp";
+import {
+  JawabanUser,
+  SoalBagian,
+  SoalUjianBagian,
+} from "@/types/ujian-keahlian-akp";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
@@ -46,7 +50,11 @@ function Exam() {
 
       setSelectedAnswers(initialAnswers);
 
-      const shuffledSoal = response.data.Soal.sort(() => Math.random() - 0.5);
+      // const shuffledSoal = response.data.Soal.sort(() => Math.random() - 0.5);
+      const shuffledSoal = response.data.Soal.map((soal: SoalUjianBagian) => ({
+        ...soal,
+        Jawaban: soal.Jawaban.sort(() => Math.random() - 0.5),
+      })).sort(() => Math.random() - 0.5);
       setData({ ...response.data, Soal: shuffledSoal });
       // setData(response.data);
       console.log({ response });
@@ -71,10 +79,13 @@ function Exam() {
     setSelectedAnswers((prevAnswers) => {
       const newAnswers = [...prevAnswers];
 
-      // Update the corresponding index in the array
+      // Update the answer for the current question
       newAnswers[selectedIdSoal] = {
         id_soal_bagian: idSoal.toString(),
-        jawaban_pengguna: answer,
+        jawaban_pengguna:
+          newAnswers[selectedIdSoal]?.jawaban_pengguna === answer
+            ? "" // Deselect if the same answer is clicked again
+            : answer,
       };
 
       return newAnswers;
@@ -121,6 +132,7 @@ function Exam() {
         title: `Berhasil mensubmit jawabanmu!`,
       });
       Cookies.remove("XSRF096");
+      Cookies.remove("XSRF097");
       setTimeout(() => {
         router.replace("/lembaga/dpkakp/user/auth");
       }, 1500); // Adjust the timeout duration as needed
@@ -170,23 +182,19 @@ function Exam() {
   return (
     <main className="bg-darkDPKAKP w-full h-full relative flex items-center justify-center">
       <Image
-        className="absolute top-20 w-[500px] opacity-10 z-10"
-        src={"/dpkakp/logo.png"}
+        className="absolute top-20 w-[600px] opacity-10 z-10"
+        src={"/lembaga/logo/logo-sertifikasi-akp.png"}
         width={0}
         height={0}
         alt="DPKAKP Logo"
       />
-      <div className="flex flex-row gap-20 w-full items-start justify-between mx-20">
+      <div className="flex flex-row gap-20 w-full items-start justify-between mx-20 h-full">
         <section className="relative h-full space-y-6 pb-8  md:pb-12 mt-10 flex items-center justify-center flex-col w-2/3">
           <div className="container relative flex max-w-[64rem] flex-col items-center gap-2 text-center md:px-0 px-10">
-            <Link
-              href={"/dpkakp"}
-              className="rounded-2xl bg-mutedDPKAKP px-4 py-1.5 text-sm text-gray-200 font-medium"
-              target="_blank"
-            >
+            <p className="rounded-2xl bg-mutedDPKAKP px-4 py-1.5 text-sm text-gray-200 font-medium">
               DPKAKP
-            </Link>
-            <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0">
+            </p>
+            <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2">
               <Image
                 className=" hidden md:block md:w-16 md:h-14 "
                 src={"/logo-kkp-white.png"}
@@ -206,18 +214,18 @@ function Exam() {
                   GEDUNG MINA BAHARI III Lt.5, JALAN MEDAN MERDEKA TIMUR NOMOR
                   16 JAKARTA 10110 <br /> KOTAK POS 4130 JKP 10041 TELEPON (021)
                   3519070 (LACAK), FAKSIMILE (021) 3513287 <br /> LAMAN
-                  <Link href={""} className="text-blue-500 underline">
-                    https://elaut-bppsdm.go.id/dpkakp
-                  </Link>{" "}
+                  <span className="text-blue-500 underline ">
+                    https://elaut-bppsdm.go.id/lembaga/dpkakp
+                  </span>{" "}
                   SUREL{" "}
-                  <Link href={""} className="text-blue-500 underline">
+                  <span className="text-blue-500 underline">
                     dpkakp@kkp.go.id
-                  </Link>
+                  </span>
                 </p>
               </div>
               <Image
-                className="hidden md:block w-14 h-16 "
-                src={"/dpkakp/logo.png"}
+                className="hidden md:block w-16 h-16 "
+                src={"/lembaga/logo/logo-sertifikasi-akp.png"}
                 width={0}
                 height={0}
                 alt="DPKAKP Logo"
@@ -227,14 +235,27 @@ function Exam() {
           {loading ? (
             <SkeletonDataSoal />
           ) : (
-            <section className="w-full max-w-[54rem] container flex items-center justify-center text-white relative z-50">
+            <section className="w-full  container flex items-center justify-center text-white relative z-50 h-full">
               <div className="flex w-full h-fit mx-auto items-center justify-between gap-10">
-                <div className="rounded-md h-[400px] max-w-xl px-6 py-3 flex-1">
+                <div className="rounded-md h-full  px-6 py-3 flex-1">
                   <h2 className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 text-2xl">
                     Soal No. {selectedIdSoal + 1}
                   </h2>
+
+                  {data?.Soal[selectedIdSoal]?.GambarSoal != "" ? (
+                    <Image
+                      className="hidden md:block w-100 my-5 rounded-lg"
+                      src={data!.Soal[selectedIdSoal]?.GambarSoal!}
+                      width={0}
+                      height={0}
+                      alt="DPKAKP Logo"
+                    />
+                  ) : (
+                    <></>
+                  )}
+
                   <h3 className="text-white leading-[110%] text-xl font-semibold">
-                    {data && data.Soal[selectedIdSoal]?.Soal} ?
+                    {data && data.Soal[selectedIdSoal]?.Soal}
                   </h3>
                   <div className="flex flex-col items-start text-mutedForegroundDPKAKP justify-start gap-1 mt-5">
                     {data &&
@@ -245,11 +266,15 @@ function Exam() {
                             className="flex items-start w-full mb-4 text-gray-360"
                           >
                             <input
-                              id={`radio-${selectedIdSoal}-${index}`}
-                              type="radio"
+                              id={`checkbox-${selectedIdSoal}-${index}`}
+                              type="checkbox"
                               value={jawaban.NameJawaban}
-                              name={`radio-${selectedIdSoal}`}
-                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700"
+                              name={`checkbox-${selectedIdSoal}`}
+                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 focus:ring-2 dark:bg-gray-700 rounded-md"
+                              checked={
+                                selectedAnswers[selectedIdSoal]
+                                  ?.jawaban_pengguna === jawaban.NameJawaban
+                              }
                               onChange={() =>
                                 handleAnswerChange(
                                   jawaban.IdSoalUjianBagian,
@@ -258,7 +283,7 @@ function Exam() {
                               }
                             />
                             <label
-                              htmlFor={`radio-${selectedIdSoal}-${index}`}
+                              htmlFor={`checkbox-${selectedIdSoal}-${index}`}
                               className="ms-2 -mt-1 text-base capitalize font-normal text-white"
                             >
                               {index === 0
@@ -274,10 +299,11 @@ function Exam() {
                         )
                       )}
                   </div>
+
                   <div className="flex w-full items-center justify-end mt-4">
                     {selectedIdSoal !== 0 && (
                       <Button
-                        className="w-fit text-lg px-4 py-2 bg-mutedForegroundDPKAKP hover:bg-gray-600"
+                        className="w-fit text-lg px-4 py-2 border bg-transparent border-blue-500 hover:bg-blue-600"
                         onClick={handlePrevClick}
                       >
                         Sebelumnya
@@ -285,14 +311,14 @@ function Exam() {
                     )}
                     {selectedIdSoal === data?.Soal?.length! - 1 ? (
                       <Button
-                        className="w-fit text-lg px-4 py-2 bg-mutedForegroundDPKAKP hover:bg-gray-600 ml-4"
+                        className="w-fit text-base px-4 py-2 bg-blue-500 hover:bg-blue-600 ml-4"
                         onClick={() => setShowSubmitAlert(true)}
                       >
                         Submit
                       </Button>
                     ) : (
                       <Button
-                        className="w-fit text-lg px-4 py-2 bg-mutedForegroundDPKAKP hover:bg-gray-600 ml-4"
+                        className="w-fit text-base px-4 py-2 bg-blue-500 hover:bg-blue-600 ml-4"
                         onClick={handleNextClick}
                       >
                         Selanjutnya
@@ -321,7 +347,8 @@ function Exam() {
                   <AlertDialogHeader>
                     <AlertDialogTitle>Konfirmasi</AlertDialogTitle>
                     <AlertDialogDescription>
-                      Anda yakin ingin mengirim jawaban?
+                      Pastikan semua soal telah terjawab, apakah anda yakin akan
+                      mengirimkan jawaban anda?
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -339,14 +366,22 @@ function Exam() {
             </section>
           )}
         </section>
-        <section className="h-full text-white w-1/3 py-20">
+        <section className="h-full text-white w-1/3 py-20 z-50">
           <div className="flex flex-col gap-3 h-full">
             <div className="flex flex-col  gap-0 items-start">
               <h1 className="font-bold text-gray-200 text-sm md:text-xl max-w-xs md:max-w-md leading-[95%] mb-5 mt-2 text-left">
                 {data?.Ujian} <br />{" "}
                 <span className="font-normal text-xs md:text-base text-mutedForegroundDPKAKP leading-[90%]">
-                  {data?.Fungsi} {data?.Bagian}
+                  {data?.Fungsi}
                 </span>{" "}
+                <br />
+                <span className="font-normal text-xs md:text-base text-mutedForegroundDPKAKP leading-[90%]">
+                  Tipe Soal : {data?.Bagian}
+                </span>
+                <br />
+                <span className="font-normal text-xs md:text-base text-mutedForegroundDPKAKP leading-[90%]">
+                  Jumlah Soal : {data?.jumlah} Soal
+                </span>
                 <br />
                 <span className="font-normal text-xs md:text-base text-mutedForegroundDPKAKP leading-[90%]">
                   Waktu Pelaksanaan : 120 Menit
@@ -361,7 +396,7 @@ function Exam() {
                   onClick={(e) => setSelectedIdSoal(index)}
                   className={`h-12 w-12 flex justify-between items-center cursor-pointer hover:scale-105 ${
                     selectedAnswers[index]!.jawaban_pengguna! != ""
-                      ? "bg-green-500 text-white"
+                      ? "bg-blue-500 text-white"
                       : "bg-[#343650]"
                   } rounded-lg duration-700 bg-opacity-70`}
                 >
@@ -386,13 +421,6 @@ function Exam() {
   );
 }
 
-interface CountDownTime {
-  days: string;
-  hours: string;
-  minutes: string;
-  seconds: string;
-}
-
 const SkeletonDataSoal = () => {
   return (
     <section className="w-full max-w-[54rem] container flex items-center justify-center text-white relative z-50">
@@ -414,6 +442,13 @@ const SkeletonDataSoal = () => {
   );
 };
 
+interface CountDownTime {
+  days: string;
+  hours: string;
+  minutes: string;
+  seconds: string;
+}
+
 const Timer: React.FC = () => {
   const [countDownTime, setCountDownTime] = React.useState<CountDownTime>({
     days: "00",
@@ -421,6 +456,8 @@ const Timer: React.FC = () => {
     minutes: "00",
     seconds: "00",
   });
+
+  const router = useRouter(); // Next.js router for redirection
 
   const getTimeDifference = (countDownDate: number) => {
     const currentTime = new Date().getTime();
@@ -433,6 +470,15 @@ const Timer: React.FC = () => {
         minutes: "00",
         seconds: "00",
       });
+      localStorage.removeItem("countDownDate"); // Clear countdown from storage
+      Cookies.remove("XSRF096");
+      Cookies.remove("XSRF097");
+      Toast.fire({
+        icon: "success",
+        title: "Waktu telah habis!",
+        text: `Ups, waktu telah habis, jawabanmu akan tersubmit secara otomatis, selamat telah mengerjakan ujian!`,
+      });
+      router.push("/lembaga/dpkakp/user/auth"); // Redirect when time ends
     } else {
       const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000))
         .toString()
@@ -461,10 +507,18 @@ const Timer: React.FC = () => {
   };
 
   const startCountDown = React.useCallback(() => {
-    const customDate = new Date();
-    const countDownDate = new Date(
-      customDate.getTime() + 120 * 60 * 1000 // Set countdown to 120 minutes from now
-    ).getTime();
+    const storedDate = localStorage.getItem("countDownDate");
+    let countDownDate: number;
+
+    if (storedDate) {
+      countDownDate = parseInt(storedDate, 10); // Use the stored date if it exists
+    } else {
+      const customDate = new Date();
+      countDownDate = new Date(
+        customDate.getTime() + 120 * 60 * 1000 // Set countdown to 120 minutes from now
+      ).getTime();
+      localStorage.setItem("countDownDate", countDownDate.toString()); // Save the countdown date
+    }
 
     const intervalId = setInterval(() => {
       getTimeDifference(countDownDate);
@@ -475,7 +529,7 @@ const Timer: React.FC = () => {
 
   React.useEffect(() => {
     const intervalId = startCountDown();
-    return () => clearInterval(intervalId); // Use the interval ID for clearInterval
+    return () => clearInterval(intervalId); // Clear the interval on unmount
   }, [startCountDown]);
 
   return (

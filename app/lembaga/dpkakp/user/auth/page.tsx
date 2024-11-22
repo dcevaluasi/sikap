@@ -90,13 +90,13 @@ function page() {
           <h1 className="font-bold text-gray-200 text-4xl -mt-2">
             Akses Ujian Keahlian
           </h1>
-          <p className="font-jakarta max-w-[42rem] leading-[100%] text-mutedForegroundDPKAKP  sm:text-lg sm:leading-8 -mt-4">
+          <p className="font-jakarta max-w-[42rem] leading-[100%] text-mutedForegroundDPKAKP  sm:text-lg sm:leading-8 -mt-2">
             Selamat Datang Dewan Penguji, Silahkan Login Untuk Mengakses Fitur
             Ujian Keahlian Awak Kapal Perikanan
           </p>
           <Image
-            className="absolute -top-28 w-[500px] opacity-10 z-10"
-            src={"/dpkakp/logo.png"}
+            className="absolute -top-28 w-[600px] opacity-10 z-10"
+            src={"/lembaga/logo/logo-sertifikasi-akp.png"}
             width={0}
             height={0}
             alt="DPKAKP Logo"
@@ -119,7 +119,7 @@ function page() {
             onClick={(e) => handleLoginAdminDPKAKP(e)}
             className="text-white w-full bg-blue-950 rounded-xl bg-opacity-100 py-2"
           >
-            Lakukan Ujian
+            Mulai Ujian
           </button>
         </div>
       </section>

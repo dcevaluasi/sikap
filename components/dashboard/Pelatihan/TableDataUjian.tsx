@@ -6,6 +6,20 @@ import {
   RiVerifiedBadgeFill,
 } from "react-icons/ri";
 
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+import { Button } from "@/components/ui/button";
+
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -24,10 +38,10 @@ import {
   LucideClipboardEdit,
   LucideNewspaper,
   LucidePrinter,
+  Search,
   Trash,
   X,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
 import {
   TbBook,
@@ -59,7 +73,7 @@ import {
   IoMdGlobe,
   IoMdSchool,
 } from "react-icons/io";
-import { FiFile, FiUploadCloud } from "react-icons/fi";
+import { FiEdit2, FiFile, FiUploadCloud } from "react-icons/fi";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -92,19 +106,13 @@ import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialo
 import Link from "next/link";
 import { dpkakpBaseUrl } from "@/constants/urls";
 import { wilayahPukakp } from "@/constants/dpkakp";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-} from "@/components/ui/select";
+
 import { UserInformationDPKAKP } from "@/types/dpkakp";
 import { generateTanggalPelatihan } from "@/utils/text";
 import { FaEdit } from "react-icons/fa";
 import { DewanPenguji } from "@/types/dewanPenguji";
 import { TypeUjian, Ujian } from "@/types/ujian-keahlian-akp";
+import { BiPaperPlane } from "react-icons/bi";
 
 const TableDataUjian: React.FC = () => {
   /**
@@ -115,6 +123,11 @@ const TableDataUjian: React.FC = () => {
 
   /*============== STORE DATA VARIABLES ================ */
   const [data, setData] = React.useState<Ujian[]>([]);
+
+  const [countVerified, setCountVerified] = React.useState<number>(0);
+  const [countNotVerified, setCountNotVerified] = React.useState<number>(0);
+  const [countDraft, setCountDraft] = React.useState<number>(0);
+
   const [dataTypeUjian, setDataTypeUjian] = React.useState<TypeUjian[]>([]);
   const [selectedKeahlian, setSelectedKeahlian] = React.useState<string | null>(
     null
@@ -145,7 +158,6 @@ const TableDataUjian: React.FC = () => {
   /*================== LOADER VARIABLES ================= */
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
 
-  /*=============== HANDLING FETCHING UJIAN ============== */
   const handleFetchingUjianKeahlianData = async () => {
     setIsFetching(true);
 
@@ -175,6 +187,23 @@ const TableDataUjian: React.FC = () => {
         // Sort by CreateAt in descending order
         return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime();
       });
+      console.log({ filteredData });
+
+      // Count 'Aktif' and 'Tidak Aktif' statuses
+      const verifiedCount = filteredData.filter(
+        (item: any) => item.Status === "Aktif"
+      ).length;
+      const notVerifiedCount = filteredData.filter(
+        (item: any) => item.Status === "Tidak Aktif"
+      ).length;
+      const draft = filteredData.filter(
+        (item: any) => item.Status === "Draft"
+      ).length;
+
+      // Update the state with the counts
+      setCountVerified(verifiedCount);
+      setCountNotVerified(notVerifiedCount);
+      setCountDraft(draft);
 
       // Set the sorted data depending on the pathPukakp condition
       if (pathPukakp) {
@@ -196,8 +225,6 @@ const TableDataUjian: React.FC = () => {
         setData(sortedOriginalData);
       }
 
-      console.log({ response });
-
       setIsFetching(false);
     } catch (error) {
       setIsFetching(false);
@@ -206,6 +233,8 @@ const TableDataUjian: React.FC = () => {
   };
 
   console.log({ data });
+  console.log({ countVerified });
+  console.log({ countNotVerified });
 
   const handleFetchingTypeUjianKeahlianData = async () => {
     setIsFetching(true);
@@ -284,7 +313,7 @@ const TableDataUjian: React.FC = () => {
     formData.append("TanggalBerakhirUjian", tanggalBerakhir);
     formData.append("WaktuUjian", waktuUjian);
     formData.append("JumlahPesertaUjian", jumlahPeserta.toString());
-    formData.append("Status", "Tidak Aktif");
+    formData.append("Status", "Draft");
     if (filePermohonan != null) {
       formData.append("filePermohonan", filePermohonan!);
     }
@@ -306,7 +335,6 @@ const TableDataUjian: React.FC = () => {
         title: `Berhasil menambahkan data pelaksanaan ujian keahlian baru!`,
       });
       handleFetchingUjianKeahlianData();
-      setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
       setIsPosting(false);
       setStatus("");
     } catch (error) {
@@ -316,7 +344,6 @@ const TableDataUjian: React.FC = () => {
         title: `Gagal menambahkan data pelaksanaan ujian keahlian baru!`,
       });
       handleFetchingUjianKeahlianData();
-      setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
       setIsPosting(true);
       setStatus("");
     }
@@ -344,7 +371,6 @@ const TableDataUjian: React.FC = () => {
         title: `Berhasil mengupdate data pelaksanaan ujian keahlian baru!`,
       });
       handleFetchingUjianKeahlianData();
-      setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
       setIsPosting(false);
       setStatus("");
     } catch (error) {
@@ -354,201 +380,18 @@ const TableDataUjian: React.FC = () => {
         title: `Gagal mengupdate data pelaksanaan ujian keahlian baru!`,
       });
       handleFetchingUjianKeahlianData();
-      setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
       setIsPosting(true);
       setStatus("");
     }
   };
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-
   const [selectedId, setSelectedId] = React.useState<number>(0);
 
   const router = useRouter();
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const columns: ColumnDef<Ujian>[] = [
-    {
-      accessorKey: "TempatUjian",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          className="text-gray-900 font-semibold"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          No
-          <ArrowUpDown className="ml-1 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => (
-        <div className="text-center uppercase">{row.index + 1}</div>
-      ),
-    },
-    {
-      accessorKey: "IdUjian",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          className="flex w-full text-gray-900 font-semibold"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Action
-          <TbDatabaseEdit className="ml-1 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => (
-        <div className="w-full flex flex-col gap-2">
-          <div className="flex items-center justify-center gap-1">
-            <Button variant="outline" className=" border border-[#000000]">
-              <FaBookOpen className="h-4 w-4" />
-            </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button variant="outline" className=" border border-rose-600">
-                  <Trash className="h-4 w-4 text-rose-600" />
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Apakah kamu yakin menghapus ujian ini?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Penghapusan data ini akan dilakukan secara permanen,
-                    sehingga anda tidak dapat kembali melakukan undo terkait
-                    tindakan ini!
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Batal</AlertDialogCancel>
-                  <AlertDialogAction className="bg-rose-600">
-                    Hapus
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-            {row.original.Status == "Aktif" && (
-              <Link
-                href={`/lembaga/${
-                  usePathname().includes("pukakp") ? "pukakp" : "dpkakp"
-                }/admin/dashboard/ujian/peserta-ujian/${row.getValue(
-                  "IdUjian"
-                )}/${row.original.IdTypeUjian}`}
-                className="border border-blue-500 rounded-md  bg-white shadow-sm  h-9 px-4 py-2"
-              >
-                <HiUserGroup className="h-4 w-4 text-blue-500" />
-              </Link>
-            )}
-
-            {row.original.FilePermohonan != null &&
-            row.original.Status == "Aktif" ? (
-              <Link
-                target="_blank"
-                href={row.original.FilePermohonan!}
-                className="border border-gray-500 rounded-md bg-white shadow-sm  h-9 px-4 py-2"
-              >
-                <FiFile className="h-4 w-4 text-gray-500" />
-              </Link>
-            ) : (
-              <></>
-            )}
-
-            {usePathname().includes("dpkakp") &&
-              row.original.Status != "Aktif" && (
-                <Button
-                  onClick={(e) => {
-                    setSelectedId(row.original.IdUjian);
-                    setSelectedSuratPermohonan(row.original.FilePermohonan);
-                    setOpenFormValidasiPelaksanaanUjian(
-                      !openFormValidasiPelaksanaanUjian
-                    );
-                  }}
-                  variant="outline"
-                  className="border border-green-400 rounded-md"
-                >
-                  <RiVerifiedBadgeFill className="h-4 w-4 text-green-400" />
-                </Button>
-              )}
-
-            {usePathname().includes("dpkakp") &&
-              row.original.Status == "Aktif" && (
-                <Button
-                  onClick={(e) => {
-                    setSelectedId(row.original.IdUjian);
-                    setStatus(row.original.Status);
-                    setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
-                  }}
-                  variant="outline"
-                  className="border border-yellow-400 rounded-md"
-                >
-                  <TbEditCircle className="h-5 w-5 text-yellow-400" />
-                </Button>
-              )}
-          </div>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "NamaUjian",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          className="p-0 !text-left w-[270px] flex items-center justify-start text-gray-900 font-semibold"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Ujian
-          <TbSchool className="ml-1 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => (
-        <div className="ml-0 text-left capitalize">
-          <p className="text-xs text-gray-400 mt-2 leading-[100%] mb-1">
-            {row.original.TypeUjian} • PUKAKP: {row.original.PUKAKP}
-          </p>
-          <p className="text-base font-semibold tracking-tight leading-none">
-            {row.getValue("NamaUjian")}
-          </p>
-          <div className="ml-0 text-left mt-1">
-            <p className="text-xs font-medium ">
-              <span className="flex items-center gap-1 leading-[105%]">
-                <TbTargetArrow className="text-lg" />
-                <span>{row.original.TempatUjian}</span>
-              </span>
-              <span className="flex items-center gap-1 leading-[105%]">
-                <TbCalendarCheck className="text-lg" />
-                <span>
-                  {generateTanggalPelatihan(row.original.TanggalMulaiUjian)} s.d{" "}
-                  {generateTanggalPelatihan(row.original.TanggalBerakhirUjian)}
-                </span>
-              </span>
-              <span className="flex items-center gap-1 leading-[105%]">
-                <HiUserGroup className="text-base" />
-                <span>
-                  Jumlah peserta ujian: {row.original.UsersUjian.length}
-                </span>
-              </span>
-            </p>
-          </div>
-        </div>
-      ),
-    },
-  ];
 
   const [filePermohonan, setFilePermohonan] = React.useState<File | null>(null);
   const handleFileChange = (e: any) => {
     setFilePermohonan(e.target.files[0]);
-  };
-
-  const handleSelectChange = (value: string) => {
-    setSelectedKeahlian(value);
-    console.log(value);
-    console.log(data);
-    setData(value ? data.filter((ujian) => ujian.TypeUjian === value) : data);
-    console.log(data);
   };
 
   const [dataPenguji, setDataPenguji] = React.useState<DewanPenguji[] | null>(
@@ -576,32 +419,6 @@ const TableDataUjian: React.FC = () => {
       throw error;
     }
   };
-
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-
-  React.useEffect(() => {
-    fetchInformationDPKAKP();
-    handleFetchingUjianKeahlianData();
-    handleGetDataPenguji();
-    handleFetchingTypeUjianKeahlianData();
-  }, []);
 
   const [
     openFormValidasiPelaksanaanUjian,
@@ -641,7 +458,7 @@ const TableDataUjian: React.FC = () => {
       console.error(error);
       Toast.fire({
         icon: "error",
-        title: `Gagal memvalidasi  pelaksanaan ujian keahlian!`,
+        title: `Gagal memvalidasi pelaksanaan ujian keahlian!`,
       });
       handleFetchingUjianKeahlianData();
       setOpenFormValidasiPelaksanaanUjian(false);
@@ -649,8 +466,645 @@ const TableDataUjian: React.FC = () => {
     }
   };
 
+  const handleKirimPermohonan = async (e: any) => {
+    setIsValidating(true);
+
+    try {
+      const response = await axios.put(
+        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedId}`,
+        {
+          status: "Pending",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil mengirimkan permohonan pelaksanaan ujian keahlian!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setStatus("Tidak Aktif");
+      setSelectedId(0);
+      setSelectedSuratPermohonan("");
+      setOpenFormValidasiPelaksanaanUjian(false);
+      setIsValidating(false);
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal mengirimkan permohonan pelaksanaan ujian keahlian!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setOpenFormValidasiPelaksanaanUjian(false);
+      setIsValidating(false);
+    }
+  };
+
+  // STATUS FILTERING
+  const [selectedStatusFilter, setSelectedStatusFilter] =
+    React.useState<string>("All");
+
+  // SEARCHING
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
+
+  const filteredData = data.filter((ujian) => {
+    const matchesSearchQuery =
+      ujian.TypeUjian.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      ujian.NamaUjian.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesStatus =
+      selectedStatusFilter === "All" || ujian.Status === selectedStatusFilter;
+
+    return matchesSearchQuery && matchesStatus;
+  });
+
+  // CANCEL ADD NEW UJIAN
+  const handleCancelAddNewUjian = () => {
+    setTypeUjian("");
+    setNamaUjian("");
+    setTempatUjian("");
+    setTanggalMulai("");
+    setTanggalBerakhir("");
+    setWaktuUjian("");
+    setJumlahPeserta("");
+    setFilePermohonan(null);
+    setSelectedIdUjian(0);
+  };
+
+  console.log({ selectedStatusFilter });
+
+  // EDIT UJIAN
+  const [selectedIdUjian, setSelectedIdUjian] = React.useState<number>(0);
+  const [selectedUjian, setSelectedUjian] = React.useState<Ujian | null>(null);
+  const handleFetchingDataUjianById = async (idUjian: number) => {
+    setSelectedIdUjian(idUjian);
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${dpkakpBaseUrl}/adminPusat/GetUjian?id=${idUjian}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+
+      console.log({ response });
+      setSelectedUjian(response.data.data[0]);
+      setTypeUjian(response.data.data[0].TypeUjian);
+      setNamaUjian(response.data.data[0].NamaUjian);
+      setTempatUjian(response.data.data[0].TempatUjian);
+      setTanggalMulai(response.data.data[0].TanggalMulaiUjian);
+      setTanggalBerakhir(response.data.data[0].TanggalBerakhirUjian);
+      setWaktuUjian(response.data.data[0].WaktuUjian);
+      setJumlahPeserta(response.data.data[0].JumlahPesertaUjian);
+      setIsOpenFormUjianKeahlian(true);
+    } catch (error) {
+      console.error("ERROR FETCHING UJIAN : ", error);
+      setIsFetching(false);
+      setIsOpenFormUjianKeahlian(false);
+      handleCancelAddNewUjian();
+      throw error;
+    }
+  };
+
+  const handleEditUjianKeahlian = async (e: any) => {
+    try {
+      const response = await axios.put(
+        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedIdUjian}`,
+        {
+          nama_ujian: namaUjian,
+          tempat_ujian: tempatUjian,
+          pukakp: pukakp,
+          tanggal_mulai_ujian: tanggalMulai,
+          tanggal_berakhir_ujian: tanggalBerakhir,
+          status: "Draft",
+          type_ujian: typeUjian,
+          id_type_ujian: idTypeUjian
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil mengupdate data pelaksanaan ujian keahlian baru!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setIsPosting(false);
+      handleCancelAddNewUjian()
+      setIsOpenFormUjianKeahlian(false)
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal mengupdate data pelaksanaan ujian keahlian baru!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setIsPosting(true);
+      setIsOpenFormUjianKeahlian(false)
+      setStatus("");
+    }
+  };
+
+  React.useEffect(() => {
+    fetchInformationDPKAKP();
+    handleFetchingUjianKeahlianData();
+    handleGetDataPenguji();
+    handleFetchingTypeUjianKeahlianData();
+  }, []);
+
   return (
-    <section className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+    <section className="rounded-sm   pb-5 shadow-default  h-full scrollbar-hide">
+      <section
+        aria-label="main content"
+        className="flex h-full flex-col flex-auto w-full border-l scrollbar-hide"
+      >
+        <nav className="bg-gray-100 flex p-4">
+          <section
+            aria-labelledby="ticket-statistics-tabs-label"
+            className="pb-2"
+          >
+            <label
+              id="ticket-statistics-tabs-label"
+              className="font-semibold block mb-1 text-sm"
+            >
+              Pengajuan Pelaksanaan Ujian
+              {/* <span className="font-normal text-gray-700"> ()</span> */}
+            </label>
+            <ul className="flex">
+              <li>
+                <button
+                  onClick={() => setSelectedStatusFilter("All")}
+                  className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${
+                    selectedStatusFilter === "All"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  <p className="font-semibold text-lg">{data!.length}</p>
+                  <p
+                    className={`uppercase text-sm ${
+                      selectedStatusFilter === "All"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    All
+                  </p>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => setSelectedStatusFilter("Draft")}
+                  className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
+                    selectedStatusFilter === "Draft"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  <p className="font-semibold text-lg">{countDraft}</p>
+                  <p
+                    className={`uppercase text-sm ${
+                      selectedStatusFilter === "Draft"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    Draft
+                  </p>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => setSelectedStatusFilter("Pending")}
+                  className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
+                    selectedStatusFilter === "Pending"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  <p className="font-semibold text-lg">{countNotVerified}</p>
+                  <p
+                    className={`uppercase text-sm ${
+                      selectedStatusFilter === "Pending"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    Pending
+                  </p>
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={() => setSelectedStatusFilter("Aktif")}
+                  className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-24 ${
+                    selectedStatusFilter === "Aktif"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                  }`}
+                >
+                  <p className="font-semibold text-lg">{countVerified}</p>
+                  <p
+                    className={`uppercase text-sm ${
+                      selectedStatusFilter === "Aktif"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
+                    }`}
+                  >
+                    Disetujui
+                  </p>
+                </button>
+              </li>
+            </ul>
+          </section>
+        </nav>
+
+        <div className="px-4 mt-2">
+          <Tabs defaultValue="account" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="account">Daftar Pelaksanan Ujian</TabsTrigger>
+              <TabsTrigger value="password">
+                Buat Pelaksanaan Ujian Baru
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="account">
+              <div className="flex flex-col gap-1">
+                <div className="mb-1">
+                  <Input
+                    type="text"
+                    placeholder="Cari berdasarkan Program Ujian atau Nama Ujian"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full text-sm"
+                  />
+                </div>
+                {filteredData.map((ujian, index) => (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>{ujian!.NamaUjian}</CardTitle>
+                      <CardDescription>
+                        {" "}
+                        {ujian!.TypeUjian} • {ujian!.PUKAKP}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div className="ml-0 text-left capitalize -mt-6">
+                        <div className="ml-0 text-left mt-1 text-neutral-500 ">
+                          <p className="text-sm ">
+                            <span className="flex items-center gap-1 leading-[105%]">
+                              <TbTargetArrow className="text-lg" />
+                              <span>{ujian!.TempatUjian}</span>
+                            </span>
+                            <span className="flex items-center gap-1 leading-[105%]">
+                              <TbCalendarCheck className="text-lg" />
+                              <span>
+                                {generateTanggalPelatihan(
+                                  ujian!.TanggalMulaiUjian
+                                )}{" "}
+                                s.d{" "}
+                                {generateTanggalPelatihan(
+                                  ujian!.TanggalBerakhirUjian
+                                )}
+                              </span>
+                            </span>
+                            <span className="flex items-center gap-1 leading-[105%]">
+                              <HiUserGroup className="text-base" />
+                              <span>
+                                Jumlah peserta ujian: {ujian!.UsersUjian.length}
+                              </span>
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <div className="flex items-center justify-center gap-1 flex-wrap  -mt-2">
+                        <Button
+                          variant="outline"
+                          className=" bg-gray-900 text-white hover:text-white hover:bg-gray-900"
+                        >
+                          <FaBookOpen className="h-4 w-4 mr-1" /> Info Ujian
+                        </Button>
+                        {ujian!.Status == "Aktif" && (
+                          <Link
+                            href={`/lembaga/${
+                              usePathname().includes("pukakp")
+                                ? "pukakp"
+                                : "dpkakp"
+                            }/admin/dashboard/ujian/peserta-ujian/${
+                              ujian!.IdUjian
+                            }/${ujian!.IdTypeUjian}`}
+                            className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm"
+                          >
+                            <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
+                            Peserta Ujian
+                          </Link>
+                        )}
+
+                        {ujian!.FilePermohonan != null &&
+                        ujian!.Status == "Aktif" ? (
+                          <Link
+                            target="_blank"
+                            href={ujian!.FilePermohonan!}
+                            className="bg-gray-500 text-white rounded-md  shadow-sm  h-9 px-4 py-2 flex text-sm items-center"
+                          >
+                            <FiFile className="h-4 w-4 mr-1" /> File Permohonan
+                          </Link>
+                        ) : (
+                          <></>
+                        )}
+
+                        {ujian!.Status == "Draft" && (
+                          <Button
+                            onClick={() => {
+                              handleFetchingDataUjianById(ujian!.IdUjian);
+                            }}
+                            variant="outline"
+                            className="bg-indigo-600 text-neutral-100 hover:text-neutral-100 hover:bg-indigo-600"
+                          >
+                            <BiPaperPlane className="h-4 w-4 text-neutral-100 mr-1" />{" "}
+                            Kirim Permohonan
+                          </Button>
+                        )}
+
+                        {ujian!.Status == "Draft" && (
+                          <Button
+                            onClick={() => {
+                              handleFetchingDataUjianById(ujian!.IdUjian);
+                            }}
+                            variant="outline"
+                            className="bg-yellow-300 text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
+                          >
+                            <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" />{" "}
+                            Edit Ujian
+                          </Button>
+                        )}
+
+                        {ujian!.Status == "Draft" && (
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button
+                                variant="outline"
+                                className="bg-rose-600 text-white hover:text-white hover:bg-rose-600"
+                              >
+                                <Trash className="h-4 w-4 text-white mr-1" />{" "}
+                                Hapus Ujian
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                  Apakah kamu yakin menghapus ujian ini?
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Penghapusan data ini akan dilakukan secara
+                                  permanen, sehingga anda tidak dapat kembali
+                                  melakukan undo terkait tindakan ini!
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Batal</AlertDialogCancel>
+                                <AlertDialogAction className="bg-rose-600">
+                                  Hapus
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        )}
+
+                        {usePathname().includes("dpkakp") &&
+                          ujian!.Status != "Aktif" && (
+                            <Button
+                              onClick={(e) => {
+                                setSelectedId(ujian!.IdUjian);
+                                setSelectedSuratPermohonan(
+                                  ujian!.FilePermohonan
+                                );
+                                setOpenFormValidasiPelaksanaanUjian(
+                                  !openFormValidasiPelaksanaanUjian
+                                );
+                              }}
+                              variant="outline"
+                              className="bg-green-400 hover:bg-green-400 hover:text-white text-white rounded-md"
+                            >
+                              <RiVerifiedBadgeFill className="h-4 w-4 mr-1" />{" "}
+                              Verifikasi
+                            </Button>
+                          )}
+
+                        {usePathname().includes("dpkakp") &&
+                          ujian!.Status == "Aktif" && (
+                            <Button
+                              onClick={(e) => {
+                                setSelectedId(ujian!.IdUjian);
+                                setStatus(ujian!.Status);
+                                setIsOpenFormUjianKeahlian(
+                                  !isOpenFormUjianKeahlian
+                                );
+                              }}
+                              variant="outline"
+                              className="bg-yellow-400 hover:bg-yellow-400 text-gray-800 rounded-md hover:text-gray-800"
+                            >
+                              <TbEditCircle className="h-5 w-5 mr-1" /> Edit
+                              Ujian
+                            </Button>
+                          )}
+                      </div>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </TabsContent>
+            <TabsContent value="password">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Ajukan Permohonan Ujian AKP</CardTitle>
+                  <CardDescription>
+                    Dalam hal melaksanakan ujian keahlian di PUKAKP masing -
+                    masing dari permohonan lemdiklat yang mengajukan, harap
+                    mengajukan permohonan pelaksanaan kepada tim sekretariat
+                    untuk diketahui!
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 -mt-6">
+                  <form autoComplete="off">
+                    {/* PUKAKP */}
+                    <div className="mt-2 w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        PUKAKP <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        className="form-input w-full text-black border-gray-300 rounded-md py-2 text-sm"
+                        placeholder="Tempat Ujian"
+                        required
+                        value={Cookies.get("PUKAKP")}
+                        onChange={(e) => setPukakp(e.target.value)}
+                      />
+                    </div>
+                    {/* Tipe Ujian */}
+
+                    <div className="mt-2">
+                      <Label htmlFor="type-ujian">Tipe Ujian*</Label>
+                      <select
+                        id="type-ujian"
+                        className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
+                        required
+                        value={typeUjian}
+                        onChange={(e) => setTypeUjian(e.target.value)}
+                      >
+                        <option value="0">Pilih Tipe Ujian</option>
+                        {dataTypeUjian.map((type) => (
+                          <option
+                            key={type.IdTypeUjian}
+                            value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
+                            className="capitalize"
+                          >
+                            {type.NamaTypeUjian}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Nama Ujian */}
+                    <div className="mt-2">
+                      <Label htmlFor="nama-ujian">Nama Ujian*</Label>
+                      <Input
+                        id="nama-ujian"
+                        type="text"
+                        required
+                        value={namaUjian}
+                        onChange={(e) => setNamaUjian(e.target.value)}
+                      />
+                    </div>
+
+                    {/* Tempat Ujian */}
+                    <div className="mt-2">
+                      <Label htmlFor="tempat-ujian">Tempat Ujian*</Label>
+                      <Input
+                        id="tempat-ujian"
+                        type="text"
+                        required
+                        value={tempatUjian}
+                        onChange={(e) => setTempatUjian(e.target.value)}
+                      />
+                    </div>
+
+                    {/* Tanggal Mulai and Tanggal Berakhir */}
+                    <div className="grid grid-cols-2 gap-4 mt-1">
+                      <div className="">
+                        <Label htmlFor="tanggal-mulai">Tanggal Mulai*</Label>
+                        <Input
+                          id="tanggal-mulai"
+                          type="date"
+                          required
+                          min={new Date().toISOString().split("T")[0]}
+                          value={tanggalMulai}
+                          onChange={(e) => setTanggalMulai(e.target.value)}
+                        />
+                      </div>
+                      <div className="">
+                        <Label htmlFor="tanggal-berakhir">
+                          Tanggal Berakhir*
+                        </Label>
+                        <Input
+                          id="tanggal-berakhir"
+                          type="date"
+                          placeholder="Tanggal Berakhir"
+                          required
+                          value={tanggalBerakhir}
+                          min={tanggalMulai}
+                          onChange={(e) => setTanggalBerakhir(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Waktu Ujian and Jumlah Peserta */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="mt-2">
+                        <Label htmlFor="waktu-ujian">
+                          Waktu Ujian per Materi*
+                        </Label>
+                        <Input
+                          id="waktu-ujian"
+                          type="number"
+                          placeholder="Waktu Ujian"
+                          required
+                          value={waktuUjian}
+                          onChange={(e) => setWaktuUjian(e.target.value)}
+                        />
+                      </div>
+                      <div className="mt-2">
+                        <Label htmlFor="jumlah-peserta">Jumlah Peserta*</Label>
+                        <Input
+                          id="jumlah-peserta"
+                          type="text"
+                          placeholder="Jumlah Peserta"
+                          required
+                          value={jumlahPeserta}
+                          onChange={(e) => setJumlahPeserta(e.target.value)}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Surat Permohonan */}
+                    <div className="mt-2">
+                      <Label htmlFor="surat-permohonan">Surat Permohonan</Label>
+                      <input
+                        id="surat-permohonan"
+                        type="file"
+                        className="text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                        required
+                        onChange={handleFileChange}
+                      />
+                    </div>
+
+                    <CardFooter className="pt-4 flex justify-end gap-2">
+                      {isPosting ? (
+                        <Button>Loading ...</Button>
+                      ) : (
+                        <>
+                          <Button
+                            variant="ghost"
+                            type="button"
+                            onClick={() => handleCancelAddNewUjian()}
+                          >
+                            Cancel
+                          </Button>{" "}
+                          <Button
+                            onClick={(e) => handlePostNewUjianKeahlian(e)}
+                          >
+                            Save Draft
+                          </Button>
+                        </>
+                      )}
+                    </CardFooter>
+                  </form>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        <footer
+          aria-label="content footer"
+          className="flex p-3 bg-white border-t hidden"
+        >
+          footer
+        </footer>
+      </section>
       <AlertDialog
         open={openFormValidasiPelaksanaanUjian}
         onOpenChange={setOpenFormValidasiPelaksanaanUjian}
@@ -743,7 +1197,7 @@ const TableDataUjian: React.FC = () => {
               <FaBookOpen className="h-4 w-4" />
               {status == "Aktif"
                 ? " Tetakan Penguji dan Fasilitator"
-                : " Tambah Pelaksanaan Ujian Keahlian"}
+                : " Edit Pelaksanaan Ujian Keahlian"}
             </AlertDialogTitle>
             <AlertDialogDescription className="-mt-6">
               {status == "Aktif"
@@ -764,24 +1218,21 @@ const TableDataUjian: React.FC = () => {
                         Tipe Ujian <span className="text-red-600">*</span>
                       </label>
                       <select
-                        id="name"
-                        className="form-input w-full text-black text-sm border-gray-300 rounded-md"
-                        placeholder="Tipe Blanko"
+                        id="type-ujian"
+                        className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
                         required
                         value={typeUjian}
                         onChange={(e) => setTypeUjian(e.target.value)}
                       >
                         <option value="0">Pilih Tipe Ujian</option>
-                        {dataTypeUjian.map((typeUjian, index) => (
+                        {dataTypeUjian.map((type) => (
                           <option
-                            value={
-                              typeUjian.NamaTypeUjian +
-                              "," +
-                              typeUjian.IdTypeUjian
-                            }
+                            key={type.IdTypeUjian}
+                            value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
                             className="capitalize"
+                            selected={type.NamaTypeUjian == typeUjian}
                           >
-                            {typeUjian.NamaTypeUjian}
+                            {type.NamaTypeUjian}
                           </option>
                         ))}
                       </select>
@@ -928,7 +1379,7 @@ const TableDataUjian: React.FC = () => {
                       />
                     </div>
                   </div>
-                  <div className="w-full mx-3">
+                  {/* <div className="w-full mx-3">
                     <label
                       className="block text-gray-800 text-sm font-medium mb-1"
                       htmlFor="name"
@@ -941,7 +1392,7 @@ const TableDataUjian: React.FC = () => {
                       required
                       onChange={handleFileChange}
                     />
-                  </div>
+                  </div> */}
                 </div>
 
                 <AlertDialogFooter className="mt-3">
@@ -953,9 +1404,9 @@ const TableDataUjian: React.FC = () => {
                     Cancel
                   </AlertDialogCancel>
                   <AlertDialogAction
-                    onClick={(e) => handlePostNewUjianKeahlian(e)}
+                    onClick={(e) => handleEditUjianKeahlian(e)}
                   >
-                    Upload
+                    Edit
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </form>
@@ -1012,9 +1463,10 @@ const TableDataUjian: React.FC = () => {
 
                 <AlertDialogFooter className="mt-3">
                   <AlertDialogCancel
-                    onClick={(e) =>
-                      setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian)
-                    }
+                    onClick={(e) => {
+                      handleCancelAddNewUjian();
+                      setIsOpenFormUjianKeahlian(false);
+                    }}
                   >
                     Cancel
                   </AlertDialogCancel>
@@ -1031,77 +1483,6 @@ const TableDataUjian: React.FC = () => {
           </fieldset>
         </AlertDialogContent>
       </AlertDialog>
-
-      <>
-        {/* List Data Pelatihan */}
-        <div>
-          <div id="chartOne" className="-ml-5"></div>
-          <div className="flex w-full items-center mb-2">
-            <Select onValueChange={handleSelectChange}>
-              <SelectTrigger className="w-[200px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                <div className="inline-flex gap-2 px-3 mr-2 text-sm items-center rounded-md bg-whiter p-1.5 cursor-pointer">
-                  <IoMdSchool />
-                  {selectedKeahlian == null
-                    ? "Jenis Keahlian"
-                    : selectedKeahlian}
-                </div>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Jenis Keahlian</SelectLabel>
-                  {dataTypeUjian.map((data, index) => (
-                    <SelectItem key={index} value={data.NamaTypeUjian}>
-                      {data.NamaTypeUjian}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            {usePathname().includes("pukakp") && (
-              <div className="w-full flex justify-end gap-2">
-                <div
-                  onClick={(e) =>
-                    setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian)
-                  }
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <FiUploadCloud />
-                  Tambah Ujian Baru
-                </div>
-              </div>
-            )}
-          </div>
-
-          <TableData
-            isLoading={isFetching}
-            columns={columns}
-            table={table}
-            type={"short"}
-          />
-          <div className="flex items-center justify-end space-x-2 py-4">
-            <div className="space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="font-inter"
-                onClick={() => table.previousPage()}
-                disabled={!table.getCanPreviousPage()}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="font-inter"
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-              >
-                Next
-              </Button>
-            </div>
-          </div>
-        </div>
-      </>
     </section>
   );
 };

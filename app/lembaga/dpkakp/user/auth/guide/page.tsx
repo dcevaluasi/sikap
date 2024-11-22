@@ -56,8 +56,8 @@ function page() {
             keahlian awak kapal perikanan.
           </p>
           <Image
-            className="absolute top-16 md:-top-28 w-[500px] opacity-10 z-10"
-            src={"/dpkakp/logo.png"}
+            className="absolute -top-16 w-[600px] opacity-10 z-10"
+            src={"/lembaga/logo/logo-sertifikasi-akp.png"}
             width={0}
             height={0}
             alt="DPKAKP Logo"
@@ -89,7 +89,10 @@ function page() {
             </div>
           </div>
           <button
-            onClick={(e) => router.push("/lembaga/dpkakp/user/auth/exam")}
+            onClick={(e) => {
+              Cookies.set("XSRF097", "ExamIsStarted");
+              router.push("/lembaga/dpkakp/user/auth/exam");
+            }}
             className="text-white w-full bg-blue-950 rounded-xl bg-opacity-100 py-2"
           >
             Lanjutkan

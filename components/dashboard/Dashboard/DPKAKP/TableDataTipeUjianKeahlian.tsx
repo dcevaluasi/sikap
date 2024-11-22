@@ -228,14 +228,14 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
               <li key={index}>
                 <article
                   tabIndex={0}
-                  className="cursor-pointer border rounded-md p-3 bg-white flex text-gray-700 mb-2 hover:border-blue-500 focus:outline-none focus:border-blue-500"
+                  className="cursor-pointer border rounded-md py-5 px-8 bg-white flex text-gray-700 mb-2 hover:border-blue-500 focus:outline-none focus:border-blue-500"
                 >
-                  <span className="flex-none pt-1 pr-2">
+                  {/* <span className="flex-none pt-1 pr-2">
                     <img
                       className="h-8 w-8 rounded-md"
                       src="https://raw.githubusercontent.com/bluebrown/tailwind-zendesk-clone/master/public/assets/avatar.png"
                     />
-                  </span>
+                  </span> */}
                   <div className="flex-1">
                     <header className="mb-1">
                       <span className="font-semibold text-sm">
@@ -306,182 +306,6 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
             ))}
           </ul>
         </section>
-
-        {/* section content */}
-        {/* <section
-          aria-label="main content"
-          className="flex min-h-0 flex-col flex-auto border-l"
-        >
-         
-          <nav className="bg-gray-100 flex p-4">
-    
-            <section
-              aria-labelledby="open-tickets-tabs-label"
-              className="mr-4 focus:outline-none"
-            >
-              <label
-                id="open-tickets-tabs-label"
-                className="font-semibold block mb-1 text-sm"
-              >
-                Ujian Berlangsung
-                <span className="font-normal text-gray-700">(current)</span>
-              </label>
-              <ul className="flex">
-                <li>
-                  <button className="focus:outline-none focus:bg-yellow-200 p-2 rounded-l-md border border-r-0 bg-white flex flex-col items-center w-24">
-                    <p className="font-semibold text-lg">6</p>
-                    <p className="text-sm uppercase text-gray-600">You</p>
-                  </button>
-                </li>
-                <li>
-                  <button className="focus:outline-none focus:bg-yellow-200 p-2 border rounded-r-md bg-white flex flex-col items-center w-24 cursor-pointer">
-                    <p className="font-semibold text-lg">23</p>
-                    <p className="text-sm uppercase text-gray-600">Groups</p>
-                  </button>
-                </li>
-              </ul>
-            </section>
-           
-            <section
-              aria-labelledby="ticket-statistics-tabs-label"
-              className="pb-2"
-            >
-              <label
-                id="ticket-statistics-tabs-label"
-                className="font-semibold block mb-1 text-sm"
-              >
-                Statistik Ujian
-                <span className="font-normal text-gray-700">(this week)</span>
-              </label>
-              <ul className="flex">
-                <li>
-                  <button className="focus:outline-none focus:bg-yellow-200 p-2 rounded-l-md border border-r-0 bg-white flex flex-col items-center w-24">
-                    <p className="font-semibold text-lg">16</p>
-                    <p className="uppercase text-gray-600 text-sm">good</p>
-                  </button>
-                </li>
-                <li>
-                  <button className="focus:outline-none focus:bg-yellow-200 p-2 border border-r-0 bg-white flex flex-col items-center w-24">
-                    <p className="font-semibold text-lg">2</p>
-                    <p className="uppercase text-gray-600 text-sm">bad</p>
-                  </button>
-                </li>
-                <li>
-                  <button className="focus:outline-none focus:bg-yellow-200 p-2 border rounded-r-md bg-white flex flex-col items-center w-24">
-                    <p className="font-semibold text-lg">32</p>
-                    <p className="uppercase text-gray-600 text-sm">solved</p>
-                  </button>
-                </li>
-              </ul>
-            </section>
-          </nav>
-        
-          <header className="bg-white border-t flex items-center py-1 px-4">
-            <div className="flex">
-              <h2 id="content-caption" className="font-semibold">
-                Tickets requiring your attention (6)
-              </h2>
-              <span className="ml-3 group relative">
-                <button
-                  role="details"
-                  aria-controls="info-popup"
-                  className="text-blue-700 border-b border-dotted border-blue-700 focus:outline-none text-sm"
-                >
-                  What is this?
-                </button>
-                <div
-                  role="tooltip"
-                  id="info-popup"
-                  className="absolute pt-1 rounded-md rounded-t-lg right-0 transform translate-x-40 mx-auto hidden group-hover:block z-50"
-                >
-                  <div className="border rounded-md rounded-t-lg shadow-lg bg-white w-full max-w-xs w-screen">
-                    <header className="font-semibold rounded-t-lg bg-gray-300 px-4 py-2">
-                      People are waiting for replies!
-                    </header>
-                    <div className="p-4 border-t">
-                      <p className="mb-4">
-                        These are new or open tickets that are assigned to you,
-                        unassinged in your group(s) or not assigned to any
-                        group.
-                      </p>
-                      <p className="mb-1">
-                        They are ordered by priority and requester update date
-                        (oldest first).
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </span>
-            </div>
-            <div className="ml-auto">
-              <button
-                title="See available tickets in this view"
-                aria-label="play"
-                className="border rounded-md px-3 py-2 leading-none"
-              >
-                Play
-              </button>
-            </div>
-          </header>
-          
-          <div className="px-4 mt-2">
-            <Tabs defaultValue="account" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="account">Account</TabsTrigger>
-                <TabsTrigger value="password">Password</TabsTrigger>
-              </TabsList>
-              <TabsContent value="account">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Account</CardTitle>
-                    <CardDescription>
-                      Make changes to your account here. Click save when you're
-                      done.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    
-                  </CardContent>
-                  <CardFooter>
-                    <Button>Save changes</Button>
-                  </CardFooter>
-                </Card>
-              </TabsContent>
-              <TabsContent value="password">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Password</CardTitle>
-                    <CardDescription>
-                      Change your password here. After saving, you'll be logged
-                      out.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    <div className="space-y-1">
-                      <Label htmlFor="current">Current password</Label>
-                      <Input id="current" type="password" />
-                    </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="new">New password</Label>
-                      <Input id="new" type="password" />
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <Button>Save password</Button>
-                  </CardFooter>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
-
-        
-          <footer
-            aria-label="content footer"
-            className="flex p-3 bg-white border-t hidden"
-          >
-            footer
-          </footer>
-        </section> */}
       </main>
     </div>
   );

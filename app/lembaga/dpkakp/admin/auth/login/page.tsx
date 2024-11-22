@@ -67,6 +67,7 @@ function page() {
           });
           await handleClearFormLoginAdminDPKAKP();
           Cookies.set("XSRF095", response?.data?.t);
+          Cookies.set("IsPUKAKP", role == "PUKAKP" ? "true" : "false");
           if (containsPukakp(email)) {
             router.replace("/lembaga/pukakp/admin/dashboard/ujian");
           } else {
