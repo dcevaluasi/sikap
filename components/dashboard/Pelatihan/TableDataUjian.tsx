@@ -466,12 +466,12 @@ const TableDataUjian: React.FC = () => {
     }
   };
 
-  const handleKirimPermohonan = async (e: any) => {
+  const handleKirimPermohonan = async (id: number) => {
     setIsValidating(true);
 
     try {
       const response = await axios.put(
-        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedId}`,
+        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${id}`,
         {
           status: "Pending",
         },
@@ -583,7 +583,7 @@ const TableDataUjian: React.FC = () => {
           tanggal_berakhir_ujian: tanggalBerakhir,
           status: "Draft",
           type_ujian: typeUjian,
-          id_type_ujian: idTypeUjian
+          id_type_ujian: idTypeUjian,
         },
         {
           headers: {
@@ -598,8 +598,8 @@ const TableDataUjian: React.FC = () => {
       });
       handleFetchingUjianKeahlianData();
       setIsPosting(false);
-      handleCancelAddNewUjian()
-      setIsOpenFormUjianKeahlian(false)
+      handleCancelAddNewUjian();
+      setIsOpenFormUjianKeahlian(false);
     } catch (error) {
       console.error(error);
       Toast.fire({
@@ -608,7 +608,7 @@ const TableDataUjian: React.FC = () => {
       });
       handleFetchingUjianKeahlianData();
       setIsPosting(true);
-      setIsOpenFormUjianKeahlian(false)
+      setIsOpenFormUjianKeahlian(false);
       setStatus("");
     }
   };
@@ -787,12 +787,12 @@ const TableDataUjian: React.FC = () => {
                     </CardContent>
                     <CardFooter>
                       <div className="flex items-center justify-center gap-1 flex-wrap  -mt-2">
-                        <Button
+                        {/* <Button
                           variant="outline"
                           className=" bg-gray-900 text-white hover:text-white hover:bg-gray-900"
                         >
                           <FaBookOpen className="h-4 w-4 mr-1" /> Info Ujian
-                        </Button>
+                        </Button> */}
                         {ujian!.Status == "Aktif" && (
                           <Link
                             href={`/lembaga/${
@@ -825,7 +825,7 @@ const TableDataUjian: React.FC = () => {
                         {ujian!.Status == "Draft" && (
                           <Button
                             onClick={() => {
-                              handleFetchingDataUjianById(ujian!.IdUjian);
+                              handleKirimPermohonan(ujian!.IdUjian);
                             }}
                             variant="outline"
                             className="bg-indigo-600 text-neutral-100 hover:text-neutral-100 hover:bg-indigo-600"
