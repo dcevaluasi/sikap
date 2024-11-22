@@ -136,6 +136,7 @@ export type SoalBagian = {
   Soal: SoalUjianBagian[];
   Ujian: string;
   jumlah: number;
+  waktu?: number;
 }
 
 export type PaketBagianDetail = {

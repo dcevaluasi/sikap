@@ -266,7 +266,7 @@ function Exam() {
 
                   {data?.Soal[selectedIdSoal]?.GambarSoal != "" ? (
                     <Image
-                      className="hidden md:block w-100 my-5 rounded-lg"
+                      className="hidden md:block w-fit h-50 object-contain my-5 rounded-lg"
                       src={data!.Soal[selectedIdSoal]?.GambarSoal!}
                       width={0}
                       height={0}
@@ -406,10 +406,10 @@ function Exam() {
                 </span>
                 <br />
                 <span className="font-normal text-xs md:text-base text-mutedForegroundDPKAKP leading-[90%]">
-                  Waktu Pelaksanaan : 120 Menit
+                  Waktu Pelaksanaan : {data?.waktu!} Menit
                 </span>
               </h1>
-              <Timer />
+              <Timer countdownMinutes={data?.waktu!} />
             </div>
             <div className="grid grid-cols-6 grid-rows-6 space-x-0 space-y-0 gap-2">
               {data?.Soal!.map((soal, index) => (
@@ -471,7 +471,11 @@ interface CountDownTime {
   seconds: string;
 }
 
-const Timer: React.FC = () => {
+interface TimerProps {
+  countdownMinutes: number; // Custom countdown in minutes
+}
+
+const Timer: React.FC<TimerProps> = ({ countdownMinutes }) => {
   const [countDownTime, setCountDownTime] = React.useState<CountDownTime>({
     days: "00",
     hours: "00",
@@ -479,7 +483,7 @@ const Timer: React.FC = () => {
     seconds: "00",
   });
 
-  const router = useRouter(); // Next.js router for redirection
+  const router = useRouter();
 
   const getTimeDifference = (countDownDate: number) => {
     const currentTime = new Date().getTime();
@@ -492,15 +496,10 @@ const Timer: React.FC = () => {
         minutes: "00",
         seconds: "00",
       });
-      localStorage.removeItem("countDownDate"); // Clear countdown from storage
+      localStorage.removeItem("countDownDate");
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
-      // Toast.fire({
-      //   icon: "success",
-      //   title: "Waktu telah habis!",
-      //   text: `Ups, waktu telah habis, jawabanmu akan tersubmit secara otomatis, selamat telah mengerjakan ujian!`,
-      // });
-      router.push("/lembaga/dpkakp/user/auth"); // Redirect when time ends
+      router.push("/lembaga/dpkakp/user/auth");
     } else {
       const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000))
         .toString()
@@ -519,12 +518,7 @@ const Timer: React.FC = () => {
         .toString()
         .padStart(2, "0");
 
-      setCountDownTime({
-        days,
-        hours,
-        minutes,
-        seconds,
-      });
+      setCountDownTime({ days, hours, minutes, seconds });
     }
   };
 
@@ -532,80 +526,48 @@ const Timer: React.FC = () => {
     const storedDate = localStorage.getItem("countDownDate");
     let countDownDate: number;
 
-    if (storedDate) {
-      countDownDate = parseInt(storedDate, 10); // Use the stored date if it exists
+    if (storedDate && !isNaN(parseInt(storedDate, 10))) {
+      countDownDate = parseInt(storedDate, 10);
     } else {
-      const customDate = new Date();
-      countDownDate = new Date(
-        customDate.getTime() + 120 * 60 * 1000 // Set countdown to 120 minutes from now
-      ).getTime();
-      localStorage.setItem("countDownDate", countDownDate.toString()); // Save the countdown date
+      const currentTime = new Date().getTime();
+      countDownDate = currentTime + countdownMinutes * 60 * 1000; // Set countdown based on the input minutes
+      localStorage.setItem("countDownDate", countDownDate.toString());
     }
 
     const intervalId = setInterval(() => {
       getTimeDifference(countDownDate);
     }, 1000);
 
-    return intervalId; // Return the interval ID
-  }, []);
+    return intervalId;
+  }, [countdownMinutes]);
 
   React.useEffect(() => {
     const intervalId = startCountDown();
-    return () => clearInterval(intervalId); // Clear the interval on unmount
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [startCountDown]);
 
   return (
     <div className="h-fit">
       <div className="flex flex-col items-center justify-center w-full h-full gap-8 sm:gap-16">
         <div className="flex justify-center gap-3 sm:gap-8">
-          <div className="flex flex-col gap-2 relative">
-            <div className="h-12 w-12 flex justify-between items-center bg-[#343650] rounded-lg">
-              <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-[#191A24]"></div>
-              <span className="text-2xl font-semibold text-[#a5b4fc]">
-                {countDownTime.days}
+          {["days", "hours", "minutes", "seconds"].map((unit, index) => (
+            <div key={index} className="flex flex-col gap-2 relative">
+              <div className="h-12 w-12 flex justify-between items-center bg-[#343650] rounded-lg">
+                <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-[#191A24]"></div>
+                <span className="text-2xl font-semibold text-[#a5b4fc]">
+                  {countDownTime[unit as keyof CountDownTime]}
+                </span>
+                <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-[#191A24]"></div>
+              </div>
+              <span className="text-[#8486A9] text-xs text-center capitalize">
+                {countDownTime[unit as keyof CountDownTime] === "01"
+                  ? unit.slice(0, -1)
+                  : unit}
               </span>
-              <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-[#191A24]"></div>
             </div>
-            <span className="text-[#8486A9] text-xs text-center capitalize">
-              {countDownTime.days === "01" ? "Day" : "Days"}
-            </span>
-          </div>
-          <div className="flex flex-col gap-2 relative">
-            <div className="h-12 w-12 flex justify-between items-center bg-[#343650] rounded-lg">
-              <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-[#191A24]"></div>
-              <span className="text-2xl font-semibold text-[#a5b4fc]">
-                {countDownTime.hours}
-              </span>
-              <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-[#191A24]"></div>
-            </div>
-            <span className="text-[#8486A9] text-xs text-center font-medium">
-              {countDownTime.hours === "01" ? "Hour" : "Hours"}
-            </span>
-          </div>
-          <div className="flex flex-col gap-2 relative">
-            <div className="h-12 w-12 flex justify-between items-center bg-[#343650] rounded-lg">
-              <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-[#191A24]"></div>
-              <span className="text-2xl font-semibold text-[#a5b4fc]">
-                {countDownTime.minutes}
-              </span>
-              <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-[#191A24]"></div>
-            </div>
-            <span className="text-[#8486A9] text-xs text-center capitalize">
-              {countDownTime.minutes === "01" ? "Minute" : "Minutes"}
-            </span>
-          </div>
-          <div className="flex flex-col gap-2 relative">
-            <div className="h-12 w-12 flex justify-between items-center bg-[#343650] rounded-lg">
-              <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-[#191A24]"></div>
-              <span className="text-2xl font-semibold text-[#a5b4fc]">
-                {countDownTime.seconds}
-              </span>
-              <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-[#191A24]"></div>
-            </div>
-            <span className="text-[#8486A9] text-xs text-center capitalize">
-              {countDownTime.seconds === "01" ? "Second" : "Seconds"}
-            </span>
-          </div>
+          ))}
         </div>
       </div>
     </div>
