@@ -822,7 +822,8 @@ const TableDataUjian: React.FC = () => {
                           <></>
                         )}
 
-                        {ujian!.Status == "Draft" && (
+                        {ujian!.Status == "Draft" &&
+                        !usePathname().includes("dpkakp") ? (
                           <Button
                             onClick={() => {
                               handleKirimPermohonan(ujian!.IdUjian);
@@ -833,9 +834,12 @@ const TableDataUjian: React.FC = () => {
                             <BiPaperPlane className="h-4 w-4 text-neutral-100 mr-1" />{" "}
                             Kirim Permohonan
                           </Button>
+                        ) : (
+                          <></>
                         )}
 
-                        {ujian!.Status == "Draft" && (
+                        {usePathname().includes("/dpkakap") &&
+                        ujian!.Status == "Draft" ? (
                           <Button
                             onClick={() => {
                               handleFetchingDataUjianById(ujian!.IdUjian);
@@ -846,9 +850,12 @@ const TableDataUjian: React.FC = () => {
                             <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" />{" "}
                             Edit Ujian
                           </Button>
+                        ) : (
+                          <></>
                         )}
 
-                        {ujian!.Status == "Draft" && (
+                        {usePathname().includes("/dpkakap") &&
+                        ujian!.Status == "Draft" ? (
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button
@@ -878,6 +885,8 @@ const TableDataUjian: React.FC = () => {
                               </AlertDialogFooter>
                             </AlertDialogContent>
                           </AlertDialog>
+                        ) : (
+                          <></>
                         )}
 
                         {usePathname().includes("dpkakp") &&
@@ -911,10 +920,10 @@ const TableDataUjian: React.FC = () => {
                                 );
                               }}
                               variant="outline"
-                              className="bg-yellow-400 hover:bg-yellow-400 text-gray-800 rounded-md hover:text-gray-800"
+                              className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200"
                             >
-                              <TbEditCircle className="h-5 w-5 mr-1" /> Edit
-                              Ujian
+                              <TbEditCircle className="h-5 w-5 mr-1" /> Pilih
+                              Penguji
                             </Button>
                           )}
                       </div>
