@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import * as XLSX from "xlsx";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -600,6 +602,36 @@ const TableDataPesertaUjianKeahlian = () => {
     }
   };
 
+  const exportToExcel = () => {
+    if (!data || data.length === 0) {
+      console.error("No data to export.");
+      return;
+    }
+
+    // Flatten the data and format as per the requirements
+    const flattenedData = data.flatMap((user) => {
+      return user.CodeAksesUsersBagian.map((bagian) => ({
+        Nama: user.Nama,
+        NIK: user.Nik,
+        Instansi: user.Instansi,
+        "Nomor Ujian": user.NomorUjian,
+        "ID Bagian": bagian.IdBagian,
+        "Nama Bagian": bagian.NamaBagian,
+        "Kode Akses": bagian.KodeAkses, // Add KodeAkses value for each NamaBagian
+      }));
+    });
+
+    // Create a worksheet and workbook
+    const worksheet = XLSX.utils.json_to_sheet(flattenedData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "ExportedData");
+
+    // Export the Excel file
+    const currentDate = new Date().toISOString().slice(0, 10);
+    const fileName = `ExportedData_${currentDate}.xlsx`;
+    XLSX.writeFile(workbook, fileName);
+  };
+
   React.useEffect(() => {
     handleFetchingUjianKeahlianData();
   }, []);
@@ -744,10 +776,13 @@ const TableDataPesertaUjianKeahlian = () => {
           <div className="flex w-full items-center mb-2">
             {usePathname().includes("pukakp") && (
               <div className="w-full flex justify-end gap-2">
-                {/* <div className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit">
+                <div
+                  onClick={() => exportToExcel()}
+                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                >
                   <PiMicrosoftExcelLogoFill />
                   Export
-                </div> */}
+                </div>
 
                 {dataUjian.length > 0 && dataUjian != null ? (
                   dataUjian[0].UsersUjian != null &&
