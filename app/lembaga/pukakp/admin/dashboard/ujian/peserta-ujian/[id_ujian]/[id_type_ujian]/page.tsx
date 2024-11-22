@@ -29,25 +29,6 @@ export default function Home() {
               >
                 {/* add button */}
                 <li className="group relative">
-                  <button
-                    aria-controls="add"
-                    aria-expanded="false"
-                    aria-haspopup="listbox"
-                    className="flex items-center h-full px-4 text-sm"
-                  >
-                    <i>
-                      <svg
-                        className="fill-current w-3 h-3 mx-auto"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={24}
-                        height={24}
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M24 10h-10v-10h-2v10h-10v2h10v10h2v-10h10z" />
-                      </svg>
-                    </i>
-                    <span className="ml-2">Add</span>
-                  </button>
                   <span className="absolute p-1 hidden group-hover:block">
                     <ul
                       id="add"
@@ -236,63 +217,7 @@ export default function Home() {
                     </svg>
                   </i>
                 </li>
-                <li className="h-8 w-8 ml-3">
-                  <button
-                    title="Notifications"
-                    aria-label="notifications"
-                    className="w-full h-full text-white bg-gray-600 rounded-md focus:outline-none focus:shadow-outline"
-                  >
-                    <i>
-                      <svg
-                        className="fill-current w-4 h-4 mx-auto"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={24}
-                        height={24}
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M15.137 3.945c-.644-.374-1.042-1.07-1.041-1.82v-.003c.001-1.172-.938-2.122-2.096-2.122s-2.097.95-2.097 2.122v.003c.001.751-.396 1.446-1.041 1.82-4.667 2.712-1.985 11.715-6.862 13.306v1.749h20v-1.749c-4.877-1.591-2.195-10.594-6.863-13.306zm-3.137-2.945c.552 0 1 .449 1 1 0 .552-.448 1-1 1s-1-.448-1-1c0-.551.448-1 1-1zm3 20c0 1.598-1.392 3-2.971 3s-3.029-1.402-3.029-3h6z" />
-                      </svg>
-                    </i>
-                  </button>
-                </li>
-                <li className="h-8 w-8 ml-3">
-                  <button
-                    title="v2 REPL"
-                    aria-label="repl"
-                    className="w-full h-full text-white bg-gray-600 rounded-md focus:outline-none focus:shadow-outline"
-                  >
-                    <i>
-                      <svg
-                        className="fill-current w-4 h-4 mx-auto"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={24}
-                        height={24}
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M22 6v16h-20v-16h20zm2-6h-24v24h24v-24zm-11 11v1.649l3.229 1.351-3.229 1.347v1.653l5-2.201v-1.599l-5-2.2zm-7 2.201v1.599l5 2.2v-1.653l-3.229-1.347 3.229-1.351v-1.649l-5 2.201z" />
-                      </svg>
-                    </i>
-                  </button>
-                </li>
-                <li className="h-8 w-8 ml-3">
-                  <button
-                    title="Products"
-                    aria-label="chi desk products"
-                    className="w-full h-full rounded-md focus:outline-none focus:shadow-outline"
-                  >
-                    <i className="text-gray-600">
-                      <svg
-                        className="fill-current w-5 h-5 mx-auto"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width={24}
-                        height={24}
-                        viewBox="0 0 24 24"
-                      >
-                        <path d="M11 11h-11v-11h11v11zm13 0h-11v-11h11v11zm-13 13h-11v-11h11v11zm13 0h-11v-11h11v11z" />
-                      </svg>
-                    </i>
-                  </button>
-                </li>
+
                 <li className="h-10 w-10 ml-3">
                   <button
                     title="Page Menu"

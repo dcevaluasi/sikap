@@ -54,7 +54,9 @@ function page() {
     } else {
       try {
         const response = await axios.post(
-          `${process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL}/adminPusat/login`,
+          role == "penguji"
+            ? `${process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL}/penguji/login`
+            : `${process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL}/adminPusat/login`,
           {
             email: email,
             password: password,
@@ -67,7 +69,10 @@ function page() {
           });
           await handleClearFormLoginAdminDPKAKP();
           Cookies.set("XSRF095", response?.data?.t);
-          Cookies.set("IsPUKAKP", role == "pukakp" ? "true" : "false");
+          Cookies.set(
+            "IsPUKAKP",
+            role == "pukakp" ? "true" : role == "penguji" ? "penguji" : "false"
+          );
           if (containsPukakp(email)) {
             router.replace("/lembaga/pukakp/admin/dashboard/ujian");
           } else {

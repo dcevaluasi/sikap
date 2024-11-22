@@ -115,13 +115,6 @@ import { TypeUjian, Ujian } from "@/types/ujian-keahlian-akp";
 import { BiPaperPlane } from "react-icons/bi";
 
 const TableDataUjian: React.FC = () => {
-  /**
-   * =============================================================
-   * UTILS FOR FETCHING UJIAN KEAHLIAN DATA
-   * =============================================================
-   */
-
-  /*============== STORE DATA VARIABLES ================ */
   const [data, setData] = React.useState<Ujian[]>([]);
 
   const [countVerified, setCountVerified] = React.useState<number>(0);
@@ -130,9 +123,7 @@ const TableDataUjian: React.FC = () => {
   const [countPilihPenguji, setCountPilihPenguji] = React.useState<number>(0);
 
   const [dataTypeUjian, setDataTypeUjian] = React.useState<TypeUjian[]>([]);
-  const [selectedKeahlian, setSelectedKeahlian] = React.useState<string | null>(
-    null
-  );
+
   const pathPukakp = usePathname().includes("pukakp");
 
   const [dpkakpData, setDpkakpData] =
@@ -158,13 +149,16 @@ const TableDataUjian: React.FC = () => {
 
   /*================== LOADER VARIABLES ================= */
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
+  const idUsersDpkakp = Cookies.get("IdUsersDpkakp");
 
   const handleFetchingUjianKeahlianData = async () => {
     setIsFetching(true);
 
     try {
       const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminPusat/GetUjian`,
+        isPenguji
+          ? `${dpkakpBaseUrl}/adminPusat/GetUjian?id_users_dpkakp=${idUsersDpkakp}`
+          : `${dpkakpBaseUrl}/adminPusat/GetUjian`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("XSRF095")}`,
@@ -242,10 +236,6 @@ const TableDataUjian: React.FC = () => {
     }
   };
 
-  console.log({ data });
-  console.log({ countVerified });
-  console.log({ countNotVerified });
-
   const handleFetchingTypeUjianKeahlianData = async () => {
     setIsFetching(true);
     try {
@@ -265,19 +255,13 @@ const TableDataUjian: React.FC = () => {
     }
   };
 
-  /**
-   * =============================================================
-   * UTILS FOR POSTING NEW UJIAN KEAHLIAN DATA
-   * =============================================================
-   */
-
-  /*================== STATE VARIABLES ================= */
   const [idTypeUjian, setIdTypeUjian] = React.useState<string>("");
   const [typeUjian, setTypeUjian] = React.useState<string>("");
   const [namaUjian, setNamaUjian] = React.useState<string>("");
   const [tempatUjian, setTempatUjian] = React.useState<string>("");
   const [pukakp, setPukakp] = React.useState<string>("");
   const [namaPengawas, setNamaPengawas] = React.useState<string>("");
+  const [idPengawas, setIdPengawas] = React.useState<string>("");
   const [namaVasilitator, setNamaVasilitator] = React.useState<string>("");
   const [tanggalMulai, setTanggalMulai] = React.useState<string>("");
   const [tanggalBerakhir, setTanggalBerakhir] = React.useState<string>("");
@@ -303,6 +287,7 @@ const TableDataUjian: React.FC = () => {
     setTanggalBerakhir("");
     setWaktuUjian("");
     setJumlahPeserta("");
+    setIdPengawas("");
     setStatus("");
     setFilePermohonan(null);
   };
@@ -370,6 +355,7 @@ const TableDataUjian: React.FC = () => {
         `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedId}`,
         {
           nama_pengawas_ujian: namaPengawas,
+          id_users_dpkakp: idPengawas,
           nama_vasilitator_ujian: namaVasilitator,
         },
         {
@@ -401,8 +387,6 @@ const TableDataUjian: React.FC = () => {
   };
 
   const [selectedId, setSelectedId] = React.useState<number>(0);
-
-  const router = useRouter();
 
   const [filePermohonan, setFilePermohonan] = React.useState<File | null>(null);
   const handleFileChange = (e: any) => {
@@ -670,6 +654,8 @@ const TableDataUjian: React.FC = () => {
     }
   };
 
+  const isPenguji = Cookies.get("IsPUKAKP") == "penguji";
+
   return (
     <section className="rounded-sm   pb-5 shadow-default  h-full scrollbar-hide">
       <section
@@ -683,124 +669,152 @@ const TableDataUjian: React.FC = () => {
           >
             <label
               id="ticket-statistics-tabs-label"
-              className="font-semibold block mb-1 text-sm"
+              className="font-semibold block mb-3 text-sm"
             >
               Pengajuan Pelaksanaan Ujian
               {/* <span className="font-normal text-gray-700"> ()</span> */}
             </label>
-            <ul className="flex">
-              <li>
-                <button
-                  onClick={() => setSelectedStatusFilter("All")}
-                  className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${
-                    selectedStatusFilter === "All"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                  }`}
-                >
-                  <p className="font-semibold text-lg">{data!.length}</p>
-                  <p
-                    className={`uppercase text-sm ${
+            {isPenguji ? (
+              <ul className="flex">
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("All")}
+                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${
                       selectedStatusFilter === "All"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    All
-                  </p>
-                </button>
-              </li>
-              {usePathname().includes("pukakp") && (
-                <li>
-                  <button
-                    onClick={() => setSelectedStatusFilter("Draft")}
-                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
-                      selectedStatusFilter === "Draft"
                         ? "bg-blue-500 text-white"
                         : "bg-white text-black"
                     }`}
                   >
-                    <p className="font-semibold text-lg">{countDraft}</p>
+                    <p className="font-semibold text-lg">{data!.length}</p>
                     <p
                       className={`uppercase text-sm ${
+                        selectedStatusFilter === "All"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      All
+                    </p>
+                  </button>
+                </li>
+              </ul>
+            ) : (
+              <ul className="flex">
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("All")}
+                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${
+                      selectedStatusFilter === "All"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    <p className="font-semibold text-lg">{data!.length}</p>
+                    <p
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "All"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      All
+                    </p>
+                  </button>
+                </li>
+                {usePathname().includes("pukakp") && (
+                  <li>
+                    <button
+                      onClick={() => setSelectedStatusFilter("Draft")}
+                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
                         selectedStatusFilter === "Draft"
-                          ? "text-white font-bold"
-                          : "text-gray-600"
+                          ? "bg-blue-500 text-white"
+                          : "bg-white text-black"
                       }`}
                     >
-                      Draft
-                    </p>
-                  </button>
-                </li>
-              )}
+                      <p className="font-semibold text-lg">{countDraft}</p>
+                      <p
+                        className={`uppercase text-sm ${
+                          selectedStatusFilter === "Draft"
+                            ? "text-white font-bold"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        Draft
+                      </p>
+                    </button>
+                  </li>
+                )}
 
-              <li>
-                <button
-                  onClick={() => setSelectedStatusFilter("Pending")}
-                  className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
-                    selectedStatusFilter === "Pending"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                  }`}
-                >
-                  <p className="font-semibold text-lg">{countNotVerified}</p>
-                  <p
-                    className={`uppercase text-sm ${
-                      selectedStatusFilter === "Pending"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                    }`}
-                  >
-                    Pending
-                  </p>
-                </button>
-              </li>
-              {usePathname().includes("dpkakp") && (
                 <li>
                   <button
-                    onClick={() => setSelectedStatusFilter("Pilih Penguji")}
-                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-32 ${
-                      selectedStatusFilter === "Pilih Penguji"
+                    onClick={() => setSelectedStatusFilter("Pending")}
+                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
+                      selectedStatusFilter === "Pending"
                         ? "bg-blue-500 text-white"
                         : "bg-white text-black"
                     }`}
                   >
-                    <p className="font-semibold text-lg">{countPilihPenguji}</p>
+                    <p className="font-semibold text-lg">{countNotVerified}</p>
                     <p
                       className={`uppercase text-sm ${
-                        selectedStatusFilter === "Pilih Penguji"
+                        selectedStatusFilter === "Pending"
                           ? "text-white font-bold"
                           : "text-gray-600"
                       }`}
                     >
-                      Pilih Penguji
+                      Pending
                     </p>
                   </button>
                 </li>
-              )}
+                {usePathname().includes("dpkakp") && (
+                  <li>
+                    <button
+                      onClick={() => setSelectedStatusFilter("Pilih Penguji")}
+                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-32 ${
+                        selectedStatusFilter === "Pilih Penguji"
+                          ? "bg-blue-500 text-white"
+                          : "bg-white text-black"
+                      }`}
+                    >
+                      <p className="font-semibold text-lg">
+                        {countPilihPenguji}
+                      </p>
+                      <p
+                        className={`uppercase text-sm ${
+                          selectedStatusFilter === "Pilih Penguji"
+                            ? "text-white font-bold"
+                            : "text-gray-600"
+                        }`}
+                      >
+                        Pilih Penguji
+                      </p>
+                    </button>
+                  </li>
+                )}
 
-              <li>
-                <button
-                  onClick={() => setSelectedStatusFilter("Aktif")}
-                  className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-24 ${
-                    selectedStatusFilter === "Aktif"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                  }`}
-                >
-                  <p className="font-semibold text-lg">{countVerified}</p>
-                  <p
-                    className={`uppercase text-sm ${
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("Aktif")}
+                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-24 ${
                       selectedStatusFilter === "Aktif"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
                     }`}
                   >
-                    Disetujui
-                  </p>
-                </button>
-              </li>
-            </ul>
+                    <p className="font-semibold text-lg">{countVerified}</p>
+                    <p
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "Aktif"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      Disetujui
+                    </p>
+                  </button>
+                </li>
+              </ul>
+            )}
           </section>
         </nav>
 
@@ -1512,13 +1526,17 @@ const TableDataUjian: React.FC = () => {
                         className="form-select w-full text-black border-gray-300 rounded-md"
                         required
                         value={namaPengawas}
-                        onChange={(e) => setNamaPengawas(e.target.value)}
+                        onChange={(e) => {
+                          const [nama, id] = e.target.value.split("|"); // Split the combined value
+                          setNamaPengawas(nama); // Update state for NamaUsersDpkakp
+                          setIdPengawas(id); // Update state for IdUsersDpkakp
+                        }}
                       >
                         <option value="">Pilih Penguji</option>
                         {dataPenguji!.map((penguji: any, index: number) => (
                           <option
                             key={penguji.IdUsersDpkakp}
-                            value={penguji.NamaUsersDpkakp}
+                            value={`${penguji.NamaUsersDpkakp}|${penguji.IdUsersDpkakp}`} // Combine the values
                             className="capitalize"
                           >
                             {penguji.NamaUsersDpkakp}
