@@ -36,6 +36,7 @@ export default function LayoutAdmin({
           },
         }
       );
+
       Cookies.set("PUKAKP", data.data.Nama);
     } catch (error) {
       console.error("Failed to fetch admin data", error);

@@ -127,6 +127,7 @@ const TableDataUjian: React.FC = () => {
   const [countVerified, setCountVerified] = React.useState<number>(0);
   const [countNotVerified, setCountNotVerified] = React.useState<number>(0);
   const [countDraft, setCountDraft] = React.useState<number>(0);
+  const [countPilihPenguji, setCountPilihPenguji] = React.useState<number>(0);
 
   const [dataTypeUjian, setDataTypeUjian] = React.useState<TypeUjian[]>([]);
   const [selectedKeahlian, setSelectedKeahlian] = React.useState<string | null>(
@@ -173,55 +174,64 @@ const TableDataUjian: React.FC = () => {
 
       console.log({ response });
 
-      // Filter the data by PUKAKP value from cookies
-      const filteredData = response.data.data.filter(
-        (item: any) => item.PUKAKP === Cookies.get("PUKAKP")
-      );
+      const pukakpCookie = Cookies.get("PUKAKP");
 
-      // Sort the data first by status ('tidak aktif' first) and then by CreateAt in descending order
+      // Filter the data by PUKAKP value if the cookie is available
+      const filteredData =
+        pukakpCookie != "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan"
+          ? response.data.data.filter(
+              (item: any) => item.PUKAKP === pukakpCookie
+            )
+          : response.data.data;
+
+      // Sort the data first by status ('Pending' first) and then by CreateAt in descending order
       const sortedData = filteredData.sort((a: any, b: any) => {
-        // Sort by status: 'tidak aktif' first
-        if (a.Status === "Tidak Aktif" && b.Status !== "Tidak Aktif") return -1;
-        if (a.Status !== "Tidak Aktif" && b.Status === "Tidak Aktif") return 1;
+        // Sort by status: 'Pending' first
+        if (a.Status === "Pending" && b.Status !== "Pending") return -1;
+        if (a.Status !== "Pending" && b.Status === "Pending") return 1;
 
         // Sort by CreateAt in descending order
         return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime();
       });
+
       console.log({ filteredData });
 
-      // Count 'Aktif' and 'Tidak Aktif' statuses
+      // Count statuses
       const verifiedCount = filteredData.filter(
         (item: any) => item.Status === "Aktif"
       ).length;
       const notVerifiedCount = filteredData.filter(
-        (item: any) => item.Status === "Tidak Aktif"
+        (item: any) => item.Status === "Pending"
       ).length;
       const draft = filteredData.filter(
         (item: any) => item.Status === "Draft"
       ).length;
+      const pilihPenguji = filteredData.filter(
+        (item: any) => item.NamaPengawasUjian == ""
+      ).length;
 
-      // Update the state with the counts
+      // Update state with counts
       setCountVerified(verifiedCount);
       setCountNotVerified(notVerifiedCount);
       setCountDraft(draft);
+      setCountPilihPenguji(pilihPenguji);
 
-      // Set the sorted data depending on the pathPukakp condition
+      // Set the data to the sorted data
       if (pathPukakp) {
         setData(sortedData);
       } else {
-        // Also sort the original data by status and CreateAt if no filter is applied
+        // Sort original data by status and CreateAt if no filter is applied
         const sortedOriginalData = response.data.data.sort((a: any, b: any) => {
-          // Sort by status: 'tidak aktif' first
-          if (a.Status === "tidak aktif" && b.Status !== "tidak aktif")
-            return -1;
-          if (a.Status !== "tidak aktif" && b.Status === "tidak aktif")
-            return 1;
+          // Sort by status: 'Pending' first
+          if (a.Status === "Pending" && b.Status !== "Pending") return -1;
+          if (a.Status !== "Pending" && b.Status === "Pending") return 1;
 
           // Sort by CreateAt in descending order
           return (
             new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
           );
         });
+
         setData(sortedOriginalData);
       }
 
@@ -294,6 +304,7 @@ const TableDataUjian: React.FC = () => {
     setWaktuUjian("");
     setJumlahPeserta("");
     setStatus("");
+    setFilePermohonan(null);
   };
 
   /*=============== HANDLING POSTING UJIAN ============== */
@@ -336,6 +347,7 @@ const TableDataUjian: React.FC = () => {
       });
       handleFetchingUjianKeahlianData();
       setIsPosting(false);
+      handleClearNewUjianKeahlian();
       setStatus("");
     } catch (error) {
       console.error(error);
@@ -344,6 +356,7 @@ const TableDataUjian: React.FC = () => {
         title: `Gagal menambahkan data pelaksanaan ujian keahlian baru!`,
       });
       handleFetchingUjianKeahlianData();
+      handleClearNewUjianKeahlian();
       setIsPosting(true);
       setStatus("");
     }
@@ -371,6 +384,7 @@ const TableDataUjian: React.FC = () => {
         title: `Berhasil mengupdate data pelaksanaan ujian keahlian baru!`,
       });
       handleFetchingUjianKeahlianData();
+      setIsOpenFormUjianKeahlian(false);
       setIsPosting(false);
       setStatus("");
     } catch (error) {
@@ -380,6 +394,7 @@ const TableDataUjian: React.FC = () => {
         title: `Gagal mengupdate data pelaksanaan ujian keahlian baru!`,
       });
       handleFetchingUjianKeahlianData();
+      setIsOpenFormUjianKeahlian(false);
       setIsPosting(true);
       setStatus("");
     }
@@ -516,8 +531,14 @@ const TableDataUjian: React.FC = () => {
       ujian.TypeUjian.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ujian.NamaUjian.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus =
-      selectedStatusFilter === "All" || ujian.Status === selectedStatusFilter;
+    var matchesStatus;
+
+    if (selectedStatusFilter == "Pilih Penguji") {
+      matchesStatus = ujian.NamaPengawasUjian === "";
+    } else {
+      matchesStatus =
+        selectedStatusFilter === "All" || ujian.Status === selectedStatusFilter;
+    }
 
     return matchesSearchQuery && matchesStatus;
   });
@@ -621,11 +642,39 @@ const TableDataUjian: React.FC = () => {
     handleFetchingTypeUjianKeahlianData();
   }, []);
 
+  // DELETE UJIAN
+  const handleDeleteUjian = async () => {
+    try {
+      const response = await axios.delete(
+        `${dpkakpBaseUrl}/adminPusat/deleteUjians?id=${selectedIdUjian}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title:
+          "Berhasil menghapus draft pengajuan permohonan pelaksanaan ujian!",
+      });
+      handleFetchingUjianKeahlianData();
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title:
+          "Ups, gagal menghapus draft pengajuan permohonan pelaksanaan ujian!",
+      });
+      handleFetchingUjianKeahlianData();
+    }
+  };
+
   return (
     <section className="rounded-sm   pb-5 shadow-default  h-full scrollbar-hide">
       <section
         aria-label="main content"
-        className="flex h-full flex-col flex-auto w-full border-l scrollbar-hide"
+        className="flex h-full flex-col flex-auto w-full border-l scrollbar-hide -mt-4"
       >
         <nav className="bg-gray-100 flex p-4">
           <section
@@ -661,27 +710,30 @@ const TableDataUjian: React.FC = () => {
                   </p>
                 </button>
               </li>
-              <li>
-                <button
-                  onClick={() => setSelectedStatusFilter("Draft")}
-                  className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
-                    selectedStatusFilter === "Draft"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                  }`}
-                >
-                  <p className="font-semibold text-lg">{countDraft}</p>
-                  <p
-                    className={`uppercase text-sm ${
+              {usePathname().includes("pukakp") && (
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("Draft")}
+                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
                       selectedStatusFilter === "Draft"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
                     }`}
                   >
-                    Draft
-                  </p>
-                </button>
-              </li>
+                    <p className="font-semibold text-lg">{countDraft}</p>
+                    <p
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "Draft"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      Draft
+                    </p>
+                  </button>
+                </li>
+              )}
+
               <li>
                 <button
                   onClick={() => setSelectedStatusFilter("Pending")}
@@ -703,6 +755,30 @@ const TableDataUjian: React.FC = () => {
                   </p>
                 </button>
               </li>
+              {usePathname().includes("dpkakp") && (
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("Pilih Penguji")}
+                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-32 ${
+                      selectedStatusFilter === "Pilih Penguji"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    <p className="font-semibold text-lg">{countPilihPenguji}</p>
+                    <p
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "Pilih Penguji"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      Pilih Penguji
+                    </p>
+                  </button>
+                </li>
+              )}
+
               <li>
                 <button
                   onClick={() => setSelectedStatusFilter("Aktif")}
@@ -730,12 +806,17 @@ const TableDataUjian: React.FC = () => {
 
         <div className="px-4 mt-2">
           <Tabs defaultValue="account" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="account">Daftar Pelaksanan Ujian</TabsTrigger>
-              <TabsTrigger value="password">
-                Buat Pelaksanaan Ujian Baru
-              </TabsTrigger>
-            </TabsList>
+            {usePathname().includes("pukakp") && (
+              <TabsList className={`grid w-full grid-cols-2`}>
+                <TabsTrigger value="account">
+                  Daftar Pelaksanan Ujian
+                </TabsTrigger>
+                <TabsTrigger value="password">
+                  Buat Pelaksanaan Ujian Baru
+                </TabsTrigger>
+              </TabsList>
+            )}
+
             <TabsContent value="account">
               <div className="flex flex-col gap-1">
                 <div className="mb-1">
@@ -780,6 +861,7 @@ const TableDataUjian: React.FC = () => {
                               <HiUserGroup className="text-base" />
                               <span>
                                 Jumlah peserta ujian: {ujian!.UsersUjian.length}
+                                /{ujian!.JumlahPesertaUjian}
                               </span>
                             </span>
                           </p>
@@ -860,6 +942,9 @@ const TableDataUjian: React.FC = () => {
                           <AlertDialog>
                             <AlertDialogTrigger asChild>
                               <Button
+                                onClick={() =>
+                                  setSelectedIdUjian(ujian!.IdUjian)
+                                }
                                 variant="outline"
                                 className="bg-rose-600 text-white hover:text-white hover:bg-rose-600"
                               >
@@ -880,7 +965,10 @@ const TableDataUjian: React.FC = () => {
                               </AlertDialogHeader>
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Batal</AlertDialogCancel>
-                                <AlertDialogAction className="bg-rose-600">
+                                <AlertDialogAction
+                                  onClick={() => handleDeleteUjian()}
+                                  className="bg-rose-600"
+                                >
                                   Hapus
                                 </AlertDialogAction>
                               </AlertDialogFooter>
@@ -911,7 +999,8 @@ const TableDataUjian: React.FC = () => {
                           )}
 
                         {usePathname().includes("dpkakp") &&
-                          ujian!.Status == "Aktif" && (
+                          ujian!.Status == "Aktif" &&
+                          ujian!.NamaPengawasUjian == "" && (
                             <Button
                               onClick={(e) => {
                                 setSelectedId(ujian!.IdUjian);
@@ -923,8 +1012,8 @@ const TableDataUjian: React.FC = () => {
                               variant="outline"
                               className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200"
                             >
-                              <TbEditCircle className="h-5 w-5 mr-1" /> Pilih
-                              Penguji
+                              <TbEditCircle className="h-5 w-5 mr-1" />
+                              Pilih Penguji
                             </Button>
                           )}
                       </div>
@@ -1042,20 +1131,7 @@ const TableDataUjian: React.FC = () => {
                     </div>
 
                     {/* Waktu Ujian and Jumlah Peserta */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="mt-2">
-                        <Label htmlFor="waktu-ujian">
-                          Waktu Ujian per Materi*
-                        </Label>
-                        <Input
-                          id="waktu-ujian"
-                          type="number"
-                          placeholder="Waktu Ujian"
-                          required
-                          value={waktuUjian}
-                          onChange={(e) => setWaktuUjian(e.target.value)}
-                        />
-                      </div>
+                    <div className="grid grid-cols-1 gap-4">
                       <div className="mt-2">
                         <Label htmlFor="jumlah-peserta">Jumlah Peserta*</Label>
                         <Input
@@ -1206,7 +1282,7 @@ const TableDataUjian: React.FC = () => {
               {" "}
               <FaBookOpen className="h-4 w-4" />
               {status == "Aktif"
-                ? " Tetakan Penguji dan Fasilitator"
+                ? " Tetapkan Penguji dan Fasilitator"
                 : " Edit Pelaksanaan Ujian Keahlian"}
             </AlertDialogTitle>
             <AlertDialogDescription className="-mt-6">

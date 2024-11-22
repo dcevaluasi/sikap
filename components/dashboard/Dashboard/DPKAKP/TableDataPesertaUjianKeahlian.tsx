@@ -788,7 +788,7 @@ const TableDataPesertaUjianKeahlian = () => {
                   dataUjian[0].UsersUjian != null &&
                   dataUjian[0].UsersUjian.length > 0 ? (
                     <></>
-                  ) : (
+                  ) : usePathname().includes("dpkakp") ? (
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer">
@@ -830,6 +830,8 @@ const TableDataPesertaUjianKeahlian = () => {
                         </AlertDialogFooter>
                       </AlertDialogContent>
                     </AlertDialog>
+                  ) : (
+                    <></>
                   )
                 ) : null}
 
