@@ -599,6 +599,7 @@ const TableDataUjian: React.FC = () => {
       handleFetchingUjianKeahlianData();
       setIsPosting(false);
       handleCancelAddNewUjian();
+      handleClearNewUjianKeahlian();
       setIsOpenFormUjianKeahlian(false);
     } catch (error) {
       console.error(error);
@@ -838,7 +839,7 @@ const TableDataUjian: React.FC = () => {
                           <></>
                         )}
 
-                        {usePathname().includes("/dpkakap") &&
+                        {usePathname().includes("pukakp") &&
                         ujian!.Status == "Draft" ? (
                           <Button
                             onClick={() => {
@@ -854,7 +855,7 @@ const TableDataUjian: React.FC = () => {
                           <></>
                         )}
 
-                        {usePathname().includes("/dpkakap") &&
+                        {usePathname().includes("pukakp") &&
                         ujian!.Status == "Draft" ? (
                           <AlertDialog>
                             <AlertDialogTrigger asChild>

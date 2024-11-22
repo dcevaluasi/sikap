@@ -18,8 +18,9 @@ import {
   JawabanUser,
   SoalBagian,
   SoalUjianBagian,
+  Ujian,
 } from "@/types/ujian-keahlian-akp";
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,6 +29,27 @@ import React from "react";
 
 function Exam() {
   const router = useRouter();
+
+  const [selectedUjian, setSelectedUjian] = React.useState<Ujian | null>(null);
+  const handleFetchingDataUjianById = async (idUjian: number) => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${dpkakpBaseUrl}/adminPusat/GetUjian?id=${idUjian}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+
+      console.log({ response });
+      setSelectedUjian(response.data.data[0]);
+    } catch (error) {
+      console.error("ERROR FETCHING UJIAN : ", error);
+
+      throw error;
+    }
+  };
 
   const [data, setData] = React.useState<SoalBagian | null>(null);
   const [selectedAnswers, setSelectedAnswers] = React.useState<JawabanUser[]>(
@@ -473,11 +495,11 @@ const Timer: React.FC = () => {
       localStorage.removeItem("countDownDate"); // Clear countdown from storage
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
-      Toast.fire({
-        icon: "success",
-        title: "Waktu telah habis!",
-        text: `Ups, waktu telah habis, jawabanmu akan tersubmit secara otomatis, selamat telah mengerjakan ujian!`,
-      });
+      // Toast.fire({
+      //   icon: "success",
+      //   title: "Waktu telah habis!",
+      //   text: `Ups, waktu telah habis, jawabanmu akan tersubmit secara otomatis, selamat telah mengerjakan ujian!`,
+      // });
       router.push("/lembaga/dpkakp/user/auth"); // Redirect when time ends
     } else {
       const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000))
