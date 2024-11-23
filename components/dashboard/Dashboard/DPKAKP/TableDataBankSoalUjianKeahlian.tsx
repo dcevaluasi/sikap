@@ -10,14 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-} from "@/components/ui/select";
+
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -48,43 +41,19 @@ import {
   TbTargetArrow,
   TbTrash,
 } from "react-icons/tb";
-import { IoIosInformationCircle, IoMdCloseCircle } from "react-icons/io";
-import { FiUploadCloud } from "react-icons/fi";
 
 import { usePathname, useRouter } from "next/navigation";
-import {
-  MdInfo,
-  MdOutlineNumbers,
-  MdOutlinePaid,
-  MdOutlinePayment,
-  MdSchool,
-} from "react-icons/md";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  JawabanSoalPelatihan,
-  Pelatihan,
-  PelatihanMasyarakat,
-  SoalPelatihan,
-  UserPelatihan,
-} from "@/types/product";
+
 import axios, { AxiosResponse } from "axios";
-import { extractLastSegment } from "@/utils";
-import {
-  HiMiniNewspaper,
-  HiMiniUserGroup,
-  HiOutlineDocument,
-  HiUserGroup,
-} from "react-icons/hi2";
+
 import {
   RiFilePaper2Line,
   RiShipLine,
   RiVerifiedBadgeFill,
 } from "react-icons/ri";
 import Link from "next/link";
-import { FaRegPaperPlane, FaRupiahSign } from "react-icons/fa6";
 import Toast from "@/components/toast";
-import { GiTakeMyMoney } from "react-icons/gi";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
+
 import Cookies from "js-cookie";
 import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import TableData from "../../Tables/TableData";
@@ -107,6 +76,7 @@ const TableDataBankSoalUjianKeahlian = () => {
   const [dataBagian, setDataBagian] = React.useState<Bagian | null>(null);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
+  const [countSoalBergambar, setCountSoalBergambar] = React.useState<number>(0);
 
   const handleFetchingBagianUjian = async () => {
     setIsFetching(true);
@@ -122,6 +92,13 @@ const TableDataBankSoalUjianKeahlian = () => {
         }
       );
       console.log(response);
+
+      const countGambarSoal = response.data!.data[0]!.SoalUjianBagian.filter(
+        (soal: any) => soal.GambarSoal && soal.GambarSoal.trim() !== ""
+      ).length;
+
+      setCountSoalBergambar(countGambarSoal);
+
       setDataBagian(response.data.data[0]!);
       setData(response.data!.data[0]!.SoalUjianBagian);
     } catch (error) {
@@ -130,6 +107,8 @@ const TableDataBankSoalUjianKeahlian = () => {
       throw error;
     }
   };
+
+  console.log({ countSoalBergambar });
 
   console.log({ dataBagian });
   console.log({ data });
@@ -482,7 +461,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       </AlertDialog>
 
       {showFormAjukanPelatihan ? (
-        <h1>TEST</h1>
+        <></>
       ) : (
         <>
           {/* List Data Pelatihan */}
@@ -514,6 +493,18 @@ const TableDataBankSoalUjianKeahlian = () => {
                     <p className="font-semibold text-lg">{data!.length}</p>
                     <p className={`uppercase text-sm ${"text-gray-600"}`}>
                       Total Soal
+                    </p>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`focus:outline-none p-2 rounded-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                  >
+                    <p className="font-semibold text-lg">
+                      {countSoalBergambar}
+                    </p>
+                    <p className={`uppercase text-sm ${"text-gray-600"}`}>
+                      Soal Gambar
                     </p>
                   </button>
                 </li>
