@@ -93,7 +93,7 @@ import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PelatihanMasyarakat } from "@/types/product";
-import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
+import { FaBookOpen, FaRupiahSign, FaUserPen } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
 
 import { convertDate } from "@/utils";
@@ -156,9 +156,7 @@ const TableDataUjian: React.FC = () => {
 
     try {
       const response: AxiosResponse = await axios.get(
-        isPenguji
-          ? `${dpkakpBaseUrl}/adminPusat/GetUjian?id_users_dpkakp=${idUsersDpkakp}`
-          : `${dpkakpBaseUrl}/adminPusat/GetUjian`,
+        `${dpkakpBaseUrl}/adminPusat/GetUjian`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("XSRF095")}`,
@@ -233,6 +231,110 @@ const TableDataUjian: React.FC = () => {
     } catch (error) {
       setIsFetching(false);
       throw error;
+    }
+  };
+
+  const handleFetchingUjianKeahlianDataPenguji = async () => {
+    setIsFetching(true);
+
+    try {
+      // Check if idUsersDpkakp exists, and wait until it does (polling mechanism)
+      const getIdUsersDpkakp = async (): Promise<string | null> => {
+        let id = Cookies.get("IdUsersDpkakp");
+        const timeout = 5000; // Maximum wait time (in ms)
+        const interval = 200; // Check every 200ms
+        const startTime = Date.now();
+
+        while (!id && Date.now() - startTime < timeout) {
+          await new Promise((resolve) => setTimeout(resolve, interval));
+          id = Cookies.get("IdUsersDpkakp");
+        }
+
+        return id!;
+      };
+
+      const idUsersDpkakp = await getIdUsersDpkakp();
+
+      if (!idUsersDpkakp) {
+        throw new Error("idUsersDpkakp not found within the timeout period.");
+      }
+
+      const response: AxiosResponse = await axios.get(
+        `${dpkakpBaseUrl}/adminPusat/GetUjian?id_users_dpkakp=${idUsersDpkakp}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+
+      console.log({ response });
+
+      const pukakpCookie = Cookies.get("PUKAKP");
+
+      // Filter the data by PUKAKP value if the cookie is available
+      const filteredData =
+        pukakpCookie != "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan"
+          ? response.data.data.filter(
+              (item: any) => item.PUKAKP === pukakpCookie
+            )
+          : response.data.data;
+
+      // Sort the data first by status ('Pending' first) and then by CreateAt in descending order
+      const sortedData = filteredData.sort((a: any, b: any) => {
+        // Sort by status: 'Pending' first
+        if (a.Status === "Pending" && b.Status !== "Pending") return -1;
+        if (a.Status !== "Pending" && b.Status === "Pending") return 1;
+
+        // Sort by CreateAt in descending order
+        return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime();
+      });
+
+      console.log({ filteredData });
+
+      // Count statuses
+      const verifiedCount = filteredData.filter(
+        (item: any) => item.Status === "Aktif"
+      ).length;
+      const notVerifiedCount = filteredData.filter(
+        (item: any) => item.Status === "Pending"
+      ).length;
+      const draft = filteredData.filter(
+        (item: any) => item.Status === "Draft"
+      ).length;
+      const pilihPenguji = filteredData.filter(
+        (item: any) => item.NamaPengawasUjian == ""
+      ).length;
+
+      // Update state with counts
+      setCountVerified(verifiedCount);
+      setCountNotVerified(notVerifiedCount);
+      setCountDraft(draft);
+      setCountPilihPenguji(pilihPenguji);
+
+      // Set the data to the sorted data
+      if (pathPukakp) {
+        setData(sortedData);
+      } else {
+        // Sort original data by status and CreateAt if no filter is applied
+        const sortedOriginalData = response.data.data.sort((a: any, b: any) => {
+          // Sort by status: 'Pending' first
+          if (a.Status === "Pending" && b.Status !== "Pending") return -1;
+          if (a.Status !== "Pending" && b.Status === "Pending") return 1;
+
+          // Sort by CreateAt in descending order
+          return (
+            new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
+          );
+        });
+
+        setData(sortedOriginalData);
+      }
+
+      setIsFetching(false);
+    } catch (error) {
+      setIsFetching(false);
+      console.error("Error fetching data:", error);
     }
   };
 
@@ -621,9 +723,13 @@ const TableDataUjian: React.FC = () => {
 
   React.useEffect(() => {
     fetchInformationDPKAKP();
-    handleFetchingUjianKeahlianData();
-    handleGetDataPenguji();
-    handleFetchingTypeUjianKeahlianData();
+    if (isPenguji) {
+      handleFetchingUjianKeahlianDataPenguji();
+    } else {
+      handleFetchingUjianKeahlianData();
+      handleGetDataPenguji();
+      handleFetchingTypeUjianKeahlianData();
+    }
   }, []);
 
   // DELETE UJIAN
@@ -857,11 +963,14 @@ const TableDataUjian: React.FC = () => {
                           <p className="text-sm ">
                             <span className="flex items-center gap-1 leading-[105%]">
                               <TbTargetArrow className="text-lg" />
-                              <span>{ujian!.TempatUjian}</span>
+                              <span>
+                                Tempat Pelaksanaan : {ujian!.TempatUjian}
+                              </span>
                             </span>
                             <span className="flex items-center gap-1 leading-[105%]">
                               <TbCalendarCheck className="text-lg" />
                               <span>
+                                Waktu Pelaksanaan :{" "}
                                 {generateTanggalPelatihan(
                                   ujian!.TanggalMulaiUjian
                                 )}{" "}
@@ -871,11 +980,20 @@ const TableDataUjian: React.FC = () => {
                                 )}
                               </span>
                             </span>
+                            {ujian!.NamaPengawasUjian != "" && (
+                              <span className="flex items-center gap-1 ml-[0.125rem] leading-[105%]">
+                                <FaUserPen className="text-base" />
+                                <span>
+                                  Penguji : {ujian!.NamaPengawasUjian}
+                                </span>
+                              </span>
+                            )}
                             <span className="flex items-center gap-1 leading-[105%]">
                               <HiUserGroup className="text-base" />
                               <span>
-                                Jumlah peserta ujian: {ujian!.UsersUjian.length}
-                                /{ujian!.JumlahPesertaUjian}
+                                Jumlah peserta ujian :{" "}
+                                {ujian!.UsersUjian.length}/
+                                {ujian!.JumlahPesertaUjian}
                               </span>
                             </span>
                           </p>
@@ -1525,7 +1643,7 @@ const TableDataUjian: React.FC = () => {
                         id="name"
                         className="form-select w-full text-black border-gray-300 rounded-md"
                         required
-                        value={namaPengawas}
+                        value={`${namaPengawas}|${idPengawas}`} // Match the combined value
                         onChange={(e) => {
                           const [nama, id] = e.target.value.split("|"); // Split the combined value
                           setNamaPengawas(nama); // Update state for NamaUsersDpkakp

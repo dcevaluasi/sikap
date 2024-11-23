@@ -41,6 +41,7 @@ import {
   TbCircleKey,
   TbClipboardCheck,
   TbDatabaseEdit,
+  TbEditCircle,
   TbFileCertificate,
   TbFileStack,
   TbInfoCircleFilled,
@@ -129,6 +130,13 @@ const TableDataPesertaUjianKeahlian = () => {
       throw error;
     }
   };
+
+  const [isOpenFormUjianKeahlian, setIsOpenFormUjianKeahlian] =
+    React.useState<boolean>(false);
+
+  const [selectedIdPeserta, setSelectedIdPeserta] = React.useState(0);
+
+  const [nilaiKomprehensif, setNilaiKomprehensif] = React.useState<string>("");
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -462,13 +470,49 @@ const TableDataPesertaUjianKeahlian = () => {
           <TbClipboardCheck className="ml-2 h-4 w-4" />
         </Button>
       ),
-      cell: ({ row }) => (
-        <div className="ml-auto capitalize w-full flex items-center justify-center">
-          <p className="text-sm font-normal tracking-tight leading-none">
-            {row.getValue("NilaiKomprensif")}
-          </p>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const {
+          NilaiF1B1,
+          NilaiF1B2,
+          NilaiF1B3,
+          NilaiF2B1,
+          NilaiF3B1,
+          NilaiF3B2,
+          NilaiKomprensif,
+        } = row.original;
+
+        // Check if all required values are not 0
+        const isVisible =
+          NilaiF1B1 !== 0 &&
+          NilaiF1B2 !== 0 &&
+          NilaiF1B3 !== 0 &&
+          NilaiF2B1 !== 0 &&
+          NilaiF3B1 !== 0 &&
+          NilaiF3B2 !== 0;
+
+        // Render only if all required fields are non-zero
+        return isVisible ? (
+          <div className="ml-auto capitalize w-full flex items-center justify-center">
+            {NilaiKomprensif === 0 ? (
+              <Button
+                onClick={(e) => {
+                  setSelectedIdPeserta(row.original.IdUserUjian);
+                  setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+                }}
+                variant="outline"
+                className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200"
+              >
+                <TbEditCircle className="h-5 w-5 mr-1" />
+                Masukkan Nilai
+              </Button>
+            ) : (
+              <p className="text-sm font-normal tracking-tight leading-none">
+                {row.getValue("NilaiKomprensif")}
+              </p>
+            )}
+          </div>
+        ) : null; // Hide if any of the required fields is 0
+      },
     },
   ];
 
@@ -497,8 +541,6 @@ const TableDataPesertaUjianKeahlian = () => {
   const [isOpenFormInputNilai, setIsOpenFormInputNilai] = React.useState(false);
   const [nilaiPretest, setNilaiPretest] = React.useState("");
   const [nilaiPosttest, setNilaiPosttest] = React.useState("");
-
-  const [selectedIdPeserta, setSelectedIdPeserta] = React.useState(0);
 
   const [isOpenFormPeserta, setIsOpenFormPeserta] =
     React.useState<boolean>(false);
@@ -630,6 +672,47 @@ const TableDataPesertaUjianKeahlian = () => {
     const currentDate = new Date().toISOString().slice(0, 10);
     const fileName = `ExportedData_${currentDate}.xlsx`;
     XLSX.writeFile(workbook, fileName);
+  };
+
+  const [isUploading, setIsUploading] = React.useState<boolean>(false);
+
+  const handleUploadNilaiKomprehensif = async (e: any) => {
+    setIsUploading(true);
+
+    try {
+      const response = await axios.post(
+        `${dpkakpBaseUrl}/penguji/inputNilaiKompre?id=${selectedIdPeserta}`,
+        {
+          nilai_komprensif: nilaiKomprehensif,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil menginput nilai komprehensif peserta ujian!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setIsOpenFormUjianKeahlian(false);
+      setIsUploading(false);
+      setNilaiKomprehensif("");
+      setSelectedIdPeserta(0);
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal menginput nilai komprehensif peserta ujian!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setIsOpenFormUjianKeahlian(false);
+      setIsUploading(false);
+      setNilaiKomprehensif("");
+      setSelectedIdPeserta(0);
+    }
   };
 
   React.useEffect(() => {
@@ -889,6 +972,67 @@ const TableDataPesertaUjianKeahlian = () => {
               </div>
             </div>
           </div>
+
+          <AlertDialog open={isOpenFormUjianKeahlian}>
+            <AlertDialogContent className="max-w-xl">
+              <AlertDialogHeader className="gap-0 flex flex-col">
+                <AlertDialogTitle className="flex items-center gap-2 text-2xl">
+                  {" "}
+                  <FaBookOpen className="h-4 w-4" />
+                  Masukkan Nilai Komprehensif
+                </AlertDialogTitle>
+                <AlertDialogDescription className="-mt-6">
+                  Sebagai kelengkapan penilaian dari pelaksanaan ujian keahlaian
+                  Awak Kapal Perikanan ini, diharap sebagai penguji dapat
+                  memasukkan nilai yang didapatkan peserta dari proses
+                  komprehensif!
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <fieldset>
+                <form autoComplete="off">
+                  <div className="flex flex-wrap -mx-3 mb-1">
+                    <div className="flex px-3 gap-2 mb-2 w-full">
+                      <div className="w-full">
+                        <label
+                          className="block text-gray-800 text-sm font-medium mb-1"
+                          htmlFor="name"
+                        >
+                          Nilai Ujian Komprehensif{" "}
+                          <span className="text-red-600">*</span>
+                        </label>
+                        <input
+                          id="name"
+                          type="text"
+                          className="form-input w-full text-black border-gray-300 rounded-md"
+                          placeholder="Masukkan nilai"
+                          required
+                          value={nilaiKomprehensif}
+                          onChange={(e) => setNilaiKomprehensif(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <AlertDialogFooter className="mt-3">
+                    <AlertDialogCancel
+                      onClick={(e) => {
+                        setIsOpenFormUjianKeahlian(false);
+                      }}
+                    >
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={(e) => {
+                        handleUploadNilaiKomprehensif(e);
+                      }}
+                    >
+                      Upload
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </form>
+              </fieldset>
+            </AlertDialogContent>
+          </AlertDialog>
         </>
       )}
     </div>
