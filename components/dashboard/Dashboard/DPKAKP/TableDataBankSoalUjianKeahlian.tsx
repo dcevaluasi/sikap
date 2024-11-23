@@ -136,6 +136,31 @@ const TableDataBankSoalUjianKeahlian = () => {
     []
   );
 
+  const handleDeleteSoal = async (idSoalUjianBagian: number) => {
+    try {
+      const response = await axios.delete(
+        `${dpkakpBaseUrl}/adminPusat/DeleteSoal?id=${idSoalUjianBagian}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: "Berhasil menghapus butir soal ujian!",
+      });
+      handleFetchingBagianUjian();
+    } catch (error) {
+      Toast.fire({
+        icon: "error",
+        title: "Ups, gagal menghapus butir soal ujian!",
+      });
+      handleFetchingBagianUjian();
+    }
+  };
+
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -156,6 +181,55 @@ const TableDataBankSoalUjianKeahlian = () => {
       },
       cell: ({ row }) => (
         <div className={`w-full text-center uppercase`}>{row.index + 1}</div>
+      ),
+    },
+    {
+      accessorKey: "IdSoalUjianBagian",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={`text-black font-semibold  p-0 flex justify-center w-full items-center`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <p className="leading-[105%]"> Action</p>
+
+            <TbDatabaseEdit className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              // onClick={() => setSelectedIdUjian(ujian!.IdUjian)}
+              variant="outline"
+              className="bg-rose-600 text-white hover:text-white hover:bg-rose-600"
+            >
+              <Trash className="h-4 w-4 text-white mr-1" /> Hapus Soal
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>
+                Apakah kamu yakin menghapus soal ini?
+              </AlertDialogTitle>
+              <AlertDialogDescription>
+                Penghapusan data ini akan dilakukan secara permanen, sehingga
+                anda tidak dapat kembali melakukan undo terkait tindakan ini!
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Batal</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => handleDeleteSoal(row.original.IdSoalUjianBagian)}
+                className="bg-rose-600"
+              >
+                Hapus
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       ),
     },
     {
