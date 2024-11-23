@@ -78,6 +78,7 @@ const TableDataBankSoalUjianKeahlian = () => {
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
   const [countSoalBergambar, setCountSoalBergambar] = React.useState<number>(0);
+  const [countSoalDuplikasi, setCountSoalDuplikasi] = React.useState<number>(0);
 
   const handleFetchingBagianUjian = async () => {
     setIsFetching(true);
@@ -98,7 +99,22 @@ const TableDataBankSoalUjianKeahlian = () => {
         (soal: any) => soal.GambarSoal && soal.GambarSoal.trim() !== ""
       ).length;
 
+      // Count duplicate Soal values
+      const soalFrequency = response.data!.data[0]!.SoalUjianBagian.reduce(
+        (acc: Record<string, number>, soal: any) => {
+          const key = soal.Soal;
+          acc[key] = (acc[key] || 0) + 1;
+          return acc;
+        },
+        {}
+      );
+
+      const countSoalDuplikasi = Object.values(soalFrequency).filter(
+        (count: any) => count > 1
+      ).length;
+
       setCountSoalBergambar(countGambarSoal);
+      setCountSoalDuplikasi(countSoalDuplikasi);
 
       setDataBagian(response.data.data[0]!);
       setData(response.data!.data[0]!.SoalUjianBagian);
@@ -109,6 +125,7 @@ const TableDataBankSoalUjianKeahlian = () => {
     }
   };
 
+  console.log({ countSoalDuplikasi });
   console.log({ countSoalBergambar });
 
   console.log({ dataBagian });
@@ -489,7 +506,7 @@ const TableDataBankSoalUjianKeahlian = () => {
               <ul className="flex">
                 <li>
                   <button
-                    className={`focus:outline-none p-2 rounded-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                    className={`focus:outline-none p-2 rounded-l-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
                   >
                     <p className="font-semibold text-lg">{data!.length}</p>
                     <p className={`uppercase text-sm ${"text-gray-600"}`}>
@@ -499,7 +516,19 @@ const TableDataBankSoalUjianKeahlian = () => {
                 </li>
                 <li>
                   <button
-                    className={`focus:outline-none p-2 rounded-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                    className={`focus:outline-none p-2  border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                  >
+                    <p className="font-semibold text-lg">
+                      {countSoalDuplikasi}
+                    </p>
+                    <p className={`uppercase text-sm ${"text-gray-600"}`}>
+                      Soal Duplikat
+                    </p>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={`focus:outline-none p-2 rounded-r-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
                   >
                     <p className="font-semibold text-lg">
                       {countSoalBergambar}
