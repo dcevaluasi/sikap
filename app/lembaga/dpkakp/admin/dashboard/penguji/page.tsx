@@ -72,14 +72,6 @@ const Blanko: React.FC = () => {
             </ul>
           </nav>
           {/* section body header */}
-          <header
-            aria-label="page caption"
-            className="flex-none flex h-16 bg-gray-100 border-t px-4 items-center"
-          >
-            <h1 id="page-caption" className="font-semibold text-lg">
-              Tim Penguji
-            </h1>
-          </header>
 
           {/* main content */}
 

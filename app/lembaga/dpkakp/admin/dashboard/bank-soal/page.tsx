@@ -14,6 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TbDatabase } from "react-icons/tb";
 
 export const metadata: Metadata = {
   title: "Bank Soal Ujian - Dewan Penguji Keahlian Awak Kapal Perikanan",
@@ -80,14 +81,26 @@ export default function Page() {
             </ul>
           </nav>
           {/* section body header */}
-          <header
-            aria-label="page caption"
-            className="flex-none flex h-16 bg-gray-100 border-t px-4 items-center"
-          >
-            <h1 id="page-caption" className="font-semibold text-lg">
-              Bank Soal
-            </h1>
-          </header>
+          <div className="flex flex-col">
+            <div className="flex flex-row gap-2 items-center">
+              <header
+                aria-label="page caption"
+                className="flex-row  flex h-20 items-center gap-2 bg-gray-100 border-t px-4"
+              >
+                <TbDatabase className="text-3xl" />
+                <div className="flex flex-col">
+                  <h1 id="page-caption" className="font-semibold text-lg">
+                    Jenis Program Keahlian
+                  </h1>
+                  <p className="font-medium text-gray-400 text-base">
+                    Upload Bank Soal Untuk Sesuai Program Keahlian Yang Diujikan
+                    Pada Pelaksanaan Ujian Keahlian Awak Kapal Perikanan Yang
+                    Diselenggarakan!
+                  </p>
+                </div>
+              </header>
+            </div>
+          </div>
 
           {/* main content */}
           <TipeUjianKeahlian />

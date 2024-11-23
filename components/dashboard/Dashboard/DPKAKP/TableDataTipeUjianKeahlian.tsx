@@ -217,13 +217,10 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      <main className="flex-grow flex min-h-0 border-t ">
+      <main className="flex-grow flex min-h-0 border-t -mt-6">
         {/* section update to tickets */}
         <section className="flex flex-col p-4 w-full flex-none bg-gray-100 h-full">
-          <h1 className="font-semibold leading-[120%] mb-1">
-            Jenis Program <br /> Keahlian Awak Kapal Perikanan
-          </h1>
-          <ul className="w-full grid grid-cols-2 gap-2 mt-3 ">
+          <ul className="w-full grid grid-cols-2 gap-2">
             {data.map((bankSoal, index) => (
               <li key={index}>
                 <article

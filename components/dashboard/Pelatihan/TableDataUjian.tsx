@@ -771,15 +771,8 @@ const TableDataUjian: React.FC = () => {
         <nav className="bg-gray-100 flex p-4">
           <section
             aria-labelledby="ticket-statistics-tabs-label"
-            className="pb-2"
+            className="pb-2 -mt-5"
           >
-            <label
-              id="ticket-statistics-tabs-label"
-              className="font-semibold block mb-3 text-sm"
-            >
-              Pengajuan Pelaksanaan Ujian
-              {/* <span className="font-normal text-gray-700"> ()</span> */}
-            </label>
             {isPenguji ? (
               <ul className="flex">
                 <li>
@@ -924,7 +917,7 @@ const TableDataUjian: React.FC = () => {
           </section>
         </nav>
 
-        <div className="px-4 mt-2">
+        <div className="px-4 -mt-4">
           <Tabs defaultValue="account" className="w-full">
             {usePathname().includes("pukakp") && (
               <TabsList className={`grid w-full grid-cols-2`}>

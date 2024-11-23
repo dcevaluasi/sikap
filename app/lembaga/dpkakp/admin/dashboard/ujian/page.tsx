@@ -4,6 +4,7 @@ import UjianKeahlianAKP from "@/components/dashboard/Dashboard/UjianKeahlianAKP"
 import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
 import DefaultLayoutDPKAKP from "@/components/dashboard/Layouts/DefaultLayoutDPKAKP";
 import LayoutAdmin from "@/components/dashboard/Layouts/LayoutAdmin";
+import { LucideFileSignature } from "lucide-react";
 
 import { Metadata } from "next";
 
@@ -70,14 +71,27 @@ export default function Page() {
             </ul>
           </nav>
           {/* section body header */}
-          <header
-            aria-label="page caption"
-            className="flex-none flex h-16 bg-gray-100 border-t px-4 items-center"
-          >
-            <h1 id="page-caption" className="font-semibold text-lg">
-              Pelaksanaan Ujian AKP
-            </h1>
-          </header>
+
+          <div className="flex flex-col">
+            <div className="flex flex-row gap-2 items-center">
+              <header
+                aria-label="page caption"
+                className="flex-row  flex h-20 items-center gap-2 bg-gray-100 border-t px-4"
+              >
+                <LucideFileSignature className="text-3xl" />
+                <div className="flex flex-col">
+                  <h1 id="page-caption" className="font-semibold text-lg">
+                    Pelaksaan Ujian Keahlian AKP
+                  </h1>
+                  <p className="font-medium text-gray-400 text-base">
+                    Upload Bank Soal Untuk Sesuai Program Keahlian Yang Diujikan
+                    Pada Pelaksanaan Ujian Keahlian Awak Kapal Perikanan Yang
+                    Diselenggarakan!
+                  </p>
+                </div>
+              </header>
+            </div>
+          </div>
           <main className="flex w-full h-full">
             <UjianKeahlianAKP />
             {/* section content */}
