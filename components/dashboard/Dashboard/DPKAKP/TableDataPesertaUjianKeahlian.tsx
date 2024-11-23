@@ -486,6 +486,55 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
     },
     {
+      accessorKey: "NilaiF1B3",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          <p className="leading-[105%]">Total Nilai F3</p>
+          <TbClipboardCheck className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="ml-auto capitalize w-full flex items-center justify-center">
+          <p className="text-sm font-normal tracking-tight leading-none">
+            {((row.original.NilaiF3B1 + row.original.NilaiF3B2) / 2).toFixed(2)}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "NilaiF1B3",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          <p className="leading-[105%]">Nilai Kumulatif</p>
+          <TbClipboardCheck className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="ml-auto capitalize w-full flex items-center justify-center">
+          <p className="text-sm font-normal tracking-tight leading-none">
+            {(
+              ((row.original.NilaiF1B1 +
+                row.original.NilaiF1B2 +
+                row.original.NilaiF1B3) /
+                3 +
+                row.original.NilaiF2B1 +
+                (row.original.NilaiF3B1 + row.original.NilaiF3B2) / 2) /
+              3
+            ).toFixed(2)}
+          </p>
+        </div>
+      ),
+    },
+
+    {
       accessorKey: "NilaiKomprensif",
       header: ({ column }) => (
         <Button
