@@ -338,6 +338,7 @@ const TableDataPesertaUjianKeahlian = () => {
         </div>
       ),
     },
+
     {
       accessorKey: "NilaiF1B1",
       header: ({ column }) => (
@@ -398,6 +399,32 @@ const TableDataPesertaUjianKeahlian = () => {
         </div>
       ),
     },
+    {
+      accessorKey: "NilaiF1B3",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          <p className="leading-[105%]">Total Nilai F1</p>
+          <TbClipboardCheck className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="ml-auto capitalize w-full flex items-center justify-center">
+          <p className="text-sm font-normal tracking-tight leading-none">
+            {(
+              (row.original.NilaiF1B1 +
+                row.original.NilaiF1B2 +
+                row.original.NilaiF1B3) /
+              3
+            ).toFixed(2)}
+          </p>
+        </div>
+      ),
+    },
+
     {
       accessorKey: "NilaiF2B1",
       header: ({ column }) => (
@@ -879,47 +906,49 @@ const TableDataPesertaUjianKeahlian = () => {
                   Export
                 </div>
 
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer">
-                      <FaMapPin />
-                      Sematkan Soal Ujian
-                    </div>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Apakah anda yakin akan menyematkan soal ujian?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Pastikan jumlah anggota mu sudah sesuai dengan data
-                        peserta ujian yang sudah didaftarkan dan merupakan
-                        anggota yang sah tercantum dalam Surat Keputusan Dewan
-                        sebagai peserta yang mengikuti ujian keahlian awak kapal
-                        Perikanan!
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      {isLoadingSematkanSoal ? (
-                        <AlertDialogAction className="bg-gray-900">
-                          Loading ...
-                        </AlertDialogAction>
-                      ) : (
-                        <>
-                          <AlertDialogCancel>Batal</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={(e) =>
-                              handleSematkanSoalUjianKeahlianToPeserta(e)
-                            }
-                            className="bg-gray-900"
-                          >
-                            Sematkan
+                {usePathname().includes("dpkakp") && (
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer">
+                        <FaMapPin />
+                        Sematkan Soal Ujian
+                      </div>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Apakah anda yakin akan menyematkan soal ujian?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Pastikan jumlah anggota mu sudah sesuai dengan data
+                          peserta ujian yang sudah didaftarkan dan merupakan
+                          anggota yang sah tercantum dalam Surat Keputusan Dewan
+                          sebagai peserta yang mengikuti ujian keahlian awak
+                          kapal Perikanan!
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        {isLoadingSematkanSoal ? (
+                          <AlertDialogAction className="bg-gray-900">
+                            Loading ...
                           </AlertDialogAction>
-                        </>
-                      )}
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
+                        ) : (
+                          <>
+                            <AlertDialogCancel>Batal</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={(e) =>
+                                handleSematkanSoalUjianKeahlianToPeserta(e)
+                              }
+                              className="bg-gray-900"
+                            >
+                              Sematkan
+                            </AlertDialogAction>
+                          </>
+                        )}
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                )}
 
                 {dataUjian.length > 0 && dataUjian != null ? (
                   dataUjian[0].UsersUjian != null &&
