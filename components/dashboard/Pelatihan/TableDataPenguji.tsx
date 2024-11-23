@@ -564,7 +564,17 @@ const TableDataDewanenguji: React.FC = () => {
   const [dataBlanko, setDataBlanko] = React.useState<DewanPenguji[]>([]);
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-sm   pb-5  shadow-default  xl:col-span-8">
+      <Input
+        placeholder="Cari Nama Penguji..."
+        value={
+          (table.getColumn("NamaUsersDpkakp")?.getFilterValue() as string) ?? ""
+        }
+        onChange={(event) =>
+          table.getColumn("NamaUsersDpkakp")?.setFilterValue(event.target.value)
+        }
+        className="max-w-sm mb-3"
+      />
       <TableData
         isLoading={isFetching}
         columns={columns}
