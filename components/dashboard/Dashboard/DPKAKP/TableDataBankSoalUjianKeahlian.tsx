@@ -69,6 +69,7 @@ import {
   SoalUjianBagian,
 } from "@/types/ujian-keahlian-akp";
 import { SelectValue } from "@radix-ui/react-select";
+import { Input } from "@/components/ui/input";
 
 const TableDataBankSoalUjianKeahlian = () => {
   const pathname = usePathname();
@@ -141,7 +142,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       ),
     },
     {
-      accessorKey: "NoRegistrasi",
+      accessorKey: "Soal",
       header: ({ column }) => {
         return (
           <Button
@@ -509,6 +510,16 @@ const TableDataBankSoalUjianKeahlian = () => {
                   </button>
                 </li>
               </ul>
+              <Input
+                placeholder="Cari Soal..."
+                value={
+                  (table.getColumn("Soal")?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event) =>
+                  table.getColumn("Soal")?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
               <TableData
                 isLoading={false}
                 columns={columns}
