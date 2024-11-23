@@ -70,6 +70,7 @@ import {
 } from "@/types/ujian-keahlian-akp";
 import { SelectValue } from "@radix-ui/react-select";
 import { Input } from "@/components/ui/input";
+import { FiEdit2, FiTrash, FiUploadCloud } from "react-icons/fi";
 
 const TableDataBankSoalUjianKeahlian = () => {
   const pathname = usePathname();
@@ -136,6 +137,32 @@ const TableDataBankSoalUjianKeahlian = () => {
     []
   );
 
+  const handleDeleteBankSoal = async (idBagian: number) => {
+    try {
+      const response = await axios.delete(
+        `${dpkakpBaseUrl}/adminPusat/deleteAllSoalBagian?id=${idBagian}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log({ response });
+      Toast.fire({
+        icon: "success",
+        title: "Berhasil menghapus bank soal ujian!",
+      });
+      handleFetchingBagianUjian();
+    } catch (error) {
+      console.error({ error });
+      Toast.fire({
+        icon: "error",
+        title: "Ups, gagal menghapus bank soal ujian!",
+      });
+      handleFetchingBagianUjian();
+    }
+  };
+
   const handleDeleteSoal = async (idSoalUjianBagian: number) => {
     try {
       const response = await axios.delete(
@@ -199,37 +226,50 @@ const TableDataBankSoalUjianKeahlian = () => {
         );
       },
       cell: ({ row }) => (
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button
-              // onClick={() => setSelectedIdUjian(ujian!.IdUjian)}
-              variant="outline"
-              className="bg-rose-600 text-white hover:text-white hover:bg-rose-600"
-            >
-              <Trash className="h-4 w-4 text-white mr-1" /> Hapus Soal
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                Apakah kamu yakin menghapus soal ini?
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                Penghapusan data ini akan dilakukan secara permanen, sehingga
-                anda tidak dapat kembali melakukan undo terkait tindakan ini!
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Batal</AlertDialogCancel>
-              <AlertDialogAction
-                onClick={() => handleDeleteSoal(row.original.IdSoalUjianBagian)}
-                className="bg-rose-600"
+        <>
+          <Button
+            // onClick={() => {
+            //   handleFetchingDataUjianById(ujian!.IdUjian);
+            // }}
+            variant="outline"
+            className="bg-yellow-300 w-full text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
+          >
+            <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" /> Edit Soal
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                // onClick={() => setSelectedIdUjian(ujian!.IdUjian)}
+                variant="outline"
+                className="bg-rose-600 w-full text-white hover:text-white hover:bg-rose-600"
               >
-                Hapus
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+                <Trash className="h-4 w-4 text-white mr-1" /> Hapus Soal
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  Apakah kamu yakin menghapus soal ini?
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  Penghapusan data ini akan dilakukan secara permanen, sehingga
+                  anda tidak dapat kembali melakukan undo terkait tindakan ini!
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Batal</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() =>
+                    handleDeleteSoal(row.original.IdSoalUjianBagian)
+                  }
+                  className="bg-rose-600"
+                >
+                  Hapus
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </>
       ),
     },
     {
@@ -613,16 +653,60 @@ const TableDataBankSoalUjianKeahlian = () => {
                   </button>
                 </li>
               </ul>
-              <Input
-                placeholder="Cari Soal..."
-                value={
-                  (table.getColumn("Soal")?.getFilterValue() as string) ?? ""
-                }
-                onChange={(event) =>
-                  table.getColumn("Soal")?.setFilterValue(event.target.value)
-                }
-                className="max-w-sm"
-              />
+              <div className="flex w-full items-center justify-between">
+                <Input
+                  placeholder="Cari Soal..."
+                  value={
+                    (table.getColumn("Soal")?.getFilterValue() as string) ?? ""
+                  }
+                  onChange={(event) =>
+                    table.getColumn("Soal")?.setFilterValue(event.target.value)
+                  }
+                  className="max-w-sm text-sm"
+                />
+                <div className="w-full flex justify-end gap-2">
+                  <div
+                    onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
+                    className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
+                  >
+                    <FiUploadCloud />
+                    Import Bank Soal{" "}
+                    {dataBagian != null ? dataBagian.NamaBagian : ""}
+                  </div>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
+                        <FiTrash />
+                        Hapus Bank Soal{" "}
+                        {dataBagian != null ? dataBagian.NamaBagian : ""}
+                      </div>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Apakah kamu yakin menghapus soal ini?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Penghapusan data ini akan dilakukan secara permanen,
+                          sehingga anda tidak dapat kembali melakukan undo
+                          terkait tindakan ini!
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={() =>
+                            handleDeleteBankSoal(dataBagian!.IdBagian)
+                          }
+                          className="bg-rose-600"
+                        >
+                          Hapus
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+              </div>
               <TableData
                 isLoading={false}
                 columns={columns}

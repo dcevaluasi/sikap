@@ -1377,7 +1377,7 @@ const TableDataUjian: React.FC = () => {
                         Valid
                       </option>
                       <option
-                        onClick={(e) => setStatus("Tidak Aktif")}
+                        onClick={(e) => setStatus("Pending")}
                         value={"Tidak Aktif"}
                       >
                         Tidak Valid
