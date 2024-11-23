@@ -941,210 +941,233 @@ const TableDataUjian: React.FC = () => {
                     className="w-full text-sm"
                   />
                 </div>
-                {filteredData.map((ujian, index) => (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>{ujian!.NamaUjian}</CardTitle>
-                      <CardDescription>
-                        {" "}
-                        {ujian!.TypeUjian} • {ujian!.PUKAKP}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      <div className="ml-0 text-left capitalize -mt-6">
-                        <div className="ml-0 text-left mt-1 text-neutral-500 ">
-                          <p className="text-sm ">
-                            <span className="flex items-center gap-1 leading-[105%]">
-                              <TbTargetArrow className="text-lg" />
-                              <span>
-                                Tempat Pelaksanaan : {ujian!.TempatUjian}
-                              </span>
-                            </span>
-                            <span className="flex items-center gap-1 leading-[105%]">
-                              <TbCalendarCheck className="text-lg" />
-                              <span>
-                                Waktu Pelaksanaan :{" "}
-                                {generateTanggalPelatihan(
-                                  ujian!.TanggalMulaiUjian
-                                )}{" "}
-                                s.d{" "}
-                                {generateTanggalPelatihan(
-                                  ujian!.TanggalBerakhirUjian
-                                )}
-                              </span>
-                            </span>
-                            {ujian!.NamaPengawasUjian != "" && (
-                              <span className="flex items-center gap-1 ml-[0.125rem] leading-[105%]">
-                                <FaUserPen className="text-base" />
+                {filteredData.length == 0 ? (
+                  <div className="pt-12 md:pt-20 flex flex-col items-center">
+                    <Image
+                      src={"/illustrations/not-found.png"}
+                      alt="Not Found"
+                      width={0}
+                      height={0}
+                      className="w-[400px]"
+                    />
+                    <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
+                      <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                        Belum Ada Ujian
+                      </h1>
+                      <div className="text-gray-600 text-sm text-center  max-w-md">
+                        Pelaksana Ujian Keahlian Awak Kapal Perikanan (PUKAKP)
+                        belum ada yang melakukan pengjuan permohonan pelaksanaan
+                        ujian keahlian Awak Kapal Perikanan!{" "}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  filteredData.map((ujian, index) => (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>{ujian!.NamaUjian}</CardTitle>
+                        <CardDescription>
+                          {" "}
+                          {ujian!.TypeUjian} • {ujian!.PUKAKP}
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <div className="ml-0 text-left capitalize -mt-6">
+                          <div className="ml-0 text-left mt-1 text-neutral-500 ">
+                            <p className="text-sm ">
+                              <span className="flex items-center gap-1 leading-[105%]">
+                                <TbTargetArrow className="text-lg" />
                                 <span>
-                                  Penguji : {ujian!.NamaPengawasUjian}
+                                  Tempat Pelaksanaan : {ujian!.TempatUjian}
                                 </span>
                               </span>
-                            )}
-                            <span className="flex items-center gap-1 leading-[105%]">
-                              <HiUserGroup className="text-base" />
-                              <span>
-                                Jumlah peserta ujian :{" "}
-                                {ujian!.UsersUjian.length}/
-                                {ujian!.JumlahPesertaUjian}
+                              <span className="flex items-center gap-1 leading-[105%]">
+                                <TbCalendarCheck className="text-lg" />
+                                <span>
+                                  Waktu Pelaksanaan :{" "}
+                                  {generateTanggalPelatihan(
+                                    ujian!.TanggalMulaiUjian
+                                  )}{" "}
+                                  s.d{" "}
+                                  {generateTanggalPelatihan(
+                                    ujian!.TanggalBerakhirUjian
+                                  )}
+                                </span>
                               </span>
-                            </span>
-                          </p>
+                              {ujian!.NamaPengawasUjian != "" && (
+                                <span className="flex items-center gap-1 ml-[0.125rem] leading-[105%]">
+                                  <FaUserPen className="text-base" />
+                                  <span>
+                                    Penguji : {ujian!.NamaPengawasUjian}
+                                  </span>
+                                </span>
+                              )}
+                              <span className="flex items-center gap-1 leading-[105%]">
+                                <HiUserGroup className="text-base" />
+                                <span>
+                                  Jumlah peserta ujian :{" "}
+                                  {ujian!.UsersUjian.length}/
+                                  {ujian!.JumlahPesertaUjian}
+                                </span>
+                              </span>
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </CardContent>
-                    <CardFooter>
-                      <div className="flex items-center justify-center gap-1 flex-wrap  -mt-2">
-                        {/* <Button
-                          variant="outline"
-                          className=" bg-gray-900 text-white hover:text-white hover:bg-gray-900"
-                        >
-                          <FaBookOpen className="h-4 w-4 mr-1" /> Info Ujian
-                        </Button> */}
-                        {ujian!.Status == "Aktif" && (
-                          <Link
-                            href={`/lembaga/${
-                              usePathname().includes("pukakp")
-                                ? "pukakp"
-                                : "dpkakp"
-                            }/admin/dashboard/ujian/peserta-ujian/${
-                              ujian!.IdUjian
-                            }/${ujian!.IdTypeUjian}`}
-                            className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm"
-                          >
-                            <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
-                            Peserta Ujian
-                          </Link>
-                        )}
-
-                        {ujian!.FilePermohonan != null &&
-                        ujian!.Status == "Aktif" ? (
-                          <Link
-                            target="_blank"
-                            href={ujian!.FilePermohonan!}
-                            className="bg-gray-500 text-white rounded-md  shadow-sm  h-9 px-4 py-2 flex text-sm items-center"
-                          >
-                            <FiFile className="h-4 w-4 mr-1" /> File Permohonan
-                          </Link>
-                        ) : (
-                          <></>
-                        )}
-
-                        {ujian!.Status == "Draft" &&
-                        !usePathname().includes("dpkakp") ? (
-                          <Button
-                            onClick={() => {
-                              handleKirimPermohonan(ujian!.IdUjian);
-                            }}
+                      </CardContent>
+                      <CardFooter>
+                        <div className="flex items-center justify-center gap-1 flex-wrap  -mt-2">
+                          {/* <Button
                             variant="outline"
-                            className="bg-indigo-600 text-neutral-100 hover:text-neutral-100 hover:bg-indigo-600"
+                            className=" bg-gray-900 text-white hover:text-white hover:bg-gray-900"
                           >
-                            <BiPaperPlane className="h-4 w-4 text-neutral-100 mr-1" />{" "}
-                            Kirim Permohonan
-                          </Button>
-                        ) : (
-                          <></>
-                        )}
+                            <FaBookOpen className="h-4 w-4 mr-1" /> Info Ujian
+                          </Button> */}
+                          {ujian!.Status == "Aktif" && (
+                            <Link
+                              href={`/lembaga/${
+                                usePathname().includes("pukakp")
+                                  ? "pukakp"
+                                  : "dpkakp"
+                              }/admin/dashboard/ujian/peserta-ujian/${
+                                ujian!.IdUjian
+                              }/${ujian!.IdTypeUjian}`}
+                              className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm"
+                            >
+                              <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
+                              Peserta Ujian
+                            </Link>
+                          )}
 
-                        {usePathname().includes("pukakp") &&
-                        ujian!.Status == "Draft" ? (
-                          <Button
-                            onClick={() => {
-                              handleFetchingDataUjianById(ujian!.IdUjian);
-                            }}
-                            variant="outline"
-                            className="bg-yellow-300 text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
-                          >
-                            <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" />{" "}
-                            Edit Ujian
-                          </Button>
-                        ) : (
-                          <></>
-                        )}
+                          {ujian!.FilePermohonan != null &&
+                          ujian!.Status == "Aktif" ? (
+                            <Link
+                              target="_blank"
+                              href={ujian!.FilePermohonan!}
+                              className="bg-gray-500 text-white rounded-md  shadow-sm  h-9 px-4 py-2 flex text-sm items-center"
+                            >
+                              <FiFile className="h-4 w-4 mr-1" /> File
+                              Permohonan
+                            </Link>
+                          ) : (
+                            <></>
+                          )}
 
-                        {usePathname().includes("pukakp") &&
-                        ujian!.Status == "Draft" ? (
-                          <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                              <Button
-                                onClick={() =>
-                                  setSelectedIdUjian(ujian!.IdUjian)
-                                }
-                                variant="outline"
-                                className="bg-rose-600 text-white hover:text-white hover:bg-rose-600"
-                              >
-                                <Trash className="h-4 w-4 text-white mr-1" />{" "}
-                                Hapus Ujian
-                              </Button>
-                            </AlertDialogTrigger>
-                            <AlertDialogContent>
-                              <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                  Apakah kamu yakin menghapus ujian ini?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                  Penghapusan data ini akan dilakukan secara
-                                  permanen, sehingga anda tidak dapat kembali
-                                  melakukan undo terkait tindakan ini!
-                                </AlertDialogDescription>
-                              </AlertDialogHeader>
-                              <AlertDialogFooter>
-                                <AlertDialogCancel>Batal</AlertDialogCancel>
-                                <AlertDialogAction
-                                  onClick={() => handleDeleteUjian()}
-                                  className="bg-rose-600"
+                          {ujian!.Status == "Draft" &&
+                          !usePathname().includes("dpkakp") ? (
+                            <Button
+                              onClick={() => {
+                                handleKirimPermohonan(ujian!.IdUjian);
+                              }}
+                              variant="outline"
+                              className="bg-indigo-600 text-neutral-100 hover:text-neutral-100 hover:bg-indigo-600"
+                            >
+                              <BiPaperPlane className="h-4 w-4 text-neutral-100 mr-1" />{" "}
+                              Kirim Permohonan
+                            </Button>
+                          ) : (
+                            <></>
+                          )}
+
+                          {usePathname().includes("pukakp") &&
+                          ujian!.Status == "Draft" ? (
+                            <Button
+                              onClick={() => {
+                                handleFetchingDataUjianById(ujian!.IdUjian);
+                              }}
+                              variant="outline"
+                              className="bg-yellow-300 text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
+                            >
+                              <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" />{" "}
+                              Edit Ujian
+                            </Button>
+                          ) : (
+                            <></>
+                          )}
+
+                          {usePathname().includes("pukakp") &&
+                          ujian!.Status == "Draft" ? (
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  onClick={() =>
+                                    setSelectedIdUjian(ujian!.IdUjian)
+                                  }
+                                  variant="outline"
+                                  className="bg-rose-600 text-white hover:text-white hover:bg-rose-600"
                                 >
-                                  Hapus
-                                </AlertDialogAction>
-                              </AlertDialogFooter>
-                            </AlertDialogContent>
-                          </AlertDialog>
-                        ) : (
-                          <></>
-                        )}
-
-                        {usePathname().includes("dpkakp") &&
-                          ujian!.Status != "Aktif" && (
-                            <Button
-                              onClick={(e) => {
-                                setSelectedId(ujian!.IdUjian);
-                                setSelectedSuratPermohonan(
-                                  ujian!.FilePermohonan
-                                );
-                                setOpenFormValidasiPelaksanaanUjian(
-                                  !openFormValidasiPelaksanaanUjian
-                                );
-                              }}
-                              variant="outline"
-                              className="bg-green-400 hover:bg-green-400 hover:text-white text-white rounded-md"
-                            >
-                              <RiVerifiedBadgeFill className="h-4 w-4 mr-1" />{" "}
-                              Verifikasi
-                            </Button>
+                                  <Trash className="h-4 w-4 text-white mr-1" />{" "}
+                                  Hapus Ujian
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Apakah kamu yakin menghapus ujian ini?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Penghapusan data ini akan dilakukan secara
+                                    permanen, sehingga anda tidak dapat kembali
+                                    melakukan undo terkait tindakan ini!
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel>Batal</AlertDialogCancel>
+                                  <AlertDialogAction
+                                    onClick={() => handleDeleteUjian()}
+                                    className="bg-rose-600"
+                                  >
+                                    Hapus
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          ) : (
+                            <></>
                           )}
 
-                        {usePathname().includes("dpkakp") &&
-                          ujian!.Status == "Aktif" &&
-                          ujian!.NamaPengawasUjian == "" && (
-                            <Button
-                              onClick={(e) => {
-                                setSelectedId(ujian!.IdUjian);
-                                setStatus(ujian!.Status);
-                                setIsOpenFormUjianKeahlian(
-                                  !isOpenFormUjianKeahlian
-                                );
-                              }}
-                              variant="outline"
-                              className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200"
-                            >
-                              <TbEditCircle className="h-5 w-5 mr-1" />
-                              Pilih Penguji
-                            </Button>
-                          )}
-                      </div>
-                    </CardFooter>
-                  </Card>
-                ))}
+                          {usePathname().includes("dpkakp") &&
+                            ujian!.Status != "Aktif" && (
+                              <Button
+                                onClick={(e) => {
+                                  setSelectedId(ujian!.IdUjian);
+                                  setSelectedSuratPermohonan(
+                                    ujian!.FilePermohonan
+                                  );
+                                  setOpenFormValidasiPelaksanaanUjian(
+                                    !openFormValidasiPelaksanaanUjian
+                                  );
+                                }}
+                                variant="outline"
+                                className="bg-green-400 hover:bg-green-400 hover:text-white text-white rounded-md"
+                              >
+                                <RiVerifiedBadgeFill className="h-4 w-4 mr-1" />{" "}
+                                Verifikasi
+                              </Button>
+                            )}
+
+                          {usePathname().includes("dpkakp") &&
+                            ujian!.Status == "Aktif" &&
+                            ujian!.NamaPengawasUjian == "" && (
+                              <Button
+                                onClick={(e) => {
+                                  setSelectedId(ujian!.IdUjian);
+                                  setStatus(ujian!.Status);
+                                  setIsOpenFormUjianKeahlian(
+                                    !isOpenFormUjianKeahlian
+                                  );
+                                }}
+                                variant="outline"
+                                className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200"
+                              >
+                                <TbEditCircle className="h-5 w-5 mr-1" />
+                                Pilih Penguji
+                              </Button>
+                            )}
+                        </div>
+                      </CardFooter>
+                    </Card>
+                  ))
+                )}
               </div>
             </TabsContent>
             <TabsContent value="password">
