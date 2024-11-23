@@ -123,7 +123,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       );
       console.log(response);
       setDataBagian(response.data.data[0]!);
-      setData(response.data!.data[0]!.PaketBagian[0]!.SoalUjianBagian);
+      setData(response.data!.data[0]!.SoalUjianBagian);
     } catch (error) {
       console.error("Error posting tipe ujian:", error);
       setIsFetching(false);
@@ -138,8 +138,6 @@ const TableDataBankSoalUjianKeahlian = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-
-
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -416,8 +414,6 @@ const TableDataBankSoalUjianKeahlian = () => {
     handleFetchingBagianUjian();
   }, []);
 
-  const [selectedPaket, setSelectedPaket] = React.useState<string>("");
-
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       <AlertDialog open={isOpenFormPeserta}>
@@ -491,7 +487,7 @@ const TableDataBankSoalUjianKeahlian = () => {
         <>
           {/* List Data Pelatihan */}
           <div className="flex flex-col gap-2">
-            <Select onValueChange={setSelectedPaket} value={selectedPaket}>
+            {/* <Select onValueChange={setSelectedPaket} value={selectedPaket}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue
                   placeholder={
@@ -508,46 +504,53 @@ const TableDataBankSoalUjianKeahlian = () => {
                   )
                 )}
               </SelectContent>
-            </Select>
-
-            {selectedPaket != "" ? (
-              <>
-                <TableData
-                  isLoading={false}
-                  columns={columns}
-                  table={table}
-                  type={"short"}
-                />{" "}
-                <div className="flex items-center justify-end space-x-2 py-4">
-                  <div className="text-muted-foreground flex-1 text-sm">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                  </div>
-                  <div className="space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="font-inter"
-                      onClick={() => table.previousPage()}
-                      disabled={!table.getCanPreviousPage()}
-                    >
-                      Previous
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="font-inter"
-                      onClick={() => table.nextPage()}
-                      disabled={!table.getCanNextPage()}
-                    >
-                      Next
-                    </Button>
-                  </div>
+            </Select> */}
+            <>
+              <ul className="flex">
+                <li>
+                  <button
+                    className={`focus:outline-none p-2 rounded-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                  >
+                    <p className="font-semibold text-lg">{data!.length}</p>
+                    <p className={`uppercase text-sm ${"text-gray-600"}`}>
+                      Total Soal
+                    </p>
+                  </button>
+                </li>
+              </ul>
+              <TableData
+                isLoading={false}
+                columns={columns}
+                table={table}
+                type={"short"}
+              />{" "}
+              <div className="flex items-center justify-end space-x-2 py-4">
+                <div className="text-muted-foreground flex-1 text-sm">
+                  {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                  {table.getFilteredRowModel().rows.length} row(s) selected.
                 </div>
-              </>
-            ) : (
-              <></>
-            )}
+                <div className="space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="font-inter"
+                    onClick={() => table.previousPage()}
+                    disabled={!table.getCanPreviousPage()}
+                  >
+                    Previous
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="font-inter"
+                    onClick={() => table.nextPage()}
+                    disabled={!table.getCanNextPage()}
+                  >
+                    Next
+                  </Button>
+                </div>
+              </div>
+            </>
           </div>
         </>
       )}
