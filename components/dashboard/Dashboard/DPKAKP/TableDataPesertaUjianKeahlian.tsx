@@ -62,7 +62,7 @@ import {
 } from "react-icons/md";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Pelatihan, PelatihanMasyarakat, UserPelatihan } from "@/types/product";
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 import { extractLastSegment, extractSecondLastSegment } from "@/utils";
 import {
   HiMiniNewspaper,
@@ -590,10 +590,22 @@ const TableDataPesertaUjianKeahlian = () => {
     } catch (error) {
       console.log("FILE IMPORT PESERTA PELATIHAN : ", error);
       setIsOpenFormPeserta(!isOpenFormPeserta);
-      Toast.fire({
-        icon: "error",
-        title: `Gagal mengupload peserta ujian keahlian!`,
-      });
+      if (error instanceof AxiosError) {
+        if (error.response?.status == 400) {
+          Toast.fire({
+            icon: "error",
+            title: "Ups, gagal!",
+            text: `Jumlah peserta yang kamu import melebih jumlah yang kamu ajukan pada saat permohonan!`,
+          });
+        } else {
+          Toast.fire({
+            icon: "error",
+            title: "Ups, gagal!",
+            text: `Gagal mengupload peserta ujian keahlian!`,
+          });
+        }
+      }
+
       handleFetchingUjianKeahlianData();
     }
   };
