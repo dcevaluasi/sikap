@@ -144,24 +144,15 @@ const MateriButton: React.FC<MateriButtonProps> = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              onClick={(e) => {
-                setIsOpenFormMateri(!isOpenFormMateri);
-              }}
-              className="ml-auto border rounded-full border-[#000000] hover:bg-[#000] hover:text-white duration-700"
-            >
-              <FaBookOpen className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Upload Materi</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Button
+        variant="outline"
+        onClick={(e) => {
+          setIsOpenFormMateri(!isOpenFormMateri);
+        }}
+        className="ml-auto border rounded-full border-[#000000] hover:bg-[#000] hover:text-white duration-700"
+      >
+        <FaBookOpen className="h-4 w-4" />
+      </Button>
     </>
   );
 };

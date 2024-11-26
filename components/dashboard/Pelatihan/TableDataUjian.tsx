@@ -1331,13 +1331,6 @@ const TableDataUjian: React.FC = () => {
             </TabsContent>
           </Tabs>
         </div>
-
-        <footer
-          aria-label="content footer"
-          className="flex p-3 bg-white border-t hidden"
-        >
-          footer
-        </footer>
       </section>
       <AlertDialog
         open={openFormValidasiPelaksanaanUjian}

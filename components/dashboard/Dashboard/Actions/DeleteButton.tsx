@@ -113,22 +113,13 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => setIsOpenFormDelete(!isOpenFormDelete)}
-              variant="outline"
-              className="ml-auto text-rose-600 border rounded-full border-rose-600 hover:bg-rose-600 hover:text-white duration-700"
-            >
-              <Trash className="h-4 w-4 " />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Hapus</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Button
+        onClick={() => setIsOpenFormDelete(!isOpenFormDelete)}
+        variant="outline"
+        className="ml-auto text-neutral-100  bg-rose-600 hover:bg-rose-600 hover:text-neutral-100 duration-700"
+      >
+        <Trash className="h-5 w-5 mr-1 " /> Hapus Pelatihan
+      </Button>
     </>
   );
 };

@@ -371,39 +371,6 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     } else {
       setIndexFormTab(indexFormTab + 1);
     }
-    // if (
-    //   !namaPelatihan ||
-    //   !penyelenggaraPelatihan ||
-    //   !detailPelatihan ||
-    //   !jenisPelatihan ||
-    //   !bidangPelatihan ||
-    //   !dukunganProgramTerobosan ||
-    //   !tanggalMulaiPelatihan ||
-    //   !tanggalBerakhirPelatihan ||
-    //   !hargaPelatihan ||
-    //   !instruktur ||
-    //   !fotoPelatihan ||
-    //   !status ||
-    //   !memoPusat ||
-    //   !silabusPelatihan ||
-    //   !lokasiPelatihan ||
-    //   !pelaksanaanPelatihan ||
-    //   !ujiKompetensi ||
-    //   !kuotaPelatihan ||
-    //   !asalPelatihan ||
-    //   !jenisSertifikat ||
-    //   !ttdSertifikat ||
-    //   !noSertifikat
-    // ) {
-    //   Toast.fire({
-    //     icon: "error",
-    //     title: "Ups, inputan belum terisi",
-    //     text: "Pastikan semua data terisi dengan benar!",
-    //   });
-    // } else {
-    //   // Proceed to the next step
-    //   console.log("Form data is complete. Proceeding...");
-    // }
   };
 
   const handleFileChange = (e: any) => {
@@ -529,7 +496,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   }, []);
 
   return (
-    <section ref={elementRef} className="relative w-full">
+    <section ref={elementRef} className="relative w-full py-10">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
         <div className="pb-12 md:pb-20 flex items-center justify-center">
           {/* Form */}

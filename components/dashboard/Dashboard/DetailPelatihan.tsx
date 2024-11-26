@@ -21,28 +21,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HiLockClosed, HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
-import {
-  TbBook,
-  TbBookFilled,
-  TbBroadcast,
-  TbBuildingCommunity,
-  TbCalendarCheck,
-  TbCalendarDot,
-  TbCalendarExclamation,
-  TbCalendarSearch,
-  TbCalendarStats,
-  TbChartBubble,
-  TbChartDonut,
-  TbDatabase,
-  TbDatabaseEdit,
-  TbFileCertificate,
-  TbFileDigit,
-  TbFishChristianity,
-  TbMoneybag,
-  TbQrcode,
-  TbSchool,
-  TbTargetArrow,
-} from "react-icons/tb";
+import { TbSchool } from "react-icons/tb";
 import {
   IoIosBook,
   IoIosInformationCircle,
@@ -52,24 +31,6 @@ import {
   IoMdInformationCircleOutline,
 } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import { usePathname, useRouter } from "next/navigation";
 import { MdOutlineSaveAlt } from "react-icons/md";
@@ -94,6 +55,15 @@ import DeleteButton from "./Actions/DeleteButton";
 import CloseButton from "./Actions/CloseButton";
 import UploadSuratButton from "./Actions/UploadSuratButton";
 import GenerateNoSertifikatButton from "./Actions/GenerateNoSertifikatButton";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 function DetailPelatihan() {
   const paths = usePathname().split("/");
@@ -124,18 +94,28 @@ function DetailPelatihan() {
   }, []);
 
   return (
-    <section className="m-3">
-      <div className="flex flex-col">
-        <div className="flex flex-row gap-2 items-end justify-between pb-4 border-b border-b-gray-200">
-          <div className="flex flex-col">
-            <h1 className="text-3xl font-medium leading-[100%] font-calsans">
-              Detail Pelatihan
-            </h1>
-            <p className="font-medium text-gray-400 text-base">
-              Verifikasi, Monitoring, dan Lihat Data Peserta Pelatihan!
-            </p>
-          </div>
+    <section className="">
+      <div className="flex flex-col w-full">
+        <div className="flex flex-row gap-2 items-center">
+          <header
+            aria-label="page caption"
+            className="flex-row w-full flex h-20 items-center gap-2 bg-gray-100 border-t px-4"
+          >
+            <TbSchool className="text-3xl" />
+            <div className="flex flex-col">
+              <h1 id="page-caption" className="font-semibold text-lg">
+                Database Pelatihan
+              </h1>
+              <p className="font-medium text-gray-400 text-base">
+                Tambahkan data pelatihan yang ada di lembaga diklat mu!
+              </p>
+            </div>
+          </header>
+        </div>
+      </div>
 
+      <div className="flex flex-col m-3">
+        <div className="flex flex-row gap-2 items-end justify-between pb-4 border-b border-b-gray-200">
           {/* ACTIONS */}
           {pelatihan != null && (
             <div className={`w-fit flex items-center justify-center gap-1`}>
@@ -156,21 +136,13 @@ function DetailPelatihan() {
                 handleFetchingData={handleFetchDetailPelatihan}
               />
 
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href={`/admin/lemdiklat/pelatihan/${kodePelatihan}/peserta-pelatihan/${idPelatihan}`}
-                      className="ml-auto border rounded-full border-green-500  h-9 px-4 py-2  hover:bg-green-500 hover:text-white text-green-500 duration-700"
-                    >
-                      <HiUserGroup className="h-4 w-4 " />
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Peserta Pelatihan</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <Link
+                href={`/admin/pusat/pelatihan/${pelatihan.KodePelatihan}/peserta-pelatihan/${pelatihan.IdPelatihan}`}
+                className="  shadow-sm bg-green-400 hover:bg-green-400 text-neutral-100  hover:text-neutral-100 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2"
+              >
+                <HiUserGroup className="h-5 w-5 mr-1" />
+                Peserta Pelatihan
+              </Link>
 
               <GenerateNoSertifikatButton
                 idPelatihan={idPelatihan}
@@ -195,7 +167,7 @@ function DetailPelatihan() {
       </div>
 
       {pelatihan != null && (
-        <div className="mt-4 md:mt-6 2xl:mt-7.5 w-full">
+        <div className="px-4 w-full">
           <div className="w-full border border-gray-200 rounded-xl">
             <div className="bg-gray-100 p-4 w-full ">
               <h2 className="font-bold font-calsans text-xl">
@@ -278,7 +250,7 @@ function DetailPelatihan() {
       )}
 
       {pelatihan != null && (
-        <div className="mt-4 md:mt-6 2xl:mt-7.5 w-full">
+        <Card className="mt-4 md:mt-6 2xl:mt-7.5 w-full">
           <div className="w-full border border-gray-200 rounded-xl">
             <div className="bg-gray-100 p-4 w-full ">
               <h2 className="font-bold font-calsans text-xl">
@@ -312,7 +284,7 @@ function DetailPelatihan() {
               </tr>
             </table>
           </div>
-        </div>
+        </Card>
       )}
 
       {pelatihan != null && (

@@ -50,7 +50,7 @@ const GenerateNoSertifikatButton: React.FC<GenerateNoSertifikatButtonProps> = ({
   };
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
 
-  const handleGenerateSertifikat = async (id: string) => {
+  const handleGenerateSertifikat = async () => {
     setIsUploading(!isUploading);
     console.log({ ttdSertifikat });
     const formData = new FormData();
@@ -58,6 +58,7 @@ const GenerateNoSertifikatButton: React.FC<GenerateNoSertifikatButtonProps> = ({
 
     const updateData = new FormData();
     updateData.append("PemberitahuanDiterima", "Sedang diproses pusat");
+    updateData.append("StatusPenerbitan", "On Progress");
     if (beritaAcara != null) {
       updateData.append("BeritaAcara", beritaAcara);
     }
@@ -277,7 +278,7 @@ const GenerateNoSertifikatButton: React.FC<GenerateNoSertifikatButtonProps> = ({
               </AlertDialogCancel>
             )}
             <AlertDialogAction
-              onClick={(e) => handleGenerateSertifikat(idPelatihan)}
+              onClick={(e) => handleGenerateSertifikat()}
               disabled={isUploading}
               className={`${isUploading && "px-6"}`}
             >
@@ -287,102 +288,96 @@ const GenerateNoSertifikatButton: React.FC<GenerateNoSertifikatButtonProps> = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            {pelatihan.StatusApproval == "Selesai" ? (
-              pelatihan.NoSertifikat == "" ? (
-                <Button
-                  onClick={(e) => {
-                    setOpenFormSertifikat(true);
-                  }}
-                  variant="outline"
-                  className="ml-auto border  border-blue-600 rounded-full hover:bg-blue-600 duration-700 hover:text-white text-blue-600"
-                >
-                  <RiVerifiedBadgeFill className="h-4 w-4 " />
-                </Button>
-              ) : (
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="ml-auto border border-blue-600 rounded-full hover:bg-blue-600 duration-700 hover:text-white text-blue-600"
-                    >
-                      <RiVerifiedBadgeFill className="h-4 w-4 " />
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <div className="flex flex-col items-center justify-center w-full">
-                      <Image
-                        src={"/illustrations/web_13.jpg"}
-                        alt="Not Found"
-                        width={0}
-                        height={0}
-                        className="w-[400px]"
-                      />
-                      <AlertDialogHeader className="flex flex-col items-center justify-center text-center">
-                        <AlertDialogTitle>
-                          Penerbitan Sertifikat Pelatihan
-                        </AlertDialogTitle>
-                        <AlertDialogDescription className="-mt-2 text-center">
-                          Nomor sertifikat kamu telah digenerate, kamu tidak
-                          dapat mengatur ulang no sertifikatmu!
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                    </div>
+      {pelatihan.StatusApproval == "Selesai" ? (
+        pelatihan.NoSertifikat == "" ? (
+          <Button
+            onClick={(e) => {
+              setOpenFormSertifikat(true);
+            }}
+            variant="outline"
+            className="ml-auto bg-blue-600 hover:bg-blue-600 duration-700 text-neutral-100 hover:text-neutral-100"
+          >
+            <RiVerifiedBadgeFill className="h-5 w-5 mr-1 " /> Terbitkan
+            Sertifikat
+          </Button>
+        ) : (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="outline"
+                className="ml-auto bg-blue-600 hover:bg-blue-600 duration-700 text-neutral-100 hover:text-neutral-100"
+              >
+                <RiVerifiedBadgeFill className="h-5 w-5 mr-1 " /> Terbitkan
+                Sertifikat
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <div className="flex flex-col items-center justify-center w-full">
+                <Image
+                  src={"/illustrations/web_13.jpg"}
+                  alt="Not Found"
+                  width={0}
+                  height={0}
+                  className="w-[400px]"
+                />
+                <AlertDialogHeader className="flex flex-col items-center justify-center text-center">
+                  <AlertDialogTitle>
+                    Penerbitan Sertifikat Pelatihan
+                  </AlertDialogTitle>
+                  <AlertDialogDescription className="-mt-2 text-center">
+                    Nomor sertifikat kamu telah digenerate, kamu tidak dapat
+                    mengatur ulang no sertifikatmu!
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+              </div>
 
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction>Continue</AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              )
-            ) : (
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="ml-auto border border-blue-600 rounded-full hover:bg-blue-600 duration-700 hover:text-white text-blue-600"
-                  >
-                    <RiVerifiedBadgeFill className="h-4 w-4 " />
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <div className="flex flex-col items-center justify-center w-full">
-                    <Image
-                      src={"/illustrations/web_13.jpg"}
-                      alt="Not Found"
-                      width={0}
-                      height={0}
-                      className="w-[400px]"
-                    />
-                    <AlertDialogHeader className="flex flex-col items-center justify-center text-center">
-                      <AlertDialogTitle>
-                        Penerbitan Sertifikat Pelatihan
-                      </AlertDialogTitle>
-                      <AlertDialogDescription className="-mt-2 text-center">
-                        Dalam penerbitan sertifikat, diharapkan proses pelatihan
-                        sudah selesai dan mengirimkan bukti berupa berita acara
-                        ke pusat untuk didapatkan approval melakukan generate
-                        nomor sertifikat dan pengajuan penerbitan!
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                  </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction>Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )
+      ) : (
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="outline"
+              className="ml-auto bg-blue-600 hover:bg-blue-600 duration-700 hover:text-neutral-100 text-neutral-100"
+            >
+              <RiVerifiedBadgeFill className="h-5 w-5 mr-1 " /> Terbitkan
+              Sertifikat
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <div className="flex flex-col items-center justify-center w-full">
+              <Image
+                src={"/illustrations/web_13.jpg"}
+                alt="Not Found"
+                width={0}
+                height={0}
+                className="w-[400px]"
+              />
+              <AlertDialogHeader className="flex flex-col items-center justify-center text-center">
+                <AlertDialogTitle>
+                  Penerbitan Sertifikat Pelatihan
+                </AlertDialogTitle>
+                <AlertDialogDescription className="-mt-2 text-center">
+                  Dalam penerbitan sertifikat, diharapkan proses pelatihan sudah
+                  selesai dan mengirimkan bukti berupa berita acara ke pusat
+                  untuk didapatkan approval melakukan generate nomor sertifikat
+                  dan pengajuan penerbitan!
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+            </div>
 
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            )}
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Sertifikat</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction>Continue</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      )}
     </>
   );
 };

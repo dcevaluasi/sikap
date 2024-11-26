@@ -62,6 +62,7 @@ export function middleware(request: any) {
   if (!XSRF091) {
     const protectedPaths = [
       '/admin/lemdiklat/dashboard',
+      '/admin/pusat/dashboard',
       '/admin/lemdiklat/pelatihan',
       '/admin/lemdiklat/pelatihan/tambah-pelatihan',
       '/admin/lemdiklat/pelatihan/penerbitan-sttpl',

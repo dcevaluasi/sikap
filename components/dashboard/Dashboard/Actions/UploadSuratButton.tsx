@@ -171,39 +171,28 @@ const UploadSuratButton: React.FC<UploadSuratButtonProps> = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            {suratPemberitahuan != "" ? (
-              <Link
-                href={
-                  "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/suratPemberitahuan/" +
-                  suratPemberitahuan
-                }
-                target="_blank"
-                className="ml-auto border border-gray-600  bg-white shadow-sm hover:bg-neutral-100 hover:text-neutral-900 h-9 px-4 py-2 rounded-full"
-              >
-                <LucideFileCheck2 className="h-4 w-4 text-gray-600" />
-              </Link>
-            ) : (
-              <Button
-                onClick={() => {
-                  setIsOpenFormSuratPemberitahuan(
-                    !isOpenFormSuratPemberitahuan
-                  );
-                }}
-                variant="outline"
-                className="ml-auto border border-gray-600 rounded-full"
-              >
-                <FiUploadCloud className="h-4 w-4 text-gray-600" />
-              </Button>
-            )}
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Upload Surat Pemberitahuan</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      {suratPemberitahuan != "" ? (
+        <Link
+          href={
+            "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/suratPemberitahuan/" +
+            suratPemberitahuan
+          }
+          target="_blank"
+          className="ml-auto bg-gray-600 shadow-sm hover:bg-gray-600 hover:text-neutral-100 h-9 px-4 py-2 "
+        >
+          <LucideFileCheck2 className="h-5 w-5 mr-1" />
+        </Link>
+      ) : (
+        <Button
+          onClick={() => {
+            setIsOpenFormSuratPemberitahuan(!isOpenFormSuratPemberitahuan);
+          }}
+          variant="outline"
+          className="ml-auto bg-gray-600 shadow-sm hover:bg-gray-600 hover:text-neutral-100 text-neutral-100"
+        >
+          <FiUploadCloud className="h-5 w-5 mr-1" /> Upload Surat Pemberitahuan
+        </Button>
+      )}
     </>
   );
 };

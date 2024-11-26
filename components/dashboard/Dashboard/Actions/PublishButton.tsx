@@ -133,25 +133,16 @@ const PublishButton: React.FC<PublishButtonProps> = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => {
-                setSelectedStatus(statusPelatihan);
-                setIsOpenFormPublishedPelatihan(!isOpenFormPublishedPelatihan);
-              }}
-              variant="outline"
-              className="ml-auto border rounded-full border-purple-600 hover:bg-purple-600 hover:text-white text-purple-600 duration-700"
-            >
-              <TbBroadcast className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Publish</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Button
+        onClick={() => {
+          setSelectedStatus(statusPelatihan);
+          setIsOpenFormPublishedPelatihan(!isOpenFormPublishedPelatihan);
+        }}
+        variant="outline"
+        className="ml-auto hover:text-neutral-100 hover:bg-purple-600 text-neutral-100 bg-purple-600 duration-700"
+      >
+        <TbBroadcast className="h-5 w-5 mr-1" /> Publish
+      </Button>
     </>
   );
 };

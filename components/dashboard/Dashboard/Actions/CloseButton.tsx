@@ -144,9 +144,9 @@ const CloseButton: React.FC<CloseButtonProps> = ({
                 setOpenFormTutupPelatihan(!openFormTutupPelatihan);
               }}
               variant="outline"
-              className="ml-auto border rounded-full border-yellow-400 hover:bg-yellow-400 hover:text-white text-yellow-400 duration-700"
+              className="ml-auto  hover:bg-yellow-300 bg-yellow-300 hover:text-neutral-800 text-neutral-800 duration-700"
             >
-              <HiLockClosed className="h-5 w-4 " />
+              <HiLockClosed className="h-5 w-5 mr-1 " /> Edit Pelatihan
             </Button>
           </TooltipTrigger>
           <TooltipContent>

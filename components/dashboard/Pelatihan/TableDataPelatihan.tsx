@@ -1,13 +1,14 @@
 import React, { ReactElement, useState } from "react";
 import TableData from "../Tables/TableData";
 import {
+  RiInformationFill,
   RiRadioButtonLine,
   RiShipLine,
   RiVerifiedBadgeFill,
 } from "react-icons/ri";
 
-import { LucideFileCheck2, LucidePodcast, TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import {
   Card,
   CardContent,
@@ -16,12 +17,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
 
 import {
   Sheet,
@@ -78,58 +73,33 @@ import {
   TbSchool,
   TbTargetArrow,
 } from "react-icons/tb";
-import {
-  IoIosBook,
-  IoIosInformationCircle,
-  IoMdBook,
-  IoMdClose,
-  IoMdGlobe,
-  IoMdInformationCircleOutline,
-} from "react-icons/io";
-import { FiUploadCloud } from "react-icons/fi";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+
 import { useRouter } from "next/navigation";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
 import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
-import {
-  PiFilePdf,
-  PiMicrosoftExcelLogoFill,
-  PiStampLight,
-} from "react-icons/pi";
+import { PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PelatihanMasyarakat } from "@/types/product";
-import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
 
 import { convertDate } from "@/utils";
 import Cookies from "js-cookie";
-import { Progress } from "@/components/ui/progress";
-import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
+
 import Link from "next/link";
 import { elautBaseUrl } from "@/constants/urls";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-} from "@/components/ui/select";
+
 import { HashLoader } from "react-spinners";
+import { Input } from "@/components/ui/input";
+import { generateTanggalPelatihan } from "@/utils/text";
+import { MateriButton, PublishButton } from "../Dashboard/Actions";
+import UploadSuratButton from "../Dashboard/Actions/UploadSuratButton";
+import GenerateNoSertifikatButton from "../Dashboard/Actions/GenerateNoSertifikatButton";
+import CloseButton from "../Dashboard/Actions/CloseButton";
+import DeleteButton from "../Dashboard/Actions/DeleteButton";
 
 const TableDataPelatihan: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -137,36 +107,20 @@ const TableDataPelatihan: React.FC = () => {
   const [showCertificateSetting, setShowCertificateSetting] =
     React.useState<boolean>(false);
 
-  const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-  ];
-
-  const chartConfig = {
-    desktop: {
-      label: "Desktop",
-      color: "#2563eb",
-    },
-    mobile: {
-      label: "Mobile",
-      color: "#7A1CAC",
-    },
-  } satisfies ChartConfig;
-
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
 
+  // COUNTER
+  const [countOnProgress, setCountOnProgress] = React.useState<number>(0);
+  const [countDone, setCountDone] = React.useState<number>(0);
+
   const handleFetchingPublicTrainingData = async () => {
     setIsFetching(true);
     try {
       const response: AxiosResponse = await axios.get(
-        `${baseUrl}/lemdik/getPelatihanAdmin?id_lemdik=${Cookies.get(
+        `${elautBaseUrl}/lemdik/getPelatihanAdmin?id_lemdik=${Cookies.get(
           "IDLemdik"
         )}`,
         {
@@ -175,6 +129,18 @@ const TableDataPelatihan: React.FC = () => {
           },
         }
       );
+
+      // Count statuses
+      const onProgressCount = response?.data!.data!.filter(
+        (item: any) => item.StatusPenerbitan === "On Progress"
+      ).length;
+      const doneCount = response?.data!.data!.filter(
+        (item: any) => item.StatusPenerbitan === "Done"
+      ).length;
+
+      // Update state with counts
+      setCountOnProgress(onProgressCount);
+      setCountDone(doneCount);
       console.log("PELATIHAN BY LEMDIK: ", response);
       setData(response.data.data);
 
@@ -191,190 +157,14 @@ const TableDataPelatihan: React.FC = () => {
     (item: PelatihanMasyarakat) => item.Status === "Publish"
   ).length;
 
-  const handleUpdatePublishPelatihanToELAUT = async (
-    id: number,
-    status: string
-  ) => {
-    const formData = new FormData();
-    formData.append("Status", status);
-    try {
-      const response = await axios.put(
-        `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-          },
-        }
-      );
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
-      });
-      console.log("UPDATE PELATIHAN: ", response);
-      handleFetchingPublicTrainingData();
-    } catch (error) {
-      console.error("ERROR UPDATE PELATIHAN: ", error);
-      Toast.fire({
-        icon: "success",
-        title: `Gagal mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
-      });
-      handleFetchingPublicTrainingData();
-    }
-  };
-
-  const handleUpdateClosePelatihanELAUT = async (
-    id: number,
-    status: string
-  ) => {
-    if (
-      fileSuratPemberitahuan !=
-      "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/suratPemberitahuan/"
-    ) {
-      const formData = new FormData();
-      formData.append("StatusApproval", status);
-      try {
-        const response = await axios.put(
-          `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-            },
-          }
-        );
-        Toast.fire({
-          icon: "success",
-          title: `Berhasil menutup kelas pelatihan, kamu dapat melanjutkan proses selanjutnya!`,
-        });
-        console.log("UPDATE PELATIHAN: ", response);
-        handleFetchingPublicTrainingData();
-      } catch (error) {
-        console.error("ERROR UPDATE PELATIHAN: ", error);
-        Toast.fire({
-          icon: "error",
-          title: `Gagal menutup kelas pelatihan, kamu dapat melanjutkan proses selanjutnya!`,
-        });
-        handleFetchingPublicTrainingData();
-      }
-    } else {
-      Toast.fire({
-        icon: "error",
-        title: `Gagal menutup kelas pelatihan, surat pemberitahuan belum diupload!`,
-      });
-    }
-  };
-
   /* ================================= HANDLING PENERBITAN SERTIFIKAT ====================================== */
   const [beritaAcara, setBeritaAcara] = React.useState<File | null>(null);
-  const handleFileChange = (e: any) => {
-    setBeritaAcara(e.target.files[0]);
-  };
-  const handleGenerateSertifikat = async (id: number) => {
-    setIsUploading(!isUploading);
-    console.log({ ttdSertifikat });
-    const formData = new FormData();
-    formData.append("TtdSertifikat", ttdSertifikat);
 
-    const updateData = new FormData();
-    if (beritaAcara != null) {
-      updateData.append("BeritaAcara", beritaAcara);
-    }
-
-    try {
-      const response = await axios.post(
-        `${baseUrl}/lemdik/PublishSertifikat?id=${selectedIdPelatihanSertifikat}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      const uploadBeritaAcaraResponse = await axios.put(
-        `${baseUrl}/lemdik/UpdatePelatihan?id=${selectedIdPelatihanSertifikat}`,
-        updateData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil mengupload file berita acara dan penandatangan, tunggu proses approval dari pusat!`,
-      });
-      setIsUploading(!isUploading);
-      handleFetchingPublicTrainingData();
-      setOpenFormSertifikat(!openFormSertifikat);
-      console.log("UPLOAD BERITA ACARA: ", uploadBeritaAcaraResponse);
-      // handleFetchingPublicTrainingData();
-    } catch (error) {
-      console.error("ERROR GENERATE SERTIFIKAT: ", error);
-      Toast.fire({
-        icon: "error",
-        title: `Gagal mengupload file berita acara dan penandatangan!`,
-      });
-      setIsUploading(!isUploading);
-      setOpenFormSertifikat(!openFormSertifikat);
-      handleFetchingPublicTrainingData();
-    }
-  };
   /* ================================= HANDLING PENERBITAN SERTIFIKAT ====================================== */
 
   const [isOpenFormMateri, setIsOpenFormMateri] =
     React.useState<boolean>(false);
   const [selectedId, setSelectedId] = React.useState<number>(0);
-
-  const [materiPelatihan, setMateriPelatihan] = React.useState<File | null>(
-    null
-  );
-  const handleFileMateriChange = (e: any) => {
-    setMateriPelatihan(e.target.files[0]);
-  };
-
-  const handleUploadMateriPelatihan = async (id: number) => {
-    const data = new FormData();
-    if (materiPelatihan != null) {
-      data.append("file", materiPelatihan);
-    }
-
-    data.append("IdPelatihan", id.toString());
-
-    try {
-      const response = await axios.post(
-        `${baseUrl}/lemdik/exportModulePelatihan`,
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-          },
-        }
-      );
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil menambahkan materi pelatihan!`,
-      });
-      handleFetchingPublicTrainingData();
-      console.log("MATERI PELATIHAN: ", response);
-      setIsOpenFormMateri(!isOpenFormMateri);
-    } catch (error) {
-      console.error("ERROR GENERATE SERTIFIKAT: ", error);
-      Toast.fire({
-        icon: "success",
-        title: `Gagal menambahkan materi pelatihan!`,
-      });
-      handleFetchingPublicTrainingData();
-      setIsOpenFormMateri(!isOpenFormMateri);
-    }
-  };
-
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
 
   const [sertifikatUntukPelatihan, setSertifikatUntukPelatihan] =
     React.useState("");
@@ -383,50 +173,6 @@ const TableDataPelatihan: React.FC = () => {
 
   const [isOpenFormPublishedPelatihan, setIsOpenFormPublishedPelatihan] =
     React.useState<boolean>(false);
-
-  const handleDelete = async (
-    id: number,
-    pesertaPelatihan: number,
-    sertifikat: string
-  ) => {
-    if (pesertaPelatihan > 0) {
-      Toast.fire({
-        icon: "error",
-        title:
-          "Ups, pelatihan tidak dapat dihapus karena sudah ada yang mendaftar!",
-      });
-    } else if (sertifikat != "") {
-      Toast.fire({
-        icon: "error",
-        title:
-          "Ups, pelatihan sudah terbit nomor sertifikatnya, tidak dapat dihapus!",
-      });
-    } else {
-      try {
-        const response = await axios.delete(
-          `${elautBaseUrl}/lemdik/deletePelatihan?id=${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-            },
-          }
-        );
-        console.log(response);
-        Toast.fire({
-          icon: "success",
-          title: "Berhasil menghapus pelatihan dari database, sobat elaut!",
-        });
-        handleFetchingPublicTrainingData();
-      } catch (error) {
-        console.error({ error });
-        Toast.fire({
-          icon: "error",
-          title: "Ups, pelatihan tidak dapat dihapus karena kesalahan server!",
-        });
-        handleFetchingPublicTrainingData();
-      }
-    }
-  };
 
   const [openFormTutupPelatihan, setOpenFormTutupPelatihan] =
     React.useState(false);
@@ -445,9 +191,6 @@ const TableDataPelatihan: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = React.useState("");
 
   const router = useRouter();
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
 
   const [isOpenFormSuratPemberitahuan, setIsOpenFormSuratPemberitahuan] =
     React.useState<boolean>(false);
@@ -501,156 +244,6 @@ const TableDataPelatihan: React.FC = () => {
   const [fileSuratPemberitahuan, setFileSuratPemberitahuan] =
     React.useState<string>("");
 
-  const columns: ColumnDef<PelatihanMasyarakat>[] = [
-    {
-      accessorKey: "KodePelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`text-gray-900 font-semibold w-full`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            No
-            <ArrowUpDown className="ml-1 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`text-center uppercase w-full`}>{row.index + 1}</div>
-      ),
-    },
-    {
-      accessorKey: "NamaPelatihan",
-
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`p-0 !text-left w-[270px] flex items-center justify-start text-gray-900 font-semibold`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Pelatihan
-            <TbSchool className="ml-1 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <Link
-          href={`/admin/lemdiklat/pelatihan/detail/${row.original.KodePelatihan}/${row.original.IdPelatihan}`}
-          className={`${"ml-0"} text-left capitalize bg-gray-100 cursor-pointer`}
-        >
-          <p className="text-xs text-gray-400 mt-2 leading-[100%] mb-1">
-            {" "}
-            {row.getValue("KodePelatihan")} • {row.original.BidangPelatihan} •
-            Mendukung Program Terobosan {row.original.DukunganProgramTerobosan}
-          </p>
-          <p className="text-base font-semibold tracking-tight leading-none">
-            {row.getValue("NamaPelatihan")}
-          </p>
-          <div className={`${"ml-0"} text-left capitalize mt-1`}>
-            <p className="text-sm  font-medium capitalize ">
-              {" "}
-              <span className="flex items-center gap-1 leading-[105%]">
-                <TbTargetArrow />
-                <span>{row.original?.PelaksanaanPelatihan}</span>{" "}
-              </span>
-              <span className="flex items-center gap-1 leading-[105%]">
-                <TbCalendarCheck />
-                <span className="">
-                  {" "}
-                  <span>
-                    {" "}
-                    {convertDate(row.original.TanggalMulaiPendaftaran)}{" "}
-                  </span>
-                  <span className="lowercase">s.d</span>{" "}
-                  <span>
-                    {" "}
-                    {convertDate(row?.original?.TanggalAkhirPendaftaran)}
-                  </span>
-                </span>
-              </span>
-              <span className="flex items-center gap-1 leading-[105%]">
-                <HiUserGroup className="text-base" />
-                <span>
-                  Asal peserta merupakan {row.original?.AsalPelatihan} dengan
-                  kuota pendaftar{" "}
-                  <span className="font-semibold">
-                    {row.original.KoutaPelatihan}
-                  </span>
-                </span>{" "}
-              </span>
-              {/* <div
-                onClick={(e) => {
-                  router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
-                }}
-                className="flex gap-2 px-3 mt-3 text-sm hover:bg-blue-500 duration-700 hover:text-white items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-              >
-                <FiUploadCloud />
-                Upload Surat Pemberitahuan
-              </div> */}
-              {/* <span className="w-full flex flex-col ">
-                <span className="text-xs  font-medium capitalize leading-[100%] mt-1 mb-1">
-                  Realisasi Pendaftar
-                </span>
-                <Progress
-                  value={
-                    row.original.UserPelatihan.length *
-                    (100 / parseInt(row.original.KoutaPelatihan))
-                  }
-                  max={parseInt(row.original.KoutaPelatihan)}
-                  className="w-[80%]"
-                />
-                <p className="text-xs text-gray-400 capitalize">
-                  {" "}
-                  {row.original.UserPelatihan.length}/
-                  {parseInt(row.original.KoutaPelatihan)}
-                </p>
-              </span> */}
-            </p>
-          </div>
-        </Link>
-      ),
-    },
-    {
-      accessorKey: "KodePelatihan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`text-gray-900 font-semibold w-[300px]`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Status
-            <LucidePodcast className="ml-1 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`text-center uppercase w-[300px]`}>{row.index + 1}</div>
-      ),
-    },
-  ];
-
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
-  });
-
   const [
     isShowInformationSuratPemberitahuan,
     setIsShowInformationSuratPemberitahuan,
@@ -664,21 +257,45 @@ const TableDataPelatihan: React.FC = () => {
   const [filterSelectedJenisPelatihan, setFilterSelectedJenisPelatihan] =
     React.useState("");
 
-  const filteredData = React.useMemo(() => {
-    return data.filter((item) =>
-      item.JenisPelatihan.includes(filterSelectedJenisPelatihan)
-    );
-  }, [filterSelectedJenisPelatihan, data]);
-
   React.useEffect(() => {
     handleFetchingPublicTrainingData();
   }, []);
 
-  const urlTemplateMateriPelatihan =
-    "https://docs.google.com/spreadsheets/d/115Oytsh0Sv8kneobA-MNmsHWh87PNC56/export?format=xlsx";
+  // STATUS FILTER
+  const [selectedStatusFilter, setSelectedStatusFilter] =
+    React.useState<string>("All");
+
+  // SEARCHING
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const filteredData = data.filter((pelatihan) => {
+    const matchesSearchQuery =
+      pelatihan.NamaPelatihan.toLowerCase().includes(
+        searchQuery.toLowerCase()
+      ) ||
+      pelatihan.BidangPelatihan.toLowerCase().includes(
+        searchQuery.toLowerCase()
+      ) ||
+      pelatihan.PenyelenggaraPelatihan.toLowerCase().includes(
+        searchQuery.toLowerCase()
+      );
+
+    var matchesStatus;
+
+    if (selectedStatusFilter == "Perlu Di TTD") {
+      matchesStatus = pelatihan!.StatusPenerbitan === "On Progress";
+    } else if (selectedStatusFilter == "Sudah Di TTD") {
+      matchesStatus = pelatihan!.StatusPenerbitan === "Done";
+    } else {
+      matchesStatus =
+        selectedStatusFilter === "All" ||
+        pelatihan!.StatusPenerbitan === selectedStatusFilter;
+    }
+
+    return matchesSearchQuery && matchesStatus;
+  });
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+    <div className="rounded-sm  pb-5  shadow-default -mt-10">
       {showFormAjukanPelatihan ? (
         <>
           {/* Header Tabel Data Pelatihan */}
@@ -808,133 +425,291 @@ const TableDataPelatihan: React.FC = () => {
         </>
       ) : (
         <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Statistik Pelatihan */}
-            <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-primary">Total Pelatihan</p>
-                  <p className="text-sm font-medium">{data.length} pelatihan</p>
-                </div>
-              </div>
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-secondary">
-                    Total Publish Umum
-                  </p>
-                  <p className="text-sm font-medium">
-                    {publishedData} pelatihan
-                  </p>
-                </div>
-              </div>
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-400"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-green-400">Total Selesai</p>
-                  <p className="text-sm font-medium">
-                    {data?.reduce(
-                      (total: number, item: PelatihanMasyarakat) => {
-                        // Check if StatusApprovala is "Selesai"
-                        if (item.StatusApproval === "Selesai") {
-                          return total + 1;
-                        }
-                        return total;
-                      },
-                      0
-                    ) || 0}{" "}
-                    pelatihan
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <nav className="bg-gray-100 flex p-4">
+            <section
+              aria-labelledby="ticket-statistics-tabs-label"
+              className="pb-2"
+            >
+              <ul className="flex">
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("All")}
+                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-fit ${
+                      selectedStatusFilter === "All"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    <p className="font-semibold text-lg">{data!.length}</p>
+                    <p
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "All"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      TOTAL PELATIHAN
+                    </p>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("Perlu Di TTD")}
+                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-fit ${
+                      selectedStatusFilter === "Perlu Di TTD"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    <p className="font-semibold text-lg">{countOnProgress}</p>
+                    <p
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "Perlu Di TTD"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      Belum Dipublish
+                    </p>
+                  </button>
+                </li>
 
-          {/* List Data Pelatihan */}
-          <div>
-            <div id="chartOne" className="-ml-5"></div>
-            <div className="flex w-full items-center mb-2">
-              <div className="flex w-full gap-1 items-start">
-                {/* ==================== FILTERING BY JENIS PELATIHAN ==================== */}
-                <Select
-                  value={filterSelectedJenisPelatihan}
-                  onValueChange={(value) =>
-                    setFilterSelectedJenisPelatihan(value)
-                  }
-                >
-                  <SelectTrigger className="w-[160px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-full">
-                      <FaRupiahSign />
-                      {filterSelectedJenisPelatihan != ""
-                        ? filterSelectedJenisPelatihan
-                        : "Jenis Pelatihan"}
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("Perlu Di TTD")}
+                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-fit ${
+                      selectedStatusFilter === "Perlu Di TTD"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    <p className="font-semibold text-lg">{countOnProgress}</p>
+                    <p
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "Perlu Di TTD"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      Pendaftaran
+                    </p>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("Perlu Di TTD")}
+                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-fit ${
+                      selectedStatusFilter === "Perlu Di TTD"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    <p className="font-semibold text-lg">{countOnProgress}</p>
+                    <p
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "Perlu Di TTD"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      Telah Selesai
+                    </p>
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("Sudah Di TTD")}
+                    className={`focus:outline-none p-2 rounded-r-md border border-r-1 flex flex-col items-center w-fit ${
+                      selectedStatusFilter === "Sudah Di TTD"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
+                  >
+                    <p className="font-semibold text-lg">{countDone}</p>
+                    <p
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "Sudah Di TTD"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
+                    >
+                      Proses Penerbitan
+                    </p>
+                  </button>
+                </li>
+              </ul>
+            </section>
+          </nav>
+          <section className="px-4 -mt-4 w-full">
+            <Tabs defaultValue="account" className="w-full">
+              <TabsList className={`grid w-full grid-cols-2`}>
+                <TabsTrigger value="account">Daftar Pelatihan</TabsTrigger>
+                <TabsTrigger value="password">Buat Pelatihan Baru</TabsTrigger>
+              </TabsList>
+              <TabsContent value="account">
+                <div className="flex flex-col gap-1">
+                  <div className="mb-1">
+                    <Input
+                      type="text"
+                      placeholder="Cari berdasarkan Nama, Bidang, dan Penyelenggara Pelatihan"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full text-sm"
+                    />
+                  </div>
+                  {filteredData.length == 0 ? (
+                    <div className="pt-12 md:pt-20 flex flex-col items-center">
+                      <Image
+                        src={"/illustrations/not-found.png"}
+                        alt="Not Found"
+                        width={0}
+                        height={0}
+                        className="w-[400px]"
+                      />
+                      <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
+                        <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                          Belum Pengajuan Penerbitan
+                        </h1>
+                        <div className="text-gray-600 text-sm text-center  max-w-md">
+                          Pengajuan penerbitan sertifikat pelatihan/bimbingan
+                          teknis yang ditandatangani oleh Kepala Pusat Pelatihan
+                          KP belum ada!
+                        </div>
+                      </div>
                     </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Jenis</SelectLabel>
-                      <SelectItem value="Reguler">Reguler</SelectItem>
-                      <SelectItem value="Aspirasi">Aspirasi</SelectItem>
-                      <SelectItem value="PNBP/BLU">PNBP/BLU</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
+                  ) : (
+                    filteredData.map((pelatihan, index) => (
+                      <Card key={index}>
+                        <CardHeader>
+                          <CardTitle>{pelatihan!.NamaPelatihan}</CardTitle>
+                          <CardDescription>
+                            {" "}
+                            {pelatihan!.Program} •{" "}
+                            {pelatihan!.PenyelenggaraPelatihan}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <div className="ml-0 text-left capitalize -mt-6">
+                            <div className="ml-0 text-left mt-1 text-neutral-500 ">
+                              <p className="text-sm ">
+                                <span className="flex items-center gap-1 leading-[105%]">
+                                  <TbTargetArrow className="text-lg" />
+                                  <span>
+                                    Lokasi Pelatihan :{" "}
+                                    {pelatihan!.LokasiPelatihan}
+                                  </span>
+                                </span>
+                                <span className="flex items-center gap-1 leading-[105%]">
+                                  <TbCalendarCheck className="text-lg" />
+                                  <span>
+                                    Waktu Pelaksanaan :{" "}
+                                    {generateTanggalPelatihan(
+                                      pelatihan!.TanggalMulaiPelatihan
+                                    )}{" "}
+                                    s.d{" "}
+                                    {generateTanggalPelatihan(
+                                      pelatihan!.TanggalBerakhirPelatihan
+                                    )}
+                                  </span>
+                                </span>
 
-              <div className="w-full flex justify-end gap-2">
-                <div
-                  onClick={(e) => {
-                    router.push("/admin/lemdiklat/pelatihan/tambah-pelatihan");
-                  }}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <FiUploadCloud />
-                  Tambah Database Pelatihan
+                                <span className="flex items-center gap-1 leading-[105%]">
+                                  <HiUserGroup className="text-base" />
+                                  <span>
+                                    Jumlah peserta pelatihan :{" "}
+                                    {pelatihan!.UserPelatihan.length}/
+                                    {pelatihan!.KoutaPelatihan}
+                                  </span>
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        </CardContent>
+                        <CardFooter>
+                          <div className="flex items-center justify-center gap-1 flex-wrap  -mt-2">
+                            <Link
+                              href={`/admin/lemdiklat/pelatihan/detail/${pelatihan.KodePelatihan}/${pelatihan.IdPelatihan}`}
+                              className="border border-neutral-200  shadow-sm  inline-flex items-center justify-center whitespace-nowrap  text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-gray-400 hover:bg-gray-400 hover:text-white text-white rounded-md"
+                            >
+                              <RiInformationFill className="h-5 w-5 mr-1" />
+                              Lihat Detail
+                            </Link>
+
+                            <Link
+                              href={`/admin/pusat/pelatihan/${pelatihan.KodePelatihan}/peserta-pelatihan/${pelatihan.IdPelatihan}`}
+                              className="  shadow-sm bg-green-400 hover:bg-green-400 text-neutral-100  hover:text-neutral-100 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2"
+                            >
+                              <HiUserGroup className="h-5 w-5 mr-1" />
+                              Peserta Pelatihan
+                            </Link>
+
+                            <MateriButton
+                              idPelatihan={pelatihan!.IdPelatihan.toString()}
+                              handleFetchingData={
+                                handleFetchingPublicTrainingData
+                              }
+                            />
+
+                            <DeleteButton
+                              idPelatihan={pelatihan!.IdPelatihan.toString()}
+                              pelatihan={pelatihan}
+                              handleFetchingData={
+                                handleFetchingPublicTrainingData
+                              }
+                            />
+
+                            <CloseButton
+                              idPelatihan={pelatihan!.IdPelatihan.toString()}
+                              statusPelatihan={pelatihan?.StatusApproval ?? ""}
+                              handleFetchingData={
+                                handleFetchingPublicTrainingData
+                              }
+                            />
+
+                            <GenerateNoSertifikatButton
+                              idPelatihan={pelatihan!.IdPelatihan.toString()}
+                              pelatihan={pelatihan!}
+                              handleFetchingData={
+                                handleFetchingPublicTrainingData
+                              }
+                            />
+
+                            <PublishButton
+                              statusPelatihan={pelatihan?.Status ?? ""}
+                              idPelatihan={pelatihan!.IdPelatihan.toString()}
+                              handleFetchingData={
+                                handleFetchingPublicTrainingData
+                              }
+                            />
+
+                            <UploadSuratButton
+                              idPelatihan={pelatihan!.IdPelatihan.toString()}
+                              handleFetchingData={
+                                handleFetchingPublicTrainingData
+                              }
+                              suratPemberitahuan={
+                                pelatihan?.SuratPemberitahuan ?? ""
+                              }
+                            />
+                          </div>
+                        </CardFooter>
+                      </Card>
+                    ))
+                  )}
                 </div>
-              </div>
-            </div>
+              </TabsContent>
 
-            <TableData
-              isLoading={isFetching}
-              columns={columns}
-              table={table}
-              type={"short"}
-            />
-            <div className="flex items-center justify-end space-x-2 py-4">
-              <div className="text-muted-foreground flex-1 text-sm">
-                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-              </div>
-              <div className="space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          </div>
+              <TabsContent value="password">
+                <Card>
+                  <CardContent>
+                    <FormPelatihan edit={false} />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </section>
         </>
       )}
     </div>
