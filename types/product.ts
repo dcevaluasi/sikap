@@ -116,7 +116,7 @@ export type DetailPelatihanMasyarakat = {
   StatusApproval: string
   PenerbitanSertifikatDiterima: string
   TanggalMulaiPendaftaran: string
-  TanggalAkhirrPendaftaran: string
+  TanggalAkhirPendaftaran: string
   PemberitahuanDiterima: string
   Program: string;
   JenisProgram: string;
