@@ -238,7 +238,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
   */
   const handlePostingPublicTrainingData = async (e: any) => {
     e.preventDefault();
-    setIsUploading(!isUploading);
+    setIsUploading(true);
     console.log({ fotoPelatihan });
 
     logAllStates();
@@ -297,7 +297,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
         icon: "success",
         title: `Berhasil menambahkan pelatihan baru!`,
       });
-      setIsUploading(!isUploading);
+      setIsUploading(false);
       resetAllStateToEmptyString();
       router.push("/admin/lemdiklat/pelatihan");
     } catch (error) {
@@ -306,7 +306,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
         icon: "error",
         title: `Gagal menambahkan pelatihan baru!`,
       });
-      setIsUploading(!isUploading);
+      setIsUploading(false);
       throw error;
     }
   };
@@ -321,13 +321,10 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
         jenisPelatihan == "" ||
         bidangPelatihan == "" ||
         dukunganProgramTerobosan == "" ||
-        tanggalMulaiPelatihan == "" ||
-        tanggalBerakhirPelatihan == "" ||
         lokasiPelatihan == "" ||
         pelaksanaanPelatihan == "" ||
         jenisSertifikat == "" ||
-        !fotoPelatihan ||
-        !silabusPelatihan
+        !fotoPelatihan
       ) {
         if (elementRef.current) {
           elementRef.current.scrollTo({
@@ -495,6 +492,10 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
     }
   }, []);
 
+  const [prosesPendaftaran, setProsesPendaftaran] = React.useState(false);
+  const [waktuPelaksanaanPelatihan, setWaktuPelaksanaanPelatihan] =
+    React.useState(false);
+
   return (
     <section ref={elementRef} className="relative w-full py-10">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
@@ -633,109 +634,174 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                         </div>
                       </div>
 
-                      <div className="flex gap-2 w-full">
-                        <div className="flex flex-wrap -mx-3 mb-1 w-full">
-                          <div className="w-full px-3">
-                            <label
-                              className="block text-gray-800 text-sm font-medium mb-1"
-                              htmlFor="kodePelatihan"
-                            >
-                              Tanggal Mulai Pendaftaran{" "}
-                              <span className="text-red-600">*</span>
-                            </label>
-                            <input
-                              id="tanggalMulaiPelatihan"
-                              type="date"
-                              className="form-input w-full text-black border-gray-300 rounded-md"
-                              required
-                              min={new Date().toISOString().split("T")[0]}
-                              value={tanggalMulaiPendaftaran}
-                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                setTanggalMulaiPendaftaran(e.target.value)
+                      <div className="flex flex-col gap-2 w-full">
+                        <label
+                          className="block text-gray-800 text-sm font-medium"
+                          htmlFor="kodePelatihan"
+                        >
+                          Proses Pendaftaran
+                        </label>
+                        <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow -mt-1">
+                          <div>
+                            <Checkbox
+                              onCheckedChange={(e) =>
+                                setProsesPendaftaran(!prosesPendaftaran)
                               }
                             />
                           </div>
-                        </div>
-                        <div className="flex flex-wrap -mx-3 mb-1 w-full">
-                          <div className="w-full px-3">
-                            <label
-                              className="block text-gray-800 text-sm font-medium mb-1"
-                              htmlFor="namaPelatihan"
-                            >
-                              Tanggal Berakhir Pendaftaran{" "}
-                              <span className="text-red-600">*</span>
-                            </label>
-                            <input
-                              id="tanggalBerakhirPelatihan"
-                              type="date"
-                              className="form-input w-full text-black border-gray-300 rounded-md"
-                              required
-                              min={
-                                tanggalMulaiPendaftaran ||
-                                new Date().toISOString().split("T")[0]
-                              }
-                              value={tanggalBerakhirPendaftaran}
-                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                setTanggalBerakhirPendaftaran(e.target.value)
-                              }
-                              disabled={!tanggalMulaiPendaftaran}
-                            />
+                          <div className="space-y-1 leading-none">
+                            <label>Pendaftaran Peserta</label>
+                            <p className="text-xs text-gray-600">
+                              Checked jika terdapat proses pendaftaran dan
+                              tentukan tanggal Pendaftaran untuk pelatihan yang
+                              dibuka!
+                            </p>
                           </div>
                         </div>
+                        {prosesPendaftaran && (
+                          <div className="flex gap-2 w-full">
+                            <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                              <div className="w-full px-3">
+                                <label
+                                  className="block text-gray-800 text-sm font-medium mb-1"
+                                  htmlFor="kodePelatihan"
+                                >
+                                  Tanggal Mulai Pendaftaran{" "}
+                                  <span className="text-red-600">*</span>
+                                </label>
+                                <input
+                                  id="tanggalMulaiPelatihan"
+                                  type="date"
+                                  className="form-input w-full text-black border-gray-300 rounded-md"
+                                  required
+                                  min={new Date().toISOString().split("T")[0]}
+                                  value={tanggalMulaiPendaftaran}
+                                  onChange={(
+                                    e: ChangeEvent<HTMLInputElement>
+                                  ) =>
+                                    setTanggalMulaiPendaftaran(e.target.value)
+                                  }
+                                />
+                              </div>
+                            </div>
+
+                            <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                              <div className="w-full px-3">
+                                <label
+                                  className="block text-gray-800 text-sm font-medium mb-1"
+                                  htmlFor="namaPelatihan"
+                                >
+                                  Tanggal Berakhir Pendaftaran{" "}
+                                  <span className="text-red-600">*</span>
+                                </label>
+                                <input
+                                  id="tanggalBerakhirPelatihan"
+                                  type="date"
+                                  className="form-input w-full text-black border-gray-300 rounded-md"
+                                  required
+                                  min={
+                                    tanggalMulaiPendaftaran ||
+                                    new Date().toISOString().split("T")[0]
+                                  }
+                                  value={tanggalBerakhirPendaftaran}
+                                  onChange={(
+                                    e: ChangeEvent<HTMLInputElement>
+                                  ) =>
+                                    setTanggalBerakhirPendaftaran(
+                                      e.target.value
+                                    )
+                                  }
+                                  disabled={!tanggalMulaiPendaftaran}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
-                      <div className="flex gap-2 w-full">
-                        <div className="flex flex-wrap -mx-3 mb-1 w-full">
-                          <div className="w-full px-3">
-                            <label
-                              className="block text-gray-800 text-sm font-medium mb-1"
-                              htmlFor="kodePelatihan"
-                            >
-                              Tanggal Mulai Pelatihan{" "}
-                              <span className="text-red-600">*</span>
-                            </label>
-                            <input
-                              id="tanggalMulaiPelatihan"
-                              type="date"
-                              className="form-input w-full text-black border-gray-300 rounded-md"
-                              required
-                              min={
-                                tanggalBerakhirPendaftaran ||
-                                new Date().toISOString().split("T")[0]
-                              }
-                              value={tanggalMulaiPelatihan}
-                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                setTanggalMulaiPelatihan(e.target.value)
+                      <div className="flex flex-col gap-2 w-full mt-2 mb-1">
+                        <label
+                          className="block text-gray-800 text-sm font-medium"
+                          htmlFor="kodePelatihan"
+                        >
+                          Waktu Pelaksanaan
+                        </label>
+                        <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 shadow -mt-1">
+                          <div>
+                            <Checkbox
+                              onCheckedChange={(e) =>
+                                setWaktuPelaksanaanPelatihan(
+                                  !waktuPelaksanaanPelatihan
+                                )
                               }
                             />
                           </div>
-                        </div>
-                        <div className="flex flex-wrap -mx-3 mb-1 w-full">
-                          <div className="w-full px-3">
-                            <label
-                              className="block text-gray-800 text-sm font-medium mb-1"
-                              htmlFor="namaPelatihan"
-                            >
-                              Tanggal Berakhir Pelatihan{" "}
-                              <span className="text-red-600">*</span>
-                            </label>
-                            <input
-                              id="tanggalBerakhirPelatihan"
-                              type="date"
-                              className="form-input w-full text-black border-gray-300 rounded-md"
-                              required
-                              min={
-                                tanggalMulaiPelatihan ||
-                                new Date().toISOString().split("T")[0]
-                              }
-                              value={tanggalBerakhirPelatihan}
-                              onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                                setTanggalBerakhirPelatihan(e.target.value)
-                              }
-                              disabled={!tanggalMulaiPelatihan}
-                            />
+                          <div className="space-y-1 leading-none">
+                            <label>Waktu Pelaksanaan Pelatihan</label>
+                            <p className="text-xs text-gray-600">
+                              Checked jika waktu pelaksanaan pelatihan sudah
+                              ditentukan tanggal pastinya dan jika terdapat
+                              perubahan maka dapat dilakukan edit kemudian!
+                            </p>
                           </div>
                         </div>
+                        {waktuPelaksanaanPelatihan && (
+                          <div className="flex gap-2 w-full">
+                            <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                              <div className="w-full px-3">
+                                <label
+                                  className="block text-gray-800 text-sm font-medium mb-1"
+                                  htmlFor="kodePelatihan"
+                                >
+                                  Tanggal Mulai Pelatihan{" "}
+                                  <span className="text-red-600">*</span>
+                                </label>
+                                <input
+                                  id="tanggalMulaiPelatihan"
+                                  type="date"
+                                  className="form-input w-full text-black border-gray-300 rounded-md"
+                                  required
+                                  min={
+                                    tanggalBerakhirPendaftaran ||
+                                    new Date().toISOString().split("T")[0]
+                                  }
+                                  value={tanggalMulaiPelatihan}
+                                  onChange={(
+                                    e: ChangeEvent<HTMLInputElement>
+                                  ) => setTanggalMulaiPelatihan(e.target.value)}
+                                />
+                              </div>
+                            </div>
+                            <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                              <div className="w-full px-3">
+                                <label
+                                  className="block text-gray-800 text-sm font-medium mb-1"
+                                  htmlFor="namaPelatihan"
+                                >
+                                  Tanggal Berakhir Pelatihan{" "}
+                                  <span className="text-red-600">*</span>
+                                </label>
+                                <input
+                                  id="tanggalBerakhirPelatihan"
+                                  type="date"
+                                  className="form-input w-full text-black border-gray-300 rounded-md"
+                                  required
+                                  min={
+                                    tanggalMulaiPelatihan ||
+                                    new Date().toISOString().split("T")[0]
+                                  }
+                                  value={tanggalBerakhirPelatihan}
+                                  onChange={(
+                                    e: ChangeEvent<HTMLInputElement>
+                                  ) =>
+                                    setTanggalBerakhirPelatihan(e.target.value)
+                                  }
+                                  disabled={!tanggalMulaiPelatihan}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex gap-2 w-full">
@@ -1178,7 +1244,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                               <SelectItem value="Portfolio">
                                 Portfolio
                               </SelectItem>
-                              <SelectItem value="Kelautan">
+                              <SelectItem value="Tidak Ada Penilaian Teknis">
                                 Tidak Ada Penilaian Teknis
                               </SelectItem>
                             </SelectContent>

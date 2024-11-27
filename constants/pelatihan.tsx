@@ -185,6 +185,44 @@ export const BIDANG_PELATIHAN: BidangPelatihan[] = [
   // },
 ];
 
+export const PROGRAM_AKP = [
+  "ANKAPIN Tingkat I",
+  "ATKAPIN Tingkat I",
+  "ANKAPIN Tingkat II",
+  "ATKAPIN Tingkat II",
+  "ANKAPIN Tingkat III",
+  "ATKAPIN Tingkat III",
+  "BSTF I",
+  "BSTF II",
+  "Rating",
+  "SKN",
+  "SKPI",
+  "SOPI",
+  "Fishing Master",
+];
+
+export const PROGRAM_PERIKANAN = [
+  "CPIB",
+  "CBIB",
+  "CPPIB",
+  "HACCP",
+  "SPI",
+  "API",
+  "Budidaya",
+  "Pengolahan dan Pemasaran",
+  "Mesin Perikanan",
+  "Penangkapan",
+  "SD Perikanan",
+  "Wisata Bahari",
+];
+
+export const PROGRAM_KELAUTAN = [
+  "BCL",
+  "Pengelolaan Sampah",
+  "Mitigasi Bencana",
+  "Konservasi",
+];
+
 export const JENIS_PELATIHAN: JenisPelatihan[] = [
   {
     Id: "JP001",

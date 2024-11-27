@@ -27,7 +27,10 @@ import Footer from "@/components/ui/footer";
 import { MdOutlineAppRegistration, MdVerified } from "react-icons/md";
 import FormRegistrationTraining from "@/components/dashboard/users/formRegistrationTraining";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { PelatihanMasyarakat } from "@/types/product";
+import {
+  DetailPelatihanMasyarakat,
+  PelatihanMasyarakat,
+} from "@/types/product";
 import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import {
@@ -77,7 +80,9 @@ function page() {
 
   const [progress, setProgress] = React.useState(13);
 
-  const [data, setData] = React.useState<PelatihanMasyarakat | null>(null);
+  const [data, setData] = React.useState<DetailPelatihanMasyarakat | null>(
+    null
+  );
   const [loading, setLoading] = React.useState<boolean>(true);
 
   const handleFetchingPublicTrainingDataById = async () => {
@@ -373,9 +378,13 @@ function page() {
                                 <span className="font-semibold">
                                   Tanggal Pendaftaran :{" "}
                                 </span>
-                                {convertDate(data!.TanggalMulaiPelatihan)}{" "}
+                                {generateTanggalPelatihan(
+                                  data!.TanggalMulaiPendaftaran
+                                )}{" "}
                                 <span className="lowercase">s.d</span>{" "}
-                                {convertDate(data!.TanggalBerakhirPelatihan)}
+                                {generateTanggalPelatihan(
+                                  data!.TanggalAkhirPendaftaran
+                                )}
                               </p>
                             </td>
                           </tr>

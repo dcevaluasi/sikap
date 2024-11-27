@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Tooltip,
-  TooltipProvider,
-  TooltipTrigger,
-  TooltipContent,
-} from "@/components/ui/tooltip";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -53,7 +48,7 @@ const ValidasiPesertaButton: React.FC<ValidasiPesertaButtonProps> = ({
 
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
 
-  const handleValidDataPesertaPelatihan = async () => {
+  const handleValidDataPesertaPelatihan = async (type: string) => {
     const formData = new FormData();
     formData.append("Keterangan", status);
     formData.append("StatusPembayaran", catatan);
@@ -67,27 +62,83 @@ const ValidasiPesertaButton: React.FC<ValidasiPesertaButtonProps> = ({
           },
         }
       );
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil memvalidasi data pesereta pelatihan!`,
-      });
+      if (type == "Validasi") {
+        Toast.fire({
+          icon: "success",
+          title: `Berhasil memvalidasi data pesereta pelatihan!`,
+        });
+        setOpenFormSertifikat(false);
+      } else {
+        Toast.fire({
+          icon: "success",
+          title: `Berhasil unvalidasi data pesereta pelatihan!`,
+        });
+        setOpenFormUnvalidasi(false);
+      }
+
       console.log("VALIDASI PESERTA PELATIHAN: ", response);
       handleFetchingData();
-      setOpenFormSertifikat(!openFormSertifikat);
+
       setCatatan("");
+      setStatus("");
     } catch (error) {
       console.error("ERROR UPDATE PELATIHAN: ", error);
-      Toast.fire({
-        icon: "success",
-        title: `Gagal menyisipkan no sertifikat ke akun pesereta pelatihan!`,
-      });
+      if (type == "Validasi") {
+        Toast.fire({
+          icon: "success",
+          title: `Gagal memvalidasi data peserta, harap tunggu beberapa saat!`,
+        });
+      } else {
+        Toast.fire({
+          icon: "success",
+          title: `Gagal unvalidasi data peserta, harap tunggu beberapa saat!`,
+        });
+      }
+
       handleFetchingData();
       setCatatan("");
+      setStatus("");
     }
   };
 
+  const [openFormUnvalidasi, setOpenFormUnvalidasi] =
+    React.useState<boolean>(false);
+
   return (
     <>
+      <AlertDialog
+        open={openFormUnvalidasi}
+        onOpenChange={setOpenFormUnvalidasi}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Apakah kamu yakin unvalidasi data peserta ini?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Unvalidasi data ini akan dilakukan jika memang terdapat
+              kelengkapan dari peserta pendaftar ataupun data diri yang belum
+              lengkap!
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => setOpenFormUnvalidasi(!openFormUnvalidasi)}
+            >
+              Batal
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                handleValidDataPesertaPelatihan("Unvalidasi");
+              }}
+              className="bg-neutral-950 text-white"
+            >
+              Unvalidasi
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <AlertDialog
         open={openFormSertifikat}
         onOpenChange={setOpenFormSertifikat}
@@ -173,7 +224,7 @@ const ValidasiPesertaButton: React.FC<ValidasiPesertaButtonProps> = ({
               </AlertDialogCancel>
             )}
             <AlertDialogAction
-              onClick={(e) => handleValidDataPesertaPelatihan()}
+              onClick={(e) => handleValidDataPesertaPelatihan("Validasi")}
               disabled={isUploading}
               className={`${isUploading && "px-6"}`}
             >
@@ -183,43 +234,32 @@ const ValidasiPesertaButton: React.FC<ValidasiPesertaButtonProps> = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            {peserta.Keterangan == "Valid" ? (
-              <Button
-                variant="outline"
-                className="ml-auto border  border-blue-600 rounded-full hover:bg-blue-600 duration-700 hover:text-white text-blue-600"
-              >
-                <RiVerifiedBadgeFill className="h-4 w-4 " /> Valid
-              </Button>
-            ) : (
-              <>
-                <Button
-                  variant="outline"
-                  className="ml-auto border border-rose-600 rounded-full hover:bg-rose-600 duration-700 hover:text-white text-rose-600"
-                >
-                  <MdOutlineClose className="h-4 w-4 " />
-                  Tidak Valid
-                </Button>
-                <Button
-                  onClick={(e) => {
-                    setOpenFormSertifikat(true);
-                  }}
-                  variant="outline"
-                  className="ml-auto border border-gray-600 rounded-full hover:bg-gray-600 duration-700 hover:text-white text-gray-600"
-                >
-                  <TbEditCircle className="h-4 w-4 " />
-                  Validasi
-                </Button>
-              </>
-            )}
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Validasi Data Peserta</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      {peserta.Keterangan == "Valid" ? (
+        <Button
+          onClick={(e) => {
+            setStatus("Tidak Valid");
+            setOpenFormUnvalidasi(true);
+          }}
+          variant="outline"
+          className="w-full hover:bg-teal-600 duration-700 hover:text-white text-white bg-teal-600  mt-3 text-base"
+        >
+          <TbEditCircle className="h-4 w-4 " />
+          Unvalidasi
+        </Button>
+      ) : (
+        <>
+          <Button
+            onClick={(e) => {
+              setOpenFormSertifikat(true);
+            }}
+            variant="outline"
+            className="w-full bg-gray-600 text-base py-3 hover:bg-gray-600 duration-700 hover:text-white text-white mt-3"
+          >
+            <TbEditCircle className="h-4 w-4 " />
+            Validasi
+          </Button>
+        </>
+      )}
     </>
   );
 };

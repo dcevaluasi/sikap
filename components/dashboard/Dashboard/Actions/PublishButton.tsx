@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { TbBroadcast } from "react-icons/tb";
+import { TbBroadcast, TbWorldCancel } from "react-icons/tb";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import { elautBaseUrl } from "@/constants/urls";
 import axios from "axios";
@@ -26,12 +26,14 @@ import Toast from "@/components/toast";
 import Cookies from "js-cookie";
 
 interface PublishButtonProps {
+  title: string;
   statusPelatihan: string;
   idPelatihan: string;
   handleFetchingData: any;
 }
 
 const PublishButton: React.FC<PublishButtonProps> = ({
+  title,
   statusPelatihan,
   idPelatihan,
   handleFetchingData,
@@ -127,21 +129,30 @@ const PublishButton: React.FC<PublishButtonProps> = ({
                   : handlePublish(idPelatihan, "Belum Publish")
               }
             >
-              {statusPelatihan == "Publish" ? "Unpublish" : "Publish"}
+              {statusPelatihan == "Publish" ? "Take Down" : "Publish"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
 
       <Button
+        title={title}
         onClick={() => {
           setSelectedStatus(statusPelatihan);
           setIsOpenFormPublishedPelatihan(!isOpenFormPublishedPelatihan);
         }}
         variant="outline"
-        className="ml-auto hover:text-neutral-100 hover:bg-purple-600 text-neutral-100 bg-purple-600 duration-700"
+        className={`ml-auto hover:text-neutral-100  text-neutral-100  duration-700 ${
+          title == "Publish"
+            ? "bg-purple-600 hover:bg-purple-600"
+            : "bg-teal-600 hover:bg-teal-600"
+        }`}
       >
-        <TbBroadcast className="h-5 w-5 mr-1" /> Publish
+        {title == "Publish" ? (
+          <TbBroadcast className="h-5 w-5" />
+        ) : (
+          <TbWorldCancel className="h-5 w-5" />
+        )}
       </Button>
     </>
   );

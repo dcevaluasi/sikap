@@ -57,8 +57,8 @@ export type PelatihanMasyarakat = {
   NoSertifikat: string
   IdSaranaPrasarana: string
   IdKonsumsi: string
-  CreatedAt: string
-  UpdatedAt: string
+  CreateAt: string
+  UpdateAt: string
   SuratPemberitahuan: string
   StatusPenerbitan: string
   UserPelatihan: UserPelatihan[]
@@ -69,7 +69,54 @@ export type PelatihanMasyarakat = {
   StatusApproval: string
   PenerbitanSertifikatDiterima: string
   TanggalMulaiPendaftaran: string
-  TanggalAkhirPendaftaran: string
+  TanggalBerakhirPendaftaran: string
+  PemberitahuanDiterima: string
+  Program: string;
+  JenisProgram: string;
+}
+
+export type DetailPelatihanMasyarakat = {
+  IdPelatihan: number
+  IdLemdik: string
+  KodePelatihan: string
+  NamaPelatihan: string
+  PenyelenggaraPelatihan: string
+  DetailPelatihan: string
+  JenisPelatihan: string
+  BidangPelatihan: string
+  DukunganProgramTerobosan: string
+  DeskripsiSertifikat: string
+  TanggalMulaiPelatihan: string
+  TanggalBerakhirPelatihan: string
+  HargaPelatihan: number
+  Instruktur: string
+  FotoPelatihan: string
+  Status: string
+  MemoPusat: string
+  SilabusPelatihan: string
+  LokasiPelatihan: string
+  PelaksanaanPelatihan: string
+  UjiKompotensi: string
+  KoutaPelatihan: string // type from be, should be KuotaPelatihan
+  AsalPelatihan: string
+  JenisSertifikat: string
+  TtdSertifikat: string
+  NoSertifikat: string
+  IdSaranaPrasarana: string
+  IdKonsumsi: string
+  CreateAt: string
+  UpdateAt: string
+  SuratPemberitahuan: string
+  StatusPenerbitan: string
+  UserPelatihan: UserPelatihan[]
+  MateriPelatihan: MateriPelatihan[]
+  SarprasPelatihan: Sarpras[]
+  BeritaAcara: string
+  CatatanPenerbitanByPusat: string
+  StatusApproval: string
+  PenerbitanSertifikatDiterima: string
+  TanggalMulaiPendaftaran: string
+  TanggalAkhirrPendaftaran: string
   PemberitahuanDiterima: string
   Program: string;
   JenisProgram: string;

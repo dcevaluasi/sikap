@@ -171,16 +171,18 @@ const UploadSuratButton: React.FC<UploadSuratButtonProps> = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      {suratPemberitahuan != "" ? (
+      {suratPemberitahuan !=
+      "https://elaut-bppsdm.kkp.go.id/api-elaut//public/static/suratPemberitahuan/" ? (
         <Link
           href={
             "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/suratPemberitahuan/" +
             suratPemberitahuan
           }
+          title="Surat Pemberitahuan"
           target="_blank"
-          className="ml-auto bg-gray-600 shadow-sm hover:bg-gray-600 hover:text-neutral-100 h-9 px-4 py-2 "
+          className="border border-neutral-200  shadow-sm  inline-flex items-center justify-center whitespace-nowrap  text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md"
         >
-          <LucideFileCheck2 className="h-5 w-5 mr-1" />
+          <LucideFileCheck2 className="h-5 w-5" />
         </Link>
       ) : (
         <Button
@@ -188,9 +190,10 @@ const UploadSuratButton: React.FC<UploadSuratButtonProps> = ({
             setIsOpenFormSuratPemberitahuan(!isOpenFormSuratPemberitahuan);
           }}
           variant="outline"
-          className="ml-auto bg-gray-600 shadow-sm hover:bg-gray-600 hover:text-neutral-100 text-neutral-100"
+          title="Upload Surat Pemberitahuan"
+          className="border border-neutral-200  shadow-sm  inline-flex items-center justify-center whitespace-nowrap  text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md"
         >
-          <FiUploadCloud className="h-5 w-5 mr-1" /> Upload Surat Pemberitahuan
+          <FiUploadCloud className="h-5 w-5" />
         </Button>
       )}
     </>

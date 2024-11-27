@@ -14,7 +14,12 @@ import axios, { AxiosResponse } from "axios";
 import Link from "next/link";
 import { Bounce, Slide } from "react-awesome-reveal";
 import { MdClear, MdKeyboardArrowRight } from "react-icons/md";
-import { TbClockHour2, TbLayoutGrid } from "react-icons/tb";
+import {
+  TbCalendarCheck,
+  TbClockHour2,
+  TbLayoutGrid,
+  TbTargetArrow,
+} from "react-icons/tb";
 
 import { HiViewGrid } from "react-icons/hi";
 
@@ -32,9 +37,10 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { HashLoader } from "react-spinners";
-import { formatToRupiah, getMonthName } from "@/lib/utils";
+import { formatToRupiah, getMonthName, replaceUrl } from "@/lib/utils";
 import { FiCalendar, FiSearch } from "react-icons/fi";
-import Toast from "../toast";
+import { generateTanggalPelatihan } from "@/utils/text";
+import { GrSend } from "react-icons/gr";
 
 function PencarianPelatihan() {
   const [data, setData] = React.useState<PelatihanMasyarakat[] | null>(null);
@@ -46,8 +52,6 @@ function PencarianPelatihan() {
       : usePathname() == "/layanan/program/perikanan"
       ? "Perikanan"
       : "Kelautan";
-
-  console.log(jenisProgram);
 
   const handleFetchingPublicTrainingData = async () => {
     setLoading(true);
@@ -61,7 +65,6 @@ function PencarianPelatihan() {
       );
       setLoading(false);
       setShowResult(true);
-      console.log({ response });
 
       if (response.data.data != null) {
         const filteredAndSortedData = response.data.data
@@ -90,12 +93,12 @@ function PencarianPelatihan() {
             return dateA.getTime() - dateB.getTime(); // Ascending order
           });
 
+        console.log(response);
         setData(filteredAndSortedData);
       } else {
         setData(null);
       }
     } catch (error) {
-      console.error("Error posting training data:", error);
       setLoading(false);
       setShowResult(false);
       throw error;
@@ -171,235 +174,246 @@ function PencarianPelatihan() {
 
   const [selectedDate, setSelectedDate] = React.useState("15 September 2024");
 
-  const handleDateClick = (date: any) => {
-    setSelectedDate(date);
-  };
-
   React.useEffect(() => {
-    setTimeout(() => {
-      handleFetchingPublicTrainingData();
+    setLoading(true);
 
-      setLoading(false);
-    }, 1000);
+    // Function to start fetching every 20 seconds
+    const intervalId = setInterval(() => {
+      handleFetchingPublicTrainingData();
+    }, 60000); // 1 minutes in milliseconds
+
+    // Fetch data immediately on component mount
+    handleFetchingPublicTrainingData().finally(() => setLoading(false));
+
+    // Cleanup interval on unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
     <section className="-mt-20 w-full">
-      <div className=" mx-auto max-w-7xl py-5 flex flex-col gap-4">
-        <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-white h-auto w-fit mx-auto items-center justify-center flex flex-col relative shadow-custom rounded-3xl overflow-hidden">
-          <div className="group relative flex flex-col overflow-hidden justify-center rounded-3xl px-6  flex-grow group">
-            <div className="flex flex-col gap-1  ">
-              <div className="flex w-fit gap-2 py-5 items-center justify-center">
-                <Select
-                  value={selectedBalaiPelatihan}
-                  onValueChange={(value) => setSelectedBalaiPelatihan(value)}
-                >
-                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
-                      <RiSchoolLine />
-                      {selectedBalaiPelatihan == ""
-                        ? "Balai Pelatihan"
-                        : selectedBalaiPelatihan}
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="z-[10000]">
-                    <SelectGroup>
-                      <SelectLabel>Balai Pelatihan</SelectLabel>
-                      {BALAI_PELATIHAN.map((balaiPelatihan, index) => (
-                        <SelectItem key={index} value={balaiPelatihan.Name}>
-                          {balaiPelatihan.Name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={selectedProgramPelatihan}
-                  onValueChange={(value) => setSelectedProgramPelatihan(value)}
-                >
-                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 px-3 w-full text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
-                      <RiShipLine />
-                      {selectedProgramPelatihan == ""
-                        ? "Program Pelatihan"
-                        : selectedProgramPelatihan}
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="z-[10000]">
-                    <SelectGroup>
-                      <SelectLabel>Pilih Program Pelatihan</SelectLabel>
-                      {usePathname().includes("akp") && (
-                        <>
-                          {akpSelections.map((akp, index) => (
-                            <SelectItem key={index} value={akp}>
-                              {akp}
-                            </SelectItem>
-                          ))}
-                        </>
-                      )}
-
-                      {usePathname().includes("perikanan") && (
-                        <>
-                          {perikananSelection.map((akp, index) => (
-                            <SelectItem key={index} value={akp}>
-                              {akp}
-                            </SelectItem>
-                          ))}
-                        </>
-                      )}
-
-                      {usePathname().includes("kelautan") && (
-                        <>
-                          {kelautanSection.map((akp, index) => (
-                            <SelectItem key={index} value={akp}>
-                              {akp}
-                            </SelectItem>
-                          ))}
-                        </>
-                      )}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={selectedJenisPelatihan}
-                  onValueChange={(value) => setSelectedJenisPelatihan(value)}
-                >
-                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 px-3 w-full text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
-                      <HiViewGrid />
-                      {selectedJenisPelatihan == ""
-                        ? "Jenis Pelatihan"
-                        : selectedJenisPelatihan}
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="z-[10000]">
-                    <SelectGroup>
-                      <SelectLabel>Pilih Jenis Pelatihan</SelectLabel>
-                      <SelectItem value={"Aspirasi"}>Aspirasi</SelectItem>
-                      <SelectItem value={"PNBP/BLU"}>PNBP/BLU</SelectItem>
-                      <SelectItem value={"Reguler"}>Reguler</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select
-                  value={selectedBulanPelatihan}
-                  onValueChange={(value) => setSelectedBulanPelatihan(value)}
-                >
-                  <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
-                      <FiCalendar />
-                      {selectedBulanPelatihan == ""
-                        ? "Pilih Waktu"
-                        : getMonthName(selectedBulanPelatihan)}
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent className="z-[10000]">
-                    <SelectGroup>
-                      <SelectLabel>Bulan Pelatihan</SelectLabel>
-                      <SelectItem value={"01"}>Januari</SelectItem>
-                      <SelectItem value={"02"}>Februari</SelectItem>
-                      <SelectItem value={"03"}>Maret</SelectItem>
-                      <SelectItem value={"04"}>April</SelectItem>
-                      <SelectItem value={"05"}>Mei</SelectItem>
-                      <SelectItem value={"06"}>Juni</SelectItem>
-                      <SelectItem value={"07"}>Juli</SelectItem>
-                      <SelectItem value={"08"}>Agustus</SelectItem>
-                      <SelectItem value={"09"}>September</SelectItem>
-                      <SelectItem value={"10"}>Oktober</SelectItem>
-                      <SelectItem value={"11"}>November</SelectItem>
-                      <SelectItem value={"12"}>Desember</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                {(selectedJenisPelatihan !== "" ||
-                  selectedBalaiPelatihan !== "" ||
-                  selectedBiayaPelatihan !== "" ||
-                  selectedBidangPelatihan !== "" ||
-                  selectedProgramPelatihan !== "" ||
-                  selectedBulanPelatihan != "") && (
-                  <div
-                    onClick={() => handleClearFilter()}
-                    className="inline-flex gap-2 w-fit px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer border border-gray-300"
+      {loading ? (
+        <></>
+      ) : (
+        <div className=" mx-auto max-w-7xl py-5 flex flex-col gap-4">
+          <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-white h-auto w-fit mx-auto items-center justify-center flex flex-col relative shadow-custom rounded-3xl overflow-hidden">
+            <div className="group relative flex flex-col overflow-hidden justify-center rounded-3xl px-6  flex-grow group">
+              <div className="flex flex-col gap-1  ">
+                <div className="flex w-fit gap-2 py-5 items-center justify-center">
+                  <Select
+                    value={selectedBalaiPelatihan}
+                    onValueChange={(value) => setSelectedBalaiPelatihan(value)}
                   >
-                    <MdClear />
-                    Bersihkan Filter
+                    <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                      <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
+                        <RiSchoolLine />
+                        {selectedBalaiPelatihan == ""
+                          ? "Balai Pelatihan"
+                          : selectedBalaiPelatihan}
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent className="z-[10000]">
+                      <SelectGroup>
+                        <SelectLabel>Balai Pelatihan</SelectLabel>
+                        {BALAI_PELATIHAN.map((balaiPelatihan, index) => (
+                          <SelectItem key={index} value={balaiPelatihan.Name}>
+                            {balaiPelatihan.Name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+
+                  <Select
+                    value={selectedProgramPelatihan}
+                    onValueChange={(value) =>
+                      setSelectedProgramPelatihan(value)
+                    }
+                  >
+                    <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                      <div className="inline-flex gap-2 px-3 w-full text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
+                        <RiShipLine />
+                        {selectedProgramPelatihan == ""
+                          ? "Program Pelatihan"
+                          : selectedProgramPelatihan}
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent className="z-[10000]">
+                      <SelectGroup>
+                        <SelectLabel>Pilih Program Pelatihan</SelectLabel>
+                        {usePathname().includes("akp") && (
+                          <>
+                            {akpSelections.map((akp, index) => (
+                              <SelectItem key={index} value={akp}>
+                                {akp}
+                              </SelectItem>
+                            ))}
+                          </>
+                        )}
+
+                        {usePathname().includes("perikanan") && (
+                          <>
+                            {perikananSelection.map((akp, index) => (
+                              <SelectItem key={index} value={akp}>
+                                {akp}
+                              </SelectItem>
+                            ))}
+                          </>
+                        )}
+
+                        {usePathname().includes("kelautan") && (
+                          <>
+                            {kelautanSection.map((akp, index) => (
+                              <SelectItem key={index} value={akp}>
+                                {akp}
+                              </SelectItem>
+                            ))}
+                          </>
+                        )}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+
+                  <Select
+                    value={selectedJenisPelatihan}
+                    onValueChange={(value) => setSelectedJenisPelatihan(value)}
+                  >
+                    <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                      <div className="inline-flex gap-2 px-3 w-full text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
+                        <HiViewGrid />
+                        {selectedJenisPelatihan == ""
+                          ? "Jenis Pelatihan"
+                          : selectedJenisPelatihan}
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent className="z-[10000]">
+                      <SelectGroup>
+                        <SelectLabel>Pilih Jenis Pelatihan</SelectLabel>
+                        <SelectItem value={"Aspirasi"}>Aspirasi</SelectItem>
+                        <SelectItem value={"PNBP/BLU"}>PNBP/BLU</SelectItem>
+                        <SelectItem value={"Reguler"}>Reguler</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+
+                  <Select
+                    value={selectedBulanPelatihan}
+                    onValueChange={(value) => setSelectedBulanPelatihan(value)}
+                  >
+                    <SelectTrigger className="w-[180px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                      <div className="inline-flex gap-2 w-full px-3 text-sm items-center rounded-md bg-white p-1.5  cursor-pointer border border-gray-300">
+                        <FiCalendar />
+                        {selectedBulanPelatihan == ""
+                          ? "Pilih Waktu"
+                          : getMonthName(selectedBulanPelatihan)}
+                      </div>
+                    </SelectTrigger>
+                    <SelectContent className="z-[10000]">
+                      <SelectGroup>
+                        <SelectLabel>Bulan Pelatihan</SelectLabel>
+                        <SelectItem value={"01"}>Januari</SelectItem>
+                        <SelectItem value={"02"}>Februari</SelectItem>
+                        <SelectItem value={"03"}>Maret</SelectItem>
+                        <SelectItem value={"04"}>April</SelectItem>
+                        <SelectItem value={"05"}>Mei</SelectItem>
+                        <SelectItem value={"06"}>Juni</SelectItem>
+                        <SelectItem value={"07"}>Juli</SelectItem>
+                        <SelectItem value={"08"}>Agustus</SelectItem>
+                        <SelectItem value={"09"}>September</SelectItem>
+                        <SelectItem value={"10"}>Oktober</SelectItem>
+                        <SelectItem value={"11"}>November</SelectItem>
+                        <SelectItem value={"12"}>Desember</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+
+                  {(selectedJenisPelatihan !== "" ||
+                    selectedBalaiPelatihan !== "" ||
+                    selectedBiayaPelatihan !== "" ||
+                    selectedBidangPelatihan !== "" ||
+                    selectedProgramPelatihan !== "" ||
+                    selectedBulanPelatihan != "") && (
+                    <div
+                      onClick={() => handleClearFilter()}
+                      className="inline-flex gap-2 w-fit px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer border border-gray-300"
+                    >
+                      <MdClear />
+                      Bersihkan Filter
+                    </div>
+                  )}
+
+                  <div className="flex">
+                    <Button
+                      onClick={(e) => handleFetchingPublicTrainingData()}
+                      className="btn-sm text-sm text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                    >
+                      <span className="mr-2">Cari</span>
+                      <FiSearch />
+                    </Button>
                   </div>
-                )}
-
-                <div className="flex">
-                  <Button
-                    onClick={(e) => handleFetchingPublicTrainingData()}
-                    className="btn-sm text-sm text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
-                  >
-                    <span className="mr-2">Cari</span>
-                    <FiSearch />
-                  </Button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {loading ? (
-          <div className="w-full flex h-[50vh] items-center justify-center">
-            <HashLoader color="#338CF5" size={50} />
-          </div>
-        ) : (
-          showResult && (
-            <div className="w-full max-w-7xl mx-auto pb-4">
-              {/* Header */}
-              {selectedBulanPelatihan != "" && (
-                <div className="bg-white shadow-custom rounded-xl p-3 text-xl text-center font-calsans">
-                  <span className="font-bold">
-                    {getMonthName(selectedBulanPelatihan)}{" "}
-                    {new Date().getFullYear()}
-                  </span>
+          {loading ? (
+            <div className="w-full flex h-[50vh] items-center justify-center">
+              <HashLoader color="#338CF5" size={50} />
+            </div>
+          ) : (
+            showResult && (
+              <div className="w-full max-w-7xl mx-auto pb-4">
+                {/* Header */}
+                {selectedBulanPelatihan != "" && (
+                  <div className="bg-white shadow-custom rounded-xl p-3 text-xl text-center font-calsans">
+                    <span className="font-bold">
+                      {getMonthName(selectedBulanPelatihan)}{" "}
+                      {new Date().getFullYear()}
+                    </span>
+                  </div>
+                )}
+
+                {/* Table */}
+                <div className="bg-white shadow-custom text-black text-center grid grid-cols-5 gap-2 p-4 rounded-xl font-calsans text-lg mt-4">
+                  <div>Pelatihan</div>
+                  <div>Penyelenggara</div>
+                  <div></div>
+                  <div>Pelaksanaan</div>
+                  <div>Harga</div>
                 </div>
-              )}
 
-              {/* Table */}
-              <div className="bg-white shadow-custom text-black text-center grid grid-cols-5 gap-2 p-4 rounded-xl font-calsans text-lg mt-4">
-                <div>Pelatihan</div>
-                <div>Penyelenggara</div>
-                <div></div>
-                <div>Pelaksanaan</div>
-                <div>Harga</div>
-              </div>
-
-              <div className="flex-col gap-4 flex w-full mt-4">
-                {data == null || data.length === 0 ? (
-                  <div className="flex flex-col w-full items-center justify-center h-fit">
-                    <Image
-                      src={"/illustrations/not-found.png"}
-                      alt="Not Found"
-                      width={0}
-                      height={0}
-                      className="w-[400px]"
-                    />
-                    <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
-                      <h1 className="text-3xl font-calsans leading-[110%] text-black">
-                        Belum Ada Pelatihan
-                      </h1>
-                      <div className="text-gray-600 text-center  max-w-md">
-                        Belum ada pelatihan yang tersedia saat ini, harap terus
-                        cek berkala ya websitenya Sobat E-LAUT!
+                <div className="flex-col gap-4 flex w-full mt-4">
+                  {data == null || data.length === 0 ? (
+                    <div className="flex flex-col w-full items-center justify-center h-fit">
+                      <Image
+                        src={"/illustrations/not-found.png"}
+                        alt="Not Found"
+                        width={0}
+                        height={0}
+                        className="w-[400px]"
+                      />
+                      <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
+                        <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                          Belum Ada Pelatihan
+                        </h1>
+                        <div className="text-gray-600 text-center  max-w-md">
+                          Belum ada pelatihan yang tersedia saat ini, harap
+                          terus cek berkala ya websitenya Sobat E-LAUT!
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ) : (
-                  data.map((pelatihan, index) => (
-                    <CardPelatihan key={index} pelatihan={pelatihan} />
-                  ))
-                )}
+                  ) : (
+                    <div className="w-full ">
+                      {data.map((pelatihan, index) => (
+                        <CardPelatihan key={index} pelatihan={pelatihan} />
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          )
-        )}
-      </div>
+            )
+          )}
+        </div>
+      )}
     </section>
   );
 }
@@ -443,10 +457,18 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
       {/* Arrival Info */}
       <div className="text-center">
         <p className="font-bold">{pelatihan.PelaksanaanPelatihan}</p>
-        <p className="text-sm leading-[100%]">
-          {convertDate(pelatihan.TanggalMulaiPelatihan)} -{" "}
-          {convertDate(pelatihan.TanggalBerakhirPelatihan)}
-        </p>
+        {pelatihan!.TanggalMulaiPelatihan != "" ? (
+          <span className="text-sm leading-[100%] block">
+            {generateTanggalPelatihan(pelatihan.TanggalMulaiPelatihan)} -{" "}
+            {generateTanggalPelatihan(pelatihan.TanggalBerakhirPelatihan)}
+          </span>
+        ) : (
+          <span className="text-sm leading-[100%] block">
+            Waktu Pendaftaran <br />
+            {generateTanggalPelatihan(pelatihan.TanggalMulaiPendaftaran)} -{" "}
+            {generateTanggalPelatihan(pelatihan!.TanggalBerakhirPendaftaran)}
+          </span>
+        )}
       </div>
 
       {/* Price and Button */}
@@ -476,5 +498,70 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
     </div>
   );
 };
+
+// const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
+//   return (
+//     <div className="coverflow flex flex-col shadow-custom relative w-fit h-fit rounded-3xl">
+//       <div className="w-fit absolute top-4 right-4 flex gap-1 z-[60]">
+//         <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
+//           {pelatihan.HargaPelatihan == 0
+//             ? "Gratis"
+//             : formatToRupiah(pelatihan.HargaPelatihan)}
+//         </div>
+//         {/* <div className="text-xs font-medium px-4 py-2 bg-blue-500 rounded-3xl text-white">
+//           {pelatihan.BidangPelatihan}
+//         </div> */}
+//       </div>
+//       <div className="w-full relative h-[240px]">
+//         <div className="flex w-full absolute h-[240px] bg-gradient-to-r opacity-40 from-blue-500 to-teal-400 bg-opacity-40 rounded-tl-3xl rounded-tr-3xl"></div>
+//         <Image
+//           className="w-full rounded-tl-3xl rounded-tr-3xl  object-cover h-[240px]"
+//           alt=""
+//           src={`${replaceUrl(pelatihan.FotoPelatihan)}`}
+//           width={0}
+//           height={0}
+//         />
+//       </div>
+
+//       <div className="px-6 py-3">
+//         <div className="w-full pb-4">
+//           <h2 className="font-calsans text-xl duration-1000 text-black mt-2 leading-[110%]">
+//             {pelatihan.NamaPelatihan}
+//           </h2>
+//           {/* <div className="flex flex-col">
+//             <span className="flex items-center gap-1 leading-[105%] text-xs text-gray-600">
+//               <span>
+//                 Waktu Pendaftaran :{" "}
+//                 {generateTanggalPelatihan(pelatihan!.TanggalMulaiPendaftaran)}{" "}
+//                 <span className="lowercase">s.d</span>{" "}
+//                 {generateTanggalPelatihan(
+//                   pelatihan!.TanggalBerakhirPendaftaran
+//                 )}
+//               </span>
+//             </span>
+//           </div> */}
+//           <p
+//             dangerouslySetInnerHTML={{
+//               __html:
+//                 pelatihan &&
+//                 truncateText(pelatihan?.DetailPelatihan, 250, "..."),
+//             }}
+//             className="text-sm font-normal group-hover:text-xs text-gray-600 group-hover:duration-1000"
+//           />
+
+//           <Link
+//             target="_blank"
+//             href={`/layanan/pelatihan/${createSlug(pelatihan.NamaPelatihan)}/${
+//               pelatihan?.KodePelatihan
+//             }/${pelatihan?.IdPelatihan}`}
+//             className="w-full mt-4 block text-sm text-center font-medium px-6 py-2 bg-blue-500 rounded-3xl text-white"
+//           >
+//             Lihat Detail
+//           </Link>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
 
 export default PencarianPelatihan;

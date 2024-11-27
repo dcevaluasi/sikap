@@ -47,7 +47,7 @@ import { FaBookOpen } from "react-icons/fa6";
 import axios from "axios";
 import { PelatihanMasyarakat } from "@/types/product";
 import { generateFullNameBalai, generateTanggalPelatihan } from "@/utils/text";
-import { generateInstrukturName } from "@/lib/utils";
+import { formatToRupiah, generateInstrukturName } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
 import Toast from "@/components/toast";
 import { MateriButton, PublishButton } from "./Actions";
@@ -56,14 +56,7 @@ import CloseButton from "./Actions/CloseButton";
 import UploadSuratButton from "./Actions/UploadSuratButton";
 import GenerateNoSertifikatButton from "./Actions/GenerateNoSertifikatButton";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 function DetailPelatihan() {
   const paths = usePathname().split("/");
@@ -104,153 +97,170 @@ function DetailPelatihan() {
             <TbSchool className="text-3xl" />
             <div className="flex flex-col">
               <h1 id="page-caption" className="font-semibold text-lg">
-                Database Pelatihan
+                {pelatihan != null ? pelatihan.NamaPelatihan : ""}
               </h1>
-              <p className="font-medium text-gray-400 text-base">
-                Tambahkan data pelatihan yang ada di lembaga diklat mu!
-              </p>
+              {pelatihan != null ? (
+                <p className="font-medium text-gray-400 text-sm">
+                  {" "}
+                  {pelatihan != null ? pelatihan!.KodePelatihan : ""} •{" "}
+                  {pelatihan != null ? pelatihan!.BidangPelatihan : ""} •
+                  Mendukung Program Terobosan{" "}
+                  {pelatihan != null ? pelatihan!.DukunganProgramTerobosan : ""}
+                </p>
+              ) : (
+                <p></p>
+              )}
             </div>
           </header>
         </div>
       </div>
 
-      <div className="flex flex-col m-3">
-        <div className="flex flex-row gap-2 items-end justify-between pb-4 border-b border-b-gray-200">
-          {/* ACTIONS */}
-          {pelatihan != null && (
-            <div className={`w-fit flex items-center justify-center gap-1`}>
-              <MateriButton
-                idPelatihan={idPelatihan}
-                handleFetchingData={handleFetchDetailPelatihan}
-              />
-
-              <DeleteButton
-                idPelatihan={idPelatihan}
-                pelatihan={pelatihan}
-                handleFetchingData={handleFetchDetailPelatihan}
-              />
-
-              <CloseButton
-                idPelatihan={idPelatihan}
-                statusPelatihan={pelatihan?.StatusApproval ?? ""}
-                handleFetchingData={handleFetchDetailPelatihan}
-              />
-
-              <Link
-                href={`/admin/pusat/pelatihan/${pelatihan.KodePelatihan}/peserta-pelatihan/${pelatihan.IdPelatihan}`}
-                className="  shadow-sm bg-green-400 hover:bg-green-400 text-neutral-100  hover:text-neutral-100 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2"
-              >
-                <HiUserGroup className="h-5 w-5 mr-1" />
-                Peserta Pelatihan
-              </Link>
-
-              <GenerateNoSertifikatButton
-                idPelatihan={idPelatihan}
-                pelatihan={pelatihan!}
-                handleFetchingData={handleFetchDetailPelatihan}
-              />
-
-              <PublishButton
-                statusPelatihan={pelatihan?.Status ?? ""}
-                idPelatihan={idPelatihan}
-                handleFetchingData={handleFetchDetailPelatihan}
-              />
-
-              <UploadSuratButton
-                idPelatihan={idPelatihan}
-                handleFetchingData={handleFetchDetailPelatihan}
-                suratPemberitahuan={pelatihan?.SuratPemberitahuan ?? ""}
-              />
+      <div className="flex w-full gap-0">
+        {pelatihan != null && (
+          <div className="px-4 w-full">
+            <div className="w-full border border-gray-200 rounded-xl">
+              <div className="bg-gray-100 p-4 w-full ">
+                <h2 className="font-bold font-calsans text-xl">
+                  Informasi Pelatihan
+                </h2>
+              </div>
+              <table className="w-full">
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">Judul</td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan!.NamaPelatihan || ""}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">Kode Pelatihan</td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan!.KodePelatihan || ""}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Penyelenggara Pelatihan
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {generateFullNameBalai(pelatihan!.PenyelenggaraPelatihan) ||
+                      ""}{" "}
+                    ({pelatihan!.PenyelenggaraPelatihan || ""})
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Lokasi Pelatihan
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan!.LokasiPelatihan || ""}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Waktu Pelaksanaan
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan.TanggalMulaiPelatihan !== "" &&
+                    pelatihan.TanggalBerakhirPelatihan !== "" ? (
+                      <>
+                        {generateTanggalPelatihan(
+                          pelatihan.TanggalMulaiPelatihan
+                        )}{" "}
+                        s.d.{" "}
+                        {generateTanggalPelatihan(
+                          pelatihan.TanggalBerakhirPelatihan
+                        )}
+                      </>
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Metode Pelaksanaan
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan!.PelaksanaanPelatihan || ""}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Dukungan Program Terobosan
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan!.DukunganProgramTerobosan || ""}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">Jenis Pelatihan</td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan!.JenisPelatihan || ""}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Bidang Pelatihan
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan!.BidangPelatihan || ""}
+                  </td>
+                </tr>
+              </table>
             </div>
-          )}
-        </div>
+          </div>
+        )}
+        {pelatihan != null && (
+          <div className="px-4 w-full">
+            <div className=" w-full border border-gray-200 rounded-xl">
+              <div className="bg-gray-100 p-4 w-full ">
+                <h2 className="font-bold font-calsans text-xl">
+                  Informasi Penerbitan Sertifikat
+                </h2>
+              </div>
+              <table className="w-full">
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Jenis Sertifikat
+                  </td>
+                  <td className="p-4 w-2/3">{pelatihan!.JenisSertifikat}</td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Penandatangan Sertifikat
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan!.TtdSertifikat == ""
+                      ? "-"
+                      : pelatihan!.TtdSertifikat}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">No Sertifikat</td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan!.NoSertifikat == ""
+                      ? "-"
+                      : pelatihan!.NoSertifikat}
+                  </td>
+                </tr>
+                <tr className="border-b border-b-gray-200 w-full">
+                  <td className="font-semibold p-4 w-[20%]">
+                    Status Penerbitan
+                  </td>
+                  <td className="p-4 w-2/3">
+                    {pelatihan!.PemberitahuanDiterima == ""
+                      ? "-"
+                      : pelatihan!.PemberitahuanDiterima}
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
 
       {pelatihan != null && (
-        <div className="px-4 w-full">
-          <div className="w-full border border-gray-200 rounded-xl">
-            <div className="bg-gray-100 p-4 w-full ">
-              <h2 className="font-bold font-calsans text-xl">
-                Informasi Pelatihan
-              </h2>
-            </div>
-            <table className="w-full">
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">Judul</td>
-                <td className="p-4 w-2/3">{pelatihan!.NamaPelatihan || ""}</td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">Kode Pelatihan</td>
-                <td className="p-4 w-2/3">{pelatihan!.KodePelatihan || ""}</td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">
-                  Penyelenggara Pelatihan
-                </td>
-                <td className="p-4 w-2/3">
-                  {generateFullNameBalai(pelatihan!.PenyelenggaraPelatihan) ||
-                    ""}{" "}
-                  ({pelatihan!.PenyelenggaraPelatihan || ""})
-                </td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">Lokasi Pelatihan</td>
-                <td className="p-4 w-2/3">
-                  {pelatihan!.LokasiPelatihan || ""}
-                </td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">Waktu Pelaksanaan</td>
-                <td className="p-4 w-2/3">
-                  {pelatihan.TanggalMulaiPelatihan !== "" &&
-                  pelatihan.TanggalBerakhirPelatihan !== "" ? (
-                    <>
-                      {generateTanggalPelatihan(
-                        pelatihan.TanggalMulaiPelatihan
-                      )}{" "}
-                      s.d.{" "}
-                      {generateTanggalPelatihan(
-                        pelatihan.TanggalBerakhirPelatihan
-                      )}
-                    </>
-                  ) : (
-                    "-"
-                  )}
-                </td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">
-                  Metode Pelaksanaan
-                </td>
-                <td className="p-4 w-2/3">
-                  {pelatihan!.PelaksanaanPelatihan || ""}
-                </td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">
-                  Dukungan Program Terobosan
-                </td>
-                <td className="p-4 w-2/3">
-                  {pelatihan!.DukunganProgramTerobosan || ""}
-                </td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">Jenis Pelatihan</td>
-                <td className="p-4 w-2/3">{pelatihan!.JenisPelatihan || ""}</td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">Bidang Pelatihan</td>
-                <td className="p-4 w-2/3">
-                  {pelatihan!.BidangPelatihan || ""}
-                </td>
-              </tr>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {pelatihan != null && (
-        <Card className="mt-4 md:mt-6 2xl:mt-7.5 w-full">
+        <div className="px-4 w-full mt-5">
           <div className="w-full border border-gray-200 rounded-xl">
             <div className="bg-gray-100 p-4 w-full ">
               <h2 className="font-bold font-calsans text-xl">
@@ -271,7 +281,7 @@ function DetailPelatihan() {
               <tr className="border-b border-b-gray-200 w-full">
                 <td className="font-semibold p-4 w-[20%]">Tarif Pelatihan</td>
                 <td className="p-4 w-2/3">
-                  Rp. {pelatihan!.HargaPelatihan || ""}
+                  {formatToRupiah(pelatihan!.HargaPelatihan) || ""}
                 </td>
               </tr>
               <tr className="border-b border-b-gray-200 w-full">
@@ -280,15 +290,23 @@ function DetailPelatihan() {
               </tr>
               <tr className="border-b border-b-gray-200 w-full">
                 <td className="font-semibold p-4 w-[20%]">Kuota Peserta</td>
-                <td className="p-4 w-2/3">{pelatihan!.KoutaPelatihan}</td>
+                <td className="p-4 w-2/3">
+                  {pelatihan!.KoutaPelatihan} Peserta
+                </td>
+              </tr>
+              <tr className="border-b border-b-gray-200 w-full">
+                <td className="font-semibold p-4 w-[20%]">Jumlah Terdaftar</td>
+                <td className="p-4 w-2/3">
+                  {pelatihan!.UserPelatihan.length} Peserta
+                </td>
               </tr>
             </table>
           </div>
-        </Card>
+        </div>
       )}
 
       {pelatihan != null && (
-        <div className="mt-4 md:mt-6 2xl:mt-7.5 w-full">
+        <div className="px-4 w-full mt-5">
           <div className="w-full border border-gray-200 rounded-xl">
             <div className="bg-gray-100 p-4 w-full ">
               <h2 className="font-bold font-calsans text-xl">
@@ -350,7 +368,7 @@ function DetailPelatihan() {
                   </Link>
                 </td>
               </tr>
-              {pelatihan?.UjiKompotensi == "Portfolio" ? (
+              {pelatihan?.UjiKompotensi != "Ujian Pre-test dan Post-test" ? (
                 <></>
               ) : (
                 <tr className="border-b border-b-gray-200 w-full">
@@ -371,50 +389,6 @@ function DetailPelatihan() {
                   </td>
                 </tr>
               )}
-            </table>
-          </div>
-        </div>
-      )}
-
-      {pelatihan != null && (
-        <div className="mt-4 md:mt-6 2xl:mt-7.5 w-full">
-          <div className="w-full border border-gray-200 rounded-xl">
-            <div className="bg-gray-100 p-4 w-full ">
-              <h2 className="font-bold font-calsans text-xl">
-                Informasi Penerbitan Sertifikat
-              </h2>
-            </div>
-            <table className="w-full">
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">Jenis Sertifikat</td>
-                <td className="p-4 w-2/3">{pelatihan!.JenisSertifikat}</td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">
-                  Penandatangan Sertifikat
-                </td>
-                <td className="p-4 w-2/3">
-                  {pelatihan!.TtdSertifikat == ""
-                    ? "-"
-                    : pelatihan!.TtdSertifikat}
-                </td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">No Sertifikat</td>
-                <td className="p-4 w-2/3">
-                  {pelatihan!.NoSertifikat == ""
-                    ? "-"
-                    : pelatihan!.NoSertifikat}
-                </td>
-              </tr>
-              <tr className="border-b border-b-gray-200 w-full">
-                <td className="font-semibold p-4 w-[20%]">Status Penerbitan</td>
-                <td className="p-4 w-2/3">
-                  {pelatihan!.PemberitahuanDiterima == ""
-                    ? "-"
-                    : pelatihan!.PemberitahuanDiterima}
-                </td>
-              </tr>
             </table>
           </div>
         </div>

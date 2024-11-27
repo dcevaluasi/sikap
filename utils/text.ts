@@ -17,7 +17,7 @@ export function generateFullNameBalai(bppp: string): string {
         case 'BDA Sukamandi':
             return 'Balai Diklat Aparatur Sukamandi'
         default:
-            return 'Undefined'
+            return 'Balai Pelatihan dan Penyuluhan Perikanan Testing'
     }
 }
 
