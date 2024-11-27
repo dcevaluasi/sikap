@@ -3,12 +3,15 @@
 import * as React from "react";
 
 import { Progress } from "@/components/ui/progress";
-import { PelatihanMasyarakat } from "@/types/product";
+import {
+  DetailPelatihanMasyarakat,
+  PelatihanMasyarakat,
+} from "@/types/product";
 
 export function ProgressBarPesertaPelatihan({
   pelatihan,
 }: {
-  pelatihan: PelatihanMasyarakat;
+  pelatihan: DetailPelatihanMasyarakat;
 }) {
   const [progress, setProgress] = React.useState(0);
 

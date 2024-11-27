@@ -39,6 +39,7 @@ import axios, { AxiosResponse } from "axios";
 import Cookies from "js-cookie";
 import {
   BalaiPelatihanBank,
+  DetailPelatihanMasyarakat,
   PelatihanMasyarakat,
   Sarpras,
 } from "@/types/product";
@@ -57,7 +58,7 @@ function FormRegistrationTraining({
 }: {
   id: number;
   harga: string;
-  pelatihan: PelatihanMasyarakat;
+  pelatihan: DetailPelatihanMasyarakat;
 }) {
   const scrollToTop = () => {
     window.scrollTo({

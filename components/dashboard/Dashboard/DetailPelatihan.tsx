@@ -275,7 +275,9 @@ function DetailPelatihan() {
                 <td className="p-4 w-2/3">
                   {generateTanggalPelatihan(pelatihan.TanggalMulaiPendaftaran)}{" "}
                   s.d.{" "}
-                  {generateTanggalPelatihan(pelatihan!.TanggalAkhirPendaftaran)}
+                  {generateTanggalPelatihan(
+                    pelatihan!.TanggalBerakhirPendaftaran
+                  )}
                 </td>
               </tr>
               <tr className="border-b border-b-gray-200 w-full">
