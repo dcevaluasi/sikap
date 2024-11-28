@@ -29,6 +29,7 @@ export type JawabanSoalPelatihan = {
 }
 
 export type PelatihanMasyarakat = {
+  TanggalAkhirPendaftaran?: string
   IdPelatihan: number
   IdLemdik: string
   KodePelatihan: string

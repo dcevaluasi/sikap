@@ -8,7 +8,7 @@ import Loader from "@/components/dashboard/common/Loader";
 import { Delius_Unicase, Inter, Plus_Jakarta_Sans } from "next/font/google";
 
 import localFont from "next/font/local";
-import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const myFont = localFont({
   src: "../font/calsans.ttf",

@@ -1,7 +1,17 @@
 import React, { ReactElement, useState } from "react";
-import { RiInformationFill, RiVerifiedBadgeFill } from "react-icons/ri";
+import {
+  RiInformationFill,
+  RiProgress3Line,
+  RiVerifiedBadgeFill,
+} from "react-icons/ri";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 import {
   Card,
@@ -24,6 +34,18 @@ import { generateTanggalPelatihan } from "@/utils/text";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import { GrValidate } from "react-icons/gr";
+import { MdNumbers } from "react-icons/md";
+import { AlertDialog } from "@radix-ui/react-alert-dialog";
+import {
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const TableDataPenerbitanSertifikat: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -53,7 +75,9 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
 
       // Filter data where SuratPemberitahuan is not an empty string
       const filteredData = response.data.data.filter(
-        (item: any) => item.TtdSertifikat == Cookies.get("Eselon")
+        (item: any) =>
+          item.TtdSertifikat == Cookies.get("Eselon") &&
+          item.StatusPenerbitan != ""
       );
 
       // Count statuses
@@ -256,22 +280,134 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
                   ) : (
                     filteredData.map((pengajuanPenerbitanSertifikat, index) => (
                       <Card key={index} className="relative">
-                        {pengajuanPenerbitanSertifikat!.NoSertifikat != "" && (
-                          <Badge
-                            variant="outline"
-                            className={`top-4 right-4 absolute ${
-                              pengajuanPenerbitanSertifikat!.StatusPenerbitan ==
-                              "On Progress"
-                                ? " bg-yellow-300 text-neutral-800"
-                                : " bg-green-500 text-white"
-                            }`}
-                          >
-                            {pengajuanPenerbitanSertifikat!.StatusPenerbitan!}{" "}
-                            {usePathname().includes("lemdiklat")
-                              ? "Pengajuan Sertifikat"
-                              : "Penerbitan"}
-                          </Badge>
+                        {pengajuanPenerbitanSertifikat != null ? (
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              {pengajuanPenerbitanSertifikat!.NoSertifikat !=
+                                "" && (
+                                <Badge
+                                  variant="outline"
+                                  className={`top-4 right-4 absolute cursor-pointer ${
+                                    pengajuanPenerbitanSertifikat!
+                                      .StatusPenerbitan == "On Progress"
+                                      ? " bg-yellow-300 text-neutral-800 hover:bg-yellow-400"
+                                      : " bg-green-500 text-white hover:bg-green-600"
+                                  }`}
+                                >
+                                  {
+                                    pengajuanPenerbitanSertifikat!
+                                      .StatusPenerbitan!
+                                  }{" "}
+                                  {usePathname().includes("lemdiklat")
+                                    ? "Pengajuan Sertifikat"
+                                    : "Penerbitan"}
+                                </Badge>
+                              )}
+                            </AlertDialogTrigger>
+                            <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
+                              <AlertDialogHeader>
+                                <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
+                                  <div className="w-24 h-24 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center animate-pulse">
+                                    <div className="w-16 h-16 rounded-full  bg-gradient-to-b from-gray-300 via-whiter to-white flex items-center justify-center animate-pulse">
+                                      {pengajuanPenerbitanSertifikat!
+                                        .StatusPenerbitan == "On Progress" ? (
+                                        <RiProgress3Line className="h-12 w-12 text-yellow-400" />
+                                      ) : (
+                                        <RiVerifiedBadgeFill className="h-12 w-12 text-green-500" />
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="flex flex-col gap-1 w-full justify-center items-center">
+                                    <h1 className="font-bold text-xl">
+                                      {
+                                        pengajuanPenerbitanSertifikat!
+                                          .StatusPenerbitan
+                                      }
+                                    </h1>
+                                    <AlertDialogDescription className="w-full text-center font-normal text-sm -mt-1">
+                                      {pengajuanPenerbitanSertifikat!
+                                        .StatusPenerbitan == "On Progress"
+                                        ? "Pengajuan penerbitan sertifikat telah masuk untuk diproses penandatanganan, harap tindak lanjut pengajuan berikut dalam kurun waktu 1x24 jam!"
+                                        : "Pengajuan penerbitan telah berhasil dan sertifikat telah terbit dengan ditandatangani anda sebagai" +
+                                          pengajuanPenerbitanSertifikat!
+                                            .TtdSertifikat}
+                                    </AlertDialogDescription>
+                                  </div>
+                                </AlertDialogTitle>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter className="w-full">
+                                <div className="flex-col flex w-full">
+                                  <div className="flex flex-wrap  border-b py-2 border-b-gray-300 w-full">
+                                    <div className="w-full">
+                                      <label
+                                        className="block text-sm text-gray-800  font-medium mb-1"
+                                        htmlFor="name"
+                                      >
+                                        No Sertifikat{" "}
+                                      </label>
+                                      <p className="text-gray-600 text-sm -mt-1">
+                                        {
+                                          pengajuanPenerbitanSertifikat?.NoSertifikat
+                                        }
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-wrap border-b py-2 border-b-gray-300 w-full">
+                                    <div className="w-full">
+                                      <label
+                                        className="block text-sm text-gray-800 font-medium mb-1"
+                                        htmlFor="name"
+                                      >
+                                        Pelatihan{" "}
+                                      </label>
+                                      <p className="text-gray-600 text-sm -mt-1">
+                                        {
+                                          pengajuanPenerbitanSertifikat?.NamaPelatihan
+                                        }
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-wrap border-b py-2 border-b-gray-300 w-full">
+                                    <div className="w-full">
+                                      <label
+                                        className="block text-sm text-gray-800 font-medium mb-1"
+                                        htmlFor="name"
+                                      >
+                                        Bidang Pelatihan{" "}
+                                      </label>
+                                      <p className="text-gray-600 text-sm -mt-1">
+                                        {
+                                          pengajuanPenerbitanSertifikat?.BidangPelatihan
+                                        }
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-wrap border-b py-2 border-b-gray-300 w-full">
+                                    <div className="w-full">
+                                      <label
+                                        className="block text-sm text-gray-800 font-medium mb-1"
+                                        htmlFor="name"
+                                      >
+                                        Tanggal Penandatangan{" "}
+                                      </label>
+                                      <p className="text-gray-600 text-sm -mt-1">
+                                        {"10 Juni 2024 - 19 Juni 2024"}
+                                      </p>
+                                    </div>
+                                  </div>
+
+                                  <AlertDialogAction className="py-5 mt-4">
+                                    Close
+                                  </AlertDialogAction>
+                                </div>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
+                        ) : (
+                          <></>
                         )}
+
                         <CardHeader>
                           <CardTitle>
                             {pengajuanPenerbitanSertifikat!.NamaPelatihan}
@@ -289,6 +425,16 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
                           <div className="ml-0 text-left capitalize -mt-6">
                             <div className="ml-0 text-left mt-1 text-neutral-500 ">
                               <p className="text-sm ">
+                                <span className="flex items-center gap-1 leading-[105%]">
+                                  <MdNumbers className="text-lg" />
+                                  <span>
+                                    No Sertifikat :{" "}
+                                    {
+                                      pengajuanPenerbitanSertifikat!
+                                        .NoSertifikat
+                                    }
+                                  </span>
+                                </span>
                                 <span className="flex items-center gap-1 leading-[105%]">
                                   <TbTargetArrow className="text-lg" />
                                   <span>
@@ -351,6 +497,7 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
 
                             <Link
                               href={`/admin/pusat/pelatihan/${pengajuanPenerbitanSertifikat.KodePelatihan}/peserta-pelatihan/${pengajuanPenerbitanSertifikat.IdPelatihan}`}
+                              title="Data Peserta Pelatihan"
                               className="border border-neutral-200  shadow-sm bg-teal-600 hover:bg-teal-600 text-neutral-100  hover:text-neutral-200 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2"
                             >
                               <HiUserGroup className="h-5 w-5" />

@@ -1,9 +1,19 @@
-import React from "react";
-import { RiInformationFill } from "react-icons/ri";
+import React, { ChangeEvent } from "react";
+import {
+  RiInformationFill,
+  RiProgress3Line,
+  RiVerifiedBadgeFill,
+} from "react-icons/ri";
 
 import { Badge } from "@/components/ui/badge";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 import {
   Card,
@@ -47,6 +57,18 @@ import { FiEdit2 } from "react-icons/fi";
 import GenerateNoSertifikatButton from "../Dashboard/Actions/GenerateNoSertifikatButton";
 import CloseButton from "../Dashboard/Actions/CloseButton";
 import { usePathname } from "next/navigation";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import Toast from "@/components/toast";
 
 const TableDataPelatihan: React.FC = () => {
   const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
@@ -106,6 +128,58 @@ const TableDataPelatihan: React.FC = () => {
     handleFetchingPublicTrainingData();
   }, []);
 
+  // HANDLING UPDATING DATA PELATIHAN
+  const [openFormEditPelatihan, setOpenFormEditPelatihan] =
+    React.useState<boolean>(false);
+
+  const [selectedPelatihan, setSelectedPelatihan] =
+    React.useState<PelatihanMasyarakat | null>(null);
+
+  const [tanggalMulaiPelatihan, setTanggalMulaiPelatihan] =
+    React.useState<string>("");
+  const [tanggalBerakhirPelatihan, setTanggalBerakhirPelatihan] =
+    React.useState<string>("");
+
+  const handleUpdatingDataPelatihan = async () => {
+    const formData = new FormData();
+    formData.append("TanggalMulaiPelatihan", tanggalMulaiPelatihan);
+    formData.append("TanggalBerakhirPelatihan", tanggalBerakhirPelatihan);
+
+    try {
+      const response = await axios.put(
+        `${elautBaseUrl}/lemdik/UpdatePelatihan?id=${
+          selectedPelatihan!.IdPelatihan
+        }`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log({ response });
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil setting waktu pelaksanaan!`,
+      });
+      setTanggalMulaiPelatihan("");
+      setOpenFormEditPelatihan(false);
+      setTanggalBerakhirPelatihan("");
+      handleFetchingPublicTrainingData();
+    } catch (error) {
+      console.error({ error });
+      Toast.fire({
+        icon: "error",
+        title: `Gagal setting waktu pelaksanaan!`,
+      });
+      setTanggalMulaiPelatihan("");
+      setTanggalBerakhirPelatihan("");
+      setOpenFormEditPelatihan(false);
+      handleFetchingPublicTrainingData();
+    }
+  };
+
   // STATUS FILTER
   const [selectedStatusFilter, setSelectedStatusFilter] =
     React.useState<string>("All");
@@ -149,6 +223,90 @@ const TableDataPelatihan: React.FC = () => {
 
   return (
     <div className="shadow-default -mt-10">
+      <AlertDialog
+        open={openFormEditPelatihan}
+        onOpenChange={setOpenFormEditPelatihan}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Edit Data Pelatihan</AlertDialogTitle>
+            <AlertDialogDescription>
+              {selectedPelatihan != null ? (
+                <div className="flex gap-2 w-full">
+                  <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                    <div className="w-full px-3">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="kodePelatihan"
+                      >
+                        Tanggal Mulai Pelatihan{" "}
+                        <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="tanggalMulaiPelatihan"
+                        type="date"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        required
+                        min={
+                          selectedPelatihan.TanggalAkhirPendaftaran ||
+                          new Date().toISOString().split("T")[0]
+                        }
+                        value={tanggalMulaiPelatihan}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                          setTanggalMulaiPelatihan(e.target.value)
+                        }
+                      />
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap -mx-3 mb-1 w-full">
+                    <div className="w-full px-3">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="namaPelatihan"
+                      >
+                        Tanggal Berakhir Pelatihan{" "}
+                        <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="tanggalBerakhirPelatihan"
+                        type="date"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        required
+                        min={
+                          tanggalMulaiPelatihan ||
+                          new Date().toISOString().split("T")[0]
+                        }
+                        value={tanggalBerakhirPelatihan}
+                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                          setTanggalBerakhirPelatihan(e.target.value)
+                        }
+                        disabled={!tanggalMulaiPelatihan}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <></>
+              )}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => {
+                setOpenFormEditPelatihan(false);
+                setTanggalMulaiPelatihan("");
+                setTanggalBerakhirPelatihan("");
+              }}
+            >
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={(e) => handleUpdatingDataPelatihan()}>
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <nav className="bg-gray-100 flex p-4">
         <section
           aria-labelledby="ticket-statistics-tabs-label "
@@ -270,20 +428,124 @@ const TableDataPelatihan: React.FC = () => {
               ) : (
                 filteredData.map((pelatihan, index) => (
                   <Card key={index} className="relative">
-                    {pelatihan!.NoSertifikat != "" && (
-                      <Badge
-                        variant="outline"
-                        className={`top-4 right-4 absolute ${
-                          pelatihan!.StatusPenerbitan == "On Progress"
-                            ? " bg-yellow-300 text-neutral-800"
-                            : " bg-green-500 text-white"
-                        }`}
-                      >
-                        {pelatihan!.StatusPenerbitan!}{" "}
-                        {usePathname().includes("lemdiklat")
-                          ? "Pengajuan Sertifikat"
-                          : "Penerbitan"}
-                      </Badge>
+                    {pelatihan != null ? (
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          {pelatihan!.NoSertifikat != "" &&
+                          pelatihan!.StatusPenerbitan != "" ? (
+                            <Badge
+                              variant="outline"
+                              className={`top-4 right-4 absolute cursor-pointer ${
+                                pelatihan!.StatusPenerbitan == "On Progress"
+                                  ? " bg-yellow-300 text-neutral-800 hover:bg-yellow-400"
+                                  : " bg-green-500 text-white hover:bg-green-600"
+                              }`}
+                            >
+                              {pelatihan!.StatusPenerbitan!}{" "}
+                              {usePathname().includes("lemdiklat")
+                                ? "Pengajuan Sertifikat"
+                                : "Penerbitan"}
+                            </Badge>
+                          ) : (
+                            <Badge
+                              variant="outline"
+                              className={`top-4 right-4 absolute cursor-pointer  bg-blue-500 text-white hover:bg-blue-600`}
+                            >
+                              Generate File Sertifikat
+                            </Badge>
+                          )}
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="w-full flex gap-2 items-center justify-center flex-col">
+                              <div className="w-24 h-24 rounded-full bg-gradient-to-b from-gray-200 via-whiter to-white flex items-center justify-center animate-pulse">
+                                <div className="w-16 h-16 rounded-full  bg-gradient-to-b from-gray-300 via-whiter to-white flex items-center justify-center animate-pulse">
+                                  {pelatihan!.StatusPenerbitan ==
+                                  "On Progress" ? (
+                                    <RiProgress3Line className="h-12 w-12 text-yellow-400" />
+                                  ) : (
+                                    <RiVerifiedBadgeFill className="h-12 w-12 text-green-500" />
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="flex flex-col gap-1 w-full justify-center items-center">
+                                <h1 className="font-bold text-xl">
+                                  {pelatihan!.StatusPenerbitan}
+                                </h1>
+                                <AlertDialogDescription className="w-full text-center font-normal text-sm -mt-1">
+                                  {pelatihan!.StatusPenerbitan == "On Progress"
+                                    ? "Pengajuan penerbitan sertifikat sedang dalam proses, harap dapat menunggu 1x24 jam dalam dan kembali lagi untuk mencek status!"
+                                    : "Pengajuan penerbitan sertifikat sudah diproses dan telah ditandangani oleh" +
+                                      pelatihan!.TtdSertifikat}
+                                </AlertDialogDescription>
+                              </div>
+                            </AlertDialogTitle>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter className="w-full">
+                            <div className="flex-col flex w-full">
+                              <div className="flex flex-wrap  border-b py-2 border-b-gray-300 w-full">
+                                <div className="w-full">
+                                  <label
+                                    className="block text-sm text-gray-800  font-medium mb-1"
+                                    htmlFor="name"
+                                  >
+                                    No Sertifikat{" "}
+                                  </label>
+                                  <p className="text-gray-600 text-sm -mt-1">
+                                    {pelatihan?.NoSertifikat}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex flex-wrap border-b py-2 border-b-gray-300 w-full">
+                                <div className="w-full">
+                                  <label
+                                    className="block text-sm text-gray-800 font-medium mb-1"
+                                    htmlFor="name"
+                                  >
+                                    Pelatihan{" "}
+                                  </label>
+                                  <p className="text-gray-600 text-sm -mt-1">
+                                    {pelatihan?.NamaPelatihan}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex flex-wrap border-b py-2 border-b-gray-300 w-full">
+                                <div className="w-full">
+                                  <label
+                                    className="block text-sm text-gray-800 font-medium mb-1"
+                                    htmlFor="name"
+                                  >
+                                    Bidang Pelatihan{" "}
+                                  </label>
+                                  <p className="text-gray-600 text-sm -mt-1">
+                                    {pelatihan?.BidangPelatihan}
+                                  </p>
+                                </div>
+                              </div>
+                              <div className="flex flex-wrap border-b py-2 border-b-gray-300 w-full">
+                                <div className="w-full">
+                                  <label
+                                    className="block text-sm text-gray-800 font-medium mb-1"
+                                    htmlFor="name"
+                                  >
+                                    Tanggal Penandatangan{" "}
+                                  </label>
+                                  <p className="text-gray-600 text-sm -mt-1">
+                                    {"10 Juni 2024 - 19 Juni 2024"}
+                                  </p>
+                                </div>
+                              </div>
+
+                              <AlertDialogAction className="py-5 mt-4">
+                                Close
+                              </AlertDialogAction>
+                            </div>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    ) : (
+                      <></>
                     )}
 
                     <CardHeader>
@@ -313,7 +575,7 @@ const TableDataPelatihan: React.FC = () => {
                                 )}{" "}
                                 <span className="lowercase">s.d</span>{" "}
                                 {generateTanggalPelatihan(
-                                  pelatihan!.TanggalBerakhirPelatihan
+                                  pelatihan!.TanggalAkhirPendaftaran!
                                 )}
                               </span>
                             </span>
@@ -370,8 +632,12 @@ const TableDataPelatihan: React.FC = () => {
                           >
                             <HiUserGroup className="h-5 w-5 " />
                           </Link>
-                          {pelatihan!.NoSertifikat == "" && (
+                          {pelatihan!.TanggalMulaiPelatihan == "" && (
                             <Button
+                              onClick={() => {
+                                setOpenFormEditPelatihan(true);
+                                setSelectedPelatihan(pelatihan);
+                              }}
                               title="Edit Pelatihan"
                               variant="outline"
                               className="ml-auto  hover:bg-yellow-300 bg-yellow-300 hover:text-neutral-700 text-neutral-700 duration-700"

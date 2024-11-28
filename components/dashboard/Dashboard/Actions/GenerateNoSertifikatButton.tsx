@@ -58,7 +58,7 @@ const GenerateNoSertifikatButton: React.FC<GenerateNoSertifikatButtonProps> = ({
 
     const updateData = new FormData();
     updateData.append("PemberitahuanDiterima", "Sedang diproses pusat");
-    updateData.append("StatusPenerbitan", "On Progress");
+    // updateData.append("StatusPenerbitan", "On Progress");
     if (beritaAcara != null) {
       updateData.append("BeritaAcara", beritaAcara);
     }
@@ -277,13 +277,17 @@ const GenerateNoSertifikatButton: React.FC<GenerateNoSertifikatButtonProps> = ({
                 Cancel
               </AlertDialogCancel>
             )}
-            <AlertDialogAction
-              onClick={(e) => handleGenerateSertifikat()}
-              disabled={isUploading}
-              className={`${isUploading && "px-6"}`}
-            >
-              {isUploading ? <span>Uploading...</span> : <span>Upload</span>}
-            </AlertDialogAction>
+            {beritaAcara != null && ttdSertifikat != "" ? (
+              <AlertDialogAction
+                onClick={(e) => handleGenerateSertifikat()}
+                disabled={isUploading}
+                className={`${isUploading && "px-6"}`}
+              >
+                {isUploading ? <span>Uploading...</span> : <span>Upload</span>}
+              </AlertDialogAction>
+            ) : (
+              <></>
+            )}
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -295,7 +299,7 @@ const GenerateNoSertifikatButton: React.FC<GenerateNoSertifikatButtonProps> = ({
               setOpenFormSertifikat(true);
             }}
             variant="outline"
-            title="Generate No Sertifikat dan Terbitkan Sertifikat"
+            title="Generate No Sertifikat"
             className="ml-auto bg-blue-600 hover:bg-blue-600 duration-700 text-neutral-100 hover:text-neutral-100"
           >
             <RiVerifiedBadgeFill className="h-5 w-5" />

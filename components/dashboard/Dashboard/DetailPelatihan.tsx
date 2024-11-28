@@ -2,6 +2,7 @@
 
 import React from "react";
 import {
+  RiProgress3Line,
   RiRadioButtonLine,
   RiShipLine,
   RiVerifiedBadgeFill,
@@ -57,6 +58,7 @@ import UploadSuratButton from "./Actions/UploadSuratButton";
 import GenerateNoSertifikatButton from "./Actions/GenerateNoSertifikatButton";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 function DetailPelatihan() {
   const paths = usePathname().split("/");
@@ -247,10 +249,24 @@ function DetailPelatihan() {
                   <td className="font-semibold p-4 w-[20%]">
                     Status Penerbitan
                   </td>
-                  <td className="p-4 w-2/3">
-                    {pelatihan!.PemberitahuanDiterima == ""
-                      ? "-"
-                      : pelatihan!.PemberitahuanDiterima}
+                  <td className="p-4 w-2/3 flex items-center">
+                    {pelatihan!.StatusPenerbitan != "" ? (
+                      <Badge
+                        variant="outline"
+                        className={` ${
+                          pelatihan!.StatusPenerbitan == "On Progress"
+                            ? " bg-yellow-300 text-neutral-800 hover:bg-yellow-400"
+                            : " bg-green-500 text-white hover:bg-green-600"
+                        }`}
+                      >
+                        {pelatihan!.StatusPenerbitan!}{" "}
+                        {usePathname().includes("lemdiklat")
+                          ? "Pengajuan Sertifikat"
+                          : "Penerbitan"}
+                      </Badge>
+                    ) : (
+                      <span>-</span>
+                    )}
                   </td>
                 </tr>
               </table>

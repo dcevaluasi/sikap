@@ -14,7 +14,6 @@ import {
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue,
   SelectLabel,
 } from "@/components/ui/select";
 import { FiSlack } from "react-icons/fi";
@@ -22,11 +21,14 @@ import { HiMiniUserGroup } from "react-icons/hi2";
 import ReCAPTCHA from "react-google-recaptcha";
 import Link from "next/link";
 import { generateRandomId } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 function page() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const router = useRouter();
 
+  // CAPTCHA VALIDATION
+  const recaptchaRef = React.createRef();
   const [captcha, setCaptcha] = React.useState<string | null>();
 
   /*
@@ -41,9 +43,14 @@ function page() {
     setPassword("");
   };
 
-  /*
-        method for processing login (POST)
-      */
+  // HANDLING RESET STATE
+  const handleClearStateLogin = () => {
+    setEmail("");
+    setPassword("");
+    setRole("");
+  };
+
+  // HANDLING LOGIN ADMIN
   const handleLogin = async (e: any) => {
     e.preventDefault();
 
@@ -51,56 +58,77 @@ function page() {
     data.append("email", email);
     data.append("password", password);
 
-    try {
-      const response: AxiosResponse = await axios.post(
-        `${baseUrl}/${role}/login`,
-        JSON.stringify({
-          email: email,
-          password: password,
-        }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
+    if (email == "" || password == "" || role == "") {
       Toast.fire({
-        icon: "success",
-        title: `Berhasil login ke admin E-LAUT!`,
+        icon: "error",
+        title: "Gagal mencoba login.",
+        text: `Harap lengkapi email, password, serta memilih role terlebih dahulu sebelum login!`,
       });
+      handleClearStateLogin();
+    } else {
+      if (captcha) {
+        try {
+          const response: AxiosResponse = await axios.post(
+            `${baseUrl}/${role}/login`,
+            JSON.stringify({
+              email: email,
+              password: password,
+            }),
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
 
-      Cookies.set("XSRF091", response.data.t, { expires: 1 });
-      Cookies.set("XSRF092", "true", { expires: 1 });
-      Cookies.set("XSRF093", role == "lemdik" ? "lemdiklat" : "adminPusat", {
-        expires: 1,
-      });
+          Toast.fire({
+            icon: "success",
+            title: `Berhasil login ke admin E-LAUT!`,
+          });
 
-      resetAllStateToEmptyString();
+          Cookies.set("XSRF091", response.data.t, { expires: 1 });
+          Cookies.set("XSRF092", "true", { expires: 1 });
+          Cookies.set(
+            "XSRF093",
+            role == "lemdik" ? "lemdiklat" : "adminPusat",
+            {
+              expires: 1,
+            }
+          );
 
-      if (role == "lemdik") {
-        router.push(`/${generateRandomId()}/lemdiklat/dashboard`);
-      } else {
-        router.push(`/admin/pusat/pelatihan/penerbitan-sertifikat`);
-      }
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        if (error.response?.status == 401) {
-          Toast.fire({
-            icon: "error",
-            title: `Email atau password yang dimasukkan salah, harap periksa kembali!`,
-          });
-        } else if (error.response?.status == 500) {
-          Toast.fire({
-            icon: "error",
-            title: `Proses login gagal dikarenakan terjadi gangguan pada server, hubungi admin pusat melalui call center!`,
-          });
-        } else {
-          Toast.fire({
-            icon: "error",
-            title: `Periksa jaringan internetmu, sistem tidak terhubung ke internet!`,
-          });
+          resetAllStateToEmptyString();
+
+          if (role == "lemdik") {
+            router.push(`/${generateRandomId()}/lemdiklat/dashboard`);
+          } else {
+            router.push(`/admin/pusat/pelatihan/penerbitan-sertifikat`);
+          }
+        } catch (error) {
+          if (error instanceof AxiosError) {
+            if (error.response?.status == 401) {
+              Toast.fire({
+                icon: "error",
+                title: `Email atau password yang dimasukkan salah, harap periksa kembali!`,
+              });
+            } else if (error.response?.status == 500) {
+              Toast.fire({
+                icon: "error",
+                title: `Proses login gagal dikarenakan terjadi gangguan pada server, hubungi admin pusat melalui call center!`,
+              });
+            } else {
+              Toast.fire({
+                icon: "error",
+                title: `Periksa jaringan internetmu, sistem tidak terhubung ke internet!`,
+              });
+            }
+          }
         }
+      } else {
+        Toast.fire({
+          icon: "error",
+          title: "Gagal mencoba login.",
+          text: `Untuk membuktikan kamu bukan robot, harap melakukan captcha terlebih dahulu!`,
+        });
       }
     }
   };
@@ -129,7 +157,7 @@ function page() {
                 E-LAUT
               </span>
             </h1>
-            <p className="font-jakarta max-w-[42rem] leading-[115%] text-gray-300  sm:text-base -mt-2">
+            <p className="font-jakarta max-w-[42rem] leading-[115%] text-gray-300  sm:text-base -mt-6">
               Selamat datang kembali, silahkan login untuk mengakses dashboard
               admin Elektronik Layanan Pelatihan Kelautan dan Perikanan Utama
               Terpadu!
@@ -146,6 +174,7 @@ function page() {
                 onChange={(e) => setEmail(e.target.value)}
                 className="border rounded-xl text-white border-blue-500 bg-transparent w-full placeholder:text-gray-300"
                 placeholder="Enter your email address"
+                autoComplete="off"
               />
             </div>
             <div className="flex flex-col gap-1">
@@ -158,6 +187,7 @@ function page() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="border rounded-xl text-white border-blue-500 bg-transparent w-full placeholder:text-gray-300"
                 placeholder="Enter your password"
+                autoComplete="off"
               />
             </div>
             <div className="flex flex-col gap-1">
@@ -190,12 +220,50 @@ function page() {
               </Select>
             </div>
 
-            <button
+            {role != "" && (
+              <div
+                className="flex flex-wrap w-full -mx-3 mb-2"
+                style={{ width: "100% !important" }}
+              >
+                <div
+                  className="w-full px-3"
+                  style={{ width: "100% !important" }}
+                >
+                  <label
+                    className="block text-gray-200 text-sm font-medium mb-1"
+                    htmlFor="password"
+                  >
+                    Verify if you are not a robot{" "}
+                    <span className="text-red-600">*</span>
+                  </label>
+                  <ReCAPTCHA
+                    style={{ width: "100% !important" }}
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                    className="mx-auto w-full font-inter text-sm"
+                    onChange={setCaptcha}
+                  />
+                </div>
+              </div>
+            )}
+
+            <Button
+              disabled={captcha ? false : true}
               onClick={(e) => handleLogin(e)}
-              className="text-white w-full bg-blue-500 rounded-xl bg-opacity-100 py-2"
+              className="text-white w-full text-base bg-blue-500 rounded-xl hover:bg-blue-600  py-3"
             >
               Login
-            </button>
+            </Button>
+            <div className="text-sm text-gray-200 text-center mt-2">
+              By logging to the system, you agree to the{" "}
+              <a className="underline" href="#0">
+                terms & conditions
+              </a>
+              , and our{" "}
+              <a className="underline" href="#0">
+                privacy policy
+              </a>
+              .
+            </div>
           </div>
         </section>
       </main>

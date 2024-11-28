@@ -10,7 +10,12 @@ import {
 import React, { ReactElement, useRef } from "react";
 import { MdVerified } from "react-icons/md";
 import { Button } from "../ui/button";
-import { TbCloudDownload, TbCloudUpload, TbLink } from "react-icons/tb";
+import {
+  TbCloudDownload,
+  TbCloudUpload,
+  TbLink,
+  TbWritingSign,
+} from "react-icons/tb";
 import { PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 import { useReactToPrint } from "react-to-print";
 
@@ -40,27 +45,15 @@ const SertifikatPage1 = React.forwardRef(
       pelatihan,
       userPelatihan,
       isPrinting,
+      isSpesimen,
     }: {
       pelatihan: PelatihanMasyarakat;
       userPelatihan: UserPelatihan;
       isPrinting?: boolean;
+      isSpesimen?: boolean;
     },
     ref: any
   ) => {
-    const totalJamTeory = pelatihan?.MateriPelatihan?.reduce(
-      (total, materi) => {
-        return total + parseInt(materi.JamTeory);
-      },
-      0
-    );
-
-    const totalJamPraktek = pelatihan?.MateriPelatihan?.reduce(
-      (total, materi) => {
-        return total + parseInt(materi.JamPraktek);
-      },
-      0
-    );
-
     const [peserta, setPeserta] = React.useState<User | null>(null);
 
     const handleFetchDetailPeserta = async () => {
@@ -77,9 +70,6 @@ const SertifikatPage1 = React.forwardRef(
 
     React.useEffect(() => {
       handleFetchDetailPeserta();
-      // document.addEventListener("contextmenu", function (e) {
-      //   e.preventDefault();
-      // });
     }, []);
 
     return (
@@ -238,13 +228,13 @@ const SertifikatPage1 = React.forwardRef(
                         : "Director for Marine And Fisheries Training Center"}
                     </p>
                   </div>
-                  {!isPrinting && pelatihan?.StatusPenerbitan == "Done" ? (
+                  {isSpesimen ? (
                     <Image
                       alt=""
                       width={0}
                       height={0}
                       src={"/ttd-elektronik.png"}
-                      className="w-fit h-[80px] relative -z-10 mt-2"
+                      className="w-fit h-[80px] relative -z-10"
                     />
                   ) : (
                     <div className="h-[80px]"></div>
@@ -260,91 +250,6 @@ const SertifikatPage1 = React.forwardRef(
               </div>
             </div>
 
-            {/* <div className="w-full  flex flex-col gap-4  px-10 py-10 rounded-md font-cambria leading-[120%] !h-[120vh]">
-              <div className="flex flex-row justify-center items-center">
-                <div className="flex flex-row gap-2 items-center">
-                  <div className="flex flex-col font-cambria text-center">
-                    <p className="font-extrabold max-w-md w-full italic">
-                      {pelatihan?.NamaPelatihan}
-                    </p>
-                    <p className="font-extrabold max-w-3xl">
-                      19 – 21 February 2024
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <table
-                border={1}
-                className="text-center border border-black-2 p-2 rounded-md"
-              >
-                <tr>
-                  <td
-                    rowSpan={2}
-                    className="border border-black-2 p-2 font-extrabold text-lg"
-                  >
-                    NO.
-                  </td>
-                  <td
-                    rowSpan={2}
-                    className="border border-black-2 p-2 font-extrabold text-lg"
-                  >
-                    COURSES
-                  </td>
-                  <td
-                    colSpan={3}
-                    className="border border-black-2 p-2 font-extrabold text-lg"
-                  >
-                    JAM PELATIHAN
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-black-2 p-2 font-extrabold text-lg">
-                    T
-                  </td>
-                  <td className="border border-black-2 p-2 font-extrabold text-lg">
-                    P
-                  </td>
-                </tr>
-                {pelatihan?.MateriPelatihan?.map((materi, index) => (
-                  <tr key={index}>
-                    <td className="border border-black-2 p-2">{index + 1}.</td>
-                    <td className="border border-black-2 p-2 text-left">
-                      {materi.NamaMateri}
-                    </td>
-                    <td className="border border-black-2 p-2">
-                      {materi.JamTeory}
-                    </td>
-                    <td className="border border-black-2 p-2">
-                      {materi.JamPraktek}
-                    </td>
-                  </tr>
-                ))}
-                <tr>
-                  <td
-                    colSpan={2}
-                    className="font-extrabold text-lg border border-black-2 p-2"
-                  >
-                    JUMLAH TOTAL
-                  </td>
-                  <td className="border border-black-2 p-2 font-extrabold">
-                    {totalJamTeory}
-                  </td>
-                  <td className="border border-black-2 p-2 font-extrabold">
-                    {totalJamPraktek}
-                  </td>
-                </tr>
-              </table>
-            </div>
-
-            <div className="flex flex-row  absolute -bottom-12">
-              <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">
-                Dokumen ini telah ditandatangani secara elektronik menggunakan
-                sertifikat elektronik yang telah diterbitkan oleh Balai
-                Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
-              </p>
-            </div> */}
-
             {!isPrinting && (
               <div className="flex flex-row  absolute -bottom-12">
                 <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">
@@ -355,101 +260,6 @@ const SertifikatPage1 = React.forwardRef(
               </div>
             )}
           </div>
-
-          {/* <div className="w-full flex flex-col  gap-4 relative h-full items-center justify-center">
-            <div className="w-full flex flex-col gap-4 px-10 pt-8 ">
-              <div className="flex flex-col gap-0 w-full items-center text-center justify-center mt-12">
-                <h1 className="text-base max-w-xl font-bosBold">
-                  Materi Pelatihan Cara Pembuatan Pakan Ikan yang Baik (CPPIB)
-                  bagi Peserta Didik di Satuan Pendidikan Kelautan dan
-                  Perikanan, tanggal 27 – 31 Mei 2024
-                </h1>
-                <p className=" leading-none font-bosItalic text-[0.65rem] max-w-xl">
-                  Good Aquculture Feed Manufacturing Practices (GfMP) Training
-                  For Students in the Marine and Fisheries Education Units 27 –
-                  31 May 2024
-                </p>
-              </div>
-
-              <table
-                border={1}
-                className="text-center border border-black-2 p-2 rounded-md"
-              >
-                <tr>
-                  <td
-                    rowSpan={2}
-                    className="border border-black-2 font-extrabold text-base font-bosBold"
-                  >
-                    NO
-                  </td>
-                  <td
-                    rowSpan={2}
-                    className="border border-black-2 font-extrabold text-base w-2/3"
-                  >
-                    <h2 className="font-bosBold text-base">MATA PELATIHAN</h2>
-                    <p className="font-bosItalic text-xs">COURSE</p>
-                  </td>
-                  <td
-                    colSpan={3}
-                    className="border border-black-2 font-extrabold text-lg"
-                  >
-                    <h2 className="font-bosBold text-base">
-                      ALOKASI WAKTU
-                      <br />
-                      (@ 45 menit)
-                    </h2>
-                    <p className="font-bosItalic text-xs">Duration @45 Menit</p>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="border border-black-2 w-[100px] font-extrabold text-lg">
-                    <h2 className="font-bosBold text-base">TEORI</h2>
-                    <p className="font-bosItalic text-xs">Theory</p>
-                  </td>
-                  <td className="border border-black-2 w-[100px] font-extrabold text-lg">
-                    <h2 className="font-bosBold text-base">PRAKTEK</h2>
-                    <p className="font-bosItalic text-xs">Practice</p>
-                  </td>
-                </tr>
-                {pelatihan?.MateriPelatihan?.map((materi, index) => (
-                  <tr key={index}>
-                    <td className="border border-black-2 p-2">{index + 1}.</td>
-                    <td className="border border-black-2 p-2 text-left">
-                      {materi.NamaMateri}
-                    </td>
-                    <td className="border border-black-2 p-2">
-                      {materi.JamTeory}
-                    </td>
-                    <td className="border border-black-2 p-2">
-                      {materi.JamPraktek}
-                    </td>
-                  </tr>
-                ))}
-                <tr>
-                  <td
-                    colSpan={2}
-                    className="font-extrabold text-lg border border-black-2 p-2"
-                  >
-                    JUMLAH TOTAL
-                  </td>
-                  <td className="border border-black-2 p-2 font-extrabold">
-                    {totalJamTeory}
-                  </td>
-                  <td className="border border-black-2 p-2 font-extrabold">
-                    {totalJamPraktek}
-                  </td>
-                </tr>
-              </table>
-            </div>
-
-            <div className="flex flex-row  absolute -bottom-12">
-              <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">
-                Dokumen ini telah ditandatangani secara elektronik menggunakan
-                sertifikat elektronik yang telah diterbitkan oleh Balai
-                Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
-              </p>
-            </div>
-          </div> */}
         </div>
       </div>
     );
@@ -592,6 +402,7 @@ export function DialogSertifikatPelatihan({
   }, [show, userPelatihan]);
 
   const [isPrinting, setIsPrinting] = React.useState<boolean>(false);
+  const [isSpesimen, setIsSpesimen] = React.useState<boolean>(false);
 
   return (
     <div>
@@ -620,6 +431,7 @@ export function DialogSertifikatPelatihan({
             <SertifikatPage1
               ref={componentRef}
               pelatihan={pelatihan}
+              isSpesimen={isSpesimen}
               userPelatihan={userPelatihan}
               isPrinting={isPrinting}
             />
@@ -660,21 +472,39 @@ export function DialogSertifikatPelatihan({
 
               {usePathname().includes("lemdiklat") &&
                 userPelatihan!.FileSertifikat == "" && (
-                  <Button
-                    onClick={(e) => handleUploadPDF()}
-                    type="submit"
-                    disabled={isUploading}
-                    className="flex items-center gap-1"
-                  >
-                    {isUploading ? (
-                      <>Uploading...</>
-                    ) : (
-                      <>
-                        <TbCloudUpload />
-                        Upload
-                      </>
+                  <>
+                    {!isUploading && (
+                      <Button
+                        onClick={(e) => setIsSpesimen(!isSpesimen)}
+                        className="flex items-center gap-1 bg-gray-600 hover:bg-gray-700 text-white hover:text-white"
+                      >
+                        <>
+                          <TbWritingSign />
+                          {isSpesimen
+                            ? "Undo Tambahkan Spesimen TTD"
+                            : "Tambahkan Spesimen TTD"}
+                        </>
+                      </Button>
                     )}
-                  </Button>
+
+                    {isSpesimen && (
+                      <Button
+                        onClick={(e) => handleUploadPDF()}
+                        type="submit"
+                        disabled={isUploading}
+                        className="flex items-center gap-1"
+                      >
+                        {isUploading ? (
+                          <>Uploading...</>
+                        ) : (
+                          <>
+                            <TbCloudUpload />
+                            Generate PDF dan Ajukan Penerbitan
+                          </>
+                        )}
+                      </Button>
+                    )}
+                  </>
                 )}
             </DialogFooter>
           )}
