@@ -471,7 +471,7 @@ const TableDataPesertaPelatihan = () => {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        ) : (
+        ) : row.original.FileSertifikat == "" ? (
           <DialogSertifikatPelatihan
             pelatihan={dataPelatihan!}
             userPelatihan={data[row.index]}
@@ -484,6 +484,18 @@ const TableDataPesertaPelatihan = () => {
               <span className="text-xs"> {row.original?.NoSertifikat}</span>
             </Button>
           </DialogSertifikatPelatihan>
+        ) : (
+          <Link
+            target="_blank"
+            href={
+              "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/sertifikat-ttde/" +
+              row.original.FileSertifikat!
+            }
+            className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center h-9 px-4 py-2  whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50"
+          >
+            <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
+            <span className="text-xs"> {row.original?.NoSertifikat}</span>
+          </Link>
         ),
     },
     {

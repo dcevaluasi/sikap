@@ -321,22 +321,23 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
                         <CardFooter>
                           <div className="flex items-center justify-center gap-1 flex-wrap  -mt-2">
                             <Link
+                              title={
+                                pengajuanPenerbitanSertifikat!
+                                  .StatusPenerbitan != "Done"
+                                  ? "Review"
+                                  : "Lihat Detail"
+                              }
                               href={`/admin/pusat/pelatihan/penerbitan-sertifikat/detail-pelatihan/${pengajuanPenerbitanSertifikat.KodePelatihan}/${pengajuanPenerbitanSertifikat.IdPelatihan}`}
-                            className="border border-neutral-200  shadow-sm  inline-flex items-center justify-center whitespace-nowrap  text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-gray-400 hover:bg-gray-400 hover:text-white text-white rounded-md"
+                              className="border border-neutral-200  shadow-sm  inline-flex items-center justify-center whitespace-nowrap  text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2 bg-gray-400 hover:bg-gray-400 hover:text-white text-white rounded-md"
                             >
-                              <RiInformationFill className="h-5 w-5 mr-1" />
-                              {pengajuanPenerbitanSertifikat!
-                                .StatusPenerbitan != "Done"
-                                ? "Review"
-                                : "Lihat Detail"}
+                              <RiInformationFill className="h-5 w-5" />
                             </Link>
 
                             <Link
                               href={`/admin/pusat/pelatihan/${pengajuanPenerbitanSertifikat.KodePelatihan}/peserta-pelatihan/${pengajuanPenerbitanSertifikat.IdPelatihan}`}
                               className="border border-neutral-200  shadow-sm bg-teal-600 hover:bg-teal-600 text-neutral-100  hover:text-neutral-200 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2"
                             >
-                              <HiUserGroup className="h-5 w-5 mr-1" />
-                              Peserta Pelatihan
+                              <HiUserGroup className="h-5 w-5" />
                             </Link>
                           </div>
                         </CardFooter>
