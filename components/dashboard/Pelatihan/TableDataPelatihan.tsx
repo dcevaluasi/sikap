@@ -43,6 +43,8 @@ import UploadSuratButton from "../Dashboard/Actions/UploadSuratButton";
 import { GrSend } from "react-icons/gr";
 import { FiEdit2 } from "react-icons/fi";
 import GenerateNoSertifikatButton from "../Dashboard/Actions/GenerateNoSertifikatButton";
+import CloseButton from "../Dashboard/Actions/CloseButton";
+import { usePathname } from "next/navigation";
 
 const TableDataPelatihan: React.FC = () => {
   const [data, setData] = React.useState<PelatihanMasyarakat[]>([]);
@@ -129,8 +131,12 @@ const TableDataPelatihan: React.FC = () => {
 
     // Check if it matches the status filter
     let matchesStatus = true;
-    if (selectedStatusFilter === "Belum Dipublish") {
+    if (selectedStatusFilter === "Proses Penerbitan Sertifikat") {
+      matchesStatus = pelatihan.StatusPenerbitan === "On Progress";
+    } else if (selectedStatusFilter === "Belum Dipublish") {
       matchesStatus = pelatihan.Status !== "Publish";
+    } else if (selectedStatusFilter === "Sudah Di TTD") {
+      matchesStatus = pelatihan.StatusPenerbitan === "Done";
     } else if (selectedStatusFilter !== "All") {
       matchesStatus = pelatihan.Status === selectedStatusFilter;
     }
@@ -160,13 +166,17 @@ const TableDataPelatihan: React.FC = () => {
               onClick={() => setSelectedStatusFilter("Belum Dipublish")}
             />
             <StatusButton
-              label="Perlu Di TTD"
+              label="Proses Penerbitan Sertifikat"
               count={countOnProgress}
-              isSelected={selectedStatusFilter === "Perlu Di TTD"}
-              onClick={() => setSelectedStatusFilter("Perlu Di TTD")}
+              isSelected={
+                selectedStatusFilter === "Proses Penerbitan Sertifikat"
+              }
+              onClick={() =>
+                setSelectedStatusFilter("Proses Penerbitan Sertifikat")
+              }
             />
             <StatusButton
-              label="Sudah Di TTD"
+              label="Sudah Terbit"
               count={countDone}
               isSelected={selectedStatusFilter === "Sudah Di TTD"}
               onClick={() => setSelectedStatusFilter("Sudah Di TTD")}
@@ -331,7 +341,13 @@ const TableDataPelatihan: React.FC = () => {
                           </Link>
                           <Link
                             title="Peserta Pelatihan"
-                            href={`/admin/pusat/pelatihan/${pelatihan.KodePelatihan}/peserta-pelatihan/${pelatihan.IdPelatihan}`}
+                            href={`/admin/${
+                              usePathname().includes("lemdiklat")
+                                ? "lemdiklat"
+                                : "pusat"
+                            }/pelatihan/${
+                              pelatihan.KodePelatihan
+                            }/peserta-pelatihan/${pelatihan.IdPelatihan}`}
                             className="  shadow-sm bg-green-500 hover:bg-green-500 text-neutral-100  hover:text-neutral-100 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors  disabled:pointer-events-none disabled:opacity-50 h-9 px-4 py-2"
                           >
                             <HiUserGroup className="h-5 w-5 " />
@@ -345,14 +361,6 @@ const TableDataPelatihan: React.FC = () => {
                               <FiEdit2 className="h-5 w-5" />
                             </Button>
                           )}
-
-                          <GenerateNoSertifikatButton
-                            idPelatihan={pelatihan!.IdPelatihan.toString()}
-                            pelatihan={pelatihan!}
-                            handleFetchingData={
-                              handleFetchingPublicTrainingData
-                            }
-                          />
 
                           {pelatihan!.Status != "Publish" && (
                             <>
@@ -398,6 +406,23 @@ const TableDataPelatihan: React.FC = () => {
                               suratPemberitahuan={pelatihan?.SuratPemberitahuan}
                             />
                           )}
+
+                          <GenerateNoSertifikatButton
+                            idPelatihan={pelatihan!.IdPelatihan.toString()}
+                            pelatihan={pelatihan!}
+                            handleFetchingData={
+                              handleFetchingPublicTrainingData
+                            }
+                          />
+
+                          <CloseButton
+                            pelatihan={pelatihan!}
+                            statusPelatihan={pelatihan?.Status ?? ""}
+                            idPelatihan={pelatihan!.IdPelatihan.toString()}
+                            handleFetchingData={
+                              handleFetchingPublicTrainingData
+                            }
+                          />
                         </div>
                         <p className="italic text-neutral-400 text-[0.6rem]">
                           Created at {pelatihan!.CreateAt} | Updated at{" "}

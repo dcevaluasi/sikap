@@ -25,16 +25,19 @@ import axios from "axios";
 import Toast from "@/components/toast";
 import Cookies from "js-cookie";
 import { HiLockClosed } from "react-icons/hi2";
+import { PelatihanMasyarakat } from "@/types/product";
 
 interface CloseButtonProps {
   statusPelatihan: string;
   idPelatihan: string;
+  pelatihan: PelatihanMasyarakat;
   handleFetchingData: any;
 }
 
 const CloseButton: React.FC<CloseButtonProps> = ({
   statusPelatihan,
   idPelatihan,
+  pelatihan,
   handleFetchingData,
 }) => {
   const [openFormTutupPelatihan, setOpenFormTutupPelatihan] =
@@ -72,6 +75,8 @@ const CloseButton: React.FC<CloseButtonProps> = ({
       handleFetchingData();
     }
   };
+
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <>
@@ -135,25 +140,20 @@ const CloseButton: React.FC<CloseButtonProps> = ({
         </AlertDialogContent>
       </AlertDialog>
 
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => {
-                setSelectedStatus(statusPelatihan);
-                setOpenFormTutupPelatihan(!openFormTutupPelatihan);
-              }}
-              variant="outline"
-              className="ml-auto  hover:bg-yellow-300 bg-yellow-300 hover:text-neutral-800 text-neutral-800 duration-700"
-            >
-              <HiLockClosed className="h-5 w-5 mr-1 " /> Edit Pelatihan
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Tutup Pelatihan</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      {pelatihan.TanggalBerakhirPelatihan >= today &&
+        pelatihan.StatusApproval != "Selesai" && (
+          <Button
+            title="Tutup Kelas Pelatihan"
+            onClick={() => {
+              setSelectedStatus(statusPelatihan);
+              setOpenFormTutupPelatihan(!openFormTutupPelatihan);
+            }}
+            variant="outline"
+            className="ml-auto hover:bg-primary bg-primary hover:text-neutral-100 text-neutral-100 duration-700"
+          >
+            <HiLockClosed className="h-5 w-5" />
+          </Button>
+        )}
     </>
   );
 };

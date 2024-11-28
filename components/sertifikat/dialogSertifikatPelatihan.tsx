@@ -624,32 +624,38 @@ export function DialogSertifikatPelatihan({
           </div>
           {userPelatihan != null && (
             <DialogFooter>
-              <Button
-                type="submit"
-                className="flex items-center gap-1 bg-blue-500 hover:bg-blue-500"
-              >
-                <TbLink />
-                Salin Tautan
-              </Button>
-              <Button
-                type="submit"
-                onClick={(e) => handlePrint()}
-                className="flex items-center gap-1 bg-gray-700 hover:bg-gray-700"
-              >
-                <BsFillPrinterFill />
-                Print Sertifikat
-              </Button>
-              <Link
-                href={`https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/sertifikat-ttde/${
-                  userPelatihan!.FileSertifikat
-                }`}
-                target="_blank"
-                type="submit"
-                className="bg-neutral-900 text-neutral-50 shadow hover:bg-neutral-900/90 h-9 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50"
-              >
-                <TbCloudDownload />
-                Download
-              </Link>
+              {pelatihan!.StatusPenerbitan == "Done" && (
+                <>
+                  {" "}
+                  <Button
+                    type="submit"
+                    className="flex items-center gap-1 bg-blue-500 hover:bg-blue-500"
+                  >
+                    <TbLink />
+                    Salin Tautan
+                  </Button>
+                  <Button
+                    type="submit"
+                    onClick={(e) => handlePrint()}
+                    className="flex items-center gap-1 bg-gray-700 hover:bg-gray-700"
+                  >
+                    <BsFillPrinterFill />
+                    Print Sertifikat
+                  </Button>
+                  <Link
+                    href={`https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/sertifikat-ttde/${
+                      userPelatihan!.FileSertifikat
+                    }`}
+                    target="_blank"
+                    type="submit"
+                    className="bg-neutral-900 text-neutral-50 shadow hover:bg-neutral-900/90 h-9 px-4 py-2 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50"
+                  >
+                    <TbCloudDownload />
+                    Download
+                  </Link>
+                </>
+              )}
+
               {usePathname().includes("lemdiklat") &&
                 userPelatihan!.FileSertifikat == "" && (
                   <Button
