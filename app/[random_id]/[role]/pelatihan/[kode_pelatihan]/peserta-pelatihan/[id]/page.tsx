@@ -65,24 +65,6 @@ export default function Home() {
             </ul>
           </nav>
 
-          <div className="flex flex-col w-full">
-            <div className="flex flex-row gap-2 items-center">
-              <header
-                aria-label="page caption"
-                className="flex-row w-full flex h-20 items-center gap-2 bg-gray-100 border-t px-4"
-              >
-                <HiUserGroup className="text-3xl" />
-                <div className="flex flex-col">
-                  <h1 id="page-caption" className="font-semibold text-lg">
-                    Peserta Pelatihan
-                  </h1>
-                  <p className="font-medium text-gray-400 text-base">
-                    Verifikasi, Monitoring, dan Lihat Data Peserta Pelatihan!
-                  </p>
-                </div>
-              </header>
-            </div>
-          </div>
           <main className="w-full h-full">
             <PesertaPelatihan />
           </main>

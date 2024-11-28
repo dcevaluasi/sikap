@@ -15,7 +15,7 @@ import {
 import { HiUserGroup } from "react-icons/hi2";
 import { TbCalendarCheck, TbTargetArrow } from "react-icons/tb";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import axios, { AxiosResponse } from "axios";
 import { PelatihanMasyarakat } from "@/types/product";
 import Cookies from "js-cookie";
@@ -23,6 +23,7 @@ import Link from "next/link";
 import { generateTanggalPelatihan } from "@/utils/text";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 const TableDataPenerbitanSertifikat: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -125,7 +126,7 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
 
     if (selectedStatusFilter == "Proses Tandatangan") {
       matchesStatus = pelatihan!.StatusPenerbitan === "On Progress";
-    } else if (selectedStatusFilter == "Sudah Di TTD") {
+    } else if (selectedStatusFilter == "Sudah Ditandatangan") {
       matchesStatus = pelatihan!.StatusPenerbitan === "Done";
     } else {
       matchesStatus =
@@ -195,9 +196,11 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
 
                 <li>
                   <button
-                    onClick={() => setSelectedStatusFilter("Sudah Di TTD")}
+                    onClick={() =>
+                      setSelectedStatusFilter("Sudah Ditandatangan")
+                    }
                     className={`focus:outline-none p-2 rounded-r-md border border-r-1 flex flex-col items-center w-fit ${
-                      selectedStatusFilter === "Sudah Di TTD"
+                      selectedStatusFilter === "Sudah Ditandatangan"
                         ? "bg-blue-500 text-white"
                         : "bg-white text-black"
                     }`}
@@ -205,12 +208,12 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
                     <p className="font-semibold text-lg">{countDone}</p>
                     <p
                       className={`uppercase text-sm ${
-                        selectedStatusFilter === "Sudah Di TTD"
+                        selectedStatusFilter === "Sudah Ditandatangan"
                           ? "text-white font-bold"
                           : "text-gray-600"
                       }`}
                     >
-                      Sudah Di TTD
+                      Sudah Ditandatangan
                     </p>
                   </button>
                 </li>
@@ -252,7 +255,23 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
                     </div>
                   ) : (
                     filteredData.map((pengajuanPenerbitanSertifikat, index) => (
-                      <Card key={index}>
+                      <Card key={index} className="relative">
+                        {pengajuanPenerbitanSertifikat!.NoSertifikat != "" && (
+                          <Badge
+                            variant="outline"
+                            className={`top-4 right-4 absolute ${
+                              pengajuanPenerbitanSertifikat!.StatusPenerbitan ==
+                              "On Progress"
+                                ? " bg-yellow-300 text-neutral-800"
+                                : " bg-green-500 text-white"
+                            }`}
+                          >
+                            {pengajuanPenerbitanSertifikat!.StatusPenerbitan!}{" "}
+                            {usePathname().includes("lemdiklat")
+                              ? "Pengajuan Sertifikat"
+                              : "Penerbitan"}
+                          </Badge>
+                        )}
                         <CardHeader>
                           <CardTitle>
                             {pengajuanPenerbitanSertifikat!.NamaPelatihan}

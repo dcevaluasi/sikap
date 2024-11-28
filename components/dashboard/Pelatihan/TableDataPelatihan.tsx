@@ -269,7 +269,23 @@ const TableDataPelatihan: React.FC = () => {
                 </div>
               ) : (
                 filteredData.map((pelatihan, index) => (
-                  <Card key={index}>
+                  <Card key={index} className="relative">
+                    {pelatihan!.NoSertifikat != "" && (
+                      <Badge
+                        variant="outline"
+                        className={`top-4 right-4 absolute ${
+                          pelatihan!.StatusPenerbitan == "On Progress"
+                            ? " bg-yellow-300 text-neutral-800"
+                            : " bg-green-500 text-white"
+                        }`}
+                      >
+                        {pelatihan!.StatusPenerbitan!}{" "}
+                        {usePathname().includes("lemdiklat")
+                          ? "Pengajuan Sertifikat"
+                          : "Penerbitan"}
+                      </Badge>
+                    )}
+
                     <CardHeader>
                       <CardTitle>{pelatihan!.NamaPelatihan}</CardTitle>
                       <CardDescription>
@@ -279,7 +295,7 @@ const TableDataPelatihan: React.FC = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                      <div className="ml-0 text-left capitalize -mt-6 w-full relative">
+                      <div className="ml-0 text-left capitalize -mt-6 w-full ">
                         <div className="ml-0 text-left mt-1 text-neutral-500 ">
                           <p className="text-sm ">
                             <span className="flex items-center gap-1 leading-[105%]">
@@ -329,7 +345,6 @@ const TableDataPelatihan: React.FC = () => {
                             </span>
                           </p>
                         </div>
-                        <Badge variant="outline">Outline</Badge>
                       </div>
                     </CardContent>
                     <CardFooter>

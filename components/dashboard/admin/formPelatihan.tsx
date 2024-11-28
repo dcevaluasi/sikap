@@ -498,7 +498,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
 
   return (
     <section ref={elementRef} className="relative w-full py-10">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 md:-mt-8">
+      <div className=" mx-auto px-4 sm:px-6 md:-mt-8">
         <div className="pb-12 md:pb-20 flex items-center justify-center">
           {/* Form */}
           {isUploading ? (

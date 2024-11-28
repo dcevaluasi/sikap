@@ -30,7 +30,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, Edit3Icon, LucideListChecks, Trash } from "lucide-react";
+import {
+  ArrowUpDown,
+  Edit3Icon,
+  LucideInfo,
+  LucideListChecks,
+  Trash,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   TbBroadcast,
@@ -265,44 +271,46 @@ const TableDataPesertaPelatihan = () => {
       },
       cell: ({ row }) => (
         <div className={` flex items-center justify-center w-full gap-1`}>
-          {row.original.Keterangan == "Valid" ? (
-            <Link
-              href={`/admin/lemdiklat/pelatihan/${
-                paths[paths.length - 3]
-              }/peserta-pelatihan/${row.original.IdPelatihan}/${
-                row.original.IdUserPelatihan
-              }/${row.original.IdUsers}`}
-              // onClick={(e) => {
-              //   setOpenFormValidasiDataPesertaPelatihan(
-              //     !openFormValidasiDataPesertaPelatihan
-              //   );
-              //   setDataPesertaSelected(row.original!);
-              //   setSelectedIdPeserta(row.original!.IdUserPelatihan);
-              // }}
-              // variant="outline"
-              className=" border border-green-500  text-green-500  bg-white shadow-sm hover:bg-green-500 hover:text-white h-9 px-4 py-2 mx-0 rounded-md"
-            >
-              <RiVerifiedBadgeFill className="h-4 w-4 " />
-            </Link>
+          {usePathname().includes("lemdiklat") ? (
+            row.original.Keterangan == "Valid" ? (
+              <Link
+                href={`/admin/${
+                  usePathname().includes("lemdiklat") ? "lemdiklat" : "pusat"
+                }/pelatihan/${paths[paths.length - 3]}/peserta-pelatihan/${
+                  row.original.IdPelatihan
+                }/${row.original.IdUserPelatihan}/${row.original.IdUsers}`}
+                className=" border border-green-500  text-white shadow-sm hover:bg-green-500 bg-green-500 hover:text-white h-9 px-4 py-2 mx-0 rounded-md  flex text-base items-center gap-2"
+              >
+                <RiVerifiedBadgeFill className="h-4 w-4 " />{" "}
+                <span className="">Validasi</span>
+              </Link>
+            ) : (
+              <Link
+                href={`/admin/${
+                  usePathname().includes("lemdiklat") ? "lemdiklat" : "pusat"
+                }/pelatihan/${paths[paths.length - 3]}/peserta-pelatihan/${
+                  row.original.IdPelatihan
+                }/${row.original.IdUserPelatihan}/${row.original.IdUsers}`}
+                className=" border border-rose-500  text-white   shadow-sm hover:bg-rose-500 bg-rose-500 hover:text-white h-9 px-4 py-2 mx-0 rounded-md  flex text-base items-center gap-2"
+              >
+                <RiVerifiedBadgeFill className="h-4 w-4 " />{" "}
+                <span className="">Tidak Valid</span>
+              </Link>
+            )
           ) : (
-            <Link
-              href={`/admin/lemdiklat/pelatihan/${
-                paths[paths.length - 3]
-              }/peserta-pelatihan/${row.original.IdPelatihan}/${
-                row.original.IdUserPelatihan
-              }/${row.original.IdUsers}`}
-              // onClick={(e) => {
-              //   setOpenFormValidasiDataPesertaPelatihan(
-              //     !openFormValidasiDataPesertaPelatihan
-              //   );
-              //   setDataPesertaSelected(row.original!);
-              //   setSelectedIdPeserta(row.original!.IdUserPelatihan);
-              // }}
-              // variant="outline"
-              className=" border border-rose-500  text-rose-500  bg-white shadow-sm hover:bg-rose-500 hover:text-white h-9 px-4 py-2 mx-0 rounded-md"
-            >
-              <RiVerifiedBadgeFill className="h-4 w-4 " />
-            </Link>
+            <>
+              <Link
+                href={`/admin/${
+                  usePathname().includes("lemdiklat") ? "lemdiklat" : "pusat"
+                }/pelatihan/${paths[paths.length - 3]}/peserta-pelatihan/${
+                  row.original.IdPelatihan
+                }/${row.original.IdUserPelatihan}/${row.original.IdUsers}`}
+                className=" border border-neutral-800  text-white  shadow-sm hover:bg-neutral-800 bg-neutral-800 hover:text-white h-9 px-4 py-2 mx-0 rounded-md flex text-base items-center gap-2"
+              >
+                <LucideInfo className="h-4 w-4 " />{" "}
+                <span className="">Lihat Detail Peserta</span>
+              </Link>
+            </>
           )}
         </div>
       ),
@@ -348,22 +356,6 @@ const TableDataPesertaPelatihan = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize`}>
-          {/* <p className="text-xs text-gray-400">
-            {" "}
-            <span
-              className={`${
-                row.original.StatusPembayaran == "pending"
-                  ? "text-yellow-500"
-                  : row.original.StatusPembayaran == "paid" ||
-                    row.original.StatusPembayaran == "Done"
-                  ? "text-rose-500"
-                  : "text-rose-500"
-              } capitalize`}
-            >
-              {row.original.StatusPembayaran}
-            </span>{" "}
-            • BTPN
-          </p>{" "} */}
           <p className="text-xs text-gray-400"> Total Pembayaran</p>{" "}
           <p className="text-base font-semibold tracking-tight leading-none">
             {formatToRupiah(parseInt(row.original.TotalBayar))}
@@ -377,7 +369,9 @@ const TableDataPesertaPelatihan = () => {
         return (
           <Button
             variant="ghost"
-            className={`text-black font-semibold text-center w-full  items-center justify-center p-0 flex`}
+            className={`text-black font-semibold text-center w-full  items-center justify-center p-0 flex ${
+              usePathname().includes("lemdiklat") ? "flex" : "hidden"
+            }`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             No Sertifikat
@@ -385,8 +379,13 @@ const TableDataPesertaPelatihan = () => {
           </Button>
         );
       },
-      cell: ({ row }) =>
-        row.original.Keterangan == "" ? (
+      cell: ({ row }) => (
+        <div
+          className={`${
+            usePathname().includes("lemdiklat") ? "flex" : "hidden"
+          }`}
+        >
+          row.original.Keterangan == "" ? (
           <Button
             variant="outline"
             className="w-full border flex gap-2 border-rose-600 text-left capitalize items-center justify-center"
@@ -395,7 +394,7 @@ const TableDataPesertaPelatihan = () => {
             Divalidasi
             <span className="text-xs"> {row.original?.NoSertifikat}</span>
           </Button>
-        ) : row.original.NoSertifikat == "" ? (
+          ) : row.original.NoSertifikat == "" ? (
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
@@ -471,7 +470,7 @@ const TableDataPesertaPelatihan = () => {
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        ) : row.original.FileSertifikat == "" ? (
+          ) : row.original.FileSertifikat == "" ? (
           <DialogSertifikatPelatihan
             pelatihan={dataPelatihan!}
             userPelatihan={data[row.index]}
@@ -484,7 +483,7 @@ const TableDataPesertaPelatihan = () => {
               <span className="text-xs"> {row.original?.NoSertifikat}</span>
             </Button>
           </DialogSertifikatPelatihan>
-        ) : (
+          ) : (
           <Link
             target="_blank"
             href={
@@ -496,8 +495,11 @@ const TableDataPesertaPelatihan = () => {
             <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
             <span className="text-xs"> {row.original?.NoSertifikat}</span>
           </Link>
-        ),
+          ),
+        </div>
+      ),
     },
+
     {
       accessorKey: "IdUserPelatihan",
       header: ({ column }) => {
@@ -506,7 +508,9 @@ const TableDataPesertaPelatihan = () => {
             variant="ghost"
             className={`flex  ${
               usePathname().includes("puslat") && "hidden"
-            } items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold`}
+            } items-center justify-center p-0 leading-[105%] w-full text-gray-900 font-semibold ${
+              usePathname().includes("lemdiklat") ? "flex" : "hidden"
+            }`}
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Input <br />
@@ -517,8 +521,8 @@ const TableDataPesertaPelatihan = () => {
       },
       cell: ({ row }) => (
         <div
-          className={` flex ${
-            usePathname().includes("puslat") && "hidden"
+          className={` ${
+            usePathname().includes("lemdiklat") ? "flex" : "hidden"
           } items-center justify-center w-full gap-1`}
         >
           <Button
@@ -613,7 +617,7 @@ const TableDataPesertaPelatihan = () => {
         return (
           <Button
             variant="ghost"
-            className={`text-black font-semibold ${
+            className={`text-black w-full font-semibold ${
               dataPelatihan != null
                 ? dataPelatihan!.UjiKompotensi == "Portfolio"
                   ? "hidden"
@@ -629,7 +633,7 @@ const TableDataPesertaPelatihan = () => {
       },
       cell: ({ row }) => (
         <div
-          className={`text-center uppercase text-base font-semibold ${
+          className={`text-center uppercase w-full text-base font-semibold ${
             dataPelatihan != null
               ? dataPelatihan!.UjiKompotensi == "Portfolio"
                 ? "hidden"
@@ -748,7 +752,35 @@ const TableDataPesertaPelatihan = () => {
   };
 
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+    <div className="">
+      <div className="flex flex-col w-full">
+        <div className="flex flex-row gap-2 items-center">
+          <header
+            aria-label="page caption"
+            className="flex-row w-full flex h-20 items-center gap-2 bg-gray-100 border-t px-4"
+          >
+            <HiUserGroup className="text-3xl" />
+            <div className="flex flex-col">
+              <h1 id="page-caption" className="font-semibold text-lg">
+                Peserta{" "}
+                {dataPelatihan != null ? dataPelatihan!.NamaPelatihan : ""}
+              </h1>
+              <p className="font-medium text-gray-400 text-base">
+                {" "}
+                {dataPelatihan != null
+                  ? dataPelatihan!.KodePelatihan
+                  : ""} •{" "}
+                {dataPelatihan != null ? dataPelatihan!.BidangPelatihan : ""} •
+                Mendukung Program Terobosan{" "}
+                {dataPelatihan != null
+                  ? dataPelatihan!.DukunganProgramTerobosan
+                  : ""}
+              </p>
+            </div>
+          </header>
+        </div>
+      </div>
+
       <AlertDialog open={isOpenFormInputNilai}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -910,7 +942,7 @@ const TableDataPesertaPelatihan = () => {
       {showFormAjukanPelatihan ? (
         <h1>TEST</h1>
       ) : (
-        <>
+        <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
           {/* Header Tabel Data Pelatihan */}
           <div className="flex items-center mb-3 justify-between gap-3 ">
             {/* Statistik Pelatihan */}
@@ -957,29 +989,6 @@ const TableDataPesertaPelatihan = () => {
                   <p className="text-sm font-medium">
                     {" "}
                     {dataPelatihan?.UserPelatihan.length} orang
-                  </p>
-                </div>
-              </div>
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-yellow-400">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-yellow-500"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-yellow-500">
-                    Total Terbit Sertifikat
-                  </p>
-                  <p className="text-sm font-medium">
-                    {" "}
-                    {dataPelatihan?.UserPelatihan?.reduce(
-                      (total: number, user: UserPelatihan) => {
-                        if (user.NoSertifikat !== "") {
-                          return total + 1;
-                        }
-                        return total;
-                      },
-                      0
-                    ) || 0}{" "}
-                    orang
                   </p>
                 </div>
               </div>
@@ -1039,10 +1048,6 @@ const TableDataPesertaPelatihan = () => {
             </div>
 
             <div className="w-full flex justify-end gap-2">
-              <div className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit">
-                <TbChartDonut />
-                Statistik
-              </div>
               <div
                 onClick={(e) => {
                   if (dataPelatihan?.StatusApproval == "Selesai") {
@@ -1072,7 +1077,7 @@ const TableDataPesertaPelatihan = () => {
               type={"short"}
             />
           </div>
-        </>
+        </div>
       )}
     </div>
   );
