@@ -79,7 +79,7 @@ const DetailPelatihan: React.FC = () => {
             },
           }
         );
-
+        // df
         if (response.status === 200) {
           console.log("TTDE", response);
           console.log("File uploaded successfully");
