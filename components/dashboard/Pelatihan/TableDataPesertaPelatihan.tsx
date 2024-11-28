@@ -81,6 +81,7 @@ import { PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import { User } from "@/types/user";
 import { formatToRupiah } from "@/lib/utils";
 import { elautBaseUrl } from "@/constants/urls";
+import { Badge } from "@/components/ui/badge";
 
 const TableDataPesertaPelatihan = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -379,125 +380,127 @@ const TableDataPesertaPelatihan = () => {
           </Button>
         );
       },
-      cell: ({ row }) => (
-        <div
-          className={`${
-            usePathname().includes("lemdiklat") ? "flex" : "hidden"
-          }`}
-        >
-          row.original.Keterangan == "" ? (
-          <Button
-            variant="outline"
-            className="w-full border flex gap-2 border-rose-600 text-left capitalize items-center justify-center"
-          >
-            <IoMdCloseCircle className="h-4 w-4 text-rose-600" /> Data Belum
-            Divalidasi
-            <span className="text-xs"> {row.original?.NoSertifikat}</span>
-          </Button>
-          ) : row.original.NoSertifikat == "" ? (
-          <AlertDialog>
-            <AlertDialogTrigger asChild>
+      cell: ({ row }) => {
+        const pathname = usePathname();
+
+        // Ensure the condition is handled properly
+        if (!pathname.includes("lemdiklat")) {
+          return null; // Return null if the path does not include 'lemdiklat'
+        }
+
+        return (
+          <div className="flex">
+            {row.original.Keterangan === "" ? (
               <Button
                 variant="outline"
-                className="border flex gap-2 w-full items-center justify-center border-gray-600"
+                className="w-full border flex gap-2 border-rose-600 text-left capitalize items-center justify-center"
               >
-                <TbRubberStamp className="h-4 w-4 text-gray-600" />{" "}
-                <span className="text-sm"> Terbitkan Sertifikat</span>
+                <IoMdCloseCircle className="h-4 w-4 text-rose-600" /> Data Belum
+                Divalidasi
+                <span className="text-xs">{row.original?.NoSertifikat}</span>
               </Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Sebarkan No Sertifikat</AlertDialogTitle>
-                <AlertDialogDescription className="-mt-2">
-                  Agar no sertifikat dapat diakses dan diunduh sertifikatnya
-                  oleh peserta pelatihan, harap memverifikasi!
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <form autoComplete="off">
-                {row.original.NoSertifikat == "" ? (
-                  <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                    <div>
-                      {dataPelatihan!.NoSertifikat != "" && (
-                        <Checkbox
-                          id="publish"
-                          onCheckedChange={(e) =>
-                            setNoSertifikatTerbitkan(
-                              dataPelatihan!.NoSertifikat
+            ) : row.original.NoSertifikat === "" ? (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="border flex gap-2 w-full items-center justify-center border-gray-600"
+                  >
+                    <TbRubberStamp className="h-4 w-4 text-gray-600" />
+                    <span className="text-sm"> Terbitkan Sertifikat</span>
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Sebarkan No Sertifikat</AlertDialogTitle>
+                    <AlertDialogDescription className="-mt-2">
+                      Agar no sertifikat dapat diakses dan diunduh sertifikatnya
+                      oleh peserta pelatihan, harap memverifikasi!
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <form autoComplete="off">
+                    {row.original.NoSertifikat === "" ? (
+                      <div className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                        <div>
+                          {dataPelatihan?.NoSertifikat !== "" && (
+                            <Checkbox
+                              id="publish"
+                              onCheckedChange={(e) =>
+                                setNoSertifikatTerbitkan(
+                                  dataPelatihan?.NoSertifikat!
+                                )
+                              }
+                            />
+                          )}
+                        </div>
+                        <div className="space-y-1 leading-none">
+                          <label>
+                            {dataPelatihan?.NoSertifikat === ""
+                              ? "Generate Terlebih Dahulu"
+                              : "B" + dataPelatihan?.NoSertifikat}
+                          </label>
+                          <p className="text-xs leading-[110%] text-gray-600">
+                            Generate nomor sertifikat terlebih dahulu dan
+                            sebarkan nomor ke sertifikat peserta
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
+                        <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
+                        <div className="space-y-1 leading-none">
+                          <label>{row.original?.NoSertifikat}</label>
+                          <p className="text-xs leading-[110%] text-gray-600">
+                            Nomor sertifikat telah diterbitkan, sertifikat telah
+                            muncul di bagian dashboard user!
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </form>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={(e) =>
+                        dataPelatihan?.NoSertifikat !== ""
+                          ? handleUpdatePublishPelatihanToELAUT(
+                              row.original.IdUserPelatihan,
+                              dataPelatihan?.NoSertifikat!
                             )
-                          }
-                        />
-                      )}
-                    </div>
-                    <div className="space-y-1 leading-none">
-                      <label>
-                        {dataPelatihan!.NoSertifikat == ""
-                          ? "Generate Terlebih Dahulu"
-                          : "B" + dataPelatihan!.NoSertifikat}
-                      </label>
-                      <p className="text-xs leading-[110%] text-gray-600">
-                        Generate nomor sertifikat terlebih dahulu dan sebarkan
-                        nomor ke sertifikat peserta
-                      </p>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-row items-center space-x-3 space-y-0 rounded-md border p-4 border-gray-300">
-                    <RiVerifiedBadgeFill className="h-7 w-7 text-green-500 text-lg" />
-                    <div className="space-y-1 leading-none">
-                      <label>{row.original?.NoSertifikat}</label>
-                      <p className="text-xs leading-[110%] text-gray-600">
-                        Nomor sertifikat telah diterbitkan, sertifikat telah
-                        muncul di bagian dashboard user!
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </form>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={(e) =>
-                    dataPelatihan!.NoSertifikat != ""
-                      ? handleUpdatePublishPelatihanToELAUT(
-                          row.original.IdUserPelatihan,
-                          dataPelatihan!.NoSertifikat
-                        )
-                      : null
-                  }
+                          : null
+                      }
+                    >
+                      {dataPelatihan?.NoSertifikat !== "" ? "Sematkan" : "Ok"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            ) : row.original.FileSertifikat === "" ? (
+              <DialogSertifikatPelatihan
+                pelatihan={dataPelatihan!}
+                userPelatihan={data[row.index]}
+              >
+                <Button
+                  variant="outline"
+                  className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
                 >
-                  {dataPelatihan!.NoSertifikat != "" ? "Sematkan" : "Ok"}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          ) : row.original.FileSertifikat == "" ? (
-          <DialogSertifikatPelatihan
-            pelatihan={dataPelatihan!}
-            userPelatihan={data[row.index]}
-          >
-            <Button
-              variant="outline"
-              className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
-            >
-              <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-              <span className="text-xs"> {row.original?.NoSertifikat}</span>
-            </Button>
-          </DialogSertifikatPelatihan>
-          ) : (
-          <Link
-            target="_blank"
-            href={
-              "https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/sertifikat-ttde/" +
-              row.original.FileSertifikat!
-            }
-            className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center h-9 px-4 py-2  whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50"
-          >
-            <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-            <span className="text-xs"> {row.original?.NoSertifikat}</span>
-          </Link>
-          ),
-        </div>
-      ),
+                  <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
+                  <span className="text-xs">{row.original?.NoSertifikat}</span>
+                </Button>
+              </DialogSertifikatPelatihan>
+            ) : (
+              <Link
+                target="_blank"
+                href={`https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/sertifikat-ttde/${row.original.FileSertifikat}`}
+                className="w-full border flex gap-2 border-blue-600 text-left capitalize items-center justify-center h-9 px-4 py-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-neutral-950 disabled:pointer-events-none disabled:opacity-50"
+              >
+                <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />
+                <span className="text-xs">{row.original?.NoSertifikat}</span>
+              </Link>
+            )}
+          </div>
+        );
+      },
     },
 
     {
@@ -759,23 +762,49 @@ const TableDataPesertaPelatihan = () => {
             aria-label="page caption"
             className="flex-row w-full flex h-20 items-center gap-2 bg-gray-100 border-t px-4"
           >
-            <HiUserGroup className="text-3xl" />
-            <div className="flex flex-col">
-              <h1 id="page-caption" className="font-semibold text-lg">
-                Peserta{" "}
-                {dataPelatihan != null ? dataPelatihan!.NamaPelatihan : ""}
-              </h1>
-              <p className="font-medium text-gray-400 text-base">
-                {" "}
+            <div className="w-full flex items-center justify-between">
+              <div className="flex gap-2">
+                <HiUserGroup className="text-3xl" />
+                <div className="flex flex-col">
+                  <h1 id="page-caption" className="font-semibold text-lg">
+                    Peserta{" "}
+                    {dataPelatihan != null ? dataPelatihan!.NamaPelatihan : ""}
+                  </h1>
+                  <p className="font-medium text-gray-400 text-base">
+                    {" "}
+                    {dataPelatihan != null
+                      ? dataPelatihan!.KodePelatihan
+                      : ""}{" "}
+                    •{" "}
+                    {dataPelatihan != null
+                      ? dataPelatihan!.BidangPelatihan
+                      : ""}{" "}
+                    • Mendukung Program Terobosan{" "}
+                    {dataPelatihan != null
+                      ? dataPelatihan!.DukunganProgramTerobosan
+                      : ""}
+                  </p>
+                </div>
+              </div>
+              <div className=" flex">
                 {dataPelatihan != null
-                  ? dataPelatihan!.KodePelatihan
-                  : ""} •{" "}
-                {dataPelatihan != null ? dataPelatihan!.BidangPelatihan : ""} •
-                Mendukung Program Terobosan{" "}
-                {dataPelatihan != null
-                  ? dataPelatihan!.DukunganProgramTerobosan
-                  : ""}
-              </p>
+                  ? dataPelatihan!.StatusPenerbitan != "" && (
+                      <Badge
+                        variant="outline"
+                        className={`w-fit flex items-center justify-center ${
+                          dataPelatihan!.StatusPenerbitan == "On Progress"
+                            ? " bg-yellow-300 text-neutral-800"
+                            : " bg-green-500 text-white"
+                        }`}
+                      >
+                        {dataPelatihan!.StatusPenerbitan!}{" "}
+                        {usePathname().includes("lemdiklat")
+                          ? "Pengajuan Sertifikat"
+                          : "Penerbitan"}
+                      </Badge>
+                    )
+                  : null}
+              </div>
             </div>
           </header>
         </div>

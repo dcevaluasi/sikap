@@ -238,7 +238,7 @@ const SertifikatPage1 = React.forwardRef(
                         : "Director for Marine And Fisheries Training Center"}
                     </p>
                   </div>
-                  {!isPrinting && (
+                  {!isPrinting && pelatihan?.StatusPenerbitan == "Done" ? (
                     <Image
                       alt=""
                       width={0}
@@ -246,6 +246,8 @@ const SertifikatPage1 = React.forwardRef(
                       src={"/ttd-elektronik.png"}
                       className="w-fit h-[80px] relative -z-10 mt-2"
                     />
+                  ) : (
+                    <div className="h-[80px]"></div>
                   )}
 
                   <p className=" font-bosBold text-base">
@@ -678,16 +680,6 @@ export function DialogSertifikatPelatihan({
           )}
         </DialogContent>
       </Dialog>
-
-      {/* {show ? (
-        <SertifikatPage1
-          ref={componentRef}
-          pelatihan={pelatihan}
-          userPelatihan={userPelatihan}
-        />
-      ) : (
-        <></>
-      )} */}
     </div>
   );
 }

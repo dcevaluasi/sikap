@@ -36,6 +36,7 @@ import { HiUserGroup } from "react-icons/hi2";
 import Cookies from "js-cookie";
 import { AiFillSignature } from "react-icons/ai";
 import { MdOutlinePodcasts } from "react-icons/md";
+import { Badge } from "@/components/ui/badge";
 
 const DetailPelatihan: React.FC = () => {
   const [dataPelatihan, setDataPelatihan] =
@@ -148,34 +149,51 @@ const DetailPelatihan: React.FC = () => {
             aria-label="page caption"
             className="flex-row  w-full flex h-20 items-center gap-2 bg-gray-100 border-t px-4 justify-between"
           >
-            <div className="flex gap-2 items-center">
-              <TbListDetails className="text-3xl" />
-              <div className="flex flex-col">
-                <h1 id="page-caption" className="font-semibold text-lg">
-                  Pelatihan{" "}
-                  {dataPelatihan != null ? dataPelatihan!.NamaPelatihan : "-"}
-                </h1>
-                <p className="text-sm text-gray-400 mb-1 mt-1 leading-[110%]">
-                  {" "}
-                  {dataPelatihan != null
-                    ? dataPelatihan!.KodePelatihan
-                    : ""} •{" "}
-                  {dataPelatihan != null ? dataPelatihan!.BidangPelatihan : ""}{" "}
-                  • Mendukung Program Terobosan{" "}
-                  {dataPelatihan != null
-                    ? dataPelatihan!.DukunganProgramTerobosan
-                    : ""}
-                </p>
+            <div className="w-full flex items-center justify-between">
+              <div className="flex gap-2 items-center">
+                <TbListDetails className="text-3xl" />
+                <div className="flex flex-col">
+                  <h1 id="page-caption" className="font-semibold text-lg">
+                    Pelatihan{" "}
+                    {dataPelatihan != null ? dataPelatihan!.NamaPelatihan : "-"}
+                  </h1>
+                  <p className="text-sm text-gray-400 mb-1 mt-1 leading-[110%]">
+                    {" "}
+                    {dataPelatihan != null
+                      ? dataPelatihan!.KodePelatihan
+                      : ""}{" "}
+                    •{" "}
+                    {dataPelatihan != null
+                      ? dataPelatihan!.BidangPelatihan
+                      : ""}{" "}
+                    • Mendukung Program Terobosan{" "}
+                    {dataPelatihan != null
+                      ? dataPelatihan!.DukunganProgramTerobosan
+                      : ""}
+                  </p>
+                </div>
               </div>
             </div>
-            {dataPelatihan != null
-              ? dataPelatihan!.StatusPenerbitan != "" && (
-                  <div className="flex w-fit h-fit gap-2 bg-none items-center text-sm justify-center">
-                    <MdOutlinePodcasts />
-                    {dataPelatihan!.StatusPenerbitan} Penerbitan Sertifikat
-                  </div>
-                )
-              : null}
+
+            <div className="w-full flex justify-end">
+              {dataPelatihan != null
+                ? dataPelatihan!.StatusPenerbitan != "" && (
+                    <Badge
+                      variant="outline"
+                      className={`w-fit flex items-center justify-center ${
+                        dataPelatihan!.StatusPenerbitan == "On Progress"
+                          ? " bg-yellow-300 text-neutral-800"
+                          : " bg-green-500 text-white text-base"
+                      }`}
+                    >
+                      {dataPelatihan!.StatusPenerbitan!}{" "}
+                      {usePathname().includes("lemdiklat")
+                        ? "Pengajuan Sertifikat"
+                        : "Penerbitan"}
+                    </Badge>
+                  )
+                : null}
+            </div>
           </header>
         </div>
       </div>
