@@ -1,6 +1,8 @@
 import React from "react";
 import { RiInformationFill } from "react-icons/ri";
 
+import { Badge } from "@/components/ui/badge";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import {
@@ -131,7 +133,7 @@ const TableDataPelatihan: React.FC = () => {
 
     // Check if it matches the status filter
     let matchesStatus = true;
-    if (selectedStatusFilter === "Proses Penerbitan Sertifikat") {
+    if (selectedStatusFilter === "Proses Pengajuan Sertifikat") {
       matchesStatus = pelatihan.StatusPenerbitan === "On Progress";
     } else if (selectedStatusFilter === "Belum Dipublish") {
       matchesStatus = pelatihan.Status !== "Publish";
@@ -166,13 +168,13 @@ const TableDataPelatihan: React.FC = () => {
               onClick={() => setSelectedStatusFilter("Belum Dipublish")}
             />
             <StatusButton
-              label="Proses Penerbitan Sertifikat"
+              label="Proses Pengajuan Sertifikat"
               count={countOnProgress}
               isSelected={
-                selectedStatusFilter === "Proses Penerbitan Sertifikat"
+                selectedStatusFilter === "Proses Pengajuan Sertifikat"
               }
               onClick={() =>
-                setSelectedStatusFilter("Proses Penerbitan Sertifikat")
+                setSelectedStatusFilter("Proses Pengajuan Sertifikat")
               }
             />
             <StatusButton
@@ -277,7 +279,7 @@ const TableDataPelatihan: React.FC = () => {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-2">
-                      <div className="ml-0 text-left capitalize -mt-6">
+                      <div className="ml-0 text-left capitalize -mt-6 w-full relative">
                         <div className="ml-0 text-left mt-1 text-neutral-500 ">
                           <p className="text-sm ">
                             <span className="flex items-center gap-1 leading-[105%]">
@@ -327,6 +329,7 @@ const TableDataPelatihan: React.FC = () => {
                             </span>
                           </p>
                         </div>
+                        <Badge variant="outline">Outline</Badge>
                       </div>
                     </CardContent>
                     <CardFooter>

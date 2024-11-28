@@ -66,52 +66,43 @@ const DetailPelatihan: React.FC = () => {
       });
       setPassphrase("");
     } else {
-      if (passphrase != "Hantek1234.!") {
+      try {
+        const response = await axios.post(
+          elautBaseUrl + "/lemdik/sendSertifikatTtde",
+          {
+            idPelatihan: idPelatihan?.toString(),
+            kodeParafrase: passphrase,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          console.log("TTDE", response);
+          console.log("File uploaded successfully");
+          Toast.fire({
+            icon: "success",
+            text: "Berhasil melakuukan penandatangan sertifikat secara elektronik!",
+            title: `Berhasil TTDe`,
+          });
+          router.push("/admin/puslat/pelatihan/penerbitan-sertifikat");
+          handleUpdateStatusPenerbitan();
+          setPassphrase("");
+        } else {
+          console.error("Failed to upload the file");
+          setPassphrase("");
+        }
+      } catch (error) {
+        console.error("Error uploading the file:", error);
+        setPassphrase("");
         Toast.fire({
           icon: "error",
-          text: "Passphrase yang anda masukkan salah atau bukan milikmu harap cek kembali",
-          title: `Salah passphrase`,
+          text: "Failed to send file to API, dialing to the given TCP address timed out",
+          title: `Gagal TTDe`,
         });
-        setPassphrase("");
-      } else {
-        try {
-          const response = await axios.post(
-            elautBaseUrl + "/lemdik/sendSertifikatTtde",
-            {
-              idPelatihan: idPelatihan?.toString(),
-              kodeParafrase: passphrase,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-              },
-            }
-          );
-
-          if (response.status === 200) {
-            console.log("TTDE", response);
-            console.log("File uploaded successfully");
-            Toast.fire({
-              icon: "success",
-              text: "Berhasil melakuukan penandatangan sertifikat secara elektronik!",
-              title: `Berhasil TTDe`,
-            });
-            router.push("/admin/puslat/pelatihan/penerbitan-sertifikat");
-            handleUpdateStatusPenerbitan();
-            setPassphrase("");
-          } else {
-            console.error("Failed to upload the file");
-            setPassphrase("");
-          }
-        } catch (error) {
-          console.error("Error uploading the file:", error);
-          setPassphrase("");
-          Toast.fire({
-            icon: "error",
-            text: "Failed to send file to API, dialing to the given TCP address timed out",
-            title: `Gagal TTDe`,
-          });
-        }
       }
     }
   };
@@ -544,7 +535,7 @@ const DetailPelatihan: React.FC = () => {
                       <AlertDialogTitle className="flex items-center gap-2">
                         {" "}
                         <TbSignature className="text-3xl" />
-                        Passphrase/OTP
+                        Passphrase
                       </AlertDialogTitle>
                       <p className="-mt-1 text-gray-500 text-sm leading-[110%] w-full">
                         Masukkan passphrase anda untuk melanjutkan proses

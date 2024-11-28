@@ -64,7 +64,6 @@ export function middleware(request: any) {
       '/admin/lemdiklat/dashboard',
       '/admin/pusat/dashboard',
       '/admin/lemdiklat/pelatihan',
-      '/admin/lemdiklat/pelatihan/tambah-pelatihan',
       '/admin/lemdiklat/pelatihan/penerbitan-sttpl',
       'admin/lemdiklat/pelatihan/[kode-pelatihan]/peserta-pelatihan/[id]'
     ]

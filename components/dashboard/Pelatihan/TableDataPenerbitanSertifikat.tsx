@@ -12,12 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { Button } from "@/components/ui/button";
-import {
-  HiMiniUserGroup,
-  HiOutlineUserGroup,
-  HiUserGroup,
-} from "react-icons/hi2";
+import { HiUserGroup } from "react-icons/hi2";
 import { TbCalendarCheck, TbTargetArrow } from "react-icons/tb";
 
 import { useRouter } from "next/navigation";
@@ -25,7 +20,7 @@ import axios, { AxiosResponse } from "axios";
 import { PelatihanMasyarakat } from "@/types/product";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { generateFullNameBalai, generateTanggalPelatihan } from "@/utils/text";
+import { generateTanggalPelatihan } from "@/utils/text";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 
@@ -128,7 +123,7 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
 
     var matchesStatus;
 
-    if (selectedStatusFilter == "Perlu Di TTD") {
+    if (selectedStatusFilter == "Proses Tandatangan") {
       matchesStatus = pelatihan!.StatusPenerbitan === "On Progress";
     } else if (selectedStatusFilter == "Sudah Di TTD") {
       matchesStatus = pelatihan!.StatusPenerbitan === "Done";
@@ -176,9 +171,11 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
                 </li>
                 <li>
                   <button
-                    onClick={() => setSelectedStatusFilter("Perlu Di TTD")}
+                    onClick={() =>
+                      setSelectedStatusFilter("Proses Tandatangan")
+                    }
                     className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-fit ${
-                      selectedStatusFilter === "Perlu Di TTD"
+                      selectedStatusFilter === "Proses Tandatangan"
                         ? "bg-blue-500 text-white"
                         : "bg-white text-black"
                     }`}
@@ -186,12 +183,12 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
                     <p className="font-semibold text-lg">{countOnProgress}</p>
                     <p
                       className={`uppercase text-sm ${
-                        selectedStatusFilter === "Perlu Di TTD"
+                        selectedStatusFilter === "Proses Tandatangan"
                           ? "text-white font-bold"
                           : "text-gray-600"
                       }`}
                     >
-                      Perlu Di TTD
+                      Proses Tandatangan
                     </p>
                   </button>
                 </li>
