@@ -86,6 +86,7 @@ const DetailPelatihan: React.FC = () => {
           {
             idPelatihan: idPelatihan?.toString(),
             kodeParafrase: passphrase,
+            nik: "0803202100007062",
           },
           {
             headers: {
@@ -117,7 +118,7 @@ const DetailPelatihan: React.FC = () => {
         if (error instanceof AxiosError)
           Toast.fire({
             icon: "error",
-            text: error.response?.data?.error!,
+            text: "Internal server error",
             title: `Gagal TTDe`,
           });
       }
