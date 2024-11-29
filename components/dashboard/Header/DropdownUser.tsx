@@ -522,14 +522,14 @@ const DropdownUser = ({
           <span className="block text-sm font-medium text-black">
             {pathname.includes("lemdiklat")
               ? userLoggedInInfo?.data?.NamaLemdik
-              : dataAdminPusat && pathname.includes("puslat")
+              : dataAdminPusat && pathname.includes("pusat")
               ? dataAdminPusat!.Nama
               : ""}
           </span>
           <span className="block text-xs">
             {pathname.includes("lemdiklat")
               ? "Admin Balai Pelatihan"
-              : dataAdminPusat && pathname.includes("puslat")
+              : dataAdminPusat && pathname.includes("pusat")
               ? dataAdminPusat!.Nip
               : ""}
           </span>

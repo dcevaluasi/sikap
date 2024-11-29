@@ -2,11 +2,13 @@
 
 import Toast from "@/components/toast";
 import { elautBaseUrl } from "@/constants/urls";
+import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import DropdownUser from "../Header/DropdownUser";
 
 export default function LayoutAdminElaut({
   children,
@@ -31,6 +33,28 @@ export default function LayoutAdminElaut({
       console.error({ error });
     }
   };
+
+  const [lemdikData, setLemdikData] =
+    React.useState<LemdiklatDetailInfo | null>(null);
+
+  const fetchInformationLemdiklat = async () => {
+    try {
+      const response = await axios.get(`${elautBaseUrl}/lemdik/getLemdik`, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("XSRF091")}`,
+        },
+      });
+      setLemdikData(response.data);
+      Cookies.set("IDLemdik", response.data.data.IdLemdik);
+      console.log("LEMDIK INFO: ", response);
+    } catch (error) {
+      console.error("LEMDIK INFO: ", error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchInformationLemdiklat();
+  }, []);
 
   const handleLogOut = async () => {
     Cookies.remove("XSRF091");
@@ -138,7 +162,26 @@ export default function LayoutAdminElaut({
       </nav>
 
       {/* Main Content */}
-      <main className="flex-grow overflow-y-scroll w-full scrollbar-hide">
+      <main className="flex-grow overflow-y-scroll w-full scrollbar-hide flex flex-col">
+        <nav
+          aria-label="top bar"
+          className="flex-none w-full flex justify-between bg-white h-16"
+        >
+          <ul
+            aria-label="top bar left"
+            aria-orientation="horizontal"
+            className="flex"
+          ></ul>
+          <ul
+            aria-label="top bar right"
+            aria-orientation="horizontal"
+            className="px-8 flex items-center"
+          >
+            <li className="h-10  ml-3">
+              <DropdownUser userLoggedInInfo={lemdikData!} />
+            </li>
+          </ul>
+        </nav>
         {children}
       </main>
     </div>
