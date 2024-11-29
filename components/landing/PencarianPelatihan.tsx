@@ -69,7 +69,8 @@ function PencarianPelatihan() {
       if (response.data.data != null) {
         const filteredAndSortedData = response.data.data
           .filter(
-            (item: PelatihanMasyarakat) => item.JenisProgram === jenisProgram
+            (item: PelatihanMasyarakat) =>
+              item.JenisProgram === jenisProgram && item.Status == "Publish"
           )
           .sort((a: PelatihanMasyarakat, b: PelatihanMasyarakat) => {
             const dateA = new Date(a.TanggalMulaiPelatihan);
