@@ -532,7 +532,12 @@ const TableDataPelatihan: React.FC = () => {
                                     Tanggal Penandatangan{" "}
                                   </label>
                                   <p className="text-gray-600 text-sm -mt-1">
-                                    {"10 Juni 2024 - 19 Juni 2024"}
+                                    {pelatihan?.PenerbitanSertifikatDiterima !=
+                                    ""
+                                      ? generateTanggalPelatihan(
+                                          pelatihan?.PenerbitanSertifikatDiterima
+                                        )
+                                      : "-"}
                                   </p>
                                 </div>
                               </div>

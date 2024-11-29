@@ -57,8 +57,20 @@ const DetailPelatihan: React.FC = () => {
 
   const router = useRouter();
 
+  function generateDate(): string {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed, add 1 and pad with 0 if needed
+    const day = String(today.getDate()).padStart(2, "0"); // Pad day with 0 if needed
+
+    return `${year}-${month}-${day}`;
+  }
+
   const [passphrase, setPassphrase] = React.useState<string>("");
+  const [isSigning, setIsSigning] = React.useState<boolean>(false);
   const handleTTDElektronik = async () => {
+    setIsSigning(true);
     if (passphrase === "") {
       Toast.fire({
         icon: "error",
@@ -66,6 +78,7 @@ const DetailPelatihan: React.FC = () => {
         title: `Tidak ada passphrase`,
       });
       setPassphrase("");
+      setIsSigning(false);
     } else {
       try {
         const response = await axios.post(
@@ -95,10 +108,12 @@ const DetailPelatihan: React.FC = () => {
         } else {
           console.error("Failed to upload the file");
           setPassphrase("");
+          setIsSigning(false);
         }
       } catch (error) {
         console.error("Error uploading the file:", error);
         setPassphrase("");
+        setIsSigning(false);
         Toast.fire({
           icon: "error",
           text: "Failed to send file to API, dialing to the given TCP address timed out",
@@ -117,6 +132,7 @@ const DetailPelatihan: React.FC = () => {
   const handleUpdateStatusPenerbitan = async () => {
     const formData = new FormData();
     formData.append("StatusPenerbitan", "Done");
+    formData.append("PenerbitanSertifikatDiterima", generateDate());
 
     try {
       const response = await axios.put(
@@ -131,6 +147,7 @@ const DetailPelatihan: React.FC = () => {
       );
       console.log({ response });
       handleFetchPelatihanById();
+      setIsSigning(false);
     } catch (error) {
       console.error({ error });
       Toast.fire({
@@ -138,6 +155,7 @@ const DetailPelatihan: React.FC = () => {
         title: `Gagal mengupload file berita acara dan penandatangan!`,
       });
       handleFetchPelatihanById();
+      setIsSigning(false);
     }
   };
 
@@ -541,10 +559,11 @@ const DetailPelatihan: React.FC = () => {
                 <AlertDialogTrigger className="w-full pb-10">
                   {" "}
                   <Button
+                    disabled={isSigning}
                     className={`btn text-white bg-blue-500 hover:bg-blue-500 w-full max-w-full text-base`}
                   >
                     <AiFillSignature className="text-lg" />
-                    Tanda Tangan
+                    {isSigning ? "...Signing" : "Tanda Tangan"}
                   </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>

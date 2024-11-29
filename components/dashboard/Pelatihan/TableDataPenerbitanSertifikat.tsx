@@ -392,7 +392,12 @@ const TableDataPenerbitanSertifikat: React.FC = () => {
                                         Tanggal Penandatangan{" "}
                                       </label>
                                       <p className="text-gray-600 text-sm -mt-1">
-                                        {"10 Juni 2024 - 19 Juni 2024"}
+                                        {pengajuanPenerbitanSertifikat?.PenerbitanSertifikatDiterima !=
+                                        ""
+                                          ? generateTanggalPelatihan(
+                                              pengajuanPenerbitanSertifikat?.PenerbitanSertifikatDiterima
+                                            )
+                                          : "-"}
                                       </p>
                                     </div>
                                   </div>
