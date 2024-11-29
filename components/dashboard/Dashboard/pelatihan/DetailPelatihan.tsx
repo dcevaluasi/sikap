@@ -11,7 +11,7 @@ import {
 import TableDataPemberitahuanPelatihan from "../../Pelatihan/TableDataPemberitahuanPelatihan";
 import { getNumberFromURLDetailPelatihanAdmin } from "@/utils/pelatihan";
 import { usePathname, useRouter } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { elautBaseUrl, fileBaseUrl } from "@/constants/urls";
 import { PelatihanMasyarakat } from "@/types/product";
 import Link from "next/link";
@@ -114,11 +114,12 @@ const DetailPelatihan: React.FC = () => {
         console.error("Error uploading the file:", error);
         setPassphrase("");
         setIsSigning(false);
-        Toast.fire({
-          icon: "error",
-          text: "Failed to send file to API, dialing to the given TCP address timed out",
-          title: `Gagal TTDe`,
-        });
+        if (error instanceof AxiosError)
+          Toast.fire({
+            icon: "error",
+            text: error.response?.data?.error!,
+            title: `Gagal TTDe`,
+          });
       }
     }
   };
