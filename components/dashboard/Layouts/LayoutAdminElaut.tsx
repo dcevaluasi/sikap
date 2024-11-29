@@ -51,12 +51,12 @@ export default function LayoutAdminElaut({
 
   const navs = pathname.includes("pusat")
     ? [
-        {
-          title: "Dashboard Pelatihan",
-          href: "/admin/pusat/dashboard/",
-          iconPath:
-            "M12 6.453l9 8.375v9.172h-6v-6h-6v6h-6v-9.172l9-8.375zm12 5.695l-12-11.148-12 11.133 1.361 1.465 10.639-9.868 10.639 9.883 1.361-1.465z",
-        },
+        // {
+        //   title: "Dashboard Pelatihan",
+        //   href: "/admin/pusat/dashboard/",
+        //   iconPath:
+        //     "M12 6.453l9 8.375v9.172h-6v-6h-6v6h-6v-9.172l9-8.375zm12 5.695l-12-11.148-12 11.133 1.361 1.465 10.639-9.868 10.639 9.883 1.361-1.465z",
+        // },
         {
           title: "Penerbitan Sertifikat",
           href: "/admin/pusat/pelatihan/penerbitan-sertifikat",
