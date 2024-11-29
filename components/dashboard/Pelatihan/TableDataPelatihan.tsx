@@ -446,13 +446,15 @@ const TableDataPelatihan: React.FC = () => {
                                 ? "Pengajuan Sertifikat"
                                 : "Penerbitan"}
                             </Badge>
-                          ) : (
+                          ) : pelatihan!.NoSertifikat != "" ? (
                             <Badge
                               variant="outline"
                               className={`top-4 right-4 absolute cursor-pointer  bg-blue-500 text-white hover:bg-blue-600`}
                             >
                               Generate File Sertifikat
                             </Badge>
+                          ) : (
+                            <></>
                           )}
                         </AlertDialogTrigger>
                         <AlertDialogContent className="flex flex-col items-center justify-center !w-[420px]">
