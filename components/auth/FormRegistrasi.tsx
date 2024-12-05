@@ -1148,7 +1148,6 @@ function FormRegistrasi() {
           </div>
         </div>
       </div>
-      <Footer />
     </section>
   );
 }

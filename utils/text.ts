@@ -40,7 +40,7 @@ export function generateTanggalPelatihan(tanggal: string): string {
     const year = date.getUTCFullYear();
 
     // Mengembalikan string tanggal yang telah diformat
-    return `${dayOfWeek}, ${day} ${month} ${year}`;
+    return `${day} ${month} ${year}`;
 }
 
 export function generateTanggalPelatihanWithoutDay(tanggal: string): string {

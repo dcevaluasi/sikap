@@ -69,13 +69,14 @@ export function middleware(request: any) {
     const protectedPaths = [
       '/admin/lemdiklat/dashboard',
       '/admin/pusat/dashboard',
+      '/admin/pusat/pelatihan/penerbitan-sertifikat',
       '/admin/lemdiklat/pelatihan',
       '/admin/lemdiklat/pelatihan/penerbitan-sttpl',
       'admin/lemdiklat/pelatihan/[kode-pelatihan]/peserta-pelatihan/[id]'
     ]
 
     if (protectedPaths.includes(request.nextUrl.pathname)) {
-      return NextResponse.redirect(new URL('/', request.url))
+      return NextResponse.redirect(new URL('/admin/auth/login', request.url))
     }
   } else {
     const protectedPaths = ['/admin/auth/login']

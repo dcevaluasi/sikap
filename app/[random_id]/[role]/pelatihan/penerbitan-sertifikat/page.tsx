@@ -1,12 +1,8 @@
 import React from "react";
-import PenerbitanSertifikat from "@/components/dashboard/Dashboard/PenerbitanSertifikat";
-
 import { LucideFileSignature } from "lucide-react";
 import LayoutAdminElaut from "@/components/dashboard/Layouts/LayoutAdminElaut";
-import { LemdiklatDetailInfo } from "@/types/lemdiklat";
-import axios from "axios";
-import { elautBaseUrl } from "@/constants/urls";
-import Cookies from "js-cookie";
+import TableDataPenerbitanSertifikat from "@/components/dashboard/Pelatihan/TableDataPenerbitanSertifikat";
+import PenerbitanSertifikat from "@/components/dashboard/Dashboard/PenerbitanSertifikat";
 
 function page() {
   return (
@@ -22,7 +18,7 @@ function page() {
                 <LucideFileSignature className="text-3xl" />
                 <div className="flex flex-col">
                   <h1 id="page-caption" className="font-semibold text-lg">
-                    Pengajuan Penerbitan Sertifikat
+                    Permohonan Penerbitan Sertifikat
                   </h1>
                   <p className="font-medium text-gray-400 text-base">
                     Terbitkan sertifikat pelatihan sebagai tanda kelulusan dari

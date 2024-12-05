@@ -39,7 +39,7 @@ import Toast from "../toast";
 
 const html2pdf = dynamic(() => import("html2pdf.js"), { ssr: false });
 
-const SertifikatPage1 = React.forwardRef(
+const SertifikatNonKepelautan = React.forwardRef(
   (
     {
       pelatihan,
@@ -217,8 +217,11 @@ const SertifikatPage1 = React.forwardRef(
                 <div className="flex flex-col font-bos text-center items-center justify-center">
                   <div className="flex w-full flex-col items-cennter mt-2 text-center">
                     <p className="font-bos text-sm leading-[105%]">
-                      Jakarta, {getCurrentDate()} <br />{" "}
-                      {pelatihan?.TtdSertifikat}
+                      Jakarta,{" "}
+                      {generateTanggalPelatihan(
+                        pelatihan?.PenerbitanSertifikatDiterima
+                      )}{" "}
+                      <br /> {pelatihan?.TtdSertifikat}
                     </p>
 
                     <p className=" leading-none font-bosItalic text-[0.65rem]">
@@ -252,6 +255,254 @@ const SertifikatPage1 = React.forwardRef(
 
             {!isPrinting && (
               <div className="flex flex-row  absolute -bottom-12">
+                <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">
+                  Dokumen ini telah ditandatangani secara elektronik menggunakan
+                  sertifikat elektronik yang telah diterbitkan oleh Balai
+                  Sertifikasi Elektronik (BSrE), Badan Siber dan Sandi Negara
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+);
+
+const SertifikatKepelautan = React.forwardRef(
+  (
+    {
+      pelatihan,
+      userPelatihan,
+      isPrinting,
+      isSpesimen,
+    }: {
+      pelatihan: PelatihanMasyarakat;
+      userPelatihan: UserPelatihan;
+      isPrinting?: boolean;
+      isSpesimen?: boolean;
+    },
+    ref: any
+  ) => {
+    const [peserta, setPeserta] = React.useState<User | null>(null);
+
+    const handleFetchDetailPeserta = async () => {
+      try {
+        const response = await axios.get(
+          `${elautBaseUrl}/users/getUsersByIdNoJwt?id=${userPelatihan!.IdUsers}`
+        );
+        setPeserta(response.data);
+        console.log({ response });
+      } catch (error) {
+        console.error("LEMDIK INFO: ", error);
+      }
+    };
+
+    React.useEffect(() => {
+      handleFetchDetailPeserta();
+    }, []);
+
+    return (
+      <div className=" flex-col gap-8 font-bos">
+        <div
+          ref={ref}
+          className="w-full h-full  flex flex-col gap-4 items-center justify-center  px-10 py-14 rounded-md font-bos leading-[120%]"
+        >
+          <div className="w-full flex flex-col  gap-4 relative h-full items-center justify-center">
+            <div className="flex flex-row  absolute top-0 right-0">
+              <p className="text-sm leading-none not-italic">
+                CERTIFICATE NO:
+                <br /> 3319070001B2D024
+              </p>
+            </div>
+
+            <div className="w-full flex flex-col gap-4 px-10 -mt-7 ">
+              <div className="h-28 w-28"></div>
+
+              <div className="flex flex-col gap-0 w-full items-center justify-center -mt-6">
+                <div className="flex flex-col items-center justify-center leading-[.9rem] mb-1">
+                  <h1 className="text-sm font-bosBold">REPUBLIK INDONESIA</h1>
+                  <p className="text-sm font-bosItalic">
+                    Republic of Indonesia
+                  </p>
+                </div>
+                <div className="flex flex-col items-center justify-center leading-[.9rem] mb-1">
+                  <h1 className="text-sm font-bosBold">
+                    KEMENTERIAN KELAUTAN DAN PERIKANAN
+                  </h1>
+                  <p className="text-sm font-bosItalic">
+                    Ministry of Marine Affairs and Fisheries
+                  </p>
+                </div>
+                <div className="flex flex-col items-center justify-center leading-[.9rem] mb-1">
+                  <h1 className="text-sm font-bosBold">
+                    BADAN PENYULUHAN DAN PENGEMBANGAN SUMBER DAYA MANUSIA
+                  </h1>
+                  <p className="text-sm font-bosItalic">
+                    The Agency for Marine and Fisheries Extension and Human
+                    Resources Development
+                  </p>
+                </div>
+                <div className="flex flex-col items-center justify-center leading-[.9rem] mb-1">
+                  <h1 className="text-sm font-bosBold">
+                    MENURUT PERATURAN MENTERI KELAUTAN DAN PERIKANAN REPUBLIK
+                    INDONESIA NOMOR 33 TAHUN 2021
+                  </h1>
+                  <p className="text-sm font-bosItalic">
+                    Under the provisions of Ministerial Regulation of Marine
+                    Affairs and Fisheries, Republic of Indonesia Number 33 Year
+                    2021
+                  </p>
+                </div>
+
+                <div className="flex flex-col items-center justify-center text-center leading-[.9rem] mt-1">
+                  <h1 className="text-[12pt] font-bosBold">
+                    SERTIFIKAT BASIC SAFETY TRAINING FISHERIES (BST-F) TINGKAT
+                    II
+                  </h1>
+                  <p className="text-sm font-bosItalic">
+                    Certificate of Proficiency <br /> Basic Safety Training
+                    Fisheries Class II
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex w-full flex-col leading-[115%] items-start text-sm -mt-3 text-left font-bos">
+                <p>DENGAN INI MENERANGKAN BAHWA:</p>
+                <p className=" leading-none font-bosItalic text-sm">
+                  This is to certify that:
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-2 w-full  -mt-2">
+                <table className="w-full h-fit" cellPadding={0} cellSpacing={0}>
+                  <tr className="w-full">
+                    <td className="font-bos w-full flex flex-col">
+                      <p className="font-bosBold text-sm">NAMA</p>
+                      <p className="font-bos text-sm -mt-1">Name</p>
+                    </td>
+                    <td className=" w-2/3 text-sm uppercase">
+                      :{" "}
+                      <span className="font-bosBold text-[12pt] ml-5">
+                        {userPelatihan!.Nama}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr className="w-full">
+                    <td className="font-bos w-full flex flex-col">
+                      <p className="font-bosBold text-sm">
+                        TEMPAT DAN TANGGAL LAHIR
+                      </p>
+                      <p className="font-bos text-sm -mt-1">
+                        Place and Date of Birth{" "}
+                      </p>
+                    </td>
+                    <td className=" w-2/3  uppercase text-[12pt]">
+                      :{" "}
+                      <span className="font-bosBold ml-5">
+                        Jakarta, 04-08-2002
+                      </span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+
+              <div className="flex w-full flex-col gap-3 leading-[115%] items-start text-sm -mt-3 text-left font-bos">
+                <p className="text-xs leading-none font-bos">
+                  telah menyelesaikan pendidikan dan/atau pelatihan dan/atau
+                  bimbingan teknis, dan lulus evaluasi berdasarkan Peraturan
+                  Menteri Kelautan dan Perikanan Republik Indonesia Nomor 33
+                  Tahun 2021, Bab V Tata Kelola Pengawakan Kapal Perikanan
+                </p>
+                <p className=" leading-none font-bosItalic text-xs ">
+                  has completed the approved education and/or approved training
+                  and/or approved technical guidance, and has passed the
+                  evaluation under the provisions of Ministerial Regulation of
+                  Marine Affairs and Fisheries, Republic of Indonesia Number 33
+                  Year 2021, Chapter V on Fishery Vessel Crews Arrangements
+                </p>
+
+                <p className=" leading-none font-bosItalic text-xs ">
+                  untuk memiliki Sertifikat Basic Safety Training Fisheries
+                  Class II <br />
+                  holding the Certificate of Proficiency for Basic Safety
+                  Training Fisheries Class II
+                </p>
+              </div>
+
+              <div className="w-full min-h-[175px] -mt-5">
+                <div className="grid grid-cols-12 gap-4 ">
+                  <div className="col-span-3 flex flex-col items-center justify-center row-span-3  p-4">
+                    <p className="text-sm leading-none not-italic">
+                      Tanda Tangan Pemilik
+                      <br /> Signature of the holder:
+                    </p>
+                    <div className="mt-4">&nbsp;</div>
+                  </div>
+
+                  <div className="col-span-2 flex items-center justify-center row-span-4  p-4">
+                    <img
+                      src="https://akapi.kkp.go.id/uploads/sertifikat/202411301797486997.png"
+                      alt="Sertifikat"
+                      className="w-24 h-24"
+                    />
+                  </div>
+
+                  <div className="col-span-2 flex items-center justify-center row-span-4  p-4">
+                    <div className="border border-gray-400 w-[90px] h-[120px] flex items-center justify-center">
+                      <span>FOTO</span>
+                    </div>
+                  </div>
+
+                  <div className="col-span-5 flex items-center text-sm justify-center  p-4 mb-4 -mt-5">
+                    <p>
+                      Jakarta,{" "}
+                      {generateTanggalPelatihan(
+                        pelatihan?.PenerbitanSertifikatDiterima
+                      )}
+                    </p>
+                  </div>
+
+                  <div className="col-span-5 flex flex-col items-center justify-center  px-4 text-center -mt-12">
+                    <p className="font-bosBold text-[12pt] leading-none">
+                      a.n. KEPALA BADAN PENYULUHAN DAN
+                      <br />
+                      PENGEMBANGAN SUMBER DAYA MANUSIA
+                    </p>
+                    <p className="font-bosItalic text-sm leading-none">
+                      o.b. Chairman of The Agency for Marine and Fisheries
+                      Extension and Human Resources Development
+                    </p>
+                    <p className="font-bosBold mt-2 text-[12pt] leading-none">
+                      KEPALA PUSAT PELATIHAN KELAUTAN DAN PERIKANAN
+                    </p>
+                    <p className="font-bosItalic text-sm leading-nonee">
+                      Director for Marine And Fisheries Training Center
+                    </p>
+                  </div>
+
+                  <div className="col-span-5 flex flex-col items-center justify-end  px-4 -mt-5">
+                    {isSpesimen ? (
+                      <Image
+                        alt=""
+                        width={0}
+                        height={0}
+                        src={"/ttd-elektronik.png"}
+                        className="w-fit h-[80px] relative -z-10"
+                      />
+                    ) : (
+                      <div className="h-[80px]"></div>
+                    )}
+                    <p className=" font-bos text-sm -mt-1">
+                      Dr. Lilly Aprilya Pregiwati, S.Pi., M.Si
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {!isPrinting && (
+              <div className="flex flex-row  absolute -bottom-5">
                 <p className="text-[0.65rem] leading-[100%] text-center max-w-2xl">
                   Dokumen ini telah ditandatangani secara elektronik menggunakan
                   sertifikat elektronik yang telah diterbitkan oleh Balai
@@ -427,14 +678,24 @@ export function DialogSertifikatPelatihan({
               </div>
             </div>
           </DialogHeader>
-          <div className="max-h-[500px] scale-95 flex flex-col gap-2 overflow-y-auto scroll-smooth">
-            <SertifikatPage1
-              ref={componentRef}
-              pelatihan={pelatihan}
-              isSpesimen={isSpesimen}
-              userPelatihan={userPelatihan}
-              isPrinting={isPrinting}
-            />
+          <div className="max-h-[600px] scale-95 flex flex-col gap-2 overflow-y-auto scroll-smooth">
+            {pelatihan?.JenisSertifikat == "Kepelautan" ? (
+              <SertifikatKepelautan
+                ref={componentRef}
+                pelatihan={pelatihan}
+                isSpesimen={isSpesimen}
+                userPelatihan={userPelatihan}
+                isPrinting={isPrinting}
+              />
+            ) : (
+              <SertifikatNonKepelautan
+                ref={componentRef}
+                pelatihan={pelatihan}
+                isSpesimen={isSpesimen}
+                userPelatihan={userPelatihan}
+                isPrinting={isPrinting}
+              />
+            )}
           </div>
           {userPelatihan != null && (
             <DialogFooter>
