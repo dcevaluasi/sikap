@@ -101,7 +101,7 @@ function page() {
           if (role == "lemdik") {
             router.push(`/${generateRandomId()}/lemdiklat/dashboard`);
           } else {
-            router.push(`/admin/pusat/pelatihan/penerbitan-sertifikat`);
+            router.push(`/admin/pusat/dashboard`);
           }
         } catch (error) {
           if (error instanceof AxiosError) {

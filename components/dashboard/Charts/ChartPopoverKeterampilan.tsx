@@ -1,5 +1,7 @@
 "use client";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { BlankoKeluar } from "@/types/blanko";
 import { formatDateTime } from "@/utils";
 import { ApexOptions } from "apexcharts";
@@ -39,9 +41,41 @@ import {
 import TableDataBlankoKeluar from "../Pelatihan/TableDataBlankoKeluar";
 import { usePathname } from "next/navigation";
 import TableDataSertifikatKeterampilan from "../Pelatihan/TableDataSertifikatKeterampilan";
+import ChartPopoverKeterampilanAPBN from "./ChartPopoverKeterampilanAPBN";
+import { BALAI_PELATIHAN } from "@/constants/pelatihan";
 export const description = "A bar chart with an active bar";
 
 const chartConfig = {
+  visitors: {
+    label: "Sertifikat",
+  },
+  chrome: {
+    label: "BSTF I",
+    color: "#211951",
+  },
+  safari: {
+    label: "BSTF II",
+    color: "#836FFF",
+  },
+  firefox: {
+    label: "SKN",
+    color: "#15F5BA",
+  },
+  edge: {
+    label: "SKPI",
+    color: "#F0F3FF",
+  },
+  other: {
+    label: "SOPI",
+    color: "#E0366F",
+  },
+  other2: {
+    label: "Fisihing Master",
+    color: "#60432F",
+  },
+} satisfies ChartConfig;
+
+const chartConfigPNBP = {
   visitors: {
     label: "Sertifikat",
   },
@@ -113,35 +147,123 @@ interface ChartThreeState {
 const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
   data,
 }) => {
+  const [selectedLemdiklat, setSelectedLemdiklat] =
+    React.useState<string>("BPPP Tegal");
+
   const [state, setState] = useState<ChartThreeState>({
-    series: [
+    series: [],
+  });
+
+  const [statePNBP, setStatePNBP] = useState<ChartThreeState>({
+    series: [],
+  });
+
+  React.useEffect(() => {
+    const updatedSeries = [
       data
         .filter(
-          (item) => item.NamaProgram === "Basic Safety Training Fisheries I"
+          (item) =>
+            item.NamaProgram === "Basic Safety Training Fisheries I" &&
+            item.AsalPendapatan == "APBN" &&
+            item.NamaPelaksana == selectedLemdiklat
         )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-      data
-        .filter(
-          (item) => item.NamaProgram === "Basic Safety Training Fisheries II"
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-      data
-        .filter((item) => item.NamaProgram === "Sertifikat Kecakapan Nelayan")
         .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
         .filter(
           (item) =>
-            item.NamaProgram === "Sertifikat Keterampilan Penanganan Ikan"
+            item.NamaProgram === "Basic Safety Training Fisheries II" &&
+            item.AsalPendapatan == "APBN" &&
+            item.NamaPelaksana == selectedLemdiklat
         )
         .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "SOPI")
+        .filter(
+          (item) =>
+            item.NamaProgram === "Sertifikat Kecakapan Nelayan" &&
+            item.AsalPendapatan == "APBN" &&
+            item.NamaPelaksana == selectedLemdiklat
+        )
         .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
-        .filter((item) => item.NamaProgram === "Fishing Master")
+        .filter(
+          (item) =>
+            item.NamaProgram === "Sertifikat Keterampilan Penanganan Ikan" &&
+            item.AsalPendapatan == "APBN" &&
+            item.NamaPelaksana == selectedLemdiklat
+        )
         .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-    ],
-  });
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "SOPI" &&
+            item.AsalPendapatan == "APBN" &&
+            item.NamaPelaksana == selectedLemdiklat
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Fishing Master" &&
+            item.AsalPendapatan == "APBN" &&
+            item.NamaPelaksana == selectedLemdiklat
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+    ];
+
+    const updatedSeriesPNBP = [
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Basic Safety Training Fisheries I" &&
+            item.AsalPendapatan == "PNBP" &&
+            item.NamaPelaksana == selectedLemdiklat
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Basic Safety Training Fisheries II" &&
+            item.AsalPendapatan == "PNBP" &&
+            item.NamaPelaksana == selectedLemdiklat
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Sertifikat Kecakapan Nelayan" &&
+            item.AsalPendapatan == "PNBP" &&
+            item.NamaPelaksana == selectedLemdiklat
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Sertifikat Keterampilan Penanganan Ikan" &&
+            item.AsalPendapatan == "PNBP" &&
+            item.NamaPelaksana == selectedLemdiklat
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "SOPI" &&
+            item.AsalPendapatan == "PNBP" &&
+            item.NamaPelaksana == selectedLemdiklat
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Fishing Master" &&
+            item.AsalPendapatan == "PNBP" &&
+            item.NamaPelaksana == selectedLemdiklat
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+    ];
+
+    setState({ series: updatedSeries });
+    setStatePNBP({ series: updatedSeriesPNBP });
+  }, [selectedLemdiklat, data]);
 
   const [stateLemdiklat, setStateLemdiklat] = useState<ChartThreeState>({
     series: [
@@ -324,6 +446,72 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
     },
   ];
 
+  const chartDataPNBP = [
+    {
+      browser: "chrome",
+      visitors: statePNBP.series[0],
+      fill: "var(--color-chrome)",
+    },
+    {
+      browser: "safari",
+      visitors: statePNBP.series[1],
+      fill: "var(--color-safari)",
+    },
+    {
+      browser: "firefox",
+      visitors: statePNBP.series[2],
+      fill: "var(--color-firefox)",
+    },
+    {
+      browser: "edge",
+      visitors: statePNBP.series[3],
+      fill: "var(--color-edge)",
+    },
+    {
+      browser: "other",
+      visitors: statePNBP.series[4],
+      fill: "var(--color-other)",
+    },
+    {
+      browser: "other2",
+      visitors: statePNBP.series[5],
+      fill: "var(--color-other2)",
+    },
+  ];
+
+  // const chartDataPNBP = [
+  //   {
+  //     browser: "chrome",
+  //     visitors: statePNBP.series[0],
+  //     fill: "var(--color-chrome)",
+  //   },
+  //   {
+  //     browser: "safari",
+  //     visitors: statePNBP.series[1],
+  //     fill: "var(--color-safari)",
+  //   },
+  //   {
+  //     browser: "firefox",
+  //     visitors: statePNBP.series[2],
+  //     fill: "var(--color-firefox)",
+  //   },
+  //   {
+  //     browser: "edge",
+  //     visitors: statePNBP.series[3],
+  //     fill: "var(--color-edge)",
+  //   },
+  //   {
+  //     browser: "other",
+  //     visitors: statePNBP.series[4],
+  //     fill: "var(--color-other)",
+  //   },
+  //   {
+  //     browser: "other2",
+  //     visitors: statePNBP.series[5],
+  //     fill: "var(--color-other2)",
+  //   },
+  // ];
+
   const chartDataLemdiklat = [
     {
       browser: "chrome",
@@ -373,106 +561,115 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
         </div>
       </div>
 
-      <div className="flex gap-2 w-full">
-        <Card className="w-[50%]">
-          <CardHeader>
-            <CardTitle>
-              Jumlah Sertifikat Berdasarkan Program Keterampilan - AKP
-            </CardTitle>
-            <CardDescription>27 May 2024 - Now 2024</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig}>
-              <BarChart accessibilityLayer data={chartData}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="browser"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  tickFormatter={(value) =>
-                    chartConfig[value as keyof typeof chartConfig]?.label
-                  }
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                />
-                <Bar
-                  dataKey="visitors"
-                  strokeWidth={2}
-                  radius={8}
-                  max={20000}
-                  activeIndex={2}
-                >
-                  <LabelList
-                    position="top"
-                    offset={12}
-                    className="fill-foreground text-black"
-                    fontSize={12}
-                    fill="#000"
-                  />
-                </Bar>
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-          <CardFooter className="flex-col items-start gap-2 text-sm">
-            <div className="leading-none text-muted-foreground">
-              Showing total certificate issued since 27 May 2024
-            </div>
-          </CardFooter>
-        </Card>
+      <Tabs defaultValue={selectedLemdiklat} className="w-full mb-3">
+        <TabsList>
+          {BALAI_PELATIHAN.map((balaiPelatihan, index) => (
+            <TabsTrigger
+              onClick={() => setSelectedLemdiklat(balaiPelatihan.Name)}
+              value={balaiPelatihan!.Name}
+            >
+              {balaiPelatihan!.Name}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <TabsContent value={selectedLemdiklat}>
+          <div className="flex gap-2 w-full">
+            <Card className="w-[50%] h-full">
+              <CardHeader>
+                <CardTitle>Diklat yang menggunakan APBN</CardTitle>
+                <CardDescription>27 May 2024 - Now 2024</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer config={chartConfig}>
+                  <BarChart accessibilityLayer data={chartData}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="browser"
+                      tickLine={false}
+                      tickMargin={10}
+                      axisLine={false}
+                      tickFormatter={(value) =>
+                        chartConfig[value as keyof typeof chartConfig]?.label
+                      }
+                    />
+                    <ChartTooltip
+                      cursor={false}
+                      content={<ChartTooltipContent hideLabel />}
+                    />
+                    <Bar
+                      dataKey="visitors"
+                      strokeWidth={2}
+                      radius={8}
+                      max={20000}
+                      activeIndex={2}
+                    >
+                      <LabelList
+                        position="inside"
+                        offset={12}
+                        className="fill-white text-white"
+                        fontSize={12}
+                        fill="#000"
+                      />
+                    </Bar>
+                  </BarChart>
+                </ChartContainer>
+              </CardContent>
+              <CardFooter className="flex-col items-start gap-2 text-sm">
+                <div className="leading-none text-muted-foreground">
+                  Showing total certificate issued since 27 May 2024
+                </div>
+              </CardFooter>
+            </Card>
 
-        <Card className="w-[50%]">
-          <CardHeader>
-            <CardTitle>
-              Jumlah Sertifikat Berdasarkan Pelaksana Diklat - AKP
-            </CardTitle>
-            <CardDescription>27 May 2024 - Now 2024</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfigLemdiklat} className="">
-              <BarChart accessibilityLayer data={chartDataLemdiklat}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="browser"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  tickFormatter={(value) =>
-                    chartConfigLemdiklat[value as keyof typeof chartConfig]
-                      ?.label
-                  }
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                />
-                <Bar
-                  dataKey="visitors"
-                  strokeWidth={2}
-                  radius={8}
-                  activeIndex={2}
-                  maxBarSize={20000}
-                >
-                  <LabelList
-                    position="top"
-                    offset={12}
-                    className="fill-foreground text-black"
-                    fontSize={12}
-                    fill="#000"
-                  />
-                </Bar>
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-          <CardFooter className="flex-col items-start gap-2 text-sm">
-            <div className="leading-none text-muted-foreground">
-              Showing total certificate issued since 27 May 2024
-            </div>
-          </CardFooter>
-        </Card>
-      </div>
+            <Card className="w-[50%] h-full">
+              <CardHeader>
+                <CardTitle>Diklat yang menghasilkan PNBP</CardTitle>
+                <CardDescription>27 May 2024 - Now 2024</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ChartContainer config={chartConfigPNBP} className="">
+                  <BarChart accessibilityLayer data={chartDataPNBP}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="browser"
+                      tickLine={false}
+                      tickMargin={10}
+                      axisLine={false}
+                      tickFormatter={(value) =>
+                        chartConfigPNBP[value as keyof typeof chartConfigPNBP]
+                          ?.label
+                      }
+                    />
+                    <ChartTooltip
+                      cursor={false}
+                      content={<ChartTooltipContent hideLabel />}
+                    />
+                    <Bar
+                      dataKey="visitors"
+                      strokeWidth={2}
+                      radius={8}
+                      activeIndex={2}
+                    >
+                      <LabelList
+                        position="inside"
+                        offset={12}
+                        className="fill-white text-white"
+                        fontSize={12}
+                        fill="#000"
+                      />
+                    </Bar>
+                  </BarChart>
+                </ChartContainer>
+              </CardContent>
+              <CardFooter className="flex-col items-start gap-2 text-sm">
+                <div className="leading-none text-muted-foreground">
+                  Showing total certificate issued since 27 May 2024
+                </div>
+              </CardFooter>
+            </Card>
+          </div>
+        </TabsContent>
+      </Tabs>
 
       <div className="flex gap-2 flex-col mt-10">
         <Card className="w-full">
@@ -579,7 +776,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
         </Card>
       </div>
 
-      <div className="flex gap-2 flex-col mt-10">
+      {/* <div className="flex gap-2 flex-col mt-10">
         <Card className="w-full">
           <CardHeader>
             <CardTitle>
@@ -1086,7 +1283,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
             </div>
           </CardFooter>
         </Card>
-      </div>
+      </div> */}
 
       <div className="flex gap-2 flex-col mt-10">
         <Card className="w-full">

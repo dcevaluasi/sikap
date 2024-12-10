@@ -42,6 +42,7 @@ import TableDataBlankoKeluarPublic from "../Pelatihan/TableDataBlankoKeluarPubli
 import ChartBlankoAwal from "../Charts/ChartBlankoAwal";
 import ChartPopoverKeterampilan from "../Charts/ChartPopoverKeterampilan";
 import ChartCertificatesMonthly from "../Charts/ChartCertificatesMonthly";
+import ChartPopoverKeterampilanAPBN from "../Charts/ChartPopoverKeterampilanAPBN";
 
 const AKP: React.FC = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -237,7 +238,13 @@ const AKP: React.FC = () => {
       <div className="w-full mt-8">
         {selectedId == 0 && <ChartCertificatesMonthly data={data!} />}
         {selectedId == 1 && <ChartPopoverKeahlian data={data!} />}
-        {selectedId == 2 && <ChartPopoverKeterampilan data={data!} />}
+
+        {selectedId == 2 && (
+          <>
+            
+            <ChartPopoverKeterampilan data={data!} />
+          </>
+        )}
       </div>
     </>
   );

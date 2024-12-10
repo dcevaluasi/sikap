@@ -22,6 +22,7 @@ export type BlankoKeluarResponse = {
 export type BlankoKeluar = {
     IdBlankoKeluar: number,
     IdBlanko: number,
+    AsalPendapatan: string,
     TipeBlanko: string,
     TanggalKeluar: string,
     NamaLemdiklat: string,
