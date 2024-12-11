@@ -927,9 +927,13 @@ const TableDataBlankoKeluar: React.FC = () => {
                           <SelectItem value="PPN Prigi">
                             Pelabuhan Perikanan Nusantara (PPN) Pemangkat
                           </SelectItem>
+                          <SelectItem value="PPN Palabuhan Ratu">
+                            Pelabuhan Perikanan Nusantara (PPN) Palabuhan Ratu
+                          </SelectItem>
                           <SelectItem value="PPP Untia">
                             Pelabuhan Perikanan Perintis (PPP) Untia
                           </SelectItem>
+
                           <SelectItem value="LMTC">LMTC</SelectItem>
                         </SelectContent>
                       )}
