@@ -572,6 +572,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
             </TabsTrigger>
           ))}
         </TabsList>
+
         <TabsContent value={selectedLemdiklat}>
           <div className="flex gap-2 w-full">
             <Card className="w-[50%] h-full">

@@ -60,7 +60,6 @@ const DropdownUser = ({
       );
       Cookies.set("Eselon", response.data.data.Nip);
       setDataAdminPusat(response.data.data);
-      console.log({ response });
     } catch (error) {
       console.error({ error });
     }
@@ -83,17 +82,17 @@ const DropdownUser = ({
   const [alamat, setAlamat] = React.useState<string>("");
 
   const handleEditProfileUpdate = async () => {
-    console.log(
-      "DATA UPDATE : ",
-      JSON.stringify({
-        email: email,
-        nama_lemdik: namaLemdiklat,
-        no_telpon: noTelpon,
-        deskripsi: deskripsi,
-        alamat: alamat,
-        last_no_sertif: LastNosertif,
-      })
-    );
+    // console.log(
+    //   "DATA UPDATE : ",
+    //   JSON.stringify({
+    //     email: email,
+    //     nama_lemdik: namaLemdiklat,
+    //     no_telpon: noTelpon,
+    //     deskripsi: deskripsi,
+    //     alamat: alamat,
+    //     last_no_sertif: LastNosertif,
+    //   })
+    // );
     try {
       const response = await axios.put(
         `${baseUrl}/${isLemdik ? "lemdik" : "pusat"}/update`,
@@ -115,7 +114,7 @@ const DropdownUser = ({
         icon: "success",
         title: `Data profile lemdiklat mu telah diupdate!`,
       });
-      console.log("RESPONSE UPDATE PROFILE: ", response);
+      // console.log("RESPONSE UPDATE PROFILE: ", response);
       setOpenDialogEditProfile(!openFormEditProfile);
       setOpenFormEditProfile(!openFormEditProfile);
       setNamaLemdiklat("");
@@ -205,7 +204,7 @@ const DropdownUser = ({
         title: `Berhasil menyimpan!`,
       });
       setOpenDialogLastSertifikat(!openDialogLastSertifikat);
-      console.log("RESPONSE UP LAST SERTIF: ", response);
+
       router.replace("/admin/lemdiklat/pelatihan");
     } catch (error) {
       Toast.fire({

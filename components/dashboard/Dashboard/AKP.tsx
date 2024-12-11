@@ -1,32 +1,17 @@
 "use client";
 import React from "react";
 import CardDataStats from "../CardDataStats";
-import { HiCheckBadge, HiMiniUserGroup, HiTrash } from "react-icons/hi2";
-import { GiBattery75, GiPapers, GiReceiveMoney } from "react-icons/gi";
+import { HiCheckBadge } from "react-icons/hi2";
+import { GiBattery75, GiPapers } from "react-icons/gi";
 import { MdSchool } from "react-icons/md";
-import ChartFour from "../Charts/ChartFour";
 import Cookies from "js-cookie";
 import axios, { AxiosResponse } from "axios";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
-import {
-  RiLogoutCircleRFill,
-  RiShipFill,
-  RiVerifiedBadgeFill,
-} from "react-icons/ri";
+import { RiLogoutCircleRFill, RiShipFill } from "react-icons/ri";
 import { Blanko, BlankoKeluar } from "@/types/blanko";
-import TableDataPublicBlanko from "../Pelatihan/TableDataPublicBlanko";
-// import MapOne from "../Maps/MapOne";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { Button } from "flowbite-react";
 
 import {
@@ -38,11 +23,9 @@ import ChartPopover from "../Charts/ChartPopover";
 import ChartPopoverKeluar from "../Charts/ChartPopoverKeluar";
 import { formatDateTime } from "@/utils";
 import ChartPopoverKeahlian from "../Charts/ChartPopoverKeahlian";
-import TableDataBlankoKeluarPublic from "../Pelatihan/TableDataBlankoKeluarPublic";
 import ChartBlankoAwal from "../Charts/ChartBlankoAwal";
 import ChartPopoverKeterampilan from "../Charts/ChartPopoverKeterampilan";
 import ChartCertificatesMonthly from "../Charts/ChartCertificatesMonthly";
-import ChartPopoverKeterampilanAPBN from "../Charts/ChartPopoverKeterampilanAPBN";
 
 const AKP: React.FC = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -165,7 +148,7 @@ const AKP: React.FC = () => {
             </span>
           </PopoverTrigger>
           <PopoverContent className="w-150">
-            <ChartPopover data={dataBlanko} />
+            <ChartPopover data={dataBlanko} blankoKeluar={data} />
           </PopoverContent>
         </Popover>
 
@@ -236,15 +219,28 @@ const AKP: React.FC = () => {
         </span>
       </div>
       <div className="w-full mt-8">
-        {selectedId == 0 && <ChartCertificatesMonthly data={data!} />}
-        {selectedId == 1 && <ChartPopoverKeahlian data={data!} />}
+        <ChartCertificatesMonthly data={data!} />
 
-        {selectedId == 2 && (
-          <>
-            
-            <ChartPopoverKeterampilan data={data!} />
-          </>
-        )}
+        <Tabs defaultValue={"CoP"} className="w-full mb-3 -mt-4">
+          <TabsList className="flex gap-2 w-full">
+            <TabsTrigger value="CoC" className="w-full">
+              Ujian dan Diklat Keahlian AKP
+            </TabsTrigger>
+            <TabsTrigger value="CoP" className="w-full">
+              Diklat Keterampilan AKP
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="CoC">
+            <>
+              <ChartPopoverKeahlian data={data!} />
+            </>
+          </TabsContent>
+          <TabsContent value="CoP">
+            <>
+              <ChartPopoverKeterampilan data={data!} />
+            </>
+          </TabsContent>
+        </Tabs>
       </div>
     </>
   );

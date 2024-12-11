@@ -1,9 +1,8 @@
-import { Blanko } from "@/types/blanko";
+import { Blanko, BlankoKeluar } from "@/types/blanko";
 import { formatDateTime } from "@/utils";
 import { ApexOptions } from "apexcharts";
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
-import { IoMdArrowDropdown } from "react-icons/io";
 
 interface ChartThreeState {
   series: number[];
@@ -52,17 +51,30 @@ const options: ApexOptions = {
   ],
 };
 
-const ChartPopover: React.FC<{ data: Blanko[] }> = ({ data }) => {
+const ChartPopover: React.FC<{
+  data: Blanko[];
+  blankoKeluar: BlankoKeluar[];
+}> = ({ data, blankoKeluar }) => {
   const [state, setState] = useState<ChartThreeState>({
     series: [
       data
         .filter((item) => item.TipeBlanko === "Certificate of Competence (CoC)")
-        .reduce((total, item) => total + item.Jumlah, 0),
+        .reduce((total, item) => total + item.JumlahPengadaan, 0) -
+        blankoKeluar
+          .filter(
+            (item) => item.TipeBlanko === "Certificate of Competence (CoC)"
+          )
+          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
       data
         .filter(
           (item) => item.TipeBlanko === "Certificate of Proficiency (CoP)"
         )
-        .reduce((total, item) => total + item.Jumlah, 0),
+        .reduce((total, item) => total + item.JumlahPengadaan, 0) -
+        blankoKeluar
+          .filter(
+            (item) => item.TipeBlanko === "Certificate of Proficiency (CoP)"
+          )
+          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
     ],
   });
 
@@ -109,7 +121,16 @@ const ChartPopover: React.FC<{ data: Blanko[] }> = ({ data }) => {
                   (item) =>
                     item.TipeBlanko === "Certificate of Competence (CoC)"
                 )
-                .reduce((total, item) => total + item.Jumlah, 0) }
+                .reduce((total, item) => total + item.JumlahPengadaan, 0) -
+                blankoKeluar
+                  .filter(
+                    (item) =>
+                      item.TipeBlanko === "Certificate of Competence (CoC)"
+                  )
+                  .reduce(
+                    (total, item) => total + item.JumlahBlankoDisetujui,
+                    0
+                  )}
             </span>
           </div>
         </div>
@@ -127,7 +148,16 @@ const ChartPopover: React.FC<{ data: Blanko[] }> = ({ data }) => {
                   (item) =>
                     item.TipeBlanko === "Certificate of Proficiency (CoP)"
                 )
-                .reduce((total, item) => total + item.Jumlah, 0)}
+                .reduce((total, item) => total + item.JumlahPengadaan, 0) -
+                blankoKeluar
+                  .filter(
+                    (item) =>
+                      item.TipeBlanko === "Certificate of Proficiency (CoP)"
+                  )
+                  .reduce(
+                    (total, item) => total + item.JumlahBlankoDisetujui,
+                    0
+                  )}
             </span>
           </div>
         </div>
