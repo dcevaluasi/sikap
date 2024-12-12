@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 import axios, { AxiosResponse } from "axios";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 import { RiLogoutCircleRFill, RiShipFill } from "react-icons/ri";
-import { Blanko, BlankoKeluar } from "@/types/blanko";
+import { Blanko, BlankoKeluar, BlankoRusak } from "@/types/blanko";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -55,10 +55,23 @@ const AKP: React.FC = () => {
       const response: AxiosResponse = await axios.get(
         `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlankoKeluar`
       );
-      console.log("RESPONSE BLANKO KELUAR : ", response);
       setData(response.data.data);
     } catch (error) {
       console.error("ERROR BLANKO KELUAR : ", error);
+      throw error;
+    }
+  };
+
+  const [blankoRusak, setBlankoRusak] = React.useState<BlankoRusak[]>([]);
+
+  const handleFetchingBlankoRusak = async () => {
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlankoRusak`
+      );
+      setBlankoRusak(response.data.data);
+    } catch (error) {
+      console.error("ERROR BLANKO RUSAK : ", error);
       throw error;
     }
   };
@@ -69,7 +82,6 @@ const AKP: React.FC = () => {
       const response: AxiosResponse = await axios.get(
         `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlanko`
       );
-      console.log("RESPONSE BLANKO : ", response);
       setDataBlanko(response.data.data);
     } catch (error) {
       console.error("ERROR BLANKO : ", error);
@@ -80,9 +92,24 @@ const AKP: React.FC = () => {
   const [selectedId, setSelectedId] = React.useState<number>(0);
 
   React.useEffect(() => {
-    fetchInformationLemdiklat();
-    handleFetchingBlanko();
-    handleFetchingBlankoMaster();
+    // Fungsi untuk fetch data
+    const fetchAllData = () => {
+      fetchInformationLemdiklat();
+      handleFetchingBlankoRusak();
+      handleFetchingBlanko();
+      handleFetchingBlankoMaster();
+    };
+
+    // Panggil pertama kali saat komponen di-mount
+    fetchAllData();
+
+    // Atur interval untuk refresh data setiap 30 detik
+    const intervalId = setInterval(() => {
+      fetchAllData();
+    }, 3000); // 30 detik (atur sesuai kebutuhan)
+
+    // Cleanup interval saat komponen di-unmount
+    return () => clearInterval(intervalId);
   }, []);
 
   return (
@@ -109,7 +136,7 @@ const AKP: React.FC = () => {
           <PopoverTrigger asChild>
             <span onClick={(e) => setSelectedId(0)}>
               <CardDataStats
-                title="Total Persedian Blanko"
+                title="Total Pengadaan Blanko"
                 total={dataBlanko
                   .reduce((total, item) => total + item.JumlahPengadaan, 0)
                   .toString()}
@@ -129,7 +156,30 @@ const AKP: React.FC = () => {
           <PopoverTrigger asChild>
             <span onClick={(e) => setSelectedId(0)}>
               <CardDataStats
-                title="Sisa Blanko"
+                title="Total Blanko Terpakai"
+                total={(
+                  data.reduce(
+                    (total, item) => total + item.JumlahBlankoDisetujui,
+                    0
+                  ) + blankoRusak.length
+                ).toString()}
+                rate="0%"
+                levelUp
+              >
+                <RiLogoutCircleRFill className="text-primary text-3xl" />
+              </CardDataStats>
+            </span>
+          </PopoverTrigger>
+          <PopoverContent className="w-150">
+            <ChartPopoverKeluar data={data} dataBlankoRusak={blankoRusak} />
+          </PopoverContent>
+        </Popover>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <span onClick={(e) => setSelectedId(0)}>
+              <CardDataStats
+                title="Sisa Persediaan Blanko"
                 total={(
                   dataBlanko.reduce(
                     (total, item) => total + item.JumlahPengadaan,
@@ -138,7 +188,8 @@ const AKP: React.FC = () => {
                   data.reduce(
                     (total, item) => total + item.JumlahBlankoDisetujui,
                     0
-                  )
+                  ) -
+                  blankoRusak.length
                 ).toString()}
                 rate=""
                 levelDown
@@ -148,30 +199,11 @@ const AKP: React.FC = () => {
             </span>
           </PopoverTrigger>
           <PopoverContent className="w-150">
-            <ChartPopover data={dataBlanko} blankoKeluar={data} />
-          </PopoverContent>
-        </Popover>
-
-        <Popover>
-          <PopoverTrigger asChild>
-            <span onClick={(e) => setSelectedId(0)}>
-              <CardDataStats
-                title="Total Blanko Terpakai"
-                total={data
-                  .reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  )
-                  .toString()}
-                rate="0%"
-                levelUp
-              >
-                <RiLogoutCircleRFill className="text-primary text-3xl" />
-              </CardDataStats>
-            </span>
-          </PopoverTrigger>
-          <PopoverContent className="w-150">
-            <ChartPopoverKeluar data={data} />
+            <ChartPopover
+              data={dataBlanko}
+              blankoKeluar={data}
+              dataBlankoRusak={blankoRusak}
+            />
           </PopoverContent>
         </Popover>
 
@@ -217,6 +249,26 @@ const AKP: React.FC = () => {
             <MdSchool className="text-primary text-3xl" />
           </CardDataStats>
         </span>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <span onClick={(e) => setSelectedId(0)}>
+              <CardDataStats
+                title="Total Blanko Rusak"
+                total={dataBlanko
+                  .reduce((total, item) => total + item.JumlahPengadaan, 0)
+                  .toString()}
+                rate="0%"
+                levelUp
+              >
+                <GiPapers className="text-primary text-3xl group-hover:scale-110" />
+              </CardDataStats>
+            </span>
+          </PopoverTrigger>
+          <PopoverContent className="w-150">
+            <ChartBlankoAwal data={dataBlanko} />
+          </PopoverContent>
+        </Popover>
       </div>
       <div className="w-full mt-8">
         <ChartCertificatesMonthly data={data!} />

@@ -1,4 +1,4 @@
-import { Blanko, BlankoKeluar } from "@/types/blanko";
+import { Blanko, BlankoKeluar, BlankoRusak } from "@/types/blanko";
 import { formatDateTime } from "@/utils";
 import { ApexOptions } from "apexcharts";
 import React, { useState } from "react";
@@ -15,11 +15,7 @@ const options: ApexOptions = {
     type: "donut",
   },
   colors: ["#3C50E0", "#6577F3", "#FFb703"],
-  labels: [
-    "CoC (Certificate of Competence)",
-    "CoP (Certificate of Profecy)",
-    "Blanko Rusak",
-  ],
+  labels: ["Blanko Aktif", "Blanko Pasif"],
   legend: {
     show: false,
     position: "bottom",
@@ -56,17 +52,27 @@ const options: ApexOptions = {
   ],
 };
 
-const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
+const ChartPopoverKeluar: React.FC<{
+  data: BlankoKeluar[];
+  dataBlankoRusak: BlankoRusak[];
+}> = ({ data, dataBlankoRusak }) => {
+  // const [state, setState] = useState<ChartThreeState>({
+  //   series: [
+  //     data
+  //       .filter((item) => item.TipeBlanko === "Certificate of Competence (CoC)")
+  //       .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+  //     data
+  //       .filter(
+  //         (item) => item.TipeBlanko === "Certificate of Proficiency (CoP)"
+  //       )
+  //       .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+  //   ],
+  // });
+
   const [state, setState] = useState<ChartThreeState>({
     series: [
-      data
-        .filter((item) => item.TipeBlanko === "Certificate of Competence (CoC)")
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-      data
-        .filter(
-          (item) => item.TipeBlanko === "Certificate of Proficiency (CoP)"
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data.reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      dataBlankoRusak.length,
     ],
   });
 
@@ -106,16 +112,14 @@ const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-primary"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black ">
-              <span>CoC (Certificate of Competence)</span>
+              <span>Blanko Aktif</span>
             </p>
             <span>
               {" "}
-              {data
-                .filter(
-                  (item) =>
-                    item.TipeBlanko === "Certificate of Competence (CoC)"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0)}
+              {data.reduce(
+                (total, item) => total + item.JumlahBlankoDisetujui,
+                0
+              )}
             </span>
           </div>
         </div>
@@ -124,17 +128,9 @@ const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
           <div className="flex w-full items-center">
             <span className="mr-2 block h-3 w-full max-w-3 rounded-full bg-[#8FD0EF]"></span>
             <p className="flex w-full justify-between text-sm font-medium text-black ">
-              <span>CoP (Certificate of Profecy)</span>
+              <span>Blanko Pasif</span>
             </p>
-            <span className="ml-3">
-              {" "}
-              {data
-                .filter(
-                  (item) =>
-                    item.TipeBlanko === "Certificate of Proficiency (CoP)"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0)}
-            </span>
+            <span className="ml-3"> {dataBlankoRusak.length}</span>
           </div>
         </div>
       </div>
@@ -143,3 +139,10 @@ const ChartPopoverKeluar: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
 };
 
 export default ChartPopoverKeluar;
+
+// data
+//                 .filter(
+//                   (item) =>
+//                     item.TipeBlanko === "Certificate of Proficiency (CoP)"
+//                 )
+//                 .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0)

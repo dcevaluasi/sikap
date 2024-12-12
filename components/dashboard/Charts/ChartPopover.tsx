@@ -1,4 +1,4 @@
-import { Blanko, BlankoKeluar } from "@/types/blanko";
+import { Blanko, BlankoKeluar, BlankoRusak } from "@/types/blanko";
 import { formatDateTime } from "@/utils";
 import { ApexOptions } from "apexcharts";
 import React, { useState } from "react";
@@ -54,7 +54,8 @@ const options: ApexOptions = {
 const ChartPopover: React.FC<{
   data: Blanko[];
   blankoKeluar: BlankoKeluar[];
-}> = ({ data, blankoKeluar }) => {
+  dataBlankoRusak: BlankoRusak[];
+}> = ({ data, blankoKeluar, dataBlankoRusak }) => {
   const [state, setState] = useState<ChartThreeState>({
     series: [
       data
@@ -64,7 +65,10 @@ const ChartPopover: React.FC<{
           .filter(
             (item) => item.TipeBlanko === "Certificate of Competence (CoC)"
           )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0) -
+        dataBlankoRusak.filter(
+          (item) => item.Tipe === "Certificate of Competence (CoC)"
+        ).length,
       data
         .filter(
           (item) => item.TipeBlanko === "Certificate of Proficiency (CoP)"
@@ -74,7 +78,10 @@ const ChartPopover: React.FC<{
           .filter(
             (item) => item.TipeBlanko === "Certificate of Proficiency (CoP)"
           )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0) -
+        dataBlankoRusak.filter(
+          (item) => item.Tipe === "Certificate of Proficiency (CoP)"
+        ).length,
     ],
   });
 
@@ -92,7 +99,9 @@ const ChartPopover: React.FC<{
     >
       <div className="mb-3 justify-between gap-4 sm:flex w-full">
         <div>
-          <h5 className="text-xl font-semibold text-black ">Sisa Blanko</h5>
+          <h5 className="text-xl font-semibold text-black ">
+            Sisa Persediaan Blanko
+          </h5>
           <p className="italic text-sm">{formatDateTime()}</p>
         </div>
       </div>
@@ -130,7 +139,10 @@ const ChartPopover: React.FC<{
                   .reduce(
                     (total, item) => total + item.JumlahBlankoDisetujui,
                     0
-                  )}
+                  ) -
+                dataBlankoRusak.filter(
+                  (item) => item.Tipe === "Certificate of Competence (CoC)"
+                ).length}
             </span>
           </div>
         </div>
@@ -157,7 +169,10 @@ const ChartPopover: React.FC<{
                   .reduce(
                     (total, item) => total + item.JumlahBlankoDisetujui,
                     0
-                  )}
+                  ) -
+                dataBlankoRusak.filter(
+                  (item) => item.Tipe === "Certificate of Proficiency (CoP)"
+                ).length}
             </span>
           </div>
         </div>

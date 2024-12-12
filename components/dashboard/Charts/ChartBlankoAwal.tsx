@@ -80,7 +80,9 @@ const ChartBlankoAwal: React.FC<{ data: Blanko[] }> = ({ data }) => {
     >
       <div className="mb-3 justify-between gap-4 sm:flex w-full">
         <div>
-          <h5 className="text-xl font-semibold text-black ">Total Blanko</h5>
+          <h5 className="text-xl font-semibold text-black ">
+            Total Pengadaan Blanko
+          </h5>
           <p className="italic text-sm">{formatDateTime()}</p>
         </div>
       </div>

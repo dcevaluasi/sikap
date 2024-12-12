@@ -22,16 +22,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  Edit3Icon,
-  Fullscreen,
-  LucideClipboardEdit,
-  LucideNewspaper,
-  LucidePrinter,
-  Trash,
-  X,
-} from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
 import {
@@ -85,7 +76,7 @@ import {
 } from "@/components/ui/select";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { Blanko, BlankoKeluar } from "@/types/blanko";
+import { Blanko, BlankoKeluar, BlankoRusak } from "@/types/blanko";
 import { generateTanggalPelatihan } from "@/utils/text";
 
 const TableDataBlankoRusak: React.FC = () => {
@@ -115,9 +106,28 @@ const TableDataBlankoRusak: React.FC = () => {
   }, [keywordSuggestion, suggestionsBlankoKeluar]);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const [data, setData] = React.useState<BlankoKeluar[]>([]);
+  const [data, setData] = React.useState<BlankoRusak[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
+
+  const [dataBlankoKeluar, setDataBlankoKeluar] = React.useState<
+    BlankoKeluar[]
+  >([]);
+
+  const handleFetchingBlankoRusak = async () => {
+    setIsFetching(true);
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlankoRusak`
+      );
+      setData(response.data.data);
+      console.log({ response });
+      setIsFetching(false);
+    } catch (error) {
+      setIsFetching(false);
+      throw error;
+    }
+  };
 
   const handleFetchingBlankoKeluar = async () => {
     setIsFetching(true);
@@ -125,7 +135,7 @@ const TableDataBlankoRusak: React.FC = () => {
       const response: AxiosResponse = await axios.get(
         `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlankoKeluar`
       );
-      setData(response.data.data);
+      setDataBlankoKeluar(response.data.data);
       setSuggestionsBlankoKeluar(response.data.data);
       console.log({ response });
       setIsFetching(false);
@@ -147,9 +157,9 @@ const TableDataBlankoRusak: React.FC = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
-  const columns: ColumnDef<BlankoKeluar>[] = [
+  const columns: ColumnDef<BlankoRusak>[] = [
     {
-      accessorKey: "KodePelatihan",
+      accessorKey: "IdBlankoRusak",
       header: ({ column }) => {
         return (
           <Button
@@ -167,7 +177,32 @@ const TableDataBlankoRusak: React.FC = () => {
       ),
     },
     {
-      accessorKey: "NoSertifikat",
+      accessorKey: "NoSeri",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            No Serial Blanko
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+        >
+          <p className="text-sm text-dark leading-[100%]">
+            {" "}
+            {row.original.NoSeri}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "Tipe",
       header: ({ column }) => {
         return (
           <Button
@@ -186,414 +221,8 @@ const TableDataBlankoRusak: React.FC = () => {
         >
           <p className="text-sm text-dark leading-[100%]">
             {" "}
-            {row.original.TipeBlanko}
+            {row.original.Tipe}
           </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "TanggalKeluar",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Tanggal Keluar
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {generateTanggalPelatihan(row.original.TanggalKeluar)}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "NamaLemdiklat",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[300px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Asal Sekolah/Lemdiklat/Masyarakat
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.NamaLemdiklat}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "NamaProgram",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Nama Program
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.NamaProgram}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "NamaPelaksana",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Nama Pelaksana
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.NamaPelaksana}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "TanggalPermohonan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[250px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Tanggal Permohonan
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {generateTanggalPelatihan(row.original.TanggalPermohonan)}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "LinkPermohonan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Link Permohonan
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`${"ml-0"}  text-left flex flex-wrap flex-col`}>
-          <p className="text-xs text-blue-500 underline leading-[100%] ">
-            {" "}
-            {row.original.LinkPermohonan}
-          </p>
-        </div>
-      ),
-    },
-
-    {
-      accessorKey: "TanggalPelaksanaan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Tanggal Pelaksanaan
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.TanggalPelaksanaan}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "JumlahPesertaLulus",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Jumlah Peserta Lulus
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.JumlahPesertaLulus}
-          </p>
-        </div>
-      ),
-    },
-
-    {
-      accessorKey: "NoSeriBlanko",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            No Seri Blanko
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.NoSeriBlanko}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Status",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Status
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.Status}
-          </p>
-        </div>
-      ),
-    },
-    // {
-    //   accessorKey: "IsSd",
-    //   header: ({ column }) => {
-    //     return (
-    //       <Button
-    //         variant="ghost"
-    //         className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //       >
-    //         Sertifikat Digital <br /> Sudah Diterbitkan
-    //         <HiUserGroup className="ml-2 h-4 w-4" />
-    //       </Button>
-    //     );
-    //   },
-    //   cell: ({ row }) => (
-    //     <div
-    //       className={`${"ml-0"}  text-left flex flex-wrap flex-col lowercase text-blue-500 underline`}
-    //     >
-    //       <Link
-    //         href={row.original.IsSd}
-    //         className="text-sm text-dark leading-[100%]"
-    //       >
-    //         {" "}
-    //         {row.original.IsSd}
-    //       </Link>
-    //     </div>
-    //   ),
-    // },
-    {
-      accessorKey: "IsCetak",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Sertifikat Yang Dicetak
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.IsCetak}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "TipePengambilan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Tipe Pengambilan
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.TipePengambilan}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "PetugasYangMenerima",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Petugas Yang Menerima
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.PetugasYangMenerima}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "PetugasYangMemberi",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Petugas Yang Memberi
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.PetugasYangMemberi}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "LinkDataDukung",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Sertifikat Digital <br /> Sudah Diterbitkan
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col text-blue-500`}
-        >
-          <Link
-            href={row.original.LinkDataDukung}
-            className="text-xs text-blue-500 underline leading-[100%]"
-          >
-            {" "}
-            {row.original.LinkDataDukung}
-          </Link>
         </div>
       ),
     },
@@ -603,7 +232,7 @@ const TableDataBlankoRusak: React.FC = () => {
         return (
           <Button
             variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            className="p-0 !text-left w-[300px] flex items-center justify-start text-gray-900 font-semibold"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Keterangan
@@ -618,6 +247,81 @@ const TableDataBlankoRusak: React.FC = () => {
           <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.Keterangan}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "TanggalRusak",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Tanggal Rusak
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+        >
+          <p className="text-sm text-dark leading-[100%]">
+            {" "}
+            {row.original.TanggalRusak}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "FotoDokumen",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Foto Blanko
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+        >
+          <p className="text-sm text-dark leading-[100%]">
+            {" "}
+            {row.original.FotoDokumen}
+          </p>
+        </div>
+      ),
+    },
+    {
+      accessorKey: "CreatedAt",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[250px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Diupload pada
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+        >
+          <p className="text-sm text-dark leading-[100%]">
+            {" "}
+            {generateTanggalPelatihan(row.original.CreatedAt)}
           </p>
         </div>
       ),
@@ -645,6 +349,7 @@ const TableDataBlankoRusak: React.FC = () => {
 
   React.useEffect(() => {
     handleFetchingBlankoKeluar();
+    handleFetchingBlankoRusak();
   }, []);
 
   const [dataBlanko, setDataBlanko] = React.useState<Blanko[]>([]);
@@ -727,7 +432,7 @@ const TableDataBlankoRusak: React.FC = () => {
     data.append("IdBlankoKeluar", idBlankoKeluar.toString());
     data.append("NoSeri", noSerialBlanko);
     data.append("Tipe", tipeBlanko);
-    data.append("Keterangan", namaPelaksana);
+    data.append("Keterangan", keterangan);
     data.append("TanggalRusak", tanggalBlankoRusak);
 
     if (fotoBlankoRusak != null) data.append("foto_blanko", fotoBlankoRusak);
@@ -745,6 +450,7 @@ const TableDataBlankoRusak: React.FC = () => {
       );
       handleFetchingBlankoKeluar();
       handleClearFormBlankoRusak();
+      handleFetchingBlankoRusak();
       console.log("RESPONSE POST BLANKO RUSAK : ", response);
       Toast.fire({
         icon: "success",
@@ -930,7 +636,7 @@ const TableDataBlankoRusak: React.FC = () => {
                       type="file"
                       className="w-full border border-gray-300 rounded-md"
                       accept="image/*"
-                      capture="environment" // Use "user" for the front camera
+                      // capture="environment" // Use "user" for the front camera
                       onChange={handleFotoBlankoRusakChange}
                     />
                   </div>
@@ -964,81 +670,7 @@ const TableDataBlankoRusak: React.FC = () => {
           </div>
         </>
       ) : showCertificateSetting ? (
-        <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-            <div className="flex w-full gap-2 justify-end">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                    <PiStampLight />
-                    Add Stempel
-                  </div>
-                </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
-                    <div className="flex flex-row items-center gap-2">
-                      {/* <Image
-                        src={"/logo-kkp.png"}
-                        width={0}
-                        height={0}
-                        alt="KKP Logo"
-                        className="w-12 h-12"
-                      /> */}
-                      <div className="flex flex-col gap-1">
-                        <SheetTitle>Pilih Stempel</SheetTitle>
-                        <SheetDescription>
-                          Pilih stempel tanda tangan elektronik yang ingin anda
-                          taukan ke file sertifikat yang akan digenerate!
-                        </SheetDescription>
-                      </div>
-                    </div>
-                  </SheetHeader>
-                  <div className="w-full mt-5 mb-10">
-                    <div className="w-full border-2 rounded-md hover:cursor-pointer hover:border-blue-500 duration-700 flex items-center flex-col px-3 py-5 text-center justify-center border-dashed">
-                      <p className="-mt-1 text-sm">
-                        Kepala Balai Pelatihan dan Penyuluhan Perikanan
-                        Banyuwangi
-                      </p>
-                      <Image
-                        className="w-[200px] my-3"
-                        width={0}
-                        height={0}
-                        alt="Logo Kementrian Kelautan dan Perikanan RI"
-                        src={"/ttd-elektronik.png"}
-                      />
-                      <p className="-mt-1 font-extrabold text-sm">
-                        MOCH. MUCHLISIN, A.Pi, M.P
-                      </p>
-                      <p className="font-extrabold text-sm -mt-1">
-                        NIP. 197509161999031003
-                      </p>
-                    </div>
-                  </div>
-                  <SheetFooter>
-                    <SheetClose asChild>
-                      <Button type="submit">Sematkan Stempel</Button>
-                    </SheetClose>
-                  </SheetFooter>
-                </SheetContent>
-              </Sheet>
-
-              <div
-                onClick={(e) => setShowFormAjukanPelatihan(true)}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-              >
-                <TbFileCertificate />
-                Generate Sertifikat Peserta
-              </div>
-            </div>
-          </div>
-
-          <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
-            <SertifikatSettingPage1 />
-            <SertifikatSettingPage2 />
-          </div>
-        </>
+        <></>
       ) : (
         <>
           <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
@@ -1050,7 +682,7 @@ const TableDataBlankoRusak: React.FC = () => {
                 <div className="w-full">
                   <p className="font-semibold text-primary">Total Blanko</p>
                   <p className="text-sm font-medium">
-                    {data.reduce(
+                    {dataBlankoKeluar.reduce(
                       (total, item) => total + item.JumlahBlankoDisetujui,
                       0
                     )}{" "}
@@ -1067,7 +699,7 @@ const TableDataBlankoRusak: React.FC = () => {
                     Total Blanko CoP
                   </p>
                   <p className="text-sm font-medium">
-                    {data
+                    {dataBlankoKeluar
                       .filter(
                         (item: BlankoKeluar) =>
                           item.TipeBlanko === "Certificate of Proficiency (CoP)"
@@ -1090,7 +722,7 @@ const TableDataBlankoRusak: React.FC = () => {
                     Total Blanko CoC
                   </p>
                   <p className="text-sm font-medium">
-                    {data
+                    {dataBlankoKeluar
                       .filter(
                         (item: BlankoKeluar) =>
                           item.TipeBlanko === "Certificate of Competence (CoC)"

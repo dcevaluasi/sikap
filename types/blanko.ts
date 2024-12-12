@@ -19,6 +19,18 @@ export type BlankoKeluarResponse = {
     data: BlankoKeluar[];
 }
 
+export type BlankoRusak = {
+    IdBlankoRusak: number;
+    IdBlankoKeluar: number;
+    NoSeri: string;
+    Tipe: string;
+    Keterangan: string;
+    TanggalRusak: string;
+    FotoDokumen: string;
+    CreatedAt: string;
+    UpdatedAt: string;
+}
+
 export type BlankoKeluar = {
     IdBlankoKeluar: number,
     IdBlanko: number,
