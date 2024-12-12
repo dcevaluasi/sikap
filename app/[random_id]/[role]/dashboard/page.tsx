@@ -1,5 +1,6 @@
 "use client";
 
+import AKP from "@/components/dashboard/Dashboard/AKP";
 import ECommerce from "@/components/dashboard/Dashboard/E-commerce";
 import LayoutAdminElaut from "@/components/dashboard/Layouts/LayoutAdminElaut";
 
@@ -10,7 +11,7 @@ export default function Home() {
   return (
     <>
       <LayoutAdminElaut>
-        <ECommerce />
+        <AKP />
       </LayoutAdminElaut>
     </>
   );

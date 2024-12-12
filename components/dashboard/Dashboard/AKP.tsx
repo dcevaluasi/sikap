@@ -249,26 +249,6 @@ const AKP: React.FC = () => {
             <MdSchool className="text-primary text-3xl" />
           </CardDataStats>
         </span>
-
-        <Popover>
-          <PopoverTrigger asChild>
-            <span onClick={(e) => setSelectedId(0)}>
-              <CardDataStats
-                title="Total Blanko Rusak"
-                total={dataBlanko
-                  .reduce((total, item) => total + item.JumlahPengadaan, 0)
-                  .toString()}
-                rate="0%"
-                levelUp
-              >
-                <GiPapers className="text-primary text-3xl group-hover:scale-110" />
-              </CardDataStats>
-            </span>
-          </PopoverTrigger>
-          <PopoverContent className="w-150">
-            <ChartBlankoAwal data={dataBlanko} />
-          </PopoverContent>
-        </Popover>
       </div>
       <div className="w-full mt-8">
         <ChartCertificatesMonthly data={data!} />
