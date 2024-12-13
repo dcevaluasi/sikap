@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/chart";
 import TableDataSertifikatKeterampilan from "../Pelatihan/TableDataSertifikatKeterampilan";
 import { BALAI_PELATIHAN } from "@/constants/pelatihan";
-import { PILIHAN_SUMMARY_AKP } from "@/constants/akp";
+import { PELABUHAN_PERIKANAN, PILIHAN_SUMMARY_AKP } from "@/constants/akp";
 export const description = "A bar chart with an active bar";
 
 const chartConfig = {
@@ -141,7 +141,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
   data,
 }) => {
   const [selectedLemdiklat, setSelectedLemdiklat] =
-    React.useState<string>("BPPP Tegal");
+    React.useState<string>("All");
 
   const [state, setState] = useState<ChartThreeState>({
     series: [],
@@ -426,19 +426,26 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
     {
       label: "Basic Safety Training Fisheries I",
       color: "bg-primary",
-      multiplier: 565000,
+      multiplier: selectedLemdiklat != "BPPP Tegal" ? 1350000 : 1050000,
     },
     {
       label: "Basic Safety Training Fisheries II",
       color: "bg-[#8FD0EF]",
-      multiplier: 565000,
+      multiplier: selectedLemdiklat != "BPPP Tegal" ? 600000 : 620000,
+    },
+    {
+      label: "Rating Keahlian",
+      color: "bg-[#E0366F]",
+      multiplier: selectedLemdiklat != "BPPP Tegal" ? 1350000 : 2050000,
     },
   ].reduce(
     (acc, item) => {
       const totalBlanko = data
         .filter(
           (d) =>
-            d.NamaProgram === item.label && d.NamaPelaksana == selectedLemdiklat
+            d.NamaProgram === item.label &&
+            d.NamaPelaksana == selectedLemdiklat &&
+            d.AsalPendapatan == "PNBP"
         )
         .reduce((total, d) => total + d.JumlahBlankoDisetujui, 0);
 
@@ -582,7 +589,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
   ];
 
   const [selectedSummaryAKP, setSelectedSummaryAKP] =
-    React.useState<string>("");
+    React.useState<string>("All");
 
   return (
     <div className="col-span-12 rounded-xl border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-5 w-full">
@@ -596,7 +603,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
       </div>
 
       <Tabs defaultValue={selectedSummaryAKP} className="w-full mb-3">
-        <TabsList>
+        <TabsList className="w-full mb-3 flex flex-wrap">
           <TabsTrigger
             onClick={() => setSelectedSummaryAKP("All")}
             value={"All"}
@@ -606,7 +613,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
           {PILIHAN_SUMMARY_AKP.map((summaryAKP, index) => (
             <TabsTrigger
               key={index}
-              onClick={() => setSelectedLemdiklat(summaryAKP.name)}
+              onClick={() => setSelectedSummaryAKP(summaryAKP.name)}
               value={summaryAKP!.name}
             >
               {summaryAKP!.name}
@@ -616,22 +623,45 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
 
         <TabsContent value={selectedSummaryAKP}>
           <Tabs defaultValue={selectedLemdiklat} className="w-full mb-3">
-            <TabsList>
-              <TabsTrigger
-                onClick={() => setSelectedLemdiklat("All")}
-                value={"All"}
-              >
-                All
-              </TabsTrigger>
-              {BALAI_PELATIHAN.map((balaiPelatihan, index) => (
+            {selectedSummaryAKP == "Balai Pelatihan & Satuan Pendidikana KP" ? (
+              <TabsList className="w-full mb-3 flex flex-wrap">
                 <TabsTrigger
-                  onClick={() => setSelectedLemdiklat(balaiPelatihan.Name)}
-                  value={balaiPelatihan!.Name}
+                  onClick={() => setSelectedLemdiklat("All")}
+                  value={"All"}
                 >
-                  {balaiPelatihan!.Name}
+                  All
                 </TabsTrigger>
-              ))}
-            </TabsList>
+                {BALAI_PELATIHAN.map((balaiPelatihan, index) => (
+                  <TabsTrigger
+                    onClick={() => setSelectedLemdiklat(balaiPelatihan.Name)}
+                    value={balaiPelatihan!.Name}
+                  >
+                    {balaiPelatihan!.Name}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            ) : selectedSummaryAKP == "Pelabuhan Perikanan" ? (
+              <TabsList className="w-full mb-3 flex flex-wrap h-full">
+                <TabsTrigger
+                  onClick={() => setSelectedLemdiklat("All")}
+                  value={"All"}
+                >
+                  All
+                </TabsTrigger>
+                {PELABUHAN_PERIKANAN.map((pelabuhanPerikanan, index) => (
+                  <TabsTrigger
+                    onClick={() =>
+                      setSelectedLemdiklat(pelabuhanPerikanan.Name)
+                    }
+                    value={pelabuhanPerikanan!.Name}
+                  >
+                    {pelabuhanPerikanan!.Name}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            ) : (
+              <></>
+            )}
 
             <TabsContent value={selectedLemdiklat}>
               {selectedLemdiklat == "All" ? (
@@ -854,122 +884,130 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                       </CardFooter>
                     </Card>
                   </div>
-                  <div className="flex gap-2 flex-col mt-10">
-                    <Card className="w-full">
-                      <CardHeader>
-                        <CardTitle>Total Perkiraan Penerimaan PNBP</CardTitle>
-                        <CardDescription>
-                          {" "}
-                          The unit prices used in this data were obtained from{" "}
-                          <span className="font-semibold">PP Tarif 85</span>
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="p-8 flex flex-wrap items-center justify-center gap-y-3 mt-0 border-t border-t-gray-200">
-                          {[
-                            {
-                              label: "Basic Safety Training Fisheries I",
-                              color: "bg-primary",
-                              multiplier:
-                                selectedLemdiklat != "BPPP Tegal"
-                                  ? 1350000
-                                  : 1050000,
-                            },
-                            {
-                              label: "Basic Safety Training Fisheries II",
-                              color: "bg-[#8FD0EF]",
-                              multiplier:
-                                selectedLemdiklat != "BPPP Tegal"
-                                  ? 600000
-                                  : 620000,
-                            },
-                            {
-                              label: "Rating Keahlian",
-                              color: "bg-[#E0366F]",
-                              multiplier:
-                                selectedLemdiklat != "BPPP Tegal"
-                                  ? 600000
-                                  : 2050000,
-                            },
-                          ].map((item, index) => (
-                            <div className="w-full px-8 " key={index}>
-                              <div className="flex w-full items-center justify-between">
-                                <div className="flex gap-1 w-full items-center">
-                                  <span
-                                    className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
-                                  ></span>
-                                  <p className="flex w-full justify-between text-sm font-medium text-black">
-                                    <span>
-                                      {item.label} - Rp{" "}
-                                      {item.multiplier.toLocaleString("id-ID")}
-                                    </span>
-                                  </p>
-                                </div>
+                  {selectedSummaryAKP == "Pelabuhan Perikanan" ? (
+                    <></>
+                  ) : selectedSummaryAKP == "DJPT" ? (
+                    <></>
+                  ) : (
+                    <div className="flex gap-2 flex-col mt-10">
+                      <Card className="w-full">
+                        <CardHeader>
+                          <CardTitle>Total Perkiraan Penerimaan PNBP</CardTitle>
+                          <CardDescription>
+                            {" "}
+                            The unit prices used in this data were obtained from{" "}
+                            <span className="font-semibold">PP Tarif 85</span>
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="p-8 flex flex-wrap items-center justify-center gap-y-3 mt-0 border-t border-t-gray-200">
+                            {[
+                              {
+                                label: "Basic Safety Training Fisheries I",
+                                color: "bg-primary",
+                                multiplier:
+                                  selectedLemdiklat != "BPPP Tegal"
+                                    ? 1350000
+                                    : 1050000,
+                              },
+                              {
+                                label: "Basic Safety Training Fisheries II",
+                                color: "bg-[#8FD0EF]",
+                                multiplier:
+                                  selectedLemdiklat != "BPPP Tegal"
+                                    ? 600000
+                                    : 620000,
+                              },
+                              {
+                                label: "Rating Keahlian",
+                                color: "bg-[#E0366F]",
+                                multiplier:
+                                  selectedLemdiklat != "BPPP Tegal"
+                                    ? 1350000
+                                    : 2050000,
+                              },
+                            ].map((item, index) => (
+                              <div className="w-full px-8 " key={index}>
+                                <div className="flex w-full items-center justify-between">
+                                  <div className="flex gap-1 w-full items-center">
+                                    <span
+                                      className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
+                                    ></span>
+                                    <p className="flex w-full justify-between text-sm font-medium text-black">
+                                      <span>
+                                        {item.label} - Rp{" "}
+                                        {item.multiplier.toLocaleString(
+                                          "id-ID"
+                                        )}
+                                      </span>
+                                    </p>
+                                  </div>
 
-                                <span className="w-full flex items-end justify-end">
-                                  Rp.
-                                  {(
-                                    data
-                                      .filter(
-                                        (d) =>
-                                          d.NamaProgram === item.label &&
-                                          d.NamaPelaksana ===
-                                            selectedLemdiklat &&
-                                          d.AsalPendapatan == "PNBP"
-                                      )
-                                      .reduce(
-                                        (total, d) =>
-                                          total + d.JumlahBlankoDisetujui,
-                                        0
-                                      ) * item.multiplier
-                                  ).toLocaleString("id-ID")}{" "}
-                                  <span className="font-semibold text-xs ml-3">
-                                    (
-                                    {data
-                                      .filter(
-                                        (d) =>
-                                          d.NamaProgram === item.label &&
-                                          d.NamaPelaksana ===
-                                            selectedLemdiklat &&
-                                          d.AsalPendapatan == "PNBP"
-                                      )
-                                      .reduce(
-                                        (total, d) =>
-                                          total + d.JumlahBlankoDisetujui,
-                                        0
-                                      )
-                                      .toLocaleString("id-ID")}
-                                    Sertifikat )
+                                  <span className="w-full flex items-end justify-end">
+                                    Rp.
+                                    {(
+                                      data
+                                        .filter(
+                                          (d) =>
+                                            d.NamaProgram === item.label &&
+                                            d.NamaPelaksana ===
+                                              selectedLemdiklat &&
+                                            d.AsalPendapatan == "PNBP"
+                                        )
+                                        .reduce(
+                                          (total, d) =>
+                                            total + d.JumlahBlankoDisetujui,
+                                          0
+                                        ) * item.multiplier
+                                    ).toLocaleString("id-ID")}{" "}
+                                    <span className="font-semibold text-xs ml-3">
+                                      (
+                                      {data
+                                        .filter(
+                                          (d) =>
+                                            d.NamaProgram === item.label &&
+                                            d.NamaPelaksana ===
+                                              selectedLemdiklat &&
+                                            d.AsalPendapatan == "PNBP"
+                                        )
+                                        .reduce(
+                                          (total, d) =>
+                                            total + d.JumlahBlankoDisetujui,
+                                          0
+                                        )
+                                        .toLocaleString("id-ID")}
+                                      Sertifikat )
+                                    </span>
                                   </span>
+                                </div>
+                              </div>
+                            ))}
+                            <div className="w-full flex justify-end items-center px-8">
+                              <div className="flex gap-1 items-end">
+                                <h5 className="text-3xl font-bold text-black">
+                                  Rp{" "}
+                                  <CountUp
+                                    start={0}
+                                    duration={12.75}
+                                    end={totalSum.totalAmount}
+                                  />
+                                </h5>
+                                <span className="font-semibold text-xs ml-3">
+                                  ({totalSum.totalBlanko}
+                                  Sertifikat )
                                 </span>
                               </div>
                             </div>
-                          ))}
-                          <div className="w-full flex justify-end items-center px-8">
-                            <div className="flex gap-1 items-end">
-                              <h5 className="text-3xl font-bold text-black">
-                                Rp{" "}
-                                <CountUp
-                                  start={0}
-                                  duration={12.75}
-                                  end={totalSum.totalAmount}
-                                />
-                              </h5>
-                              <span className="font-semibold text-xs ml-3">
-                                ({totalSum.totalBlanko}
-                                Sertifikat )
-                              </span>
-                            </div>
                           </div>
-                        </div>
-                      </CardContent>
-                      <CardFooter className="flex-col items-start gap-2 text-sm">
-                        <div className="leading-none text-muted-foreground">
-                          Showing total certificate issued since 27 May 2024
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </div>
+                        </CardContent>
+                        <CardFooter className="flex-col items-start gap-2 text-sm">
+                          <div className="leading-none text-muted-foreground">
+                            Showing total certificate issued since 27 May 2024
+                          </div>
+                        </CardFooter>
+                      </Card>
+                    </div>
+                  )}
                 </>
               )}
             </TabsContent>
