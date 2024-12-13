@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import CardDataStats from "../CardDataStats";
 import { HiCheckBadge } from "react-icons/hi2";
 import { GiBattery75, GiPapers } from "react-icons/gi";
 import { MdSchool } from "react-icons/md";
@@ -12,22 +11,21 @@ import { Blanko, BlankoKeluar, BlankoRusak } from "@/types/blanko";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { Button } from "flowbite-react";
-
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import ChartPopover from "../Charts/ChartPopover";
-import ChartPopoverKeluar from "../Charts/ChartPopoverKeluar";
 import { formatDateTime } from "@/utils";
-import ChartPopoverKeahlian from "../Charts/ChartPopoverKeahlian";
-import ChartBlankoAwal from "../Charts/ChartBlankoAwal";
-import ChartPopoverKeterampilan from "../Charts/ChartPopoverKeterampilan";
-import ChartCertificatesMonthly from "../Charts/ChartCertificatesMonthly";
+import ChartBlankoAwal from "../../Charts/ChartBlankoAwal";
+import ChartPopoverKeluar from "../../Charts/ChartPopoverKeluar";
+import ChartPopover from "../../Charts/ChartPopover";
+import ChartCertificatesMonthly from "../../Charts/ChartCertificatesMonthly";
+import ChartPopoverKeahlian from "../../Charts/ChartPopoverKeahlian";
+import ChartPopoverKeterampilan from "../../Charts/ChartPopoverKeterampilan";
+import CardDataStats from "../../CardDataStats";
 
-const AKP: React.FC = () => {
+const SummaryELAUT: React.FC = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const token = Cookies.get("XSRF091");
 
@@ -115,7 +113,7 @@ const AKP: React.FC = () => {
   return (
     <>
       <div className="flex flex-col mb-8">
-        <div className="flex flex-row gap-2 items-center">
+        {/* <div className="flex flex-row gap-2 items-center">
           <RiShipFill className="text-4xl" />
           <div className="flex flex-col">
             <h1 className="text-4xl text-gray-900 font-medium leading-[100%] font-calsans">
@@ -129,7 +127,7 @@ const AKP: React.FC = () => {
               and is valid to {formatDateTime()}
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
       <div className="grid grid-cols-1 gap-4 h-fit max-h-fit md:grid-cols-3 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
         <Popover>
@@ -256,10 +254,10 @@ const AKP: React.FC = () => {
         <Tabs defaultValue={"CoP"} className="w-full mb-3 -mt-4">
           <TabsList className="flex gap-2 w-full">
             <TabsTrigger value="CoC" className="w-full">
-              Keahlian Awak Kapal Perikanan
+              Ujian dan Diklat Keahlian AKP
             </TabsTrigger>
             <TabsTrigger value="CoP" className="w-full">
-              Keterampilan Awak Kapal Perikanan
+              Diklat Keterampilan AKP
             </TabsTrigger>
           </TabsList>
           <TabsContent value="CoC">
@@ -278,4 +276,4 @@ const AKP: React.FC = () => {
   );
 };
 
-export default AKP;
+export default SummaryELAUT;

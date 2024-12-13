@@ -230,7 +230,8 @@ export default function Header() {
         usePathname().includes("/dpkakp/penguji") ||
         usePathname().includes("/pukakp/admin") ||
         usePathname().includes("/pukakp/user") ||
-        usePathname().includes("/pukakp/penguji")
+        usePathname().includes("/pukakp/penguji") ||
+        usePathname().includes("/dev-dashboard")
           ? "hidden"
           : "block"
       } w-full z-[150] md:bg-opacity-90 transition duration-300 ease-in-out ${

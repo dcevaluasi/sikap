@@ -1,16 +1,6 @@
-import React, { ReactElement, useState } from "react";
+import React from "react";
 import TableData from "../Tables/TableData";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -22,34 +12,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  Edit3Icon,
-  Fullscreen,
-  LucideClipboardEdit,
-  LucideNewspaper,
-  LucidePrinter,
-  Trash,
-  X,
-} from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
-import {
-  TbBook,
-  TbBookFilled,
-  TbBroadcast,
-  TbChartBubble,
-  TbChartDonut,
-  TbDatabase,
-  TbDatabaseEdit,
-  TbFileCertificate,
-  TbFileDigit,
-  TbFishChristianity,
-  TbMoneybag,
-  TbQrcode,
-  TbSchool,
-  TbTargetArrow,
-} from "react-icons/tb";
+import { TbChartBubble } from "react-icons/tb";
 
 import { FiUploadCloud } from "react-icons/fi";
 import {
@@ -73,7 +39,6 @@ import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -83,7 +48,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { convertDate } from "@/utils";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { Blanko, BlankoKeluar } from "@/types/blanko";
@@ -95,7 +59,6 @@ const TableDataBlankoKeluar: React.FC = () => {
   const [showCertificateSetting, setShowCertificateSetting] =
     React.useState<boolean>(false);
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [data, setData] = React.useState<BlankoKeluar[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
@@ -117,23 +80,6 @@ const TableDataBlankoKeluar: React.FC = () => {
     }
   };
 
-  const handleDeletingBlankoKeluar = async (id: number) => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/deleteBlankoKeluar?id=${id}`
-      );
-      console.log("DELETE BLANKO KELUAR : ", response);
-      handleFetchingBlanko();
-      setIsFetching(false);
-    } catch (error) {
-      console.error("ERROR DELETE BLANKO KELUAR : ", error);
-      handleFetchingBlanko();
-      setIsFetching(false);
-      throw error;
-    }
-  };
-
   const [isOpenFormMateri, setIsOpenFormMateri] =
     React.useState<boolean>(false);
 
@@ -141,14 +87,6 @@ const TableDataBlankoKeluar: React.FC = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-
-  const [sertifikatUntukPelatihan, setSertifikatUntukPelatihan] =
-    React.useState("");
-  const [ttdSertifikat, setTtdSertifikat] = React.useState("");
-  const [openFormSertifikat, setOpenFormSertifikat] = React.useState(false);
-
-  const [isOpenFormPublishedPelatihan, setIsOpenFormPublishedPelatihan] =
-    React.useState<boolean>(false);
 
   const router = useRouter();
   const [columnVisibility, setColumnVisibility] =
@@ -174,7 +112,10 @@ const TableDataBlankoKeluar: React.FC = () => {
       ),
     },
     {
-      accessorKey: "NoSertifikat",
+      accessorKey: "TipeBlanko",
+      meta: {
+        filterVariant: "select",
+      },
       header: ({ column }) => {
         return (
           <Button
@@ -423,31 +364,31 @@ const TableDataBlankoKeluar: React.FC = () => {
         </div>
       ),
     },
-    {
-      accessorKey: "Status",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Status
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.Status}
-          </p>
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "Status",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Status
+    //         <HiUserGroup className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div
+    //       className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+    //     >
+    //       <p className="text-sm text-dark leading-[100%]">
+    //         {" "}
+    //         {row.original.Status}
+    //       </p>
+    //     </div>
+    //   ),
+    // },
     // {
     //   accessorKey: "IsSd",
     //   header: ({ column }) => {
@@ -476,31 +417,7 @@ const TableDataBlankoKeluar: React.FC = () => {
     //     </div>
     //   ),
     // },
-    {
-      accessorKey: "IsCetak",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Sertifikat Yang Dicetak
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.IsCetak}
-          </p>
-        </div>
-      ),
-    },
+
     {
       accessorKey: "TipePengambilan",
       header: ({ column }) => {
@@ -526,128 +443,126 @@ const TableDataBlankoKeluar: React.FC = () => {
         </div>
       ),
     },
-    {
-      accessorKey: "PetugasYangMenerima",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Petugas Yang Menerima
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.PetugasYangMenerima}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "PetugasYangMemberi",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Petugas Yang Memberi
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.PetugasYangMemberi}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "LinkDataDukung",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Sertifikat Digital <br /> Sudah Diterbitkan
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col text-blue-500`}
-        >
-          <Link
-            href={row.original.LinkDataDukung}
-            className="text-xs text-blue-500 underline leading-[100%]"
-          >
-            {" "}
-            {row.original.LinkDataDukung}
-          </Link>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Keterangan",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Keterangan
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.Keterangan}
-          </p>
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "PetugasYangMenerima",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Petugas Yang Menerima
+    //         <HiUserGroup className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div
+    //       className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+    //     >
+    //       <p className="text-sm text-dark leading-[100%]">
+    //         {" "}
+    //         {row.original.PetugasYangMenerima}
+    //       </p>
+    //     </div>
+    //   ),
+    // },
+    // {
+    //   accessorKey: "PetugasYangMemberi",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Petugas Yang Memberi
+    //         <HiUserGroup className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div
+    //       className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+    //     >
+    //       <p className="text-sm text-dark leading-[100%]">
+    //         {" "}
+    //         {row.original.PetugasYangMemberi}
+    //       </p>
+    //     </div>
+    //   ),
+    // },
+    // {
+    //   accessorKey: "LinkDataDukung",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Sertifikat Digital <br /> Sudah Diterbitkan
+    //         <HiUserGroup className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div
+    //       className={`${"ml-0"}  text-left flex flex-wrap flex-col text-blue-500`}
+    //     >
+    //       <Link
+    //         href={row.original.LinkDataDukung}
+    //         className="text-xs text-blue-500 underline leading-[100%]"
+    //       >
+    //         {" "}
+    //         {row.original.LinkDataDukung}
+    //       </Link>
+    //     </div>
+    //   ),
+    // },
+    // {
+    //   accessorKey: "Keterangan",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Keterangan
+    //         <HiUserGroup className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div
+    //       className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+    //     >
+    //       <p className="text-sm text-dark leading-[100%]">
+    //         {" "}
+    //         {row.original.Keterangan}
+    //       </p>
+    //     </div>
+    //   ),
+    // },
   ];
 
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
+    filterFns: {},
+    state: {
+      columnFilters,
+    },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(), //client side filtering
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
+    getPaginationRowModel: getPaginationRowModel(),
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: false,
   });
 
   React.useEffect(() => {
@@ -757,8 +672,26 @@ const TableDataBlankoKeluar: React.FC = () => {
     }
   };
 
+  const [selectedTipeBlanko, setSelectedTipeBlanko] =
+    React.useState<string>("");
+
+  React.useEffect(() => {
+    if (selectedTipeBlanko) {
+      setColumnFilters([
+        {
+          id: "TipeBlanko",
+          value: selectedTipeBlanko,
+        },
+      ]);
+    } else {
+      setColumnFilters([]); // Clear filters when no selection
+    }
+  }, [selectedTipeBlanko]);
+
+  console.log({ selectedTipeBlanko });
+
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-8">
       <AlertDialog open={isOpenFormMateri}>
         <AlertDialogContent className="max-w-5xl">
           <AlertDialogHeader>
@@ -1289,93 +1222,9 @@ const TableDataBlankoKeluar: React.FC = () => {
         </AlertDialogContent>
       </AlertDialog>
       {showFormAjukanPelatihan ? (
-        <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-          </div>
-
-          {/* List Data Pelatihan */}
-          <div>
-            <FormPelatihan edit={false} />
-          </div>
-        </>
+        <></>
       ) : showCertificateSetting ? (
-        <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-            <div className="flex w-full gap-2 justify-end">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                    <PiStampLight />
-                    Add Stempel
-                  </div>
-                </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
-                    <div className="flex flex-row items-center gap-2">
-                      {/* <Image
-                        src={"/logo-kkp.png"}
-                        width={0}
-                        height={0}
-                        alt="KKP Logo"
-                        className="w-12 h-12"
-                      /> */}
-                      <div className="flex flex-col gap-1">
-                        <SheetTitle>Pilih Stempel</SheetTitle>
-                        <SheetDescription>
-                          Pilih stempel tanda tangan elektronik yang ingin anda
-                          taukan ke file sertifikat yang akan digenerate!
-                        </SheetDescription>
-                      </div>
-                    </div>
-                  </SheetHeader>
-                  <div className="w-full mt-5 mb-10">
-                    <div className="w-full border-2 rounded-md hover:cursor-pointer hover:border-blue-500 duration-700 flex items-center flex-col px-3 py-5 text-center justify-center border-dashed">
-                      <p className="-mt-1 text-sm">
-                        Kepala Balai Pelatihan dan Penyuluhan Perikanan
-                        Banyuwangi
-                      </p>
-                      <Image
-                        className="w-[200px] my-3"
-                        width={0}
-                        height={0}
-                        alt="Logo Kementrian Kelautan dan Perikanan RI"
-                        src={"/ttd-elektronik.png"}
-                      />
-                      <p className="-mt-1 font-extrabold text-sm">
-                        MOCH. MUCHLISIN, A.Pi, M.P
-                      </p>
-                      <p className="font-extrabold text-sm -mt-1">
-                        NIP. 197509161999031003
-                      </p>
-                    </div>
-                  </div>
-                  <SheetFooter>
-                    <SheetClose asChild>
-                      <Button type="submit">Sematkan Stempel</Button>
-                    </SheetClose>
-                  </SheetFooter>
-                </SheetContent>
-              </Sheet>
-
-              <div
-                onClick={(e) => setShowFormAjukanPelatihan(true)}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-              >
-                <TbFileCertificate />
-                Generate Sertifikat Peserta
-              </div>
-            </div>
-          </div>
-
-          <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
-            <SertifikatSettingPage1 />
-            <SertifikatSettingPage2 />
-          </div>
-        </>
+        <></>
       ) : (
         <>
           {/* Header Tabel Data Pelatihan */}
@@ -1451,33 +1300,30 @@ const TableDataBlankoKeluar: React.FC = () => {
             <div id="chartOne" className="-ml-5"></div>
             <div className="flex w-full items-center mb-2">
               <div className="flex w-full gap-1 items-start">
-                <Select>
-                  <SelectTrigger className="w-[140px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                <Select
+                  value={selectedTipeBlanko}
+                  onValueChange={(value) => setSelectedTipeBlanko(value)}
+                >
+                  <SelectTrigger className="w-fit border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
                     <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                      <TbChartBubble /> Jenis Blanko
+                      <TbChartBubble />{" "}
+                      {selectedTipeBlanko == " "
+                        ? "All"
+                        : selectedTipeBlanko != ""
+                        ? selectedTipeBlanko
+                        : "Tipe Blanko"}
                     </div>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Status</SelectLabel>
-                      <SelectItem value="pendaftaran">CoP</SelectItem>
-                      <SelectItem value="pelaksanaan">CoC</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select>
-                  <SelectTrigger className="w-[190px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                      <TbBroadcast />
-                      Tanggal Pengadaan
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Bidang</SelectLabel>
-                      <SelectItem value="apple">Publish E-LAUT</SelectItem>
-                      <SelectItem value="banana">Unpublish E-LAUT</SelectItem>
+                      <SelectItem value=" ">All</SelectItem>
+                      <SelectItem value="Certificate of Competence (CoC)">
+                        Certificate of Competence (CoC)
+                      </SelectItem>
+                      <SelectItem value="Certificate of Proficiency (CoP)">
+                        Certificate of Proficiency (CoP)
+                      </SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>

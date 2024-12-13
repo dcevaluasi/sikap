@@ -61,6 +61,17 @@ export const BALAI_PELATIHAN: BalaiPelatihan[] = [
     KepalaBalaiPelatihan: "",
     Image: "",
   },
+  {
+    Id: "SP006",
+    Longitude: 98.60778803618938,
+    Latitude: 4.365581800690166,
+    Name: "Politeknik AUP Jakarta",
+    Location: "medan",
+    Description: "Balai Pelatihan dan Penyuluhan Perikanan Medan.",
+    FullName: "Balai Pelatihan dan Penyuluhan Perikanan (BPPP) Medan",
+    KepalaBalaiPelatihan: "",
+    Image: "",
+  },
 ];
 
 export const BIDANG_PELATIHAN: BidangPelatihan[] = [
