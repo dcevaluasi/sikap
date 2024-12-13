@@ -665,9 +665,9 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
 
             <TabsContent value={selectedLemdiklat}>
               {selectedLemdiklat == "All" ? (
-                <div className="flex flex-col gap-4">
-                  <div className="w-[60%] flex ">
-                    <Card className="w-[60%]">
+                <div className="flex gap-2 w-full h-full">
+                  <div className="w-full ">
+                    <Card className="">
                       <CardHeader>
                         <CardTitle>
                           DIKLAT dan BIMTEK BERDASARKAN LEMBAGA DIKLATEK
@@ -724,8 +724,8 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                       </CardFooter>
                     </Card>
                   </div>
-                  <div className="flex gap-2 w-full">
-                    <Card className="w-[50%] h-full">
+                  <div className="w-full">
+                    <Card className="">
                       <CardHeader>
                         <CardTitle>
                           DIKLAT dan BIMTEK BERDASARKAN JENIS PROGRAM
@@ -784,7 +784,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
               ) : (
                 <>
                   <div className="flex gap-2 w-full">
-                    <Card className="w-[50%] h-full">
+                    <Card className="w-full h-full">
                       <CardHeader>
                         <CardTitle>DIKLAT dan BIMTEK NON-PNBP</CardTitle>
                         <CardDescription>
@@ -834,7 +834,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                       </CardFooter>
                     </Card>
 
-                    <Card className="w-[50%] h-full">
+                    <Card className="w-full h-full">
                       <CardHeader>
                         <CardTitle>DIKLAT dan BIMTEK PNBP</CardTitle>
                         <CardDescription>
