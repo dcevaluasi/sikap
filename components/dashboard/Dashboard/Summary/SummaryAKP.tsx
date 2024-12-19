@@ -114,23 +114,7 @@ const SummaryAKP: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col mb-8">
-        {/* <div className="flex flex-row gap-2 items-center">
-          <RiShipFill className="text-4xl" />
-          <div className="flex flex-col">
-            <h1 className="text-4xl text-gray-900 font-medium leading-[100%] font-calsans">
-              Dashboard Sertifikasi Awak
-              <br />
-              Kapal Perikanan
-            </h1>
-            <p className="font-normal italic leading-[110%] text-gray-400 text-base max-w-4xl">
-              The data presented is obtained through the AKAPI application and
-              processed by the Maritime and Fisheries Training Center operator,
-              and is valid to {formatDateTime()}
-            </p>
-          </div>
-        </div> */}
-      </div>
+      <div className="flex flex-col mb-8"></div>
       <div className="grid grid-cols-1 gap-4 h-fit max-h-fit md:grid-cols-3 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
         <Popover>
           <PopoverTrigger asChild>
@@ -263,14 +247,10 @@ const SummaryAKP: React.FC = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="CoC">
-            <>
-              <ChartPopoverKeahlian data={data!} />
-            </>
+            <ChartPopoverKeahlian data={data!} />
           </TabsContent>
           <TabsContent value="CoP">
-            <>
-              <ChartPopoverKeterampilan data={data!} />
-            </>
+            <ChartPopoverKeterampilan data={data!} />
           </TabsContent>
         </Tabs>
       </div>

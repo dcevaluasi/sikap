@@ -24,6 +24,10 @@ import ChartCertificatesMonthly from "../../Charts/ChartCertificatesMonthly";
 import ChartPopoverKeahlian from "../../Charts/ChartPopoverKeahlian";
 import ChartPopoverKeterampilan from "../../Charts/ChartPopoverKeterampilan";
 import CardDataStats from "../../CardDataStats";
+import ChartMasyarakatDilatih from "../../Charts/ChartMasyarakatDilatih";
+import ChartMasyarakatDilatihMonthly from "../../Charts/ChartMasyarakatDilatihMonthly";
+import ChartDetailMasyarakatDilatih from "../../Charts/ChartDetailMasyarakatDilatih";
+import ChartSertifikasiKompetensiMonthly from "../../Charts/ChartSertifikasiKompetensiMonthly";
 
 const SummaryELAUT: React.FC = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -87,8 +91,6 @@ const SummaryELAUT: React.FC = () => {
     }
   };
 
-  const [selectedId, setSelectedId] = React.useState<number>(0);
-
   React.useEffect(() => {
     // Fungsi untuk fetch data
     const fetchAllData = () => {
@@ -112,162 +114,28 @@ const SummaryELAUT: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col mb-8">
-        {/* <div className="flex flex-row gap-2 items-center">
-          <RiShipFill className="text-4xl" />
-          <div className="flex flex-col">
-            <h1 className="text-4xl text-gray-900 font-medium leading-[100%] font-calsans">
-              Dashboard Sertifikasi Awak
-              <br />
-              Kapal Perikanan
-            </h1>
-            <p className="font-normal italic leading-[110%] text-gray-400 text-base max-w-4xl">
-              The data presented is obtained through the AKAPI application and
-              processed by the Maritime and Fisheries Training Center operator,
-              and is valid to {formatDateTime()}
-            </p>
-          </div>
-        </div> */}
-      </div>
-      <div className="grid grid-cols-1 gap-4 h-fit max-h-fit md:grid-cols-3 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
-        <Popover>
-          <PopoverTrigger asChild>
-            <span onClick={(e) => setSelectedId(0)}>
-              <CardDataStats
-                title="Total Pengadaan Blanko"
-                total={dataBlanko
-                  .reduce((total, item) => total + item.JumlahPengadaan, 0)
-                  .toString()}
-                rate="0%"
-                levelUp
-              >
-                <GiPapers className="text-primary text-3xl group-hover:scale-110" />
-              </CardDataStats>
-            </span>
-          </PopoverTrigger>
-          <PopoverContent className="w-150">
-            <ChartBlankoAwal data={dataBlanko} />
-          </PopoverContent>
-        </Popover>
+      <div className="flex flex-col mb-8"></div>
 
-        <Popover>
-          <PopoverTrigger asChild>
-            <span onClick={(e) => setSelectedId(0)}>
-              <CardDataStats
-                title="Total Blanko Terpakai"
-                total={(
-                  data.reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  ) + blankoRusak.length
-                ).toString()}
-                rate="0%"
-                levelUp
-              >
-                <RiLogoutCircleRFill className="text-primary text-3xl" />
-              </CardDataStats>
-            </span>
-          </PopoverTrigger>
-          <PopoverContent className="w-150">
-            <ChartPopoverKeluar data={data} dataBlankoRusak={blankoRusak} />
-          </PopoverContent>
-        </Popover>
-
-        <Popover>
-          <PopoverTrigger asChild>
-            <span onClick={(e) => setSelectedId(0)}>
-              <CardDataStats
-                title="Sisa Persediaan Blanko"
-                total={(
-                  dataBlanko.reduce(
-                    (total, item) => total + item.JumlahPengadaan,
-                    0
-                  ) -
-                  data.reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  ) -
-                  blankoRusak.length
-                ).toString()}
-                rate=""
-                levelDown
-              >
-                <GiBattery75 className="text-primary text-3xl" />
-              </CardDataStats>
-            </span>
-          </PopoverTrigger>
-          <PopoverContent className="w-150">
-            <ChartPopover
-              data={dataBlanko}
-              blankoKeluar={data}
-              dataBlankoRusak={blankoRusak}
-            />
-          </PopoverContent>
-        </Popover>
-
-        <span onClick={(e) => setSelectedId(1)}>
-          <CardDataStats
-            title="Total Sertifikat Keahlian"
-            total={data
-              .filter(
-                (item) => item.TipeBlanko === "Certificate of Competence (CoC)"
-              )
-              .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0)
-              .toString()}
-            rate=""
-            levelDown
-          >
-            <HiCheckBadge className="text-primary text-3xl" />
-          </CardDataStats>
-        </span>
-
-        <span onClick={(e) => setSelectedId(2)}>
-          <CardDataStats
-            title="Total Sertifikat Keterampilan"
-            total={
-              data
-                .filter(
-                  (item) =>
-                    item.TipeBlanko === "Certificate of Proficiency (CoP)"
-                )
-                .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0)
-                .toString() +
-              "/" +
-              dataBlanko
-                .filter(
-                  (item) =>
-                    item.TipeBlanko === "Certificate of Proficiency (CoP)"
-                )
-                .reduce((total, item) => total + item.JumlahPengadaan, 0)
-                .toString()
-            }
-            rate=""
-            levelDown
-          >
-            <MdSchool className="text-primary text-3xl" />
-          </CardDataStats>
-        </span>
-      </div>
-      <div className="w-full mt-8">
-        <ChartCertificatesMonthly data={data!} />
-
+      <div className="w-full">
         <Tabs defaultValue={"CoP"} className="w-full mb-3 -mt-4">
           <TabsList className="flex gap-2 w-full">
             <TabsTrigger value="CoC" className="w-full">
-              Ujian dan Diklat Keahlian AKP
+              Masyarakat Dilatih
             </TabsTrigger>
             <TabsTrigger value="CoP" className="w-full">
-              Diklat Keterampilan AKP
+              SDM KP Berkompetensi
             </TabsTrigger>
           </TabsList>
           <TabsContent value="CoC">
             <>
-              <ChartPopoverKeahlian data={data!} />
+              <ChartMasyarakatDilatihMonthly data={data!} />
+              <ChartDetailMasyarakatDilatih data={data!} />
             </>
           </TabsContent>
           <TabsContent value="CoP">
             <>
-              <ChartPopoverKeterampilan data={data!} />
+              <ChartSertifikasiKompetensiMonthly data={data!} />
+              <ChartDetailMasyarakatDilatih data={data!} />
             </>
           </TabsContent>
         </Tabs>

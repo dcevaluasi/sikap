@@ -1,24 +1,15 @@
 "use client";
 
+import React, { useState } from "react";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { BlankoKeluar } from "@/types/blanko";
 import { formatDateTime } from "@/utils";
-import React, { useEffect, useState } from "react";
 
 import CountUp from "react-countup";
 
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  LabelList,
-  Rectangle,
-  XAxis,
-  Pie,
-  PieChart,
-  Label,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -36,6 +27,7 @@ import {
 import TableDataSertifikatKeterampilan from "../Pelatihan/TableDataSertifikatKeterampilan";
 import { BALAI_PELATIHAN, SATUAN_PENDIDIKKAN } from "@/constants/pelatihan";
 import { PELABUHAN_PERIKANAN, PILIHAN_SUMMARY_AKP } from "@/constants/akp";
+
 export const description = "A bar chart with an active bar";
 
 const chartConfig = {
@@ -249,7 +241,7 @@ interface ChartThreeState {
   series: number[];
 }
 
-const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
+const ChartDetailMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
   data,
 }) => {
   const [selectedLemdiklat, setSelectedLemdiklat] =
@@ -1270,7 +1262,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                     <div className="flex gap-2 flex-col mt-10">
                       <Card className="w-full">
                         <CardHeader>
-                          <CardTitle>Total Perkiraan Penerimaan PNBP</CardTitle>
+                          <CardTitle>Total Penerimaan PNBP</CardTitle>
                           <CardDescription>
                             {" "}
                             The unit prices used in this data were obtained from{" "}
@@ -1411,4 +1403,4 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
   );
 };
 
-export default ChartPopoverKeterampilan;
+export default ChartDetailMasyarakatDilatih;

@@ -3,9 +3,12 @@ import { BalaiPelatihan } from "@/types/pelatihan";
 export const PILIHAN_SUMMARY_AKP = [
     {
         id: '001',
-        name: 'Balai Pelatihan & Satuan Pendidikana KP',
+        name: 'Balai Pelatihan KP',
     },
-
+    {
+        id: '002',
+        name: 'Satuan Pendidikan KP',
+    },
     {
         id: '002',
         name: 'Pelabuhan Perikanan',
@@ -13,6 +16,10 @@ export const PILIHAN_SUMMARY_AKP = [
     {
         id: '003',
         name: 'Kolaborasi DJPT',
+    },
+    {
+        id: '004',
+        name: 'Swasta',
     },
 ]
 
