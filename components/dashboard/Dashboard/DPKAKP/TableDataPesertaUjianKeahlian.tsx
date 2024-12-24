@@ -945,74 +945,72 @@ const TableDataPesertaUjianKeahlian = () => {
       ) : (
         <>
           <div className="flex w-full items-center mb-2">
-            {usePathname().includes("pukakp") && (
-              <div className="w-full flex justify-end gap-2">
-                <div
-                  onClick={() => exportToExcel()}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <PiMicrosoftExcelLogoFill />
-                  Export
-                </div>
-
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer">
-                      <FaMapPin />
-                      Sematkan Soal Ujian
-                    </div>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Apakah anda yakin akan menyematkan soal ujian?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Pastikan jumlah anggota mu sudah sesuai dengan data
-                        peserta ujian yang sudah didaftarkan dan merupakan
-                        anggota yang sah tercantum dalam Surat Keputusan Dewan
-                        sebagai peserta yang mengikuti ujian keahlian awak kapal
-                        Perikanan!
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      {isLoadingSematkanSoal ? (
-                        <AlertDialogAction className="bg-gray-900">
-                          Loading ...
-                        </AlertDialogAction>
-                      ) : (
-                        <>
-                          <AlertDialogCancel>Batal</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={(e) =>
-                              handleSematkanSoalUjianKeahlianToPeserta(e)
-                            }
-                            className="bg-gray-900"
-                          >
-                            Sematkan
-                          </AlertDialogAction>
-                        </>
-                      )}
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-
-                {dataUjian.length > 0 && dataUjian != null ? (
-                  dataUjian[0].UsersUjian != null &&
-                  dataUjian[0].UsersUjian.length > 0 ? (
-                    <></>
-                  ) : (
-                    <div
-                      onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
-                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-                    >
-                      <FiUploadCloud />
-                      Tambah Peserta Ujian
-                    </div>
-                  )
-                ) : null}
+            <div className="w-full flex justify-end gap-2">
+              <div
+                onClick={() => exportToExcel()}
+                className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+              >
+                <PiMicrosoftExcelLogoFill />
+                Export
               </div>
-            )}
+
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer">
+                    <FaMapPin />
+                    Sematkan Soal Ujian
+                  </div>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Apakah anda yakin akan menyematkan soal ujian?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Pastikan jumlah anggota mu sudah sesuai dengan data
+                      peserta ujian yang sudah didaftarkan dan merupakan anggota
+                      yang sah tercantum dalam Surat Keputusan Dewan sebagai
+                      peserta yang mengikuti ujian keahlian awak kapal
+                      Perikanan!
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    {isLoadingSematkanSoal ? (
+                      <AlertDialogAction className="bg-gray-900">
+                        Loading ...
+                      </AlertDialogAction>
+                    ) : (
+                      <>
+                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={(e) =>
+                            handleSematkanSoalUjianKeahlianToPeserta(e)
+                          }
+                          className="bg-gray-900"
+                        >
+                          Sematkan
+                        </AlertDialogAction>
+                      </>
+                    )}
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              {dataUjian.length > 0 && dataUjian != null ? (
+                dataUjian[0].UsersUjian != null &&
+                dataUjian[0].UsersUjian.length > 0 ? (
+                  <></>
+                ) : (
+                  <div
+                    onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
+                    className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
+                  >
+                    <FiUploadCloud />
+                    Tambah Peserta Ujian
+                  </div>
+                )
+              ) : null}
+            </div>
           </div>
 
           {/* List Data Pelatihan */}
