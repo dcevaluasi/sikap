@@ -40,7 +40,6 @@ function page() {
             title: `Berhasil memasukkan kode akses, silahkan lanjut melaksanakan ujian!`,
           });
           await handleClearFormLoginAdminDPKAKP();
-          Cookies.set("XSRF096", response?.data?.t);
           router.replace("/lembaga/dpkakp/user/auth/guide");
         } else {
           Toast.fire({
