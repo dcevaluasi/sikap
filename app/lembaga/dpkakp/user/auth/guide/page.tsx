@@ -90,7 +90,6 @@ function page() {
           </div>
           <button
             onClick={(e) => {
-              Cookies.set("XSRF097", "ExamIsStarted");
               router.push("/lembaga/dpkakp/user/auth/exam");
             }}
             className="text-white w-full bg-blue-950 rounded-xl bg-opacity-100 py-2"
