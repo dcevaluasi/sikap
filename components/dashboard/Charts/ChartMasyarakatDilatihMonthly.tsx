@@ -1,10 +1,15 @@
+"use client";
+
+import { elautBaseUrl } from "@/constants/urls";
 import { BlankoKeluar } from "@/types/blanko";
+import { PelatihanMasyarakat } from "@/types/product";
 import { formatDateTime, getMonthFromDateString } from "@/utils";
 import { ApexOptions } from "apexcharts";
-import React, { useState } from "react";
+import axios, { AxiosResponse } from "axios";
+import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 
-const options: ApexOptions = {
+const chartOptions: ApexOptions = {
   legend: {
     show: false,
     position: "top",
@@ -23,65 +28,35 @@ const options: ApexOptions = {
       left: 0,
       opacity: 0.1,
     },
-
-    toolbar: {
-      show: false,
-    },
+    toolbar: { show: false },
   },
   responsive: [
     {
       breakpoint: 1024,
-      options: {
-        chart: {
-          height: 300,
-        },
-      },
+      options: { chart: { height: 300 } },
     },
     {
       breakpoint: 1366,
-      options: {
-        chart: {
-          height: 350,
-        },
-      },
+      options: { chart: { height: 350 } },
     },
   ],
   stroke: {
     width: [2, 2],
     curve: "straight",
   },
-  // labels: {
-  //   show: false,
-  //   position: "top",
-  // },
   grid: {
-    xaxis: {
-      lines: {
-        show: true,
-      },
-    },
-    yaxis: {
-      lines: {
-        show: true,
-      },
-    },
+    xaxis: { lines: { show: true } },
+    yaxis: { lines: { show: true } },
   },
-  dataLabels: {
-    enabled: false,
-  },
+  dataLabels: { enabled: false },
   markers: {
     size: 4,
     colors: "#fff",
     strokeColors: ["#3056D3", "#80CAEE"],
     strokeWidth: 3,
     strokeOpacity: 0.9,
-    strokeDashArray: 0,
     fillOpacity: 1,
-    discrete: [],
-    hover: {
-      size: undefined,
-      sizeOffset: 5,
-    },
+    hover: { sizeOffset: 5 },
   },
   xaxis: {
     type: "category",
@@ -99,57 +74,74 @@ const options: ApexOptions = {
       "Nov",
       "Dec",
     ],
-    axisBorder: {
-      show: false,
-    },
-    axisTicks: {
-      show: false,
-    },
+    axisBorder: { show: false },
+    axisTicks: { show: false },
   },
   yaxis: {
-    title: {
-      style: {
-        fontSize: "0px",
-      },
-    },
-    min: 0,
-    max: 4000,
+    title: { style: { fontSize: "0px" } },
+    // min: 0,
+    // max: 100,
   },
 };
-
-interface ChartOneState {
-  series: {
-    name: string;
-    data: number[];
-  }[];
-}
 
 const ChartMasyarakatDilatihMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
   data,
 }) => {
-  const [state, setState] = useState<ChartOneState>({
-    series: [
-      {
-        name: "Keahlian",
-        data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
-      },
+  const [dataPelatihan, setDataPelatihan] = useState<PelatihanMasyarakat[]>([]);
+  const [dataTotalMasyarakatDilatih, setDataTotalMasyarakatDilatih] =
+    useState<number>(0);
+  const [isFetching, setIsFetching] = useState<boolean>(false);
 
-      {
-        name: "Keterampilan",
-        data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
-      },
-    ],
-  });
+  const fetchPublicTrainingData = async () => {
+    setIsFetching(true);
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${elautBaseUrl}/lemdik/getPelatihan`
+      );
+      const filteredData = response.data.data.filter(
+        (item: PelatihanMasyarakat) => item.JumlahPeserta! > 0
+      );
+      const totalMasyarakatDilatih = filteredData.reduce(
+        (sum: any, item: any) => sum + item.JumlahPeserta,
+        0
+      );
 
-  const handleReset = () => {
-    setState((prevState) => ({
-      ...prevState,
-    }));
+      setDataPelatihan(response.data.data);
+      setDataTotalMasyarakatDilatih(totalMasyarakatDilatih);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsFetching(false);
+    }
   };
-  handleReset;
+
+  useEffect(() => {
+    fetchPublicTrainingData();
+  }, []);
+
+  const calculateMonthlyData = (key: keyof PelatihanMasyarakat) => {
+    return Array.from({ length: 12 }, (_, i) => {
+      const month = (i + 1).toString().padStart(2, "0");
+      return dataPelatihan
+        .filter(
+          (item) =>
+            getMonthFromDateString(item.TanggalMulaiPelatihan!) === month
+        )
+        .reduce(
+          (total, item) =>
+            total + (key === "JumlahPeserta" ? item.JumlahPeserta! : 1),
+          0
+        );
+    });
+  };
+
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+
+  const years = Array.from({ length: 10 }, (_, i) => currentYear - i);
 
   return (
-    <div className="col-span-12 rounded-xl border mb-4 border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default   sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-xl border mb-4 border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="mb-3 justify-between gap-4 sm:flex flex-col w-full">
           <div>
@@ -158,74 +150,46 @@ const ChartMasyarakatDilatihMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
             </h5>
             <p className="italic text-sm">{formatDateTime()}</p>
           </div>
-          <div className="flex w-full flex-wrap gap-3 sm:gap-5">
+          <div className="flex w-full gap-3 sm:gap-5">
             <div className="flex min-w-47.5">
               <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
                 <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
               </span>
               <div className="w-full">
-                <p className="font-semibold text-primary">Total Keahlian</p>
+                <p className="font-semibold text-primary">Total Pelatihan</p>
                 <p className="text-sm font-medium">
-                  {data
-                    .filter(
-                      (item: BlankoKeluar) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)"
-                    )
-                    .reduce(
-                      (total: number, item: BlankoKeluar) =>
-                        total + item.JumlahBlankoDisetujui,
-                      0
-                    )}{" "}
-                  sertifikat
+                  {dataPelatihan.length} Pelatihan
                 </p>
               </div>
             </div>
-            <div className="flex min-w-47.5">
+            <div className="flex w-full">
               <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
                 <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
               </span>
               <div className="w-full">
                 <p className="font-semibold text-secondary">
-                  Total Keterampilan
+                  Total Masyarakat Dilatih
                 </p>
                 <p className="text-sm font-medium">
-                  {data
-                    .filter(
-                      (item: BlankoKeluar) =>
-                        item.TipeBlanko === "Certificate of Proficiency (CoP)"
-                    )
-                    .reduce(
-                      (total: number, item: BlankoKeluar) =>
-                        total + item.JumlahBlankoDisetujui,
-                      0
-                    )}{" "}
-                  sertifikat
-                </p>
-              </div>
-            </div>
-            <div className="flex min-w-47.5">
-              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-400"></span>
-              </span>
-              <div className="w-full">
-                <p className="font-semibold text-green-400">Total Sertifikat</p>
-                <p className="text-sm font-medium">
-                  {" "}
-                  {data.reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  )}{" "}
-                  sertifikat
+                  {dataTotalMasyarakatDilatih} Orang
                 </p>
               </div>
             </div>
           </div>
         </div>
-        <div className="flex w-full max-w-45 justify-end">
-          <div className="inline-flex items-center rounded-md bg-whiter p-1.5 ">
-            <button className="rounded bg-white px-3 py-1 text-xs font-medium text-black shadow-card hover:bg-white hover:shadow-card  ">
-              2024
-            </button>
+        <div className="flex w-full max-w-45 justify-end ">
+          <div className="inline-flex items-center rounded-md bg-white p-1.5">
+            <select
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(Number(e.target.value))}
+              className="rounded bg-white px-3 py-1 text-xs cursor-pointer font-medium text-black border border-gray-300"
+            >
+              {years.map((year) => (
+                <option key={year} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       </div>
@@ -233,275 +197,20 @@ const ChartMasyarakatDilatihMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
       <div>
         <div id="chartOne" className="-ml-5">
           <ReactApexChart
-            options={options}
+            options={chartOptions}
             series={[
               {
-                name: "Keahlian",
-                data: [
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "01"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "02"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "03"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "04"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "05"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "06"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "07"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "08"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "09"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "10"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "11"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "12"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                ],
+                name: "Total Pelatihan",
+                data: calculateMonthlyData("TanggalMulaiPelatihan"),
               },
-
               {
-                name: "Keterampilan",
-                data: [
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "01"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "02"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "03"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "04"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "05"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "06"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "07"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "08"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "09"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "10"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "11"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                  data
-                    .filter(
-                      (item) =>
-                        item.TipeBlanko ===
-                          "Certificate of Proficiency (CoP)" &&
-                        getMonthFromDateString(item.TanggalKeluar) === "12"
-                    )
-                    .reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    ),
-                ],
+                name: "Total Masyarakat Dilatih",
+                data: calculateMonthlyData("JumlahPeserta"),
               },
             ]}
             type="area"
             height={350}
-            width={"100%"}
+            width="100%"
           />
         </div>
       </div>

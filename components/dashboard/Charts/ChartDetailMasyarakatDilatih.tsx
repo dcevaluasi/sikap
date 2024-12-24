@@ -771,619 +771,234 @@ const ChartDetailMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
       <div className="mb-3 justify-between gap-4 sm:flex w-full">
         <div>
           <h5 className="text-xl font-semibold text-black">
-            Total Sertifikat Diklat Keterampilan
+            Total Masyarakat Dilatih
           </h5>
           <p className="italic text-sm">{formatDateTime()}</p>
         </div>
       </div>
 
-      <Tabs defaultValue={selectedSummaryAKP} className="w-full mb-3">
-        <TabsList className="w-full mb-3 flex flex-wrap">
-          <TabsTrigger
-            onClick={() => setSelectedSummaryAKP("All")}
-            value={"All"}
-          >
-            All
-          </TabsTrigger>
-          {PILIHAN_SUMMARY_AKP.map((summaryAKP, index) => (
-            <TabsTrigger
-              key={index}
-              onClick={() => {
-                setSelectedSummaryAKP(summaryAKP.name);
-                setSelectedLemdiklat("All");
-              }}
-              value={summaryAKP!.name}
-            >
-              {summaryAKP!.name}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+      <div className="flex gap-2 w-full">
+        <Card className="w-full h-full">
+          <CardHeader>
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col gap-1">
+                <CardTitle>DIKLAT dan BIMTEK NON-PNBP</CardTitle>
+                <CardDescription>27 May 2024 - Now 2024</CardDescription>
+              </div>
+              <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
+                Total Sertifikat :{" "}
+                {chartData
+                  .reduce((sum, item) => sum + item.visitors, 0)
+                  .toLocaleString("ID")}
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfig}>
+              <BarChart accessibilityLayer data={chartData}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="browser"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) =>
+                    chartConfig[value as keyof typeof chartConfig]?.label
+                  }
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Bar
+                  dataKey="visitors"
+                  strokeWidth={2}
+                  radius={8}
+                  max={20000}
+                  activeIndex={2}
+                >
+                  <LabelList
+                    position="inside"
+                    offset={12}
+                    className="fill-white text-white"
+                    fontSize={12}
+                    fill="#000"
+                  />
+                </Bar>
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-2 text-sm">
+            <div className="leading-none text-muted-foreground">
+              Showing total certificate issued since 27 May 2024
+            </div>
+          </CardFooter>
+        </Card>
 
-        <TabsContent value={selectedSummaryAKP}>
-          <Tabs defaultValue={selectedLemdiklat} className="w-full mb-3">
-            {selectedSummaryAKP == "Balai Pelatihan KP" ? (
-              <TabsList className="w-full mb-3 flex flex-wrap">
-                <TabsTrigger
-                  onClick={() => setSelectedLemdiklat("All")}
-                  value={"All"}
+        <Card className="w-full h-full">
+          <CardHeader>
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col gap-1">
+                <CardTitle>DIKLAT dan BIMTEK PNBP</CardTitle>
+                <CardDescription>27 May 2024 - Now 2024</CardDescription>
+              </div>
+              <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
+                Total Sertifikat :{" "}
+                {chartDataPNBP
+                  .reduce((sum, item) => sum + item.visitors, 0)
+                  .toLocaleString("ID")}
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <ChartContainer config={chartConfigPNBP} className="">
+              <BarChart accessibilityLayer data={chartDataPNBP}>
+                <CartesianGrid vertical={false} />
+                <XAxis
+                  dataKey="browser"
+                  tickLine={false}
+                  tickMargin={10}
+                  axisLine={false}
+                  tickFormatter={(value) =>
+                    chartConfigPNBP[value as keyof typeof chartConfigPNBP]
+                      ?.label
+                  }
+                />
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Bar
+                  dataKey="visitors"
+                  strokeWidth={2}
+                  radius={8}
+                  activeIndex={2}
                 >
-                  All
-                </TabsTrigger>
-                {BALAI_PELATIHAN.map((balaiPelatihan, index) => (
-                  <TabsTrigger
-                    onClick={() => setSelectedLemdiklat(balaiPelatihan.Name)}
-                    value={balaiPelatihan!.Name}
-                    key={index}
-                  >
-                    {balaiPelatihan!.Name}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            ) : selectedSummaryAKP == "Satuan Pendidikan KP" ? (
-              <TabsList className="w-full mb-3 flex flex-wrap">
-                <TabsTrigger
-                  onClick={() => setSelectedLemdiklat("All")}
-                  value={"All"}
-                >
-                  All
-                </TabsTrigger>
-                {SATUAN_PENDIDIKKAN.map((satuanPendidikan, index) => (
-                  <TabsTrigger
-                    onClick={() => setSelectedLemdiklat(satuanPendidikan.Name)}
-                    value={satuanPendidikan!.Name}
-                    key={index}
-                  >
-                    {satuanPendidikan!.Name}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            ) : selectedSummaryAKP == "Pelabuhan Perikanan" ? (
-              <TabsList className="w-full mb-3 flex flex-wrap h-full">
-                <TabsTrigger
-                  onClick={() => setSelectedLemdiklat("All")}
-                  value={"All"}
-                >
-                  All
-                </TabsTrigger>
-                {PELABUHAN_PERIKANAN.map((pelabuhanPerikanan, index) => (
-                  <TabsTrigger
-                    onClick={() =>
-                      setSelectedLemdiklat(pelabuhanPerikanan.Name)
-                    }
-                    value={pelabuhanPerikanan!.Name}
-                  >
-                    {pelabuhanPerikanan!.Name}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            ) : (
-              <></>
-            )}
+                  <LabelList
+                    position="inside"
+                    offset={12}
+                    className="fill-white text-white"
+                    fontSize={12}
+                    fill="#000"
+                  />
+                </Bar>
+              </BarChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-2 text-sm">
+            <div className="leading-none text-muted-foreground">
+              Showing total certificate issued since 27 May 2024
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
 
-            <TabsContent value={selectedLemdiklat}>
-              {selectedLemdiklat == "All" ? (
-                <div className="flex gap-2 w-full h-full">
-                  <div className="w-full ">
-                    <Card className="">
-                      <CardHeader>
-                        <div className="w-full flex justify-between items-center">
-                          <div className="flex flex-col gap-1">
-                            <CardTitle>BERDASARKAN LEMBAGA PELATIHAN</CardTitle>
-                            <CardDescription>
-                              27 May 2024 - Now 2024
-                            </CardDescription>
-                          </div>
-                          <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
-                            Total Sertifikat :{" "}
-                            {selectedSummaryAKP == "Balai Pelatihan KP"
-                              ? chartDataLemdiklat
-                                  .reduce((sum, item) => sum + item.visitors, 0)
-                                  .toLocaleString("ID")
-                              : chartDataSatuanPendidikanKP
-                                  .reduce((sum, item) => sum + item.visitors, 0)
-                                  .toLocaleString("ID")}
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <ChartContainer
-                          config={
-                            selectedSummaryAKP == "Balai Pelatihan KP"
-                              ? chartConfigLemdiklat
-                              : satuanPendidikanKPConfig
-                          }
-                        >
-                          <BarChart
-                            accessibilityLayer
-                            height={100}
-                            data={
-                              selectedSummaryAKP == "Balai Pelatihan KP"
-                                ? chartDataLemdiklat
-                                : chartDataSatuanPendidikanKP
-                            }
-                          >
-                            <CartesianGrid vertical={false} />
-                            <XAxis
-                              dataKey="browser"
-                              tickLine={false}
-                              tickMargin={10}
-                              axisLine={false}
-                              tickFormatter={(value) =>
-                                selectedSummaryAKP == "Balai Pelatihan KP"
-                                  ? chartConfigLemdiklat[
-                                      value as keyof typeof chartConfigLemdiklat
-                                    ]?.label
-                                  : satuanPendidikanKPConfig[
-                                      value as keyof typeof satuanPendidikanKPConfig
-                                    ]?.label
-                              }
-                            />
-                            <ChartTooltip
-                              cursor={false}
-                              content={<ChartTooltipContent hideLabel />}
-                            />
-                            <Bar
-                              dataKey="visitors"
-                              strokeWidth={2}
-                              radius={8}
-                              height={10}
-                              activeIndex={2}
-                            >
-                              <LabelList
-                                position="inside"
-                                offset={12}
-                                className="fill-white text-white"
-                                fontSize={12}
-                                fill="#000"
-                              />
-                            </Bar>
-                          </BarChart>
-                        </ChartContainer>
-                      </CardContent>
-                      <CardFooter className="flex-col items-start gap-2 text-sm">
-                        <div className="leading-none text-muted-foreground">
-                          Showing total certificate issued since 27 May 2024
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </div>
-                  <div className="w-full">
-                    <Card className="">
-                      <CardHeader>
-                        <div className="w-full flex justify-between items-center">
-                          <div className="flex flex-col gap-1">
-                            <CardTitle>BERDASARKAN JENIS PROGRAM</CardTitle>
-                            <CardDescription>
-                              27 May 2024 - Now 2024
-                            </CardDescription>
-                          </div>
-                          <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
-                            Total Sertifikat :{" "}
-                            {chartDataAllKeterampilan
-                              .reduce((sum, item) => sum + item.visitors, 0)
-                              .toLocaleString("ID")}
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <ChartContainer config={chartConfig}>
-                          <BarChart
-                            accessibilityLayer
-                            data={chartDataAllKeterampilan}
-                          >
-                            <CartesianGrid vertical={false} />
-                            <XAxis
-                              dataKey="browser"
-                              tickLine={false}
-                              tickMargin={10}
-                              axisLine={false}
-                              tickFormatter={(value) =>
-                                chartConfig[value as keyof typeof chartConfig]
-                                  ?.label
-                              }
-                            />
-                            <ChartTooltip
-                              cursor={false}
-                              content={<ChartTooltipContent hideLabel />}
-                            />
-                            <Bar
-                              dataKey="visitors"
-                              strokeWidth={2}
-                              radius={8}
-                              max={20000}
-                              activeIndex={2}
-                            >
-                              <LabelList
-                                position="inside"
-                                offset={12}
-                                className="fill-white text-white"
-                                fontSize={12}
-                                fill="#000"
-                              />
-                            </Bar>
-                          </BarChart>
-                        </ChartContainer>
-                      </CardContent>
-                      <CardFooter className="flex-col items-start gap-2 text-sm">
-                        <div className="leading-none text-muted-foreground">
-                          Showing total certificate issued since 27 May 2024
-                        </div>
-                      </CardFooter>
-                    </Card>
+      {/* <div className="flex gap-2 flex-col mt-10">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Total Perkiraan Penerimaan PNBP</CardTitle>
+            <CardDescription>
+              {" "}
+              The unit prices used in this data were obtained from{" "}
+              <span className="font-semibold">PP Tarif 85</span>
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="p-8 flex flex-wrap items-center justify-center gap-y-3 mt-0 border-t border-t-gray-200">
+              {[
+                {
+                  label: "Basic Safety Training Fisheries I",
+                  color: "bg-primary",
+                  multiplier:
+                    selectedLemdiklat != "BPPP Tegal" ? 1350000 : 1050000,
+                },
+                {
+                  label: "Basic Safety Training Fisheries II",
+                  color: "bg-[#8FD0EF]",
+                  multiplier:
+                    selectedLemdiklat != "BPPP Tegal" ? 600000 : 620000,
+                },
+                {
+                  label: "Rating Keahlian",
+                  color: "bg-[#E0366F]",
+                  multiplier:
+                    selectedLemdiklat != "BPPP Tegal" ? 1350000 : 2050000,
+                },
+              ].map((item, index) => (
+                <div className="w-full px-8 " key={index}>
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex gap-1 w-full items-center">
+                      <span
+                        className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
+                      ></span>
+                      <p className="flex w-full justify-between text-sm font-medium text-black">
+                        <span>
+                          {item.label} - Rp{" "}
+                          {item.multiplier.toLocaleString("id-ID")}
+                        </span>
+                      </p>
+                    </div>
+
+                    <span className="w-full flex items-end justify-end">
+                      Rp.
+                      {(
+                        data
+                          .filter(
+                            (d) =>
+                              d.NamaProgram === item.label &&
+                              d.NamaPelaksana === selectedLemdiklat &&
+                              d.AsalPendapatan == "PNBP"
+                          )
+                          .reduce(
+                            (total, d) => total + d.JumlahBlankoDisetujui,
+                            0
+                          ) * item.multiplier
+                      ).toLocaleString("id-ID")}{" "}
+                      <span className="font-semibold text-xs ml-3">
+                        (
+                        {data
+                          .filter(
+                            (d) =>
+                              d.NamaProgram === item.label &&
+                              d.NamaPelaksana === selectedLemdiklat &&
+                              d.AsalPendapatan == "PNBP"
+                          )
+                          .reduce(
+                            (total, d) => total + d.JumlahBlankoDisetujui,
+                            0
+                          )
+                          .toLocaleString("id-ID")}
+                        Sertifikat )
+                      </span>
+                    </span>
                   </div>
                 </div>
-              ) : (
-                <>
-                  <div className="flex gap-2 w-full">
-                    <Card className="w-full h-full">
-                      <CardHeader>
-                        <div className="w-full flex justify-between items-center">
-                          <div className="flex flex-col gap-1">
-                            <CardTitle>DIKLAT dan BIMTEK NON-PNBP</CardTitle>
-                            <CardDescription>
-                              27 May 2024 - Now 2024
-                            </CardDescription>
-                          </div>
-                          <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
-                            Total Sertifikat :{" "}
-                            {chartData
-                              .reduce((sum, item) => sum + item.visitors, 0)
-                              .toLocaleString("ID")}
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <ChartContainer config={chartConfig}>
-                          <BarChart accessibilityLayer data={chartData}>
-                            <CartesianGrid vertical={false} />
-                            <XAxis
-                              dataKey="browser"
-                              tickLine={false}
-                              tickMargin={10}
-                              axisLine={false}
-                              tickFormatter={(value) =>
-                                chartConfig[value as keyof typeof chartConfig]
-                                  ?.label
-                              }
-                            />
-                            <ChartTooltip
-                              cursor={false}
-                              content={<ChartTooltipContent hideLabel />}
-                            />
-                            <Bar
-                              dataKey="visitors"
-                              strokeWidth={2}
-                              radius={8}
-                              max={20000}
-                              activeIndex={2}
-                            >
-                              <LabelList
-                                position="inside"
-                                offset={12}
-                                className="fill-white text-white"
-                                fontSize={12}
-                                fill="#000"
-                              />
-                            </Bar>
-                          </BarChart>
-                        </ChartContainer>
-                      </CardContent>
-                      <CardFooter className="flex-col items-start gap-2 text-sm">
-                        <div className="leading-none text-muted-foreground">
-                          Showing total certificate issued since 27 May 2024
-                        </div>
-                      </CardFooter>
-                    </Card>
-
-                    <Card className="w-full h-full">
-                      <CardHeader>
-                        <div className="w-full flex justify-between items-center">
-                          <div className="flex flex-col gap-1">
-                            <CardTitle>DIKLAT dan BIMTEK PNBP</CardTitle>
-                            <CardDescription>
-                              27 May 2024 - Now 2024
-                            </CardDescription>
-                          </div>
-                          <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
-                            Total Sertifikat :{" "}
-                            {chartDataPNBP
-                              .reduce((sum, item) => sum + item.visitors, 0)
-                              .toLocaleString("ID")}
-                          </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent>
-                        <ChartContainer config={chartConfigPNBP} className="">
-                          <BarChart accessibilityLayer data={chartDataPNBP}>
-                            <CartesianGrid vertical={false} />
-                            <XAxis
-                              dataKey="browser"
-                              tickLine={false}
-                              tickMargin={10}
-                              axisLine={false}
-                              tickFormatter={(value) =>
-                                chartConfigPNBP[
-                                  value as keyof typeof chartConfigPNBP
-                                ]?.label
-                              }
-                            />
-                            <ChartTooltip
-                              cursor={false}
-                              content={<ChartTooltipContent hideLabel />}
-                            />
-                            <Bar
-                              dataKey="visitors"
-                              strokeWidth={2}
-                              radius={8}
-                              activeIndex={2}
-                            >
-                              <LabelList
-                                position="inside"
-                                offset={12}
-                                className="fill-white text-white"
-                                fontSize={12}
-                                fill="#000"
-                              />
-                            </Bar>
-                          </BarChart>
-                        </ChartContainer>
-                      </CardContent>
-                      <CardFooter className="flex-col items-start gap-2 text-sm">
-                        <div className="leading-none text-muted-foreground">
-                          Showing total certificate issued since 27 May 2024
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  </div>
-                  {selectedSummaryAKP == "Pelabuhan Perikanan" ? (
-                    <></>
-                  ) : selectedSummaryAKP == "DJPT" ? (
-                    <></>
-                  ) : selectedSummaryAKP == "Balai Pelatihan KP" ? (
-                    <div className="flex gap-2 flex-col mt-10">
-                      <Card className="w-full">
-                        <CardHeader>
-                          <CardTitle>Total Perkiraan Penerimaan PNBP</CardTitle>
-                          <CardDescription>
-                            {" "}
-                            The unit prices used in this data were obtained from{" "}
-                            <span className="font-semibold">PP Tarif 85</span>
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="p-8 flex flex-wrap items-center justify-center gap-y-3 mt-0 border-t border-t-gray-200">
-                            {[
-                              {
-                                label: "Basic Safety Training Fisheries I",
-                                color: "bg-primary",
-                                multiplier:
-                                  selectedLemdiklat != "BPPP Tegal"
-                                    ? 1350000
-                                    : 1050000,
-                              },
-                              {
-                                label: "Basic Safety Training Fisheries II",
-                                color: "bg-[#8FD0EF]",
-                                multiplier:
-                                  selectedLemdiklat != "BPPP Tegal"
-                                    ? 600000
-                                    : 620000,
-                              },
-                              {
-                                label: "Rating Keahlian",
-                                color: "bg-[#E0366F]",
-                                multiplier:
-                                  selectedLemdiklat != "BPPP Tegal"
-                                    ? 1350000
-                                    : 2050000,
-                              },
-                            ].map((item, index) => (
-                              <div className="w-full px-8 " key={index}>
-                                <div className="flex w-full items-center justify-between">
-                                  <div className="flex gap-1 w-full items-center">
-                                    <span
-                                      className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
-                                    ></span>
-                                    <p className="flex w-full justify-between text-sm font-medium text-black">
-                                      <span>
-                                        {item.label} - Rp{" "}
-                                        {item.multiplier.toLocaleString(
-                                          "id-ID"
-                                        )}
-                                      </span>
-                                    </p>
-                                  </div>
-
-                                  <span className="w-full flex items-end justify-end">
-                                    Rp.
-                                    {(
-                                      data
-                                        .filter(
-                                          (d) =>
-                                            d.NamaProgram === item.label &&
-                                            d.NamaPelaksana ===
-                                              selectedLemdiklat &&
-                                            d.AsalPendapatan == "PNBP"
-                                        )
-                                        .reduce(
-                                          (total, d) =>
-                                            total + d.JumlahBlankoDisetujui,
-                                          0
-                                        ) * item.multiplier
-                                    ).toLocaleString("id-ID")}{" "}
-                                    <span className="font-semibold text-xs ml-3">
-                                      (
-                                      {data
-                                        .filter(
-                                          (d) =>
-                                            d.NamaProgram === item.label &&
-                                            d.NamaPelaksana ===
-                                              selectedLemdiklat &&
-                                            d.AsalPendapatan == "PNBP"
-                                        )
-                                        .reduce(
-                                          (total, d) =>
-                                            total + d.JumlahBlankoDisetujui,
-                                          0
-                                        )
-                                        .toLocaleString("id-ID")}
-                                      Sertifikat )
-                                    </span>
-                                  </span>
-                                </div>
-                              </div>
-                            ))}
-                            <div className="w-full flex justify-end items-center px-8">
-                              <div className="flex gap-1 items-end">
-                                <h5 className="text-3xl font-bold text-black">
-                                  Rp{" "}
-                                  <CountUp
-                                    start={0}
-                                    duration={12.75}
-                                    end={totalSum.totalAmount}
-                                  />
-                                </h5>
-                                <span className="font-semibold text-xs ml-3">
-                                  ({totalSum.totalBlanko}
-                                  Sertifikat )
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                        <CardFooter className="flex-col items-start gap-2 text-sm">
-                          <div className="leading-none text-muted-foreground">
-                            Showing total certificate issued since 27 May 2024
-                          </div>
-                        </CardFooter>
-                      </Card>
-                    </div>
-                  ) : (
-                    <div className="flex gap-2 flex-col mt-10">
-                      <Card className="w-full">
-                        <CardHeader>
-                          <CardTitle>Total Penerimaan PNBP</CardTitle>
-                          <CardDescription>
-                            {" "}
-                            The unit prices used in this data were obtained from{" "}
-                            <span className="font-semibold">PP Tarif 85</span>
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="p-8 flex flex-wrap items-center justify-center gap-y-3 mt-0 border-t border-t-gray-200">
-                            {[
-                              {
-                                label: "Basic Safety Training Fisheries I",
-                                color: "bg-primary",
-                                multiplier:
-                                  selectedLemdiklat != "BPPP Tegal"
-                                    ? 1350000
-                                    : 1050000,
-                              },
-                              {
-                                label: "Basic Safety Training Fisheries II",
-                                color: "bg-[#8FD0EF]",
-                                multiplier:
-                                  selectedLemdiklat != "BPPP Tegal"
-                                    ? 600000
-                                    : 620000,
-                              },
-                              {
-                                label: "Rating Keahlian",
-                                color: "bg-[#E0366F]",
-                                multiplier:
-                                  selectedLemdiklat != "BPPP Tegal"
-                                    ? 1350000
-                                    : 2050000,
-                              },
-                            ].map((item, index) => (
-                              <div className="w-full px-8 " key={index}>
-                                <div className="flex w-full items-center justify-between">
-                                  <div className="flex gap-1 w-full items-center">
-                                    <span
-                                      className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
-                                    ></span>
-                                    <p className="flex w-full justify-between text-sm font-medium text-black">
-                                      <span>
-                                        {item.label} - Rp{" "}
-                                        {item.multiplier.toLocaleString(
-                                          "id-ID"
-                                        )}
-                                      </span>
-                                    </p>
-                                  </div>
-
-                                  <span className="w-full flex items-end justify-end">
-                                    Rp.
-                                    {(
-                                      data
-                                        .filter(
-                                          (d) =>
-                                            d.NamaProgram === item.label &&
-                                            d.NamaPelaksana ===
-                                              selectedLemdiklat &&
-                                            d.AsalPendapatan == "PNBP"
-                                        )
-                                        .reduce(
-                                          (total, d) =>
-                                            total + d.JumlahBlankoDisetujui,
-                                          0
-                                        ) * item.multiplier
-                                    ).toLocaleString("id-ID")}{" "}
-                                    <span className="font-semibold text-xs ml-3">
-                                      (
-                                      {data
-                                        .filter(
-                                          (d) =>
-                                            d.NamaProgram === item.label &&
-                                            d.NamaPelaksana ===
-                                              selectedLemdiklat &&
-                                            d.AsalPendapatan == "PNBP"
-                                        )
-                                        .reduce(
-                                          (total, d) =>
-                                            total + d.JumlahBlankoDisetujui,
-                                          0
-                                        )
-                                        .toLocaleString("id-ID")}
-                                      Sertifikat )
-                                    </span>
-                                  </span>
-                                </div>
-                              </div>
-                            ))}
-                            <div className="w-full flex justify-end items-center px-8">
-                              <div className="flex gap-1 items-end">
-                                <h5 className="text-3xl font-bold text-black">
-                                  Rp{" "}
-                                  <CountUp
-                                    start={0}
-                                    duration={12.75}
-                                    end={totalSum.totalAmount}
-                                  />
-                                </h5>
-                                <span className="font-semibold text-xs ml-3">
-                                  ({totalSum.totalBlanko}
-                                  Sertifikat )
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        </CardContent>
-                        <CardFooter className="flex-col items-start gap-2 text-sm">
-                          <div className="leading-none text-muted-foreground">
-                            Showing total certificate issued since 27 May 2024
-                          </div>
-                        </CardFooter>
-                      </Card>
-                    </div>
-                  )}
-                </>
-              )}
-            </TabsContent>
-          </Tabs>
-        </TabsContent>
-      </Tabs>
+              ))}
+              <div className="w-full flex justify-end items-center px-8">
+                <div className="flex gap-1 items-end">
+                  <h5 className="text-3xl font-bold text-black">
+                    Rp{" "}
+                    <CountUp
+                      start={0}
+                      duration={12.75}
+                      end={totalSum.totalAmount}
+                    />
+                  </h5>
+                  <span className="font-semibold text-xs ml-3">
+                    ({totalSum.totalBlanko}
+                    Sertifikat )
+                  </span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+          <CardFooter className="flex-col items-start gap-2 text-sm">
+            <div className="leading-none text-muted-foreground">
+              Showing total certificate issued since 27 May 2024
+            </div>
+          </CardFooter>
+        </Card>
+      </div> */}
 
       <div className="flex gap-2 flex-col mt-10">
         <Card className="w-full">

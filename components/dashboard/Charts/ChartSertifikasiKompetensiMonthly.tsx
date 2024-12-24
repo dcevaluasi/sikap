@@ -158,13 +158,15 @@ const ChartSertifikasiKompetensiMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
             </h5>
             <p className="italic text-sm">{formatDateTime()}</p>
           </div>
-          <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-            <div className="flex min-w-47.5">
+          <div className="flex w-fit">
+            <div className="flex w-full">
               <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
                 <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
               </span>
               <div className="w-full">
-                <p className="font-semibold text-primary">Total Keahlian</p>
+                <p className="font-semibold text-primary">
+                  Total Pelaksanaan Ujikom
+                </p>
                 <p className="text-sm font-medium">
                   {data
                     .filter(
@@ -176,17 +178,17 @@ const ChartSertifikasiKompetensiMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
                         total + item.JumlahBlankoDisetujui,
                       0
                     )}{" "}
-                  sertifikat
+                  Uji Kompetensi
                 </p>
               </div>
             </div>
-            <div className="flex min-w-47.5">
+            <div className="flex w-full">
               <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
                 <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
               </span>
               <div className="w-full">
                 <p className="font-semibold text-secondary">
-                  Total Keterampilan
+                  Total SDM Bersertifikasi Kompetensi
                 </p>
                 <p className="text-sm font-medium">
                   {data
@@ -199,23 +201,7 @@ const ChartSertifikasiKompetensiMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
                         total + item.JumlahBlankoDisetujui,
                       0
                     )}{" "}
-                  sertifikat
-                </p>
-              </div>
-            </div>
-            <div className="flex min-w-47.5">
-              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-400"></span>
-              </span>
-              <div className="w-full">
-                <p className="font-semibold text-green-400">Total Sertifikat</p>
-                <p className="text-sm font-medium">
-                  {" "}
-                  {data.reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  )}{" "}
-                  sertifikat
+                  Orang
                 </p>
               </div>
             </div>

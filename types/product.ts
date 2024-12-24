@@ -49,6 +49,7 @@ export type PelatihanMasyarakat = {
   MemoPusat: string
   SilabusPelatihan: string
   LokasiPelatihan: string
+  JumlahPeserta?: number;
   PelaksanaanPelatihan: string
   UjiKompotensi: string
   KoutaPelatihan: string // type from be, should be KuotaPelatihan

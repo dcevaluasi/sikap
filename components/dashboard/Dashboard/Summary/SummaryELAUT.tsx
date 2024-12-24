@@ -1,33 +1,15 @@
 "use client";
 import React from "react";
-import { HiCheckBadge } from "react-icons/hi2";
-import { GiBattery75, GiPapers } from "react-icons/gi";
-import { MdSchool } from "react-icons/md";
 import Cookies from "js-cookie";
 import axios, { AxiosResponse } from "axios";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
-import { RiLogoutCircleRFill, RiShipFill } from "react-icons/ri";
 import { Blanko, BlankoKeluar, BlankoRusak } from "@/types/blanko";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { formatDateTime } from "@/utils";
-import ChartBlankoAwal from "../../Charts/ChartBlankoAwal";
-import ChartPopoverKeluar from "../../Charts/ChartPopoverKeluar";
-import ChartPopover from "../../Charts/ChartPopover";
-import ChartCertificatesMonthly from "../../Charts/ChartCertificatesMonthly";
-import ChartPopoverKeahlian from "../../Charts/ChartPopoverKeahlian";
-import ChartPopoverKeterampilan from "../../Charts/ChartPopoverKeterampilan";
-import CardDataStats from "../../CardDataStats";
-import ChartMasyarakatDilatih from "../../Charts/ChartMasyarakatDilatih";
 import ChartMasyarakatDilatihMonthly from "../../Charts/ChartMasyarakatDilatihMonthly";
 import ChartDetailMasyarakatDilatih from "../../Charts/ChartDetailMasyarakatDilatih";
 import ChartSertifikasiKompetensiMonthly from "../../Charts/ChartSertifikasiKompetensiMonthly";
+import { BALAI_PELATIHAN } from "@/constants/pelatihan";
 
 const SummaryELAUT: React.FC = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -112,12 +94,15 @@ const SummaryELAUT: React.FC = () => {
     return () => clearInterval(intervalId);
   }, []);
 
+  const [selectedBalaiPelatihan, setSelectedBalaiPelatihan] =
+    React.useState<string>("All");
+
   return (
     <>
-      <div className="flex flex-col mb-8"></div>
+      <div className="flex flex-col "></div>
 
       <div className="w-full">
-        <Tabs defaultValue={"CoP"} className="w-full mb-3 -mt-4">
+        <Tabs defaultValue={"CoC"} className="w-full mb-3">
           <TabsList className="flex gap-2 w-full">
             <TabsTrigger value="CoC" className="w-full">
               Masyarakat Dilatih
@@ -129,7 +114,34 @@ const SummaryELAUT: React.FC = () => {
           <TabsContent value="CoC">
             <>
               <ChartMasyarakatDilatihMonthly data={data!} />
-              <ChartDetailMasyarakatDilatih data={data!} />
+
+              <Tabs
+                defaultValue={selectedBalaiPelatihan}
+                className="w-full mb-3"
+              >
+                <TabsList className="w-full">
+                  <TabsTrigger
+                    onClick={() => setSelectedBalaiPelatihan("All")}
+                    value={"All"}
+                  >
+                    All
+                  </TabsTrigger>
+                  {BALAI_PELATIHAN.map((balaiPelatihan, index) => (
+                    <TabsTrigger
+                      onClick={() =>
+                        setSelectedBalaiPelatihan(balaiPelatihan.Name)
+                      }
+                      key={index}
+                      value={balaiPelatihan!.Name}
+                    >
+                      {balaiPelatihan!.Name}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+                <TabsContent value={selectedBalaiPelatihan}>
+                  <ChartDetailMasyarakatDilatih data={data!} />
+                </TabsContent>
+              </Tabs>
             </>
           </TabsContent>
           <TabsContent value="CoP">
