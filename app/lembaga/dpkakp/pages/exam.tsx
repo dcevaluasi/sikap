@@ -497,7 +497,8 @@ const Timer: React.FC<TimerProps> = ({ countdownMinutes }) => {
         seconds: "00",
       });
       localStorage.removeItem("countDownDate");
-
+      Cookies.remove("XSRF096");
+      Cookies.remove("XSRF097");
       router.push("/lembaga/dpkakp/user/auth");
     } else {
       const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000))
