@@ -9,7 +9,16 @@ import { formatDateTime } from "@/utils";
 
 import CountUp from "react-countup";
 
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  LabelList,
+  XAxis,
+  Label,
+  Pie,
+  PieChart,
+} from "recharts";
 import {
   Card,
   CardContent,
@@ -25,38 +34,117 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import TableDataSertifikatKeterampilan from "../Pelatihan/TableDataSertifikatKeterampilan";
-import { BALAI_PELATIHAN, SATUAN_PENDIDIKKAN } from "@/constants/pelatihan";
-import { PELABUHAN_PERIKANAN, PILIHAN_SUMMARY_AKP } from "@/constants/akp";
+import { PelatihanMasyarakat } from "@/types/product";
+import { TrendingUp } from "lucide-react";
+import TableDataPelatihanSummary from "../Pelatihan/TableDataPelatihanSummary";
 
 export const description = "A bar chart with an active bar";
 
-const chartConfig = {
+const chartConfigBidangPelatihan = {
   visitors: {
-    label: "Sertifikat",
+    label: "Masyarakat Dilatih",
+  },
+  other4: {
+    label: "Budidaya",
+    color: "#274754",
   },
   chrome: {
-    label: "BSTF I",
+    label: "Penangkapan",
+    color: "#2662D9",
+  },
+  safari: {
+    label: "Kepelautan",
+    color: "#2EB88A",
+  },
+  firefox: {
+    label: "Pengolahan dan Pemasaran",
+    color: "#e88c30",
+  },
+  edge: {
+    label: "Mesin Perikanan",
+    color: "#AF57DB",
+  },
+  other: {
+    label: "Konservasi",
+    color: "#E0366F",
+  },
+  other2: {
+    label: "Wisata Bahari",
+    color: "#60432F",
+  },
+  other3: {
+    label: "Manajemen Perikanan",
+    color: "#274754",
+  },
+} satisfies ChartConfig;
+
+const chartConfigJenisPelatihan = {
+  visitors: {
+    label: "Masyarakat Dilatih",
+  },
+  chrome: {
+    label: "Aspirasi",
+    color: "#5335E9",
+  },
+  safari: {
+    label: "PNBP/BLU",
+    color: "#41C8ED",
+  },
+  firefox: {
+    label: "Reguler",
+    color: "#09105E",
+  },
+} satisfies ChartConfig;
+
+const chartConfigProgramPelatihan = {
+  visitors: {
+    label: "Masyarakat Dilatih",
+  },
+  chrome: {
+    label: "Perikanan",
     color: "#211951",
   },
   safari: {
-    label: "BSTF II",
+    label: "Kelautan",
     color: "#836FFF",
   },
+} satisfies ChartConfig;
+
+const chartConfigProgramPrioritas = {
+  visitors: {
+    label: "Masyarakat Dilatih",
+  },
+  other4: {
+    label: "Non Terobosan",
+    color: "#274754",
+  },
+  chrome: {
+    label: "Konservasi",
+    color: "#2662D9",
+  },
+  safari: {
+    label: "PIT",
+    color: "#2EB88A",
+  },
   firefox: {
-    label: "SKN",
-    color: "#15F5BA",
+    label: "Kalaju/Kalamo",
+    color: "#e88c30",
   },
   edge: {
-    label: "SKPI",
-    color: "#EB8317",
+    label: "KPB",
+    color: "#AF57DB",
   },
   other: {
-    label: "Rating Keahlian",
-    color: "#10375C",
+    label: "Budidaya",
+    color: "#E0366F",
   },
   other2: {
-    label: "Fisihing Master",
-    color: "#1E0342",
+    label: "Pengawasan Pesisir",
+    color: "#60432F",
+  },
+  other3: {
+    label: "BCL",
+    color: "#274754",
   },
 } satisfies ChartConfig;
 
@@ -241,9 +329,9 @@ interface ChartThreeState {
   series: number[];
 }
 
-const ChartDetailMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
-  data,
-}) => {
+const ChartDetailMasyarakatDilatih: React.FC<{
+  data: PelatihanMasyarakat[];
+}> = ({ data }) => {
   const [selectedLemdiklat, setSelectedLemdiklat] =
     React.useState<string>("All");
 
@@ -251,520 +339,258 @@ const ChartDetailMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
     series: [],
   });
 
-  const [statePNBP, setStatePNBP] = useState<ChartThreeState>({
-    series: [],
-  });
-
-  const [stateAllKeterampilan, setStateAllKeterampilan] =
-    useState<ChartThreeState>({
-      series: [],
-    });
-
   const [
-    stateAllKeterampilanByLemdiklatek,
-    setStateAllKeterampilanByLemdiklatek,
+    stateMasyarakatDilatihByBidangPelatihan,
+    setStateMasyarakatDilatihByBidangPelatihan,
   ] = useState<ChartThreeState>({
     series: [],
   });
 
   const [
-    stateAllKeterampilanBySatuanPendidikanKP,
-    setStateAllKeterampilanBySatuanPendidikanKP,
+    stateMasyarakatDilatihByJenisPelatihan,
+    setStateMasyarakatDilatihByJenisPelatihan,
+  ] = useState<ChartThreeState>({
+    series: [],
+  });
+
+  const [
+    stateMasyarakatDilatihByProgramPelatihan,
+    setStateMasyarakatDilatihByProgramPelatihan,
+  ] = useState<ChartThreeState>({
+    series: [],
+  });
+
+  const [
+    stateMasyarakatDilatihByProgramPrioritas,
+    setStateMasyarakatDilatihByProgramPrioritas,
   ] = useState<ChartThreeState>({
     series: [],
   });
 
   React.useEffect(() => {
-    const updatedSeries = [
+    const dataMasyarakatDilatihByBidangPelatihan = [
       data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Basic Safety Training Fisheries I" &&
-            item.AsalPendapatan == "APBN" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.BidangPelatihan === "Budidaya")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Basic Safety Training Fisheries II" &&
-            item.AsalPendapatan == "APBN" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.BidangPelatihan === "Penangkapan")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Sertifikat Kecakapan Nelayan" &&
-            item.AsalPendapatan == "APBN" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.BidangPelatihan === "Kepelautan")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Sertifikat Keterampilan Penanganan Ikan" &&
-            item.AsalPendapatan == "APBN" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.BidangPelatihan === "Pengolahan dan Pemasaran")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Rating Keahlian" &&
-            item.AsalPendapatan == "APBN" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.BidangPelatihan === "Mesin Perikanan")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Fishing Master" &&
-            item.AsalPendapatan == "APBN" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.BidangPelatihan === "Konservasi")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
+      data
+        .filter((item) => item.BidangPelatihan === "Wisata Bahari")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
+      data
+        .filter((item) => item.BidangPelatihan === "Manajemen Perikanan")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
     ];
 
-    const updatedSeriesPNBP = [
+    const dataMasyarakatDilatihByJenisPelatihan = [
       data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Basic Safety Training Fisheries I" &&
-            item.AsalPendapatan == "PNBP" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.JenisPelatihan === "Aspirasi")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Basic Safety Training Fisheries II" &&
-            item.AsalPendapatan == "PNBP" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.JenisPelatihan === "PNBP/BLU")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Sertifikat Kecakapan Nelayan" &&
-            item.AsalPendapatan == "PNBP" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-      data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Sertifikat Keterampilan Penanganan Ikan" &&
-            item.AsalPendapatan == "PNBP" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-      data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Rating Keahlian" &&
-            item.AsalPendapatan == "PNBP" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-      data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Fishing Master" &&
-            item.AsalPendapatan == "PNBP" &&
-            item.NamaPelaksana == selectedLemdiklat
-        )
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.JenisPelatihan === "Reguler")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
     ];
 
-    const updatedAllKeterampilan = [
+    const dataMasyarakatDilatihByProgramPelatihan = [
       data
-        .filter(
-          (item) => item.NamaProgram === "Basic Safety Training Fisheries I"
-        )
-        .filter((item) => {
-          if (selectedSummaryAKP === "Satuan Pendidikan KP") {
-            return item.NamaPelaksana.includes("Politeknik");
-          } else {
-            return item.NamaPelaksana.includes("BPPP");
-          }
-        })
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-
+        .filter((item) => item.JenisProgram === "Perikanan")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter(
-          (item) => item.NamaProgram === "Basic Safety Training Fisheries II"
-        )
-        .filter((item) => {
-          if (selectedSummaryAKP === "Satuan Pendidikan KP") {
-            return item.NamaPelaksana.includes("Politeknik");
-          } else {
-            return item.NamaPelaksana.includes("BPPP");
-          }
-        })
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-
-      data
-        .filter((item) => item.NamaProgram === "Sertifikat Kecakapan Nelayan")
-        .filter((item) => {
-          if (selectedSummaryAKP === "Satuan Pendidikan KP") {
-            return item.NamaPelaksana.includes("Politeknik");
-          } else {
-            return item.NamaPelaksana.includes("BPPP");
-          }
-        })
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-
-      data
-        .filter(
-          (item) =>
-            item.NamaProgram === "Sertifikat Keterampilan Penanganan Ikan"
-        )
-        .filter((item) => {
-          if (selectedSummaryAKP === "Satuan Pendidikan KP") {
-            return item.NamaPelaksana.includes("Politeknik");
-          } else {
-            return item.NamaPelaksana.includes("BPPP");
-          }
-        })
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-
-      data
-        .filter((item) => item.NamaProgram === "Rating Keahlian")
-        .filter((item) => {
-          if (selectedSummaryAKP === "Satuan Pendidikan KP") {
-            return item.NamaPelaksana.includes("Politeknik");
-          } else {
-            return item.NamaPelaksana.includes("BPPP");
-          }
-        })
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-
-      data
-        .filter((item) => item.NamaProgram === "Fishing Master")
-        .filter((item) => {
-          if (selectedSummaryAKP === "Satuan Pendidikan KP") {
-            return item.NamaPelaksana.includes("Politeknik");
-          } else {
-            return item.NamaPelaksana.includes("BPPP");
-          }
-        })
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.JenisProgram === "Kelautan")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
     ];
 
-    const updatedAllKeterampilanByLemdiklatek = [
+    const dataMasyarakatDilatihByProgramPrioritas = [
       data
-        .filter((item) => item.NamaPelaksana === "BPPP Tegal")
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.DukunganProgramTerobosan === "Non Terobosan")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter((item) => item.NamaPelaksana === "BPPP Medan")
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.DukunganProgramTerobosan === "Konservasi")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter((item) => item.NamaPelaksana === "BPPP Banyuwangi")
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.DukunganProgramTerobosan === "PIT")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter((item) => item.NamaPelaksana === "BPPP Bitung")
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.DukunganProgramTerobosan === "Kalaju/Kalamo")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
       data
-        .filter((item) => item.NamaPelaksana === "BPPP Ambon")
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-      // data
-      //   .filter((item) => item.NamaPelaksana === "Politeknik AUP Jakarta")
-      //   .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-      // data
-      //   .filter((item) => item.NamaPelaksana === "LMTC")
-      //   .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+        .filter((item) => item.DukunganProgramTerobosan === "KPB")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
+      data
+        .filter((item) => item.DukunganProgramTerobosan === "Budidaya")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
+      data
+        .filter(
+          (item) => item.DukunganProgramTerobosan === "Pengawasan Pesisir"
+        )
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
+      data
+        .filter((item) => item.DukunganProgramTerobosan === "BCL")
+        .reduce((total, item) => total + item.JumlahPeserta!, 0),
     ];
 
-    const updatedAllKeterampilanBySatuanPendidikanKP = [
-      data
-        .filter((item) => item.NamaPelaksana === "Politeknik AUP Jakarta")
-        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-    ];
-
-    setState({ series: updatedSeries });
-    setStateAllKeterampilan({ series: updatedAllKeterampilan });
-    setStateAllKeterampilanByLemdiklatek({
-      series: updatedAllKeterampilanByLemdiklatek,
+    setStateMasyarakatDilatihByBidangPelatihan({
+      series: dataMasyarakatDilatihByBidangPelatihan,
     });
-    setStateAllKeterampilanBySatuanPendidikanKP({
-      series: updatedAllKeterampilanBySatuanPendidikanKP,
+
+    setStateMasyarakatDilatihByJenisPelatihan({
+      series: dataMasyarakatDilatihByJenisPelatihan,
     });
-    setStatePNBP({ series: updatedSeriesPNBP });
+
+    setStateMasyarakatDilatihByProgramPelatihan({
+      series: dataMasyarakatDilatihByProgramPelatihan,
+    });
+
+    setStateMasyarakatDilatihByProgramPrioritas({
+      series: dataMasyarakatDilatihByProgramPrioritas,
+    });
   }, [selectedLemdiklat, data]);
 
-  const [stateLemdiklatBSTFI, setStateLemdiklatBSTFI] =
-    useState<ChartThreeState>({
-      series: [
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "BPPP Tegal" &&
-              item.NamaProgram === "Basic Safety Training Fisheries I"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "BPPP Medan" &&
-              item.NamaProgram === "Basic Safety Training Fisheries I"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "BPPP Banyuwangi" &&
-              item.NamaProgram === "Basic Safety Training Fisheries I"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "BPPP Bitung" &&
-              item.NamaProgram === "Basic Safety Training Fisheries I"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "BPPP Ambon" &&
-              item.NamaProgram === "Basic Safety Training Fisheries I"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "Politeknik AUP Jakarta" &&
-              item.NamaProgram === "Basic Safety Training Fisheries I"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-      ],
-    });
-
-  const [stateLemdiklatBSTFII, setStateLemdiklatBSTFII] =
-    useState<ChartThreeState>({
-      series: [
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "BPPP Tegal" &&
-              item.NamaProgram === "Basic Safety Training Fisheries II"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "BPPP Medan" &&
-              item.NamaProgram === "Basic Safety Training Fisheries II"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "BPPP Banyuwangi" &&
-              item.NamaProgram === "Basic Safety Training Fisheries II"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "BPPP Bitung" &&
-              item.NamaProgram === "Basic Safety Training Fisheries II"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "BPPP Ambon" &&
-              item.NamaProgram === "Basic Safety Training Fisheries II"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-        data
-          .filter(
-            (item) =>
-              item.NamaPelaksana === "Politeknik AUP Jakarta" &&
-              item.NamaProgram === "Basic Safety Training Fisheries II"
-          )
-          .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
-      ],
-    });
-
-  const totalSum = [
-    {
-      label: "Basic Safety Training Fisheries I",
-      color: "bg-primary",
-      multiplier: selectedLemdiklat != "BPPP Tegal" ? 1350000 : 1050000,
-    },
-    {
-      label: "Basic Safety Training Fisheries II",
-      color: "bg-[#8FD0EF]",
-      multiplier: selectedLemdiklat != "BPPP Tegal" ? 600000 : 620000,
-    },
-    {
-      label: "Rating Keahlian",
-      color: "bg-[#E0366F]",
-      multiplier: selectedLemdiklat != "BPPP Tegal" ? 1350000 : 2050000,
-    },
-  ].reduce(
-    (acc, item) => {
-      const totalBlanko = data
-        .filter(
-          (d) =>
-            d.NamaProgram === item.label &&
-            d.NamaPelaksana == selectedLemdiklat &&
-            d.AsalPendapatan == "PNBP"
-        )
-        .reduce((total, d) => total + d.JumlahBlankoDisetujui, 0);
-
-      const totalAmount = totalBlanko * item.multiplier;
-
-      acc.totalAmount += totalAmount;
-      acc.totalBlanko += totalBlanko;
-
-      return acc;
-    },
-    { totalAmount: 0, totalBlanko: 0 }
-  );
-
-  const chartData = [
+  const chartDataMasyarakatDilatihByBidangPelatihan = [
     {
       browser: "chrome",
-      visitors: state.series[0],
+      visitors: stateMasyarakatDilatihByBidangPelatihan.series[1],
       fill: "var(--color-chrome)",
     },
     {
       browser: "safari",
-      visitors: state.series[1],
+      visitors: stateMasyarakatDilatihByBidangPelatihan.series[2],
       fill: "var(--color-safari)",
     },
     {
       browser: "firefox",
-      visitors: state.series[2],
-      fill: "var(--color-firefox)",
-    },
-    { browser: "edge", visitors: state.series[3], fill: "var(--color-edge)" },
-    { browser: "other", visitors: state.series[4], fill: "var(--color-other)" },
-    {
-      browser: "other2",
-      visitors: state.series[5],
-      fill: "var(--color-other2)",
-    },
-  ];
-
-  const chartDataAllKeterampilan = [
-    {
-      browser: "chrome",
-      visitors: stateAllKeterampilan.series[0],
-      fill: "var(--color-chrome)",
-    },
-    {
-      browser: "safari",
-      visitors: stateAllKeterampilan.series[1],
-      fill: "var(--color-safari)",
-    },
-    {
-      browser: "firefox",
-      visitors: stateAllKeterampilan.series[2],
+      visitors: stateMasyarakatDilatihByBidangPelatihan.series[3],
       fill: "var(--color-firefox)",
     },
     {
       browser: "edge",
-      visitors: stateAllKeterampilan.series[3],
+      visitors: stateMasyarakatDilatihByBidangPelatihan.series[4],
       fill: "var(--color-edge)",
     },
     {
       browser: "other",
-      visitors: stateAllKeterampilan.series[4],
+      visitors: stateMasyarakatDilatihByBidangPelatihan.series[5],
       fill: "var(--color-other)",
     },
     {
       browser: "other2",
-      visitors: stateAllKeterampilan.series[5],
+      visitors: stateMasyarakatDilatihByBidangPelatihan.series[6],
       fill: "var(--color-other2)",
+    },
+    {
+      browser: "other3",
+      visitors: stateMasyarakatDilatihByBidangPelatihan.series[7],
+      fill: "var(--color-other3)",
+    },
+    {
+      browser: "other4",
+      visitors: stateMasyarakatDilatihByBidangPelatihan.series[0],
+      fill: "var(--color-other4)",
     },
   ];
 
-  const chartDataPNBP = [
+  const chartDataMasyarakatDilatihByJenisPelatihan = [
     {
       browser: "chrome",
-      visitors: statePNBP.series[0],
-      fill: "var(--color-chrome)",
+      name: "Aspirasi",
+      visitors: stateMasyarakatDilatihByJenisPelatihan.series[0],
+      fill: "#5335E9",
     },
     {
       browser: "safari",
-      visitors: statePNBP.series[1],
-      fill: "var(--color-safari)",
+      name: "PNBP/BLU",
+      visitors: stateMasyarakatDilatihByJenisPelatihan.series[1],
+      fill: "#41C8ED",
     },
     {
       browser: "firefox",
-      visitors: statePNBP.series[2],
-      fill: "var(--color-firefox)",
+      name: "Reguler",
+      visitors: stateMasyarakatDilatihByJenisPelatihan.series[2],
+      fill: "#09105E",
+    },
+  ];
+
+  const chartDataMasyarakatDilatihByProgramPelatihan = [
+    {
+      browser: "chrome",
+      name: "Perikanan",
+      visitors: stateMasyarakatDilatihByProgramPelatihan.series[0],
+      fill: "#211951",
+    },
+    {
+      browser: "safari",
+      name: "Kelautan",
+      visitors: stateMasyarakatDilatihByProgramPelatihan.series[1],
+      fill: "#836FFF",
+    },
+  ];
+
+  const chartDataMasyarakatDilatihByProgramPrioritas = [
+    {
+      browser: "chrome",
+      name: "Konservasi",
+      visitors: stateMasyarakatDilatihByProgramPrioritas.series[1],
+      fill: "#2662D9",
+    },
+    {
+      browser: "safari",
+      name: "PIT",
+      visitors: stateMasyarakatDilatihByProgramPrioritas.series[2],
+      fill: "#2EB88A",
+    },
+    {
+      browser: "firefox",
+      name: "Kalaju/Kalamo",
+      visitors: stateMasyarakatDilatihByProgramPrioritas.series[3],
+      fill: "#e88c30",
     },
     {
       browser: "edge",
-      visitors: statePNBP.series[3],
-      fill: "var(--color-edge)",
+      name: "KPB",
+      visitors: stateMasyarakatDilatihByProgramPrioritas.series[4],
+      fill: "#AF57DB",
     },
     {
       browser: "other",
-      visitors: statePNBP.series[4],
-      fill: "var(--color-other)",
+      name: "Budidaya",
+      visitors: stateMasyarakatDilatihByProgramPrioritas.series[5],
+      fill: "#E0366F",
     },
     {
       browser: "other2",
-      visitors: statePNBP.series[5],
-      fill: "var(--color-other2)",
+      name: "Pengawasan Pesisir",
+      visitors: stateMasyarakatDilatihByProgramPrioritas.series[6],
+      fill: "#60432F",
+    },
+    {
+      browser: "other3",
+      name: "BCL",
+      visitors: stateMasyarakatDilatihByProgramPrioritas.series[7],
+      fill: "#274754",
+    },
+    {
+      browser: "other4",
+      name: "Non Terobosan",
+      visitors: stateMasyarakatDilatihByProgramPrioritas.series[0],
+      fill: "#274754",
     },
   ];
-
-  const chartDataSatuanPendidikanKP = [
-    {
-      browser: "chrome",
-      visitors: stateAllKeterampilanBySatuanPendidikanKP.series[0],
-      fill: "var(--color-chrome)",
-    },
-  ];
-
-  const chartDataLemdiklat = [
-    {
-      browser: "chrome",
-      visitors: stateAllKeterampilanByLemdiklatek.series[0],
-      fill: "var(--color-chrome)",
-    },
-    {
-      browser: "safari",
-      visitors: stateAllKeterampilanByLemdiklatek.series[1],
-      fill: "var(--color-safari)",
-    },
-    {
-      browser: "firefox",
-      visitors: stateAllKeterampilanByLemdiklatek.series[2],
-      fill: "var(--color-firefox)",
-    },
-    {
-      browser: "edge",
-      visitors: stateAllKeterampilanByLemdiklatek.series[3],
-      fill: "var(--color-edge)",
-    },
-    {
-      browser: "other",
-      visitors: stateAllKeterampilanByLemdiklatek.series[4],
-      fill: "var(--color-other)",
-    },
-    // {
-    //   browser: "other2",
-    //   visitors: stateAllKeterampilanByLemdiklatek.series[5],
-    //   fill: "var(--color-other2)",
-    // },
-    // {
-    //   browser: "other3",
-    //   visitors: stateAllKeterampilanByLemdiklatek.series[6],
-    //   fill: "var(--color-other3)",
-    // },
-  ];
-
-  const [selectedSummaryAKP, setSelectedSummaryAKP] =
-    React.useState<string>("All");
 
   return (
     <div className="col-span-12 rounded-xl border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-5 w-full">
@@ -777,25 +603,32 @@ const ChartDetailMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
         </div>
       </div>
 
-      <div className="flex gap-2 w-full">
-        <Card className="w-full h-full">
+      <div className="flex gap-2 w-full mb-4">
+        <Card className="w-full ">
           <CardHeader>
             <div className="w-full flex justify-between items-center">
               <div className="flex flex-col gap-1">
-                <CardTitle>DIKLAT dan BIMTEK NON-PNBP</CardTitle>
+                <CardTitle>Berdasarkan Bidang Pelatihan</CardTitle>
                 <CardDescription>27 May 2024 - Now 2024</CardDescription>
               </div>
               <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
-                Total Sertifikat :{" "}
-                {chartData
+                Masyarakat Dilatih:{" "}
+                {chartDataMasyarakatDilatihByBidangPelatihan
                   .reduce((sum, item) => sum + item.visitors, 0)
                   .toLocaleString("ID")}
               </div>
             </div>
           </CardHeader>
           <CardContent>
-            <ChartContainer config={chartConfig}>
-              <BarChart accessibilityLayer data={chartData}>
+            <ChartContainer
+              config={chartConfigBidangPelatihan}
+              className="aspect-auto h-[350px] w-full"
+            >
+              <BarChart
+                accessibilityLayer
+                data={chartDataMasyarakatDilatihByBidangPelatihan}
+                height={300}
+              >
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="browser"
@@ -803,7 +636,9 @@ const ChartDetailMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
                   tickMargin={10}
                   axisLine={false}
                   tickFormatter={(value) =>
-                    chartConfig[value as keyof typeof chartConfig]?.label
+                    chartConfigBidangPelatihan[
+                      value as keyof typeof chartConfigBidangPelatihan
+                    ]?.label
                   }
                 />
                 <ChartTooltip
@@ -814,65 +649,7 @@ const ChartDetailMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
                   dataKey="visitors"
                   strokeWidth={2}
                   radius={8}
-                  max={20000}
-                  activeIndex={2}
-                >
-                  <LabelList
-                    position="inside"
-                    offset={12}
-                    className="fill-white text-white"
-                    fontSize={12}
-                    fill="#000"
-                  />
-                </Bar>
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-          <CardFooter className="flex-col items-start gap-2 text-sm">
-            <div className="leading-none text-muted-foreground">
-              Showing total certificate issued since 27 May 2024
-            </div>
-          </CardFooter>
-        </Card>
-
-        <Card className="w-full h-full">
-          <CardHeader>
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col gap-1">
-                <CardTitle>DIKLAT dan BIMTEK PNBP</CardTitle>
-                <CardDescription>27 May 2024 - Now 2024</CardDescription>
-              </div>
-              <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
-                Total Sertifikat :{" "}
-                {chartDataPNBP
-                  .reduce((sum, item) => sum + item.visitors, 0)
-                  .toLocaleString("ID")}
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfigPNBP} className="">
-              <BarChart accessibilityLayer data={chartDataPNBP}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="browser"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  tickFormatter={(value) =>
-                    chartConfigPNBP[value as keyof typeof chartConfigPNBP]
-                      ?.label
-                  }
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                />
-                <Bar
-                  dataKey="visitors"
-                  strokeWidth={2}
-                  radius={8}
-                  activeIndex={2}
+                  maxBarSize={100} // Limit the maximum bar size
                 >
                   <LabelList
                     position="inside"
@@ -893,124 +670,257 @@ const ChartDetailMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
         </Card>
       </div>
 
-      {/* <div className="flex gap-2 flex-col mt-10">
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle>Total Perkiraan Penerimaan PNBP</CardTitle>
-            <CardDescription>
-              {" "}
-              The unit prices used in this data were obtained from{" "}
-              <span className="font-semibold">PP Tarif 85</span>
-            </CardDescription>
+      <div className="flex gap-2 w-full">
+        <Card className="flex flex-col w-[33.3%]">
+          <CardHeader className="items-center pb-0">
+            <CardTitle>Program Pelatihan</CardTitle>
+            {/* <CardDescription>Pendidikan Tinggi</CardDescription> */}
           </CardHeader>
-          <CardContent>
-            <div className="p-8 flex flex-wrap items-center justify-center gap-y-3 mt-0 border-t border-t-gray-200">
-              {[
-                {
-                  label: "Basic Safety Training Fisheries I",
-                  color: "bg-primary",
-                  multiplier:
-                    selectedLemdiklat != "BPPP Tegal" ? 1350000 : 1050000,
-                },
-                {
-                  label: "Basic Safety Training Fisheries II",
-                  color: "bg-[#8FD0EF]",
-                  multiplier:
-                    selectedLemdiklat != "BPPP Tegal" ? 600000 : 620000,
-                },
-                {
-                  label: "Rating Keahlian",
-                  color: "bg-[#E0366F]",
-                  multiplier:
-                    selectedLemdiklat != "BPPP Tegal" ? 1350000 : 2050000,
-                },
-              ].map((item, index) => (
-                <div className="w-full px-8 " key={index}>
-                  <div className="flex w-full items-center justify-between">
-                    <div className="flex gap-1 w-full items-center">
-                      <span
-                        className={`mr-2 block h-3 w-full max-w-3 rounded-full ${item.color}`}
-                      ></span>
-                      <p className="flex w-full justify-between text-sm font-medium text-black">
-                        <span>
-                          {item.label} - Rp{" "}
-                          {item.multiplier.toLocaleString("id-ID")}
-                        </span>
-                      </p>
-                    </div>
-
-                    <span className="w-full flex items-end justify-end">
-                      Rp.
-                      {(
-                        data
-                          .filter(
-                            (d) =>
-                              d.NamaProgram === item.label &&
-                              d.NamaPelaksana === selectedLemdiklat &&
-                              d.AsalPendapatan == "PNBP"
-                          )
-                          .reduce(
-                            (total, d) => total + d.JumlahBlankoDisetujui,
-                            0
-                          ) * item.multiplier
-                      ).toLocaleString("id-ID")}{" "}
-                      <span className="font-semibold text-xs ml-3">
-                        (
-                        {data
-                          .filter(
-                            (d) =>
-                              d.NamaProgram === item.label &&
-                              d.NamaPelaksana === selectedLemdiklat &&
-                              d.AsalPendapatan == "PNBP"
-                          )
-                          .reduce(
-                            (total, d) => total + d.JumlahBlankoDisetujui,
-                            0
-                          )
-                          .toLocaleString("id-ID")}
-                        Sertifikat )
-                      </span>
-                    </span>
-                  </div>
-                </div>
-              ))}
-              <div className="w-full flex justify-end items-center px-8">
-                <div className="flex gap-1 items-end">
-                  <h5 className="text-3xl font-bold text-black">
-                    Rp{" "}
-                    <CountUp
-                      start={0}
-                      duration={12.75}
-                      end={totalSum.totalAmount}
-                    />
-                  </h5>
-                  <span className="font-semibold text-xs ml-3">
-                    ({totalSum.totalBlanko}
-                    Sertifikat )
-                  </span>
-                </div>
-              </div>
-            </div>
+          <CardContent className="flex-1 pb-0">
+            <ChartContainer
+              config={chartConfigProgramPelatihan}
+              className="mx-auto aspect-square max-h-[250px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={chartDataMasyarakatDilatihByProgramPelatihan}
+                  dataKey="visitors"
+                  nameKey="browser"
+                  innerRadius={60}
+                  strokeWidth={0}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                          >
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-black text-3xl font-bold"
+                            >
+                              {chartDataMasyarakatDilatihByProgramPelatihan
+                                .reduce((sum, item) => sum + item.visitors, 0)
+                                .toLocaleString("ID")}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-gray-400"
+                            >
+                              Masyarakat Dilatih
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
           </CardContent>
-          <CardFooter className="flex-col items-start gap-2 text-sm">
+          <CardFooter className="flex-col gap-1 text-sm items-center flex text-center">
+            <div className="flex items-center gap-2 font-medium leading-none">
+              Updated last minute <TrendingUp className="h-4 w-4" />
+            </div>
             <div className="leading-none text-muted-foreground">
-              Showing total certificate issued since 27 May 2024
+              Showing total visitors for the last 6 months
+            </div>
+            <div className="mt-4 flex gap-2">
+              {chartDataMasyarakatDilatihByProgramPelatihan.map(
+                (entry: any) => (
+                  <div key={entry.name} className="flex gap-2 items-center">
+                    <div
+                      className="w-4 h-4"
+                      style={{ backgroundColor: entry.fill }}
+                    ></div>
+                    <span className="text-sm">{entry.name}</span>
+                  </div>
+                )
+              )}
             </div>
           </CardFooter>
         </Card>
-      </div> */}
+        <Card className="flex flex-col w-[33.3%]">
+          <CardHeader className="items-center pb-0">
+            <CardTitle>Jenis Pelatihan</CardTitle>
+            {/* <CardDescription>Pendidikan Tinggi</CardDescription> */}
+          </CardHeader>
+          <CardContent className="flex-1 pb-0">
+            <ChartContainer
+              config={chartConfigJenisPelatihan}
+              className="mx-auto aspect-square max-h-[250px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={chartDataMasyarakatDilatihByJenisPelatihan}
+                  dataKey="visitors"
+                  nameKey="browser"
+                  innerRadius={60}
+                  strokeWidth={0}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                          >
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-black text-3xl font-bold"
+                            >
+                              {chartDataMasyarakatDilatihByJenisPelatihan
+                                .reduce((sum, item) => sum + item.visitors, 0)
+                                .toLocaleString("ID")}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-gray-400"
+                            >
+                              Masyarakat Dilatih
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col gap-1 text-sm items-center flex text-center">
+            <div className="flex items-center gap-2 font-medium leading-none">
+              Updated last minute <TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="leading-none text-muted-foreground">
+              Showing total visitors for the last 6 months
+            </div>
+
+            <div className="mt-4 flex gap-2">
+              {chartDataMasyarakatDilatihByJenisPelatihan.map((entry: any) => (
+                <div key={entry.name} className="flex gap-2 items-center">
+                  <div
+                    className="w-4 h-4"
+                    style={{ backgroundColor: entry.fill }}
+                  ></div>
+                  <span className="text-sm">{entry.name}</span>
+                </div>
+              ))}
+            </div>
+          </CardFooter>
+        </Card>
+        <Card className="flex flex-col w-[33.3%]">
+          <CardHeader className="items-center pb-0">
+            <CardTitle>Mendukung Program Terobosan</CardTitle>
+            {/* <CardDescription>Pendidikan Tinggi</CardDescription> */}
+          </CardHeader>
+          <CardContent className="flex-1 pb-0">
+            <ChartContainer
+              config={chartConfigProgramPrioritas}
+              className="mx-auto aspect-square max-h-[250px]"
+            >
+              <PieChart>
+                <ChartTooltip
+                  cursor={false}
+                  content={<ChartTooltipContent hideLabel />}
+                />
+                <Pie
+                  data={chartDataMasyarakatDilatihByProgramPrioritas}
+                  dataKey="visitors"
+                  nameKey="browser"
+                  innerRadius={60}
+                  strokeWidth={0}
+                >
+                  <Label
+                    content={({ viewBox }) => {
+                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                        return (
+                          <text
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            textAnchor="middle"
+                            dominantBaseline="middle"
+                          >
+                            <tspan
+                              x={viewBox.cx}
+                              y={viewBox.cy}
+                              className="fill-black text-3xl font-bold"
+                            >
+                              {chartDataMasyarakatDilatihByProgramPrioritas
+                                .reduce((sum, item) => sum + item.visitors, 0)
+                                .toLocaleString("ID")}
+                            </tspan>
+                            <tspan
+                              x={viewBox.cx}
+                              y={(viewBox.cy || 0) + 24}
+                              className="fill-gray-400"
+                            >
+                              Masyarakat Dilatih
+                            </tspan>
+                          </text>
+                        );
+                      }
+                    }}
+                  />
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+          </CardContent>
+          <CardFooter className="flex-col gap-1 text-sm items-center flex text-center">
+            <div className="flex items-center gap-2 font-medium leading-none">
+              Updated last minute <TrendingUp className="h-4 w-4" />
+            </div>
+            <div className="leading-none text-muted-foreground">
+              Showing total visitors for the last 6 months
+            </div>
+
+            <div className="mt-4 flex gap-1 flex-wrap">
+              {chartDataMasyarakatDilatihByProgramPrioritas.map(
+                (entry: any) => (
+                  <div key={entry.name} className="flex gap-2 items-center">
+                    <div
+                      className="w-4 h-4"
+                      style={{ backgroundColor: entry.fill }}
+                    ></div>
+                    <span className="text-sm">{entry.name}</span>
+                  </div>
+                )
+              )}
+            </div>
+          </CardFooter>
+        </Card>
+      </div>
 
       <div className="flex gap-2 flex-col mt-10">
         <Card className="w-full">
           <CardHeader>
-            <CardTitle>Detail Data CoP</CardTitle>
+            <CardTitle>Daftar Pelatihan</CardTitle>
             <CardDescription>
               {" "}
-              Yang telah diterbitkan pasca SE 933 Tahun 2024
+              Yang Telah Dilaksanakan atau Akan Dilaksanakan
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <TableDataSertifikatKeterampilan />
+            <TableDataPelatihanSummary data={data} />
           </CardContent>
         </Card>
       </div>

@@ -84,9 +84,9 @@ const chartOptions: ApexOptions = {
   },
 };
 
-const ChartMasyarakatDilatihMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
-  data,
-}) => {
+const ChartMasyarakatDilatihMonthly: React.FC<{
+  data: PelatihanMasyarakat[];
+}> = ({ data }) => {
   const [dataPelatihan, setDataPelatihan] = useState<PelatihanMasyarakat[]>([]);
   const [dataTotalMasyarakatDilatih, setDataTotalMasyarakatDilatih] =
     useState<number>(0);
@@ -122,7 +122,7 @@ const ChartMasyarakatDilatihMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
   const calculateMonthlyData = (key: keyof PelatihanMasyarakat) => {
     return Array.from({ length: 12 }, (_, i) => {
       const month = (i + 1).toString().padStart(2, "0");
-      return dataPelatihan
+      return data
         .filter(
           (item) =>
             getMonthFromDateString(item.TanggalMulaiPelatihan!) === month
@@ -157,9 +157,7 @@ const ChartMasyarakatDilatihMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
               </span>
               <div className="w-full">
                 <p className="font-semibold text-primary">Total Pelatihan</p>
-                <p className="text-sm font-medium">
-                  {dataPelatihan.length} Pelatihan
-                </p>
+                <p className="text-sm font-medium">{data.length} Pelatihan</p>
               </div>
             </div>
             <div className="flex w-full">

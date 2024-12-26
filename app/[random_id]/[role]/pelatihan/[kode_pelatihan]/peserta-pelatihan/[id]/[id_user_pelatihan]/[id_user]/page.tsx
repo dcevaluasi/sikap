@@ -130,6 +130,14 @@ function DetailPeserta() {
                         </td>
                       </tr>
                       <tr className="border-b border-b-gray-200 w-full">
+                        <td className="font-semibold p-4 w-[20%]">
+                          Jenis Kelamin
+                        </td>
+                        <td className="p-4 w-2/3">
+                          {peserta!.JenisKelamin || "-"}
+                        </td>
+                      </tr>
+                      <tr className="border-b border-b-gray-200 w-full">
                         <td className="font-semibold p-4 w-[20%]">Agama</td>
                         <td className="p-4 w-2/3">{peserta!.Agama || "-"}</td>
                       </tr>

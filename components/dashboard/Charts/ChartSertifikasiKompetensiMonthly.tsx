@@ -1,4 +1,5 @@
 import { BlankoKeluar } from "@/types/blanko";
+import { PelatihanMasyarakat } from "@/types/product";
 import { formatDateTime, getMonthFromDateString } from "@/utils";
 import { ApexOptions } from "apexcharts";
 import React, { useState } from "react";
@@ -124,9 +125,9 @@ interface ChartOneState {
   }[];
 }
 
-const ChartSertifikasiKompetensiMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
-  data,
-}) => {
+const ChartSertifikasiKompetensiMonthly: React.FC<{
+  data: PelatihanMasyarakat[];
+}> = ({ data }) => {
   const [state, setState] = useState<ChartOneState>({
     series: [
       {

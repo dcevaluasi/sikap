@@ -761,10 +761,10 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                                   type="date"
                                   className="form-input w-full text-black border-gray-300 rounded-md"
                                   required
-                                  min={
-                                    tanggalBerakhirPendaftaran ||
-                                    new Date().toISOString().split("T")[0]
-                                  }
+                                  // min={
+                                  //   tanggalBerakhirPendaftaran ||
+                                  //   new Date().toISOString().split("T")[0]
+                                  // }
                                   value={tanggalMulaiPelatihan}
                                   onChange={(
                                     e: ChangeEvent<HTMLInputElement>
@@ -1112,6 +1112,7 @@ function FormPelatihan({ edit = false }: { edit: boolean }) {
                                 <SelectItem value="Kalaju/Kalamo">
                                   Kalaju/Kalamo
                                 </SelectItem>
+                                <SelectItem value="KPB">KPB</SelectItem>
                                 <SelectItem value="Budidaya">
                                   Budidaya
                                 </SelectItem>

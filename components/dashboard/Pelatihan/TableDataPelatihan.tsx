@@ -573,19 +573,25 @@ const TableDataPelatihan: React.FC = () => {
                                 Lokasi Pelatihan : {pelatihan!.LokasiPelatihan}
                               </span>
                             </span>
-                            <span className="flex items-center gap-1 leading-[105%]">
-                              <GrSend className="text-lg" />
-                              <span>
-                                Waktu Pendaftaran :{" "}
-                                {generateTanggalPelatihan(
-                                  pelatihan!.TanggalMulaiPendaftaran
-                                )}{" "}
-                                <span className="lowercase">s.d</span>{" "}
-                                {generateTanggalPelatihan(
-                                  pelatihan!.TanggalAkhirPendaftaran!
-                                )}
+                            {pelatihan!.TanggalMulaiPendaftaran == "" ||
+                            pelatihan!.TanggalBerakhirPendaftaran == "" ? (
+                              <></>
+                            ) : (
+                              <span className="flex items-center gap-1 leading-[105%]">
+                                <GrSend className="text-lg" />
+                                <span>
+                                  Waktu Pendaftaran :{" "}
+                                  {generateTanggalPelatihan(
+                                    pelatihan!.TanggalMulaiPendaftaran
+                                  )}{" "}
+                                  <span className="lowercase">s.d</span>{" "}
+                                  {generateTanggalPelatihan(
+                                    pelatihan!.TanggalAkhirPendaftaran!
+                                  )}
+                                </span>
                               </span>
-                            </span>
+                            )}
+
                             <span className="flex items-center gap-1 leading-[105%]">
                               <TbCalendarCheck className="text-lg" />
                               {pelatihan!.TanggalMulaiPelatihan != "" ? (
