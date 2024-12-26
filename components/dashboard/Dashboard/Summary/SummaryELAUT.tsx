@@ -10,6 +10,7 @@ import ChartDetailMasyarakatDilatih from "../../Charts/ChartDetailMasyarakatDila
 import ChartSertifikasiKompetensiMonthly from "../../Charts/ChartSertifikasiKompetensiMonthly";
 import { BALAI_PELATIHAN } from "@/constants/pelatihan";
 import { HashLoader } from "react-spinners";
+import Image from "next/image";
 
 const SummaryELAUT: React.FC = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -113,7 +114,27 @@ const SummaryELAUT: React.FC = () => {
                   <ChartDetailMasyarakatDilatih data={data} />
                 </>
               ) : (
-                <></>
+                <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6 mt-20">
+                  <div className="pt-7 md:pt-0 flex flex-col items-center">
+                    <Image
+                      src={"/illustrations/not-found.png"}
+                      alt="Not Found"
+                      width={0}
+                      height={0}
+                      className="w-[350px] md:w-[400px]"
+                    />
+                    <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
+                      <h1 className="text-2xl md:text-3xl font-calsans leading-[110%] text-black">
+                        Belum Ada Pelatihan
+                      </h1>
+                      <div className="text-gray-600 text-center leading-[125%]  max-w-md">
+                        Capaian ataupun summary dari pelaksanaan pelatihan belum
+                        dapat dilihat, karena Balai Pelatihan belum memiliki
+                        peneyelenggaraan pelatihan!
+                      </div>
+                    </div>
+                  </div>
+                </div>
               )}
             </TabsContent>
           </Tabs>
