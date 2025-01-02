@@ -37,7 +37,7 @@ export default function MobileMenu({ isTop }: { isTop: boolean }) {
   });
 
   return (
-    <div className="flex md:hidden px-6 md:px-0 -mt-10 md:mt-0">
+    <div className={`flex md:hidden px-6 md:px-0 ${isTop? '-mt-10' : 'mt-0'} md:mt-0`}>
       {/* Hamburger button */}
       <button
         ref={trigger}
@@ -77,31 +77,23 @@ export default function MobileMenu({ isTop }: { isTop: boolean }) {
           <ul className="px-5 py-2">
             <li>
               <Link
-                href="/pelatihan"
+                href="/"
                 className="flex font-medium w-full text-gray-600 hover:text-gray-900 py-2 justify-center"
                 onClick={() => setMobileNavOpen(false)}
               >
-                Pelatihan
+                Beranda
               </Link>
             </li>
             <li>
               <Link
-                href="/sertifikasi"
+                href="/#cek-sertifikat"
                 className="flex font-medium w-full text-gray-600 hover:text-gray-900 py-2 justify-center"
                 onClick={() => setMobileNavOpen(false)}
               >
-                Sertifikasi
+                Cek Sertifikat
               </Link>
             </li>
-            <li>
-              <Link
-                href="/pelatihan-sertifikasi"
-                className="flex font-medium w-full text-gray-600 hover:text-gray-900 py-2 justify-center"
-                onClick={() => setMobileNavOpen(false)}
-              >
-                Pelatihan & Sertifikasi
-              </Link>
-            </li>
+
             <li>
               <Link
                 href="/login"

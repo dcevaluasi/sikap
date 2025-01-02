@@ -64,9 +64,6 @@ const SummaryELAUT: React.FC = () => {
     };
 
     fetchAllData();
-
-    const intervalId = setInterval(fetchAllData, 30000);
-    return () => clearInterval(intervalId);
   }, []);
 
   return (

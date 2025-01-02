@@ -19,18 +19,7 @@ import {
   HiMiniUserGroup,
 } from "react-icons/hi2";
 import Cookies from "js-cookie";
-import DropdownUser from "../dashboard/Header/DropdownUser";
 import DropdownUserPelatihan from "../dashboard/Header/DropdownUserPelatihan";
-import { Dropdown } from "flowbite-react";
-import {
-  RiGovernmentFill,
-  RiSchoolFill,
-  RiVerifiedBadgeFill,
-} from "react-icons/ri";
-import { BiSolidShip } from "react-icons/bi";
-import { AiFillShop } from "react-icons/ai";
-import { BsFillPatchCheckFill } from "react-icons/bs";
-import { LucideSchool } from "lucide-react";
 import { IoMdSchool } from "react-icons/io";
 import Image from "next/image";
 

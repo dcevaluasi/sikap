@@ -52,6 +52,7 @@ import { Bounce, Slide } from "react-awesome-reveal";
 import ListProgram from "./lists";
 import Logo from "./ui/logo";
 import Link from "next/link";
+import Footer from "./ui/footer";
 
 export default function Hero() {
   const programPelatihan = [
@@ -156,12 +157,12 @@ export default function Hero() {
 
         <div className="max-w-7xl z-[40] w-full mx-auto relative flex flex-col items-start justify-center text-left px-6 pb-10 md:pb-0 mt-32 md:mt-0">
           {/* Hero content */}
-          <div className="flex flex-col md:flex-row w-full items-center justify-between">
+          <div className="flex flex-col md:flex-row w-full items-center justify-center md:justify-between">
             {/* Section header */}
-            <div className="text-center gap-5 flex flex-col ">
+            <div className="text-center gap-5 flex flex-col items-center md:items-start">
               <Logo />
-              <div className="flex flex-col">
-                <h1 className="text-[2rem] md:text-[3rem] leading-none text-left font-calsans text-white">
+              <div className="flex flex-col items-center md:items-start">
+                <h1 className="text-[2.5rem] md:text-[3rem] leading-none text-center md:text-left font-calsans text-white">
                   Elektronik Layanan Pelatihan <br />{" "}
                   <span className="bg-clip-text text-transparent bg-gradient-to-r leading-none pt-0 from-blue-500 to-teal-400">
                     Kelautan dan Perikanan
@@ -175,7 +176,7 @@ export default function Hero() {
             </div>
 
             <div
-              className="flex flex-col gap-3 text-white max-w-md mt-10 md:mt-28 border-t border-t-gray-300 pt-10 md:border-none md:pt-0"
+              className="hidden md:flex flex-col gap-3 text-white max-w-md mt-10 md:mt-28 border-t border-t-gray-300 pt-10 md:border-none md:pt-0"
               onMouseLeave={() => setSelectedProgram(null)}
             >
               <h1 className="font-medium font-calsans text-2xl leading-none">
@@ -211,7 +212,7 @@ export default function Hero() {
           </div>
 
           <div
-            className={`w-full flex flex-col md:flex-row gap-5 md:gap-14 items-center justify-center  z-[10000] pt-16 ${
+            className={`w-full flex flex-col md:flex-row gap-5 md:gap-14 items-center justify-center  z-[10000] pt-10 md:pt-16 ${
               selectedProgram === null ? " md:mt-7" : "mt-0"
             }`}
           >
@@ -219,11 +220,9 @@ export default function Hero() {
               <Slide direction="up" duration={index * 1200}>
                 <div
                   onClick={(e) => setSelectedProgram(index)}
-                  className={`flex w-full flex-col gap-1 items-center justify-center hover:scale-110 duration-700 cursor-pointer hover:opacity-100 border text-center  rounded-3xl border-gray-200 ${
-                    index != 1 ? "px-9" : "px-4"
-                  } py-7 ${
+                  className={`flex w-[80%] mx-auto md:mx-0 md:w-full flex-col gap-1 items-center justify-center hover:scale-110 duration-700 cursor-pointer hover:opacity-100 border text-center rounded-3xl border-gray-200 px-20 md:px-9 py-7 ${
                     selectedProgram == index
-                      ? "opacity-100 animate-pulse  "
+                      ? "opacity-100 animate-pulse my-10 !px-9"
                       : "opacity-40  "
                   }`}
                 >
@@ -231,7 +230,7 @@ export default function Hero() {
                     src={item.icon}
                     alt={item.name}
                     className={
-                      selectedProgram == index ? "w-20 md:w-40" : "w-16 md:w-32"
+                      selectedProgram == index ? "w-40 md:w-40" : "w-40 md:w-32"
                     }
                     width={0}
                     height={0}
@@ -239,6 +238,38 @@ export default function Hero() {
                   <h3 className="text-white font-calsans text-base md:text-xl leading-none mt-3">
                     {item.name}
                   </h3>
+
+                  {selectedProgram == index && (
+                    <div
+                      className="flex md:hidden items-center  flex-col gap-10 text-white max-w-md mt-10 md:mt-28 border-t border-t-gray-300 pt-6 md:border-none md:pt-0"
+                      onMouseLeave={() => setSelectedProgram(null)}
+                    >
+                      <p className="text-sm">
+                        {" "}
+                        {selectedProgram != null
+                          ? programPelatihan[selectedProgram]!.description
+                          : ""}
+                      </p>
+
+                      {selectedProgram != null && (
+                        <Link
+                          href={`/layanan/program/${
+                            programPelatihan[selectedProgram]!.slug
+                          }`}
+                          className={`btn-sm ${
+                            top
+                              ? usePathname().includes("pelatihan") ||
+                                usePathname().includes("searching")
+                                ? "text-blue-500 hover:text-white"
+                                : "text-gray-200"
+                              : "text-blue-500 hover:text-white"
+                          } bg-transparent border border-blue-500 text-center hover:bg-blue-500 w-fit`}
+                        >
+                          <span>Lihat Selengkapnya</span>
+                        </Link>
+                      )}
+                    </div>
+                  )}
                 </div>
               </Slide>
             ))}
