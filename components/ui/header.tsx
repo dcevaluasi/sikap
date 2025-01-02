@@ -254,7 +254,10 @@ export default function Header() {
             usePathname().includes("forget-password") ||
             usePathname().includes("cek-sertifikat") ||
             usePathname().includes("login")) && (
-            <Link href={"/"} className="shrink-0 mr-4 flex items-center gap-4">
+            <Link
+              href={"/"}
+              className="shrink-0 ml-6 md:mr-4 flex items-center gap-4"
+            >
               <Image
                 className={getSizeLogoHeader()}
                 width={0}

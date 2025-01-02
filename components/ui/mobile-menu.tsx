@@ -37,7 +37,7 @@ export default function MobileMenu({ isTop }: { isTop: boolean }) {
   });
 
   return (
-    <div className={`flex md:hidden px-6 md:px-0 ${isTop? '-mt-10' : 'mt-0'} md:mt-0`}>
+    <div className={`flex md:hidden px-6 md:px-0 mt-0`}>
       {/* Hamburger button */}
       <button
         ref={trigger}

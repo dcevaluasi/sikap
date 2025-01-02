@@ -496,7 +496,7 @@ function FormLogin() {
                 Login dan Ikuti
               </span>{" "}
               <br />
-              <span className="z-0 bg-clip-text text-[4.2rem] w-[600px] md:text-[3.7rem] leading-[110%]  text-transparent bg-gradient-to-r font-calsans from-blue-500  to-teal-400">
+              <span className="z-0 bg-clip-text text-[3.4rem] w-[600px] md:text-[3.7rem] leading-[110%]  text-transparent bg-gradient-to-r font-calsans from-blue-500  to-teal-400">
                 Pelatihan dan Sertifikasi
               </span>{" "}
             </h1>
