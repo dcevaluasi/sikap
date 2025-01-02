@@ -204,7 +204,7 @@ function UserTrainingService({ user }: { user: User | null }) {
               <>
                 {!isExpand && (
                   <div className="max-w-3xl mx-auto text-center flex items-center justify-center flex-col pb-5 md:pb-8">
-                    <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                    <h1 className="text-2xl md:text-3xl font-calsans leading-[110%] text-black">
                       Pelatihan Masyarakat, Teknis, <br /> dan Kepelautan yang
                       Diikuti
                     </h1>
@@ -221,7 +221,7 @@ function UserTrainingService({ user }: { user: User | null }) {
               <>
                 {!isExpand && (
                   <div className="max-w-3xl mx-auto text-center flex items-center justify-center flex-col pb-5 md:pb-8">
-                    <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                    <h1 className="text-2xl md:text-3xl font-calsans leading-[110%] text-black">
                       Pelatihan Masyarakat, Teknis, <br /> dan Kepelautan yang
                       Diikuti
                     </h1>
@@ -244,7 +244,7 @@ function UserTrainingService({ user }: { user: User | null }) {
                       indexPelatihanSelected != 100000000
                         ? isExpand
                           ? "hidden"
-                          : "w-5/12 flex flex-col "
+                          : "w-full md:w-5/12 flex flex-col "
                         : "w-full flex flex-col "
                     }`}
                   >
@@ -369,11 +369,10 @@ function UserTrainingService({ user }: { user: User | null }) {
                               );
                             })
                         ) : (
-                          <div className="grid grid-cols-3 w-full gap-4">
+                          <div className="grid grid-cols-1 md:grid-cols-3 w-full gap-4">
                             {userDetail?.Pelatihan.slice()
                               .reverse()
                               .filter((pelatihan) => {
-                                // Split the keywordSearch into words and check if all are present in NamaPelatihan
                                 return keywordSearch
                                   .toLowerCase()
                                   .split(" ")
@@ -470,7 +469,7 @@ function UserTrainingService({ user }: { user: User | null }) {
 
                   {indexPelatihanSelected != 100000000 && !isExpand && (
                     <div
-                      className={` items-start justify-center ${
+                      className={`hidden md:flex items-start justify-center ${
                         isExpand ? "w-12/12" : "w-7/12 flex"
                       }`}
                     >
@@ -981,6 +980,203 @@ function UserTrainingService({ user }: { user: User | null }) {
                     </div>
                   )}
                 </div>
+
+                {indexPelatihanSelected != 100000000 && !isExpand && (
+                  <div
+                    className={`flex md:hidden items-start justify-center ${
+                      isExpand ? "w-12/12" : "w-full flex"
+                    }`}
+                  >
+                    <div className="relative block overflow-hidden rounded-lg border border-gray-100 p-4 sm:p-6 lg:px-6 lg:py-0">
+                      <div className="sm:flex justify-between sm:gap-4 items-center border-b-2 border-b-gray-200 pb-4">
+                        <div className="">
+                          <h3 className="text-3xl font-bold text-gray-900 font-calsans sm:text-3xl leading-[105%]">
+                            {
+                              userDetail?.Pelatihan[indexPelatihanSelected]
+                                ?.NamaPelatihan!
+                            }
+                          </h3>
+
+                          <div className="flex items-center gap-3">
+                            <p className=" text-sm font-medium text-gray-600">
+                              By{" "}
+                              {selectedPelatihan != null
+                                ? selectedPelatihan.PenyelenggaraPelatihan
+                                : "-"}{" "}
+                              ·{" "}
+                              {selectedPelatihan != null
+                                ? generateTanggalPelatihan(
+                                    selectedPelatihan?.TanggalMulaiPelatihan
+                                  )
+                                : "-"}{" "}
+                              s.d.{" "}
+                              {selectedPelatihan != null
+                                ? generateTanggalPelatihan(
+                                    selectedPelatihan?.TanggalBerakhirPelatihan
+                                  )
+                                : "-"}
+                            </p>
+                            <div
+                              className="cursor-pointer"
+                              onClick={(e) => setIsExpand(!isExpand)}
+                            >
+                              {isExpand ? (
+                                <FiMinimize className="text-base" />
+                              ) : (
+                                <FiMaximize className="text-base" />
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="hidden sm:block sm:shrink-0">
+                          <Image
+                            width={0}
+                            height={0}
+                            alt=""
+                            src={icons(
+                              userDetail?.Pelatihan[indexPelatihanSelected]
+                                ?.BidangPelatihan!
+                            )}
+                            className="w-16 rounded-lg object-cover shadow-sm"
+                          />
+                        </div>
+                      </div>
+
+                      {userDetail?.Pelatihan[indexPelatihanSelected]
+                        ?.Keterangan! == "Valid" && (
+                        <div className="mt-6 flex gap-4 sm:gap-6">
+                          <div className="flex flex-col-reverse">
+                            <div className="text-sm font-medium text-gray-600">
+                              {
+                                userDetail?.Pelatihan[indexPelatihanSelected]
+                                  ?.BidangPelatihan!
+                              }
+                            </div>
+                            <div className="text-xs text-gray-500">Bidang</div>
+                          </div>
+
+                          <div className="flex flex-col-reverse">
+                            <div className="text-sm font-bold text-gray-600">
+                              {userDetail?.Pelatihan[indexPelatihanSelected]
+                                .NoSertifikat! == ""
+                                ? "-"
+                                : userDetail?.Pelatihan[indexPelatihanSelected]
+                                    ?.NoSertifikat!}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              No Sertifikat
+                            </div>
+                          </div>
+                          <div className="flex flex-col-reverse">
+                            <div className="text-sm font-bold text-gray-600">
+                              {userDetail?.Pelatihan[indexPelatihanSelected]
+                                .NoRegistrasi! == ""
+                                ? "-"
+                                : userDetail?.Pelatihan[indexPelatihanSelected]
+                                    ?.NoRegistrasi!}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              No Registrasi
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {userDetail?.Pelatihan[indexPelatihanSelected]
+                        ?.Keterangan! == "Valid" && (
+                        <div className="mt-4">
+                          <div className="flex gap-1 flex-col">
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html:
+                                  userDetail?.Pelatihan[
+                                    indexPelatihanSelected
+                                  ]! && !seeMore
+                                    ? truncateText(
+                                        userDetail?.Pelatihan[
+                                          indexPelatihanSelected
+                                        ]?.DetailPelatihan!,
+                                        300,
+                                        "..."
+                                      )
+                                    : userDetail?.Pelatihan[
+                                        indexPelatihanSelected
+                                      ]?.DetailPelatihan!,
+                              }}
+                              className="text-sm prose   text-justify group-hover:text-xs text-gray-500 prose-strong:text-gray-500 prose-p:leading-[140%] prose-strong:font-bold group-hover:duration-1000"
+                            />{" "}
+                            <p
+                              onClick={(e) => setSeeMore(!seeMore)}
+                              className="text-blue-500 text-sm cursor-pointer"
+                            >
+                              {seeMore
+                                ? "Baca lebih sedikit"
+                                : "Baca lebih lengkap"}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {selectedPelatihan != null &&
+                        (selectedPelatihan!.UjiKompotensi == "Portfolio" ? (
+                          <TimelineProgressPortfolio
+                            userDetail={
+                              userDetail?.Pelatihan[indexPelatihanSelected]!
+                            }
+                            pelatihan={selectedPelatihan!}
+                          />
+                        ) : (
+                          <TimelineProgressPesertaPelatihan
+                            userDetail={
+                              userDetail?.Pelatihan[indexPelatihanSelected]!
+                            }
+                            pelatihan={selectedPelatihan!}
+                          />
+                        ))}
+
+                      {typePelatihanSelected == "Online" && (
+                        <div className="mt-3">
+                          <div className="flex flex-col">
+                            <div className="text-xs text-gray-500">
+                              Materi Pelatihan
+                            </div>
+
+                            <div className="grid grid-cols-2 w-full gap-2 mt-2">
+                              {[1, 2, 3, 4, 5, 6].map((pelatihan, index) => (
+                                <Link
+                                  href={`/dashboard/pelatihan/online/${
+                                    userDetail?.Pelatihan[
+                                      indexPelatihanSelected
+                                    ]!.IdPelatihan
+                                  }`}
+                                  className="flex shadow-custom w-full rounded-md p-5 cursor-pointer flex-col gap-1 hover:scale-105 duration-700 hover:bg-blue-500 hover:text-white group"
+                                >
+                                  <h3 className="font-bold font-calsans leading-[105%]">
+                                    Materi {pelatihan}. <br />
+                                    Kebijakan Pelatihan Sosial Kultural II
+                                  </h3>
+                                  <p
+                                    dangerouslySetInnerHTML={{
+                                      __html: truncateText(
+                                        userDetail?.Pelatihan[
+                                          indexPelatihanSelected
+                                        ]?.DetailPelatihan!,
+                                        100,
+                                        "..."
+                                      ),
+                                    }}
+                                    className="text-sm prose group-hover:text-white  text-justify  text-gray-500 prose-strong:text-gray-500 prose-p:leading-[140%] prose-strong:font-bold group-hover:duration-1000 prose-p:font-normal"
+                                  />
+                                </Link>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </>
             ) : (
               <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6">

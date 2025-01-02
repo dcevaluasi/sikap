@@ -79,10 +79,10 @@ export default function Page() {
 
   return (
     <>
-      <section className="relative h-fit flex flex-col items-center justify-center -mt-10 pt-4">
+      <section className="relative md:h-fit flex flex-col items-center justify-center -mt-10 md:pt-4">
         <div className="absolute w-full h-full bg-gray-900 bg-opacity-100"></div>
 
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 z-[40]">
+        <div className="max-w-6xl mx-auto px-4 pt-44 md:pt-0 sm:px-6 z-[40]">
           {/* Hero content */}
           <div className="pt-0 md:pt-40 ">
             {/* Section header */}
