@@ -188,14 +188,14 @@ export default function HeroProgramPelatihan({ program }: { program: string }) {
                 </span>
               </h1>
               {program == "akp" ? (
-                <p className="text-white leading-relaxed text-center max-w-3xl w-full text-lg mx-auto">
+                <p className="text-white leading-relaxed text-center max-w-3xl w-full text-base md:text-lg mx-auto">
                   Pendidikan dan Pelatihan Awak Kapal Perikanan adalah
                   pendidikan dan/atau pelatihan untuk mencapai tingkat keahlian
                   dan/atau keterampilan tertentu sesuai dengan jenjang,
                   kompetensi, dan jabatan untuk awak Kapal Perikanan.
                 </p>
               ) : program == "perikanan" ? (
-                <p className="text-white leading-relaxed text-center max-w-3xl w-full text-lg mx-auto">
+                <p className="text-white leading-relaxed text-center max-w-3xl w-full text-base md:text-lg mx-auto">
                   Pelatihan Perikanan adalah program pendidikan dan/atau
                   pelatihan yang bertujuan untuk meningkatkan keterampilan dan
                   pengetahuan dalam bidang perikanan, mencakup teknik
@@ -203,7 +203,7 @@ export default function HeroProgramPelatihan({ program }: { program: string }) {
                   pengolahan hasil tangkapan.
                 </p>
               ) : (
-                <p className="text-white leading-relaxed text-center max-w-3xl w-full text-lg mx-auto">
+                <p className="text-white leading-relaxed text-center max-w-3xl w-full text-base md:text-lg mx-auto">
                   Pelatihan Kelautan adalah pendidikan dan/atau pelatihan yang
                   dirancang untuk meningkatkan kompetensi dan keterampilan dalam
                   bidang kelautan, meliputi pengelolaan sumber daya laut,
@@ -473,7 +473,6 @@ function RagamBidangPelatihan() {
       img: "/images/program-pelatihan/dummies/kelautan/kelautan-8.jpg",
     },
   ];
-  
 
   return (
     <div className="w-full   gap-5 mb-10 ">

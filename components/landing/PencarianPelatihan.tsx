@@ -195,11 +195,14 @@ function PencarianPelatihan() {
       {loading ? (
         <></>
       ) : (
-        <div className=" mx-auto max-w-7xl py-5 flex flex-col gap-4">
+        <div className=" mx-auto max-w-7xl py-5 flex flex-col gap-4 -mt-20 md:mt-0  px-3 md:px-0">
           <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-white h-auto w-fit mx-auto items-center justify-center flex flex-col relative shadow-custom rounded-3xl overflow-hidden">
             <div className="group relative flex flex-col overflow-hidden justify-center rounded-3xl px-6  flex-grow group">
               <div className="flex flex-col gap-1  ">
-                <div className="flex w-fit gap-2 py-5 items-center justify-center">
+                <h3 className="text-lg font-semibold mt-5 -mb-3">
+                  Filter dan Cari Pelatihan
+                </h3>
+                <div className="grid grid-cols-2 md:flex w-fit gap-2 py-5 items-center justify-center">
                   <Select
                     value={selectedBalaiPelatihan}
                     onValueChange={(value) => setSelectedBalaiPelatihan(value)}
@@ -342,15 +345,24 @@ function PencarianPelatihan() {
                     </div>
                   )}
 
-                  <div className="flex">
+                  <div className="hidden md:flex w-full">
                     <Button
                       onClick={(e) => handleFetchingPublicTrainingData()}
-                      className="btn-sm text-sm text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                      className="btn-sm text-sm w-full text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
                     >
                       <span className="mr-2">Cari</span>
                       <FiSearch />
                     </Button>
                   </div>
+                </div>
+                <div className="flex md:hidden w-full mb-5 -mt-2">
+                  <Button
+                    onClick={(e) => handleFetchingPublicTrainingData()}
+                    className="btn-sm text-sm w-full text-white bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                  >
+                    <span className="mr-2">Cari</span>
+                    <FiSearch />
+                  </Button>
                 </div>
               </div>
             </div>
@@ -365,7 +377,7 @@ function PencarianPelatihan() {
               <div className="w-full max-w-7xl mx-auto pb-4">
                 {/* Header */}
                 {selectedBulanPelatihan != "" && (
-                  <div className="bg-white shadow-custom rounded-xl p-3 text-xl text-center font-calsans">
+                  <div className="bg-white shadow-custom rounded-xl p-3 text-xl  text-center font-calsans">
                     <span className="font-bold">
                       {getMonthName(selectedBulanPelatihan)}{" "}
                       {new Date().getFullYear()}
@@ -374,7 +386,7 @@ function PencarianPelatihan() {
                 )}
 
                 {/* Table */}
-                <div className="bg-white shadow-custom text-black text-center grid grid-cols-5 gap-2 p-4 rounded-xl font-calsans text-lg mt-4">
+                <div className="bg-white shadow-custom text-black text-center hidden md:grid grid-cols-5 gap-2 p-4 rounded-xl font-calsans text-lg mt-4">
                   <div>Pelatihan</div>
                   <div>Penyelenggara</div>
                   <div></div>
@@ -421,7 +433,7 @@ function PencarianPelatihan() {
 
 const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
   return (
-    <div className="bg-white shadow-custom text-black p-4 rounded-xl grid grid-cols-5 items-center">
+    <div className="bg-white shadow-custom text-black p-4 rounded-xl grid grid-cols-1 md:grid-cols-5 mb-4 items-center">
       {/* Train Info */}
       <div className="max-w-xs leading-[115%]">
         <h3 className="text-xl font-bold">{pelatihan.NamaPelatihan}</h3>
@@ -429,13 +441,13 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
       </div>
 
       {/* Departure Info */}
-      <div className="text-center">
+      <div className="text-left md:text-center">
         <p className="font-bold">{pelatihan.PenyelenggaraPelatihan}</p>
         <p className="text-sm leading-[100%]">{pelatihan.LokasiPelatihan}</p>
       </div>
 
       {/* Arrow and Duration */}
-      <div className="flex flex-col items-center">
+      <div className="hidden md:flex flex-col items-start md:items-center">
         <div className="bg-blue-500 p-2 rounded-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -456,7 +468,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
       </div>
 
       {/* Arrival Info */}
-      <div className="text-center">
+      <div className="text-left md:text-center">
         <p className="font-bold">{pelatihan.PelaksanaanPelatihan}</p>
         {pelatihan!.TanggalMulaiPelatihan != "" ? (
           <span className="text-sm leading-[100%] block">
@@ -473,9 +485,9 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
       </div>
 
       {/* Price and Button */}
-      <div className="text-center flex items-center justify-center flex-col">
+      <div className="text-center flex md:items-center md:justify-center flex-col">
         {pelatihan?.StatusApproval != "Selesai" && (
-          <p className="text-blue-500 text-xl font-bold">
+          <p className="text-blue-500 text-left text-xl font-bold">
             {formatToRupiah(pelatihan.HargaPelatihan)}
           </p>
         )}
@@ -489,7 +501,7 @@ const CardPelatihan = ({ pelatihan }: { pelatihan: PelatihanMasyarakat }) => {
             pelatihan?.StatusApproval == "Selesai"
               ? "bg-gray-500"
               : "bg-blue-500"
-          } text-white px-4 py-2 text-base rounded-md my-1 w-fit block`}
+          } text-white px-4 py-2 text-base rounded-md mb-1 mt-2 w-full md:w-fit block`}
         >
           {pelatihan.StatusApproval == "Selesai"
             ? "Sudah Selesai"
