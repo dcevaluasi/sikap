@@ -204,13 +204,13 @@ function page() {
           <HashLoader color="#338CF5" size={60} />
         </div>
       ) : data != null ? (
-        <div className="flex gap-2 max-w-7xl mx-auto">
+        <div className="flex gap-2 w-full md:max-w-7xl mx-auto px-3 md:px-0">
           <div className="w-full pb-5 md:pb-8 flex flex-col ">
             <h1 className="h2 text-4xl md:text-[3rem] mb-2 font-calsans leading-[100%] max-w-3xl">
               {data!.NamaPelatihan}
             </h1>
 
-            <div className="w-full flex gap-10">
+            <div className="w-full flex gap-10 flex-col md:flex-row">
               <div
                 className={`flex flex-col w-full md:w-[60%] ${
                   isRegistrasi && "md:w-[100%]"
@@ -225,7 +225,7 @@ function page() {
                       width={0}
                       height={0}
                     />
-                    <div className="flex w-full top-0 absolute h-[350px] bg-gradient-to-r opacity-40 from-blue-500 to-teal-400 bg-opacity-20 rounded-3xl"></div>
+                    <div className="flex w-full top-0 absolute h-[250px] md:h-[350px] bg-gradient-to-r opacity-40 from-blue-500 to-teal-400 bg-opacity-20 rounded-3xl"></div>
                   </div>
 
                   <div className="w-fit absolute top-4 right-4 flex gap-1">

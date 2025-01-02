@@ -199,7 +199,7 @@ function PencarianPelatihan() {
           <div className="col-span-2 sm:col-span-1 md:col-span-2 bg-white h-auto w-fit mx-auto items-center justify-center flex flex-col relative shadow-custom rounded-3xl overflow-hidden">
             <div className="group relative flex flex-col overflow-hidden justify-center rounded-3xl px-6  flex-grow group">
               <div className="flex flex-col gap-1  ">
-                <h3 className="text-lg font-semibold mt-5 -mb-3">
+                <h3 className="text-lg font-semibold mt-5 -mb-3 block md:hidden">
                   Filter dan Cari Pelatihan
                 </h3>
                 <div className="grid grid-cols-2 md:flex w-fit gap-2 py-5 items-center justify-center">
