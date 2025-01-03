@@ -4,7 +4,6 @@ import { BlankoKeluar } from "@/types/blanko";
 import { formatDateTime } from "@/utils";
 import { ApexOptions } from "apexcharts";
 import React, { useEffect, useState } from "react";
-import ReactApexChart from "react-apexcharts";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -13,17 +12,7 @@ import CountUp from "react-countup";
 import TableDataBlankoKeluarPublic from "../Pelatihan/TableDataBlankoKeluarPublic";
 
 import { TrendingUp } from "lucide-react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  LabelList,
-  Rectangle,
-  XAxis,
-  Pie,
-  PieChart,
-  Label,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -38,8 +27,84 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { BALAI_PELATIHAN } from "@/constants/pelatihan";
+import {
+  BALAI_PELATIHAN,
+  SATUAN_PENDIDIKAN_KEAHLIAN,
+} from "@/constants/pelatihan";
+import { PILIHAN_SUMMARY_KEAHLIAN_AKP } from "@/constants/akp";
 export const description = "A bar chart with an active bar";
+
+const chartConfigLemdiklat = {
+  visitors: {
+    label: "Sertifikat",
+  },
+  chrome: {
+    label: "BPPP Tegal",
+    color: "#211951",
+  },
+  safari: {
+    label: "BPPP Medan",
+    color: "#836FFF",
+  },
+  firefox: {
+    label: "BPPP Banyuwangi",
+    color: "#15F5BA",
+  },
+  edge: {
+    label: "BPPP Bitung",
+    color: "#EB8317",
+  },
+  other: {
+    label: "BPPP Ambon",
+    color: "#10375C",
+  },
+} satisfies ChartConfig;
+
+const chartConfigUPTPendidikan = {
+  visitors: {
+    label: "Sertifikat",
+  },
+  politeknikAUP: {
+    label: "Poltek AUP",
+    color: "#211951",
+  },
+  politeknikKPSidoarjo: {
+    label: "Poltek KP Sidoarjo",
+    color: "#836FFF",
+  },
+  politeknikKPBitung: {
+    label: "Poltek KP Bitung",
+    color: "#15F5BA",
+  },
+  politeknikKPSorong: {
+    label: "Poltek KP Sorong",
+    color: "#EB8317",
+  },
+  politeknikKPKarawang: {
+    label: "Poltek KP Karawang",
+    color: "#10375C",
+  },
+  politeknikKPBone: {
+    label: "Poltek KP Bone",
+    color: "#2C9F80",
+  },
+  politeknikKPKupang: {
+    label: "Poltek KP Kupang",
+    color: "#FFA500",
+  },
+  politeknikKPDumai: {
+    label: "Poltek KP Dumai",
+    color: "#8A2BE2",
+  },
+  politeknikKPPangandaran: {
+    label: "Poltek KP Pangandaran",
+    color: "#5F9EA0",
+  },
+  politeknikKPJembrana: {
+    label: "Poltek KP Jembrana",
+    color: "#FF6347",
+  },
+} satisfies ChartConfig;
 
 const chartConfig = {
   visitors: {
@@ -219,12 +284,7 @@ const options1: ApexOptions = {
     show: true,
     position: "bottom",
   },
-  // title: {
-  //   text: "Grafik Jumlah per Jenis Pendidikan",
-  //   style: {
-  //     fontFamily: "Plus Sans Jakarta",
-  //   },
-  // },
+
   plotOptions: {
     pie: {
       donut: {
@@ -267,7 +327,177 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
     series: [],
   });
 
+  const [
+    stateAllKeahlianByJenisPendidikan,
+    setStateAllKeahlianByJenisPendidikan,
+  ] = useState<ChartThreeState>({
+    series: [],
+  });
+
+  const [stateAllKeahlianByUPTPelatihan, setStateAllKeahlianByUPTPelatihan] =
+    useState<ChartThreeState>({
+      series: [],
+    });
+
+  const [stateAllKeahlianByUPTPendidikan, setStateAllKeahlianByUPTPendidikan] =
+    useState<ChartThreeState>({
+      series: [],
+    });
+
   React.useEffect(() => {
+    const updatedStateAllKeahlianByJenisPendidikanSeries = [
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Nautika Kapal Penangkap Ikan Tingkat I"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Teknika Kapal Penangkap Ikan Tingkat I"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Nautika Kapal Penangkap Ikan Tingkat II"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Teknika Kapal Penangkap Ikan Tingkat II"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Nautika Kapal Penangkap Ikan Tingkat III"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaProgram === "Ahli Teknika Kapal Penangkap Ikan Tingkat III"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter((item) => item.NamaProgram === "Rating Keahlian")
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+    ];
+
+    const updatedStateAllKeahlianByUPTPelatihan = [
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "BPPP Medan" &&
+            item.TipeBlanko == "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "BPPP Tegal" &&
+            item.TipeBlanko == "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "BPPP Banyuwangi" &&
+            item.TipeBlanko == "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "BPPP Bitung" &&
+            item.TipeBlanko == "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "BPPP Ambon" &&
+            item.TipeBlanko == "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+    ];
+
+    const updatedStateAllKeahlianByUPTPendidikan = [
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "Poltek AUP" &&
+            item.TipeBlanko === "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "Poltek KP Sidoarjo" &&
+            item.TipeBlanko === "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "Poltek KP Bitung" &&
+            item.TipeBlanko === "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "Poltek KP Sorong" &&
+            item.TipeBlanko === "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "Poltek KP Karawang" &&
+            item.TipeBlanko === "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "Poltek KP Bone" &&
+            item.TipeBlanko === "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "Poltek KP Kupang" &&
+            item.TipeBlanko === "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "Poltek KP Dumai" &&
+            item.TipeBlanko === "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "Poltek KP Pangandaran" &&
+            item.TipeBlanko === "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+      data
+        .filter(
+          (item) =>
+            item.NamaPelaksana === "Poltek KP Jembrana" &&
+            item.TipeBlanko === "Certificate of Competence (CoC)"
+        )
+        .reduce((total, item) => total + item.JumlahBlankoDisetujui, 0),
+    ];
+
     const programs = [
       "Ahli Nautika Kapal Penangkap Ikan Tingkat I",
       "Ahli Teknika Kapal Penangkap Ikan Tingkat I",
@@ -294,6 +524,16 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
     const updatedSeriesPNBP = calculateSeries("PNBP");
 
     setState({ series: updatedSeries });
+    setStateAllKeahlianByJenisPendidikan({
+      series: updatedStateAllKeahlianByJenisPendidikanSeries,
+    });
+    setStateAllKeahlianByUPTPendidikan({
+      series: updatedStateAllKeahlianByUPTPendidikan,
+    });
+    setStateAllKeahlianByUPTPelatihan({
+      series: updatedStateAllKeahlianByUPTPelatihan,
+    });
+
     setStatePNBP({ series: updatedSeriesPNBP });
   }, [selectedLemdiklat, data]);
 
@@ -357,65 +597,124 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
   const chartData = [
     {
       browser: "chrome",
-      visitors: state.series[0],
+      visitors: stateAllKeahlianByJenisPendidikan.series[0],
       fill: "var(--color-chrome)",
     },
     {
       browser: "safari",
-      visitors: state.series[1],
+      visitors: stateAllKeahlianByJenisPendidikan.series[1],
       fill: "var(--color-safari)",
     },
     {
       browser: "firefox",
-      visitors: state.series[2],
-      fill: "var(--color-firefox)",
-    },
-    { browser: "edge", visitors: state.series[3], fill: "var(--color-edge)" },
-    { browser: "other", visitors: state.series[4], fill: "var(--color-other)" },
-    {
-      browser: "other2",
-      visitors: state.series[5],
-      fill: "var(--color-other2)",
-    },
-    {
-      browser: "other3",
-      visitors: state.series[6],
-      fill: "var(--color-other3)",
-    },
-  ];
-
-  const chartDataPNBP = [
-    {
-      browser: "chrome",
-      visitors: statePNBP.series[0],
-      fill: "var(--color-chrome)",
-    },
-    {
-      browser: "safari",
-      visitors: statePNBP.series[1],
-      fill: "var(--color-safari)",
-    },
-    {
-      browser: "firefox",
-      visitors: statePNBP.series[2],
+      visitors: stateAllKeahlianByJenisPendidikan.series[2],
       fill: "var(--color-firefox)",
     },
     {
       browser: "edge",
-      visitors: statePNBP.series[3],
+      visitors: stateAllKeahlianByJenisPendidikan.series[3],
       fill: "var(--color-edge)",
     },
     {
       browser: "other",
-      visitors: statePNBP.series[4],
+      visitors: stateAllKeahlianByJenisPendidikan.series[4],
       fill: "var(--color-other)",
     },
     {
       browser: "other2",
-      visitors: statePNBP.series[5],
+      visitors: stateAllKeahlianByJenisPendidikan.series[5],
       fill: "var(--color-other2)",
     },
+    {
+      browser: "other3",
+      visitors: stateAllKeahlianByJenisPendidikan.series[6],
+      fill: "var(--color-other3)",
+    },
   ];
+
+  const chartDataUPTPelatihan = [
+    {
+      browser: "chrome",
+      visitors: stateAllKeahlianByUPTPelatihan.series[0],
+      fill: "var(--color-chrome)",
+    },
+    {
+      browser: "safari",
+      visitors: stateAllKeahlianByUPTPelatihan.series[1],
+      fill: "var(--color-safari)",
+    },
+    {
+      browser: "firefox",
+      visitors: stateAllKeahlianByUPTPelatihan.series[2],
+      fill: "var(--color-firefox)",
+    },
+    {
+      browser: "edge",
+      visitors: stateAllKeahlianByUPTPelatihan.series[3],
+      fill: "var(--color-edge)",
+    },
+    {
+      browser: "other",
+      visitors: stateAllKeahlianByUPTPelatihan.series[4],
+      fill: "var(--color-other)",
+    },
+  ];
+
+  const chartDataUPTPendidikan = [
+    {
+      browser: "politeknikAUP",
+      visitors: stateAllKeahlianByUPTPendidikan.series[0],
+      fill: "var(--color-politeknikAUP)",
+    },
+    {
+      browser: "politeknikKPSidoarjo",
+      visitors: stateAllKeahlianByUPTPendidikan.series[1],
+      fill: "var(--color-politeknikKPSidoarjo)",
+    },
+    {
+      browser: "politeknikKPBitung",
+      visitors: stateAllKeahlianByUPTPendidikan.series[2],
+      fill: "var(--color-politeknikKPBitung)",
+    },
+    {
+      browser: "politeknikKPSorong",
+      visitors: stateAllKeahlianByUPTPendidikan.series[3],
+      fill: "var(--color-politeknikKPSorong)",
+    },
+    {
+      browser: "politeknikKPKarawang",
+      visitors: stateAllKeahlianByUPTPendidikan.series[4],
+      fill: "var(--color-politeknikKPKarawang)",
+    },
+    {
+      browser: "politeknikKPBone",
+      visitors: stateAllKeahlianByUPTPendidikan.series[5],
+      fill: "var(--color-politeknikKPBone)",
+    },
+    {
+      browser: "politeknikKPKupang",
+      visitors: stateAllKeahlianByUPTPendidikan.series[6],
+      fill: "var(--color-politeknikKPKupang)",
+    },
+    {
+      browser: "politeknikKPDumai",
+      visitors: stateAllKeahlianByUPTPendidikan.series[7],
+      fill: "var(--color-politeknikKPDumai)",
+    },
+    {
+      browser: "politeknikKPPangandaran",
+      visitors: stateAllKeahlianByUPTPendidikan.series[8],
+      fill: "var(--color-politeknikKPPangandaran)",
+    },
+    {
+      browser: "politeknikKPJembrana",
+      visitors: stateAllKeahlianByUPTPendidikan.series[9],
+      fill: "var(--color-politeknikKPJembrana)",
+    },
+  ];
+
+  const [selectedSummaryAKP, setSelectedSummaryAKP] =
+    React.useState<string>("All");
 
   return (
     <div className="col-span-12 rounded-xl border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-5 w-full">
@@ -428,241 +727,268 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
         </div>
       </div>
 
-      <Tabs defaultValue={selectedLemdiklat} className="w-full mb-3">
-        <TabsList>
+      <Tabs defaultValue={selectedSummaryAKP} className="w-full mb-3">
+        <TabsList className="w-full mb-3 flex flex-wrap">
           <TabsTrigger
-            onClick={() => setSelectedLemdiklat("All")}
+            onClick={() => setSelectedSummaryAKP("All")}
             value={"All"}
           >
             All
           </TabsTrigger>
-          {BALAI_PELATIHAN.map((balaiPelatihan, index) => (
+          {PILIHAN_SUMMARY_KEAHLIAN_AKP.map((summaryAKP, index) => (
             <TabsTrigger
-              onClick={() => setSelectedLemdiklat(balaiPelatihan.Name)}
-              value={balaiPelatihan!.Name}
+              key={index}
+              onClick={() => {
+                setSelectedSummaryAKP(summaryAKP.name);
+                setSelectedLemdiklat("All");
+              }}
+              value={summaryAKP!.name}
             >
-              {balaiPelatihan!.Name}
+              {summaryAKP!.name}
             </TabsTrigger>
           ))}
         </TabsList>
 
-        <TabsContent value={selectedLemdiklat}>
-          <div className="flex gap-2 w-full">
-            <Card className="w-[50%] h-full">
-              <CardHeader>
-                <CardTitle>Diklat yang menggunakan APBN</CardTitle>
-                <CardDescription>27 May 2024 - Now 2024</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfig}>
-                  <BarChart accessibilityLayer data={chartData}>
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                      dataKey="browser"
-                      tickLine={false}
-                      tickMargin={10}
-                      axisLine={false}
-                      tickFormatter={(value) =>
-                        chartConfig[value as keyof typeof chartConfig]?.label
-                      }
-                    />
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent hideLabel />}
-                    />
-                    <Bar
-                      dataKey="visitors"
-                      strokeWidth={2}
-                      radius={8}
-                      max={20000}
-                      activeIndex={2}
-                    >
-                      <LabelList
-                        position="inside"
-                        offset={12}
-                        className="fill-white text-white"
-                        fontSize={12}
-                        fill="#000"
-                      />
-                    </Bar>
-                  </BarChart>
-                </ChartContainer>
-              </CardContent>
-              <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="leading-none text-muted-foreground">
-                  Showing total certificate issued since 27 May 2024
-                </div>
-              </CardFooter>
-            </Card>
+        <TabsContent value={selectedSummaryAKP}>
+          <Tabs defaultValue={selectedLemdiklat} className="w-full mb-3">
+            {selectedSummaryAKP == "Balai Pelatihan KP" ? (
+              <TabsList className="w-full">
+                <TabsTrigger
+                  onClick={() => setSelectedLemdiklat("All")}
+                  value={"All"}
+                >
+                  All
+                </TabsTrigger>
+                {BALAI_PELATIHAN.map((UPTPelatihan, index) => (
+                  <TabsTrigger
+                    onClick={() => setSelectedLemdiklat(UPTPelatihan.Name)}
+                    value={UPTPelatihan!.Name}
+                  >
+                    {UPTPelatihan!.Name}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            ) : selectedSummaryAKP == "Satuan Pendidikan KP" ? (
+              <TabsList className="w-full flex flex-wrap h-full">
+                <TabsTrigger
+                  onClick={() => setSelectedLemdiklat("All")}
+                  value={"All"}
+                >
+                  All
+                </TabsTrigger>
+                {SATUAN_PENDIDIKAN_KEAHLIAN.map((UPTPendidikan, index) => (
+                  <TabsTrigger
+                    onClick={() => setSelectedLemdiklat(UPTPendidikan.Name)}
+                    value={UPTPendidikan!.Name}
+                  >
+                    {UPTPendidikan!.Name}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            ) : (
+              <></>
+            )}
 
-            <Card className="w-[50%] h-full">
-              <CardHeader>
-                <CardTitle>Diklat yang menghasilkan PNBP</CardTitle>
-                <CardDescription>27 May 2024 - Now 2024</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ChartContainer config={chartConfigPNBP} className="">
-                  <BarChart accessibilityLayer data={chartDataPNBP}>
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                      dataKey="browser"
-                      tickLine={false}
-                      tickMargin={10}
-                      axisLine={false}
-                      tickFormatter={(value) =>
-                        chartConfigPNBP[value as keyof typeof chartConfigPNBP]
-                          ?.label
-                      }
-                    />
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent hideLabel />}
-                    />
-                    <Bar
-                      dataKey="visitors"
-                      strokeWidth={2}
-                      radius={8}
-                      activeIndex={2}
-                    >
-                      <LabelList
-                        position="inside"
-                        offset={12}
-                        className="fill-white text-white"
-                        fontSize={12}
-                        fill="#000"
-                      />
-                    </Bar>
-                  </BarChart>
-                </ChartContainer>
-              </CardContent>
-              <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="leading-none text-muted-foreground">
-                  Showing total certificate issued since 27 May 2024
-                </div>
-              </CardFooter>
-            </Card>
-          </div>
+            <TabsContent value={selectedLemdiklat}>
+              <div className="flex gap-2 w-full">
+                <Card className="w-[50%] h-full">
+                  <CardHeader>
+                    <div className="w-full flex justify-between items-center">
+                      <div className="flex flex-col gap-1">
+                        <CardTitle>Berdasarkan Jenis Pendidikan</CardTitle>
+                        <CardDescription>
+                          27 May 2024 - Now 2024
+                        </CardDescription>
+                      </div>
+                      <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
+                        Total Sertifikat :{" "}
+                        {chartData
+                          .reduce((sum, item) => sum + item.visitors, 0)
+                          .toLocaleString("ID")}
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <ChartContainer config={chartConfig}>
+                      <BarChart accessibilityLayer data={chartData}>
+                        <CartesianGrid vertical={false} />
+                        <XAxis
+                          dataKey="browser"
+                          tickLine={false}
+                          tickMargin={10}
+                          axisLine={false}
+                          tickFormatter={(value) =>
+                            chartConfig[value as keyof typeof chartConfig]
+                              ?.label
+                          }
+                        />
+                        <ChartTooltip
+                          cursor={false}
+                          content={<ChartTooltipContent hideLabel />}
+                        />
+                        <Bar
+                          dataKey="visitors"
+                          strokeWidth={2}
+                          radius={8}
+                          max={20000}
+                          activeIndex={2}
+                        >
+                          <LabelList
+                            position="inside"
+                            offset={12}
+                            className="fill-white text-white"
+                            fontSize={12}
+                            fill="#000"
+                          />
+                        </Bar>
+                      </BarChart>
+                    </ChartContainer>
+                  </CardContent>
+                  <CardFooter className="flex-col items-start gap-2 text-sm">
+                    <div className="leading-none text-muted-foreground">
+                      Showing total certificate issued since 27 May 2024
+                    </div>
+                  </CardFooter>
+                </Card>
+
+                {selectedSummaryAKP == "Balai Pelatihan KP" ? (
+                  <Card className="w-[50%] h-full">
+                    <CardHeader>
+                      <div className="w-full flex justify-between items-center">
+                        <div className="flex flex-col gap-1">
+                          <CardTitle>Berdasarkan UPT Pelatihan</CardTitle>
+                          <CardDescription>
+                            27 May 2024 - Now 2024
+                          </CardDescription>
+                        </div>
+                        <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
+                          Total Sertifikat :{" "}
+                          {chartDataUPTPelatihan
+                            .reduce((sum, item) => sum + item.visitors, 0)
+                            .toLocaleString("ID")}
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ChartContainer
+                        config={chartConfigLemdiklat}
+                        className=""
+                      >
+                        <BarChart
+                          accessibilityLayer
+                          data={chartDataUPTPelatihan}
+                        >
+                          <CartesianGrid vertical={false} />
+                          <XAxis
+                            dataKey="browser"
+                            tickLine={false}
+                            tickMargin={10}
+                            axisLine={false}
+                            tickFormatter={(value) =>
+                              chartConfigLemdiklat[
+                                value as keyof typeof chartConfigLemdiklat
+                              ]?.label
+                            }
+                          />
+                          <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent hideLabel />}
+                          />
+                          <Bar
+                            dataKey="visitors"
+                            strokeWidth={2}
+                            radius={8}
+                            activeIndex={2}
+                          >
+                            <LabelList
+                              position="inside"
+                              offset={12}
+                              className="fill-white text-white"
+                              fontSize={12}
+                              fill="#000"
+                            />
+                          </Bar>
+                        </BarChart>
+                      </ChartContainer>
+                    </CardContent>
+                    <CardFooter className="flex-col items-start gap-2 text-sm">
+                      <div className="leading-none text-muted-foreground">
+                        Showing total certificate issued since 27 May 2024
+                      </div>
+                    </CardFooter>
+                  </Card>
+                ) : (
+                  <Card className="w-[50%] h-full">
+                    <CardHeader>
+                      <div className="w-full flex justify-between items-center">
+                        <div className="flex flex-col gap-1">
+                          <CardTitle>Berdasarkan UPT Pendidikan</CardTitle>
+                          <CardDescription>
+                            27 May 2024 - Now 2024
+                          </CardDescription>
+                        </div>
+                        <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
+                          Total Sertifikat :{" "}
+                          {chartDataUPTPendidikan
+                            .reduce((sum, item) => sum + item.visitors, 0)
+                            .toLocaleString("ID")}
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent>
+                      <ChartContainer
+                        config={chartConfigUPTPendidikan}
+                        className=""
+                      >
+                        <BarChart
+                          accessibilityLayer
+                          data={chartDataUPTPendidikan}
+                        >
+                          <CartesianGrid vertical={false} />
+                          <XAxis
+                            dataKey="browser"
+                            tickLine={false}
+                            tickMargin={10}
+                            axisLine={false}
+                            tickFormatter={(value) =>
+                              chartConfigUPTPendidikan[
+                                value as keyof typeof chartConfigUPTPendidikan
+                              ]?.label
+                            }
+                          />
+                          <ChartTooltip
+                            cursor={false}
+                            content={<ChartTooltipContent hideLabel />}
+                          />
+                          <Bar
+                            dataKey="visitors"
+                            strokeWidth={2}
+                            radius={8}
+                            activeIndex={2}
+                          >
+                            <LabelList
+                              position="inside"
+                              offset={12}
+                              className="fill-white text-white"
+                              fontSize={12}
+                              fill="#000"
+                            />
+                          </Bar>
+                        </BarChart>
+                      </ChartContainer>
+                    </CardContent>
+                    <CardFooter className="flex-col items-start gap-2 text-sm">
+                      <div className="leading-none text-muted-foreground">
+                        Showing total certificate issued since 27 May 2024
+                      </div>
+                    </CardFooter>
+                  </Card>
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
       </Tabs>
-
-      <div className="flex gap-2 w-full">
-        <Card className="w-[50%]">
-          <CardHeader>
-            <CardTitle>
-              Jumlah Sertifikat Berdasarkan Program Keahlian - AKP
-            </CardTitle>
-            <CardDescription>January - Now 2024</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={chartConfig}>
-              <BarChart accessibilityLayer data={chartData}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="browser"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  tickFormatter={(value) =>
-                    chartConfig[value as keyof typeof chartConfig]?.label
-                  }
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                />
-                <Bar
-                  dataKey="visitors"
-                  strokeWidth={2}
-                  radius={8}
-                  activeIndex={2}
-                >
-                  <LabelList
-                    position="top"
-                    offset={12}
-                    className="fill-foreground text-black"
-                    fontSize={12}
-                    fill="#000"
-                  />
-                </Bar>
-              </BarChart>
-            </ChartContainer>
-          </CardContent>
-          <CardFooter className="flex-col items-start gap-2 text-sm">
-            <div className="flex gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="leading-none text-muted-foreground">
-              Showing total certificate issued since 27 May 2024
-            </div>
-          </CardFooter>
-        </Card>
-
-        {/* 
-        <Card className="flex flex-col w-[40%]">
-          <CardHeader className="items-center pb-0">
-            <CardTitle>Pie Chart - Donut with Text</CardTitle>
-            <CardDescription>January - June 2024</CardDescription>
-          </CardHeader>
-          <CardContent className="flex-1 pb-0">
-            <ChartContainer
-              config={chartConfig}
-              className="mx-auto aspect-square max-h-[250px]"
-            >
-              <PieChart>
-                <ChartTooltip
-                  cursor={false}
-                  content={<ChartTooltipContent hideLabel />}
-                />
-                <Pie
-                  data={chartData}
-                  dataKey="visitors"
-                  nameKey="browser"
-                  innerRadius={60}
-                  strokeWidth={5}
-                >
-                  <Label
-                    content={({ viewBox }) => {
-                      if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                        return (
-                          <text
-                            x={viewBox.cx}
-                            y={viewBox.cy}
-                            textAnchor="middle"
-                            dominantBaseline="middle"
-                          >
-                            <tspan
-                              x={viewBox.cx}
-                              y={viewBox.cy}
-                              className="fill-foreground text-3xl font-bold"
-                            >
-                              {totalVisitors.toLocaleString()}
-                            </tspan>
-                            <tspan
-                              x={viewBox.cx}
-                              y={(viewBox.cy || 0) + 24}
-                              className="fill-muted-foreground"
-                            >
-                              Visitors
-                            </tspan>
-                          </text>
-                        );
-                      }
-                    }}
-                  />
-                </Pie>
-              </PieChart>
-            </ChartContainer>
-          </CardContent>
-          <CardFooter className="flex-col gap-2 text-sm">
-            <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-            </div>
-            <div className="leading-none text-muted-foreground">
-              Showing total visitors for the last 6 months
-            </div>
-          </CardFooter>
-        </Card> */}
-      </div>
 
       <div className="flex gap-2 flex-col mt-10">
         <Card className="w-full">

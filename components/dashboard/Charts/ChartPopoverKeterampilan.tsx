@@ -34,7 +34,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import TableDataSertifikatKeterampilan from "../Pelatihan/TableDataSertifikatKeterampilan";
-import { BALAI_PELATIHAN, SATUAN_PENDIDIKKAN } from "@/constants/pelatihan";
+import { BALAI_PELATIHAN, SATUAN_PENDIDIKAN } from "@/constants/pelatihan";
 import { PELABUHAN_PERIKANAN, PILIHAN_SUMMARY_AKP } from "@/constants/akp";
 export const description = "A bar chart with an active bar";
 
@@ -122,15 +122,6 @@ const chartConfigLemdiklat = {
     label: "BPPP Ambon",
     color: "#10375C",
   },
-
-  // other2: {
-  //   label: "Politeknik AUP Jakarta",
-  //   color: "#1E0342",
-  // },
-  // other3: {
-  //   label: "LMTC",
-  //   color: "#EB8317",
-  // },
 } satisfies ChartConfig;
 
 const satuanPendidikanKPConfig = {
@@ -835,7 +826,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                 >
                   All
                 </TabsTrigger>
-                {SATUAN_PENDIDIKKAN.map((satuanPendidikan, index) => (
+                {SATUAN_PENDIDIKAN.map((satuanPendidikan, index) => (
                   <TabsTrigger
                     onClick={() => setSelectedLemdiklat(satuanPendidikan.Name)}
                     value={satuanPendidikan!.Name}

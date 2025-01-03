@@ -27,8 +27,6 @@ import { PelatihanMasyarakat } from "@/types/product";
 import Logo from "@/components/ui/logo";
 import { Button } from "@/components/ui/button";
 import { generateTanggalPelatihan } from "@/utils/text";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
-import DropdownUserPelatihan from "../Header/DropdownUserPelatihan";
 import { IoReloadCircle } from "react-icons/io5";
 
 export const TimelineProgressPesertaPelatihan = ({

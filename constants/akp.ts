@@ -23,6 +23,17 @@ export const PILIHAN_SUMMARY_AKP = [
     },
 ]
 
+export const PILIHAN_SUMMARY_KEAHLIAN_AKP = [
+    {
+        id: '001',
+        name: 'Balai Pelatihan KP',
+    },
+    {
+        id: '002',
+        name: 'Satuan Pendidikan KP',
+    },
+]
+
 export const BALAI_PELATIHAN: BalaiPelatihan[] = [
     {
         Id: "BP001",
