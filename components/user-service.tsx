@@ -32,16 +32,16 @@ export default function UserService({ user }: { user: User | null }) {
         <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
       ),
     },
-    {
-      id: 2,
-      name: "Uji Kompetensi",
-      description:
-        "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
-      image: "/illustrations/bppp-certificate.png",
-      icon: (
-        <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
-      ),
-    },
+    // {
+    //   id: 2,
+    //   name: "Uji Kompetensi",
+    //   description:
+    //     "Pelatihan yang diselenggaran BPPSDM KP untuk menjaring masyarakat kelautan perikanan yang ingin mengasah skill nya dibidang kelautan dan perikanan",
+    //   image: "/illustrations/bppp-certificate.png",
+    //   icon: (
+    //     <HiUserGroup className="absolute right-5 bottom-5 text-5xl text-gray-200 duration-1000" />
+    //   ),
+    // },
     {
       id: 4,
       name: "Profile",
@@ -129,8 +129,8 @@ export default function UserService({ user }: { user: User | null }) {
       </section>
 
       {indexMenuSelected == 0 && <UserTrainingService user={user} />}
-      {indexMenuSelected == 1 && <UserCertificateService user={user} />}
-      {indexMenuSelected == 2 && <UserDocuments user={user} />}
+      {/* {indexMenuSelected == 1 && <UserCertificateService user={user} />} */}
+      {indexMenuSelected == 1 && <UserDocuments user={user} />}
     </div>
   );
 }

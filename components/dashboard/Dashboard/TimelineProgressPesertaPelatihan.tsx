@@ -1030,20 +1030,23 @@ export const TimelineProgressPesertaPelatihan = ({
                       ? "Selamat, anda telah mengikuti dan menyelesaikan rangkaian pelatihan. Berikut sertifikat yang dapat kamu akses"
                       : "Oops. Sertifikat kamu masih dalam proses penerbitan, harap ditunggu ya paling lambat 3x24 jam. Pantau terus dashboard-mu ya sobat E-LAUT!"}
                   </span>
-                  {pelatihan.StatusPenerbitan == "Done" && (
-                    <DialogSertifikatPelatihan
-                      userPelatihan={userDetail!}
-                      pelatihan={pelatihan!}
+                  {userDetail!.NoSertifikat != "" && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-full border mt-3 flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
                     >
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="w-full border mt-3 flex gap-2 border-blue-600 text-left capitalize items-center justify-center"
+                      <Link
+                        href={`https://elaut-bppsdm.kkp.go.id/api-elaut/public/static/sertifikat-ttde/${
+                          userDetail!.FileSertifikat
+                        }`}
+                        target="_blank"
+                        className="flex w-full items-center justify-center"
                       >
                         <RiVerifiedBadgeFill className="h-4 w-4 text-blue-600" />{" "}
-                        <span className="text-sm"> Lihat Sertifikat</span>
-                      </Button>
-                    </DialogSertifikatPelatihan>
+                        <span className="text-sm"> Download Sertifikat</span>
+                      </Link>
+                    </Button>
                   )}
                 </div>
               </>

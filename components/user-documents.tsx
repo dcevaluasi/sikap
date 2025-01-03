@@ -140,8 +140,8 @@ export default function UserDocuments({ user }: { user: User | null }) {
       <section className="relative h-fit pb-20 bg-white" id="explore">
         <div className="relative max-w-6xl w-full mx-auto px-4 sm:px-6">
           <div className="pt-12 md:pt-20 text-center ">
-            <h1 className="text-3xl font-calsans leading-[110%] text-black">
-              Biodata <br /> Peserta Pelatihan & Sertifikasi
+            <h1 className="text-2xl md:text-3xl font-calsans leading-[110%] text-black">
+              Biodata Peserta <br /> Pelatihan & Sertifikasi
             </h1>
             <p className="text-base text-gray-600 max-w-xl text-center mx-auto">
               Jelajahi layanan serta informasi yang ada pada Balai Pelatihan
@@ -179,7 +179,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-5 w-full mt-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2 rounded-md md:gap-5 w-full mt-10">
               <UserInfoItem
                 icon={MdAlternateEmail}
                 title="Email"
@@ -240,7 +240,7 @@ export default function UserDocuments({ user }: { user: User | null }) {
           </div>
 
           <div className="mt-12 text-center">
-            <h2 className="text-3xl font-calsans text-black">
+            <h2 className="text-2xl md:text-3xl font-calsans text-black">
               Dokumen dan File Kelengkapan
             </h2>
             <p className="text-base text-gray-600">
@@ -334,10 +334,10 @@ const UserInfoItem = ({
   title: string;
   value: string;
 }) => (
-  <div className="gap-4 w-full">
+  <div className="gap-2 md:gap-4 w-full">
     <Slide direction="up">
       <div className="flex flex-col gap-1 w-full items-center duration-1000 text-center">
-        <div className="flex items-center justify-start gap-2 bg-white shadow-custom rounded-md w-full h-fit md:h-24 px-3 py-1">
+        <div className="flex items-center justify-start gap-2 bg-white shadow-custom rounded-md w-full h-fit md:h-24 px-3 py-3 md:py-1">
           <Icon className="text-lg" />
           <div className="flex flex-col gap-0">
             <p className="text-xs text-black text-left font-semibold">
