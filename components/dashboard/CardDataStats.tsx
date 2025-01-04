@@ -26,17 +26,17 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
       className={`${
         pathname.includes("akp") &&
         "flex gap-2 items-center duration-1000 group"
-      } rounded-xl border border-stroke bg-white hover:cursor-pointer px-7.5 py-6 shadow-default relative`}
+      } rounded-xl border border-stroke bg-white hover:cursor-pointer px-4 pb-6 pt-5 shadow-default relative`}
     >
       <div
         className={`flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 ${
-          pathname.includes("akp") && "h-20 w-20"
+          pathname.includes("akp") && "h-14 w-14"
         }`}
       >
         <div
           className={`${
             pathname.includes("akp") &&
-            "h-20 w-20 flex items-center justify-center"
+            "h-14 w-14 flex items-center justify-center"
           } group-hover:scale-110 duration-700 group-hover:-rotate-[30deg]`}
         >
           {" "}
@@ -48,15 +48,17 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
         <div className="w-full">
           <h4
             className={`${pathname.includes(
-              "akp" && "text-2xl"
+              "akp" && "text-xl"
             )} text-title-md font-bold text-black`}
           >
             <CountUp className="text-3xl" start={0} end={parseInt(total)} />
           </h4>
-          <div className="w-full flex justify-between items-center">
-            <span className="text-sm font-medium text-gray-800">{title}</span>
+          <div className="w-full flex flex-col">
+            <span className="text-xs leading-[110%] font-medium text-gray-800">
+              {title}
+            </span>
             {title != "Jumlah Blanko Rusak" && (
-              <span className="flex items-center w-fit self-end text-xs text-blue-600">
+              <span className="flex items-center w-fit  !text-xs text-blue-600 leading-[110%]">
                 Lihat Detail <MdOutlineKeyboardArrowRight />
               </span>
             )}

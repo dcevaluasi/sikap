@@ -18,6 +18,7 @@ import {
   Pie,
   PieChart,
   Label,
+  YAxis,
 } from "recharts";
 import {
   Card,
@@ -750,16 +751,6 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
       visitors: stateAllKeterampilanByLemdiklatek.series[4],
       fill: "var(--color-other)",
     },
-    // {
-    //   browser: "other2",
-    //   visitors: stateAllKeterampilanByLemdiklatek.series[5],
-    //   fill: "var(--color-other2)",
-    // },
-    // {
-    //   browser: "other3",
-    //   visitors: stateAllKeterampilanByLemdiklatek.series[6],
-    //   fill: "var(--color-other3)",
-    // },
   ];
 
   const [selectedSummaryAKP, setSelectedSummaryAKP] =
@@ -902,6 +893,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                             }
                           >
                             <CartesianGrid vertical={false} />
+
                             <XAxis
                               dataKey="browser"
                               tickLine={false}
@@ -925,6 +917,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                               dataKey="visitors"
                               strokeWidth={2}
                               radius={8}
+                              type="natural"
                               height={10}
                               activeIndex={2}
                             >
@@ -1383,6 +1376,12 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
           </Tabs>
         </TabsContent>
       </Tabs>
+
+      {/* <MapProvider>
+        <div className="mt-3 flex flex-col h-full grid-cols-1 gap-5 xl:grid-cols-2 2xl:grid-cols-3">
+          <Map />
+        </div>
+      </MapProvider> */}
 
       <div className="flex gap-2 flex-col mt-10">
         <Card className="w-full">

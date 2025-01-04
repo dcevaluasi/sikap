@@ -82,6 +82,12 @@ export function getMonthFromDateString(dateString: string) {
     return (date.getMonth() + 1).toString().padStart(2, '0');
 }
 
+export function getYearFromDateString(dateString: string) {
+    const date = new Date(dateString);
+    return (date.getFullYear() + 1).toString().padStart(2, '0');
+}
+
+
 // <AlertDialog>
 // <AlertDialogTrigger asChild>
  

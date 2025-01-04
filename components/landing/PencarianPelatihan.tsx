@@ -4,7 +4,6 @@ import Image from "next/image";
 import React, { FormEvent } from "react";
 import Hero from "@/components/hero";
 import ListBPPP from "@/components/list-bppp";
-import MapIndonesia from "@/components/map";
 import Footer from "@/components/ui/footer";
 import { BALAI_PELATIHAN, BIDANG_PELATIHAN } from "@/constants/pelatihan";
 import { elautBaseUrl } from "@/constants/urls";

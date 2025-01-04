@@ -131,7 +131,7 @@ const AKP: React.FC = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-4 h-fit max-h-fit md:grid-cols-3 md:gap-6 xl:grid-cols-3 2xl:gap-7.5">
+      <div className="grid grid-cols-1 gap-4 h-fit max-h-fit w-full md:grid-cols-5 md:gap-3 xl:grid-cols-5 2xl:gap-3">
         <Popover>
           <PopoverTrigger asChild>
             <span onClick={(e) => setSelectedId(0)}>
@@ -209,7 +209,7 @@ const AKP: React.FC = () => {
 
         <span onClick={(e) => setSelectedId(1)}>
           <CardDataStats
-            title="Total Sertifikat Keahlian"
+            title="Total Sertifikat CoC"
             total={data
               .filter(
                 (item) => item.TipeBlanko === "Certificate of Competence (CoC)"
@@ -225,7 +225,7 @@ const AKP: React.FC = () => {
 
         <span onClick={(e) => setSelectedId(2)}>
           <CardDataStats
-            title="Total Sertifikat Keterampilan"
+            title="Total Sertifikat CoP"
             total={
               data
                 .filter(
