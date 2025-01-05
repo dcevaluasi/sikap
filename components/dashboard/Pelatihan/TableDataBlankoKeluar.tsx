@@ -52,6 +52,7 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { Blanko, BlankoKeluar } from "@/types/blanko";
 import { generateTanggalPelatihan } from "@/utils/text";
+import { Input } from "@/components/ui/input";
 
 const TableDataBlankoKeluar: React.FC = () => {
   const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
@@ -1316,7 +1317,7 @@ const TableDataBlankoKeluar: React.FC = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      <SelectLabel>Status</SelectLabel>
+                      <SelectLabel>Tipe Blanko</SelectLabel>
                       <SelectItem value=" ">All</SelectItem>
                       <SelectItem value="Certificate of Competence (CoC)">
                         Certificate of Competence (CoC)
@@ -1330,6 +1331,20 @@ const TableDataBlankoKeluar: React.FC = () => {
               </div>
 
               <div className="w-full flex justify-end gap-2">
+                <Input
+                  placeholder="Cari berdasarkan nama penyelenggara..."
+                  value={
+                    (table
+                      .getColumn("NamaPelaksana")
+                      ?.getFilterValue() as string) ?? ""
+                  }
+                  onChange={(event: any) =>
+                    table
+                      .getColumn("NamaPelaksana")
+                      ?.setFilterValue(event.target.value)
+                  }
+                  className="max-w-sm text-sm"
+                />
                 <div
                   onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
                   className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"

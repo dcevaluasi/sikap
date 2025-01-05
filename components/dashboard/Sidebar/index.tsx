@@ -311,7 +311,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           <ul className="mb-5.5 mt-0 flex flex-col gap-1 pl-6">
                             <li>
                               <SidebarLinkGroup
-                                activeCondition={!pathname.includes("keluar")}
+                                activeCondition={
+                                  !pathname.includes("akp/pusat/blanko")
+                                }
                               >
                                 {(handleClick, open) => {
                                   return (
@@ -319,8 +321,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                       <Link
                                         href="/akp/pusat/blanko"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
-                                          !pathname.includes("keluar") &&
-                                          "bg-graydark "
+                                          pathname.includes(
+                                            "akp/pusat/blanko"
+                                          ) && "bg-graydark "
                                         }`}
                                       >
                                         <RiFilePaperLine className="text-xl" />
@@ -333,7 +336,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </li>
                             <li>
                               <SidebarLinkGroup
-                                activeCondition={pathname.includes("keluar")}
+                                activeCondition={pathname.includes(
+                                  "akp/pusat/blanko-keluar"
+                                )}
                               >
                                 {(handleClick, open) => {
                                   return (
@@ -341,8 +346,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                       <Link
                                         href="/akp/pusat/blanko-keluar"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
-                                          pathname.includes("keluar") &&
-                                          "bg-graydark "
+                                          pathname.includes(
+                                            "akp/pusat/blanko-keluar"
+                                          ) && "bg-graydark "
                                         }`}
                                       >
                                         <HiOutlineDownload className="text-xl" />
@@ -355,7 +361,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </li>
                             <li>
                               <SidebarLinkGroup
-                                activeCondition={pathname.includes("rusak")}
+                                activeCondition={pathname.includes(
+                                  "akp/pusat/blanko-rusak"
+                                )}
                               >
                                 {(handleClick, open) => {
                                   return (
@@ -363,8 +371,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                       <Link
                                         href="/akp/pusat/blanko-rusak"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
-                                          pathname.includes("rusak") &&
-                                          "bg-graydark "
+                                          pathname.includes(
+                                            "akp/pusat/blanko-rusak"
+                                          ) && "bg-graydark "
                                         }`}
                                       >
                                         <PiImageBroken className="text-xl" />
@@ -444,10 +453,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   return (
                                     <React.Fragment>
                                       <Link
-                                        href="/akp/pusat/pengiriman-sertifikat"
+                                        href="/akp/pusat/penyerahan-sertifikat"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                           pathname.includes(
-                                            "pengiriman-sertifikat"
+                                            "penyerahan-sertifikat"
                                           ) && "bg-graydark "
                                         }`}
                                       >

@@ -346,6 +346,30 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
       ),
     },
     {
+      accessorKey: "ListSertifikatDikirimkan",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Sertifikat Yang Dikirimkan
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+        >
+          <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md flex items-center gap-1">
+            {row.original.ListSertifikatDikirimkan}
+          </span>
+        </div>
+      ),
+    },
+    {
       accessorKey: "NominalPengiriman",
       header: ({ column }) => {
         return (

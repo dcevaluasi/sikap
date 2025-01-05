@@ -1,16 +1,6 @@
-import React, { ReactElement, useState } from "react";
+import React, { useState } from "react";
 import TableData from "../Tables/TableData";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -24,23 +14,8 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
-import {
-  TbBook,
-  TbBookFilled,
-  TbBroadcast,
-  TbChartBubble,
-  TbChartDonut,
-  TbDatabase,
-  TbDatabaseEdit,
-  TbFileCertificate,
-  TbFileDigit,
-  TbFishChristianity,
-  TbMoneybag,
-  TbQrcode,
-  TbSchool,
-  TbTargetArrow,
-} from "react-icons/tb";
+import { HiUserGroup } from "react-icons/hi2";
+import { TbChartBubble } from "react-icons/tb";
 
 import { FiUploadCloud } from "react-icons/fi";
 import {
@@ -52,16 +27,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
-import { MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
-import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
-import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
-import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
-import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
@@ -177,6 +146,34 @@ const TableDataBlankoRusak: React.FC = () => {
       ),
     },
     {
+      accessorKey: "Tipe",
+      meta: {
+        filterVariant: "select",
+      },
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Tipe Blanko
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+        >
+          <p className="text-sm text-dark leading-[100%]">
+            {" "}
+            {row.original.Tipe}
+          </p>
+        </div>
+      ),
+    },
+    {
       accessorKey: "NoSeri",
       header: ({ column }) => {
         return (
@@ -197,31 +194,6 @@ const TableDataBlankoRusak: React.FC = () => {
           <p className="text-sm text-dark leading-[100%]">
             {" "}
             {row.original.NoSeri}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "Tipe",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Tipe Blanko
-            <HiUserGroup className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
-        >
-          <p className="text-sm text-dark leading-[100%]">
-            {" "}
-            {row.original.Tipe}
           </p>
         </div>
       ),
@@ -292,12 +264,16 @@ const TableDataBlankoRusak: React.FC = () => {
       },
       cell: ({ row }) => (
         <div
-          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+          className={`${"ml-0"}  text-left flex flex-wrap flex-col lowercase`}
         >
-          <p className="text-sm text-dark leading-[100%]">
+          <Link
+            href={row.original.FotoDokumen}
+            target="_blank"
+            className="text-sm text-blue-500 underline leading-[100%]"
+          >
             {" "}
             {row.original.FotoDokumen}
-          </p>
+          </Link>
         </div>
       ),
     },
@@ -331,20 +307,18 @@ const TableDataBlankoRusak: React.FC = () => {
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
+    filterFns: {},
+    state: {
+      columnFilters,
+    },
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(), //client side filtering
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
+    getPaginationRowModel: getPaginationRowModel(),
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: false,
   });
 
   React.useEffect(() => {
@@ -352,33 +326,8 @@ const TableDataBlankoRusak: React.FC = () => {
     handleFetchingBlankoRusak();
   }, []);
 
-  const [dataBlanko, setDataBlanko] = React.useState<Blanko[]>([]);
-
-  const [idBlanko, setIdBlanko] = React.useState<string>("");
-  const [namaLemdiklat, setNamaLemdiklat] = React.useState<string>("");
-  const [namaPelaksana, setNamaPelaksana] = React.useState<string>("");
-  const [tanggalPermohonan, setTanggalPermohonan] = React.useState<string>("");
-  const [linkPermohonan, setLinkPermohonan] = React.useState<string>("");
-  const [namaProgram, setNamaProgram] = React.useState<string>("");
-  const [tanggalPelaksanaan, setTanggalPelaksanaan] =
+  const [selectedTipeBlanko, setSelectedTipeBlanko] =
     React.useState<string>("");
-  const [jumlahPesertaLulus, setJumlahPesertaLulus] =
-    React.useState<string>("");
-  const [jumlahBlankoDiajukan, setJumlahBlankoDiajukan] =
-    React.useState<string>("");
-  const [jumlahBlankoDisetujui, setJumlahBlankoDisetujui] =
-    React.useState<string>("");
-  const [noSeriBlanko, setNoSeriBlanko] = React.useState<string>("");
-  const [status, setStatus] = React.useState<string>("");
-  const [isSd, setIsSd] = React.useState<string>("");
-  const [isCetak, setIsCetak] = React.useState<string>("");
-  const [tipePengambilan, setTipePengambilan] = React.useState<string>("");
-  const [petugasYangMenerima, setPetugasYangMenerima] =
-    React.useState<string>("");
-  const [petugasYangMemberi, setPetugasYangMemberi] =
-    React.useState<string>("");
-  const [linkDataDukung, setLinkDataDukung] = React.useState<string>("");
-  const [tanggalKeluar, setTanggalKeluar] = React.useState<string>("");
 
   const [idBlankoKeluar, setIdBlankoKeluar] = React.useState<number>(0);
   const [tanggalBlankoRusak, setTanggalBlankoRusak] =
@@ -389,9 +338,6 @@ const TableDataBlankoRusak: React.FC = () => {
   const [fotoBlankoRusak, setFotoBlankoRusak] = React.useState<File | null>(
     null
   );
-  const [previewBlankoRusak, setPreviewBlankoRusak] = useState<string | null>(
-    null
-  );
 
   const handleClearFormBlankoRusak = () => {
     setIdBlankoKeluar(0);
@@ -400,7 +346,6 @@ const TableDataBlankoRusak: React.FC = () => {
     setTipeBlanko("");
     setKeterangan("");
     setFotoBlankoRusak(null);
-    setPreviewBlankoRusak(null);
   };
 
   const handleFotoBlankoRusakChange = (
@@ -413,9 +358,7 @@ const TableDataBlankoRusak: React.FC = () => {
 
         // Generate a preview URL
         const reader = new FileReader();
-        reader.onload = () => {
-          setPreviewBlankoRusak(reader.result as string);
-        };
+
         reader.readAsDataURL(file);
 
         console.log("Selected file:", file);
@@ -468,6 +411,19 @@ const TableDataBlankoRusak: React.FC = () => {
       setIsOpenFormMateri(!isOpenFormMateri);
     }
   };
+
+  React.useEffect(() => {
+    if (selectedTipeBlanko) {
+      setColumnFilters([
+        {
+          id: "Tipe",
+          value: selectedTipeBlanko,
+        },
+      ]);
+    } else {
+      setColumnFilters([]); // Clear filters when no selection
+    }
+  }, [selectedTipeBlanko]);
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
@@ -615,16 +571,6 @@ const TableDataBlankoRusak: React.FC = () => {
                 </div>
 
                 <div className="grid grid-cols-1 px-3 gap-2 mb-2 w-full">
-                  {/* {previewBlankoRusak && (
-                    <div className="mt-4">
-                      <p className="text-sm text-gray-600">Preview:</p>
-                      <img
-                        src={previewBlankoRusak}
-                        alt="Preview"
-                        className="w-30 cursor-pointer h-fit object-cover border border-gray-300 rounded-md"
-                      />
-                    </div>
-                  )} */}
                   <div className="w-full relative">
                     <label
                       className="block text-gray-800 text-sm font-medium mb-1"
@@ -636,7 +582,6 @@ const TableDataBlankoRusak: React.FC = () => {
                       type="file"
                       className="w-full border border-gray-300 rounded-md"
                       accept="image/*"
-                      // capture="environment" // Use "user" for the front camera
                       onChange={handleFotoBlankoRusakChange}
                     />
                   </div>
@@ -657,170 +602,143 @@ const TableDataBlankoRusak: React.FC = () => {
           </fieldset>
         </AlertDialogContent>
       </AlertDialog>
-      {showFormAjukanPelatihan ? (
-        <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-          </div>
 
-          {/* List Data Pelatihan */}
-          <div>
-            <FormPelatihan edit={false} />
+      <>
+        <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
+          <div className="flex w-full flex-wrap gap-3 sm:gap-5">
+            <div className="flex min-w-47.5">
+              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
+                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
+              </span>
+              <div className="w-full">
+                <p className="font-semibold text-primary">Total Blanko</p>
+                <p className="text-sm font-medium">{data.length} blanko</p>
+              </div>
+            </div>
+            <div className="flex min-w-47.5">
+              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
+                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
+              </span>
+              <div className="w-full">
+                <p className="font-semibold text-secondary">Total Blanko CoP</p>
+                <p className="text-sm font-medium">
+                  {
+                    data.filter(
+                      (item: BlankoRusak) =>
+                        item.Tipe === "Certificate of Proficiency (CoP)"
+                    ).length
+                  }{" "}
+                  blanko
+                </p>
+              </div>
+            </div>
+            <div className="flex min-w-47.5">
+              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
+                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-400"></span>
+              </span>
+              <div className="w-full">
+                <p className="font-semibold text-green-400">Total Blanko CoC</p>
+                <p className="text-sm font-medium">
+                  {
+                    data.filter(
+                      (item: BlankoRusak) =>
+                        item.Tipe === "Certificate of Competence (CoC)"
+                    ).length
+                  }{" "}
+                  blanko
+                </p>
+              </div>
+            </div>
           </div>
-        </>
-      ) : showCertificateSetting ? (
-        <></>
-      ) : (
-        <>
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-primary">Total Blanko</p>
-                  <p className="text-sm font-medium">
-                    {dataBlankoKeluar.reduce(
-                      (total, item) => total + item.JumlahBlankoDisetujui,
-                      0
-                    )}{" "}
-                    blanko
-                  </p>
-                </div>
-              </div>
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-secondary">
-                    Total Blanko CoP
-                  </p>
-                  <p className="text-sm font-medium">
-                    {dataBlankoKeluar
-                      .filter(
-                        (item: BlankoKeluar) =>
-                          item.TipeBlanko === "Certificate of Proficiency (CoP)"
-                      )
-                      .reduce(
-                        (total: number, item: BlankoKeluar) =>
-                          total + item.JumlahBlankoDisetujui,
-                        0
-                      )}{" "}
-                    blanko
-                  </p>
-                </div>
-              </div>
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-400"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-green-400">
-                    Total Blanko CoC
-                  </p>
-                  <p className="text-sm font-medium">
-                    {dataBlankoKeluar
-                      .filter(
-                        (item: BlankoKeluar) =>
-                          item.TipeBlanko === "Certificate of Competence (CoC)"
-                      )
-                      .reduce(
-                        (total: number, item: BlankoKeluar) =>
-                          total + item.JumlahBlankoDisetujui,
-                        0
-                      )}{" "}
-                    blanko
-                  </p>
-                </div>
+        </div>
+
+        <div>
+          <div id="chartOne" className="-ml-5"></div>
+          <div className="flex w-full items-center mb-2">
+            <div className="flex w-full gap-1 items-start">
+              <Select
+                value={selectedTipeBlanko}
+                onValueChange={(value) => setSelectedTipeBlanko(value)}
+              >
+                <SelectTrigger className="w-fit border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
+                    <TbChartBubble />{" "}
+                    {selectedTipeBlanko == " "
+                      ? "All"
+                      : selectedTipeBlanko != ""
+                      ? selectedTipeBlanko
+                      : "Tipe Blanko"}
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Tipe Blanko</SelectLabel>
+                    <SelectItem value=" ">All</SelectItem>
+                    <SelectItem value="Certificate of Competence (CoC)">
+                      Certificate of Competence (CoC)
+                    </SelectItem>
+                    <SelectItem value="Certificate of Proficiency (CoP)">
+                      Certificate of Proficiency (CoP)
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="w-full flex justify-end gap-2">
+              <Input
+                placeholder="Cari berdasarkan nomor serial blanko..."
+                value={
+                  (table.getColumn("NoSeri")?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event: any) =>
+                  table.getColumn("NoSeri")?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm text-sm justify-end"
+              />
+              <div
+                onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
+                className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+              >
+                <FiUploadCloud />
+                Tambah Data Blanko
               </div>
             </div>
           </div>
 
-          <div>
-            <div id="chartOne" className="-ml-5"></div>
-            <div className="flex w-full items-center mb-2">
-              {/* <div className="flex w-full gap-1 items-start">
-                <Select>
-                  <SelectTrigger className="w-[140px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                      <TbChartBubble /> Jenis Blanko
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Status</SelectLabel>
-                      <SelectItem value="pendaftaran">CoP</SelectItem>
-                      <SelectItem value="pelaksanaan">CoC</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select>
-                  <SelectTrigger className="w-[190px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                      <TbBroadcast />
-                      Tanggal Pengadaan
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Bidang</SelectLabel>
-                      <SelectItem value="apple">Publish E-LAUT</SelectItem>
-                      <SelectItem value="banana">Unpublish E-LAUT</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div> */}
-
-              <div className="w-full flex justify-end gap-2">
-                <div
-                  onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <FiUploadCloud />
-                  Tambah Data Blanko
-                </div>
-              </div>
+          <TableData
+            isLoading={isFetching}
+            columns={columns}
+            table={table}
+            type={"short"}
+          />
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="text-muted-foreground flex-1 text-sm">
+              {table.getFilteredSelectedRowModel().rows.length} of{" "}
+              {table.getFilteredRowModel().rows.length} row(s) selected.
             </div>
-
-            <TableData
-              isLoading={isFetching}
-              columns={columns}
-              table={table}
-              type={"short"}
-            />
-            <div className="flex items-center justify-end space-x-2 py-4">
-              <div className="text-muted-foreground flex-1 text-sm">
-                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-              </div>
-              <div className="space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  Next
-                </Button>
-              </div>
+            <div className="space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-inter"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-inter"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Next
+              </Button>
             </div>
           </div>
-        </>
-      )}
+        </div>
+      </>
     </div>
   );
 };

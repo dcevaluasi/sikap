@@ -1,10 +1,5 @@
-import React, { ReactElement, useState } from "react";
+import React from "react";
 import TableData from "../Tables/TableData";
-import {
-  RiRadioButtonLine,
-  RiShipLine,
-  RiVerifiedBadgeFill,
-} from "react-icons/ri";
 
 import {
   Sheet,
@@ -27,16 +22,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import {
-  ArrowUpDown,
-  Edit3Icon,
-  Fullscreen,
-  LucideClipboardEdit,
-  LucideNewspaper,
-  LucidePrinter,
-  Trash,
-  X,
-} from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
 import {
@@ -61,12 +47,6 @@ import {
   TbSchool,
   TbTargetArrow,
 } from "react-icons/tb";
-import {
-  IoIosBook,
-  IoIosInformationCircle,
-  IoMdBook,
-  IoMdGlobe,
-} from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
 import {
   AlertDialog,
@@ -88,8 +68,6 @@ import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPag
 import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
-import { Checkbox } from "@/components/ui/checkbox";
-import { PelatihanMasyarakat } from "@/types/product";
 import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
 import {
@@ -136,71 +114,6 @@ const TableDataBlanko: React.FC = () => {
       console.error("ERROR BLANKO : ", error);
       setIsFetching(false);
       throw error;
-    }
-  };
-
-  const [statusPelatihan, setStatusPelatihan] = React.useState("");
-  const handleUpdatePublishPelatihanToELAUT = async (
-    id: number,
-    status: string
-  ) => {
-    const formData = new FormData();
-    formData.append("Status", status);
-    try {
-      const response = await axios.put(
-        `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-          },
-        }
-      );
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
-      });
-      console.log("UPDATE PELATIHAN: ", response);
-      handleFetchingBlanko();
-    } catch (error) {
-      console.error("ERROR UPDATE PELATIHAN: ", error);
-      Toast.fire({
-        icon: "success",
-        title: `Gagal mempublish informasi pelatihan masyarakat ke laman E-LAUT!`,
-      });
-      handleFetchingBlanko();
-    }
-  };
-
-  const handleUpdateClosePelatihanELAUT = async (
-    id: number,
-    status: string
-  ) => {
-    const formData = new FormData();
-    formData.append("StatusApproval", status);
-    try {
-      const response = await axios.put(
-        `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-          },
-        }
-      );
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil menutup kelas pelatihan, kamu dapat melanjutkan proses selanjutnya!`,
-      });
-      console.log("UPDATE PELATIHAN: ", response);
-      handleFetchingBlanko();
-    } catch (error) {
-      console.error("ERROR UPDATE PELATIHAN: ", error);
-      Toast.fire({
-        icon: "success",
-        title: `Gagal menutup kelas pelatihan, kamu dapat melanjutkan proses selanjutnya!`,
-      });
-      handleFetchingBlanko();
     }
   };
 
@@ -651,217 +564,153 @@ const TableDataBlanko: React.FC = () => {
           </fieldset>
         </AlertDialogContent>
       </AlertDialog>
-      {showFormAjukanPelatihan ? (
-        <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-          </div>
 
-          {/* List Data Pelatihan */}
-          <div>
-            <FormPelatihan edit={false} />
+      <>
+        {/* Header Tabel Data Pelatihan */}
+        <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
+          {/* Statistik Pelatihan */}
+          <div className="flex w-full flex-wrap gap-3 sm:gap-5">
+            <div className="flex min-w-47.5">
+              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
+                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
+              </span>
+              <div className="w-full">
+                <p className="font-semibold text-primary">Total Blanko</p>
+                <p className="text-sm font-medium">
+                  {data.reduce(
+                    (total, item) => total + item.JumlahPengadaan,
+                    0
+                  )}{" "}
+                  blanko
+                </p>
+              </div>
+            </div>
+            <div className="flex min-w-47.5">
+              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
+                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
+              </span>
+              <div className="w-full">
+                <p className="font-semibold text-secondary">Total Blanko CoP</p>
+                <p className="text-sm font-medium">
+                  {data
+                    .filter(
+                      (item) =>
+                        item.TipeBlanko == "Certificate of Proficiency (CoP)"
+                    )
+                    .reduce(
+                      (total, item) => total + item.JumlahPengadaan,
+                      0
+                    )}{" "}
+                  blanko
+                </p>
+              </div>
+            </div>
+            <div className="flex min-w-47.5">
+              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
+                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-400"></span>
+              </span>
+              <div className="w-full">
+                <p className="font-semibold text-green-400">Total Blanko CoC</p>
+                <p className="text-sm font-medium">
+                  {" "}
+                  {data
+                    .filter(
+                      (item) =>
+                        item.TipeBlanko == "Certificate of Competence (CoC)"
+                    )
+                    .reduce(
+                      (total, item) => total + item.JumlahPengadaan,
+                      0
+                    )}{" "}
+                  blanko
+                </p>
+              </div>
+            </div>
           </div>
-        </>
-      ) : showCertificateSetting ? (
-        <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-            <div className="flex w-full gap-2 justify-end">
-              <Sheet>
-                <SheetTrigger asChild>
+        </div>
+
+        {/* List Data Pelatihan */}
+        <div>
+          <div id="chartOne" className="-ml-5"></div>
+          <div className="flex w-full items-center mb-2">
+            <div className="flex w-full gap-1 items-start">
+              <Select>
+                <SelectTrigger className="w-[140px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
                   <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                    <PiStampLight />
-                    Add Stempel
+                    <TbChartBubble /> Jenis Blanko
                   </div>
-                </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
-                    <div className="flex flex-row items-center gap-2">
-                      {/* <Image
-                        src={"/logo-kkp.png"}
-                        width={0}
-                        height={0}
-                        alt="KKP Logo"
-                        className="w-12 h-12"
-                      /> */}
-                      <div className="flex flex-col gap-1">
-                        <SheetTitle>Pilih Stempel</SheetTitle>
-                        <SheetDescription>
-                          Pilih stempel tanda tangan elektronik yang ingin anda
-                          taukan ke file sertifikat yang akan digenerate!
-                        </SheetDescription>
-                      </div>
-                    </div>
-                  </SheetHeader>
-                  <div className="w-full mt-5 mb-10">
-                    <div className="w-full border-2 rounded-md hover:cursor-pointer hover:border-blue-500 duration-700 flex items-center flex-col px-3 py-5 text-center justify-center border-dashed">
-                      <p className="-mt-1 text-sm">
-                        Kepala Balai Pelatihan dan Penyuluhan Perikanan
-                        Banyuwangi
-                      </p>
-                      <Image
-                        className="w-[200px] my-3"
-                        width={0}
-                        height={0}
-                        alt="Logo Kementrian Kelautan dan Perikanan RI"
-                        src={"/ttd-elektronik.png"}
-                      />
-                      <p className="-mt-1 font-extrabold text-sm">
-                        MOCH. MUCHLISIN, A.Pi, M.P
-                      </p>
-                      <p className="font-extrabold text-sm -mt-1">
-                        NIP. 197509161999031003
-                      </p>
-                    </div>
-                  </div>
-                  <SheetFooter>
-                    <SheetClose asChild>
-                      <Button type="submit">Sematkan Stempel</Button>
-                    </SheetClose>
-                  </SheetFooter>
-                </SheetContent>
-              </Sheet>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Status</SelectLabel>
+                    <SelectItem value="pendaftaran">CoP</SelectItem>
+                    <SelectItem value="pelaksanaan">CoC</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
 
+              <Select>
+                <SelectTrigger className="w-[190px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
+                    <TbBroadcast />
+                    Tanggal Pengadaan
+                  </div>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Bidang</SelectLabel>
+                    <SelectItem value="apple">Publish E-LAUT</SelectItem>
+                    <SelectItem value="banana">Unpublish E-LAUT</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="w-full flex justify-end gap-2">
               <div
-                onClick={(e) => setShowFormAjukanPelatihan(true)}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
+                onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
+                className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
               >
-                <TbFileCertificate />
-                Generate Sertifikat Peserta
+                <FiUploadCloud />
+                Tambah Data Blanko
               </div>
             </div>
           </div>
 
-          <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
-            <SertifikatSettingPage1 />
-            <SertifikatSettingPage2 />
-          </div>
-        </>
-      ) : (
-        <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Statistik Pelatihan */}
-            <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-primary">Total Blanko</p>
-                  <p className="text-sm font-medium">{data.length} blanko</p>
-                </div>
-              </div>
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-secondary">
-                    Total Blanko CoP
-                  </p>
-                  <p className="text-sm font-medium">0 blanko</p>
-                </div>
-              </div>
-              <div className="flex min-w-47.5">
-                <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                  <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-400"></span>
-                </span>
-                <div className="w-full">
-                  <p className="font-semibold text-green-400">
-                    Total Blanko CoC
-                  </p>
-                  <p className="text-sm font-medium">{data!.length!} blanko</p>
-                </div>
-              </div>
+          <TableData
+            isLoading={isFetching}
+            columns={columns}
+            table={table}
+            type={"short"}
+          />
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="text-muted-foreground flex-1 text-sm">
+              {table.getFilteredSelectedRowModel().rows.length} of{" "}
+              {table.getFilteredRowModel().rows.length} row(s) selected.
+            </div>
+            <div className="space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-inter"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-inter"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Next
+              </Button>
             </div>
           </div>
-
-          {/* List Data Pelatihan */}
-          <div>
-            <div id="chartOne" className="-ml-5"></div>
-            <div className="flex w-full items-center mb-2">
-              <div className="flex w-full gap-1 items-start">
-                <Select>
-                  <SelectTrigger className="w-[140px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                      <TbChartBubble /> Jenis Blanko
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Status</SelectLabel>
-                      <SelectItem value="pendaftaran">CoP</SelectItem>
-                      <SelectItem value="pelaksanaan">CoC</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <Select>
-                  <SelectTrigger className="w-[190px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                      <TbBroadcast />
-                      Tanggal Pengadaan
-                    </div>
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Bidang</SelectLabel>
-                      <SelectItem value="apple">Publish E-LAUT</SelectItem>
-                      <SelectItem value="banana">Unpublish E-LAUT</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="w-full flex justify-end gap-2">
-                <div
-                  onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <FiUploadCloud />
-                  Tambah Data Blanko
-                </div>
-              </div>
-            </div>
-
-            <TableData
-              isLoading={isFetching}
-              columns={columns}
-              table={table}
-              type={"short"}
-            />
-            <div className="flex items-center justify-end space-x-2 py-4">
-              <div className="text-muted-foreground flex-1 text-sm">
-                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-              </div>
-              <div className="space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          </div>
-        </>
-      )}
+        </div>
+      </>
     </div>
   );
 };

@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import TableDataPelatihan from "../Pelatihan/TableDataPelatihan";
-import { TbSchool } from "react-icons/tb";
 import { RiVerifiedBadgeFill } from "react-icons/ri";
 import TableDataBlanko from "../Pelatihan/TableDataBlanko";
 
