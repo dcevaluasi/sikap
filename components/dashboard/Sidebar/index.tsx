@@ -23,6 +23,9 @@ import {
 import Cookies from "js-cookie";
 import { checkOperatorPusat } from "@/lib/role";
 import { generateRandomId } from "@/lib/utils";
+import { GrSend } from "react-icons/gr";
+import { HiOutlineDownload } from "react-icons/hi";
+import { PiImageBroken } from "react-icons/pi";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -162,7 +165,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="/akp/pusat/dashboard"
-                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/" ||
                               pathname.includes("dashboard")) &&
                             "bg-graydark "
@@ -214,7 +217,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               ? `/${generateRandomId()}/pusat/dashboard`
                               : "admin/pusat/lemdiklat"
                           }
-                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             (pathname === "/" ||
                               pathname.includes("dashboard")) &&
                             "bg-graydark "
@@ -262,7 +265,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="/akp/pusat/blanko"
-                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             !pathname.includes("keluar") && "bg-graydark "
                           }`}
                         >
@@ -282,11 +285,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="/akp/pusat/blanko-keluar"
-                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             pathname.includes("keluar") && "bg-graydark "
                           }`}
                         >
-                          <IoIosPaperPlane className="text-xl" />
+                          <HiOutlineDownload className="text-xl" />
                           Blanko Keluar
                         </Link>
                       </React.Fragment>
@@ -302,12 +305,35 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <React.Fragment>
                         <Link
                           href="/akp/pusat/blanko-rusak"
-                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                             pathname.includes("rusak") && "bg-graydark "
                           }`}
                         >
-                          <GiPapers className="text-xl" />
+                          <PiImageBroken className="text-xl" />
                           Blanko Rusak
+                        </Link>
+                      </React.Fragment>
+                    );
+                  }}
+                </SidebarLinkGroup>
+              )}
+
+              {pathname.includes("/akp") && (
+                <SidebarLinkGroup
+                  activeCondition={pathname.includes("pengiriman-sertifikat")}
+                >
+                  {(handleClick, open) => {
+                    return (
+                      <React.Fragment>
+                        <Link
+                          href="/akp/pusat/pengiriman-sertifikat"
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                            pathname.includes("pengiriman-sertifikat") &&
+                            "bg-graydark "
+                          }`}
+                        >
+                          <GrSend className="text-xl" />
+                          Pengiriman Sertifikat
                         </Link>
                       </React.Fragment>
                     );

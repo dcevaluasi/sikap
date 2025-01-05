@@ -1,43 +1,46 @@
 import React from "react";
-import { GoogleMap, Marker } from "@react-google-maps/api";
+import { GoogleMap, Marker, OverlayView } from "@react-google-maps/api";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import Image from "next/image";
-import Cookies from "js-cookie";
-import axios from "axios";
 
+import Cookies from "js-cookie";
+import { BlankoKeluar } from "@/types/blanko";
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { DotLoader } from "react-spinners";
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+} from "./ui/chart";
 
 // Map's styling
 export const defaultMapContainerStyle = {
   width: "100%",
-  height: "60vh",
+  height: "80vh",
   borderRadius: "15px 0px 0px 15px",
 };
+
+const chartConfig = {
+  visitors: {
+    label: "Visitors",
+  },
+  desktop: {
+    label: "Certificate of Competence (CoC)",
+    color: "#3C50E0",
+  },
+  mobile: {
+    label: "Certificate of Proficiency (CoP)",
+    color: "#80CAEE",
+  },
+} satisfies ChartConfig;
 
 const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 // Navy palette styles for the map
-const navyModeStyles = [
+const customMapStyles = [
   {
     elementType: "geometry",
     stylers: [
       {
-        color: "#111c44", // Navy 800
+        color: "#D9D9D9", // Light gray for land
       },
     ],
   },
@@ -53,7 +56,7 @@ const navyModeStyles = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#aac0fe", // Navy 100
+        color: "#6B6B6B", // Dark gray for labels
       },
     ],
   },
@@ -61,7 +64,7 @@ const navyModeStyles = [
     elementType: "labels.text.stroke",
     stylers: [
       {
-        color: "#0b1437", // Navy 900
+        color: "#FFFFFF", // White for better label contrast
       },
     ],
   },
@@ -70,7 +73,7 @@ const navyModeStyles = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#728fea", // Navy 300
+        color: "#B3B3B3", // Medium gray for administrative boundaries
       },
     ],
   },
@@ -79,7 +82,7 @@ const navyModeStyles = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#3652ba", // Navy 400
+        color: "#6B6B6B", // Dark gray for country names
       },
     ],
   },
@@ -88,7 +91,7 @@ const navyModeStyles = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#aac0fe", // Navy 100
+        color: "#6B6B6B", // Dark gray for city names
       },
     ],
   },
@@ -97,7 +100,7 @@ const navyModeStyles = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#aac0fe", // Navy 100
+        color: "#6B6B6B", // Dark gray for points of interest
       },
     ],
   },
@@ -106,7 +109,7 @@ const navyModeStyles = [
     elementType: "geometry.fill",
     stylers: [
       {
-        color: "#24388a", // Navy 600
+        color: "#E0E0E0", // Light gray for roads
       },
     ],
   },
@@ -115,7 +118,7 @@ const navyModeStyles = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#aac0fe", // Navy 100
+        color: "#6B6B6B", // Dark gray for road labels
       },
     ],
   },
@@ -124,7 +127,7 @@ const navyModeStyles = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#1b3bbb", // Navy 500
+        color: "#CFCFCF", // Slightly darker gray for arterial roads
       },
     ],
   },
@@ -133,7 +136,7 @@ const navyModeStyles = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#3652ba", // Navy 400
+        color: "#B3B3B3", // Medium gray for highways
       },
     ],
   },
@@ -142,7 +145,7 @@ const navyModeStyles = [
     elementType: "geometry",
     stylers: [
       {
-        color: "#1B254B", // Navy 700
+        color: "#FFFFFF", // White for the sea
       },
     ],
   },
@@ -151,77 +154,94 @@ const navyModeStyles = [
     elementType: "labels.text.fill",
     stylers: [
       {
-        color: "#d0dcfb", // Navy 50
+        color: "#6B6B6B", // Dark gray for water labels
       },
     ],
   },
 ];
 
-export const Map = () => {
-  const defaultMapCenter = {
-    lat: -0.5572709591052816,
-    lng: 119.6669279254379,
-  };
-
-  const defaultMapZoom = 5.2;
+export const Map = ({ data }: { data: BlankoKeluar[] }) => {
+  const mapRef = React.useRef<google.maps.Map | null>(null);
 
   const defaultMapOptions = {
     zoomControl: true,
     tilt: 0,
     gestureHandling: "auto",
-    styles: navyModeStyles, // Apply navy mode styles
+    styles: customMapStyles, // Apply navy mode styles
   };
 
-  const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+  return (
+    <div className={`${plusJakartaSans.className} w-full flex flex-col gap-2`}>
+      <GoogleMap
+        ref={(map: any) => (mapRef!.current! = map!)}
+        mapContainerStyle={defaultMapContainerStyle}
+        center={{
+          lat: -2.5489, // Center latitude of Indonesia
+          lng: 118.0149, // Center longitude of Indonesia
+        }}
+        zoom={5} // Adjust zoom level to show the entire archipelago
+        options={defaultMapOptions}
+      >
+        {data!.map((data, index) => (
+          <CustomMarker
+            key={index}
+            data={data}
+            position={{
+              lat: parseFloat(data!.Latitude!),
+              lng: parseFloat(data!.Longitude!),
+            }}
+            mapRef={mapRef}
+          />
+        ))}
+      </GoogleMap>
+    </div>
+  );
+};
 
-  const mapRef = React.useRef<any>(null);
-
-  const handleMarkerClick = (location: any) => {
-    Cookies.set("IdSatdikSelected", location.id);
-
+const CustomMarker = ({
+  position,
+  data,
+  mapRef,
+}: {
+  position: google.maps.LatLngLiteral;
+  data: BlankoKeluar;
+  mapRef: React.RefObject<google.maps.Map | null>;
+}) => {
+  const handleMarkerClick = () => {
     if (mapRef.current) {
-      mapRef.current!.setCenter({ lat: location.lat, lng: location.lng });
-      setZoom(mapRef.current!.setZoom(100)); // You can set the desired zoom level here
-    }
-  };
-
-  const [isFetching, setIsFetching] = React.useState<boolean>(false);
-
-  React.useEffect(() => {}, []);
-
-  const [isOpen, setIsOpen] = React.useState(false); // State to control the sheet visibility
-
-  const [zoom, setZoom] = React.useState<number>(5.2);
-
-  const handleZoomChanged = () => {
-    if (mapRef.current) {
-      setZoom(mapRef.current.getZoom());
+      mapRef.current.setCenter(position); // Center the map to the marker's position
+      mapRef.current.setZoom(10); // Set a closer zoom level
     }
   };
 
   return (
-    <div className={`${plusJakartaSans.className} w-full`}>
-      <GoogleMap
-        ref={(map) => (mapRef.current = map)}
-        mapContainerStyle={defaultMapContainerStyle}
-        center={{
-          lat: 4,
-          lng: -160,
-        }}
-        zoom={10}
-        options={defaultMapOptions}
+    <OverlayView
+      position={position}
+      mapPaneName={OverlayView.OVERLAY_MOUSE_TARGET}
+    >
+      <div
+        className={`${plusJakartaSans.className} relative group ${
+          data!.Longitude == "" ? "hidden" : "block"
+        }`}
+        onClick={handleMarkerClick} // Handle click event
       >
-        <Marker
-          icon={{
-            url: "https://i.postimg.cc/Fs2CF16v/high-school.png", // URL of the custom marker icon
-            scaledSize: new google.maps.Size(60, 60), // Scale the icon to the desired size
+        {/* Tooltip */}
+        <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-gray-800 w-36 text-white text-xs rounded px-2 py-1">
+          {data.SasaranMasyarakat}
+        </div>
+        {/* Circle with Gradient */}
+        <div
+          className={`animate-pulse w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-base`}
+          style={{
+            background:
+              data.NamaProgram === "Sertifikat Kecakapan Nelayan"
+                ? "linear-gradient(135deg, #80CAEE, rgba(255, 255, 255,  0))"
+                : "linear-gradient(135deg, #3C50E0, rgba(255, 255, 255,  0))",
           }}
-          position={{
-            lat: 4,
-            lng: -160,
-          }}
-        />
-      </GoogleMap>
-    </div>
+        >
+          {data.JumlahBlankoDisetujui}
+        </div>
+      </div>
+    </OverlayView>
   );
 };

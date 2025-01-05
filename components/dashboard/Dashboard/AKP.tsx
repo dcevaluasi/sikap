@@ -102,14 +102,6 @@ const AKP: React.FC = () => {
 
     // Panggil pertama kali saat komponen di-mount
     fetchAllData();
-
-    // Atur interval untuk refresh data setiap 30 detik
-    const intervalId = setInterval(() => {
-      fetchAllData();
-    }, 3000); // 30 detik (atur sesuai kebutuhan)
-
-    // Cleanup interval saat komponen di-unmount
-    return () => clearInterval(intervalId);
   }, []);
 
   return (

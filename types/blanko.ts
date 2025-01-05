@@ -50,6 +50,9 @@ export type BlankoKeluar = {
     Status: string,
     IsSd: string,
     IsCetak: boolean,
+    Longitude?: string,
+    Latitude?: string,
+    SasaranMasyarakat: string,
     TipePengambilan: string,
     PetugasYangMenerima: string,
     PetugasYangMemberi: string,
@@ -57,4 +60,21 @@ export type BlankoKeluar = {
     CreatedAt: string,
     UpdatedAt: string,
     Keterangan: string
+}
+
+export type PengirimanSertifikat = {
+    IdPengirimanSertifikat: number;
+    NamaPenerima: string;
+    NomorTelpon: string;
+    Alamat: string;
+    NoResi: string;
+    BuktiResi: string;
+    NominalPengiriman: string;
+    TtdTerimaPengiriman: string;
+    BuktiPengirimanSertifikat: string;
+    BuktiPenerimaanSertifikat: string;
+    ListSertifikatDikirimkan: string;
+    CreateAt: string;
+    UpdateAt: string;
+    Status: string;
 }
