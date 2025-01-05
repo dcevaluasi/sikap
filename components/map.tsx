@@ -5,7 +5,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import { BlankoKeluar } from "@/types/blanko";
 
 // Map's styling
-export const defaultMapContainerStyle = {
+const defaultMapContainerStyle = {
   width: "100%",
   height: "80vh",
   borderRadius: "15px 0px 0px 15px",
