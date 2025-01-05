@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { useState } from "react";
 
 import {
   ColumnDef,
@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
+import { HiUserGroup } from "react-icons/hi2";
 
 import { FiUploadCloud } from "react-icons/fi";
 import {
@@ -25,26 +25,29 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useRouter } from "next/navigation";
 import Toast from "@/components/toast";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 
 import Cookies from "js-cookie";
-import {
-  BlankoKeluar,
-  BlankoRusak,
-  PengirimanSertifikat,
-} from "@/types/blanko";
+import { BlankoKeluar, PengirimanSertifikat } from "@/types/blanko";
 import { generateTanggalPelatihan } from "@/utils/text";
 import TableData from "@/components/dashboard/Tables/TableData";
 import { GrSend } from "react-icons/gr";
 import { blankoAkapiBaseUrl } from "@/constants/urls";
 import { formatToRupiah } from "@/lib/utils";
 import Image from "next/image";
+import useFetchPengirimanSertifikat from "@/hooks/blanko/useFetchPengirimanSertifikat";
+import useFetchBlankoKeluar from "@/hooks/blanko/useFetchBlankoKeluar";
 
 export const TableDataPengirimanSertifikat: React.FC = () => {
+  const { data, isFetching, refetch } = useFetchPengirimanSertifikat();
+  const {
+    data: dataBlankoKeluar,
+    isFetching: isFetchingBlankoKeluar,
+    refetch: refetchBlankoKeluar,
+  } = useFetchBlankoKeluar();
+
   const [isPosting, setIsPosting] = React.useState<boolean>(false);
 
   const [namaPenerima, setNamaPenerima] = React.useState<string>("");
@@ -66,9 +69,7 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
   };
 
   const [keywordSuggestion, setKeywordSuggestion] = React.useState<string>("");
-  const [suggestionsBlankoKeluar, setSuggestionsBlankoKeluar] = React.useState<
-    BlankoKeluar[]
-  >([]);
+
   const [filteredSuggestions, setFilteredSuggestions] = React.useState<
     BlankoKeluar[]
   >([]);
@@ -95,14 +96,14 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
     if (keywordSuggestion.trim() === "") {
       setFilteredSuggestions([]);
     } else {
-      const filtered = suggestionsBlankoKeluar.filter((item: BlankoKeluar) =>
+      const filtered = dataBlankoKeluar.filter((item: BlankoKeluar) =>
         item.NamaPelaksana.toLowerCase().includes(
           keywordSuggestion.toLowerCase()
         )
       );
       setFilteredSuggestions(filtered);
     }
-  }, [keywordSuggestion, suggestionsBlankoKeluar]);
+  }, [keywordSuggestion, dataBlankoKeluar]);
 
   const handleClearPengirimanSertifikat = () => {
     setNamaPenerima("");
@@ -127,8 +128,6 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
     formData.append("NominalPengiriman", nominalPengiriman);
     formData.append("ListSertifikatDikirimkan", selectedItems.join(" // "));
 
-    console.log(selectedItems.join(" // "));
-
     if (buktiResi != null) {
       formData.append("bukti_resi", buktiResi!);
       formData.append("ttd_terima", buktiResi!);
@@ -149,15 +148,14 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
           },
         }
       );
-      console.log(response);
       Toast.fire({
         icon: "success",
         title: "Berhasil",
         text: `Berhasil menambahkan data pengiriman sertifikat`,
       });
       setIsOpenFormMateri(false);
-      handleFetchingPengirimanSertififkat();
       handleClearPengirimanSertifikat();
+      refetch();
       setIsPosting(false);
     } catch (error) {
       console.error(error);
@@ -170,50 +168,6 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
     }
   };
 
-  const [isFetching, setIsFetching] = React.useState<boolean>(false);
-
-  const [data, setData] = React.useState<PengirimanSertifikat[]>([]);
-
-  const [dataBlankoKeluar, setDataBlankoKeluar] = React.useState<
-    BlankoKeluar[]
-  >([]);
-
-  const handleFetchingPengirimanSertififkat = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getPengiriman`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-          },
-        }
-      );
-      setData(response.data.data);
-      console.log("PENGIRIMAN SERTIFIKAT:", response);
-      setIsFetching(false);
-    } catch (error) {
-      setIsFetching(false);
-      throw error;
-    }
-  };
-
-  const handleFetchingBlankoKeluar = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlankoKeluar`
-      );
-      setDataBlankoKeluar(response.data.data);
-      setSuggestionsBlankoKeluar(response.data.data);
-      console.log({ response });
-      setIsFetching(false);
-    } catch (error) {
-      setIsFetching(false);
-      throw error;
-    }
-  };
-
   const [isOpenFormMateri, setIsOpenFormMateri] =
     React.useState<boolean>(false);
 
@@ -222,7 +176,6 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
     []
   );
 
-  const router = useRouter();
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -523,11 +476,6 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
     },
   });
 
-  React.useEffect(() => {
-    handleFetchingBlankoKeluar();
-    handleFetchingPengirimanSertififkat();
-  }, []);
-
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       <AlertDialog open={isOpenFormMateri}>
@@ -697,11 +645,11 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
 
                           // Fetch suggestions logic here...
                           // Example:
-                          setIsFetching(true);
+                          // setIsFetching(true);
                           // Simulate async fetch
-                          setTimeout(() => {
-                            setIsFetching(false);
-                          }, 500);
+                          // setTimeout(() => {
+                          //   setIsFetching(false);
+                          // }, 500);
                         }}
                       />
 
@@ -790,68 +738,6 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
       </AlertDialog>
 
       <>
-        <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-          {/* <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-            <div className="flex min-w-47.5">
-              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
-                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
-              </span>
-              <div className="w-full">
-                <p className="font-semibold text-primary">Total Blanko</p>
-                <p className="text-sm font-medium">
-                  {dataBlankoKeluar.reduce(
-                    (total, item) => total + item.JumlahBlankoDisetujui,
-                    0
-                  )}{" "}
-                  blanko
-                </p>
-              </div>
-            </div>
-            <div className="flex min-w-47.5">
-              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
-              </span>
-              <div className="w-full">
-                <p className="font-semibold text-secondary">Total Blanko CoP</p>
-                <p className="text-sm font-medium">
-                  {dataBlankoKeluar
-                    .filter(
-                      (item: BlankoKeluar) =>
-                        item.TipeBlanko === "Certificate of Proficiency (CoP)"
-                    )
-                    .reduce(
-                      (total: number, item: BlankoKeluar) =>
-                        total + item.JumlahBlankoDisetujui,
-                      0
-                    )}{" "}
-                  blanko
-                </p>
-              </div>
-            </div>
-            <div className="flex min-w-47.5">
-              <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
-                <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-400"></span>
-              </span>
-              <div className="w-full">
-                <p className="font-semibold text-green-400">Total Blanko CoC</p>
-                <p className="text-sm font-medium">
-                  {dataBlankoKeluar
-                    .filter(
-                      (item: BlankoKeluar) =>
-                        item.TipeBlanko === "Certificate of Competence (CoC)"
-                    )
-                    .reduce(
-                      (total: number, item: BlankoKeluar) =>
-                        total + item.JumlahBlankoDisetujui,
-                      0
-                    )}{" "}
-                  blanko
-                </p>
-              </div>
-            </div>
-          </div> */}
-        </div>
-
         <div>
           <div id="chartOne" className="-ml-5"></div>
           <div className="flex w-full items-center mb-2">

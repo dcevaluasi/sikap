@@ -14,8 +14,8 @@ import {
 } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
-import { TbBroadcast, TbChartBubble } from "react-icons/tb";
+import { HiUserGroup } from "react-icons/hi2";
+import { TbChartBubble } from "react-icons/tb";
 import { FiUploadCloud } from "react-icons/fi";
 import {
   AlertDialog,
@@ -27,10 +27,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useRouter } from "next/navigation";
 import Toast from "@/components/toast";
-import axios, { AxiosResponse } from "axios";
-import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
+import axios from "axios";
+import { FaBookOpen } from "react-icons/fa6";
 import {
   Select,
   SelectContent,
@@ -42,31 +41,12 @@ import {
 } from "@/components/ui/select";
 import { convertDate } from "@/utils";
 import Cookies from "js-cookie";
-import Link from "next/link";
 import { Blanko } from "@/types/blanko";
 import { blankoAkapiBaseUrl } from "@/constants/urls";
+import useFetchBlanko from "@/hooks/blanko/useFetchBlanko";
 
 const TableDataBlanko: React.FC = () => {
-  const [data, setData] = React.useState<Blanko[]>([]);
-
-  const [isFetching, setIsFetching] = React.useState<boolean>(false);
-
-  const handleFetchingBlanko = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${blankoAkapiBaseUrl}/adminpusat/getBlanko`
-      );
-      console.log("RESPONSE BLANKO : ", response);
-      setData(response.data.data);
-
-      setIsFetching(false);
-    } catch (error) {
-      console.error("ERROR BLANKO : ", error);
-      setIsFetching(false);
-      throw error;
-    }
-  };
+  const { data, isFetching, refetch } = useFetchBlanko();
 
   const [isOpenFormMateri, setIsOpenFormMateri] =
     React.useState<boolean>(false);
@@ -76,15 +56,6 @@ const TableDataBlanko: React.FC = () => {
     []
   );
 
-  const [sertifikatUntukPelatihan, setSertifikatUntukPelatihan] =
-    React.useState("");
-  const [ttdSertifikat, setTtdSertifikat] = React.useState("");
-  const [openFormSertifikat, setOpenFormSertifikat] = React.useState(false);
-
-  const [isOpenFormPublishedPelatihan, setIsOpenFormPublishedPelatihan] =
-    React.useState<boolean>(false);
-
-  const router = useRouter();
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -257,10 +228,6 @@ const TableDataBlanko: React.FC = () => {
     },
   });
 
-  React.useEffect(() => {
-    handleFetchingBlanko();
-  }, []);
-
   const [noSeri, setNoSeri] = React.useState<string>("");
   const [tipeBlanko, setTipeBlanko] = React.useState<string>("");
   const [tanggalPengadaan, setTanggalPengadaan] = React.useState<string>("");
@@ -284,7 +251,7 @@ const TableDataBlanko: React.FC = () => {
           },
         }
       );
-      handleFetchingBlanko();
+      refetch();
       console.log("RESPONSE POST BLANKO : ", response);
       Toast.fire({
         icon: "success",
@@ -297,7 +264,7 @@ const TableDataBlanko: React.FC = () => {
         icon: "error",
         title: `Gagal mengupload data blanko di Pusat Pelatihan KP!`,
       });
-      handleFetchingBlanko();
+      refetch();
       setIsOpenFormMateri(!isOpenFormMateri);
     }
   };

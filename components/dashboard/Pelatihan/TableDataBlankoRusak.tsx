@@ -28,8 +28,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { useRouter } from "next/navigation";
-import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import axios, { AxiosResponse } from "axios";
 import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
@@ -45,15 +43,11 @@ import {
 } from "@/components/ui/select";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { Blanko, BlankoKeluar, BlankoRusak } from "@/types/blanko";
+import { BlankoKeluar, BlankoRusak } from "@/types/blanko";
 import { generateTanggalPelatihan } from "@/utils/text";
+import useFetchBlankoRusak from "@/hooks/blanko/useFetchBlankoRusak";
 
 const TableDataBlankoRusak: React.FC = () => {
-  const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
-    React.useState<boolean>(false);
-  const [showCertificateSetting, setShowCertificateSetting] =
-    React.useState<boolean>(false);
-
   const [keywordSuggestion, setKeywordSuggestion] = React.useState<string>("");
   const [suggestionsBlankoKeluar, setSuggestionsBlankoKeluar] = React.useState<
     BlankoKeluar[]
@@ -74,42 +68,16 @@ const TableDataBlankoRusak: React.FC = () => {
     }
   }, [keywordSuggestion, suggestionsBlankoKeluar]);
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const [data, setData] = React.useState<BlankoRusak[]>([]);
-
-  const [isFetching, setIsFetching] = React.useState<boolean>(false);
-
-  const [dataBlankoKeluar, setDataBlankoKeluar] = React.useState<
-    BlankoKeluar[]
-  >([]);
-
-  const handleFetchingBlankoRusak = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlankoRusak`
-      );
-      setData(response.data.data);
-      console.log({ response });
-      setIsFetching(false);
-    } catch (error) {
-      setIsFetching(false);
-      throw error;
-    }
-  };
+  const { data, isFetching, refetch } = useFetchBlankoRusak();
 
   const handleFetchingBlankoKeluar = async () => {
-    setIsFetching(true);
     try {
       const response: AxiosResponse = await axios.get(
         `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlankoKeluar`
       );
-      setDataBlankoKeluar(response.data.data);
       setSuggestionsBlankoKeluar(response.data.data);
       console.log({ response });
-      setIsFetching(false);
     } catch (error) {
-      setIsFetching(false);
       throw error;
     }
   };
@@ -122,7 +90,6 @@ const TableDataBlankoRusak: React.FC = () => {
     []
   );
 
-  const router = useRouter();
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -323,7 +290,6 @@ const TableDataBlankoRusak: React.FC = () => {
 
   React.useEffect(() => {
     handleFetchingBlankoKeluar();
-    handleFetchingBlankoRusak();
   }, []);
 
   const [selectedTipeBlanko, setSelectedTipeBlanko] =
@@ -393,7 +359,7 @@ const TableDataBlankoRusak: React.FC = () => {
       );
       handleFetchingBlankoKeluar();
       handleClearFormBlankoRusak();
-      handleFetchingBlankoRusak();
+      refetch();
       console.log("RESPONSE POST BLANKO RUSAK : ", response);
       Toast.fire({
         icon: "success",
