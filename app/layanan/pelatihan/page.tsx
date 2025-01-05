@@ -8,9 +8,7 @@ function page() {
   return (
     <>
       <HeroPelatihan />
-
       <FeaturesDiklatKepelautan />
-
       <Newsletter />
     </>
   );
