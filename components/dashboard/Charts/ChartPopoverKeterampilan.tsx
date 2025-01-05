@@ -27,7 +27,8 @@ import TableDataSertifikatKeterampilan from "../Pelatihan/TableDataSertifikatKet
 import { BALAI_PELATIHAN, SATUAN_PENDIDIKAN } from "@/constants/pelatihan";
 import { PELABUHAN_PERIKANAN, PILIHAN_SUMMARY_AKP } from "@/constants/akp";
 import { MapProvider } from "@/components/MapProvider";
-import { Map } from "@/components/Map";
+import { MapComponent } from "@/components/MapComponent";
+
 export const description = "A bar chart with an active bar";
 
 const chartConfig = {
@@ -844,7 +845,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
             <TabsContent value={selectedLemdiklat}>
               <MapProvider>
                 <div className="mt-3 flex flex-col h-full grid-cols-1 gap-5 xl:grid-cols-2 2xl:grid-cols-3 mb-10">
-                  <Map data={data} />
+                  <MapComponent data={data} />
                 </div>
               </MapProvider>
               {selectedLemdiklat == "All" ? (

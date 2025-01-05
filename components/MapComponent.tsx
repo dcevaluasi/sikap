@@ -187,7 +187,7 @@ const CustomMarker = ({
   );
 };
 
-export const Map = ({ data }: { data: BlankoKeluar[] }) => {
+export const MapComponent = ({ data }: { data: BlankoKeluar[] }) => {
   const mapRef = React.useRef<google.maps.Map | null>(null);
 
   const defaultMapOptions = {
