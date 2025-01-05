@@ -1,15 +1,8 @@
 import React from "react";
-import { GoogleMap, Marker, OverlayView } from "@react-google-maps/api";
+import { GoogleMap, OverlayView } from "@react-google-maps/api";
 import { Plus_Jakarta_Sans } from "next/font/google";
 
-import Cookies from "js-cookie";
 import { BlankoKeluar } from "@/types/blanko";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-} from "./ui/chart";
 
 // Map's styling
 export const defaultMapContainerStyle = {
@@ -17,20 +10,6 @@ export const defaultMapContainerStyle = {
   height: "80vh",
   borderRadius: "15px 0px 0px 15px",
 };
-
-const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  desktop: {
-    label: "Certificate of Competence (CoC)",
-    color: "#3C50E0",
-  },
-  mobile: {
-    label: "Certificate of Proficiency (CoP)",
-    color: "#80CAEE",
-  },
-} satisfies ChartConfig;
 
 const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
