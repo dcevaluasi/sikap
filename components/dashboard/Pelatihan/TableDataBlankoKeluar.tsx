@@ -689,8 +689,6 @@ const TableDataBlankoKeluar: React.FC = () => {
     }
   }, [selectedTipeBlanko]);
 
-  console.log({ selectedTipeBlanko });
-
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default sm:px-7.5 xl:col-span-8">
       <AlertDialog open={isOpenFormMateri}>
@@ -1231,13 +1229,13 @@ const TableDataBlankoKeluar: React.FC = () => {
           {/* Header Tabel Data Pelatihan */}
           <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
             {/* Statistik Pelatihan */}
-            <div className="flex w-full flex-wrap gap-3 sm:gap-5">
+            <div className="flex w-full gap-3 sm:gap-5">
               <div className="flex min-w-47.5">
                 <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
                 </span>
                 <div className="w-full">
-                  <p className="font-semibold text-primary">Total Blanko</p>
+                  <p className="font-semibold text-primary">Total Penggunaan</p>
                   <p className="text-sm font-medium">
                     {data.reduce(
                       (total, item) => total + item.JumlahBlankoDisetujui,
@@ -1247,13 +1245,13 @@ const TableDataBlankoKeluar: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex min-w-47.5">
+              <div className="flex w-full">
                 <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-secondary"></span>
                 </span>
                 <div className="w-full">
                   <p className="font-semibold text-secondary">
-                    Total Blanko CoP
+                    Total Penggunaan Blanko CoP
                   </p>
                   <p className="text-sm font-medium">
                     {data
@@ -1270,13 +1268,13 @@ const TableDataBlankoKeluar: React.FC = () => {
                   </p>
                 </div>
               </div>
-              <div className="flex min-w-47.5">
+              <div className="flex w-full -ml-56">
                 <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-secondary">
                   <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-green-400"></span>
                 </span>
                 <div className="w-full">
                   <p className="font-semibold text-green-400">
-                    Total Blanko CoC
+                    Total Penggunaan Blanko CoC
                   </p>
                   <p className="text-sm font-medium">
                     {data
@@ -1347,10 +1345,10 @@ const TableDataBlankoKeluar: React.FC = () => {
                 />
                 <div
                   onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  justify-center cursor-pointer w-full"
                 >
                   <FiUploadCloud />
-                  Tambah Data Blanko
+                  Tambah Data Penggunaan
                 </div>
               </div>
             </div>

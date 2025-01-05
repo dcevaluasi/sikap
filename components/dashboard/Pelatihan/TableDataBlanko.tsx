@@ -2,16 +2,6 @@ import React from "react";
 import TableData from "../Tables/TableData";
 
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -25,28 +15,7 @@ import {
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
-import {
-  TbBook,
-  TbBookFilled,
-  TbBroadcast,
-  TbBuildingCommunity,
-  TbCalendarCheck,
-  TbCalendarDot,
-  TbCalendarExclamation,
-  TbCalendarSearch,
-  TbCalendarStats,
-  TbChartBubble,
-  TbChartDonut,
-  TbDatabase,
-  TbDatabaseEdit,
-  TbFileCertificate,
-  TbFileDigit,
-  TbFishChristianity,
-  TbMoneybag,
-  TbQrcode,
-  TbSchool,
-  TbTargetArrow,
-} from "react-icons/tb";
+import { TbBroadcast, TbChartBubble } from "react-icons/tb";
 import { FiUploadCloud } from "react-icons/fi";
 import {
   AlertDialog,
@@ -57,19 +26,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
-import { MdOutlineSaveAlt } from "react-icons/md";
-import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
-import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
-import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
-import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
-import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { FaBookOpen, FaRupiahSign } from "react-icons/fa6";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -81,21 +42,11 @@ import {
 } from "@/components/ui/select";
 import { convertDate } from "@/utils";
 import Cookies from "js-cookie";
-import { LemdiklatDetailInfo } from "@/types/lemdiklat";
-import { Progress } from "@/components/ui/progress";
-import { GiBookmarklet } from "react-icons/gi";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
-import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import { Blanko } from "@/types/blanko";
+import { blankoAkapiBaseUrl } from "@/constants/urls";
 
 const TableDataBlanko: React.FC = () => {
-  const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
-    React.useState<boolean>(false);
-  const [showCertificateSetting, setShowCertificateSetting] =
-    React.useState<boolean>(false);
-
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [data, setData] = React.useState<Blanko[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
@@ -104,7 +55,7 @@ const TableDataBlanko: React.FC = () => {
     setIsFetching(true);
     try {
       const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlanko`
+        `${blankoAkapiBaseUrl}/adminpusat/getBlanko`
       );
       console.log("RESPONSE BLANKO : ", response);
       setData(response.data.data);
@@ -117,105 +68,8 @@ const TableDataBlanko: React.FC = () => {
     }
   };
 
-  /* ================================= HANDLING PENERBITAN SERTIFIKAT ====================================== */
-  const [beritaAcara, setBeritaAcara] = React.useState<File | null>(null);
-  const handleFileChange = (e: any) => {
-    setBeritaAcara(e.target.files[0]);
-  };
-  console.log({ beritaAcara });
-  const handleGenerateSertifikat = async (id: number) => {
-    console.log({ ttdSertifikat });
-    const formData = new FormData();
-    const updateData = new FormData();
-    formData.append("TtdSertifikat", ttdSertifikat);
-    if (beritaAcara != null) {
-      updateData.append("BeritaAcara", beritaAcara);
-    }
-
-    try {
-      const response = await axios.post(
-        `${baseUrl}/lemdik/PublishSertifikat?id=${id}`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      const uploadBeritaAcaraResponse = await axios.put(
-        `${baseUrl}/lemdik/UpdatePelatihan?id=${id}`,
-        updateData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil mengenerate nomor sertifikat pelatihan!`,
-      });
-      handleFetchingBlanko();
-      console.log("GENERATE SERTIFIKAT: ", response);
-      console.log("UPLOAD BERITA ACARA: ", uploadBeritaAcaraResponse);
-      // handleFetchingBlanko();
-    } catch (error) {
-      console.error("ERROR GENERATE SERTIFIKAT: ", error);
-      Toast.fire({
-        icon: "success",
-        title: `Gagal mengenerate nomor sertifikat pelatihan!`,
-      });
-      handleFetchingBlanko();
-    }
-  };
-  /* ================================= HANDLING PENERBITAN SERTIFIKAT ====================================== */
-
-  const [namaMateri, setNamaMateri] = React.useState<string>("");
-  const [jamTeori, setJamTeori] = React.useState<string>("");
-  const [jamPraktek, setJamPraktek] = React.useState<string>("");
-
   const [isOpenFormMateri, setIsOpenFormMateri] =
     React.useState<boolean>(false);
-  const [selectedId, setSelectedId] = React.useState<number>(0);
-
-  const handleUploadMateriPelatihan = async (id: number) => {
-    try {
-      const response = await axios.post(
-        `${baseUrl}/lemdik/createMateriPelatihan?id_pelatihan=${id}`,
-        {
-          nama_materi: namaMateri,
-          deskripsi: "",
-          jam_teory: jamTeori,
-          jam_praktek: jamPraktek,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF091")}`,
-          },
-        }
-      );
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil menambahkan materi pelatihan!`,
-      });
-      handleFetchingBlanko();
-      console.log("MATERI PELATIHAN: ", response);
-      setIsOpenFormMateri(!isOpenFormMateri);
-      setNamaMateri("");
-      setJamPraktek("");
-      setJamTeori("");
-      // handleFetchingBlanko();
-    } catch (error) {
-      console.error("ERROR GENERATE SERTIFIKAT: ", error);
-      Toast.fire({
-        icon: "success",
-        title: `Gagal menambahkan materi pelatihan!`,
-      });
-      handleFetchingBlanko();
-    }
-  };
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -254,7 +108,10 @@ const TableDataBlanko: React.FC = () => {
       ),
     },
     {
-      accessorKey: "NoSertifikat",
+      accessorKey: "TipeBlanko",
+      meta: {
+        filterVariant: "select",
+      },
       header: ({ column }) => {
         return (
           <Button
@@ -445,6 +302,22 @@ const TableDataBlanko: React.FC = () => {
     }
   };
 
+  const [selectedTipeBlanko, setSelectedTipeBlanko] =
+    React.useState<string>("");
+
+  React.useEffect(() => {
+    if (selectedTipeBlanko) {
+      setColumnFilters([
+        {
+          id: "TipeBlanko",
+          value: selectedTipeBlanko,
+        },
+      ]);
+    } else {
+      setColumnFilters([]); // Clear filters when no selection
+    }
+  }, [selectedTipeBlanko]);
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       <AlertDialog open={isOpenFormMateri}>
@@ -634,33 +507,30 @@ const TableDataBlanko: React.FC = () => {
           <div id="chartOne" className="-ml-5"></div>
           <div className="flex w-full items-center mb-2">
             <div className="flex w-full gap-1 items-start">
-              <Select>
-                <SelectTrigger className="w-[140px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
+              <Select
+                value={selectedTipeBlanko}
+                onValueChange={(value) => setSelectedTipeBlanko(value)}
+              >
+                <SelectTrigger className="w-fit border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
                   <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                    <TbChartBubble /> Jenis Blanko
+                    <TbChartBubble />{" "}
+                    {selectedTipeBlanko == " "
+                      ? "All"
+                      : selectedTipeBlanko != ""
+                      ? selectedTipeBlanko
+                      : "Tipe Blanko"}
                   </div>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
-                    <SelectLabel>Status</SelectLabel>
-                    <SelectItem value="pendaftaran">CoP</SelectItem>
-                    <SelectItem value="pelaksanaan">CoC</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-
-              <Select>
-                <SelectTrigger className="w-[190px] border-none shadow-none bg-none p-0 active:ring-0 focus:ring-0">
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                    <TbBroadcast />
-                    Tanggal Pengadaan
-                  </div>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Bidang</SelectLabel>
-                    <SelectItem value="apple">Publish E-LAUT</SelectItem>
-                    <SelectItem value="banana">Unpublish E-LAUT</SelectItem>
+                    <SelectLabel>Tipe Blanko</SelectLabel>
+                    <SelectItem value=" ">All</SelectItem>
+                    <SelectItem value="Certificate of Competence (CoC)">
+                      Certificate of Competence (CoC)
+                    </SelectItem>
+                    <SelectItem value="Certificate of Proficiency (CoP)">
+                      Certificate of Proficiency (CoP)
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

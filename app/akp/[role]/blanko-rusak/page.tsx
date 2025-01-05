@@ -1,17 +1,19 @@
-import BlankoRusak from "@/components/dashboard/Dashboard/BlankoRusak";
-import DefaultLayoutAKP from "@/components/dashboard/Layouts/DefaultLayoutAKP";
-import { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Database Pelatihan - Elektronik Layanan Pelatihan KP Utama Terpadu",
-};
+import { BlankoComponent } from "@/components/dashboard/Dashboard/AKP/BlankoComponent";
+import DefaultLayoutAKP from "@/components/dashboard/Layouts/DefaultLayoutAKP";
+import TableDataBlankoRusak from "@/components/dashboard/Pelatihan/TableDataBlankoRusak";
+import { PiImageBroken } from "react-icons/pi";
 
 export default function Home() {
   return (
-    <>
-      <DefaultLayoutAKP>
-        <BlankoRusak />
-      </DefaultLayoutAKP>
-    </>
+    <DefaultLayoutAKP>
+      <BlankoComponent
+        icon={<PiImageBroken className="text-4xl" />}
+        title="Kerusakan Blanko"
+        description="Tracking dan Monitoring Kerusakan Blanko Yang Telah Digunakan!"
+        table={<TableDataBlankoRusak />}
+      />
+    </DefaultLayoutAKP>
   );
 }

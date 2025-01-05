@@ -5,20 +5,23 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import SidebarLinkGroup from "./SidebarLinkGroup";
 import { FaBoxOpen, FaRupiahSign } from "react-icons/fa6";
-import { IoIosPaperPlane, IoMdSchool } from "react-icons/io";
+import { IoMdSchool } from "react-icons/io";
 import LogoFooter from "@/components/ui/logo-footer";
+import { RiQuillPenLine } from "react-icons/ri";
+
 import {
   RiFilePaperLine,
   RiShakeHandsLine,
-  RiVerifiedBadgeFill,
+  RiShipLine,
   RiVerifiedBadgeLine,
 } from "react-icons/ri";
-import { GiPapers } from "react-icons/gi";
 import { HiMiniComputerDesktop } from "react-icons/hi2";
 import {
   TbBroadcast,
-  TbDatabase,
+  TbBuildingSkyscraper,
+  TbCalendarPin,
   TbDatabaseEdit,
+  TbFileCertificate,
   TbSchool,
 } from "react-icons/tb";
 import Cookies from "js-cookie";
@@ -94,14 +97,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-2 px-6 pb-5.5 lg:pb-6.5">
+      <div className="flex items-center justify-between gap-2 px-6 pb-10 lg:pb-12">
         <Link
           href="/"
           className="flex gap-2 mt-10 flex-col items-center justify-center"
         >
           <LogoFooter />
           <div className="flex flex-col gap-0 mt-3 w-full items-center justify-center">
-            <p className="font-bold text-3xl !font-delius text-white">
+            <p className="font-bold text-4xl leading-none font-calsans text-center text-white">
               {pathname.includes("/akp")
                 ? "AKAPI"
                 : pathname.includes("/dpkakp")
@@ -112,7 +115,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </p>
             <p className="font-medium text-white text-sm text-center">
               {pathname.includes("/akp")
-                ? "Dashboard Aplikasi Awak Kapal Perikanan Badan Penyuluhan dan Pengembangan Sumber Daya Manusia"
+                ? "Dashboard Sertifikasi Awak Kapal Perikanan Badan Penyuluhan dan Pengembangan Sumber Daya Manusia"
                 : pathname.includes("/dpkakp")
                 ? "Dashboard Dewan Penguji Keahlian Awak Kapal Perikanan Badan Penyuluhan dan Pengembangan Sumber Daya Manusia"
                 : pathname.includes("/pukakp")
@@ -156,7 +159,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </h3>
 
             <ul className="mb-6 flex flex-col gap-1.5 text-sm">
-              {/* <!-- Menu Item Dashboard --> */}
               {pathname.includes("/akp") ? (
                 <SidebarLinkGroup
                   activeCondition={
@@ -282,6 +284,162 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               : setSidebarExpanded(true);
                           }}
                         >
+                          <RiShipLine className="text-xl" />
+                          Layanan AKAPI
+                          <svg
+                            className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+                              open && "rotate-180"
+                            }`}
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                              fill=""
+                            />
+                          </svg>
+                        </Link>
+                        {/* <!-- Dropdown Menu Start --> */}
+                        <div
+                          className={`translate transform overflow-hidden ${
+                            !open && "hidden"
+                          }`}
+                        >
+                          <ul className="mb-5.5 mt-0 flex flex-col gap-1 pl-6">
+                            <li>
+                              <SidebarLinkGroup
+                                activeCondition={pathname == "akp/pusat/blanko"}
+                              >
+                                {(handleClick, open) => {
+                                  return (
+                                    <React.Fragment>
+                                      <Link
+                                        href="/akp/pusat/blanko"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                          pathname == "akp/pusat/blanko" &&
+                                          "bg-graydark "
+                                        }`}
+                                      >
+                                        <TbBuildingSkyscraper className="text-xl" />
+                                        Pengesahan Program
+                                      </Link>
+                                    </React.Fragment>
+                                  );
+                                }}
+                              </SidebarLinkGroup>
+                            </li>
+                            <li>
+                              <SidebarLinkGroup
+                                activeCondition={pathname.includes(
+                                  "akp/pusat/blanko-keluar"
+                                )}
+                              >
+                                {(handleClick, open) => {
+                                  return (
+                                    <React.Fragment>
+                                      <Link
+                                        href="/akp/pusat/blanko-keluar"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                          pathname.includes(
+                                            "akp/pusat/blanko-keluar"
+                                          ) && "bg-graydark "
+                                        }`}
+                                      >
+                                        <TbCalendarPin className="text-xl" />
+                                        Pelaksanaan Diklat
+                                      </Link>
+                                    </React.Fragment>
+                                  );
+                                }}
+                              </SidebarLinkGroup>
+                            </li>
+                            <li>
+                              <SidebarLinkGroup
+                                activeCondition={pathname.includes(
+                                  "akp/pusat/blanko-keluar"
+                                )}
+                              >
+                                {(handleClick, open) => {
+                                  return (
+                                    <React.Fragment>
+                                      <Link
+                                        href="/akp/pusat/blanko-keluar"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                          pathname.includes(
+                                            "akp/pusat/blanko-keluar"
+                                          ) && "bg-graydark "
+                                        }`}
+                                      >
+                                        <RiQuillPenLine className="text-xl" />
+                                        Pelaksanaan Ujian
+                                      </Link>
+                                    </React.Fragment>
+                                  );
+                                }}
+                              </SidebarLinkGroup>
+                            </li>
+                            <li>
+                              <SidebarLinkGroup
+                                activeCondition={pathname.includes(
+                                  "akp/pusat/blanko-rusak"
+                                )}
+                              >
+                                {(handleClick, open) => {
+                                  return (
+                                    <React.Fragment>
+                                      <Link
+                                        href="/akp/pusat/blanko-rusak"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                          pathname.includes(
+                                            "akp/pusat/blanko-rusak"
+                                          ) && "bg-graydark "
+                                        }`}
+                                      >
+                                        <TbFileCertificate className="text-xl" />
+                                        Penerbitan Sertifikat
+                                      </Link>
+                                    </React.Fragment>
+                                  );
+                                }}
+                              </SidebarLinkGroup>
+                            </li>
+                          </ul>
+                        </div>
+                        {/* <!-- Dropdown Menu End --> */}
+                      </React.Fragment>
+                    );
+                  }}
+                </SidebarLinkGroup>
+              )}
+
+              {pathname.includes("akp") && (
+                <SidebarLinkGroup
+                  activeCondition={
+                    pathname === "/akp" || pathname.includes("akp")
+                  }
+                >
+                  {(handleClick, open) => {
+                    return (
+                      <React.Fragment>
+                        <Link
+                          href="#"
+                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 px-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                            (pathname === "/forms" ||
+                              pathname.includes("forms")) &&
+                            "bg-graydark "
+                          }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sidebarExpanded
+                              ? handleClick()
+                              : setSidebarExpanded(true);
+                          }}
+                        >
                           <IoFileTrayStackedOutline className="text-xl" />
                           Blanko
                           <svg
@@ -311,9 +469,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           <ul className="mb-5.5 mt-0 flex flex-col gap-1 pl-6">
                             <li>
                               <SidebarLinkGroup
-                                activeCondition={
-                                  !pathname.includes("akp/pusat/blanko")
-                                }
+                                activeCondition={pathname == "akp/pusat/blanko"}
                               >
                                 {(handleClick, open) => {
                                   return (
@@ -321,9 +477,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                       <Link
                                         href="/akp/pusat/blanko"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
-                                          pathname.includes(
-                                            "akp/pusat/blanko"
-                                          ) && "bg-graydark "
+                                          pathname == "akp/pusat/blanko" &&
+                                          "bg-graydark "
                                         }`}
                                       >
                                         <RiFilePaperLine className="text-xl" />

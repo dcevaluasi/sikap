@@ -128,7 +128,7 @@ const AKP: React.FC = () => {
           <PopoverTrigger asChild>
             <span onClick={(e) => setSelectedId(0)}>
               <CardDataStats
-                title="Total Pengadaan Blanko"
+                title="Total Pengadaan"
                 total={dataBlanko
                   .reduce((total, item) => total + item.JumlahPengadaan, 0)
                   .toString()}
@@ -171,17 +171,17 @@ const AKP: React.FC = () => {
           <PopoverTrigger asChild>
             <span onClick={(e) => setSelectedId(0)}>
               <CardDataStats
-                title="Sisa Persediaan Blanko"
+                title="Sisa Persediaan"
                 total={(
                   dataBlanko.reduce(
                     (total, item) => total + item.JumlahPengadaan,
                     0
                   ) -
-                  data.reduce(
+                  (data.reduce(
                     (total, item) => total + item.JumlahBlankoDisetujui,
                     0
-                  ) -
-                  blankoRusak.length
+                  ) +
+                    blankoRusak.length)
                 ).toString()}
                 rate=""
                 levelDown
