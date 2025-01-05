@@ -1,7 +1,7 @@
 import React from "react";
+
 import { GoogleMap, OverlayView } from "@react-google-maps/api";
 import { Plus_Jakarta_Sans } from "next/font/google";
-
 import { BlankoKeluar } from "@/types/blanko";
 
 // Map's styling
@@ -139,44 +139,6 @@ const customMapStyles = [
   },
 ];
 
-export const Map = ({ data }: { data: BlankoKeluar[] }) => {
-  const mapRef = React.useRef<google.maps.Map | null>(null);
-
-  const defaultMapOptions = {
-    zoomControl: true,
-    tilt: 0,
-    gestureHandling: "auto",
-    styles: customMapStyles, // Apply navy mode styles
-  };
-
-  return (
-    <div className={`${plusJakartaSans.className} w-full flex flex-col gap-2`}>
-      <GoogleMap
-        ref={(map: any) => (mapRef!.current! = map!)}
-        mapContainerStyle={defaultMapContainerStyle}
-        center={{
-          lat: -2.5489, // Center latitude of Indonesia
-          lng: 118.0149, // Center longitude of Indonesia
-        }}
-        zoom={5} // Adjust zoom level to show the entire archipelago
-        options={defaultMapOptions}
-      >
-        {data!.map((data, index) => (
-          <CustomMarker
-            key={index}
-            data={data}
-            position={{
-              lat: parseFloat(data!.Latitude!),
-              lng: parseFloat(data!.Longitude!),
-            }}
-            mapRef={mapRef}
-          />
-        ))}
-      </GoogleMap>
-    </div>
-  );
-};
-
 const CustomMarker = ({
   position,
   data,
@@ -222,5 +184,43 @@ const CustomMarker = ({
         </div>
       </div>
     </OverlayView>
+  );
+};
+
+export const Map = ({ data }: { data: BlankoKeluar[] }) => {
+  const mapRef = React.useRef<google.maps.Map | null>(null);
+
+  const defaultMapOptions = {
+    zoomControl: true,
+    tilt: 0,
+    gestureHandling: "auto",
+    styles: customMapStyles, // Apply navy mode styles
+  };
+
+  return (
+    <div className={`${plusJakartaSans.className} w-full flex flex-col gap-2`}>
+      <GoogleMap
+        ref={(map: any) => (mapRef!.current! = map!)}
+        mapContainerStyle={defaultMapContainerStyle}
+        center={{
+          lat: -2.5489, // Center latitude of Indonesia
+          lng: 118.0149, // Center longitude of Indonesia
+        }}
+        zoom={5} // Adjust zoom level to show the entire archipelago
+        options={defaultMapOptions}
+      >
+        {data!.map((data, index) => (
+          <CustomMarker
+            key={index}
+            data={data}
+            position={{
+              lat: parseFloat(data!.Latitude!),
+              lng: parseFloat(data!.Longitude!),
+            }}
+            mapRef={mapRef}
+          />
+        ))}
+      </GoogleMap>
+    </div>
   );
 };

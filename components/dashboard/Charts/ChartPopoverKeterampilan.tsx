@@ -1,25 +1,14 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import React, { useState } from "react";
 
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BlankoKeluar } from "@/types/blanko";
 import { formatDateTime } from "@/utils";
-import React, { useEffect, useState } from "react";
 
 import CountUp from "react-countup";
 
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  LabelList,
-  Rectangle,
-  XAxis,
-  Pie,
-  PieChart,
-  Label,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 import {
   Card,
   CardContent,
