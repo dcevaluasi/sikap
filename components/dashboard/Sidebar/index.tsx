@@ -9,6 +9,7 @@ import { IoIosPaperPlane, IoMdSchool } from "react-icons/io";
 import LogoFooter from "@/components/ui/logo-footer";
 import {
   RiFilePaperLine,
+  RiShakeHandsLine,
   RiVerifiedBadgeFill,
   RiVerifiedBadgeLine,
 } from "react-icons/ri";
@@ -26,6 +27,8 @@ import { generateRandomId } from "@/lib/utils";
 import { GrSend } from "react-icons/gr";
 import { HiOutlineDownload } from "react-icons/hi";
 import { PiImageBroken } from "react-icons/pi";
+import { IoFileTrayStackedOutline } from "react-icons/io5";
+import { FiBox } from "react-icons/fi";
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -256,85 +259,234 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </SidebarLinkGroup>
               )}
 
-              {pathname.includes("/akp") && (
+              {pathname.includes("akp") && (
                 <SidebarLinkGroup
-                  activeCondition={!pathname.includes("keluar")}
+                  activeCondition={
+                    pathname === "/akp" || pathname.includes("akp")
+                  }
                 >
                   {(handleClick, open) => {
                     return (
                       <React.Fragment>
                         <Link
-                          href="/akp/pusat/blanko"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
-                            !pathname.includes("keluar") && "bg-graydark "
-                          }`}
-                        >
-                          <RiFilePaperLine className="text-xl" />
-                          Blanko
-                        </Link>
-                      </React.Fragment>
-                    );
-                  }}
-                </SidebarLinkGroup>
-              )}
-
-              {pathname.includes("/akp") && (
-                <SidebarLinkGroup activeCondition={pathname.includes("keluar")}>
-                  {(handleClick, open) => {
-                    return (
-                      <React.Fragment>
-                        <Link
-                          href="/akp/pusat/blanko-keluar"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
-                            pathname.includes("keluar") && "bg-graydark "
-                          }`}
-                        >
-                          <HiOutlineDownload className="text-xl" />
-                          Blanko Keluar
-                        </Link>
-                      </React.Fragment>
-                    );
-                  }}
-                </SidebarLinkGroup>
-              )}
-
-              {pathname.includes("/akp") && (
-                <SidebarLinkGroup activeCondition={pathname.includes("rusak")}>
-                  {(handleClick, open) => {
-                    return (
-                      <React.Fragment>
-                        <Link
-                          href="/akp/pusat/blanko-rusak"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
-                            pathname.includes("rusak") && "bg-graydark "
-                          }`}
-                        >
-                          <PiImageBroken className="text-xl" />
-                          Blanko Rusak
-                        </Link>
-                      </React.Fragment>
-                    );
-                  }}
-                </SidebarLinkGroup>
-              )}
-
-              {pathname.includes("/akp") && (
-                <SidebarLinkGroup
-                  activeCondition={pathname.includes("pengiriman-sertifikat")}
-                >
-                  {(handleClick, open) => {
-                    return (
-                      <React.Fragment>
-                        <Link
-                          href="/akp/pusat/pengiriman-sertifikat"
-                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
-                            pathname.includes("pengiriman-sertifikat") &&
+                          href="#"
+                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 px-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                            (pathname === "/forms" ||
+                              pathname.includes("forms")) &&
                             "bg-graydark "
                           }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sidebarExpanded
+                              ? handleClick()
+                              : setSidebarExpanded(true);
+                          }}
                         >
-                          <GrSend className="text-xl" />
-                          Pengiriman Sertifikat
+                          <IoFileTrayStackedOutline className="text-xl" />
+                          Blanko
+                          <svg
+                            className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+                              open && "rotate-180"
+                            }`}
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                              fill=""
+                            />
+                          </svg>
                         </Link>
+                        {/* <!-- Dropdown Menu Start --> */}
+                        <div
+                          className={`translate transform overflow-hidden ${
+                            !open && "hidden"
+                          }`}
+                        >
+                          <ul className="mb-5.5 mt-0 flex flex-col gap-1 pl-6">
+                            <li>
+                              <SidebarLinkGroup
+                                activeCondition={!pathname.includes("keluar")}
+                              >
+                                {(handleClick, open) => {
+                                  return (
+                                    <React.Fragment>
+                                      <Link
+                                        href="/akp/pusat/blanko"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                          !pathname.includes("keluar") &&
+                                          "bg-graydark "
+                                        }`}
+                                      >
+                                        <RiFilePaperLine className="text-xl" />
+                                        Persediaan Blanko
+                                      </Link>
+                                    </React.Fragment>
+                                  );
+                                }}
+                              </SidebarLinkGroup>
+                            </li>
+                            <li>
+                              <SidebarLinkGroup
+                                activeCondition={pathname.includes("keluar")}
+                              >
+                                {(handleClick, open) => {
+                                  return (
+                                    <React.Fragment>
+                                      <Link
+                                        href="/akp/pusat/blanko-keluar"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                          pathname.includes("keluar") &&
+                                          "bg-graydark "
+                                        }`}
+                                      >
+                                        <HiOutlineDownload className="text-xl" />
+                                        Penggunaan Blanko
+                                      </Link>
+                                    </React.Fragment>
+                                  );
+                                }}
+                              </SidebarLinkGroup>
+                            </li>
+                            <li>
+                              <SidebarLinkGroup
+                                activeCondition={pathname.includes("rusak")}
+                              >
+                                {(handleClick, open) => {
+                                  return (
+                                    <React.Fragment>
+                                      <Link
+                                        href="/akp/pusat/blanko-rusak"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                          pathname.includes("rusak") &&
+                                          "bg-graydark "
+                                        }`}
+                                      >
+                                        <PiImageBroken className="text-xl" />
+                                        Blanko Rusak
+                                      </Link>
+                                    </React.Fragment>
+                                  );
+                                }}
+                              </SidebarLinkGroup>
+                            </li>
+                          </ul>
+                        </div>
+                        {/* <!-- Dropdown Menu End --> */}
+                      </React.Fragment>
+                    );
+                  }}
+                </SidebarLinkGroup>
+              )}
+
+              {pathname.includes("akp") && (
+                <SidebarLinkGroup
+                  activeCondition={
+                    pathname === "/akp" || pathname.includes("akp")
+                  }
+                >
+                  {(handleClick, open) => {
+                    return (
+                      <React.Fragment>
+                        <Link
+                          href="#"
+                          className={`group relative flex items-center gap-2.5 rounded-sm  py-2 px-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                            (pathname === "/forms" ||
+                              pathname.includes("forms")) &&
+                            "bg-graydark "
+                          }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            sidebarExpanded
+                              ? handleClick()
+                              : setSidebarExpanded(true);
+                          }}
+                        >
+                          <FiBox className="text-xl" />
+                          Distribusi Sertifikat
+                          <svg
+                            className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
+                              open && "rotate-180"
+                            }`}
+                            width="20"
+                            height="20"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              clipRule="evenodd"
+                              d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                              fill=""
+                            />
+                          </svg>
+                        </Link>
+                        {/* <!-- Dropdown Menu Start --> */}
+                        <div
+                          className={`translate transform overflow-hidden ${
+                            !open && "hidden"
+                          }`}
+                        >
+                          <ul className="mb-5.5 mt-0 flex flex-col gap-1 pl-6">
+                            <li>
+                              <SidebarLinkGroup
+                                activeCondition={pathname.includes(
+                                  "penyerahan-sertifikat"
+                                )}
+                              >
+                                {(handleClick, open) => {
+                                  return (
+                                    <React.Fragment>
+                                      <Link
+                                        href="/akp/pusat/pengiriman-sertifikat"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                          pathname.includes(
+                                            "pengiriman-sertifikat"
+                                          ) && "bg-graydark "
+                                        }`}
+                                      >
+                                        <RiShakeHandsLine className="text-xl" />
+                                        Penyerahan Sertifikat
+                                      </Link>
+                                    </React.Fragment>
+                                  );
+                                }}
+                              </SidebarLinkGroup>
+                            </li>
+                            <li>
+                              <SidebarLinkGroup
+                                activeCondition={pathname.includes(
+                                  "pengiriman-sertifikat"
+                                )}
+                              >
+                                {(handleClick, open) => {
+                                  return (
+                                    <React.Fragment>
+                                      <Link
+                                        href="/akp/pusat/pengiriman-sertifikat"
+                                        className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                                          pathname.includes(
+                                            "pengiriman-sertifikat"
+                                          ) && "bg-graydark "
+                                        }`}
+                                      >
+                                        <GrSend className="text-xl" />
+                                        Pengiriman Sertifikat
+                                      </Link>
+                                    </React.Fragment>
+                                  );
+                                }}
+                              </SidebarLinkGroup>
+                            </li>
+                          </ul>
+                        </div>
+                        {/* <!-- Dropdown Menu End --> */}
                       </React.Fragment>
                     );
                   }}
@@ -876,7 +1028,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </ul>
           </div>
         </nav>
-        {/* <!-- Sidebar Menu --> */}
       </div>
     </aside>
   );

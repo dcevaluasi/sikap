@@ -41,6 +41,8 @@ import { generateTanggalPelatihan } from "@/utils/text";
 import TableData from "@/components/dashboard/Tables/TableData";
 import { GrSend } from "react-icons/gr";
 import { blankoAkapiBaseUrl } from "@/constants/urls";
+import { formatToRupiah } from "@/lib/utils";
+import Image from "next/image";
 
 export const TableDataPengirimanSertifikat: React.FC = () => {
   const [isPosting, setIsPosting] = React.useState<boolean>(false);
@@ -102,6 +104,17 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
     }
   }, [keywordSuggestion, suggestionsBlankoKeluar]);
 
+  const handleClearPengirimanSertifikat = () => {
+    setNamaPenerima("");
+    setNomorTelpon("");
+    setAlamat("");
+    setNoResi("");
+    setNominalPengiriman("");
+    setSelectedItems([]);
+    setBuktiPengiriman(null);
+    setBuktiPengiriman(null);
+  };
+
   const handlePostPengirimanSertifikat = async (e: any) => {
     setIsPosting(true);
 
@@ -118,6 +131,7 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
 
     if (buktiResi != null) {
       formData.append("bukti_resi", buktiResi!);
+      formData.append("ttd_terima", buktiResi!);
     }
 
     if (buktiPengiriman != null) {
@@ -141,6 +155,9 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
         title: "Berhasil",
         text: `Berhasil menambahkan data pengiriman sertifikat`,
       });
+      setIsOpenFormMateri(false);
+      handleFetchingPengirimanSertififkat();
+      handleClearPengirimanSertifikat();
       setIsPosting(false);
     } catch (error) {
       console.error(error);
@@ -160,21 +177,6 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
   const [dataBlankoKeluar, setDataBlankoKeluar] = React.useState<
     BlankoKeluar[]
   >([]);
-
-  const handleFetchingBlankoRusak = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${process.env.NEXT_PUBLIC_BLANKO_AKAPI_URL}/adminpusat/getBlankoRusak`
-      );
-      setData(response.data.data);
-      console.log({ response });
-      setIsFetching(false);
-    } catch (error) {
-      setIsFetching(false);
-      throw error;
-    }
-  };
 
   const handleFetchingPengirimanSertififkat = async () => {
     setIsFetching(true);
@@ -363,8 +365,65 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
         >
           <p className="text-sm text-dark leading-[100%]">
             {" "}
-            {row.original.NominalPengiriman}
+            {formatToRupiah(parseInt(row.original.NominalPengiriman))}
           </p>
+        </div>
+      ),
+    },
+
+    {
+      accessorKey: "BuktiResi",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Bukti Resi
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+        >
+          <Image
+            src={row.original.BuktiResi}
+            className="w-20 object-cover"
+            width={0}
+            height={0}
+            alt={row.original.NoResi}
+          />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "BuktiPengirimanSertifikat",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className="p-0 !text-left w-[200px] flex items-center justify-start text-gray-900 font-semibold"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Bukti Pengiriman
+            <HiUserGroup className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div
+          className={`${"ml-0"}  text-left flex flex-wrap flex-col capitalize`}
+        >
+          <Image
+            src={row.original.BuktiPengirimanSertifikat}
+            className="w-20 object-cover"
+            width={0}
+            height={0}
+            alt={row.original.NoResi}
+          />
         </div>
       ),
     },
@@ -442,7 +501,6 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
 
   React.useEffect(() => {
     handleFetchingBlankoKeluar();
-    handleFetchingBlankoRusak();
     handleFetchingPengirimanSertififkat();
   }, []);
 
@@ -462,236 +520,254 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
               </AlertDialogDescription>
             </div>
           </AlertDialogHeader>
-          <fieldset>
-            <form autoComplete="off" className="flex flex-col gap-1">
-              <div className="grid grid-cols-2 gap-3">
-                <div className="w-full">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="namaPenerima"
-                  >
-                    Nama Penerima <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    id="namaPenerima"
-                    type="text"
-                    className="form-input w-full text-black text-sm border-gray-300 rounded-md"
-                    placeholder="Masukkan nama lengkap penerima"
-                    required
-                    value={namaPenerima}
-                    onChange={(e) => setNamaPenerima(e.target.value)}
-                  />
-                </div>
-                <div className="w-full">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="noTelpon"
-                  >
-                    Nomor Telpon <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    id="noTelpon"
-                    type="text"
-                    className="form-input w-full text-black text-sm border-gray-300 rounded-md"
-                    placeholder="Masukkan nomor telpon"
-                    required
-                    value={nomorTelpon}
-                    onChange={(e) => setNomorTelpon(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-2 w-full">
-                <div className="w-full relative">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="alamat"
-                  >
-                    Alamat <span className="text-red-600">*</span>
-                  </label>
-                  <textarea
-                    id="alamat"
-                    className="form-input w-full text-sm text-black border-gray-300 rounded-md"
-                    placeholder="Masukkan alamat lengkap penerima sertifikat"
-                    required
-                    value={alamat}
-                    onChange={(e) => setAlamat(e.target.value)}
-                  ></textarea>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div className="w-full">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="noResi"
-                  >
-                    No Resi Pengiriman <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    id="noResi"
-                    type="text"
-                    className="form-input w-full text-black text-sm border-gray-300 rounded-md"
-                    placeholder="Masukkan nomor resi pengiriman"
-                    required
-                    value={noResi}
-                    onChange={(e) => setNoResi(e.target.value)}
-                  />
-                </div>
-                <div className="w-full">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="nominalPengiriman"
-                  >
-                    Harga Pengiriman (Rp)
-                    <span className="text-red-600">*</span>
-                  </label>
-                  <input
-                    id="nominalPengiriman"
-                    type="text"
-                    className="form-input w-full text-black text-sm border-gray-300 rounded-md"
-                    placeholder="Masukkan harga pengiriman"
-                    required
-                    value={nominalPengiriman}
-                    onChange={(e) => setNominalPengiriman(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-wrap -mx-3 !text-sm">
-                <div className="grid grid-cols-1 px-3 gap-2 mb-2 w-full">
-                  <div className="w-full relative">
-                    <label
-                      className="block text-gray-800 text-sm font-medium"
-                      htmlFor="name"
-                    >
-                      List Sertifikat <span className="text-red-600">*</span>
-                    </label>
-
-                    {/* Selected Items */}
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {selectedItems.map((item, index) => (
-                        <span
-                          key={index}
-                          className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md flex items-center gap-1"
-                        >
-                          {item}
-                          <button
-                            type="button"
-                            className="text-red-500"
-                            onClick={() => handleRemoveItem(item)}
-                          >
-                            &times;
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* Input for Suggestions */}
-                    <input
-                      id="name"
-                      className="form-input w-full text-black border-gray-300 rounded-md leading-[120%] text-sm h-fit"
-                      placeholder="Cari berdasarkan nama pelaksana"
-                      required
-                      value={keywordSuggestion}
-                      onChange={(e) => {
-                        setKeywordSuggestion(e.target.value);
-
-                        // Fetch suggestions logic here...
-                        // Example:
-                        setIsFetching(true);
-                        // Simulate async fetch
-                        setTimeout(() => {
-                          setIsFetching(false);
-                        }, 500);
-                      }}
-                    />
-
-                    {/* Render suggestions dropdown */}
-                    {filteredSuggestions.length > 0 && (
-                      <ul className="absolute bg-white border border-gray-300 rounded-md w-full max-h-40 overflow-y-auto mt-1 z-10">
-                        {filteredSuggestions.map((suggestion, index) => (
-                          <li
-                            key={index}
-                            className="p-2 cursor-pointer hover:bg-gray-200"
-                            onClick={() => handleSelectSuggestion(suggestion)}
-                          >
-                            {suggestion.IdBlankoKeluar}
-                            {") "}
-                            {suggestion.NamaPelaksana}; {suggestion.NamaProgram}
-                            ; {suggestion.TanggalPelaksanaan};
-                            {suggestion.NoSeriBlanko}
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-
-                    {/* Loading indicator */}
-                    {isFetching && (
-                      <p className="text-sm text-gray-500 mt-1">
-                        Fetching suggestions...
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex mb-1 gap-3">
-                <div className="w-full">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="email"
-                  >
-                    Bukti Resi <span>*</span>
-                  </label>
-                  <div className="flex gap-1">
-                    <input
-                      type="file"
-                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                      required
-                      onChange={handleBuktiResiFileChange}
-                    />
-                  </div>
-                </div>
-
-                <div className="w-full">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="email"
-                  >
-                    Bukti Pengiriman <span>*</span>
-                  </label>
-                  <div className="flex gap-1">
-                    <input
-                      type="file"
-                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                      required
-                      onChange={handleBuktiPengirimanFileChange}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <AlertDialogFooter className="mt-3">
-                <AlertDialogCancel
-                  onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
-                >
-                  Cancel
-                </AlertDialogCancel>
-                <AlertDialogAction
-                  onClick={(e) => handlePostPengirimanSertifikat(e)}
-                >
-                  Upload
+          {isPosting ? (
+            <div className="w-full flex flex-col items-center justify-center">
+              <Image
+                src={"/illustrations/development.png"}
+                alt="Illustration Loading"
+                width={0}
+                height={0}
+                className="w-100"
+              />
+              <AlertDialogFooter className="mt-3 w-full">
+                <AlertDialogAction className="w-full" disabled>
+                  Uploading....
                 </AlertDialogAction>
               </AlertDialogFooter>
-            </form>
-          </fieldset>
+            </div>
+          ) : (
+            <fieldset>
+              <form autoComplete="off" className="flex flex-col gap-1">
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="namaPenerima"
+                    >
+                      Nama Penerima <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="namaPenerima"
+                      type="text"
+                      className="form-input w-full text-black text-sm border-gray-300 rounded-md"
+                      placeholder="Masukkan nama lengkap penerima"
+                      required
+                      value={namaPenerima}
+                      onChange={(e) => setNamaPenerima(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="noTelpon"
+                    >
+                      Nomor Telpon <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="noTelpon"
+                      type="text"
+                      className="form-input w-full text-black text-sm border-gray-300 rounded-md"
+                      placeholder="Masukkan nomor telpon"
+                      required
+                      value={nomorTelpon}
+                      onChange={(e) => setNomorTelpon(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2 w-full">
+                  <div className="w-full relative">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="alamat"
+                    >
+                      Alamat <span className="text-red-600">*</span>
+                    </label>
+                    <textarea
+                      id="alamat"
+                      className="form-input w-full text-sm text-black border-gray-300 rounded-md"
+                      placeholder="Masukkan alamat lengkap penerima sertifikat"
+                      required
+                      value={alamat}
+                      onChange={(e) => setAlamat(e.target.value)}
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="noResi"
+                    >
+                      No Resi Pengiriman <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="noResi"
+                      type="text"
+                      className="form-input w-full text-black text-sm border-gray-300 rounded-md"
+                      placeholder="Masukkan nomor resi pengiriman"
+                      required
+                      value={noResi}
+                      onChange={(e) => setNoResi(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="nominalPengiriman"
+                    >
+                      Harga Pengiriman (Rp)
+                      <span className="text-red-600">*</span>
+                    </label>
+                    <input
+                      id="nominalPengiriman"
+                      type="text"
+                      className="form-input w-full text-black text-sm border-gray-300 rounded-md"
+                      placeholder="Masukkan harga pengiriman"
+                      required
+                      value={nominalPengiriman}
+                      onChange={(e) => setNominalPengiriman(e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap -mx-3 !text-sm">
+                  <div className="grid grid-cols-1 px-3 gap-2 mb-2 w-full">
+                    <div className="w-full relative">
+                      <label
+                        className="block text-gray-800 text-sm font-medium"
+                        htmlFor="name"
+                      >
+                        List Sertifikat <span className="text-red-600">*</span>
+                      </label>
+
+                      {/* Selected Items */}
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {selectedItems.map((item, index) => (
+                          <span
+                            key={index}
+                            className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md flex items-center gap-1"
+                          >
+                            {item}
+                            <button
+                              type="button"
+                              className="text-red-500"
+                              onClick={() => handleRemoveItem(item)}
+                            >
+                              &times;
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Input for Suggestions */}
+                      <input
+                        id="name"
+                        className="form-input w-full text-black border-gray-300 rounded-md leading-[120%] text-sm h-fit"
+                        placeholder="Cari berdasarkan nama pelaksana"
+                        required
+                        value={keywordSuggestion}
+                        onChange={(e) => {
+                          setKeywordSuggestion(e.target.value);
+
+                          // Fetch suggestions logic here...
+                          // Example:
+                          setIsFetching(true);
+                          // Simulate async fetch
+                          setTimeout(() => {
+                            setIsFetching(false);
+                          }, 500);
+                        }}
+                      />
+
+                      {/* Render suggestions dropdown */}
+                      {filteredSuggestions.length > 0 && (
+                        <ul className="absolute bg-white border border-gray-300 rounded-md w-full max-h-40 overflow-y-auto mt-1 z-10">
+                          {filteredSuggestions.map((suggestion, index) => (
+                            <li
+                              key={index}
+                              className="p-2 cursor-pointer hover:bg-gray-200"
+                              onClick={() => handleSelectSuggestion(suggestion)}
+                            >
+                              {suggestion.IdBlankoKeluar}
+                              {") "}
+                              {suggestion.NamaPelaksana};{" "}
+                              {suggestion.NamaProgram};{" "}
+                              {suggestion.TanggalPelaksanaan};
+                              {suggestion.NoSeriBlanko}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {/* Loading indicator */}
+                      {isFetching && (
+                        <p className="text-sm text-gray-500 mt-1">
+                          Fetching suggestions...
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex mb-1 gap-3">
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="email"
+                    >
+                      Bukti Resi <span>*</span>
+                    </label>
+                    <div className="flex gap-1">
+                      <input
+                        type="file"
+                        className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                        required
+                        onChange={handleBuktiResiFileChange}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="w-full">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="email"
+                    >
+                      Bukti Pengiriman <span>*</span>
+                    </label>
+                    <div className="flex gap-1">
+                      <input
+                        type="file"
+                        className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                        required
+                        onChange={handleBuktiPengirimanFileChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <AlertDialogFooter className="mt-3">
+                  <AlertDialogCancel
+                    onClick={(e) => setIsOpenFormMateri(!isOpenFormMateri)}
+                  >
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={(e) => handlePostPengirimanSertifikat(e)}
+                  >
+                    Upload
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
+            </fieldset>
+          )}
         </AlertDialogContent>
       </AlertDialog>
 
       <>
         <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-          <div className="flex w-full flex-wrap gap-3 sm:gap-5">
+          {/* <div className="flex w-full flex-wrap gap-3 sm:gap-5">
             <div className="flex min-w-47.5">
               <span className="mr-2 mt-1 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
                 <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
@@ -749,7 +825,7 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div>
@@ -761,7 +837,7 @@ export const TableDataPengirimanSertifikat: React.FC = () => {
                 className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
               >
                 <FiUploadCloud />
-                Tambah Data Blanko
+                Tambah Data Pengiriman Sertifikat
               </div>
             </div>
           </div>
