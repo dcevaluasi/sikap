@@ -155,7 +155,7 @@ const ChartCertificatesMonthly: React.FC<{ data: BlankoKeluar[] }> = ({
         <div className="mb-3 justify-between gap-4 sm:flex flex-col w-full">
           <div>
             <h5 className="text-xl font-semibold text-black">
-              Total Penerbitan Sertifikat per Bulan
+              Grafik Penerbitan Sertifikat per Bulan
             </h5>
             <p className="italic text-sm">{formatDateTime()}</p>
           </div>

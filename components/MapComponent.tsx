@@ -143,10 +143,12 @@ const CustomMarker = ({
   position,
   data,
   mapRef,
+  selectedSummary,
 }: {
   position: google.maps.LatLngLiteral;
   data: BlankoKeluar;
   mapRef: React.RefObject<google.maps.Map | null>;
+  selectedSummary: string;
 }) => {
   const handleMarkerClick = () => {
     if (mapRef.current) {
@@ -154,6 +156,24 @@ const CustomMarker = ({
       mapRef.current.setZoom(10); // Set a closer zoom level
     }
   };
+
+  // Conditionally render the marker based on `selectedSummary` and `data.NamaPelaksana`
+  if (
+    selectedSummary === "Balai Pelatihan KP" &&
+    !data.NamaPelaksana.startsWith("BPPP")
+  ) {
+    return null; // Don't render the marker if conditions are not met for Balai Pelatihan KP
+  } else if (
+    selectedSummary === "Pelabuhan Perikanan" &&
+    !(
+      data.NamaPelaksana.startsWith("PPP") ||
+      data.NamaPelaksana.startsWith("PPN") ||
+      data.NamaPelaksana.startsWith("PPS") ||
+      data.NamaPelaksana.startsWith("BBPI")
+    )
+  ) {
+    return null; // Don't render the marker if data.NamaPelaksana doesn't start with any of the specified keywords for Pelabuhan Perikanan
+  }
 
   return (
     <OverlayView
@@ -168,7 +188,7 @@ const CustomMarker = ({
       >
         {/* Tooltip */}
         <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 hidden group-hover:flex items-center justify-center bg-gray-800 w-36 text-white text-xs rounded px-2 py-1">
-          {data.SasaranMasyarakat}
+          {data.SasaranMasyarakat} - {data.AsalPendapatan}
         </div>
         {/* Circle with Gradient */}
         <div
@@ -187,7 +207,13 @@ const CustomMarker = ({
   );
 };
 
-export const MapComponent = ({ data }: { data: BlankoKeluar[] }) => {
+export const MapComponent = ({
+  data,
+  selectedSummary,
+}: {
+  data: BlankoKeluar[];
+  selectedSummary: string;
+}) => {
   const mapRef = React.useRef<google.maps.Map | null>(null);
 
   const defaultMapOptions = {
@@ -213,6 +239,7 @@ export const MapComponent = ({ data }: { data: BlankoKeluar[] }) => {
           <CustomMarker
             key={index}
             data={data}
+            selectedSummary={selectedSummary}
             position={{
               lat: parseFloat(data!.Latitude!),
               lng: parseFloat(data!.Longitude!),

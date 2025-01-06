@@ -15,7 +15,7 @@ import {
   RiShipLine,
   RiVerifiedBadgeLine,
 } from "react-icons/ri";
-import { HiMiniComputerDesktop } from "react-icons/hi2";
+import { HiMiniComputerDesktop, HiOutlineUserGroup } from "react-icons/hi2";
 import {
   TbBroadcast,
   TbBuildingSkyscraper,
@@ -261,6 +261,32 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </SidebarLinkGroup>
               )}
 
+              {pathname.includes("/akp") && (
+                <SidebarLinkGroup
+                  activeCondition={
+                    pathname === "/" || pathname.includes("dashboard")
+                  }
+                >
+                  {(handleClick, open) => {
+                    return (
+                      <React.Fragment>
+                        <Link
+                          href="/akp/pusat/awak-kapal-perikanan"
+                          className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
+                            (pathname === "/" ||
+                              pathname.includes("awak-kapal-perikanan")) &&
+                            "bg-graydark "
+                          }`}
+                        >
+                          <HiOutlineUserGroup className="text-xl" />
+                          Awak Kapal Perikanan
+                        </Link>
+                      </React.Fragment>
+                    );
+                  }}
+                </SidebarLinkGroup>
+              )}
+
               {pathname.includes("akp") && (
                 <SidebarLinkGroup
                   activeCondition={
@@ -336,17 +362,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <SidebarLinkGroup
                                 activeCondition={pathname.includes(
-                                  "akp/pusat/blanko-keluar"
+                                  "akp/pusat/blanko/blanko-keluar"
                                 )}
                               >
                                 {(handleClick, open) => {
                                   return (
                                     <React.Fragment>
                                       <Link
-                                        href="/akp/pusat/blanko-keluar"
+                                        href="/akp/pusat/blanko/blanko-keluar"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                           pathname.includes(
-                                            "akp/pusat/blanko-keluar"
+                                            "akp/pusat/blanko/blanko-keluar"
                                           ) && "bg-graydark "
                                         }`}
                                       >
@@ -361,17 +387,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <SidebarLinkGroup
                                 activeCondition={pathname.includes(
-                                  "akp/pusat/blanko-keluar"
+                                  "akp/pusat/blanko/blanko-keluar"
                                 )}
                               >
                                 {(handleClick, open) => {
                                   return (
                                     <React.Fragment>
                                       <Link
-                                        href="/akp/pusat/blanko-keluar"
+                                        href="/akp/pusat/blanko/blanko-keluar"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                           pathname.includes(
-                                            "akp/pusat/blanko-keluar"
+                                            "akp/pusat/blanko/blanko-keluar"
                                           ) && "bg-graydark "
                                         }`}
                                       >
@@ -386,17 +412,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <SidebarLinkGroup
                                 activeCondition={pathname.includes(
-                                  "akp/pusat/blanko-rusak"
+                                  "akp/pusat/blanko/blanko-rusak"
                                 )}
                               >
                                 {(handleClick, open) => {
                                   return (
                                     <React.Fragment>
                                       <Link
-                                        href="/akp/pusat/blanko-rusak"
+                                        href="/akp/pusat/blanko/blanko-rusak"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                           pathname.includes(
-                                            "akp/pusat/blanko-rusak"
+                                            "akp/pusat/blanko/blanko-rusak"
                                           ) && "bg-graydark "
                                         }`}
                                       >
@@ -492,17 +518,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <SidebarLinkGroup
                                 activeCondition={pathname.includes(
-                                  "akp/pusat/blanko-keluar"
+                                  "akp/pusat/blanko/blanko-keluar"
                                 )}
                               >
                                 {(handleClick, open) => {
                                   return (
                                     <React.Fragment>
                                       <Link
-                                        href="/akp/pusat/blanko-keluar"
+                                        href="/akp/pusat/blanko/blanko-keluar"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                           pathname.includes(
-                                            "akp/pusat/blanko-keluar"
+                                            "akp/pusat/blanko/blanko-keluar"
                                           ) && "bg-graydark "
                                         }`}
                                       >
@@ -517,17 +543,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <li>
                               <SidebarLinkGroup
                                 activeCondition={pathname.includes(
-                                  "akp/pusat/blanko-rusak"
+                                  "akp/pusat/blanko/blanko-rusak"
                                 )}
                               >
                                 {(handleClick, open) => {
                                   return (
                                     <React.Fragment>
                                       <Link
-                                        href="/akp/pusat/blanko-rusak"
+                                        href="/akp/pusat/blanko/blanko-rusak"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                           pathname.includes(
-                                            "akp/pusat/blanko-rusak"
+                                            "akp/pusat/blanko/blanko-rusak"
                                           ) && "bg-graydark "
                                         }`}
                                       >
@@ -608,7 +634,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   return (
                                     <React.Fragment>
                                       <Link
-                                        href="/akp/pusat/penyerahan-sertifikat"
+                                        href="/akp/pusat/distribusi/penyerahan-sertifikat"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                           pathname.includes(
                                             "penyerahan-sertifikat"
@@ -633,7 +659,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   return (
                                     <React.Fragment>
                                       <Link
-                                        href="/akp/pusat/pengiriman-sertifikat"
+                                        href="/akp/pusat/distribusi/pengiriman-sertifikat"
                                         className={`group relative flex items-center gap-2.5 rounded-sm px-2  py-2 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark  ${
                                           pathname.includes(
                                             "pengiriman-sertifikat"

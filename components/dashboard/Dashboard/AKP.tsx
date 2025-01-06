@@ -110,10 +110,10 @@ const AKP: React.FC = () => {
         <div className="flex flex-row gap-2 items-center">
           <RiShipFill className="text-4xl" />
           <div className="flex flex-col">
-            <h1 className="text-4xl text-gray-900 font-medium leading-[100%] font-calsans">
-              Dashboard Sertifikasi Awak
+            <h1 className="text-4xl text-gray-900 font-medium leading-[100%] font-calsans capitalize">
+              Dashboard Sertifikasi
               <br />
-              Kapal Perikanan
+              Awak Kapal Perikanan
             </h1>
             <p className="font-normal italic leading-[110%] text-gray-400 text-base max-w-4xl">
               The data presented is obtained through the AKAPI application and
@@ -255,14 +255,10 @@ const AKP: React.FC = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="CoC">
-            <>
-              <ChartPopoverKeahlian data={data!} />
-            </>
+            <ChartPopoverKeahlian data={data!} />
           </TabsContent>
           <TabsContent value="CoP">
-            <>
-              <ChartPopoverKeterampilan data={data!} />
-            </>
+            <ChartPopoverKeterampilan data={data!} />
           </TabsContent>
         </Tabs>
       </div>

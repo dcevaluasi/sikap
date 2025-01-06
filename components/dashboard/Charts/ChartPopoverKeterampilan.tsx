@@ -753,7 +753,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
       <div className="mb-3 justify-between gap-4 sm:flex w-full">
         <div>
           <h5 className="text-xl font-semibold text-black">
-            Total Sertifikat Diklat Keterampilan
+            Keterampilan Awak Kapal Perikanan
           </h5>
           <p className="italic text-sm">{formatDateTime()}</p>
         </div>
@@ -845,7 +845,10 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
             <TabsContent value={selectedLemdiklat}>
               <MapProvider>
                 <div className="mt-3 flex flex-col h-full grid-cols-1 gap-5 xl:grid-cols-2 2xl:grid-cols-3 mb-10">
-                  <MapComponent data={data} />
+                  <MapComponent
+                    data={data}
+                    selectedSummary={selectedSummaryAKP}
+                  />
                 </div>
               </MapProvider>
               {selectedLemdiklat == "All" ? (

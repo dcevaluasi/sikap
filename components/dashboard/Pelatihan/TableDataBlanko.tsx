@@ -42,7 +42,6 @@ import {
 import { convertDate } from "@/utils";
 import Cookies from "js-cookie";
 import { Blanko } from "@/types/blanko";
-import { blankoAkapiBaseUrl } from "@/constants/urls";
 import useFetchBlanko from "@/hooks/blanko/useFetchBlanko";
 
 const TableDataBlanko: React.FC = () => {
