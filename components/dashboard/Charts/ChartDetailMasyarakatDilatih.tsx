@@ -609,7 +609,7 @@ const ChartDetailMasyarakatDilatih: React.FC<{
             <div className="w-full flex justify-between items-center">
               <div className="flex flex-col gap-1">
                 <CardTitle>Berdasarkan Bidang Pelatihan</CardTitle>
-                <CardDescription>27 May 2024 - Now 2024</CardDescription>
+                <CardDescription>27 May 2024 - Now 2025</CardDescription>
               </div>
               <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
                 Masyarakat Dilatih:{" "}

@@ -267,7 +267,7 @@ const ChartPopoverKeterampilanAPBN: React.FC<{ data: BlankoKeluar[] }> = ({
           <CardTitle>
             Jumlah Sertifikat Berdasarkan Program Keterampilan - AKP
           </CardTitle>
-          <CardDescription>27 May 2024 - Now 2024</CardDescription>
+          <CardDescription>27 May 2024 - Now 2025</CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer config={chartConfig}>
@@ -316,7 +316,7 @@ const ChartPopoverKeterampilanAPBN: React.FC<{ data: BlankoKeluar[] }> = ({
           <CardTitle>
             Jumlah Sertifikat Berdasarkan Pelaksana Diklat - AKP
           </CardTitle>
-          <CardDescription>27 May 2024 - Now 2024</CardDescription>
+          <CardDescription>27 May 2024 - Now 2025</CardDescription>
         </CardHeader>
         <CardContent>
           <ChartContainer config={chartConfigLemdiklat} className="">

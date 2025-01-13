@@ -843,14 +843,17 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
             )}
 
             <TabsContent value={selectedLemdiklat}>
-              <MapProvider>
-                <div className="mt-3 flex flex-col h-full grid-cols-1 gap-5 xl:grid-cols-2 2xl:grid-cols-3 mb-10">
-                  <MapComponent
-                    data={data}
-                    selectedSummary={selectedSummaryAKP}
-                  />
-                </div>
-              </MapProvider>
+              {
+                selectedSummaryAKP == 'All' && <MapProvider>
+                  <div className="mt-3 flex flex-col h-full grid-cols-1 gap-5 xl:grid-cols-2 2xl:grid-cols-3 mb-10">
+                    <MapComponent
+                      data={data}
+                      selectedSummary={selectedSummaryAKP}
+                    />
+                  </div>
+                </MapProvider>
+              }
+
               {selectedLemdiklat == "All" ? (
                 <div className="flex gap-2 w-full h-full">
                   <div className="w-full ">
@@ -860,18 +863,18 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                           <div className="flex flex-col gap-1">
                             <CardTitle>BERDASARKAN LEMBAGA PELATIHAN</CardTitle>
                             <CardDescription>
-                              27 May 2024 - Now 2024
+                              27 May 2024 - Now 2025
                             </CardDescription>
                           </div>
                           <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
                             Total Sertifikat :{" "}
                             {selectedSummaryAKP == "Balai Pelatihan KP"
                               ? chartDataLemdiklat
-                                  .reduce((sum, item) => sum + item.visitors, 0)
-                                  .toLocaleString("ID")
+                                .reduce((sum, item) => sum + item.visitors, 0)
+                                .toLocaleString("ID")
                               : chartDataSatuanPendidikanKP
-                                  .reduce((sum, item) => sum + item.visitors, 0)
-                                  .toLocaleString("ID")}
+                                .reduce((sum, item) => sum + item.visitors, 0)
+                                .toLocaleString("ID")}
                           </div>
                         </div>
                       </CardHeader>
@@ -902,11 +905,11 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                               tickFormatter={(value) =>
                                 selectedSummaryAKP == "Balai Pelatihan KP"
                                   ? chartConfigLemdiklat[
-                                      value as keyof typeof chartConfigLemdiklat
-                                    ]?.label
+                                    value as keyof typeof chartConfigLemdiklat
+                                  ]?.label
                                   : satuanPendidikanKPConfig[
-                                      value as keyof typeof satuanPendidikanKPConfig
-                                    ]?.label
+                                    value as keyof typeof satuanPendidikanKPConfig
+                                  ]?.label
                               }
                             />
                             <ChartTooltip
@@ -946,7 +949,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                           <div className="flex flex-col gap-1">
                             <CardTitle>BERDASARKAN JENIS PROGRAM</CardTitle>
                             <CardDescription>
-                              27 May 2024 - Now 2024
+                              27 May 2024 - Now 2025
                             </CardDescription>
                           </div>
                           <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
@@ -1013,7 +1016,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                           <div className="flex flex-col gap-1">
                             <CardTitle>DIKLAT dan BIMTEK NON-PNBP</CardTitle>
                             <CardDescription>
-                              27 May 2024 - Now 2024
+                              27 May 2024 - Now 2025
                             </CardDescription>
                           </div>
                           <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
@@ -1073,7 +1076,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                           <div className="flex flex-col gap-1">
                             <CardTitle>DIKLAT dan BIMTEK PNBP</CardTitle>
                             <CardDescription>
-                              27 May 2024 - Now 2024
+                              27 May 2024 - Now 2025
                             </CardDescription>
                           </div>
                           <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
@@ -1194,7 +1197,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                                           (d) =>
                                             d.NamaProgram === item.label &&
                                             d.NamaPelaksana ===
-                                              selectedLemdiklat &&
+                                            selectedLemdiklat &&
                                             d.AsalPendapatan == "PNBP"
                                         )
                                         .reduce(
@@ -1210,7 +1213,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                                           (d) =>
                                             d.NamaProgram === item.label &&
                                             d.NamaPelaksana ===
-                                              selectedLemdiklat &&
+                                            selectedLemdiklat &&
                                             d.AsalPendapatan == "PNBP"
                                         )
                                         .reduce(
@@ -1313,7 +1316,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                                           (d) =>
                                             d.NamaProgram === item.label &&
                                             d.NamaPelaksana ===
-                                              selectedLemdiklat &&
+                                            selectedLemdiklat &&
                                             d.AsalPendapatan == "PNBP"
                                         )
                                         .reduce(
@@ -1329,7 +1332,7 @@ const ChartPopoverKeterampilan: React.FC<{ data: BlankoKeluar[] }> = ({
                                           (d) =>
                                             d.NamaProgram === item.label &&
                                             d.NamaPelaksana ===
-                                              selectedLemdiklat &&
+                                            selectedLemdiklat &&
                                             d.AsalPendapatan == "PNBP"
                                         )
                                         .reduce(

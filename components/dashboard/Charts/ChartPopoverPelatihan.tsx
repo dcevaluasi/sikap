@@ -354,7 +354,7 @@ const ChartPopoverPelatihan: React.FC<{ data: BlankoKeluar[] }> = ({
         <Card className="w-[50%]">
           <CardHeader>
             <CardTitle>Grafik Masyarakat Dilatih</CardTitle>
-            <CardDescription>January - Now 2024</CardDescription>
+            <CardDescription>January - Now 2025</CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer config={chartConfig}>
@@ -527,7 +527,7 @@ const ChartPopoverPelatihan: React.FC<{ data: BlankoKeluar[] }> = ({
                           {item.label}{" "}
                           {item.label ==
                             "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat III" ||
-                          item.label ==
+                            item.label ==
                             "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat III"
                             ? "SKK 60 Mil"
                             : ""}{" "}

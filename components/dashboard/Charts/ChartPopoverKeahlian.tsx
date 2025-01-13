@@ -797,7 +797,7 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
                       <div className="flex flex-col gap-1">
                         <CardTitle>Berdasarkan Jenis Pendidikan</CardTitle>
                         <CardDescription>
-                          27 May 2024 - Now 2024
+                          27 May 2024 - Now 2025
                         </CardDescription>
                       </div>
                       <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
@@ -858,7 +858,7 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
                         <div className="flex flex-col gap-1">
                           <CardTitle>Berdasarkan UPT Pelatihan</CardTitle>
                           <CardDescription>
-                            27 May 2024 - Now 2024
+                            27 May 2024 - Now 2025
                           </CardDescription>
                         </div>
                         <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
@@ -924,7 +924,7 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
                         <div className="flex flex-col gap-1">
                           <CardTitle>Berdasarkan UPT Pendidikan</CardTitle>
                           <CardDescription>
-                            27 May 2024 - Now 2024
+                            27 May 2024 - Now 2025
                           </CardDescription>
                         </div>
                         <div className="flex bg-gray-100 text-sm text-black px-3 py-2 rounded-full">
@@ -1050,7 +1050,7 @@ const ChartPopoverKeahlian: React.FC<{ data: BlankoKeluar[] }> = ({ data }) => {
                           {item.label}{" "}
                           {item.label ==
                             "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat III" ||
-                          item.label ==
+                            item.label ==
                             "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat III"
                             ? "SKK 60 Mil"
                             : ""}{" "}

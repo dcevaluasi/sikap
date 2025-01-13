@@ -453,7 +453,7 @@ const ChartMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
             <Card className="w-[50%] h-full">
               <CardHeader>
                 <CardTitle>Diklat yang menggunakan APBN</CardTitle>
-                <CardDescription>27 May 2024 - Now 2024</CardDescription>
+                <CardDescription>27 May 2024 - Now 2025</CardDescription>
               </CardHeader>
               <CardContent>
                 <ChartContainer config={chartConfig}>
@@ -500,7 +500,7 @@ const ChartMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
             <Card className="w-[50%] h-full">
               <CardHeader>
                 <CardTitle>Diklat yang menghasilkan PNBP</CardTitle>
-                <CardDescription>27 May 2024 - Now 2024</CardDescription>
+                <CardDescription>27 May 2024 - Now 2025</CardDescription>
               </CardHeader>
               <CardContent>
                 <ChartContainer config={chartConfigPNBP} className="">
@@ -553,7 +553,7 @@ const ChartMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
             <CardTitle>
               Jumlah Sertifikat Berdasarkan Program Keahlian - AKP
             </CardTitle>
-            <CardDescription>January - Now 2024</CardDescription>
+            <CardDescription>January - Now 2025</CardDescription>
           </CardHeader>
           <CardContent>
             <ChartContainer config={chartConfig}>
@@ -726,7 +726,7 @@ const ChartMasyarakatDilatih: React.FC<{ data: BlankoKeluar[] }> = ({
                           {item.label}{" "}
                           {item.label ==
                             "Ujian Ahli Teknika Kapal Penangkap Ikan Tingkat III" ||
-                          item.label ==
+                            item.label ==
                             "Ujian Ahli Nautika Kapal Penangkap Ikan Tingkat III"
                             ? "SKK 60 Mil"
                             : ""}{" "}
