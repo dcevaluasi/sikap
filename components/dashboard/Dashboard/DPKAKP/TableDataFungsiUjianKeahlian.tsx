@@ -59,8 +59,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import Toast from "@/components/toast";
-import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
-import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
 import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
@@ -73,8 +71,6 @@ import Cookies from "js-cookie";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 import { Progress } from "@/components/ui/progress";
 import { GiBookmarklet } from "react-icons/gi";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
-import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import TableData from "../../Tables/TableData";
 import { FungsiUjian } from "@/types/ujian-keahlian-akp";

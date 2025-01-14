@@ -140,12 +140,12 @@ function page() {
             alt="DPKAKP Logo"
           />
           <h1 className="font-bold  font-calsans text-gray-200 text-4xl -mt-4">
-            Login Sistem{" "}
+            Login {" "}
             <span className=" bg-clip-text text-transparent bg-gradient-to-r leading-none pt-0 from-blue-500 to-teal-400">
-              DPKAKP
+              SIKAP
             </span>
           </h1>
-          <p className="font-jakarta max-w-[42rem] leading-[115%] text-gray-200  sm:text-base  -mt-4">
+          <p className="font-jakarta max-w-[42rem] leading-[120%] text-gray-200  sm:text-base  -mt-3">
             Selamat datang dewan penguji, silahkan login untuk mengakses fitur -
             fitur penunjang pelaksanaan ujian keahlian awak kapal perikanan!
           </p>
@@ -190,8 +190,8 @@ function page() {
                     ? role == "dpkakp"
                       ? "DPKAKP"
                       : role == "pukakp"
-                      ? "PUKAKP"
-                      : "Penguji"
+                        ? "PUKAKP"
+                        : "Penguji"
                     : "Pilih Role"}
                 </p>
               </SelectTrigger>

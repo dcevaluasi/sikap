@@ -101,8 +101,6 @@ import Cookies from "js-cookie";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 import { Progress } from "@/components/ui/progress";
 import { GiBookmarklet } from "react-icons/gi";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
-import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import { dpkakpBaseUrl } from "@/constants/urls";
 import { wilayahPukakp } from "@/constants/dpkakp";
@@ -172,8 +170,8 @@ const TableDataUjian: React.FC = () => {
       const filteredData =
         pukakpCookie != "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan"
           ? response.data.data.filter(
-              (item: any) => item.PUKAKP === pukakpCookie
-            )
+            (item: any) => item.PUKAKP === pukakpCookie
+          )
           : response.data.data;
 
       // Sort the data first by status ('Pending' first) and then by CreateAt in descending order
@@ -276,8 +274,8 @@ const TableDataUjian: React.FC = () => {
       const filteredData =
         pukakpCookie != "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan"
           ? response.data.data.filter(
-              (item: any) => item.PUKAKP === pukakpCookie
-            )
+            (item: any) => item.PUKAKP === pukakpCookie
+          )
           : response.data.data;
 
       // Sort the data first by status ('Pending' first) and then by CreateAt in descending order
@@ -778,19 +776,17 @@ const TableDataUjian: React.FC = () => {
                 <li>
                   <button
                     onClick={() => setSelectedStatusFilter("All")}
-                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${
-                      selectedStatusFilter === "All"
+                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "All"
                         ? "bg-blue-500 text-white"
                         : "bg-white text-black"
-                    }`}
+                      }`}
                   >
                     <p className="font-semibold text-lg">{data!.length}</p>
                     <p
-                      className={`uppercase text-sm ${
-                        selectedStatusFilter === "All"
+                      className={`uppercase text-sm ${selectedStatusFilter === "All"
                           ? "text-white font-bold"
                           : "text-gray-600"
-                      }`}
+                        }`}
                     >
                       All
                     </p>
@@ -802,19 +798,17 @@ const TableDataUjian: React.FC = () => {
                 <li>
                   <button
                     onClick={() => setSelectedStatusFilter("All")}
-                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${
-                      selectedStatusFilter === "All"
+                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "All"
                         ? "bg-blue-500 text-white"
                         : "bg-white text-black"
-                    }`}
+                      }`}
                   >
                     <p className="font-semibold text-lg">{data!.length}</p>
                     <p
-                      className={`uppercase text-sm ${
-                        selectedStatusFilter === "All"
+                      className={`uppercase text-sm ${selectedStatusFilter === "All"
                           ? "text-white font-bold"
                           : "text-gray-600"
-                      }`}
+                        }`}
                     >
                       All
                     </p>
@@ -824,19 +818,17 @@ const TableDataUjian: React.FC = () => {
                   <li>
                     <button
                       onClick={() => setSelectedStatusFilter("Draft")}
-                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
-                        selectedStatusFilter === "Draft"
+                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "Draft"
                           ? "bg-blue-500 text-white"
                           : "bg-white text-black"
-                      }`}
+                        }`}
                     >
                       <p className="font-semibold text-lg">{countDraft}</p>
                       <p
-                        className={`uppercase text-sm ${
-                          selectedStatusFilter === "Draft"
+                        className={`uppercase text-sm ${selectedStatusFilter === "Draft"
                             ? "text-white font-bold"
                             : "text-gray-600"
-                        }`}
+                          }`}
                       >
                         Draft
                       </p>
@@ -847,19 +839,17 @@ const TableDataUjian: React.FC = () => {
                 <li>
                   <button
                     onClick={() => setSelectedStatusFilter("Pending")}
-                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
-                      selectedStatusFilter === "Pending"
+                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "Pending"
                         ? "bg-blue-500 text-white"
                         : "bg-white text-black"
-                    }`}
+                      }`}
                   >
                     <p className="font-semibold text-lg">{countNotVerified}</p>
                     <p
-                      className={`uppercase text-sm ${
-                        selectedStatusFilter === "Pending"
+                      className={`uppercase text-sm ${selectedStatusFilter === "Pending"
                           ? "text-white font-bold"
                           : "text-gray-600"
-                      }`}
+                        }`}
                     >
                       Pending
                     </p>
@@ -869,21 +859,19 @@ const TableDataUjian: React.FC = () => {
                   <li>
                     <button
                       onClick={() => setSelectedStatusFilter("Pilih Penguji")}
-                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-32 ${
-                        selectedStatusFilter === "Pilih Penguji"
+                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-32 ${selectedStatusFilter === "Pilih Penguji"
                           ? "bg-blue-500 text-white"
                           : "bg-white text-black"
-                      }`}
+                        }`}
                     >
                       <p className="font-semibold text-lg">
                         {countPilihPenguji}
                       </p>
                       <p
-                        className={`uppercase text-sm ${
-                          selectedStatusFilter === "Pilih Penguji"
+                        className={`uppercase text-sm ${selectedStatusFilter === "Pilih Penguji"
                             ? "text-white font-bold"
                             : "text-gray-600"
-                        }`}
+                          }`}
                       >
                         Pilih Penguji
                       </p>
@@ -894,19 +882,17 @@ const TableDataUjian: React.FC = () => {
                 <li>
                   <button
                     onClick={() => setSelectedStatusFilter("Aktif")}
-                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-24 ${
-                      selectedStatusFilter === "Aktif"
+                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-24 ${selectedStatusFilter === "Aktif"
                         ? "bg-blue-500 text-white"
                         : "bg-white text-black"
-                    }`}
+                      }`}
                   >
                     <p className="font-semibold text-lg">{countVerified}</p>
                     <p
-                      className={`uppercase text-sm ${
-                        selectedStatusFilter === "Aktif"
+                      className={`uppercase text-sm ${selectedStatusFilter === "Aktif"
                           ? "text-white font-bold"
                           : "text-gray-600"
-                      }`}
+                        }`}
                     >
                       Disetujui
                     </p>
@@ -1024,13 +1010,11 @@ const TableDataUjian: React.FC = () => {
                           </Button> */}
                           {ujian!.Status == "Aktif" && (
                             <Link
-                              href={`/lembaga/${
-                                usePathname().includes("pukakp")
+                              href={`/lembaga/${usePathname().includes("pukakp")
                                   ? "pukakp"
                                   : "dpkakp"
-                              }/admin/dashboard/ujian/peserta-ujian/${
-                                ujian!.IdUjian
-                              }/${ujian!.IdTypeUjian}`}
+                                }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
+                                }/${ujian!.IdTypeUjian}`}
                               className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm"
                             >
                               <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
@@ -1039,7 +1023,7 @@ const TableDataUjian: React.FC = () => {
                           )}
 
                           {ujian!.FilePermohonan != null &&
-                          ujian!.Status == "Aktif" ? (
+                            ujian!.Status == "Aktif" ? (
                             <Link
                               target="_blank"
                               href={ujian!.FilePermohonan!}
@@ -1053,7 +1037,7 @@ const TableDataUjian: React.FC = () => {
                           )}
 
                           {ujian!.Status == "Draft" &&
-                          !usePathname().includes("dpkakp") ? (
+                            !usePathname().includes("dpkakp") ? (
                             <Button
                               onClick={() => {
                                 handleKirimPermohonan(ujian!.IdUjian);
@@ -1069,7 +1053,7 @@ const TableDataUjian: React.FC = () => {
                           )}
 
                           {usePathname().includes("pukakp") &&
-                          ujian!.Status == "Draft" ? (
+                            ujian!.Status == "Draft" ? (
                             <Button
                               onClick={() => {
                                 handleFetchingDataUjianById(ujian!.IdUjian);
@@ -1085,7 +1069,7 @@ const TableDataUjian: React.FC = () => {
                           )}
 
                           {usePathname().includes("pukakp") &&
-                          ujian!.Status == "Draft" ? (
+                            ujian!.Status == "Draft" ? (
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button

@@ -1,5 +1,4 @@
-import ECommerce from "@/components/dashboard/Dashboard/E-commerce";
-import Pelatihan from "@/components/dashboard/Dashboard/Pelatihan";
+
 import UjianKeahlianAKP from "@/components/dashboard/Dashboard/UjianKeahlianAKP";
 import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
 import DefaultLayoutDPKAKP from "@/components/dashboard/Layouts/DefaultLayoutDPKAKP";

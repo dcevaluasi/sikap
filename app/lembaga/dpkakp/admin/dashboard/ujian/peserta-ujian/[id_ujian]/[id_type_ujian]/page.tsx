@@ -1,6 +1,4 @@
 import PesertaUjianKeahlian from "@/components/dashboard/Dashboard/DPKAKP/PesertaUjianKeahlian";
-import Pelatihan from "@/components/dashboard/Dashboard/Pelatihan";
-import PesertaPelatihan from "@/components/dashboard/Dashboard/PesertaPelatihan";
 import DefaultLayout from "@/components/dashboard/Layouts/DefaultLayout";
 import DefaultLayoutDPKAKP from "@/components/dashboard/Layouts/DefaultLayoutDPKAKP";
 import LayoutAdmin from "@/components/dashboard/Layouts/LayoutAdmin";

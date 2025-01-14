@@ -81,8 +81,6 @@ import {
 import { useRouter } from "next/navigation";
 import { MdOutlineSaveAlt } from "react-icons/md";
 import Toast from "@/components/toast";
-import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
-import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
 import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
@@ -104,8 +102,6 @@ import Cookies from "js-cookie";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 import { Progress } from "@/components/ui/progress";
 import { GiBookmarklet } from "react-icons/gi";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
-import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import { Blanko } from "@/types/blanko";
 import FormPelatihan from "../dashboard/admin/formPelatihan";
@@ -665,79 +661,8 @@ const TableDataPenguji: React.FC = () => {
         </>
       ) : showCertificateSetting ? (
         <>
-          {/* Header Tabel Data Pelatihan */}
-          <div className="flex flex-wrap items-center mb-3 justify-between gap-3 sm:flex-nowrap">
-            {/* Button Ajukan Permohonan Buka Pelatihan */}
-            <div className="flex w-full gap-2 justify-end">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
-                    <PiStampLight />
-                    Add Stempel
-                  </div>
-                </SheetTrigger>
-                <SheetContent>
-                  <SheetHeader>
-                    <div className="flex flex-row items-center gap-2">
-                      {/* <Image
-                        src={"/logo-kkp.png"}
-                        width={0}
-                        height={0}
-                        alt="KKP Logo"
-                        className="w-12 h-12"
-                      /> */}
-                      <div className="flex flex-col gap-1">
-                        <SheetTitle>Pilih Stempel</SheetTitle>
-                        <SheetDescription>
-                          Pilih stempel tanda tangan elektronik yang ingin anda
-                          taukan ke file sertifikat yang akan digenerate!
-                        </SheetDescription>
-                      </div>
-                    </div>
-                  </SheetHeader>
-                  <div className="w-full mt-5 mb-10">
-                    <div className="w-full border-2 rounded-md hover:cursor-pointer hover:border-blue-500 duration-700 flex items-center flex-col px-3 py-5 text-center justify-center border-dashed">
-                      <p className="-mt-1 text-sm">
-                        Kepala Balai Pelatihan dan Penyuluhan Perikanan
-                        Banyuwangi
-                      </p>
-                      <Image
-                        className="w-[200px] my-3"
-                        width={0}
-                        height={0}
-                        alt="Logo Kementrian Kelautan dan Perikanan RI"
-                        src={"/ttd-elektronik.png"}
-                      />
-                      <p className="-mt-1 font-extrabold text-sm">
-                        MOCH. MUCHLISIN, A.Pi, M.P
-                      </p>
-                      <p className="font-extrabold text-sm -mt-1">
-                        NIP. 197509161999031003
-                      </p>
-                    </div>
-                  </div>
-                  <SheetFooter>
-                    <SheetClose asChild>
-                      <Button type="submit">Sematkan Stempel</Button>
-                    </SheetClose>
-                  </SheetFooter>
-                </SheetContent>
-              </Sheet>
 
-              <div
-                onClick={(e) => setShowFormAjukanPelatihan(true)}
-                className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-              >
-                <TbFileCertificate />
-                Generate Sertifikat Peserta
-              </div>
-            </div>
-          </div>
 
-          <div className="max-h-[500px] flex flex-col gap-2 overflow-y-auto scroll-smooth">
-            <SertifikatSettingPage1 />
-            <SertifikatSettingPage2 />
-          </div>
         </>
       ) : (
         <>

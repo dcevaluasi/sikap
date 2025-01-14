@@ -1,66 +1,82 @@
-import Hero from "@/components/hero";
+import React from "react";
+import LandingDPKAKP from "../lembaga/dpkakp/pages/landing";
 
 export const metadata = {
-  title: "E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
+  title: "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan",
   description:
-    "E-LAUT, layanan elektronik dari BPPSDM KP untuk membantu mu mencari pelatihan dan sertifikasi di sektor Kelautan dan Perikanan. Ragam pelatihan menarik dapat kamu ikuti mulai dari perikanan, kelautan, hingga awak kapal perikanan.",
+    "Dewan yang menyelenggarakan Ujian Keahlian Awak Kapal Perikanan untuk mendapatkan Sertifikat Keahlian Awak Kapal Perikanan sesuai dengan standar Kompetensi Nasional dan Internasional.",
+  icons: ["/lembaga/logo/logo-sertifikasi-akp-blue.png"],
   keywords: [
+    "DPKAKP",
+    "Permen-KP 33 Tahun 2021",
+    "Dewan Penguji Keahlian Awak Kapal Perikanan",
+    "Dewan Penguji",
+    "dewan penguji keahlian awak kapal perikanan",
+    "dpkakp",
+    "dewan penguji",
+    "ankapin I",
+    "ankapin II",
+    "upgrading skk 60 mil",
+    "ANKAPIN-I",
+    "ANKAPIN-II",
+    "ANKAPIN-III",
+    "ATKAPIN-I",
+    "ATKAPIN-II",
+    "ATKAPIN-III",
+    "Ahli Nautika Kapal Penangkap Ikan Tingkat 1",
+    "Ahli Nautika Kapal Penangkap Ikan Tingkat 2",
+    "Ahli Nautika Kapal Penangkap Ikan Tingkat 3",
+    "Ahli Teknika Kapal Penangkap Ikan Tingkat 1",
+    "Ahli Teknika Kapal Penangkap Ikan Tingkat 2",
+    "Ahli Teknika Kapal Penangkap Ikan Tingkat 3",
+    "Rating",
     "E-LAUT",
-    "pelatihan kelautan",
-    "pelatihan perikanan",
-    "sertifikasi kelautan",
-    "sertifikasi perikanan",
-    "pelatihan awak kapal",
-    "e-learning kelautan",
-    "e-learning perikanan",
-    "BPPSDM KP",
-    "pendidikan kelautan",
-    "pendidikan perikanan",
-    "registrasi pelatihan",
-    "registrasi E-LAUT",
-    "sertifikasi awak kapal perikanan",
-    "Kementerian Kelautan dan Perikanan",
-    "kementerian kelautan dan perikanan",
-    "kkp",
+    "Kepelautan",
+    "Nahkoda",
+    "Ahli Kapal",
+    "Awak Kapal Perikanan",
+    "Direktorat Jenderal Perikanan Tangkap",
+    "DJPT",
+    "Pengukuhan",
+    "AKAPI",
+    "Aplikasi Awak Kapal Perikanan",
+    "Kelautan dan Perikanan",
+    "Ahli Nautika",
+    "Ahli Teknika",
+    "STCWF-95",
+    "STCW-F",
   ],
-  author: "BPPSDM KP",
+
+  authors: [
+    { name: "Kementrian Kelautan dan Perikanan" },
+    {
+      name: "Badan Penyuluhan dan Pengembangan Sumber Daya Manusia Kelautan dan Perikanan",
+    },
+    { name: "Pusat Pelatihan Kelautan dan Perikanan" },
+  ],
+
+  publisher: "Kementrian Kelautan dan Perikanan",
+  url: "/lembaga/logo/logo-sertifikasi-akp-blue.png",
+  referrer: "origin-when-cross-origin",
+  type: "website",
   robots: "index, follow",
-  canonical: "https://elaut-bppsdm.kkp.go.id",
-  openGraph: {
-    title: "E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
+  og: {
+    title: "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan",
     description:
-      "E-LAUT, layanan elektronik dari BPPSDM KP untuk membantu mu mencari pelatihan dan sertifikasi di sektor Kelautan dan Perikanan.",
-    url: "https://elaut-bppsdm.kkp.go.id",
+      "Dewan yang menyelenggarakan Ujian Keahlian Awak Kapal Perikanan untuk mendapatkan Sertifikat Keahlian Awak Kapal Perikanan sesuai dengan standar Kompetensi Nasional dan Internasional.",
     type: "website",
-    site_name: "E-LAUT",
-    images: [
-      {
-        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ1qXD5spmbdpPwx426e-daa6Cd23RLxBeFw&s",
-        width: 1200,
-        height: 630,
-        alt: "E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
-      },
-    ],
+    url: "/lembaga/logo/logo-sertifikasi-akp-blue.png",
+    image: "/lembaga/logo/logo-sertifikasi-akp-blue.png",
   },
   twitter: {
     card: "summary_large_image",
-    title: "E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
+    title: "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan",
     description:
-      "E-LAUT, layanan elektronik dari BPPSDM KP untuk membantu mencari pelatihan dan sertifikasi di sektor Kelautan dan Perikanan.",
-    site: "https://elaut-bppsdm.kkp.go.id",
-    images: [
-      {
-        url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZ1qXD5spmbdpPwx426e-daa6Cd23RLxBeFw&s",
-        alt: "E-LAUT - Elektronik Layanan Pelatihan Utama Terpadu",
-      },
-    ],
+      "Dewan yang menyelenggarakan Ujian Keahlian Awak Kapal Perikanan untuk mendapatkan Sertifikat Keahlian Awak Kapal Perikanan sesuai dengan standar Kompetensi Nasional dan Internasional.",
+    image: "/lembaga/logo/logo-sertifikasi-akp-blue.png",
   },
 };
 
-export default function Home() {
-  return (
-    <>
-      <Hero />
-    </>
-  );
+export default function page() {
+  return <LandingDPKAKP />;
 }

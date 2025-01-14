@@ -85,8 +85,6 @@ import Cookies from "js-cookie";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 import { Progress } from "@/components/ui/progress";
 import { GiBookmarklet } from "react-icons/gi";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
-import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import { dpkakpBaseUrl } from "@/constants/urls";
 import { wilayahPukakp } from "@/constants/dpkakp";

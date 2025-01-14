@@ -63,9 +63,8 @@ export default function LandingDPKAKP() {
 
   return (
     <main
-      className={`${
-        top ? "bg-white" : "bg-darkDPKAKP"
-      } duration-700 w-full h-full`}
+      className={`${top ? "bg-white" : "bg-darkDPKAKP"
+        } duration-700 w-full h-full`}
     >
       <HeroDPKAKP />
       <section className="mb-10 mt-8 h-fit w-full px-5 py-4 ">
@@ -75,7 +74,7 @@ export default function LandingDPKAKP() {
           </p>
           <Image
             className="mr-16 w-[60px]"
-            src={"/dpkakp/logo.png"}
+            src={"/lembaga/logo/logo-sertifikasi-akp-blue.png"}
             width={0}
             height={0}
             alt="DPKAKP Logo"
@@ -85,7 +84,7 @@ export default function LandingDPKAKP() {
           </p>
           <Image
             className="mr-16 w-[60px]"
-            src={"/dpkakp/logo.png"}
+            src={"/lembaga/logo/logo-sertifikasi-akp-blue.png"}
             width={0}
             height={0}
             alt="DPKAKP Logo"
@@ -95,7 +94,7 @@ export default function LandingDPKAKP() {
           </p>
           <Image
             className="mr-16 w-[60px]"
-            src={"/dpkakp/logo.png"}
+            src={"/lembaga/logo/logo-sertifikasi-akp-blue.png"}
             width={0}
             height={0}
             alt="DPKAKP Logo"
@@ -105,7 +104,7 @@ export default function LandingDPKAKP() {
           </p>
           <Image
             className="mr-16 w-[60px]"
-            src={"/dpkakp/logo.png"}
+            src={"/lembaga/logo/logo-sertifikasi-akp-blue.png"}
             width={0}
             height={0}
             alt="DPKAKP Logo"
@@ -304,21 +303,21 @@ export default function LandingDPKAKP() {
               <div className="max-w-[90%] text-xl italic leading-normal text-mutedForegroundDPKAKP sm:leading-7">
                 <ReactTyped
                   backSpeed={50}
-                  onBegin={function noRefCheck() {}}
-                  onComplete={function noRefCheck() {}}
-                  onDestroy={function noRefCheck() {}}
-                  onLastStringBackspaced={function noRefCheck() {}}
-                  onReset={function noRefCheck() {}}
-                  onStart={function noRefCheck() {}}
-                  onStop={function noRefCheck() {}}
-                  onStringTyped={function noRefCheck() {}}
-                  onTypingPaused={function noRefCheck() {}}
-                  onTypingResumed={function noRefCheck() {}}
+                  onBegin={function noRefCheck() { }}
+                  onComplete={function noRefCheck() { }}
+                  onDestroy={function noRefCheck() { }}
+                  onLastStringBackspaced={function noRefCheck() { }}
+                  onReset={function noRefCheck() { }}
+                  onStart={function noRefCheck() { }}
+                  onStop={function noRefCheck() { }}
+                  onStringTyped={function noRefCheck() { }}
+                  onTypingPaused={function noRefCheck() { }}
+                  onTypingResumed={function noRefCheck() { }}
                   strings={[
                     "&ldquo; Dewan Penguji Keahlian Awak Kapal Perikanan (DPKAKP) berjanji untuk menerapkan pencapaian mutu, perbaikan secara terus menerus dan berkelanjutan untuk meyakinkan seluruh pengguna jasa mendapatkan pelayanan pengujian terbaik serta bersedia menerima sanksi administrasi dan ganti rugi materiil apabila tidak melaksanakan manajemen pelayanan.&rdquo;",
                   ]}
                   typeSpeed={50}
-                  typedRef={function noRefCheck() {}}
+                  typedRef={function noRefCheck() { }}
                 />
               </div>
 
@@ -341,7 +340,7 @@ export default function LandingDPKAKP() {
                     className="hidden items-center space-x-3 md:flex"
                   >
                     <Image
-                      src="/dpkakp/logo.png"
+                      src="/lembaga/logo/logo-sertifikasi-akp-blue.png"
                       width={0}
                       height={0}
                       alt="DPKAKP"

@@ -75,7 +75,6 @@ import Link from "next/link";
 import { FaBookOpen, FaMapPin, FaRupiahSign } from "react-icons/fa6";
 import Toast from "@/components/toast";
 import { GiTakeMyMoney } from "react-icons/gi";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
 import Cookies from "js-cookie";
 import { PiExam, PiKeyFill, PiMicrosoftExcelLogoFill } from "react-icons/pi";
 import TableData from "../../Tables/TableData";
@@ -168,9 +167,8 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className={`${
-            usePathname().includes("pukakp") ? "flex" : "hidden"
-          } w-full text-gray-900 font-semibold`}
+          className={`${usePathname().includes("pukakp") ? "flex" : "hidden"
+            } w-full text-gray-900 font-semibold`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Action
@@ -179,9 +177,8 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
       cell: ({ row }) => (
         <div
-          className={`w-full ${
-            usePathname().includes("pukakp") ? "flex" : "hidden"
-          }  flex-col gap-2`}
+          className={`w-full ${usePathname().includes("pukakp") ? "flex" : "hidden"
+            }  flex-col gap-2`}
         >
           <div className="flex items-center justify-center gap-1">
             <Button variant="outline" className="border border-[#000000]">
@@ -998,7 +995,7 @@ const TableDataPesertaUjianKeahlian = () => {
 
               {dataUjian.length > 0 && dataUjian != null ? (
                 dataUjian[0].UsersUjian != null &&
-                dataUjian[0].UsersUjian.length > 0 ? (
+                  dataUjian[0].UsersUjian.length > 0 ? (
                   <></>
                 ) : (
                   <div

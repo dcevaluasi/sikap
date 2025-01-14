@@ -60,8 +60,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import Toast from "@/components/toast";
-import SertifikatSettingPage1 from "@/components/sertifikat/sertifikatSettingPage1";
-import SertifikatSettingPage2 from "@/components/sertifikat/sertifikatSettingPage2";
 import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
@@ -74,8 +72,6 @@ import Cookies from "js-cookie";
 import { LemdiklatDetailInfo } from "@/types/lemdiklat";
 import { Progress } from "@/components/ui/progress";
 import { GiBookmarklet } from "react-icons/gi";
-import { DialogSertifikatPelatihan } from "@/components/sertifikat/dialogSertifikatPelatihan";
-import { DialogTemplateSertifikatPelatihan } from "@/components/sertifikat/dialogTemplateSertifikatPelatihan";
 import Link from "next/link";
 import TableData from "../../Tables/TableData";
 import { BsQuestionLg } from "react-icons/bs";
@@ -278,7 +274,7 @@ const TableDataBagianUjianKeahlian: React.FC = () => {
           {row.original.Bagian.map((bagian, index) => (
             <div className="flex gap-2 flex-col">
               <div
-                onClick={(e) => {}}
+                onClick={(e) => { }}
                 className="flex gap-2 px-3 text-sm w-full justify-center items-center rounded-md bg-transparent p-1.5  cursor-pointer text-gray-700 border border-gray-700"
               >
                 <IoMdInformationCircle />
@@ -286,7 +282,7 @@ const TableDataBagianUjianKeahlian: React.FC = () => {
               </div>
 
               <div
-                onClick={(e) => {}}
+                onClick={(e) => { }}
                 className="flex gap-2 px-3 text-sm w-full justify-center items-center rounded-md bg-green-400 p-1.5  cursor-pointer text-white"
               >
                 <BiSolidPaperPlane />
