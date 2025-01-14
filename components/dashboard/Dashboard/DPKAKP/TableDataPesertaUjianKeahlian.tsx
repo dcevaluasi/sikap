@@ -53,14 +53,6 @@ import { IoIosInformationCircle, IoMdCloseCircle } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
 
 import { usePathname, useRouter } from "next/navigation";
-import {
-  MdInfo,
-  MdOutlineNumbers,
-  MdOutlinePaid,
-  MdOutlinePayment,
-  MdSchool,
-} from "react-icons/md";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Pelatihan, PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { extractLastSegment, extractSecondLastSegment } from "@/utils";

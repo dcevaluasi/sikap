@@ -21,16 +21,14 @@ import {
 import { Button } from "@/components/ui/button";
 
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   ArrowUpDown,
   Edit3Icon,
@@ -369,6 +367,21 @@ const TableDataUjian: React.FC = () => {
   const [jumlahPeserta, setJumlahPeserta] = React.useState<string>("");
   const [status, setStatus] = React.useState<string>("");
 
+  const [selectedTypeUjian, setSelectedTypeUjian] = React.useState<string>('')
+
+  const [waktuF1, setWaktuF1] = React.useState<string>('')
+  const [waktuF2, setWaktuF2] = React.useState<string>('')
+  const [waktuF3, setWaktuF3] = React.useState<string>('')
+
+
+  const [waktuF1B1, setWaktuF1B1] = React.useState<string>('')
+  const [waktuF1B2, setWaktuF1B2] = React.useState<string>('')
+  const [waktuF1B3, setWaktuF1B3] = React.useState<string>('')
+  const [waktuF2B1, setWaktuF2B1] = React.useState<string>('')
+  const [waktuF3B1, setWaktuF3B1] = React.useState<string>('')
+  const [waktuF3B2, setWaktuF3B2] = React.useState<string>('')
+
+
   /*================== LOADER VARIABLES ================= */
   const [isPosting, setIsPosting] = React.useState<boolean>(false);
   const [isOpenFormUjianKeahlian, setIsOpenFormUjianKeahlian] =
@@ -376,7 +389,17 @@ const TableDataUjian: React.FC = () => {
 
   /*======= HANDLING CLEAR STATE VARIABLES UJIAN ======== */
   const handleClearNewUjianKeahlian = async () => {
+    setWaktuF1('')
+    setWaktuF2('')
+    setWaktuF3('')
+    setWaktuF1B1('')
+    setWaktuF1B2('')
+    setWaktuF1B3('')
+    setWaktuF2B1('')
+    setWaktuF3B1('')
+    setWaktuF3B2('')
     setIdTypeUjian("");
+    setSelectedTypeUjian('')
     setTypeUjian("");
     setNamaUjian("");
     setTempatUjian("");
@@ -412,6 +435,19 @@ const TableDataUjian: React.FC = () => {
     formData.append("Status", "Draft");
     if (filePermohonan != null) {
       formData.append("filePermohonan", filePermohonan!);
+    }
+
+    if (selectedTypeUjian == 'Klasikal') {
+      formData.append("WaktuF1B1", waktuF1B1);
+      formData.append("WaktuF1B2", waktuF1B2);
+      formData.append("WaktuF1B3", waktuF1B3);
+      formData.append("WaktuF2B1", waktuF2B1);
+      formData.append("WaktuF3B1", waktuF3B1);
+      formData.append("WaktuF3B2", waktuF3B2);
+    } else {
+      formData.append("waktuF1", waktuF1);
+      formData.append("waktuF2", waktuF2);
+      formData.append("waktuF3", waktuF3);
     }
 
     try {
@@ -777,15 +813,15 @@ const TableDataUjian: React.FC = () => {
                   <button
                     onClick={() => setSelectedStatusFilter("All")}
                     className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "All"
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-black"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
                       }`}
                   >
                     <p className="font-semibold text-lg">{data!.length}</p>
                     <p
                       className={`uppercase text-sm ${selectedStatusFilter === "All"
-                          ? "text-white font-bold"
-                          : "text-gray-600"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
                         }`}
                     >
                       All
@@ -799,15 +835,15 @@ const TableDataUjian: React.FC = () => {
                   <button
                     onClick={() => setSelectedStatusFilter("All")}
                     className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "All"
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-black"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
                       }`}
                   >
                     <p className="font-semibold text-lg">{data!.length}</p>
                     <p
                       className={`uppercase text-sm ${selectedStatusFilter === "All"
-                          ? "text-white font-bold"
-                          : "text-gray-600"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
                         }`}
                     >
                       All
@@ -819,15 +855,15 @@ const TableDataUjian: React.FC = () => {
                     <button
                       onClick={() => setSelectedStatusFilter("Draft")}
                       className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "Draft"
-                          ? "bg-blue-500 text-white"
-                          : "bg-white text-black"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
                         }`}
                     >
                       <p className="font-semibold text-lg">{countDraft}</p>
                       <p
                         className={`uppercase text-sm ${selectedStatusFilter === "Draft"
-                            ? "text-white font-bold"
-                            : "text-gray-600"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
                           }`}
                       >
                         Draft
@@ -840,15 +876,15 @@ const TableDataUjian: React.FC = () => {
                   <button
                     onClick={() => setSelectedStatusFilter("Pending")}
                     className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "Pending"
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-black"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
                       }`}
                   >
                     <p className="font-semibold text-lg">{countNotVerified}</p>
                     <p
                       className={`uppercase text-sm ${selectedStatusFilter === "Pending"
-                          ? "text-white font-bold"
-                          : "text-gray-600"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
                         }`}
                     >
                       Pending
@@ -860,8 +896,8 @@ const TableDataUjian: React.FC = () => {
                     <button
                       onClick={() => setSelectedStatusFilter("Pilih Penguji")}
                       className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-32 ${selectedStatusFilter === "Pilih Penguji"
-                          ? "bg-blue-500 text-white"
-                          : "bg-white text-black"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
                         }`}
                     >
                       <p className="font-semibold text-lg">
@@ -869,8 +905,8 @@ const TableDataUjian: React.FC = () => {
                       </p>
                       <p
                         className={`uppercase text-sm ${selectedStatusFilter === "Pilih Penguji"
-                            ? "text-white font-bold"
-                            : "text-gray-600"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
                           }`}
                       >
                         Pilih Penguji
@@ -883,15 +919,15 @@ const TableDataUjian: React.FC = () => {
                   <button
                     onClick={() => setSelectedStatusFilter("Aktif")}
                     className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-24 ${selectedStatusFilter === "Aktif"
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-black"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
                       }`}
                   >
                     <p className="font-semibold text-lg">{countVerified}</p>
                     <p
                       className={`uppercase text-sm ${selectedStatusFilter === "Aktif"
-                          ? "text-white font-bold"
-                          : "text-gray-600"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
                         }`}
                     >
                       Disetujui
@@ -1011,8 +1047,8 @@ const TableDataUjian: React.FC = () => {
                           {ujian!.Status == "Aktif" && (
                             <Link
                               href={`/lembaga/${usePathname().includes("pukakp")
-                                  ? "pukakp"
-                                  : "dpkakp"
+                                ? "pukakp"
+                                : "dpkakp"
                                 }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
                                 }/${ujian!.IdTypeUjian}`}
                               className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm"
@@ -1276,6 +1312,125 @@ const TableDataUjian: React.FC = () => {
                         />
                       </div>
                     </div>
+
+                    <div className="mt-2">
+                      <Label htmlFor="surat-permohonan">Jenis Pelaksanaan Ujian</Label>
+                      <Select
+                        value={selectedTypeUjian}
+                        onValueChange={(value: string) =>
+                          setSelectedTypeUjian(value)
+                        }
+                      >
+                        <SelectTrigger className="w-full text-base py-5">
+                          <SelectValue placeholder="Pilih Tipe Pelaksanaan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Klasikal">Klasikal</SelectItem>
+                          <SelectItem value="Rewarding">
+                            Rewarding
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    {
+                      selectedTypeUjian == 'Klasikal' ? <div className="grid grid-cols-3 gap-2">
+                        <div className="mt-2">
+                          <Label htmlFor="waktuF1B1">Waktu F1B1*</Label>
+                          <Input
+                            id="waktuF1B1"
+                            type="text"
+                            required
+                            value={waktuF1B1}
+                            onChange={(e) => setWaktuF1B1(e.target.value)}
+                          />
+                        </div>
+                        <div className="mt-2">
+                          <Label htmlFor="waktuF1B2">Waktu F1B2*</Label>
+                          <Input
+                            id="waktuF1B2"
+                            type="text"
+                            required
+                            value={waktuF1B2}
+                            onChange={(e) => setWaktuF1B2(e.target.value)}
+                          />
+                        </div>
+                        <div className="mt-2">
+                          <Label htmlFor="waktuF1B3">Waktu F1B3*</Label>
+                          <Input
+                            id="waktuF1B3"
+                            type="text"
+                            required
+                            value={waktuF1B3}
+                            onChange={(e) => setWaktuF1B3(e.target.value)}
+                          />
+                        </div>
+                        <div className="mt-2">
+                          <Label htmlFor="waktuF2B1">Waktu F2B1*</Label>
+                          <Input
+                            id="waktuF2B1"
+                            type="text"
+                            required
+                            value={waktuF2B1}
+                            onChange={(e) => setWaktuF2B1(e.target.value)}
+                          />
+                        </div>
+                        <div className="mt-2">
+                          <Label htmlFor="waktuF3B1">Waktu F3B1*</Label>
+                          <Input
+                            id="waktuF3B1"
+                            type="text"
+                            required
+                            value={waktuF3B1}
+                            onChange={(e) => setWaktuF3B1(e.target.value)}
+                          />
+                        </div>
+                        <div className="mt-2">
+                          <Label htmlFor="waktuF3B2">Waktu F3B2*</Label>
+                          <Input
+                            id="waktuF3B2"
+                            type="text"
+                            required
+                            value={waktuF3B2}
+                            onChange={(e) => setWaktuF3B2(e.target.value)}
+                          />
+                        </div>
+                      </div> : selectedTypeUjian == 'Rewarding' ? <div className="grid grid-cols-3 gap-2">
+                        <div className="mt-2">
+                          <Label htmlFor="waktuF1">Waktu F1*</Label>
+                          <Input
+                            id="waktuF1"
+                            type="text"
+                            required
+                            value={waktuF1}
+                            onChange={(e) => setWaktuF1(e.target.value)}
+                          />
+                        </div>
+                        <div className="mt-2">
+                          <Label htmlFor="waktuF2">Waktu F2*</Label>
+                          <Input
+                            id="waktuF2"
+                            type="text"
+                            required
+                            value={waktuF2}
+                            onChange={(e) => setWaktuF2(e.target.value)}
+                          />
+                        </div>
+                        <div className="mt-2">
+                          <Label htmlFor="waktuF3">Waktu F3*</Label>
+                          <Input
+                            id="waktuF3"
+                            type="text"
+                            required
+                            value={waktuF3}
+                            onChange={(e) => setWaktuF3(e.target.value)}
+                          />
+                        </div>
+                      </div> : <></>
+                    }
+                    <p className="text-xs mt-2">*Format Penginputan : 2025-01-09 10:15:00 +0900 WIT</p>
+
+
 
                     {/* Surat Permohonan */}
                     <div className="mt-2">
