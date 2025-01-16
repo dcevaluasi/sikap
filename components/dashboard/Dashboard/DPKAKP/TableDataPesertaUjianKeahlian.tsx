@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -796,6 +799,40 @@ const TableDataPesertaUjianKeahlian = () => {
     handleFetchingUjianKeahlianData();
   }, []);
 
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+
+    // Table header and data
+    const tableHeaders = [
+      ["No", "NIK", "Nama", "Nomor Ujian", "Nilai F1B1", "Nilai F1B2", "Nilai F1B3", "Total Nilai F1", "Nilai F2B1", "Nilai F3B1", "Nilai F3B2", "Total Nilai F3", "Nilai Komprehensif"],
+    ];
+
+    // Sample data mapping based on your table structure
+    const tableData = data.map((row: any, index: any) => [
+      index + 1,
+      row.Nik,
+      row.Nama,
+      row.NomorUjian,
+      row.NilaiF1B1,
+      row.NilaiF1B2,
+      row.NilaiF1B3,
+      ((row.NilaiF1B1 + row.NilaiF1B2 + row.NilaiF1B3) / 3).toFixed(2),
+      row.NilaiF2B1,
+      row.NilaiF3B1,
+      row.NilaiF3B2,
+      ((row.NilaiF3B1 + row.NilaiF3B2) / 2).toFixed(2),
+    ]);
+
+    // Add table to the PDF
+    doc.autoTable({
+      head: tableHeaders,
+      body: tableData,
+    });
+
+    // Save the PDF
+    doc.save("UjianTable.pdf");
+  };
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       <AlertDialog open={isOpenFormInputNilai}>
@@ -940,50 +977,60 @@ const TableDataPesertaUjianKeahlian = () => {
                 className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
               >
                 <PiMicrosoftExcelLogoFill />
-                Export
+                Export Kode
               </div>
 
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer">
-                    <FaMapPin />
-                    Sematkan Soal Ujian
-                  </div>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>
-                      Apakah anda yakin akan menyematkan soal ujian?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Pastikan jumlah anggota mu sudah sesuai dengan data
-                      peserta ujian yang sudah didaftarkan dan merupakan anggota
-                      yang sah tercantum dalam Surat Keputusan Dewan sebagai
-                      peserta yang mengikuti ujian keahlian awak kapal
-                      Perikanan!
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    {isLoadingSematkanSoal ? (
-                      <AlertDialogAction className="bg-gray-900">
-                        Loading ...
-                      </AlertDialogAction>
-                    ) : (
-                      <>
-                        <AlertDialogCancel>Batal</AlertDialogCancel>
-                        <AlertDialogAction
-                          onClick={(e) =>
-                            handleSematkanSoalUjianKeahlianToPeserta(e)
-                          }
-                          className="bg-gray-900"
-                        >
-                          Sematkan
+              <div
+                onClick={() => exportToPDF()}
+                className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+              >
+                <PiMicrosoftExcelLogoFill />
+                Export Nilai Ujian
+              </div>
+
+              {
+                pathname.includes('dpkakp') && <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer">
+                      <FaMapPin />
+                      Sematkan Soal Ujian
+                    </div>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Apakah anda yakin akan menyematkan soal ujian?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Pastikan jumlah anggota mu sudah sesuai dengan data
+                        peserta ujian yang sudah didaftarkan dan merupakan anggota
+                        yang sah tercantum dalam Surat Keputusan Dewan sebagai
+                        peserta yang mengikuti ujian keahlian awak kapal
+                        Perikanan!
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      {isLoadingSematkanSoal ? (
+                        <AlertDialogAction className="bg-gray-900">
+                          Loading ...
                         </AlertDialogAction>
-                      </>
-                    )}
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+                      ) : (
+                        <>
+                          <AlertDialogCancel>Batal</AlertDialogCancel>
+                          <AlertDialogAction
+                            onClick={(e) =>
+                              handleSematkanSoalUjianKeahlianToPeserta(e)
+                            }
+                            className="bg-gray-900"
+                          >
+                            Sematkan
+                          </AlertDialogAction>
+                        </>
+                      )}
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              }
 
               {dataUjian.length > 0 && dataUjian != null ? (
                 dataUjian[0].UsersUjian != null &&
