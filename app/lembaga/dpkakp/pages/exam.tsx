@@ -179,7 +179,9 @@ function Exam() {
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') {
+      // Use matchMedia to detect desktop
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+      if (isDesktop && e.key === 'Enter') {
         handleNextClick();
       }
     };
@@ -190,6 +192,7 @@ function Exam() {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [selectedIdSoal]);
+
 
   const [isSectionVisible, setIsSectionVisible] = React.useState(false);
 
@@ -230,7 +233,9 @@ function Exam() {
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === " ") { // Check for space key
+      // Use matchMedia to detect desktop
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+      if (isDesktop && e.key === " ") { // Check for space key
         e.preventDefault(); // Prevent default behavior (scrolling) when space is pressed
         handlePrevClick();
       }
@@ -238,6 +243,7 @@ function Exam() {
 
     // Add event listener for the keydown event
     window.addEventListener("keydown", handleKeyDown);
+
     return () => {
       // Cleanup the event listener
       window.removeEventListener("keydown", handleKeyDown);
@@ -245,9 +251,34 @@ function Exam() {
   }, [selectedIdSoal]);
 
 
+
   React.useEffect(() => {
     handleFetchExamInformation();
   }, []);
+
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const handleImageClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  React.useEffect(() => {
+    const handleCopy = (event: ClipboardEvent) => {
+      event.preventDefault();
+    };
+
+    window.addEventListener("copy", handleCopy);
+
+    // Clean up the event listeners
+    return () => {
+      window.removeEventListener("copy", handleCopy);
+    };
+  }, []);
+
 
   return (
     <main className="bg-darkDPKAKP w-full h-full relative flex items-center justify-center pb-56 md:pb-0">
@@ -313,13 +344,38 @@ function Exam() {
                   </h2>
 
                   {data?.Soal[selectedIdSoal]?.GambarSoal != "" ? (
-                    <Image
-                      className="hidden md:block w-fit h-50 object-contain my-5 rounded-lg"
-                      src={data!.Soal[selectedIdSoal]?.GambarSoal!}
-                      width={0}
-                      height={0}
-                      alt="DPKAKP Logo"
-                    />
+                    <div>
+                      {/* Image with onClick to show the modal */}
+                      {data?.Soal[selectedIdSoal]?.GambarSoal !== "" && (
+                        <Image
+                          className="hidden md:block w-fit h-50 object-contain my-5 rounded-lg cursor-pointer z-[9999999]"
+                          src={data!.Soal[selectedIdSoal]?.GambarSoal!}
+                          width={0}
+                          height={0}
+                          alt="DPKAKP Logo"
+                          onClick={handleImageClick} // Trigger modal on image click
+                        />
+                      )}
+
+                      {/* Modal to show image */}
+                      {isModalOpen && (
+                        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999999999]">
+                          <div className="bg-white p-5 rounded-lg max-w-4xl max-h-[90%] overflow-auto">
+                            <button
+                              onClick={handleCloseModal}
+                              className="absolute top-2 right-2 text-white bg-red-500 hover:bg-red-700 rounded-full p-2"
+                            >
+                              X
+                            </button>
+                            <img
+                              src={data?.Soal[selectedIdSoal]?.GambarSoal!}
+                              alt="Full-size Image"
+                              className="w-full h-auto rounded-lg"
+                            />
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <></>
                   )}
@@ -436,7 +492,7 @@ function Exam() {
             </section>
           )}
         </section>
-        <section className="h-full text-white w-1/3 py-20 z-50 hidden md:block">
+        <section className="h-full text-white w-1/3 py-20 z-0 hidden md:block">
           <div className="flex flex-col gap-3 h-full">
             <div className="flex flex-col  gap-0 items-start">
               <h1 className="font-bold text-gray-200 text-sm md:text-xl max-w-xs md:max-w-md leading-[95%] mb-5 mt-2 text-left">
