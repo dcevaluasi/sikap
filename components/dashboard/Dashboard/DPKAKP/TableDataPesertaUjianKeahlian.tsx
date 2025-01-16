@@ -4,6 +4,7 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -78,6 +79,7 @@ import { getIdUjianKeahlianInPathPesertaUjian } from "@/components/utils/dpkakp/
 import { BsFileExcel, BsPersonVcard } from "react-icons/bs";
 import { Ujian, UsersUjian } from "@/types/ujian-keahlian-akp";
 import { HashLoader } from "react-spinners";
+import autoTable from "jspdf-autotable";
 
 const TableDataPesertaUjianKeahlian = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -799,16 +801,30 @@ const TableDataPesertaUjianKeahlian = () => {
     handleFetchingUjianKeahlianData();
   }, []);
 
-  const exportToPDF = () => {
+  const exportToPDF = (data: any[]) => {
     const doc = new jsPDF();
 
-    // Table header and data
+    // Table headers
     const tableHeaders = [
-      ["No", "NIK", "Nama", "Nomor Ujian", "Nilai F1B1", "Nilai F1B2", "Nilai F1B3", "Total Nilai F1", "Nilai F2B1", "Nilai F3B1", "Nilai F3B2", "Total Nilai F3", "Nilai Komprehensif"],
+      [
+        "No",
+        "NIK",
+        "Nama",
+        "Nomor Ujian",
+        "Nilai F1B1",
+        "Nilai F1B2",
+        "Nilai F1B3",
+        "Total Nilai F1",
+        "Nilai F2B1",
+        "Nilai F3B1",
+        "Nilai F3B2",
+        "Total Nilai F3",
+        "Nilai Komprehensif",
+      ],
     ];
 
-    // Sample data mapping based on your table structure
-    const tableData = data.map((row: any, index: any) => [
+    // Map data to match table structure
+    const tableData = data.map((row, index) => [
       index + 1,
       row.Nik,
       row.Nama,
@@ -821,16 +837,22 @@ const TableDataPesertaUjianKeahlian = () => {
       row.NilaiF3B1,
       row.NilaiF3B2,
       ((row.NilaiF3B1 + row.NilaiF3B2) / 2).toFixed(2),
+      row.NilaiKomprensif,
     ]);
 
-    // Add table to the PDF
-    doc.autoTable({
+    // Add table to the PDF using autoTable
+    autoTable(doc, {
       head: tableHeaders,
       body: tableData,
+      startY: 20, // Starting Y position
+      styles: { fontSize: 8, cellPadding: 2 }, // Adjust styling
+      headStyles: { fillColor: [22, 160, 133] }, // Header color (customize as needed)
+      alternateRowStyles: { fillColor: [240, 240, 240] }, // Alternate row background
+      theme: "grid", // Table style theme
     });
 
     // Save the PDF
-    doc.save("UjianTable.pdf");
+    doc.save("Hasil Nilai Ujian Keahlian AKP.pdf");
   };
 
   return (
@@ -981,7 +1003,7 @@ const TableDataPesertaUjianKeahlian = () => {
               </div>
 
               <div
-                onClick={() => exportToPDF()}
+                onClick={() => exportToPDF(data)}
                 className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
               >
                 <PiMicrosoftExcelLogoFill />
