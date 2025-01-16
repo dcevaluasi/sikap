@@ -222,6 +222,23 @@ function Exam() {
   };
 
   React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === " ") { // Check for space key
+        e.preventDefault(); // Prevent default behavior (scrolling) when space is pressed
+        handlePrevClick();
+      }
+    };
+
+    // Add event listener for the keydown event
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      // Cleanup the event listener
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedIdSoal]);
+
+
+  React.useEffect(() => {
     handleFetchExamInformation();
   }, []);
 
