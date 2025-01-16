@@ -854,7 +854,7 @@ const TableDataPesertaUjianKeahlian = () => {
     });
 
     // Save the PDF
-    doc.save("Hasil Nilai Ujian Keahlian AKP.pdf");
+    doc.save(`"Hasil Nilai Ujian ${dataUjian[0]!.NamaUjian}.pdf`);
   };
 
   return (
