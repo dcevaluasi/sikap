@@ -78,16 +78,16 @@ function page() {
 
   return (
     <main className="bg-darkDPKAKP w-full h-screen">
-      <section className="relative h-fit space-y-6 pb-8 pt-36 md:h-screen md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col">
+      <section className="relative h-fit space-y-6 pb-8 pt-36 md:h-screen md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col px-8 md:px-0">
         <div className="container relative flex max-w-[64rem] flex-col items-center gap-2 text-center">
           <Link
             href={"/dpkakp"}
-            className="rounded-2xl bg-mutedDPKAKP px-4 py-1.5 text-sm text-gray-200 font-medium"
+            className="rounded-2xl bg-mutedDPKAKP px-4 py-1.5 mt-40 md:mt-0 text-sm text-gray-200 font-medium"
             target="_blank"
           >
             DPKAKP
           </Link>
-          <h1 className="font-bold text-gray-200 text-4xl -mt-2">
+          <h1 className="font-bold text-gray-200 text-4xl -mt-2 leading-none md:leading-normal py-3 md:py-0">
             Akses Ujian Keahlian
           </h1>
           <p className="font-jakarta max-w-[42rem] leading-[100%] text-mutedForegroundDPKAKP  sm:text-lg sm:leading-8 -mt-2">
@@ -95,7 +95,7 @@ function page() {
             Ujian Keahlian Awak Kapal Perikanan
           </p>
           <Image
-            className="absolute -top-28 w-[600px] opacity-10 z-10"
+            className="absolute top-40 md:-top-28 w-[600px] opacity-10 z-10"
             src={"/lembaga/logo/logo-sertifikasi-akp.png"}
             width={0}
             height={0}
