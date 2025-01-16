@@ -3,6 +3,8 @@
 import Image from "next/image";
 import React from "react";
 import ScrollDown from "../scroll-down";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 export default function HeroDPKAKP() {
   const [imageIndex, setImageIndex] = React.useState(0);
@@ -71,10 +73,10 @@ export default function HeroDPKAKP() {
 
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
             <h1
-              className="text-4xl md:text-[3.9rem] font-normal leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
-              // data-aos="zoom-y-out"
+              className="text-5xl md:text-[3.9rem] font-normal leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
+            // data-aos="zoom-y-out"
             >
-              Dewan Penguji Keahlian <br />
+              Sistem Ujian keahlian  <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
                 Awak Kapal Perikanan
               </span>
@@ -82,8 +84,8 @@ export default function HeroDPKAKP() {
             <div className="max-w-3xl mx-auto">
               <p
                 className="text-lg text-gray-200 mb-8"
-                // data-aos="zoom-y-out"
-                // data-aos-delay="150"
+              // data-aos="zoom-y-out"
+              // data-aos-delay="150"
               >
                 Berdasarkan{" "}
                 <span className="font-bold">Permen KP 33 Tahun 2021</span>{" "}
@@ -92,6 +94,24 @@ export default function HeroDPKAKP() {
                 dan Penandaan Kapal Perikanan, serta Tata Kelola Pengawasan
                 Kapal Perikanan.
               </p>
+              <div className="flex flex-col md:flex-row gap-2 w-full items-center justify-center mb-2">
+                <Button
+                  className="w-full md:w-fit text-lg px-4 py-6 bg-blue-500 hover:bg-blue-600 ml-4"
+                >
+                  <Link className="block w-full" href={'https://sikap-dpkakp-dev.vercel.app/lembaga/dpkakp/user/auth'}>
+                    Video Tutorial Pelaksanaan Ujian
+                  </Link>
+
+                </Button>
+                <Button
+                  className="w-full md:w-fit text-lg px-4 py-6 bg-transparent border-blue-500 border hover:bg-blue-600 ml-4"
+                >
+                  <Link className="block w-full" href={'https://sikap-dpkakp-dev.vercel.app/lembaga/dpkakp/admin/auth/login'}>
+                    Video Tutorial DPKAKP & PUKAKP
+                  </Link>
+
+                </Button>
+              </div>
               <div className="flex items-center justify-center w-full">
                 <ScrollDown />
               </div>
@@ -99,6 +119,6 @@ export default function HeroDPKAKP() {
           </div>
         </div>
       </div>
-    </section>
+    </section >
   );
 }
