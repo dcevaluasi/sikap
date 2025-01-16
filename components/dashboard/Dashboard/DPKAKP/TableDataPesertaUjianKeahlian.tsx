@@ -819,6 +819,7 @@ const TableDataPesertaUjianKeahlian = () => {
         "Nilai F3B1",
         "Nilai F3B2",
         "Total Nilai F3",
+        "Nilak Kumulatif",
         "Nilai Komprehensif",
       ],
     ];
@@ -837,6 +838,7 @@ const TableDataPesertaUjianKeahlian = () => {
       row.NilaiF3B1,
       row.NilaiF3B2,
       ((row.NilaiF3B1 + row.NilaiF3B2) / 2).toFixed(2),
+      (((row.NilaiF1B1 + row.NilaiF1B2 + row.NilaiF1B3) / 3).toFixed(2) + row.NilaiF2B1 + ((row.NilaiF3B1 + row.NilaiF3B2) / 2).toFixed(2)),
       row.NilaiKomprensif,
     ]);
 
