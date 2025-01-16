@@ -56,7 +56,7 @@ function page() {
             keahlian awak kapal perikanan.
           </p>
           <Image
-            className="absolute -top-16 w-[600px] opacity-10 z-10"
+            className="absolute mt-40 md:-top-16 w-[600px] opacity-10 z-10"
             src={"/lembaga/logo/logo-sertifikasi-akp.png"}
             width={0}
             height={0}

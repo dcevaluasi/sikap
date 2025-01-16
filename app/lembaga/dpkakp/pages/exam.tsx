@@ -31,25 +31,7 @@ function Exam() {
   const router = useRouter();
 
   const [selectedUjian, setSelectedUjian] = React.useState<Ujian | null>(null);
-  const handleFetchingDataUjianById = async (idUjian: number) => {
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminPusat/GetUjian?id=${idUjian}`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
 
-      console.log({ response });
-      setSelectedUjian(response.data.data[0]);
-    } catch (error) {
-      console.error("ERROR FETCHING UJIAN : ", error);
-
-      throw error;
-    }
-  };
 
   const [data, setData] = React.useState<SoalBagian | null>(null);
   const [selectedAnswers, setSelectedAnswers] = React.useState<JawabanUser[]>(
@@ -114,6 +96,33 @@ function Exam() {
     });
   };
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!data || !data.Soal[selectedIdSoal]) return;
+
+      const currentQuestion = data.Soal[selectedIdSoal];
+      const answers = currentQuestion?.Jawaban?.slice(1); // Adjust for slicing
+
+      if (!answers) return;
+
+      const keyMap: any = { A: 0, B: 1, C: 2, D: 3 }; // Map keys to indices
+      const key: string = e.key.toUpperCase();
+
+      if (keyMap[key] !== undefined) {
+        const selectedAnswer = answers[keyMap[key]];
+        if (selectedAnswer) {
+          handleAnswerChange(selectedAnswer.IdSoalUjianBagian, selectedAnswer.NameJawaban);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [data, selectedIdSoal]);
+
+
   console.log("SELECTED ANSWERS", selectedAnswers);
 
   React.useEffect(() => {
@@ -167,6 +176,21 @@ function Exam() {
   const handleNextClick = () => {
     setSelectedIdSoal(selectedIdSoal + 1);
   };
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleNextClick();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedIdSoal]);
+
 
   React.useEffect(() => {
     // Clear radio button selection when moving to the next question
@@ -311,10 +335,10 @@ function Exam() {
                               {index === 0
                                 ? "A"
                                 : index === 1
-                                ? "B"
-                                : index === 2
-                                ? "C"
-                                : "D"}
+                                  ? "B"
+                                  : index === 2
+                                    ? "C"
+                                    : "D"}
                               . {jawaban.NameJawaban}
                             </label>
                           </div>
@@ -416,19 +440,17 @@ function Exam() {
                 <div
                   key={index}
                   onClick={(e) => setSelectedIdSoal(index)}
-                  className={`h-12 w-12 flex justify-between items-center cursor-pointer hover:scale-105 ${
-                    selectedAnswers[index]!.jawaban_pengguna! != ""
-                      ? "bg-blue-500 text-white"
-                      : "bg-[#343650]"
-                  } rounded-lg duration-700 bg-opacity-70`}
+                  className={`h-12 w-12 flex justify-between items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
+                    ? "bg-blue-500 text-white"
+                    : "bg-[#343650]"
+                    } rounded-lg duration-700 bg-opacity-70`}
                 >
                   <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-[#191A24]"></div>
                   <span
-                    className={`text-2xl font-semibold  ${
-                      selectedAnswers[index] != null
-                        ? " text-white"
-                        : "text-[#a5b4fc]"
-                    }`}
+                    className={`text-2xl font-semibold  ${selectedAnswers[index] != null
+                      ? " text-white"
+                      : "text-[#a5b4fc]"
+                      }`}
                   >
                     {index + 1}
                   </span>
