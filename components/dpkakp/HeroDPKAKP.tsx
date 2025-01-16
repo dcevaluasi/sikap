@@ -98,7 +98,7 @@ export default function HeroDPKAKP() {
                 <Button
                   className="w-full md:w-fit text-lg px-4 py-6 bg-blue-500 hover:bg-blue-600 ml-4"
                 >
-                  <Link className="block w-full" href={'https://sikap-dpkakp-dev.vercel.app/lembaga/dpkakp/user/auth'}>
+                  <Link className="block w-full" href={'https://youtu.be/FA70GlQXoJ0'}>
                     Video Tutorial Pelaksanaan Ujian
                   </Link>
 
@@ -106,7 +106,7 @@ export default function HeroDPKAKP() {
                 <Button
                   className="w-full md:w-fit text-lg px-4 py-6 bg-transparent border-blue-500 border hover:bg-blue-600 ml-4"
                 >
-                  <Link className="block w-full" href={'https://sikap-dpkakp-dev.vercel.app/lembaga/dpkakp/admin/auth/login'}>
+                  <Link className="block w-full" href={'https://youtu.be/ACdOJomFv70'}>
                     Video Tutorial DPKAKP & PUKAKP
                   </Link>
 
