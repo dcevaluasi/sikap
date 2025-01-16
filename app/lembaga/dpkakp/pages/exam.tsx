@@ -191,6 +191,13 @@ function Exam() {
     };
   }, [selectedIdSoal]);
 
+  const [isSectionVisible, setIsSectionVisible] = React.useState(false);
+
+  const handleToggleSection = () => {
+    setIsSectionVisible(!isSectionVisible);
+  };
+
+
 
   React.useEffect(() => {
     // Clear radio button selection when moving to the next question
@@ -243,17 +250,17 @@ function Exam() {
   }, []);
 
   return (
-    <main className="bg-darkDPKAKP w-full h-full relative flex items-center justify-center">
+    <main className="bg-darkDPKAKP w-full h-full relative flex items-center justify-center pb-56 md:pb-0">
       <Image
-        className="absolute top-20 w-[600px] opacity-10 z-10"
+        className="absolute top-40 md:top-20 w-[600px] opacity-10 z-10"
         src={"/lembaga/logo/logo-sertifikasi-akp.png"}
         width={0}
         height={0}
         alt="DPKAKP Logo"
       />
-      <div className="flex flex-row gap-20 w-full items-start justify-between mx-20 h-full">
-        <section className="relative h-full space-y-6 pb-8  md:pb-12 mt-10 flex items-center justify-center flex-col w-2/3">
-          <div className="container relative flex max-w-[64rem] flex-col items-center gap-2 text-center md:px-0 px-10">
+      <div className="flex flex-row gap-20 w-full items-start justify-between mx-10 md:mx-20 h-full">
+        <section className="relative h-full space-y-6 pb-8  md:pb-12 mt-10 flex items-center justify-center flex-col md:w-2/3">
+          <div className="md:container w-full relative flex md:max-w-[64rem] flex-col items-center gap-2 text-center md:px-0 px-10">
             <p className="rounded-2xl bg-mutedDPKAKP px-4 py-1.5 text-sm text-gray-200 font-medium">
               DPKAKP
             </p>
@@ -429,7 +436,7 @@ function Exam() {
             </section>
           )}
         </section>
-        <section className="h-full text-white w-1/3 py-20 z-50">
+        <section className="h-full text-white w-1/3 py-20 z-50 hidden md:block">
           <div className="flex flex-col gap-3 h-full">
             <div className="flex flex-col  gap-0 items-start">
               <h1 className="font-bold text-gray-200 text-sm md:text-xl max-w-xs md:max-w-md leading-[95%] mb-5 mt-2 text-left">
