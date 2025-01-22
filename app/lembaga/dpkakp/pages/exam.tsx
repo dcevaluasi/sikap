@@ -1,6 +1,20 @@
 "use client";
 
 import Toast from "@/components/toast";
+import { Input } from "@/components/ui/input"
+import { RxHamburgerMenu } from "react-icons/rx";
+
+import { Label } from "@/components/ui/label"
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -194,14 +208,6 @@ function Exam() {
   }, [selectedIdSoal]);
 
 
-  const [isSectionVisible, setIsSectionVisible] = React.useState(false);
-
-  const handleToggleSection = () => {
-    setIsSectionVisible(!isSectionVisible);
-  };
-
-
-
   React.useEffect(() => {
     // Clear radio button selection when moving to the next question
     const radioButtons = document.querySelectorAll(
@@ -282,6 +288,7 @@ function Exam() {
 
   return (
     <main className="bg-darkDPKAKP w-full h-full relative flex items-center justify-center pb-56 md:pb-0">
+
       <Image
         src={"/dpkakp/image4.jpg"}
         className="absolute w-full h-screen z-10 object-cover duration-1000"
@@ -291,7 +298,53 @@ function Exam() {
       />
       <div className="absolute bg-blue-950 opacity-80 inset-0 z-20"></div>
       <div className="flex flex-row gap-20 w-full items-start justify-between mx-10 z-[9999] md:mx-20 h-full">
-        <section className="relative h-full space-y-6 pb-8  md:pb-12 mt-10 flex items-center justify-center flex-col md:w-2/3">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" className="rounded-2xl bg-blue-500 px-4 py-1.5 text-sm text-gray-200 font-medium border-none absolute top-5 left-5 block md:hidden"><RxHamburgerMenu /></Button>
+          </SheetTrigger>
+          <SheetContent className="z-[9999] bg-darkDPKAKP overflow-y-scroll scrollbar-hide" side={'left'}>
+            <SheetHeader>
+              <SheetTitle className="leading-none text-white">{data?.Ujian} <br />{" "}
+                <span className="font-normal text-xs md:text-base text-white leading-[90%]">
+                  {data?.Fungsi}
+                </span>{" "}</SheetTitle>
+              <SheetDescription>
+                Tipe Soal : {data?.Bagian} •   Jumlah Soal : {data?.jumlah} Soal  •   Waktu Pelaksanaan : {data?.waktu!} Menit
+              </SheetDescription>
+              <Timer countdownMinutes={data?.waktu!} />
+            </SheetHeader>
+            <section className="h-full text-white w-full py-20 z-0 block -mt-14 pb-10 ml-2">
+              <div className="flex flex-col gap-3 h-full">
+                <div className="flex flex-col  gap-0 items-start">
+                </div>
+                <div className="grid grid-cols-4 grid-rows-6 space-x-0 space-y-0 gap-1">
+                  {data?.Soal!.map((soal, index) => (
+                    <div
+                      key={index}
+                      onClick={(e) => setSelectedIdSoal(index)}
+                      className={`h-12 w-12 flex justify-between items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
+                        ? "bg-green-500 text-white bg-opacity-70"
+                        : "bg-blue-500 bg-opacity-30"
+                        } rounded-lg duration-700 `}
+                    >
+                      <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-gray-300"></div>
+                      <span
+                        className={`text-2xl font-semibold  ${selectedAnswers[index] != null
+                          ? " text-white"
+                          : "text-[#a5b4fc]"
+                          }`}
+                      >
+                        {index + 1}
+                      </span>
+                      <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-gray-300"></div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          </SheetContent>
+        </Sheet>
+        <section className="relative h-full space-y-6 pb-8  md:pb-12 mt-36 md:mt-10 flex items-center justify-center flex-col md:w-2/3">
           <div className="md:container w-full relative flex md:max-w-[64rem] flex-col items-center gap-2 text-center md:px-0 px-10">
             <Link
               href={"#"}
@@ -342,8 +395,11 @@ function Exam() {
             <SkeletonDataSoal />
           ) : (
             <section className="w-full  container flex items-center justify-center text-white relative z-50 h-full">
-              <div className="flex w-full h-fit mx-auto items-center justify-between gap-10">
-                <div className="rounded-md h-full  px-6 py-3 flex-1">
+              <div className="flex flex-col md:flex-row w-full h-fit mx-auto items-center justify-between gap-10">
+                <div className='block md:hidden'>
+                  <Timer countdownMinutes={data?.waktu!} />
+                </div>
+                <div className="rounded-md h-full  px-6 py-3 flex-1 -mt-8 md:mt-0">
                   <h2 className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 text-2xl">
                     Soal No. {selectedIdSoal + 1}
                   </h2>
@@ -526,9 +582,9 @@ function Exam() {
                   key={index}
                   onClick={(e) => setSelectedIdSoal(index)}
                   className={`h-12 w-12 flex justify-between items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
-                    ? "bg-green-500 text-white"
+                    ? "bg-green-500 text-white bg-opacity-70"
                     : "bg-blue-500 bg-opacity-30"
-                    } rounded-lg duration-700 bg-opacity-70`}
+                    } rounded-lg duration-700 `}
                 >
                   <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-gray-300"></div>
                   <span
@@ -660,7 +716,7 @@ const Timer: React.FC<TimerProps> = ({ countdownMinutes }) => {
       <div className="flex flex-col items-center justify-center w-full h-full gap-8 sm:gap-16">
         <div className="flex justify-center gap-3 sm:gap-8">
           {["days", "hours", "minutes", "seconds"].map((unit, index) => (
-            <div key={index} className="flex flex-col gap-2 relative">
+            <div key={index} className="flex flex-col mr-2 md:mr-0 gap-2 relative">
               <div className="h-12 w-12 flex justify-between items-center bg-blue-500 bg-opacity-30 rounded-lg">
                 <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-gray-300"></div>
                 <span className="text-2xl font-semibold text-white">
@@ -668,7 +724,7 @@ const Timer: React.FC<TimerProps> = ({ countdownMinutes }) => {
                 </span>
                 <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-gray-300"></div>
               </div>
-              <span className="text-[#8486A9] text-xs text-center capitalize">
+              <span className="text-gray-200 text-xs text-center capitalize">
                 {countDownTime[unit as keyof CountDownTime] === "01"
                   ? unit.slice(0, -1)
                   : unit}
