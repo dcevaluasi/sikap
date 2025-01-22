@@ -108,7 +108,7 @@ function page() {
             alt="DPKAKP Logo"
           />
           <h1 className="font-bold  font-calsans leading-none text-gray-200 text-4xl -mt-4">
-            Akses Ujian Keahlian {" "}
+            Akses Ujian Keahlian {" "} <br />
             <span className=" bg-clip-text text-transparent bg-gradient-to-r leading-none pt-0 from-blue-500 to-teal-400">
               Awak Kapal Perikanan
             </span>

@@ -161,6 +161,20 @@ function Exam() {
   const [showAlert, setShowAlert] = React.useState(false);
   const [showSubmitAlert, setShowSubmitAlert] = React.useState(false);
   const handleSubmit = async () => {
+    // Check if any answer is still empty
+    const hasEmptyAnswers = selectedAnswers.some(
+      (answer) => !answer.id_soal_bagian || !answer.jawaban_pengguna
+    );
+
+    if (hasEmptyAnswers) {
+      Toast.fire({
+        icon: "error",
+        title: 'Oopsss!',
+        text: "Pastikan semua jawaban telah diisi sebelum submit!",
+      });
+      return; // Prevent submission
+    }
+
     try {
       const response = await axios.post(
         `${dpkakpBaseUrl}/SumbitExam`,
@@ -174,19 +188,24 @@ function Exam() {
       console.log("Response:", response.data);
       Toast.fire({
         icon: "success",
-        title: `Berhasil mensubmit jawabanmu!`,
+        title: 'Yeayyy!',
+        text: `Berhasil mensubmit jawabanmu, semoga hasilnya memuaskan ya sobat!`,
       });
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
       setTimeout(() => {
         router.replace("/lembaga/dpkakp/user/auth");
       }, 1500); // Adjust the timeout duration as needed
-      // Handle the response as needed
     } catch (error) {
       console.error("Error submitting exam:", error);
-      // Handle the error as needed
+      Toast.fire({
+        icon: "error",
+        title: 'Oopsss!',
+        text: "Terjadi kesalahan saat submit, coba lagi nanti!",
+      });
     }
   };
+
   const handleNextClick = () => {
     setSelectedIdSoal(selectedIdSoal + 1);
   };
@@ -303,7 +322,14 @@ function Exam() {
             <Button variant="outline" className="rounded-2xl bg-blue-500 px-4 py-1.5 text-sm text-gray-200 font-medium border-none absolute top-5 left-5 block md:hidden"><RxHamburgerMenu /></Button>
           </SheetTrigger>
           <SheetContent className="z-[9999] bg-darkDPKAKP overflow-y-scroll scrollbar-hide" side={'left'}>
-            <SheetHeader>
+            <SheetHeader className="flex flex-col items-center justify-center">
+              <Image
+                className="block w-16 h-16 "
+                src={"/lembaga/logo/logo-sertifikasi-akp.png"}
+                width={0}
+                height={0}
+                alt="DPKAKP Logo"
+              />
               <SheetTitle className="leading-none text-white">{data?.Ujian} <br />{" "}
                 <span className="font-normal text-xs md:text-base text-white leading-[90%]">
                   {data?.Fungsi}
@@ -353,6 +379,13 @@ function Exam() {
             >
               DPKAKP
             </Link>
+            <Image
+              className="block md:hidden w-16 h-16 "
+              src={"/lembaga/logo/logo-sertifikasi-akp.png"}
+              width={0}
+              height={0}
+              alt="DPKAKP Logo"
+            />
             <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2">
               <Image
                 className=" hidden md:block md:w-16 md:h-14 "
