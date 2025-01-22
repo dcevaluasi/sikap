@@ -84,7 +84,7 @@ function page() {
   return (
     <main className="bg-darkDPKAKP w-full h-screen relative">
       <Image
-        src={"/dpkakp/image3.jpg"}
+        src={"/dpkakp/image2.jpg"}
         className="absolute w-full h-screen z-10 object-cover duration-1000"
         alt=""
         layout="fill"
