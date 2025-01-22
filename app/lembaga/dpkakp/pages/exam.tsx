@@ -283,18 +283,23 @@ function Exam() {
   return (
     <main className="bg-darkDPKAKP w-full h-full relative flex items-center justify-center pb-56 md:pb-0">
       <Image
-        className="absolute top-40 md:top-20 w-[600px] opacity-10 z-10"
-        src={"/lembaga/logo/logo-sertifikasi-akp.png"}
-        width={0}
-        height={0}
-        alt="DPKAKP Logo"
+        src={"/dpkakp/image4.jpg"}
+        className="absolute w-full h-screen z-10 object-cover duration-1000"
+        alt=""
+        layout="fill"
+        priority
       />
-      <div className="flex flex-row gap-20 w-full items-start justify-between mx-10 md:mx-20 h-full">
+      <div className="absolute bg-blue-950 opacity-80 inset-0 z-20"></div>
+      <div className="flex flex-row gap-20 w-full items-start justify-between mx-10 z-[9999] md:mx-20 h-full">
         <section className="relative h-full space-y-6 pb-8  md:pb-12 mt-10 flex items-center justify-center flex-col md:w-2/3">
           <div className="md:container w-full relative flex md:max-w-[64rem] flex-col items-center gap-2 text-center md:px-0 px-10">
-            <p className="rounded-2xl bg-mutedDPKAKP px-4 py-1.5 text-sm text-gray-200 font-medium">
+            <Link
+              href={"#"}
+              className="rounded-2xl bg-blue-500 px-4 py-1.5 text-sm text-gray-200 font-medium"
+              target="_blank"
+            >
               DPKAKP
-            </p>
+            </Link>
             <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2">
               <Image
                 className=" hidden md:block md:w-16 md:h-14 "
@@ -311,7 +316,7 @@ function Exam() {
                     DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
                   </span>
                 </h1>
-                <p className="font-jakarta max-w-[42rem] leading-[95%] text-mutedForegroundDPKAKP text-xs md:text-sm  -mt-4">
+                <p className="font-jakarta max-w-[42rem] leading-[95%] text-white text-xs md:text-sm  -mt-4">
                   GEDUNG MINA BAHARI III Lt.5, JALAN MEDAN MERDEKA TIMUR NOMOR
                   16 JAKARTA 10110 <br /> KOTAK POS 4130 JKP 10041 TELEPON (021)
                   3519070 (LACAK), FAKSIMILE (021) 3513287 <br /> LAMAN
@@ -497,19 +502,19 @@ function Exam() {
             <div className="flex flex-col  gap-0 items-start">
               <h1 className="font-bold text-gray-200 text-sm md:text-xl max-w-xs md:max-w-md leading-[95%] mb-5 mt-2 text-left">
                 {data?.Ujian} <br />{" "}
-                <span className="font-normal text-xs md:text-base text-mutedForegroundDPKAKP leading-[90%]">
+                <span className="font-normal text-xs md:text-base text-white leading-[90%]">
                   {data?.Fungsi}
                 </span>{" "}
                 <br />
-                <span className="font-normal text-xs md:text-base text-mutedForegroundDPKAKP leading-[90%]">
+                <span className="font-normal text-xs md:text-base text-white leading-[90%]">
                   Tipe Soal : {data?.Bagian}
                 </span>
                 <br />
-                <span className="font-normal text-xs md:text-base text-mutedForegroundDPKAKP leading-[90%]">
+                <span className="font-normal text-xs md:text-base text-white leading-[90%]">
                   Jumlah Soal : {data?.jumlah} Soal
                 </span>
                 <br />
-                <span className="font-normal text-xs md:text-base text-mutedForegroundDPKAKP leading-[90%]">
+                <span className="font-normal text-xs md:text-base text-white leading-[90%]">
                   Waktu Pelaksanaan : {data?.waktu!} Menit
                 </span>
               </h1>
@@ -521,11 +526,11 @@ function Exam() {
                   key={index}
                   onClick={(e) => setSelectedIdSoal(index)}
                   className={`h-12 w-12 flex justify-between items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
-                    ? "bg-blue-500 text-white"
-                    : "bg-[#343650]"
+                    ? "bg-green-500 text-white"
+                    : "bg-blue-500 bg-opacity-30"
                     } rounded-lg duration-700 bg-opacity-70`}
                 >
-                  <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-[#191A24]"></div>
+                  <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-gray-300"></div>
                   <span
                     className={`text-2xl font-semibold  ${selectedAnswers[index] != null
                       ? " text-white"
@@ -534,7 +539,7 @@ function Exam() {
                   >
                     {index + 1}
                   </span>
-                  <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-[#191A24]"></div>
+                  <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-gray-300"></div>
                 </div>
               ))}
             </div>
@@ -656,12 +661,12 @@ const Timer: React.FC<TimerProps> = ({ countdownMinutes }) => {
         <div className="flex justify-center gap-3 sm:gap-8">
           {["days", "hours", "minutes", "seconds"].map((unit, index) => (
             <div key={index} className="flex flex-col gap-2 relative">
-              <div className="h-12 w-12 flex justify-between items-center bg-[#343650] rounded-lg">
-                <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-[#191A24]"></div>
-                <span className="text-2xl font-semibold text-[#a5b4fc]">
+              <div className="h-12 w-12 flex justify-between items-center bg-blue-500 bg-opacity-30 rounded-lg">
+                <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-gray-300"></div>
+                <span className="text-2xl font-semibold text-white">
                   {countDownTime[unit as keyof CountDownTime]}
                 </span>
-                <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-[#191A24]"></div>
+                <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-gray-300"></div>
               </div>
               <span className="text-[#8486A9] text-xs text-center capitalize">
                 {countDownTime[unit as keyof CountDownTime] === "01"

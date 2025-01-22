@@ -38,61 +38,78 @@ function page() {
   }, []);
 
   return (
-    <main className="bg-darkDPKAKP w-full h-screen overflow-y-scroll">
-      <section className="relative h-fit px-7 md:px-0 space-y-6 pb-8 pt-20 md:h-screen md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col">
+
+    <main className="bg-darkDPKAKP w-full h-screen relative">
+      <Image
+        src={"/dpkakp/image4.jpg"}
+        className="absolute w-full h-screen z-10 object-cover duration-1000"
+        alt=""
+        layout="fill"
+        priority
+      />
+      <div className="absolute bg-blue-950 opacity-80 inset-0 z-20"></div>
+      <section className="relative h-fit space-y-6 z-50 pb-8 pt-36 md:h-screen md:pb-12 md:pt-20 lg:py-44 w-full flex items-center justify-center flex-col">
         <div className="container relative flex max-w-[64rem] flex-col items-center gap-2 text-center">
           <Link
-            href={"/dpkakp"}
-            className="rounded-2xl bg-mutedDPKAKP px-4 py-1.5 text-sm text-gray-200 font-medium"
+            href={"#"}
+            className="rounded-2xl bg-blue-500 px-4 py-1.5 text-sm text-gray-200 font-medium"
             target="_blank"
           >
             DPKAKP
           </Link>
-          <h1 className="font-bold text-gray-200 text-3xl leading-[110%] mb-5 mt-2">
-            {data?.Ujian} - {data?.Fungsi} {data?.Bagian}
-          </h1>
-          <p className="font-jakarta max-w-[42rem] leading-[95%] text-mutedForegroundDPKAKP  sm:text-lg sm:leading-8 -mt-4">
-            Harap membaca dengan teliti dan saksama panduan pengerjaan ujian
-            keahlian awak kapal perikanan.
-          </p>
           <Image
-            className="absolute mt-40 md:-top-16 w-[600px] opacity-10 z-10"
+            className=" w-[100px] my-1 z-10"
             src={"/lembaga/logo/logo-sertifikasi-akp.png"}
             width={0}
             height={0}
             alt="DPKAKP Logo"
           />
+          <h1 className="font-bold  font-calsans leading-none text-gray-200 text-4xl -mt-4">
+            {" "}{data?.Ujian} <br />
+            <span className=" bg-clip-text text-transparent bg-gradient-to-r leading-none pt-0 from-blue-500 to-teal-400">
+              {data?.Fungsi} {data?.Bagian}
+            </span>
+          </h1>
+          <p className="font-jakarta max-w-[42rem] leading-[120%] text-gray-200  sm:text-base ">
+            Harap membaca dengan teliti dan saksama panduan pengerjaan ujian
+            keahlian awak kapal perikanan.
+          </p>
         </div>
-        <div className="flex flex-col gap-3 w-full max-w-md mx-auto z-50 -mt-20">
-          <div className="flex flex-col gap-1">
-            <p className="font-jakarta  leading-[100%] text-mutedForegroundDPKAKP   sm:text-sm sm:leading-8 ">
-              Panduan Pengerjaan
-            </p>
-            <div className="border rounded-xl text-mutedForegroundDPKAKP border-mutedDPKAKP bg-transparent w-full p-4">
-              <span>
-                {" "}
-                1.Pilih salah satu jawaban yang Saudara anggap paling
-                tepat/benar!
-              </span>{" "}
-              <br />
-              <span>
-                {" "}
-                2. Dalam menjawab soal, gunakan gadget yang mumpuni!
-              </span>{" "}
-              <br />
-              <span>
-                {" "}
-                3. Waktu yang disediakan untuk mengerjakan soal adalah 15 menit!
-              </span>{" "}
-              <br />
-              <span> 4. Tidak diperbolehkan membuka buku, handphone dll!</span>
+        <div className="flex flex-col w-full max-w-xl px-10 md:px-0 mx-auto z-50">
+          <div className="flex flex-col gap-3 w-full mx-auto z-50">
+            <div className="flex flex-col gap-1">
+              <p className="font-jakarta  leading-[100%] text-white   sm:text-sm sm:leading-8 ">
+                Panduan Pengerjaan
+              </p>
+              <div className="active:ring-blue-500 focus:ring-blue-500 active:outline-blue-500 border rounded-xl text-white border-blue-500 bg-transparent w-full placeholder:text-white  p-4">
+                <span>
+                  {" "}
+                  1.Pilih salah satu jawaban yang Saudara anggap paling
+                  tepat/benar!
+                </span>{" "}
+                <br />
+                <span>
+                  {" "}
+                  2. Dalam menjawab soal, gunakan gadget yang mumpuni!
+                </span>{" "}
+                <br />
+                <span>
+                  {" "}
+                  3. Waktu yang disediakan untuk mengerjakan soal adalah 15 menit!
+                </span>{" "}
+                <br />
+                <span> 4. Tidak diperbolehkan membuka buku, handphone dll!</span>
+              </div>
             </div>
+
           </div>
+
+
           <button
             onClick={(e) => {
               router.push("/lembaga/dpkakp/user/auth/exam");
             }}
-            className="text-white w-full bg-blue-950 rounded-xl bg-opacity-100 py-2"
+            className="text-white w-full bg-blue-500 rounded-xl bg-opacity-100 py-2 mt-2"
           >
             Lanjutkan
           </button>
