@@ -248,16 +248,25 @@ const TableDataPesertaUjianKeahlian = () => {
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <table className="w-full text-sm">
-                  <thead>
-                    <tr>
-                      <th className="border border-gray-200">F1B1</th>
-                      <th className="border border-gray-200">F1B2</th>
-                      <th className="border border-gray-200">F1B3</th>
-                      <th className="border border-gray-200">F2B1</th>
-                      <th className="border border-gray-200">F3B1</th>
-                      <th className="border border-gray-200">F3B2</th>
-                    </tr>
-                  </thead>
+                  {
+                    dataUjian!.length > 0 ? <thead>
+                      {
+                        dataUjian[0]!.TypeUjian.includes('Rewarding') ? <tr>
+                          <th className="border border-gray-200">F1</th>
+                          <th className="border border-gray-200">F2</th>
+                          <th className="border border-gray-200">F3</th>
+                        </tr> : <tr>
+                          <th className="border border-gray-200">F1B1</th>
+                          <th className="border border-gray-200">F1B2</th>
+                          <th className="border border-gray-200">F1B3</th>
+                          <th className="border border-gray-200">F2B1</th>
+                          <th className="border border-gray-200">F3B1</th>
+                          <th className="border border-gray-200">F3B2</th>
+                        </tr>
+                      }
+                    </thead> : <></>
+                  }
+
                   <tbody>
                     <tr>
                       {row.original.CodeAksesUsersBagian.map(
@@ -271,7 +280,6 @@ const TableDataPesertaUjianKeahlian = () => {
                         )
                       )}
                       {
-                        // Fill remaining cells with empty <td> elements to ensure there are always 6
                         Array.from({
                           length: 6 - row.original.CodeAksesUsersBagian.length,
                         }).map((_, index) => (
@@ -1440,14 +1448,14 @@ const TableDataPesertaUjianKeahlian = () => {
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6"><span className=''>Nama Peserta</span></div>
                               {
                                 dataUjian[0]!.TypeUjian.includes('Rewarding') ? <><div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1</span></div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6"><span className=''>Nilai F2</span></div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3</span></div></> : <> <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B1</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B2</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Total F1</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6"><span className=''>Nilai F2</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3B1</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3B2</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400  bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Total F3</span></div> </>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6"><span className=''>Nilai F2</span></div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3</span></div></> : <> <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B1</span></div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B2</span></div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Total F1</span></div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6"><span className=''>Nilai F2</span></div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3B1</span></div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3B2</span></div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400  bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Total F3</span></div> </>
                               }
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6"><span className=''>Nilai Kumulatif</span></div>
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6"><span className=''>Nilai Komprehensif</span></div>
@@ -1509,6 +1517,11 @@ const TableDataPesertaUjianKeahlian = () => {
                                     <span>{pesertaUjian?.NilaiKomprensif || 0}</span>
                                   </div>
                                   <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                    <span>
+                                      {
+                                        dataUjian[0]!.TypeUjian.includes('Rewarding') ? <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0)) / 3) > 60 ? 'LULUS' : 'TIDAK LULUS'}</span> : <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0) + (pesertaUjian?.NilaiF1B3 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) / 6) > 60 ? 'LULUS' : 'TIDAK LULUS'}</span>
+                                      }
+                                    </span>
                                     <span>{pesertaUjian?.Status ? 'LULUS' : 'TDK LULUS'}</span>
                                   </div>
                                 </div>
