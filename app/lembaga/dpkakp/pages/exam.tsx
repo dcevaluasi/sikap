@@ -211,8 +211,15 @@ function Exam() {
 
   const handleNextClick = () => {
 
-    setSelectedIdSoal(selectedIdSoal + 1);
-
+    if (selectedIdSoal != 59) {
+      setSelectedIdSoal(selectedIdSoal + 1);
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: 'Oopsss!',
+        text: "Anda sudah mencapai batas maksimal, tidak dapat ke soal selanjutnya!",
+      });
+    }
   };
 
   React.useEffect(() => {
