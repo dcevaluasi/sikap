@@ -76,7 +76,13 @@ function page() {
                     <button
                         className="text-white w-full bg-blue-500 rounded-xl bg-opacity-100 py-2 mt-2"
                     >
-                        <Link href={'https://docs.google.com/forms/d/e/1FAIpQLScgUTuZ8i5e8qkrgBdxfzX6IIj0bySUPAWOHiFodWkjU5_1HQ/viewform?usp=dialog'}>Isi Survey</Link>
+                        <Link target="_blank" className="w-full py-2" href={'https://docs.google.com/forms/d/e/1FAIpQLScgUTuZ8i5e8qkrgBdxfzX6IIj0bySUPAWOHiFodWkjU5_1HQ/viewform?usp=dialog'}>Isi Survey</Link>
+                    </button>
+                    <button
+                        onClick={() => router.push('/')}
+                        className="text-white w-full border-blue-500 border bg-transparent rounded-xl bg-opacity-100 py-2 mt-2"
+                    >
+                        Kembali ke Halaman Awal
                     </button>
                 </div>
             </section>

@@ -1677,7 +1677,7 @@ const TableDataUjian: React.FC = () => {
                         id="name"
                         type="date"
                         className="form-input w-full text-black border-gray-300 rounded-md"
-                        placeholder="Tanggall Mulai"
+                        placeholder="Tanggal Mulai"
                         required
                         min={new Date().toISOString().split("T")[0]}
                         value={tanggalMulai}

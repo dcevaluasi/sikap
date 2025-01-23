@@ -210,15 +210,8 @@ function Exam() {
   };
 
   const handleNextClick = () => {
-    if (selectedIdSoal != data!.Soal.length - 1) {
-      setSelectedIdSoal(selectedIdSoal + 1);
-    } else {
-      Toast.fire({
-        icon: "error",
-        title: 'Oopsss!',
-        text: "Anda sudah mencapai batas maksimal, tidak dapat ke soal selanjutnya!",
-      });
-    }
+
+    setSelectedIdSoal(selectedIdSoal + 1);
 
   };
 
@@ -463,7 +456,7 @@ function Exam() {
                       {/* Image with onClick to show the modal */}
                       {data?.Soal[selectedIdSoal]?.GambarSoal !== "" && (
                         <Image
-                          className="hidden md:block w-fit h-50 object-contain my-5 rounded-lg cursor-pointer z-[9999999]"
+                          className="block w-fit h-50 object-contain my-5 rounded-lg cursor-pointer z-[9999999]"
                           src={data!.Soal[selectedIdSoal]?.GambarSoal!}
                           width={0}
                           height={0}
