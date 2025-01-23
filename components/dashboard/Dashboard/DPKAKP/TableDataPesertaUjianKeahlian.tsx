@@ -590,27 +590,50 @@ const TableDataPesertaUjianKeahlian = () => {
         </Button>
       ),
       cell: ({ row }) => {
-        const {
-          NilaiF1B1,
-          NilaiF1B2,
-          NilaiF1B3,
-          NilaiF2B1,
-          NilaiF3B1,
-          NilaiF3B2,
-          NilaiKomprensif,
-        } = row.original;
+        // const {
+        //   NilaiF1B1,
+        //   NilaiF1B2,
+        //   NilaiF1B3,
+        //   NilaiF2B1,
+        //   NilaiF3B1,
+        //   NilaiF3B2,
+        //   NilaiKomprensif,
+        // } = row.original;
 
-        // Check if all required values are not 0
-        const isVisible =
-          NilaiF1B1 !== 0 &&
-          NilaiF1B2 !== 0 &&
-          NilaiF1B3 !== 0 &&
-          NilaiF2B1 !== 0 &&
-          NilaiF3B1 !== 0 &&
-          NilaiF3B2 !== 0;
+        // // Check if all required values are not 0
+        // const isVisible =
+        //   NilaiF1B1 !== 0 &&
+        //   NilaiF1B2 !== 0 &&
+        //   NilaiF1B3 !== 0 &&
+        //   NilaiF2B1 !== 0 &&
+        //   NilaiF3B1 !== 0 &&
+        //   NilaiF3B2 !== 0;
+
+        // // Render only if all required fields are non-zero
+        // return !isVisible ? (
+        //   <div className="ml-auto capitalize w-full flex items-center justify-center">
+        //     {NilaiKomprensif === 0 ? (
+        //       <Button
+        //         onClick={(e) => {
+        //           setSelectedIdPeserta(row.original.IdUserUjian);
+        //           setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+        //         }}
+        //         variant="outline"
+        //         className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200"
+        //       >
+        //         <TbEditCircle className="h-5 w-5 mr-1" />
+        //         Masukkan Nilai
+        //       </Button>
+        //     ) : (
+        //       <p className="text-sm font-normal tracking-tight leading-none">
+        //         {row.getValue("NilaiKomprensif")}
+        //       </p>
+        //     )}
+        //   </div>
+        // ) : null; // Hide if any of the required fields is 0
 
         // Render only if all required fields are non-zero
-        return isVisible ? (
+        return (
           <div className="ml-auto capitalize w-full flex items-center justify-center">
             {NilaiKomprensif === 0 ? (
               <Button
@@ -630,8 +653,8 @@ const TableDataPesertaUjianKeahlian = () => {
               </p>
             )}
           </div>
-        ) : null; // Hide if any of the required fields is 0
-      },
+        )
+      }
     },
   ];
 
