@@ -1239,10 +1239,10 @@ const TableDataPesertaUjianKeahlian = () => {
               dataUjian.length != 0 && data!.map((peserta, index) => (
                 <div className="flex w-full gap-2">
                   <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
-                    <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2">
+                    <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2 w-full">
                       <Image
-                        className="block md:w-16 md:h-14 "
-                        src={"/logo-kkp-white.png"}
+                        className="block w-16 h-16 "
+                        src={"/logo-kkp.png"}
                         width={0}
                         height={0}
                         alt="DPKAKP Logo"
@@ -1340,10 +1340,10 @@ const TableDataPesertaUjianKeahlian = () => {
 
                   </div>
                   <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-start">
-                    <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2">
+                    <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2 w-full">
                       <Image
-                        className="block md:w-16 md:h-14 "
-                        src={"/logo-kkp-white.png"}
+                        className="block w-16 h-16 "
+                        src={"/logo-kkp.png"}
                         width={0}
                         height={0}
                         alt="DPKAKP Logo"
@@ -1462,15 +1462,15 @@ const TableDataPesertaUjianKeahlian = () => {
 
         {
           showRekapitulasiNilai && <div className="border border-gray-300">
-            <div className="" ref={printRefRekapitulasiNilai}> <div className="grid grid-cols-1 gap-2">
+            <div className="" ref={printRefRekapitulasiNilai}> <div className="grid grid-cols-1 gap-2 w-full">
               {
                 dataUjian.length != 0 &&
                 <div className="flex w-full gap-2">
                   <div className="w-full rounded-lg p-6 flex flex-col items-center justify-center">
                     <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2 w-full">
                       <Image
-                        className="block md:w-16 md:h-14 "
-                        src={"/logo-kkp-white.png"}
+                        className="block w-16 h-16 "
+                        src={"/logo-kkp.png"}
                         width={0}
                         height={0}
                         alt="DPKAKP Logo"
