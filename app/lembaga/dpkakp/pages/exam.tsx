@@ -210,7 +210,16 @@ function Exam() {
   };
 
   const handleNextClick = () => {
-    setSelectedIdSoal(selectedIdSoal + 1);
+    if (selectedIdSoal != data!.Soal.length - 1) {
+      setSelectedIdSoal(selectedIdSoal + 1);
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: 'Oopsss!',
+        text: "Anda sudah mencapai batas maksimal, tidak dapat ke soal selanjutnya!",
+      });
+    }
+
   };
 
   React.useEffect(() => {
@@ -256,7 +265,16 @@ function Exam() {
   }, [selectedIdSoal, selectedAnswers]);
 
   const handlePrevClick = () => {
-    setSelectedIdSoal(selectedIdSoal - 1);
+    if (selectedIdSoal != 0) {
+      setSelectedIdSoal(selectedIdSoal - 1);
+    } else {
+      Toast.fire({
+        icon: "error",
+        title: 'Oopsss!',
+        text: "Anda sudah mencapai batas maksimal, tidak dapat ke soal sebelumnya!",
+      });
+    }
+
   };
 
   React.useEffect(() => {
