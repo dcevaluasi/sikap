@@ -392,7 +392,7 @@ function Exam() {
           </SheetContent>
         </Sheet>
         <section className="relative h-full space-y-6 pb-8  md:pb-12 mt-36 md:mt-10 flex items-center justify-center flex-col md:w-2/3">
-          <div className="md:container w-full relative flex md:max-w-[64rem] flex-col items-center gap-2 text-center md:px-0 px-10">
+          <div className=" w-full relative flex md:max-w-[64rem] flex-col items-center gap-2 text-center md:px-0 px-10">
             <Link
               href={"#"}
               className="rounded-2xl bg-blue-500 px-4 py-1.5 text-sm text-gray-200 font-medium"
