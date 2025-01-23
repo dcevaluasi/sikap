@@ -1250,7 +1250,7 @@ const TableDataPesertaUjianKeahlian = () => {
                       <div className="flex flex-col gap-1 items-center justify-center text-center">
                         <h1 className="font-normal text-gray-800 text-sm md:text-base leading-[110%] mb-5 mt-2">
                           KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN PENYULUHAN DAN
-                          PENGEMBANGAN SUMBER DAYA MANUSIA <br />
+                          PENGEMBANGAN <br /> SUMBER DAYA MANUSIA KELAUTAN DAN PERIKANAN <br />
                           <span className="font-bold">
                             DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
                           </span>
@@ -1351,7 +1351,7 @@ const TableDataPesertaUjianKeahlian = () => {
                       <div className="flex flex-col gap-1 items-center justify-center text-center">
                         <h1 className="font-normal text-gray-800 text-sm md:text-base leading-[110%] mb-5 mt-2">
                           KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN PENYULUHAN DAN
-                          PENGEMBANGAN SUMBER DAYA MANUSIA <br />
+                          PENGEMBANGAN <br /> SUMBER DAYA MANUSIA KELAUTAN DAN PERIKANAN <br />
                           <span className="font-bold">
                             DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
                           </span>
@@ -1478,7 +1478,7 @@ const TableDataPesertaUjianKeahlian = () => {
                       <div className="flex flex-col gap-1 items-center justify-center text-center">
                         <h1 className="font-normal text-gray-800 text-sm md:text-lg leading-[110%] mb-5 mt-2">
                           KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN PENYULUHAN DAN
-                          PENGEMBANGAN SUMBER DAYA MANUSIA <br />
+                          PENGEMBANGAN <br /> SUMBER DAYA MANUSIA KELAUTAN DAN PERIKANAN <br />
                           <span className="font-bold">
                             DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
                           </span>
