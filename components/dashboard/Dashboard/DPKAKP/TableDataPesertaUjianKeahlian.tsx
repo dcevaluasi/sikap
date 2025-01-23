@@ -1333,7 +1333,7 @@ const TableDataPesertaUjianKeahlian = () => {
                           <div className="flex flex-shrink-0 bg-gray-400 text-white">
                             <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1B1</span></div>
                             <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1B2</span></div>
-                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1B13</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1B3</span></div>
                             <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F2B1</span></div>
                             <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F3B1</span></div>
                             <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F3B2</span></div>
@@ -1449,6 +1449,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6"><span className=''>Nilai F2</span></div>
                                 <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3</span></div></> : <> <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B1</span></div>
                                 <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B2</span></div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B3</span></div>
                                 <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Total F1</span></div>
                                 <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6"><span className=''>Nilai F2</span></div>
                                 <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3B1</span></div>
@@ -1490,7 +1491,10 @@ const TableDataPesertaUjianKeahlian = () => {
                                       <span>{pesertaUjian?.NilaiF1B2 || 0}</span>
                                     </div>
                                     <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                      <span>{((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) / 2}</span>
+                                      <span>{pesertaUjian?.NilaiF1B3 || 0}</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0) + (pesertaUjian?.NilaiF1B3 || 0)) / 3}</span>
                                     </div>
                                     <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
                                       <span>{pesertaUjian?.NilaiF2B1 || 0}</span>
