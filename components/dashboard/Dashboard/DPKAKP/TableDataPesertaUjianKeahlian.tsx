@@ -858,6 +858,35 @@ const TableDataPesertaUjianKeahlian = () => {
 
   console.log({ dataPukakp })
 
+  React.useEffect(() => {
+    const checkClipboard = async () => {
+      try {
+        const clipboardItems = await navigator.clipboard.read();
+        for (const item of clipboardItems) {
+          if (item.types.includes("image/png") || item.types.includes("image/jpeg")) {
+            Toast.fire({
+              icon: "error",
+              title: "Maaf import peserta hanya dapat dilakukan sekali, kamu tidak bisa menambahkan lagi setelah mengimport data!",
+            });
+            break;
+          }
+        }
+      } catch (error) {
+        console.error("Clipboard access error: ", error);
+      }
+    };
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "PrintScreen") {
+        checkClipboard();
+      }
+    });
+
+    return () => {
+      document.removeEventListener("keydown", checkClipboard);
+    };
+  }, []);
+
   const exportToPDF = (data: any[]) => {
     const doc = new jsPDF();
 
