@@ -5,14 +5,17 @@ import React from "react";
 import ScrollDown from "../scroll-down";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import { BiEditAlt } from "react-icons/bi";
+import { FaBuildingWheat } from "react-icons/fa6";
+import { HiOutlinePlay } from "react-icons/hi2";
 
 export default function HeroDPKAKP() {
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = [
-    "/dpkakp/image2.jpg",
-    "/dpkakp/image2.jpg",
-    "/dpkakp/image2.jpg",
-    "/dpkakp/image2.jpg",
+    "/dpkakp/image4.jpg",
+    "/dpkakp/image4.jpg",
+    "/dpkakp/image4.jpg",
+    "/dpkakp/image4.jpg",
   ];
 
   React.useEffect(() => {
@@ -73,7 +76,7 @@ export default function HeroDPKAKP() {
 
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
             <h1
-              className="text-5xl md:text-[3.9rem] font-normal leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
+              className="text-5xl md:text-[3.5rem] font-normal leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
             // data-aos="zoom-y-out"
             >
               Sistem Ujian keahlian  <br />
@@ -83,7 +86,7 @@ export default function HeroDPKAKP() {
             </h1>
             <div className="max-w-3xl mx-auto">
               <p
-                className="text-lg text-gray-200 mb-8"
+                className="text-base text-gray-200 mb-8"
               // data-aos="zoom-y-out"
               // data-aos-delay="150"
               >
@@ -94,24 +97,42 @@ export default function HeroDPKAKP() {
                 dan Penandaan Kapal Perikanan, serta Tata Kelola Pengawasan
                 Kapal Perikanan.
               </p>
-              <div className="flex flex-col md:flex-row gap-2 w-full items-center justify-center mb-2">
-                <Button
-                  className="w-full md:w-fit text-lg px-4 py-6 bg-blue-500 hover:bg-blue-600 ml-4"
-                >
-                  <Link className="block w-full" href={'https://youtu.be/FA70GlQXoJ0'}>
-                    Video Tutorial Pelaksanaan Ujian
-                  </Link>
+              <div className="w-full flex flex-col gap-1">
+                <div className="flex flex-col md:flex-row gap-2 w-full items-center justify-center mb-2">
+                  <Button
+                    className="w-full md:w-fit text-lg px-4 py-6 bg-transparent border-blue-500 border hover:bg-blue-600 ml-4"
+                  >
+                    <Link className=" w-full flex items-center justify-center" href={'https://youtu.be/FA70GlQXoJ0'}>
+                      <BiEditAlt />
 
-                </Button>
-                <Button
-                  className="w-full md:w-fit text-lg px-4 py-6 bg-transparent border-blue-500 border hover:bg-blue-600 ml-4"
-                >
-                  <Link className="block w-full" href={'https://youtu.be/ACdOJomFv70'}>
-                    Video Tutorial DPKAKP & PUKAKP
-                  </Link>
+                      Video Tutorial Pelaksanaan Ujian
+                    </Link>
 
-                </Button>
+                  </Button>
+                  <Button
+                    className="w-full md:w-fit text-lg px-4 py-6 bg-transparent border-blue-500 border hover:bg-blue-600 ml-4"
+                  >
+                    <Link className="flex items-center w-full justify-center" href={'https://youtu.be/ACdOJomFv70'}> <FaBuildingWheat className="mr-1" />
+
+                      Video Tutorial DPKAKP & PUKAKP
+                    </Link>
+
+                  </Button>
+                </div>
+                <div className="flex flex-col md:flex-row gap-2 w-full items-center justify-center mb-2">
+                  <Button
+                    className="w-full md:w-fit text-lg px-10 py-6 bg-blue-500 hover:bg-blue-600 ml-4"
+                  >
+                    <Link className="w-full flex gap-1 items-center justify-center" href={'/lembaga/dpkakp/user/auth'}>
+                      <HiOutlinePlay />
+                      Ayo Ujian Sekarang!
+                    </Link>
+
+                  </Button>
+
+                </div>
               </div>
+
               <div className="flex items-center justify-center w-full">
                 <ScrollDown />
               </div>

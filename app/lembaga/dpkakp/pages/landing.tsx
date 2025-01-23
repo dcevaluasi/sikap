@@ -256,15 +256,6 @@ export default function LandingDPKAKP() {
                   typedRef={function noRefCheck() { }}
                 />
               </div>
-
-              {/* <p className="max-w-[90%] text-xl italic leading-normal text-muted-foreground sm:leading-7">
-          &ldquo; Dewan Penguji Keahlian Awak Kapal Perikanan (DPKAKP)
-          berjanji untuk menerapkan pencapaian mutu, perbaikan secara terus
-          menerus dan berkelanjutan untuk meyakinkan seluruh pengguna jasa
-          mendapatkan pelayanan pengujian terbaik serta bersedia menerima
-          sanksi administrasi dan ganti rugi materiil apabila tidak
-          melaksanakan manajemen pelayanan.&rdquo;
-        </p> */}
             </div>
           </section>
           <footer className="flex h-fit w-full items-center justify-center py-10">
