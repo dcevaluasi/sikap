@@ -193,6 +193,9 @@ function Exam() {
       });
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
+      localStorage.removeItem('selectedIdSoal')
+      localStorage.removeItem('answer')
+      localStorage.removeItem('countDownDate')
       setTimeout(() => {
         router.replace("/lembaga/dpkakp/user/auth");
       }, 1500); // Adjust the timeout duration as needed
@@ -348,12 +351,12 @@ function Exam() {
                     <div
                       key={index}
                       onClick={(e) => setSelectedIdSoal(index)}
-                      className={`h-12 w-12 flex justify-between items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
+                      className={`h-12 w-12 flex justify-cebter items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
                         ? "bg-green-500 text-white bg-opacity-70"
                         : "bg-blue-500 bg-opacity-30"
                         } rounded-lg duration-700 `}
                     >
-                      <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-gray-300"></div>
+
                       <span
                         className={`text-2xl font-semibold  ${selectedAnswers[index] != null
                           ? " text-white"
@@ -362,7 +365,7 @@ function Exam() {
                       >
                         {index + 1}
                       </span>
-                      <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-gray-300"></div>
+
                     </div>
                   ))}
                 </div>
@@ -614,12 +617,12 @@ function Exam() {
                 <div
                   key={index}
                   onClick={(e) => setSelectedIdSoal(index)}
-                  className={`h-12 w-12 flex justify-between items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
+                  className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
                     ? "bg-green-500 text-white bg-opacity-70"
                     : "bg-blue-500 bg-opacity-30"
                     } rounded-lg duration-700 `}
                 >
-                  <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-gray-300"></div>
+
                   <span
                     className={`text-2xl font-semibold  ${selectedAnswers[index] != null
                       ? " text-white"
@@ -628,7 +631,7 @@ function Exam() {
                   >
                     {index + 1}
                   </span>
-                  <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-gray-300"></div>
+
                 </div>
               ))}
             </div>
@@ -750,12 +753,12 @@ const Timer: React.FC<TimerProps> = ({ countdownMinutes }) => {
         <div className="flex justify-center gap-3 sm:gap-8">
           {["days", "hours", "minutes", "seconds"].map((unit, index) => (
             <div key={index} className="flex flex-col mr-2 md:mr-0 gap-2 relative">
-              <div className="h-12 w-12 flex justify-between items-center bg-blue-500 bg-opacity-30 rounded-lg">
-                <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 !-left-[6px] rounded-full bg-gray-300"></div>
+              <div className="h-12 w-12 flex justify-center items-center bg-blue-500 bg-opacity-30 rounded-lg">
+
                 <span className="text-2xl font-semibold text-white">
                   {countDownTime[unit as keyof CountDownTime]}
                 </span>
-                <div className="relative h-2.5 w-2.5 sm:h-3 sm:w-3 -right-[6px] rounded-full bg-gray-300"></div>
+
               </div>
               <span className="text-gray-200 text-xs text-center capitalize">
                 {countDownTime[unit as keyof CountDownTime] === "01"
