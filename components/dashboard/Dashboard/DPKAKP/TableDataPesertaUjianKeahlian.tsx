@@ -1470,7 +1470,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
                                   <span>{pesertaUjian?.NomorUjian || '-'}</span>
                                 </div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 capitalize">
                                   <span>{pesertaUjian?.Nama || '-'}</span>
                                 </div>
                                 {

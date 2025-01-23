@@ -351,7 +351,7 @@ function Exam() {
                     <div
                       key={index}
                       onClick={(e) => setSelectedIdSoal(index)}
-                      className={`h-12 w-12 flex justify-cebter items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
+                      className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
                         ? "bg-green-500 text-white bg-opacity-70"
                         : "bg-blue-500 bg-opacity-30"
                         } rounded-lg duration-700 `}
