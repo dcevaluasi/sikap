@@ -288,7 +288,7 @@ const TableDataBankSoalUjianKeahlian = () => {
         );
       },
       cell: ({ row }) => (
-        <div className={`${"ml-0"} text-left capitalize flex flex-col gap-1`}>
+        <div className={`${"ml-0"} text-left flex flex-col gap-1`}>
           {row.original.GambarSoal ? (
             <Image
               src={row.original.GambarSoal!}

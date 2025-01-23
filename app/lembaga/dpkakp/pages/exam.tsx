@@ -196,9 +196,9 @@ function Exam() {
       localStorage.removeItem('selectedIdSoal')
       localStorage.removeItem('answer')
       localStorage.removeItem('countDownDate')
-      setTimeout(() => {
-        router.replace("/lembaga/dpkakp/user/auth");
-      }, 1500); // Adjust the timeout duration as needed
+
+      router.replace("/lembaga/dpkakp/user/survey");
+
     } catch (error) {
       console.error("Error submitting exam:", error);
       Toast.fire({
