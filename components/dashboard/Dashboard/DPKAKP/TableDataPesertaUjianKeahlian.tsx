@@ -18,14 +18,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-} from "@/components/ui/select";
+
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -86,6 +79,7 @@ import Image from "next/image";
 import { generateTanggalPelatihan } from "@/utils/text";
 import { IoArrowBackSharp, IoPrintOutline } from "react-icons/io5";
 import { BiEditAlt } from "react-icons/bi";
+import { UserInformationDPKAKP } from "@/types/dpkakp";
 
 const TableDataPesertaUjianKeahlian = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -105,6 +99,29 @@ const TableDataPesertaUjianKeahlian = () => {
   });
 
   const [showKartuUjian, setShowKartuUjian] = React.useState<boolean>(false)
+  const [dataPukakp, setDataPukakp] = React.useState<UserInformationDPKAKP | null>(null)
+
+  const handleFetchInformasiPUKAKP = async () => {
+    setIsFetching(true);
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${dpkakpBaseUrl}/adminPusat/getAdminPusat`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      setDataPukakp(response.data.data)
+
+      setIsFetching(false);
+    } catch (error) {
+      console.error(error);
+      setIsFetching(false);
+      throw error;
+    }
+  }
 
   const [showRekapitulasiNilai, setShowRekapitulasiNilai] = React.useState<boolean>(false)
   const printRefRekapitulasiNilai = React.useRef<HTMLDivElement>(null);
@@ -836,7 +853,10 @@ const TableDataPesertaUjianKeahlian = () => {
 
   React.useEffect(() => {
     handleFetchingUjianKeahlianData();
+    handleFetchInformasiPUKAKP()
   }, []);
+
+  console.log({ dataPukakp })
 
   const exportToPDF = (data: any[]) => {
     const doc = new jsPDF();
@@ -1286,7 +1306,21 @@ const TableDataPesertaUjianKeahlian = () => {
                           25T250001</p></div>
                     </div>
 
-                    <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
+                    {dataPukakp != null ? <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
+                      <div className="flex flex-col gap-1 capitalize">
+                        <p className="capitalize text-sm">
+                          {
+                            dataUjian[0]!.TempatUjian
+                          }, {generateTanggalPelatihan(dataUjian[0]!.TanggalMulaiUjian)}
+                        </p>
+                        <p className="font-semibold text-sm">Ketua PUKAKP</p>
+                        <p className="text-xs">{dataUjian[0]!.PUKAKP}</p>
+
+                        <p className="text-sm border-b-black border-b mt-14">{dataPukakp.KetuaPukakp}</p>
+                        <p className="text-sm ">NIP. {dataPukakp.NipKetua}</p>
+                      </div>
+                      <div className="w-35 h-40 rounded-md border border-gray-300"></div>
+                    </div> : <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
                       <div className="flex flex-col gap-1 capitalize">
                         <p className="capitalize text-sm">
                           {
@@ -1300,7 +1334,8 @@ const TableDataPesertaUjianKeahlian = () => {
                         <p className="text-sm ">NIP</p>
                       </div>
                       <div className="w-35 h-40 rounded-md border border-gray-300"></div>
-                    </div>
+                    </div>}
+
 
 
                   </div>
@@ -1386,7 +1421,21 @@ const TableDataPesertaUjianKeahlian = () => {
 
 
 
-                    <div className="flex items-center justify-centerw-full mb-5 mt-6 gap-8">
+                    {dataPukakp != null ? <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
+                      <div className="flex flex-col gap-1 capitalize">
+                        <p className="capitalize text-sm">
+                          {
+                            dataUjian[0]!.TempatUjian
+                          }, {generateTanggalPelatihan(dataUjian[0]!.TanggalMulaiUjian)}
+                        </p>
+                        <p className="font-semibold text-sm">Ketua PUKAKP</p>
+                        <p className="text-xs">{dataUjian[0]!.PUKAKP}</p>
+
+                        <p className="text-sm border-b-black border-b mt-14">{dataPukakp.KetuaPukakp}</p>
+                        <p className="text-sm ">NIP. {dataPukakp.NipKetua}</p>
+                      </div>
+                      <div className="w-35 h-40 rounded-md "></div>
+                    </div> : <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
                       <div className="flex flex-col gap-1 capitalize">
                         <p className="capitalize text-sm">
                           {
@@ -1400,7 +1449,7 @@ const TableDataPesertaUjianKeahlian = () => {
                         <p className="text-sm ">NIP</p>
                       </div>
                       <div className="w-35 h-40 rounded-md "></div>
-                    </div>
+                    </div>}
 
 
                   </div>
@@ -1506,57 +1555,174 @@ const TableDataPesertaUjianKeahlian = () => {
                               <span>{pesertaUjian?.Nama || '-'}</span>
                             </div>
                             {
-                              dataUjian[0]!.TypeUjian.includes('Rewarding') ? <><div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                <span>{pesertaUjian?.NilaiF1B1 || 0}</span>
-                              </div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                  <span>{pesertaUjian?.NilaiF2B1 || 0}</span>
-                                </div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                  <span>{pesertaUjian?.NilaiF3B1 || 0}</span>
-                                </div></> : <>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                  <span>{pesertaUjian?.NilaiF1B1 || 0}</span>
-                                </div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                  <span>{pesertaUjian?.NilaiF1B2 || 0}</span>
-                                </div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                  <span>{pesertaUjian?.NilaiF1B3 || 0}</span>
-                                </div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                  <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0) + (pesertaUjian?.NilaiF1B3 || 0)) / 3).toFixed(2)}</span>
-                                </div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                  <span>{pesertaUjian?.NilaiF2B1 || 0}</span>
-                                </div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                  <span>{pesertaUjian?.NilaiF3B1 || 0}</span>
-                                </div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                  <span>{pesertaUjian?.NilaiF3B2 || 0}</span>
-                                </div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                  <span>{(((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) / 2).toFixed(2)}</span>
-                                </div></>
+                              dataUjian[0]!.TypeUjian.includes('Rewarding') ? (
+                                <>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) < 65 ? 'text-rose-500' : 'text-black'
+                                      }`}
+                                  >
+                                    <span>{pesertaUjian?.NilaiF1B1 || 0}</span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) < 65 ? 'text-rose-500' : 'text-black'
+                                      }`}
+                                  >
+                                    <span>{pesertaUjian?.NilaiF2B1 || 0}</span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF3B1 || 0) < 65 ? 'text-rose-500' : 'text-black'
+                                      }`}
+                                  >
+                                    <span>{pesertaUjian?.NilaiF3B1 || 0}</span>
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) < 65 ? 'text-rose-500' : 'text-black'
+                                      }`}
+                                  >
+                                    <span>{pesertaUjian?.NilaiF1B1 || 0}</span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B2 || 0) < 65 ? 'text-rose-500' : 'text-black'
+                                      }`}
+                                  >
+                                    <span>{pesertaUjian?.NilaiF1B2 || 0}</span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B3 || 0) < 65 ? 'text-rose-500' : 'text-black'
+                                      }`}
+                                  >
+                                    <span>{pesertaUjian?.NilaiF1B3 || 0}</span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(((pesertaUjian?.NilaiF1B1 || 0) +
+                                      (pesertaUjian?.NilaiF1B2 || 0) +
+                                      (pesertaUjian?.NilaiF1B3 || 0)) /
+                                      3) < 65
+                                      ? 'text-rose-500'
+                                      : 'text-black'
+                                      }`}
+                                  >
+                                    <span>
+                                      {(
+                                        ((pesertaUjian?.NilaiF1B1 || 0) +
+                                          (pesertaUjian?.NilaiF1B2 || 0) +
+                                          (pesertaUjian?.NilaiF1B3 || 0)) /
+                                        3
+                                      ).toFixed(2)}
+                                    </span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) < 65 ? 'text-rose-500' : 'text-black'
+                                      }`}
+                                  >
+                                    <span>{pesertaUjian?.NilaiF2B1 || 0}</span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF3B1 || 0) < 65 ? 'text-rose-500' : 'text-black'
+                                      }`}
+                                  >
+                                    <span>{pesertaUjian?.NilaiF3B1 || 0}</span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF3B2 || 0) < 65 ? 'text-rose-500' : 'text-black'
+                                      }`}
+                                  >
+                                    <span>{pesertaUjian?.NilaiF3B2 || 0}</span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) /
+                                      2) < 65
+                                      ? 'text-rose-500'
+                                      : 'text-black'
+                                      }`}
+                                  >
+                                    <span>
+                                      {(
+                                        ((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) /
+                                        2
+                                      ).toFixed(2)}
+                                    </span>
+                                  </div>
+                                </>
+                              )
                             }
-
-                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                              {
-                                dataUjian[0]!.TypeUjian.includes('Rewarding') ? <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0)) / 3).toFixed(2)}</span> : <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0) + (pesertaUjian?.NilaiF1B3 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) / 6).toFixed(2)}</span>
-                              }
+                            <div
+                              className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${dataUjian[0]!.TypeUjian.includes('Rewarding')
+                                ? (((pesertaUjian?.NilaiF1B1 || 0) +
+                                  (pesertaUjian?.NilaiF2B1 || 0) +
+                                  (pesertaUjian?.NilaiF3B1 || 0)) /
+                                  3) < 65
+                                  ? 'text-rose-500'
+                                  : 'text-black'
+                                : (((pesertaUjian?.NilaiF1B1 || 0) +
+                                  (pesertaUjian?.NilaiF1B2 || 0) +
+                                  (pesertaUjian?.NilaiF1B3 || 0) +
+                                  (pesertaUjian?.NilaiF2B1 || 0) +
+                                  (pesertaUjian?.NilaiF3B1 || 0) +
+                                  (pesertaUjian?.NilaiF3B2 || 0)) /
+                                  6) < 65
+                                  ? 'text-rose-500'
+                                  : 'text-black'
+                                }`}
+                            >
+                              <span>
+                                {dataUjian[0]!.TypeUjian.includes('Rewarding')
+                                  ? (
+                                    ((pesertaUjian?.NilaiF1B1 || 0) +
+                                      (pesertaUjian?.NilaiF2B1 || 0) +
+                                      (pesertaUjian?.NilaiF3B1 || 0)) /
+                                    3
+                                  ).toFixed(2)
+                                  : (
+                                    ((pesertaUjian?.NilaiF1B1 || 0) +
+                                      (pesertaUjian?.NilaiF1B2 || 0) +
+                                      (pesertaUjian?.NilaiF1B3 || 0) +
+                                      (pesertaUjian?.NilaiF2B1 || 0) +
+                                      (pesertaUjian?.NilaiF3B1 || 0) +
+                                      (pesertaUjian?.NilaiF3B2 || 0)) /
+                                    6
+                                  ).toFixed(2)}
+                              </span>
                             </div>
+
                             <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
                               <span>{pesertaUjian?.NilaiKomprensif || 0}</span>
                             </div>
-                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                              <span>
-                                {
-                                  dataUjian[0]!.TypeUjian.includes('Rewarding') ? <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0)) / 3) > 60 ? 'LULUS' : 'TIDAK LULUS'}</span> : <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0) + (pesertaUjian?.NilaiF1B3 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) / 6) > 60 ? 'LULUS' : 'TIDAK LULUS'}</span>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 text-center">
+                              <span
+                                className={
+                                  dataUjian[0]!.TypeUjian.includes('Rewarding')
+                                    ? (((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0)) / 3) > 65
+                                      ? 'text-green-500 font-bold'
+                                      : 'text-rose-500 font-bold'
+                                    : (((pesertaUjian?.NilaiF1B1 || 0) +
+                                      (pesertaUjian?.NilaiF1B2 || 0) +
+                                      (pesertaUjian?.NilaiF1B3 || 0) +
+                                      (pesertaUjian?.NilaiF2B1 || 0) +
+                                      (pesertaUjian?.NilaiF3B1 || 0) +
+                                      (pesertaUjian?.NilaiF3B2 || 0)) / 6) > 65
+                                      ? 'text-green-500 font-bold'
+                                      : 'text-rose-500 font-bold'
                                 }
+                              >
+                                {dataUjian[0]!.TypeUjian.includes('Rewarding')
+                                  ? (((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0)) / 3) > 65
+                                    ? 'LULUS'
+                                    : 'TIDAK LULUS'
+                                  : (((pesertaUjian?.NilaiF1B1 || 0) +
+                                    (pesertaUjian?.NilaiF1B2 || 0) +
+                                    (pesertaUjian?.NilaiF1B3 || 0) +
+                                    (pesertaUjian?.NilaiF2B1 || 0) +
+                                    (pesertaUjian?.NilaiF3B1 || 0) +
+                                    (pesertaUjian?.NilaiF3B2 || 0)) / 6) > 65
+                                    ? 'LULUS'
+                                    : 'TIDAK LULUS'}
                               </span>
-
                             </div>
+
                           </div>
                         ))}
                       </div>
@@ -1588,30 +1754,32 @@ const TableDataPesertaUjianKeahlian = () => {
 
 
 
-                    <div className="flex w-full items-center justify-center flex-col">
-                      <div className="flex items-center justify-around w-full mb-5 mt-6 gap-8">
-                        <div className="flex flex-col gap-1  capitalize text-center items-center justify-center">
-                          <p className="font-semibold text-sm">Ketua, PUKAKP</p>
-                          <p className="text-xs -mt-1">{dataUjian[0]!.PUKAKP}</p>
-                          <p className="text-sm border-b-black border-b mt-14 w-2/3">Nama</p>
-                          <p className="text-sm ">NIP. </p>
+                    {
+                      dataPukakp != null ? <div className="flex w-full items-center justify-center flex-col">
+                        <div className="flex items-center justify-around w-full mb-5 mt-6 gap-8">
+                          <div className="flex flex-col gap-1  capitalize text-center items-center justify-center">
+                            <p className="font-semibold text-sm">Ketua, PUKAKP</p>
+                            <p className="text-xs -mt-1">{dataUjian[0]!.PUKAKP}</p>
+                            <p className="text-sm border-b-black border-b mt-14 w-2/3">{dataPukakp?.KetuaPukakp}</p>
+                            <p className="text-sm ">NIP. {dataPukakp?.NipKetua}</p>
+                          </div>
+
+                          <div className="flex flex-col gap-1 capitalize text-center items-center justify-center">
+                            <p className="font-semibold text-sm">Sekretaris, PUKAKP</p>
+                            <p className="text-xs -mt-1">{dataUjian[0]!.PUKAKP}</p>
+                            <p className="text-sm border-b-black border-b mt-14 w-2/3">{dataPukakp?.SesPukakp}</p>
+                            <p className="text-sm ">NIP. {dataPukakp?.NipSes}</p>
+                          </div>
                         </div>
 
-                        <div className="flex flex-col gap-1 capitalize text-center items-center justify-center">
-                          <p className="font-semibold text-sm">Sekretaris, PUKAKP</p>
-                          <p className="text-xs -mt-1">{dataUjian[0]!.PUKAKP}</p>
-                          <p className="text-sm border-b-black border-b mt-14 w-2/3">Nama</p>
+                        <div className="flex flex-col gap-1 capitalize text-center w-1/5">
+                          <p className="font-semibold text-sm leading-none">Mengetahui,</p>
+                          <p className="font-semibold text-sm leading-none">Ketua DPKAKP,</p>
+                          <p className="text-sm border-b-black border-b mt-14 ">Achmad Subijakto, S.St.Pi., M.Pi.</p>
                           <p className="text-sm ">NIP. </p>
                         </div>
-                      </div>
-
-                      <div className="flex flex-col gap-1 capitalize text-center w-1/5">
-                        <p className="font-semibold text-sm leading-none">Mengetahui,</p>
-                        <p className="font-semibold text-sm leading-none">Ketua DPKAKP,</p>
-                        <p className="text-sm border-b-black border-b mt-14 ">Nama</p>
-                        <p className="text-sm ">NIP. </p>
-                      </div>
-                    </div>
+                      </div> : <></>
+                    }
 
 
 
