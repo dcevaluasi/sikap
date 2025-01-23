@@ -512,7 +512,7 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
     },
     {
-      accessorKey: "NilaiF1B3",
+      accessorKey: "Status",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -532,7 +532,7 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
     },
     {
-      accessorKey: "NilaiF1B3",
+      accessorKey: "TanggalLahir",
       header: ({ column }) => (
         <Button
           variant="ghost"
@@ -1022,355 +1022,563 @@ const TableDataPesertaUjianKeahlian = () => {
         </AlertDialogContent>
       </AlertDialog>
 
-      {showFormAjukanPelatihan ? (
-        <></>
-      ) : (
-        <>
-          <div className="flex w-full items-center justify-between mb-2">
-            <div className="w-full flex gap-2">
-              {showKartuUjian || showRekapitulasiNilai ? <div
-                onClick={() => { setShowKartuUjian(false); setShowRekapitulasiNilai(false) }}
+
+      <>
+        <div className="flex w-full items-center justify-between mb-2">
+          <div className="w-fit flex gap-2">
+            {showKartuUjian || showRekapitulasiNilai ? <div
+              onClick={() => { setShowKartuUjian(false); setShowRekapitulasiNilai(false) }}
+              className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+            >
+              <IoArrowBackSharp />
+              Kembali
+            </div> : <></>
+            }
+
+
+
+
+          </div>
+          <div className="w-full flex justify-end gap-2">
+            {
+              !showRekapitulasiNilai && (dataUjian.length != 0 && (dataUjian[0]!.UsersUjian.length != 0 ? showKartuUjian ? <div
+                onClick={handlePrint}
                 className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
               >
-                <IoArrowBackSharp />
-                Kembali Ke Data Peserta
-              </div> : <></>
-              }
+                <IoPrintOutline />
+                Print Kartu Ujian Peserta
+              </div> : <div
+                onClick={() => setShowKartuUjian(true)}
+                className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+              >
+                <PiFilePdf />
+                Generate Kartu Ujian Peserta
+              </div> : <></>))
+            }
 
 
-
-
+            <div
+              onClick={() => exportToExcel()}
+              className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+            >
+              <PiMicrosoftExcelLogoFill />
+              Export Kode
             </div>
-            <div className="w-full flex justify-end gap-2">
-              {
-                !showRekapitulasiNilai && (dataUjian.length != 0 && (dataUjian[0]!.UsersUjian.length != 0 ? showKartuUjian ? <div
-                  onClick={handlePrint}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <IoPrintOutline />
-                  Print Kartu Ujian Peserta
-                </div> : <div
-                  onClick={() => setShowKartuUjian(true)}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <PiFilePdf />
-                  Generate Kartu Ujian Peserta
-                </div> : <></>))
-              }
 
-
-              <div
-                onClick={() => exportToExcel()}
+            {
+              !showKartuUjian && (!showRekapitulasiNilai ? <div
+                onClick={() => setShowRekapitulasiNilai(true)}
                 className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
               >
-                <PiMicrosoftExcelLogoFill />
-                Export Kode
-              </div>
-
-              {
-                !showKartuUjian && (!showRekapitulasiNilai ? <div
-                  onClick={() => setShowRekapitulasiNilai(true)}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <BiEditAlt />
-                  Rekapitulasi Nilai Ujian
-                </div> : <div
-                  onClick={() => handlePrintRekapitulasiNilai()}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <IoPrintOutline />
-                  Save Nilai Ujian
-                </div>)
-              }
+                <BiEditAlt />
+                Rekapitulasi Nilai Ujian
+              </div> : <div
+                onClick={() => handlePrintRekapitulasiNilai()}
+                className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+              >
+                <IoPrintOutline />
+                Save Nilai Ujian
+              </div>)
+            }
 
 
-              {
-                pathname.includes('dpkakp') && <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer">
-                      <FaMapPin />
-                      Sematkan Soal Ujian
-                    </div>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Apakah anda yakin akan menyematkan soal ujian?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        Pastikan jumlah anggota mu sudah sesuai dengan data
-                        peserta ujian yang sudah didaftarkan dan merupakan anggota
-                        yang sah tercantum dalam Surat Keputusan Dewan sebagai
-                        peserta yang mengikuti ujian keahlian awak kapal
-                        Perikanan!
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      {isLoadingSematkanSoal ? (
-                        <AlertDialogAction className="bg-gray-900">
-                          Loading ...
-                        </AlertDialogAction>
-                      ) : (
-                        <>
-                          <AlertDialogCancel>Batal</AlertDialogCancel>
-                          <AlertDialogAction
-                            onClick={(e) =>
-                              handleSematkanSoalUjianKeahlianToPeserta(e)
-                            }
-                            className="bg-gray-900"
-                          >
-                            Sematkan
-                          </AlertDialogAction>
-                        </>
-                      )}
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              }
-
-              {dataUjian.length > 0 && dataUjian != null ? (
-                dataUjian[0].UsersUjian != null &&
-                  dataUjian[0].UsersUjian.length > 0 ? (
-                  <></>
-                ) : (
-                  <div
-                    onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
-                    className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-                  >
-                    <FiUploadCloud />
-                    Tambah Peserta Ujian
+            {
+              pathname.includes('dpkakp') && <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer">
+                    <FaMapPin />
+                    Sematkan Soal Ujian
                   </div>
-                )
-              ) : null}
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Apakah anda yakin akan menyematkan soal ujian?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Pastikan jumlah anggota mu sudah sesuai dengan data
+                      peserta ujian yang sudah didaftarkan dan merupakan anggota
+                      yang sah tercantum dalam Surat Keputusan Dewan sebagai
+                      peserta yang mengikuti ujian keahlian awak kapal
+                      Perikanan!
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    {isLoadingSematkanSoal ? (
+                      <AlertDialogAction className="bg-gray-900">
+                        Loading ...
+                      </AlertDialogAction>
+                    ) : (
+                      <>
+                        <AlertDialogCancel>Batal</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={(e) =>
+                            handleSematkanSoalUjianKeahlianToPeserta(e)
+                          }
+                          className="bg-gray-900"
+                        >
+                          Sematkan
+                        </AlertDialogAction>
+                      </>
+                    )}
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            }
+
+            {dataUjian.length > 0 && dataUjian != null ? (
+              dataUjian[0].UsersUjian.length == dataUjian[0].JumlahPesertaUjian &&
+                dataUjian[0].UsersUjian.length > 0 ? (
+                <></>
+              ) : (
+                <div
+                  onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
+                  className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
+                >
+                  <FiUploadCloud />
+                  Tambah Peserta Ujian
+                </div>
+              )
+            ) : null}
+          </div>
+        </div>
+
+        {/* List Data Pelatihan */}
+
+        {(!showKartuUjian && !showRekapitulasiNilai) && (<div>
+          <div id="chartOne" className="-ml-5"></div>
+          <TableData
+            isLoading={false}
+            columns={columns}
+            table={table}
+            type={"long"}
+          />
+          <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="text-muted-foreground flex-1 text-sm">
+              {table.getFilteredSelectedRowModel().rows.length} of{" "}
+              {table.getFilteredRowModel().rows.length} row(s) selected.
+            </div>
+            <div className="space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-inter"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+              >
+                Previous
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="font-inter"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+              >
+                Next
+              </Button>
             </div>
           </div>
+        </div>)}
 
-          {/* List Data Pelatihan */}
-
-          {(!showKartuUjian && !showRekapitulasiNilai) && (<div>
-            <div id="chartOne" className="-ml-5"></div>
-            <TableData
-              isLoading={false}
-              columns={columns}
-              table={table}
-              type={"long"}
-            />
-            <div className="flex items-center justify-end space-x-2 py-4">
-              <div className="text-muted-foreground flex-1 text-sm">
-                {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                {table.getFilteredRowModel().rows.length} row(s) selected.
-              </div>
-              <div className="space-x-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.previousPage()}
-                  disabled={!table.getCanPreviousPage()}
-                >
-                  Previous
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="font-inter"
-                  onClick={() => table.nextPage()}
-                  disabled={!table.getCanNextPage()}
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
-          </div>)}
-
-          {
-            showKartuUjian && <div className="" ref={printRef}> <div className="grid grid-cols-1 gap-2">
-              {
-                dataUjian.length != 0 && data!.map((peserta, index) => (
-                  <div className="flex w-full gap-2">
-                    <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
-                      <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2">
-                        <Image
-                          className="block md:w-16 md:h-14 "
-                          src={"/logo-kkp-white.png"}
-                          width={0}
-                          height={0}
-                          alt="DPKAKP Logo"
-                        />
-                        <div className="flex flex-col gap-1 items-center justify-center text-center">
-                          <h1 className="font-normal text-gray-800 text-sm md:text-base leading-[110%] mb-5 mt-2">
-                            KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN PENYULUHAN DAN
-                            PENGEMBANGAN SUMBER DAYA MANUSIA <br />
-                            <span className="font-bold">
-                              DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
-                            </span>
-                          </h1>
-                          <p className="font-jakarta max-w-[42rem] leading-[95%] text-gray-600 text-[0.65rem]  -mt-5">
-                            GEDUNG MINA BAHARI III Lt.5, JALAN MEDAN MERDEKA TIMUR NOMOR
-                            16 JAKARTA 10110 <br /> KOTAK POS 4130 JKP 10041 TELEPON (021)
-                            3519070 (LACAK), FAKSIMILE (021) 3513287 <br /> LAMAN
-                            <span className="text-blue-500 underline ">
-                              https://elaut-bppsdm.go.id/lembaga/dpkakp
-                            </span>{" "}
-                            SUREL{" "}
-                            <span className="text-blue-500 underline">
-                              dpkakp@kkp.go.id
-                            </span>
-                          </p>
-                        </div>
-                        <Image
-                          className="block w-16 h-16 "
-                          src={"/lembaga/logo/logo-sertifikasi-akp.png"}
-                          width={0}
-                          height={0}
-                          alt="DPKAKP Logo"
-                        />
-                      </div>
-
-                      <div className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border ${dataUjian[0]!.TypeUjian.includes('ATKAPIN') ? 'border-rose-500 bg-rose-500 text-rose-600' : 'border-blue-500 bg-blue-500 text-blue-600'} bg-opacity-20 font-medium  mt-5 text-base`}>KARTU PESERTA UJIAN {dataUjian[0]!.TypeUjian}</div>
-
-                      <div className="ml-0 text-left capitalize w-full mt-2">
-                        <p className="text-sm font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
-                          Nama{"   "}: {"          "}<span className="font-normal">{peserta.Nama}</span>
-                        </p>
-                        <p className="text-sm font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
-                          NIK{"     "}: {"          "} <span className="font-normal">{peserta.Nik}</span>
-                        </p>
-                        <p className="text-sm font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
-                          Tempat, Tanggal Lahir{"   "}: {"          "} <span className="font-normal">{peserta.TempatLahir}, {peserta.TanggalLahir}</span>
-                        </p>
-                        <p className="text-sm font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
-                          Asal Sekolah/Instansi{"   "}: {"          "} <span className="font-normal">
-                            {peserta.Instansi}
+        {
+          showKartuUjian && <div className="" ref={printRef}> <div className="grid grid-cols-1 gap-2">
+            {
+              dataUjian.length != 0 && data!.map((peserta, index) => (
+                <div className="flex w-full gap-2">
+                  <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
+                    <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2">
+                      <Image
+                        className="block md:w-16 md:h-14 "
+                        src={"/logo-kkp-white.png"}
+                        width={0}
+                        height={0}
+                        alt="DPKAKP Logo"
+                      />
+                      <div className="flex flex-col gap-1 items-center justify-center text-center">
+                        <h1 className="font-normal text-gray-800 text-sm md:text-base leading-[110%] mb-5 mt-2">
+                          KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN PENYULUHAN DAN
+                          PENGEMBANGAN SUMBER DAYA MANUSIA <br />
+                          <span className="font-bold">
+                            DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
+                          </span>
+                        </h1>
+                        <p className="font-jakarta max-w-[42rem] leading-[95%] text-gray-600 text-[0.65rem]  -mt-5">
+                          GEDUNG MINA BAHARI III Lt.5, JALAN MEDAN MERDEKA TIMUR NOMOR
+                          16 JAKARTA 10110 <br /> KOTAK POS 4130 JKP 10041 TELEPON (021)
+                          3519070 (LACAK), FAKSIMILE (021) 3513287 <br /> LAMAN
+                          <span className="text-blue-500 underline ">
+                            https://elaut-bppsdm.go.id/lembaga/dpkakp
+                          </span>{" "}
+                          SUREL{" "}
+                          <span className="text-blue-500 underline">
+                            dpkakp@kkp.go.id
                           </span>
                         </p>
-
                       </div>
+                      <Image
+                        className="block w-16 h-16 "
+                        src={"/lembaga/logo/logo-sertifikasi-akp.png"}
+                        width={0}
+                        height={0}
+                        alt="DPKAKP Logo"
+                      />
+                    </div>
 
-                      <div className="flex flex-col gap">
-                        <div className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border border-gray-300 bg-gray-400 bg-opacity-20 font-medium  mt-5 text-base uppercase`}>
-                          <p className="text-sm">
-                            Nomor Ujian{"     "}:
-                          </p>
-                          <p className="font-semibold">
-                            25T250001</p></div>
-                      </div>
+                    <div className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border ${dataUjian[0]!.TypeUjian.includes('ATKAPIN') ? 'border-rose-500 bg-rose-500 text-rose-600' : 'border-blue-500 bg-blue-500 text-blue-600'} bg-opacity-20 font-medium  mt-5 text-base`}>KARTU PESERTA UJIAN {dataUjian[0]!.TypeUjian}</div>
 
-                      <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
-                        <div className="flex flex-col gap-1 capitalize">
-                          <p className="capitalize text-sm">
-                            {
-                              dataUjian[0]!.TempatUjian
-                            }, {generateTanggalPelatihan(dataUjian[0]!.TanggalMulaiUjian)}
-                          </p>
-                          <p className="font-semibold text-sm">Ketua PUKAKP</p>
-                          <p className="text-xs">{dataUjian[0]!.PUKAKP}</p>
-
-                          <p className="text-sm border-b-black border-b mt-14">Nama</p>
-                          <p className="text-sm ">NIP</p>
-                        </div>
-                        <div className="w-35 h-40 rounded-md border border-gray-300"></div>
-                      </div>
-
+                    <div className="ml-0 text-left capitalize w-full mt-2">
+                      <p className="text-sm font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
+                        Nama{"   "}: {"          "}<span className="font-normal">{peserta.Nama}</span>
+                      </p>
+                      <p className="text-sm font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
+                        NIK{"     "}: {"          "} <span className="font-normal">{peserta.Nik}</span>
+                      </p>
+                      <p className="text-sm font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
+                        Tempat, Tanggal Lahir{"   "}: {"          "} <span className="font-normal">{peserta.TempatLahir}, {peserta.TanggalLahir}</span>
+                      </p>
+                      <p className="text-sm font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
+                        Asal Sekolah/Instansi{"   "}: {"          "} <span className="font-normal">
+                          {peserta.Instansi}
+                        </span>
+                      </p>
 
                     </div>
-                    <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-start">
-                      <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2">
-                        <Image
-                          className="block md:w-16 md:h-14 "
-                          src={"/logo-kkp-white.png"}
-                          width={0}
-                          height={0}
-                          alt="DPKAKP Logo"
-                        />
-                        <div className="flex flex-col gap-1 items-center justify-center text-center">
-                          <h1 className="font-normal text-gray-800 text-sm md:text-base leading-[110%] mb-5 mt-2">
-                            KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN PENYULUHAN DAN
-                            PENGEMBANGAN SUMBER DAYA MANUSIA <br />
-                            <span className="font-bold">
-                              DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
-                            </span>
-                          </h1>
-                          <p className="font-jakarta max-w-[42rem] leading-[95%] text-gray-600 text-[0.65rem]  -mt-5">
-                            GEDUNG MINA BAHARI III Lt.5, JALAN MEDAN MERDEKA TIMUR NOMOR
-                            16 JAKARTA 10110 <br /> KOTAK POS 4130 JKP 10041 TELEPON (021)
-                            3519070 (LACAK), FAKSIMILE (021) 3513287 <br /> LAMAN
-                            <span className="text-blue-500 underline ">
-                              https://elaut-bppsdm.go.id/lembaga/dpkakp
-                            </span>{" "}
-                            SUREL{" "}
-                            <span className="text-blue-500 underline">
-                              dpkakp@kkp.go.id
-                            </span>
-                          </p>
-                        </div>
-                        <Image
-                          className="block w-16 h-16 "
-                          src={"/lembaga/logo/logo-sertifikasi-akp.png"}
-                          width={0}
-                          height={0}
-                          alt="DPKAKP Logo"
-                        />
+
+                    <div className="flex flex-col gap">
+                      <div className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border border-gray-300 bg-gray-400 bg-opacity-20 font-medium  mt-5 text-base uppercase`}>
+                        <p className="text-sm">
+                          Nomor Ujian{"     "}:
+                        </p>
+                        <p className="font-semibold">
+                          25T250001</p></div>
+                    </div>
+
+                    <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
+                      <div className="flex flex-col gap-1 capitalize">
+                        <p className="capitalize text-sm">
+                          {
+                            dataUjian[0]!.TempatUjian
+                          }, {generateTanggalPelatihan(dataUjian[0]!.TanggalMulaiUjian)}
+                        </p>
+                        <p className="font-semibold text-sm">Ketua PUKAKP</p>
+                        <p className="text-xs">{dataUjian[0]!.PUKAKP}</p>
+
+                        <p className="text-sm border-b-black border-b mt-14">Nama</p>
+                        <p className="text-sm ">NIP</p>
                       </div>
+                      <div className="w-35 h-40 rounded-md border border-gray-300"></div>
+                    </div>
 
-                      <div className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border ${dataUjian[0]!.TypeUjian.includes('ATKAPIN') ? 'border-rose-500 bg-rose-500 text-rose-600' : 'border-blue-500 bg-blue-500 text-blue-600'} bg-opacity-20 font-medium  mt-5 text-base`}>KARTU PESERTA UJIAN {dataUjian[0]!.TypeUjian}</div>
 
-                      {
-                        dataUjian[0]!.TypeUjian.includes('Rewarding') ? peserta!.CodeAksesUsersBagian!.length != 0 && <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
+                  </div>
+                  <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-start">
+                    <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2">
+                      <Image
+                        className="block md:w-16 md:h-14 "
+                        src={"/logo-kkp-white.png"}
+                        width={0}
+                        height={0}
+                        alt="DPKAKP Logo"
+                      />
+                      <div className="flex flex-col gap-1 items-center justify-center text-center">
+                        <h1 className="font-normal text-gray-800 text-sm md:text-base leading-[110%] mb-5 mt-2">
+                          KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN PENYULUHAN DAN
+                          PENGEMBANGAN SUMBER DAYA MANUSIA <br />
+                          <span className="font-bold">
+                            DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
+                          </span>
+                        </h1>
+                        <p className="font-jakarta max-w-[42rem] leading-[95%] text-gray-600 text-[0.65rem]  -mt-5">
+                          GEDUNG MINA BAHARI III Lt.5, JALAN MEDAN MERDEKA TIMUR NOMOR
+                          16 JAKARTA 10110 <br /> KOTAK POS 4130 JKP 10041 TELEPON (021)
+                          3519070 (LACAK), FAKSIMILE (021) 3513287 <br /> LAMAN
+                          <span className="text-blue-500 underline ">
+                            https://elaut-bppsdm.go.id/lembaga/dpkakp
+                          </span>{" "}
+                          SUREL{" "}
+                          <span className="text-blue-500 underline">
+                            dpkakp@kkp.go.id
+                          </span>
+                        </p>
+                      </div>
+                      <Image
+                        className="block w-16 h-16 "
+                        src={"/lembaga/logo/logo-sertifikasi-akp.png"}
+                        width={0}
+                        height={0}
+                        alt="DPKAKP Logo"
+                      />
+                    </div>
+
+                    <div className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border ${dataUjian[0]!.TypeUjian.includes('ATKAPIN') ? 'border-rose-500 bg-rose-500 text-rose-600' : 'border-blue-500 bg-blue-500 text-blue-600'} bg-opacity-20 font-medium  mt-5 text-base`}>KARTU PESERTA UJIAN {dataUjian[0]!.TypeUjian}</div>
+
+                    {
+                      dataUjian[0]!.TypeUjian.includes('Rewarding') ? peserta!.CodeAksesUsersBagian!.length != 0 && <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
+                        <div className="flex flex-shrink-0 bg-gray-400 text-white">
+                          <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1</span></div>
+                          <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F2</span></div>
+                          <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F3</span></div>
+                        </div>
+                        <div className="overflow-auto">
+                          <div className="flex flex-shrink-0">
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[0]!.KodeAkses || ''}</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[1]!.KodeAkses || ''}</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[2]!.KodeAkses || ''}</span></div>
+                          </div>
+                        </div>
+
+                      </div> :
+                        peserta!.CodeAksesUsersBagian!.length != 0 && <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
                           <div className="flex flex-shrink-0 bg-gray-400 text-white">
-                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1</span></div>
-                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F2</span></div>
-                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F3</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1B1</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1B2</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1B13</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F2B1</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F3B1</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F3B2</span></div>
                           </div>
                           <div className="overflow-auto">
                             <div className="flex flex-shrink-0">
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[0]!.KodeAkses || ''}</span></div>
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[1]!.KodeAkses || ''}</span></div>
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[2]!.KodeAkses || ''}</span></div>
+                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[3]!.KodeAkses || ''}</span></div>
+                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[4]!.KodeAkses || ''}</span></div>
+                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[5]!.KodeAkses || ''}</span></div>
                             </div>
                           </div>
 
-                        </div> :
-                          peserta!.CodeAksesUsersBagian!.length != 0 && <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
-                            <div className="flex flex-shrink-0 bg-gray-400 text-white">
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1B1</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1B2</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F1B13</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F2B1</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F3B1</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>F3B2</span></div>
-                            </div>
-                            <div className="overflow-auto">
-                              <div className="flex flex-shrink-0">
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[0]!.KodeAkses || ''}</span></div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[1]!.KodeAkses || ''}</span></div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[2]!.KodeAkses || ''}</span></div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[3]!.KodeAkses || ''}</span></div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[4]!.KodeAkses || ''}</span></div>
-                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center"><span>{peserta!.CodeAksesUsersBagian[5]!.KodeAkses || ''}</span></div>
-                              </div>
-                            </div>
-
-                          </div>
-                      }
-
-
-
-                      <div className="flex items-center justify-centerw-full mb-5 mt-6 gap-8">
-                        <div className="flex flex-col gap-1 capitalize">
-                          <p className="capitalize text-sm">
-                            {
-                              dataUjian[0]!.TempatUjian
-                            }, {generateTanggalPelatihan(dataUjian[0]!.TanggalMulaiUjian)}
-                          </p>
-                          <p className="font-semibold text-sm">Ketua PUKAKP</p>
-                          <p className="text-xs">{dataUjian[0]!.PUKAKP}</p>
-
-                          <p className="text-sm border-b-black border-b mt-14">Nama</p>
-                          <p className="text-sm ">NIP</p>
                         </div>
-                        <div className="w-35 h-40 rounded-md "></div>
+                    }
+
+
+
+                    <div className="flex items-center justify-centerw-full mb-5 mt-6 gap-8">
+                      <div className="flex flex-col gap-1 capitalize">
+                        <p className="capitalize text-sm">
+                          {
+                            dataUjian[0]!.TempatUjian
+                          }, {generateTanggalPelatihan(dataUjian[0]!.TanggalMulaiUjian)}
+                        </p>
+                        <p className="font-semibold text-sm">Ketua PUKAKP</p>
+                        <p className="text-xs">{dataUjian[0]!.PUKAKP}</p>
+
+                        <p className="text-sm border-b-black border-b mt-14">Nama</p>
+                        <p className="text-sm ">NIP</p>
                       </div>
+                      <div className="w-35 h-40 rounded-md "></div>
+                    </div>
+
+
+                  </div>
+                </div>
+
+              ))
+            }
+          </div></div>
+        }
+
+        {
+          showRekapitulasiNilai && <div className="border border-gray-300">
+            <div className="" ref={printRefRekapitulasiNilai}> <div className="grid grid-cols-1 gap-2">
+              {
+                dataUjian.length != 0 && data!.map((peserta, index) => (
+                  <div className="flex w-full gap-2">
+                    <div className="w-full rounded-lg p-6 flex flex-col items-center justify-center">
+                      <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2 w-full">
+                        <Image
+                          className="block md:w-16 md:h-14 "
+                          src={"/logo-kkp-white.png"}
+                          width={0}
+                          height={0}
+                          alt="DPKAKP Logo"
+                        />
+                        <div className="flex flex-col gap-1 items-center justify-center text-center">
+                          <h1 className="font-normal text-gray-800 text-sm md:text-lg leading-[110%] mb-5 mt-2">
+                            KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN PENYULUHAN DAN
+                            PENGEMBANGAN SUMBER DAYA MANUSIA <br />
+                            <span className="font-bold">
+                              DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
+                            </span>
+                          </h1>
+                          <p className="font-jakarta max-w-[42rem] leading-[95%] text-gray-600 text-sm  -mt-5">
+                            GEDUNG MINA BAHARI III Lt.5, JALAN MEDAN MERDEKA TIMUR NOMOR
+                            16 JAKARTA 10110 <br /> KOTAK POS 4130 JKP 10041 TELEPON (021)
+                            3519070 (LACAK), FAKSIMILE (021) 3513287 <br /> LAMAN
+                            <span className="text-blue-500 underline ">
+                              https://elaut-bppsdm.go.id/lembaga/dpkakp
+                            </span>{" "}
+                            SUREL{" "}
+                            <span className="text-blue-500 underline">
+                              dpkakp@kkp.go.id
+                            </span>
+                          </p>
+                        </div>
+                        <Image
+                          className="block w-16 h-16 "
+                          src={"/lembaga/logo/logo-sertifikasi-akp.png"}
+                          width={0}
+                          height={0}
+                          alt="DPKAKP Logo"
+                        />
+                      </div>
+
+                      <div className={`flex items-center justify-center w-fit rounded-md px-2 py-2 bg-opacity-20 font-bold text-black  mt-5 text-lg leading-none text-center`}>DAFTAR NILAI HASIL UJIAN KEAHLIAN AWAK KAPAL PERIKANAN
+                        <br />TINGKAT SERTIFIKAT :
+                        {dataUjian[0]!.TypeUjian}</div>
+
+                      <div className="ml-0 text-left capitalize w-full mt-2">
+                        <p className="text-sm font-semibold tracking-tight leading-none  py-2">
+                          Tanggal Pelaksanaan{"   "}: {"          "}<span className="font-normal">{generateTanggalPelatihan(dataUjian[0]!.TanggalMulaiUjian)} - {generateTanggalPelatihan(dataUjian[0]!.TanggalBerakhirUjian)}</span>
+                        </p>
+                        <p className="text-sm font-semibold tracking-tight leading-none ">
+                          Lokasi Pelaksanaan{"     "}: {"          "} <span className="font-normal">{dataUjian[0]!.TempatUjian}</span>
+                        </p>
+                      </div>
+
+                      {peserta!.CodeAksesUsersBagian!.length !== 0 && (
+                        <div className="flex flex-col w-full border border-gray-400 mt-6 rounded-md">
+                          {/* Table Header */}
+                          <div className="flex  text-white text-sm">
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-gray-400 bg-[#338BF6] justify-center py-6"><span>No</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6"><span className=''>Nomor Ujian</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6"><span className=''>Nama Peserta</span></div>
+                            {
+                              dataUjian[0]!.TypeUjian.includes('Rewarding') ? <><div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1</span></div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6"><span className=''>Nilai F2</span></div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3</span></div></> : <> <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B1</span></div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B2</span></div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Total F1</span></div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6"><span className=''>Nilai F2</span></div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3B1</span></div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3B2</span></div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400  bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Total F3</span></div> </>
+                            }
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6"><span className=''>Nilai Kumulatif</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6"><span className=''>Nilai Komprehensif</span></div>
+                            <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6"><span className=''>LULUS/TDK LULUS</span></div>
+                          </div>
+
+                          {/* Table Rows */}
+                          <div className="overflow-auto">
+                            {data!.map((pesertaUjian, index) => (
+                              <div key={index} className="flex text-sm">
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <span>{index + 1}</span>
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <span>{pesertaUjian?.NomorUjian || '-'}</span>
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <span>{pesertaUjian?.Nama || '-'}</span>
+                                </div>
+                                {
+                                  dataUjian[0]!.TypeUjian.includes('Rewarding') ? <><div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                    <span>{pesertaUjian?.NilaiF1B1 || 0}</span>
+                                  </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{pesertaUjian?.NilaiF2B1 || 0}</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{pesertaUjian?.NilaiF3B1 || 0}</span>
+                                    </div></> : <>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{pesertaUjian?.NilaiF1B1 || 0}</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{pesertaUjian?.NilaiF1B2 || 0}</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) / 2}</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{pesertaUjian?.NilaiF2B1 || 0}</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{pesertaUjian?.NilaiF3B1 || 0}</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{pesertaUjian?.NilaiF3B2 || 0}</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{(pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)}</span>
+                                    </div></>
+                                }
+
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  {
+                                    dataUjian[0]!.TypeUjian.includes('Rewarding') ? <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0)) / 3).toFixed(2)}</span> : <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0) + (pesertaUjian?.NilaiF1B3 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) / 6).toFixed(2)}</span>
+                                  }
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <span>{pesertaUjian?.NilaiKomprensif || 0}</span>
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <span>
+                                    {
+                                      dataUjian[0]!.TypeUjian.includes('Rewarding') ? <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0)) / 3) > 60 ? 'LULUS' : 'TIDAK LULUS'}</span> : <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0) + (pesertaUjian?.NilaiF1B3 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) / 6) > 60 ? 'LULUS' : 'TIDAK LULUS'}</span>
+                                    }
+                                  </span>
+
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="flex w-full items-start justify-between mt-2">
+                        <div className="ml-0 text-left capitalize w-full ">
+                          <p className="text-sm font-semibold tracking-tight leading-none  py-2">
+                            Hasil: {"          "}
+                          </p>
+                          <p className="text-sm font-semibold tracking-tight  ">
+                            Jumlah Peserta{"     "}: {"          "} <span className="font-normal">{data!.length} Orang</span>
+                          </p>
+                          <p className="text-sm font-semibold tracking-tight  ">
+                            Lulus (L){"     "}: {"          "} <span className="font-normal">{data!.length} Orang</span>
+                          </p>
+                          <p className="text-sm font-semibold tracking-tight  ">
+                            Mengulang (UL){"     "}: {"          "} <span className="font-normal">{data!.length} Orang</span>
+                          </p>
+                        </div>
+
+                        <div className="w-full flex items-end justify-end"><p className="capitalize text-sm">
+                          {
+                            dataUjian[0]!.TempatUjian
+                          }, {generateTanggalPelatihan(dataUjian[0]!.TanggalMulaiUjian)}
+                        </p></div>
+
+                      </div>
+
+
+
+                      <div className="flex w-full items-center justify-center flex-col">
+                        <div className="flex items-center justify-around w-full mb-5 mt-6 gap-8">
+                          <div className="flex flex-col gap-1  capitalize text-center items-center justify-center">
+                            <p className="font-semibold text-sm">Ketua, PUKAKP</p>
+                            <p className="text-xs -mt-1">{dataUjian[0]!.PUKAKP}</p>
+                            <p className="text-sm border-b-black border-b mt-14 w-2/3">Nama</p>
+                            <p className="text-sm ">NIP. </p>
+                          </div>
+
+                          <div className="flex flex-col gap-1 capitalize text-center items-center justify-center">
+                            <p className="font-semibold text-sm">Sekretaris, PUKAKP</p>
+                            <p className="text-xs -mt-1">{dataUjian[0]!.PUKAKP}</p>
+                            <p className="text-sm border-b-black border-b mt-14 w-2/3">Nama</p>
+                            <p className="text-sm ">NIP. </p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-1 capitalize text-center w-1/5">
+                          <p className="font-semibold text-sm leading-none">Mengetahui,</p>
+                          <p className="font-semibold text-sm leading-none">Ketua DPKAKP,</p>
+                          <p className="text-sm border-b-black border-b mt-14 ">Nama</p>
+                          <p className="text-sm ">NIP. </p>
+                        </div>
+                      </div>
+
 
 
                     </div>
@@ -1378,283 +1586,73 @@ const TableDataPesertaUjianKeahlian = () => {
 
                 ))
               }
+
             </div></div>
-          }
+          </div>
+        }
 
-          {
-            showRekapitulasiNilai && <div className="border border-gray-300">
-              <div className="" ref={printRefRekapitulasiNilai}> <div className="grid grid-cols-1 gap-2">
-                {
-                  dataUjian.length != 0 && data!.map((peserta, index) => (
-                    <div className="flex w-full gap-2">
-                      <div className="w-full rounded-lg p-6 flex flex-col items-center justify-center">
-                        <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2 w-full">
-                          <Image
-                            className="block md:w-16 md:h-14 "
-                            src={"/logo-kkp-white.png"}
-                            width={0}
-                            height={0}
-                            alt="DPKAKP Logo"
-                          />
-                          <div className="flex flex-col gap-1 items-center justify-center text-center">
-                            <h1 className="font-normal text-gray-800 text-sm md:text-lg leading-[110%] mb-5 mt-2">
-                              KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN PENYULUHAN DAN
-                              PENGEMBANGAN SUMBER DAYA MANUSIA <br />
-                              <span className="font-bold">
-                                DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
-                              </span>
-                            </h1>
-                            <p className="font-jakarta max-w-[42rem] leading-[95%] text-gray-600 text-sm  -mt-5">
-                              GEDUNG MINA BAHARI III Lt.5, JALAN MEDAN MERDEKA TIMUR NOMOR
-                              16 JAKARTA 10110 <br /> KOTAK POS 4130 JKP 10041 TELEPON (021)
-                              3519070 (LACAK), FAKSIMILE (021) 3513287 <br /> LAMAN
-                              <span className="text-blue-500 underline ">
-                                https://elaut-bppsdm.go.id/lembaga/dpkakp
-                              </span>{" "}
-                              SUREL{" "}
-                              <span className="text-blue-500 underline">
-                                dpkakp@kkp.go.id
-                              </span>
-                            </p>
-                          </div>
-                          <Image
-                            className="block w-16 h-16 "
-                            src={"/lembaga/logo/logo-sertifikasi-akp.png"}
-                            width={0}
-                            height={0}
-                            alt="DPKAKP Logo"
-                          />
-                        </div>
-
-                        <div className={`flex items-center justify-center w-fit rounded-md px-2 py-2 bg-opacity-20 font-bold text-black  mt-5 text-lg leading-none text-center`}>DAFTAR NILAI HASIL UJIAN KEAHLIAN AWAK KAPAL PERIKANAN
-                          <br />TINGKAT SERTIFIKAT :
-                          {dataUjian[0]!.TypeUjian}</div>
-
-                        <div className="ml-0 text-left capitalize w-full mt-2">
-                          <p className="text-sm font-semibold tracking-tight leading-none  py-2">
-                            Tanggal Pelaksanaan{"   "}: {"          "}<span className="font-normal">{generateTanggalPelatihan(dataUjian[0]!.TanggalMulaiUjian)} - {generateTanggalPelatihan(dataUjian[0]!.TanggalBerakhirUjian)}</span>
-                          </p>
-                          <p className="text-sm font-semibold tracking-tight leading-none ">
-                            Lokasi Pelaksanaan{"     "}: {"          "} <span className="font-normal">{dataUjian[0]!.TempatUjian}</span>
-                          </p>
-                        </div>
-
-                        {peserta!.CodeAksesUsersBagian!.length !== 0 && (
-                          <div className="flex flex-col w-full border border-gray-400 mt-6 rounded-md">
-                            {/* Table Header */}
-                            <div className="flex  text-white text-sm">
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-gray-400 bg-[#338BF6] justify-center py-6"><span>No</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6"><span className=''>Nomor Ujian</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6"><span className=''>Nama Peserta</span></div>
-                              {
-                                dataUjian[0]!.TypeUjian.includes('Rewarding') ? <><div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1</span></div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6"><span className=''>Nilai F2</span></div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3</span></div></> : <> <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B1</span></div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Nilai F1B2</span></div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6"><span className=''>Total F1</span></div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6"><span className=''>Nilai F2</span></div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3B1</span></div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Nilai F3B2</span></div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400  bg-[#0796A6] justify-center text-center leading-none py-6"><span className=''>Total F3</span></div> </>
-                              }
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6"><span className=''>Nilai Kumulatif</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6"><span className=''>Nilai Komprehensif</span></div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6"><span className=''>LULUS/TDK LULUS</span></div>
-                            </div>
-
-                            {/* Table Rows */}
-                            <div className="overflow-auto">
-                              {data!.map((pesertaUjian, index) => (
-                                <div key={index} className="flex text-sm">
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                    <span>{index + 1}</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                    <span>{pesertaUjian?.NomorUjian || '-'}</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                    <span>{pesertaUjian?.Nama || '-'}</span>
-                                  </div>
-                                  {
-                                    dataUjian[0]!.TypeUjian.includes('Rewarding') ? <><div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                      <span>{pesertaUjian?.NilaiF1B1 || 0}</span>
-                                    </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                        <span>{pesertaUjian?.NilaiF2B1 || 0}</span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                        <span>{pesertaUjian?.NilaiF3B1 || 0}</span>
-                                      </div></> : <>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                        <span>{pesertaUjian?.NilaiF1B1 || 0}</span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                        <span>{pesertaUjian?.NilaiF1B2 || 0}</span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                        <span>{((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) / 2}</span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                        <span>{pesertaUjian?.NilaiF2B1 || 0}</span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                        <span>{pesertaUjian?.NilaiF3B1 || 0}</span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                        <span>{pesertaUjian?.NilaiF3B2 || 0}</span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                        <span>{(pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)}</span>
-                                      </div></>
-                                  }
-
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                    {
-                                      dataUjian[0]!.TypeUjian.includes('Rewarding') ? <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0)) / 3).toFixed(2)}</span> : <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0) + (pesertaUjian?.NilaiF1B3 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) / 6).toFixed(2)}</span>
-                                    }
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                    <span>{pesertaUjian?.NilaiKomprensif || 0}</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
-                                    <span>
-                                      {
-                                        dataUjian[0]!.TypeUjian.includes('Rewarding') ? <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0)) / 3) > 60 ? 'LULUS' : 'TIDAK LULUS'}</span> : <span>{(((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0) + (pesertaUjian?.NilaiF1B3 || 0) + (pesertaUjian?.NilaiF2B1 || 0) + (pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) / 6) > 60 ? 'LULUS' : 'TIDAK LULUS'}</span>
-                                      }
-                                    </span>
-                                    <span>{pesertaUjian?.Status ? 'LULUS' : 'TDK LULUS'}</span>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="flex w-full items-start justify-between mt-2">
-                          <div className="ml-0 text-left capitalize w-full ">
-                            <p className="text-sm font-semibold tracking-tight leading-none  py-2">
-                              Hasil: {"          "}
-                            </p>
-                            <p className="text-sm font-semibold tracking-tight  ">
-                              Jumlah Peserta{"     "}: {"          "} <span className="font-normal">{data!.length} Orang</span>
-                            </p>
-                            <p className="text-sm font-semibold tracking-tight  ">
-                              Lulus (L){"     "}: {"          "} <span className="font-normal">{data!.length} Orang</span>
-                            </p>
-                            <p className="text-sm font-semibold tracking-tight  ">
-                              Mengulang (UL){"     "}: {"          "} <span className="font-normal">{data!.length} Orang</span>
-                            </p>
-                          </div>
-
-                          <div className="w-full flex items-end justify-end"><p className="capitalize text-sm">
-                            {
-                              dataUjian[0]!.TempatUjian
-                            }, {generateTanggalPelatihan(dataUjian[0]!.TanggalMulaiUjian)}
-                          </p></div>
-
-                        </div>
-
-
-
-                        <div className="flex w-full items-center justify-center flex-col">
-                          <div className="flex items-center justify-around w-full mb-5 mt-6 gap-8">
-                            <div className="flex flex-col gap-1  capitalize text-center items-center justify-center">
-                              <p className="font-semibold text-sm">Ketua, PUKAKP</p>
-                              <p className="text-xs -mt-1">{dataUjian[0]!.PUKAKP}</p>
-                              <p className="text-sm border-b-black border-b mt-14 w-2/3">Nama</p>
-                              <p className="text-sm ">NIP. </p>
-                            </div>
-
-                            <div className="flex flex-col gap-1 capitalize text-center items-center justify-center">
-                              <p className="font-semibold text-sm">Sekretaris, PUKAKP</p>
-                              <p className="text-xs -mt-1">{dataUjian[0]!.PUKAKP}</p>
-                              <p className="text-sm border-b-black border-b mt-14 w-2/3">Nama</p>
-                              <p className="text-sm ">NIP. </p>
-                            </div>
-                          </div>
-
-                          <div className="flex flex-col gap-1 capitalize text-center w-1/5">
-                            <p className="font-semibold text-sm leading-none">Mengetahui,</p>
-                            <p className="font-semibold text-sm leading-none">Ketua DPKAKP,</p>
-                            <p className="text-sm border-b-black border-b mt-14 ">Nama</p>
-                            <p className="text-sm ">NIP. </p>
-                          </div>
-                        </div>
-
-
-
-                      </div>
-                    </div>
-
-                  ))
-                }
-
-              </div></div>
-            </div>
-          }
-
-          <AlertDialog open={isOpenFormUjianKeahlian}>
-            <AlertDialogContent className="max-w-xl">
-              <AlertDialogHeader className="gap-0 flex flex-col">
-                <AlertDialogTitle className="flex items-center gap-2 text-2xl">
-                  {" "}
-                  <FaBookOpen className="h-4 w-4" />
-                  Masukkan Nilai Komprehensif
-                </AlertDialogTitle>
-                <AlertDialogDescription className="-mt-6">
-                  Sebagai kelengkapan penilaian dari pelaksanaan ujian keahlaian
-                  Awak Kapal Perikanan ini, diharap sebagai penguji dapat
-                  memasukkan nilai yang didapatkan peserta dari proses
-                  komprehensif!
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <fieldset>
-                <form autoComplete="off">
-                  <div className="flex flex-wrap -mx-3 mb-1">
-                    <div className="flex px-3 gap-2 mb-2 w-full">
-                      <div className="w-full">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="name"
-                        >
-                          Nilai Ujian Komprehensif{" "}
-                          <span className="text-red-600">*</span>
-                        </label>
-                        <input
-                          id="name"
-                          type="text"
-                          className="form-input w-full text-black border-gray-300 rounded-md"
-                          placeholder="Masukkan nilai"
-                          required
-                          value={nilaiKomprehensif}
-                          onChange={(e) => setNilaiKomprehensif(e.target.value)}
-                        />
-                      </div>
+        <AlertDialog open={isOpenFormUjianKeahlian}>
+          <AlertDialogContent className="max-w-xl">
+            <AlertDialogHeader className="gap-0 flex flex-col">
+              <AlertDialogTitle className="flex items-center gap-2 text-2xl">
+                {" "}
+                <FaBookOpen className="h-4 w-4" />
+                Masukkan Nilai Komprehensif
+              </AlertDialogTitle>
+              <AlertDialogDescription className="-mt-6">
+                Sebagai kelengkapan penilaian dari pelaksanaan ujian keahlaian
+                Awak Kapal Perikanan ini, diharap sebagai penguji dapat
+                memasukkan nilai yang didapatkan peserta dari proses
+                komprehensif!
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <fieldset>
+              <form autoComplete="off">
+                <div className="flex flex-wrap -mx-3 mb-1">
+                  <div className="flex px-3 gap-2 mb-2 w-full">
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Nilai Ujian Komprehensif{" "}
+                        <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Masukkan nilai"
+                        required
+                        value={nilaiKomprehensif}
+                        onChange={(e) => setNilaiKomprehensif(e.target.value)}
+                      />
                     </div>
                   </div>
+                </div>
 
-                  <AlertDialogFooter className="mt-3">
-                    <AlertDialogCancel
-                      onClick={(e) => {
-                        setIsOpenFormUjianKeahlian(false);
-                      }}
-                    >
-                      Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={(e) => {
-                        handleUploadNilaiKomprehensif(e);
-                      }}
-                    >
-                      Upload
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </form>
-              </fieldset>
-            </AlertDialogContent>
-          </AlertDialog>
-        </>
-      )}
+                <AlertDialogFooter className="mt-3">
+                  <AlertDialogCancel
+                    onClick={(e) => {
+                      setIsOpenFormUjianKeahlian(false);
+                    }}
+                  >
+                    Cancel
+                  </AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={(e) => {
+                      handleUploadNilaiKomprehensif(e);
+                    }}
+                  >
+                    Upload
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </form>
+            </fieldset>
+          </AlertDialogContent>
+        </AlertDialog>
+      </>
+
     </div>
   );
 };
