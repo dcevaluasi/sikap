@@ -985,7 +985,12 @@ const TableDataUjian: React.FC = () => {
                   </div>
                 ) : (
                   filteredData.map((ujian, index) => (
-                    <Card>
+                    <Card className="relative">
+                      {
+                        ujian!.Status == 'Pending' && <div className="w-fit absolute top-5 right-5 text-[0.65rem] px-2 py-1 rounded-md bg-yellow-400 text-white flex gap-1 items-center animate-pulse">
+                          Pending DPKAKP</div>
+                      }
+
                       <CardHeader>
                         <CardTitle>{ujian!.NamaUjian}</CardTitle>
                         <CardDescription>
@@ -993,7 +998,7 @@ const TableDataUjian: React.FC = () => {
                           {ujian!.TypeUjian} • {ujian!.PUKAKP}
                         </CardDescription>
                       </CardHeader>
-                      <CardContent className="space-y-2">
+                      <CardContent className="space-y-2 relative">
                         <div className="ml-0 text-left capitalize -mt-6">
                           <div className="ml-0 text-left mt-1 text-neutral-500 ">
                             <p className="text-sm ">

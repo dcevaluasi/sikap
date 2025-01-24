@@ -65,7 +65,8 @@ function page() {
         if (response.status == 200) {
           Toast.fire({
             icon: "success",
-            title: `Berhasil login, silahkan menggunakan layanan admin DPKAKP!`,
+            title: 'Yeayyy!',
+            text: `Berhasil login, silahkan menggunakan layanan admin DPKAKP!`,
           });
           await handleClearFormLoginAdminDPKAKP();
           Cookies.set("XSRF095", response?.data?.t);
@@ -92,20 +93,23 @@ function page() {
           if (e.response?.status == 401) {
             Toast.fire({
               icon: "error",
-              title: `Unauthorized, ${e.response?.data.pesan}!`,
+              title: 'Oopsss!',
+              text: `Unauthorized, ${e.response?.data.pesan}!`,
             });
             await handleClearFormLoginAdminDPKAKP();
           } else {
             Toast.fire({
               icon: "error",
-              title: `${e.response?.data.pesan}!`,
+              title: 'Oopsss!',
+              text: `${e.response?.data.pesan}!`,
             });
             await handleClearFormLoginAdminDPKAKP();
           }
         } else {
           Toast.fire({
             icon: "error",
-            title: `${e}!`,
+            title: 'Oopsss!',
+            text: `${e}!`,
           });
           await handleClearFormLoginAdminDPKAKP();
         }

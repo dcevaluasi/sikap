@@ -27,16 +27,16 @@ export default function HeroDPKAKP() {
   }, []);
 
   return (
-    <section className="relative h-[95vh] m-4 rounded-3xl flex items-center justify-center">
+    <section className="relative h-screen flex items-center justify-center">
       <Image
         src={images[imageIndex]}
-        className="absolute w-full h-full object-cover rounded-3xl duration-1000  "
+        className="absolute w-full h-full object-cover  duration-1000  "
         alt=""
         layout="fill"
         priority
       />
 
-      <div className="absolute w-full h-full rounded-3xl bg-black bg-opacity-70  "></div>
+      <div className="absolute w-full h-full  bg-black bg-opacity-70  "></div>
 
       {/* Illustration behind hero content */}
       <div
@@ -70,25 +70,34 @@ export default function HeroDPKAKP() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 z-[40]">
-        {/* Hero content */}
         <div className="pt-32 pb-12 md:pt-40 md:pb-20">
-          {/* Section header */}
-
           <div className="text-center pb-12 md:pb-16 flex flex-col items-center justify-center ">
-            <h1
-              className="text-5xl md:text-[3.5rem] font-normal leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
-            // data-aos="zoom-y-out"
+            <Link
+              href={"#"}
+              className="rounded-2xl bg-blue-500 px-4 py-1.5 text-sm text-gray-200 font-medium"
+              target="_blank"
             >
-              Sistem Ujian keahlian  <br />
+              DPKAKP
+            </Link>
+            <Image
+              className=" w-[100px] my-1 z-10 mt-4"
+              src={"/lembaga/logo/logo-sertifikasi-akp.png"}
+              width={0}
+              height={0}
+              alt="DPKAKP Logo"
+            />
+            <h1
+              className="text-4xl md:text-[3.5rem] font-normal leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
+            >
+              Sistem Ujian Keahlian  <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
                 Awak Kapal Perikanan
               </span>
             </h1>
             <div className="max-w-3xl mx-auto">
               <p
-                className="text-base text-gray-200 mb-8"
-              // data-aos="zoom-y-out"
-              // data-aos-delay="150"
+                className="text-sm text-gray-200 mb-8"
+
               >
                 Berdasarkan{" "}
                 <span className="font-bold">Permen KP 33 Tahun 2021</span>{" "}
@@ -97,12 +106,12 @@ export default function HeroDPKAKP() {
                 dan Penandaan Kapal Perikanan, serta Tata Kelola Pengawasan
                 Kapal Perikanan.
               </p>
-              <div className="w-full flex flex-col gap-1">
+              <div className="w-full flex flex-col gap-1 px-8 md:px-0">
                 <div className="flex flex-col md:flex-row gap-2 w-full items-center justify-center mb-2">
                   <Button
                     className="w-full md:w-fit text-lg px-4 py-6 bg-transparent border-blue-500 border hover:bg-blue-600 ml-4"
                   >
-                    <Link className=" w-full flex items-center justify-center" href={'https://youtu.be/FA70GlQXoJ0'}>
+                    <Link target="_blank" className=" w-full flex items-center justify-center" href={'https://youtu.be/FA70GlQXoJ0'}>
                       <BiEditAlt />
 
                       Video Tutorial Pelaksanaan Ujian
@@ -112,7 +121,7 @@ export default function HeroDPKAKP() {
                   <Button
                     className="w-full md:w-fit text-lg px-4 py-6 bg-transparent border-blue-500 border hover:bg-blue-600 ml-4"
                   >
-                    <Link className="flex items-center w-full justify-center" href={'https://youtu.be/ACdOJomFv70'}> <FaBuildingWheat className="mr-1" />
+                    <Link target="_blank" className="flex items-center w-full justify-center" href={'https://youtu.be/ACdOJomFv70'}> <FaBuildingWheat className="mr-1" />
 
                       Video Tutorial DPKAKP & PUKAKP
                     </Link>

@@ -1,4 +1,5 @@
 
+import CallCenter from "@/components/call-center";
 import UjianKeahlianAKP from "@/components/dashboard/Dashboard/UjianKeahlianAKP";
 import DefaultLayoutDPKAKP from "@/components/dashboard/Layouts/DefaultLayoutDPKAKP";
 import LayoutAdmin from "@/components/dashboard/Layouts/LayoutAdmin";
@@ -57,6 +58,8 @@ export default function Page() {
           </header>
           <main className="mx-5 overflow-y-scroll">
             <UjianKeahlianAKP />
+
+            <CallCenter />
           </main>
           {/* main content */}
         </div>
