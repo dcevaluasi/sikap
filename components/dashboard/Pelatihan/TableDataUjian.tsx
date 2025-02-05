@@ -988,7 +988,8 @@ const TableDataUjian: React.FC = () => {
                     <Card className="relative">
                       {
                         ujian!.Status == 'Pending' && <div className="w-fit absolute top-5 right-5 text-[0.65rem] px-2 py-1 rounded-md bg-yellow-400 text-white flex gap-1 items-center animate-pulse">
-                          Pending DPKAKP</div>
+                          {usePathname().includes('dpkakp')
+}</div>
                       }
 
                       <CardHeader>
