@@ -46,7 +46,6 @@ function Exam() {
 
   const [selectedUjian, setSelectedUjian] = React.useState<Ujian | null>(null);
 
-
   const [data, setData] = React.useState<SoalBagian | null>(null);
   const [selectedAnswers, setSelectedAnswers] = React.useState<JawabanUser[]>(
     []
@@ -71,7 +70,9 @@ function Exam() {
       // const shuffledSoal = response.data.Soal.sort(() => Math.random() - 0.5);
       const shuffledSoal = response.data.Soal.map((soal: SoalUjianBagian) => ({
         ...soal,
-        Jawaban: soal.Jawaban.sort(() => Math.random() - 0.5),
+        Jawaban: [...soal.Jawaban] // Salin array agar tidak mengubah data asli
+          .sort(() => Math.random() - 0.5) // Acak dulu
+          .sort((a, b) => a.IdJawaban - b.IdJawaban),
       })).sort(() => Math.random() - 0.5);
       setData({ ...response.data, Soal: shuffledSoal });
       // setData(response.data);
@@ -82,6 +83,7 @@ function Exam() {
   };
 
   console.log(selectedAnswers);
+  console.log('DATA: ', data)
 
   const [selectedIdSoal, setSelectedIdSoal] = React.useState<number>(0);
 
