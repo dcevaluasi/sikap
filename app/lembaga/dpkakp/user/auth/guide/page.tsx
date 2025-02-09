@@ -38,7 +38,6 @@ function page() {
   }, []);
 
   return (
-
     <main className="bg-darkDPKAKP w-full h-full relative">
       <Image
         src={"/dpkakp/image4.jpg"}
@@ -65,7 +64,8 @@ function page() {
             alt="DPKAKP Logo"
           />
           <h1 className="font-bold  font-calsans leading-none text-gray-200 text-4xl -mt-4">
-            {" "}{data?.Ujian} <br />
+            {" "}
+            {data?.Ujian} <br />
             <span className=" bg-clip-text text-transparent bg-gradient-to-r leading-none pt-0 from-blue-500 to-teal-400">
               {data?.Fungsi} {data?.Bagian}
             </span>
@@ -95,15 +95,14 @@ function page() {
                 <br />
                 <span>
                   {" "}
-                  3. Waktu yang disediakan untuk mengerjakan soal adalah 15 menit!
+                  3. Waktu yang disediakan untuk mengerjakan soal adalah 120
+                  menit!
                 </span>{" "}
                 <br />
-                <span> 4. Tidak diperbolehkan membuka buku, handphone dll!</span>
+                <span> 4. Tidak diperbolehkan membuka buku, dll!</span>
               </div>
             </div>
-
           </div>
-
 
           <button
             onClick={(e) => {

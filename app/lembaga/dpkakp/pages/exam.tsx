@@ -1,10 +1,10 @@
 "use client";
 
 import Toast from "@/components/toast";
-import { Input } from "@/components/ui/input"
+import { Input } from "@/components/ui/input";
 import { RxHamburgerMenu } from "react-icons/rx";
 
-import { Label } from "@/components/ui/label"
+import { Label } from "@/components/ui/label";
 import {
   Sheet,
   SheetClose,
@@ -14,7 +14,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
+} from "@/components/ui/sheet";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -83,7 +83,7 @@ function Exam() {
   };
 
   console.log(selectedAnswers);
-  console.log('DATA: ', data)
+  console.log("DATA: ", data);
 
   const [selectedIdSoal, setSelectedIdSoal] = React.useState<number>(0);
 
@@ -127,7 +127,10 @@ function Exam() {
       if (keyMap[key] !== undefined) {
         const selectedAnswer = answers[keyMap[key]];
         if (selectedAnswer) {
-          handleAnswerChange(selectedAnswer.IdSoalUjianBagian, selectedAnswer.NameJawaban);
+          handleAnswerChange(
+            selectedAnswer.IdSoalUjianBagian,
+            selectedAnswer.NameJawaban
+          );
         }
       }
     };
@@ -137,7 +140,6 @@ function Exam() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [data, selectedIdSoal]);
-
 
   console.log("SELECTED ANSWERS", selectedAnswers);
 
@@ -171,7 +173,7 @@ function Exam() {
     if (hasEmptyAnswers) {
       Toast.fire({
         icon: "error",
-        title: 'Oopsss!',
+        title: "Oopsss!",
         text: "Pastikan semua jawaban telah diisi sebelum submit!",
       });
       return; // Prevent submission
@@ -190,35 +192,34 @@ function Exam() {
       console.log("Response:", response.data);
       Toast.fire({
         icon: "success",
-        title: 'Yeayyy!',
+        title: "Yeayyy!",
         text: `Berhasil mensubmit jawabanmu, semoga hasilnya memuaskan ya sobat!`,
       });
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
-      localStorage.removeItem('selectedIdSoal')
-      localStorage.removeItem('answer')
-      localStorage.removeItem('countDownDate')
+      localStorage.removeItem("selectedIdSoal");
+      localStorage.removeItem("answer");
+      localStorage.removeItem("answers");
+      localStorage.removeItem("countDownDate");
 
-      router.replace("/lembaga/dpkakp/user/survey");
-
+      router.replace("/lembaga/dpkakp/user/auth");
     } catch (error) {
       console.error("Error submitting exam:", error);
       Toast.fire({
         icon: "error",
-        title: 'Oopsss!',
+        title: "Oopsss!",
         text: "Terjadi kesalahan saat submit, coba lagi nanti!",
       });
     }
   };
 
   const handleNextClick = () => {
-
     if (selectedIdSoal != 59) {
       setSelectedIdSoal(selectedIdSoal + 1);
     } else {
       Toast.fire({
         icon: "error",
-        title: 'Oopsss!',
+        title: "Oopsss!",
         text: "Anda sudah mencapai batas maksimal, tidak dapat ke soal selanjutnya!",
       });
     }
@@ -228,18 +229,17 @@ function Exam() {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Use matchMedia to detect desktop
       const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-      if (isDesktop && e.key === 'Enter') {
+      if (isDesktop && e.key === "Enter") {
         handleNextClick();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [selectedIdSoal]);
-
 
   React.useEffect(() => {
     // Clear radio button selection when moving to the next question
@@ -272,18 +272,18 @@ function Exam() {
     } else {
       Toast.fire({
         icon: "error",
-        title: 'Oopsss!',
+        title: "Oopsss!",
         text: "Anda sudah mencapai batas maksimal, tidak dapat ke soal sebelumnya!",
       });
     }
-
   };
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // Use matchMedia to detect desktop
       const isDesktop = window.matchMedia("(min-width: 768px)").matches;
-      if (isDesktop && e.key === " ") { // Check for space key
+      if (isDesktop && e.key === " ") {
+        // Check for space key
         e.preventDefault(); // Prevent default behavior (scrolling) when space is pressed
         handlePrevClick();
       }
@@ -297,8 +297,6 @@ function Exam() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [selectedIdSoal]);
-
-
 
   React.useEffect(() => {
     handleFetchExamInformation();
@@ -327,10 +325,8 @@ function Exam() {
     };
   }, []);
 
-
   return (
     <main className="bg-darkDPKAKP w-full h-full relative flex items-center justify-center pb-56 md:pb-0">
-
       <Image
         src={"/dpkakp/image4.jpg"}
         className="absolute w-full h-screen z-10 object-cover duration-1000"
@@ -342,9 +338,17 @@ function Exam() {
       <div className="flex flex-row gap-20 w-full items-start justify-between mx-10 z-[9999] md:mx-20 h-full">
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" className="rounded-2xl bg-blue-500 px-4 py-1.5 text-sm text-gray-200 font-medium border-none absolute top-5 left-5 block md:hidden"><RxHamburgerMenu /></Button>
+            <Button
+              variant="outline"
+              className="rounded-2xl bg-blue-500 px-4 py-1.5 text-sm text-gray-200 font-medium border-none absolute top-5 left-5 block md:hidden"
+            >
+              <RxHamburgerMenu />
+            </Button>
           </SheetTrigger>
-          <SheetContent className="z-[9999] bg-darkDPKAKP overflow-y-scroll scrollbar-hide" side={'left'}>
+          <SheetContent
+            className="z-[9999] bg-darkDPKAKP overflow-y-scroll scrollbar-hide"
+            side={"left"}
+          >
             <SheetHeader className="flex flex-col items-center justify-center">
               <Image
                 className="block w-16 h-16 "
@@ -353,39 +357,41 @@ function Exam() {
                 height={0}
                 alt="DPKAKP Logo"
               />
-              <SheetTitle className="leading-none text-white">{data?.Ujian} <br />{" "}
+              <SheetTitle className="leading-none text-white">
+                {data?.Ujian} <br />{" "}
                 <span className="font-normal text-xs md:text-base text-white leading-[90%]">
                   {data?.Fungsi}
-                </span>{" "}</SheetTitle>
+                </span>{" "}
+              </SheetTitle>
               <SheetDescription>
-                Tipe Soal : {data?.Bagian} •   Jumlah Soal : {data?.jumlah} Soal  •   Waktu Pelaksanaan : {data?.waktu!} Menit
+                Tipe Soal : {data?.Bagian} • Jumlah Soal : {data?.jumlah} Soal •
+                Waktu Pelaksanaan : {data?.waktu!} Menit
               </SheetDescription>
               <Timer countdownMinutes={data?.waktu!} />
             </SheetHeader>
             <section className="h-full text-white w-full py-20 z-0 block -mt-14 pb-10 ml-2">
               <div className="flex flex-col gap-3 h-full">
-                <div className="flex flex-col  gap-0 items-start">
-                </div>
+                <div className="flex flex-col  gap-0 items-start"></div>
                 <div className="grid grid-cols-4 grid-rows-6 space-x-0 space-y-0 gap-1">
                   {data?.Soal!.map((soal, index) => (
                     <div
                       key={index}
                       onClick={(e) => setSelectedIdSoal(index)}
-                      className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
-                        ? "bg-green-500 text-white bg-opacity-70"
-                        : "bg-blue-500 bg-opacity-30"
-                        } rounded-lg duration-700 `}
+                      className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${
+                        selectedAnswers[index]!.jawaban_pengguna! != ""
+                          ? "bg-green-500 text-white bg-opacity-70"
+                          : "bg-blue-500 bg-opacity-30"
+                      } rounded-lg duration-700 `}
                     >
-
                       <span
-                        className={`text-2xl font-semibold  ${selectedAnswers[index] != null
-                          ? " text-white"
-                          : "text-[#a5b4fc]"
-                          }`}
+                        className={`text-2xl font-semibold  ${
+                          selectedAnswers[index] != null
+                            ? " text-white"
+                            : "text-[#a5b4fc]"
+                        }`}
                       >
                         {index + 1}
                       </span>
-
                     </div>
                   ))}
                 </div>
@@ -452,7 +458,7 @@ function Exam() {
           ) : (
             <section className="w-full  container flex items-center justify-center text-white relative z-50 h-full">
               <div className="flex flex-col md:flex-row w-full h-fit mx-auto items-center justify-between gap-10">
-                <div className='block md:hidden'>
+                <div className="block md:hidden">
                   <Timer countdownMinutes={data?.waktu!} />
                 </div>
                 <div className="rounded-md h-full  px-6 py-3 flex-1 -mt-8 md:mt-0">
@@ -532,10 +538,10 @@ function Exam() {
                               {index === 0
                                 ? "A"
                                 : index === 1
-                                  ? "B"
-                                  : index === 2
-                                    ? "C"
-                                    : "D"}
+                                ? "B"
+                                : index === 2
+                                ? "C"
+                                : "D"}
                               . {jawaban.NameJawaban}
                             </label>
                           </div>
@@ -637,21 +643,21 @@ function Exam() {
                 <div
                   key={index}
                   onClick={(e) => setSelectedIdSoal(index)}
-                  className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
-                    ? "bg-green-500 text-white bg-opacity-70"
-                    : "bg-blue-500 bg-opacity-30"
-                    } rounded-lg duration-700 `}
+                  className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${
+                    selectedAnswers[index]!.jawaban_pengguna! != ""
+                      ? "bg-green-500 text-white bg-opacity-70"
+                      : "bg-blue-500 bg-opacity-30"
+                  } rounded-lg duration-700 `}
                 >
-
                   <span
-                    className={`text-2xl font-semibold  ${selectedAnswers[index] != null
-                      ? " text-white"
-                      : "text-[#a5b4fc]"
-                      }`}
+                    className={`text-2xl font-semibold  ${
+                      selectedAnswers[index] != null
+                        ? " text-white"
+                        : "text-[#a5b4fc]"
+                    }`}
                   >
                     {index + 1}
                   </span>
-
                 </div>
               ))}
             </div>
@@ -772,13 +778,14 @@ const Timer: React.FC<TimerProps> = ({ countdownMinutes }) => {
       <div className="flex flex-col items-center justify-center w-full h-full gap-8 sm:gap-16">
         <div className="flex justify-center gap-3 sm:gap-8">
           {["days", "hours", "minutes", "seconds"].map((unit, index) => (
-            <div key={index} className="flex flex-col mr-2 md:mr-0 gap-2 relative">
+            <div
+              key={index}
+              className="flex flex-col mr-2 md:mr-0 gap-2 relative"
+            >
               <div className="h-12 w-12 flex justify-center items-center bg-blue-500 bg-opacity-30 rounded-lg">
-
                 <span className="text-2xl font-semibold text-white">
                   {countDownTime[unit as keyof CountDownTime]}
                 </span>
-
               </div>
               <span className="text-gray-200 text-xs text-center capitalize">
                 {countDownTime[unit as keyof CountDownTime] === "01"
