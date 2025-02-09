@@ -109,6 +109,7 @@ import { FaEdit } from "react-icons/fa";
 import { DewanPenguji } from "@/types/dewanPenguji";
 import { TypeUjian, Ujian } from "@/types/ujian-keahlian-akp";
 import { BiPaperPlane } from "react-icons/bi";
+import { IoReload } from "react-icons/io5";
 
 const TableDataUjian: React.FC = () => {
   const [data, setData] = React.useState<Ujian[]>([]);
@@ -168,8 +169,8 @@ const TableDataUjian: React.FC = () => {
       const filteredData =
         pukakpCookie != "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan"
           ? response.data.data.filter(
-            (item: any) => item.PUKAKP === pukakpCookie
-          )
+              (item: any) => item.PUKAKP === pukakpCookie
+            )
           : response.data.data;
 
       // Sort the data first by status ('Pending' first) and then by CreateAt in descending order
@@ -272,8 +273,8 @@ const TableDataUjian: React.FC = () => {
       const filteredData =
         pukakpCookie != "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan"
           ? response.data.data.filter(
-            (item: any) => item.PUKAKP === pukakpCookie
-          )
+              (item: any) => item.PUKAKP === pukakpCookie
+            )
           : response.data.data;
 
       // Sort the data first by status ('Pending' first) and then by CreateAt in descending order
@@ -367,20 +368,18 @@ const TableDataUjian: React.FC = () => {
   const [jumlahPeserta, setJumlahPeserta] = React.useState<string>("");
   const [status, setStatus] = React.useState<string>("");
 
-  const [selectedTypeUjian, setSelectedTypeUjian] = React.useState<string>('')
+  const [selectedTypeUjian, setSelectedTypeUjian] = React.useState<string>("");
 
-  const [waktuF1, setWaktuF1] = React.useState<string>('')
-  const [waktuF2, setWaktuF2] = React.useState<string>('')
-  const [waktuF3, setWaktuF3] = React.useState<string>('')
+  const [waktuF1, setWaktuF1] = React.useState<string>("");
+  const [waktuF2, setWaktuF2] = React.useState<string>("");
+  const [waktuF3, setWaktuF3] = React.useState<string>("");
 
-
-  const [waktuF1B1, setWaktuF1B1] = React.useState<string>('')
-  const [waktuF1B2, setWaktuF1B2] = React.useState<string>('')
-  const [waktuF1B3, setWaktuF1B3] = React.useState<string>('')
-  const [waktuF2B1, setWaktuF2B1] = React.useState<string>('')
-  const [waktuF3B1, setWaktuF3B1] = React.useState<string>('')
-  const [waktuF3B2, setWaktuF3B2] = React.useState<string>('')
-
+  const [waktuF1B1, setWaktuF1B1] = React.useState<string>("");
+  const [waktuF1B2, setWaktuF1B2] = React.useState<string>("");
+  const [waktuF1B3, setWaktuF1B3] = React.useState<string>("");
+  const [waktuF2B1, setWaktuF2B1] = React.useState<string>("");
+  const [waktuF3B1, setWaktuF3B1] = React.useState<string>("");
+  const [waktuF3B2, setWaktuF3B2] = React.useState<string>("");
 
   /*================== LOADER VARIABLES ================= */
   const [isPosting, setIsPosting] = React.useState<boolean>(false);
@@ -389,17 +388,17 @@ const TableDataUjian: React.FC = () => {
 
   /*======= HANDLING CLEAR STATE VARIABLES UJIAN ======== */
   const handleClearNewUjianKeahlian = async () => {
-    setWaktuF1('')
-    setWaktuF2('')
-    setWaktuF3('')
-    setWaktuF1B1('')
-    setWaktuF1B2('')
-    setWaktuF1B3('')
-    setWaktuF2B1('')
-    setWaktuF3B1('')
-    setWaktuF3B2('')
+    setWaktuF1("");
+    setWaktuF2("");
+    setWaktuF3("");
+    setWaktuF1B1("");
+    setWaktuF1B2("");
+    setWaktuF1B3("");
+    setWaktuF2B1("");
+    setWaktuF3B1("");
+    setWaktuF3B2("");
     setIdTypeUjian("");
-    setSelectedTypeUjian('')
+    setSelectedTypeUjian("");
     setTypeUjian("");
     setNamaUjian("");
     setTempatUjian("");
@@ -437,7 +436,7 @@ const TableDataUjian: React.FC = () => {
       formData.append("filePermohonan", filePermohonan!);
     }
 
-    if (selectedTypeUjian == 'Klasikal') {
+    if (selectedTypeUjian == "Klasikal") {
       formData.append("WaktuF1B1", waktuF1B1);
       formData.append("WaktuF1B2", waktuF1B2);
       formData.append("WaktuF1B3", waktuF1B3);
@@ -552,6 +551,50 @@ const TableDataUjian: React.FC = () => {
       console.error("ERROR BLANKO KELUAR : ", error);
       setIsFetching(false);
       throw error;
+    }
+  };
+
+  const [waktuRemedial, setWaktuRemedial] = React.useState<string>("");
+  const [openFormRemedial, setOpenFormRemedial] =
+    React.useState<boolean>(false);
+  const [isProcessingRemedial, setIsProcessingRemedial] =
+    React.useState<boolean>(false);
+  const handleRemedial = async (e: any) => {
+    setIsProcessingRemedial(true);
+    try {
+      const response = await axios.post(
+        `${dpkakpBaseUrl}/adminPusat/getRemedial`,
+        {
+          id_ujian: selectedIdUjian,
+          waktu_code_ujian: waktuRemedial,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: "Yeayyy!",
+        text: `Berhasil mengatur jadwal remedial!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setSelectedIdUjian(0);
+      setOpenFormRemedial(false);
+      setIsProcessingRemedial(false);
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: "Oopsss!",
+        text: `Gagal mengatur jadwal remedial!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setSelectedIdUjian(0);
+      setOpenFormRemedial(false);
+      setIsProcessingRemedial(false);
     }
   };
 
@@ -812,17 +855,19 @@ const TableDataUjian: React.FC = () => {
                 <li>
                   <button
                     onClick={() => setSelectedStatusFilter("All")}
-                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "All"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
+                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${
+                      selectedStatusFilter === "All"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
                   >
                     <p className="font-semibold text-lg">{data!.length}</p>
                     <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "All"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "All"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
                     >
                       All
                     </p>
@@ -834,17 +879,19 @@ const TableDataUjian: React.FC = () => {
                 <li>
                   <button
                     onClick={() => setSelectedStatusFilter("All")}
-                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "All"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
+                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${
+                      selectedStatusFilter === "All"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
                   >
                     <p className="font-semibold text-lg">{data!.length}</p>
                     <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "All"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "All"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
                     >
                       All
                     </p>
@@ -854,17 +901,19 @@ const TableDataUjian: React.FC = () => {
                   <li>
                     <button
                       onClick={() => setSelectedStatusFilter("Draft")}
-                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "Draft"
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-black"
-                        }`}
+                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
+                        selectedStatusFilter === "Draft"
+                          ? "bg-blue-500 text-white"
+                          : "bg-white text-black"
+                      }`}
                     >
                       <p className="font-semibold text-lg">{countDraft}</p>
                       <p
-                        className={`uppercase text-sm ${selectedStatusFilter === "Draft"
-                          ? "text-white font-bold"
-                          : "text-gray-600"
-                          }`}
+                        className={`uppercase text-sm ${
+                          selectedStatusFilter === "Draft"
+                            ? "text-white font-bold"
+                            : "text-gray-600"
+                        }`}
                       >
                         Draft
                       </p>
@@ -875,17 +924,19 @@ const TableDataUjian: React.FC = () => {
                 <li>
                   <button
                     onClick={() => setSelectedStatusFilter("Pending")}
-                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "Pending"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
+                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${
+                      selectedStatusFilter === "Pending"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
                   >
                     <p className="font-semibold text-lg">{countNotVerified}</p>
                     <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "Pending"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "Pending"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
                     >
                       Pending
                     </p>
@@ -895,19 +946,21 @@ const TableDataUjian: React.FC = () => {
                   <li>
                     <button
                       onClick={() => setSelectedStatusFilter("Pilih Penguji")}
-                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-32 ${selectedStatusFilter === "Pilih Penguji"
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-black"
-                        }`}
+                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-32 ${
+                        selectedStatusFilter === "Pilih Penguji"
+                          ? "bg-blue-500 text-white"
+                          : "bg-white text-black"
+                      }`}
                     >
                       <p className="font-semibold text-lg">
                         {countPilihPenguji}
                       </p>
                       <p
-                        className={`uppercase text-sm ${selectedStatusFilter === "Pilih Penguji"
-                          ? "text-white font-bold"
-                          : "text-gray-600"
-                          }`}
+                        className={`uppercase text-sm ${
+                          selectedStatusFilter === "Pilih Penguji"
+                            ? "text-white font-bold"
+                            : "text-gray-600"
+                        }`}
                       >
                         Pilih Penguji
                       </p>
@@ -918,17 +971,19 @@ const TableDataUjian: React.FC = () => {
                 <li>
                   <button
                     onClick={() => setSelectedStatusFilter("Aktif")}
-                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-24 ${selectedStatusFilter === "Aktif"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
+                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-24 ${
+                      selectedStatusFilter === "Aktif"
+                        ? "bg-blue-500 text-white"
+                        : "bg-white text-black"
+                    }`}
                   >
                     <p className="font-semibold text-lg">{countVerified}</p>
                     <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "Aktif"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
+                      className={`uppercase text-sm ${
+                        selectedStatusFilter === "Aktif"
+                          ? "text-white font-bold"
+                          : "text-gray-600"
+                      }`}
                     >
                       Disetujui
                     </p>
@@ -986,11 +1041,11 @@ const TableDataUjian: React.FC = () => {
                 ) : (
                   filteredData.map((ujian, index) => (
                     <Card className="relative">
-                      {
-                        ujian!.Status == 'Pending' && <div className="w-fit absolute top-5 right-5 text-[0.65rem] px-2 py-1 rounded-md bg-yellow-400 text-white flex gap-1 items-center animate-pulse">
-                          {usePathname().includes('dpkakp')
-}</div>
-                      }
+                      {ujian!.Status == "Pending" && (
+                        <div className="w-fit absolute top-5 right-5 text-[0.65rem] px-2 py-1 rounded-md bg-yellow-400 text-white flex gap-1 items-center animate-pulse">
+                          {usePathname().includes("dpkakp")}
+                        </div>
+                      )}
 
                       <CardHeader>
                         <CardTitle>{ujian!.NamaUjian}</CardTitle>
@@ -1052,11 +1107,13 @@ const TableDataUjian: React.FC = () => {
                           </Button> */}
                           {ujian!.Status == "Aktif" && (
                             <Link
-                              href={`/lembaga/${usePathname().includes("pukakp")
-                                ? "pukakp"
-                                : "dpkakp"
-                                }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
-                                }/${ujian!.IdTypeUjian}`}
+                              href={`/lembaga/${
+                                usePathname().includes("pukakp")
+                                  ? "pukakp"
+                                  : "dpkakp"
+                              }/admin/dashboard/ujian/peserta-ujian/${
+                                ujian!.IdUjian
+                              }/${ujian!.IdTypeUjian}`}
                               className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm"
                             >
                               <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
@@ -1065,7 +1122,7 @@ const TableDataUjian: React.FC = () => {
                           )}
 
                           {ujian!.FilePermohonan != null &&
-                            ujian!.Status == "Aktif" ? (
+                          ujian!.Status == "Aktif" ? (
                             <Link
                               target="_blank"
                               href={ujian!.FilePermohonan!}
@@ -1079,7 +1136,7 @@ const TableDataUjian: React.FC = () => {
                           )}
 
                           {ujian!.Status == "Draft" &&
-                            !usePathname().includes("dpkakp") ? (
+                          !usePathname().includes("dpkakp") ? (
                             <Button
                               onClick={() => {
                                 handleKirimPermohonan(ujian!.IdUjian);
@@ -1095,7 +1152,7 @@ const TableDataUjian: React.FC = () => {
                           )}
 
                           {usePathname().includes("pukakp") &&
-                            ujian!.Status == "Draft" ? (
+                          ujian!.Status == "Draft" ? (
                             <Button
                               onClick={() => {
                                 handleFetchingDataUjianById(ujian!.IdUjian);
@@ -1111,7 +1168,7 @@ const TableDataUjian: React.FC = () => {
                           )}
 
                           {usePathname().includes("pukakp") &&
-                            ujian!.Status == "Draft" ? (
+                          ujian!.Status == "Draft" ? (
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
                                 <Button
@@ -1170,6 +1227,20 @@ const TableDataUjian: React.FC = () => {
                                 Verifikasi
                               </Button>
                             )}
+
+                          {usePathname().includes("pukakp") && (
+                            <Button
+                              onClick={(e) => {
+                                setSelectedIdUjian(ujian!.IdUjian);
+
+                                setOpenFormRemedial(!openFormRemedial);
+                              }}
+                              variant="outline"
+                              className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md"
+                            >
+                              <IoReload className="h-4 w-4 mr-1" /> Remedial
+                            </Button>
+                          )}
 
                           {usePathname().includes("dpkakp") &&
                             ujian!.Status == "Aktif" &&
@@ -1320,7 +1391,9 @@ const TableDataUjian: React.FC = () => {
                     </div>
 
                     <div className="mt-2">
-                      <Label htmlFor="surat-permohonan">Jenis Pelaksanaan Ujian</Label>
+                      <Label htmlFor="surat-permohonan">
+                        Jenis Pelaksanaan Ujian
+                      </Label>
                       <Select
                         value={selectedTypeUjian}
                         onValueChange={(value: string) =>
@@ -1332,15 +1405,13 @@ const TableDataUjian: React.FC = () => {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Klasikal">Klasikal</SelectItem>
-                          <SelectItem value="Rewarding">
-                            Rewarding
-                          </SelectItem>
+                          <SelectItem value="Rewarding">Rewarding</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
-                    {
-                      selectedTypeUjian == 'Klasikal' ? <div className="grid grid-cols-3 gap-2">
+                    {selectedTypeUjian == "Klasikal" ? (
+                      <div className="grid grid-cols-3 gap-2">
                         <div className="mt-2">
                           <Label htmlFor="waktuF1B1">Waktu F1B1*</Label>
                           <Input
@@ -1401,7 +1472,9 @@ const TableDataUjian: React.FC = () => {
                             onChange={(e) => setWaktuF3B2(e.target.value)}
                           />
                         </div>
-                      </div> : selectedTypeUjian == 'Rewarding' ? <div className="grid grid-cols-3 gap-2">
+                      </div>
+                    ) : selectedTypeUjian == "Rewarding" ? (
+                      <div className="grid grid-cols-3 gap-2">
                         <div className="mt-2">
                           <Label htmlFor="waktuF1">Waktu F1*</Label>
                           <Input
@@ -1427,16 +1500,20 @@ const TableDataUjian: React.FC = () => {
                           <Input
                             id="waktuF3"
                             type="text"
+                            placeholder="Masukkan waktu pelaksanaan remedial"
                             required
                             value={waktuF3}
                             onChange={(e) => setWaktuF3(e.target.value)}
                           />
                         </div>
-                      </div> : <></>
-                    }
-                    <p className="text-xs mt-2">*Format Penginputan : 2025-01-09 10:15:00 +0900 WIT</p>
-
-
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    <p className="text-xs">
+                      *Format Penginputan : 2025-01-09 10:15:00
+                      (+0700/+0800/+0900) (WIB/WITA/WIT)
+                    </p>
 
                     {/* Surat Permohonan */}
                     <div className="mt-2">
@@ -1555,6 +1632,65 @@ const TableDataUjian: React.FC = () => {
                 <span>Validating...</span>
               ) : (
                 <span>Validasi</span>
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={openFormRemedial} onOpenChange={setOpenFormRemedial}>
+        <AlertDialogContent className="max-w-md">
+          <>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Remedial Pelaksaan Ujian</AlertDialogTitle>
+              <AlertDialogDescription className="-mt-2">
+                Proses ini mengharuskan PUKAKP untuk menginput waktu pelaksanaan
+                remedial, kode akses peserta ujian sebelumnya dapat diakses
+                kembali jika memang peserta bersangkutan mendapatkan remedial.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <fieldset>
+              <div className="flex gap-2  mb-1 w-full">
+                <div className="w-full">
+                  <label
+                    className="block text-gray-800 text-sm font-medium mb-1"
+                    htmlFor="noSertifikat"
+                  >
+                    Waktu Pelaksanaan <span className="text-red-600">*</span>
+                  </label>
+                  <Input
+                    id="waktuRemedial"
+                    type="text"
+                    required
+                    value={waktuRemedial}
+                    onChange={(e) => setWaktuRemedial(e.target.value)}
+                  />
+                </div>
+              </div>
+            </fieldset>
+
+            <p className="text-gray-700 text-xs">
+              *Format Penginputan : 2025-01-09 10:15:00 (+0700/+0800/+0900)
+              (WIB/WITA/WIT)
+            </p>
+            <p className="text-rose-500 text-xs -mt-3">
+              *Pastikan rekapitulasi penilaian sebelumnya telah didownload
+              karena nilai remedi ini akan menimpa nilai awal
+            </p>
+          </>
+          <AlertDialogFooter>
+            {!isProcessingRemedial && (
+              <AlertDialogCancel
+                onClick={(e) => setOpenFormRemedial(!openFormRemedial)}
+              >
+                Cancel
+              </AlertDialogCancel>
+            )}
+            <AlertDialogAction onClick={(e) => handleRemedial(e)}>
+              {isProcessingRemedial ? (
+                <span>Processing...</span>
+              ) : (
+                <span>Lakukan Remedial</span>
               )}
             </AlertDialogAction>
           </AlertDialogFooter>
