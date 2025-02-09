@@ -24,7 +24,7 @@ function page() {
       Toast.fire({
         icon: "error",
         title: `Oopss!`,
-        text: 'Maaf, masukkan kode akses terlebih dahulu sebelum memulai ujian!'
+        text: "Maaf, masukkan kode akses terlebih dahulu sebelum memulai ujian!",
       });
       return;
     } else {
@@ -38,7 +38,7 @@ function page() {
         if (response.status == 200) {
           Toast.fire({
             icon: "success",
-            title: 'Yeayyy!',
+            title: "Yeayyy!",
             text: `Berhasil memasukkan kode akses, silahkan lanjut melaksanakan ujian!`,
           });
           await handleClearFormLoginAdminDPKAKP();
@@ -47,7 +47,7 @@ function page() {
         } else {
           Toast.fire({
             icon: "error",
-            title: 'Oopss!',
+            title: "Oopss!",
             text: response.statusText,
           });
 
@@ -58,14 +58,14 @@ function page() {
           if (e.response?.status == 401) {
             Toast.fire({
               icon: "error",
-              title: 'Oopss!',
+              title: "Oopss!",
               text: `Unauthorized, ${e.response?.data.pesan}!`,
             });
             await handleClearFormLoginAdminDPKAKP();
           } else {
             Toast.fire({
               icon: "error",
-              title: 'Oopss!',
+              title: "Oopss!",
               text: `${e.response?.data.Pesan}!`,
             });
             await handleClearFormLoginAdminDPKAKP();
@@ -108,13 +108,14 @@ function page() {
             alt="DPKAKP Logo"
           />
           <h1 className="font-bold  font-calsans leading-none text-gray-200 text-4xl -mt-4">
-            Akses Ujian Keahlian {" "} <br />
+            Akses Ujian Keahlian <br />
             <span className=" bg-clip-text text-transparent bg-gradient-to-r leading-none pt-0 from-blue-500 to-teal-400">
               Awak Kapal Perikanan
             </span>
           </h1>
           <p className="font-jakarta max-w-[42rem] leading-[120%] text-gray-200  sm:text-base ">
-            Selamat datang peserta ujian! Masukkan kode aksesmu untuk dapat memulai ujiannya, persiapkan diri dengan baik!
+            Selamat datang peserta ujian! Masukkan kode aksesmu untuk dapat
+            memulai ujiannya, persiapkan diri dengan baik!
           </p>
         </div>
         <div className="flex flex-col w-full max-w-md mx-auto z-50 px-10">
@@ -131,17 +132,38 @@ function page() {
             />
           </div>
 
+          <div className="flex flex-col gap-1">
+            <button
+              onClick={(e) => handleLoginAdminDPKAKP(e)}
+              className="text-white w-full bg-blue-500 rounded-xl bg-opacity-100 py-2 mt-2"
+            >
+              Mulai Ujian
+            </button>
 
-          <button
-            onClick={(e) => handleLoginAdminDPKAKP(e)}
-            className="text-white w-full bg-blue-500 rounded-xl bg-opacity-100 py-2 mt-2"
-          >
-            Mulai Ujian
-          </button>
+            <div className="flex items-center mt-6">
+              <div
+                className="border-t border-gray-300 grow mr-3"
+                aria-hidden="true"
+              ></div>
+              <div
+                className="border-t border-gray-300 grow ml-3"
+                aria-hidden="true"
+              ></div>
+            </div>
+            <div className="text-gray-200 text-center mt-6">
+              Dalam meningkatkan layanan pelaksanaan ujian keahlian silahkan
+              mengisi{" "}
+              <Link
+                href="/registrasi"
+                className="text-blue-500 hover:underline transition duration-150 ease-in-out"
+              >
+                survey berikut
+              </Link>{" "}
+            </div>
+          </div>
         </div>
       </section>
     </main>
-
   );
 }
 
