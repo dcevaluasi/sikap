@@ -839,6 +839,54 @@ const TableDataUjian: React.FC = () => {
 
   const isPenguji = Cookies.get("IsPUKAKP") == "penguji";
 
+  React.useEffect(() => {
+    // Function to get formatted date-time with timezone offset and name
+    const getFormattedDateTime = () => {
+      const now = new Date();
+      const options: Intl.DateTimeFormatOptions = {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+      };
+
+      // Get the formatted date: `yyyy-MM-dd`
+      const formattedDate = now
+        .toLocaleString("en-GB", options)
+        .replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$2-$1") // Change from `dd/MM/yyyy` to `yyyy-MM-dd`
+        .replace(/,/g, ""); // Remove any commas if present
+
+      const timezoneOffset = now.getTimezoneOffset(); // Get timezone offset in minutes
+      let timezone = "";
+
+      if (timezoneOffset === -420) {
+        timezone = "+0700 WIB"; // UTC+07:00 (WIB)
+      } else if (timezoneOffset === -480) {
+        timezone = "+0800 WITA"; // UTC+08:00 (WITA)
+      } else if (timezoneOffset === -540) {
+        timezone = "+0900 WIT"; // UTC+09:00 (WIT)
+      }
+
+      return `${formattedDate} ${timezone}`;
+    };
+
+    // Set the formatted date-time for all the input fields when the component mounts
+    const formattedDateTime = getFormattedDateTime();
+    setWaktuF1(formattedDateTime);
+    setWaktuF2(formattedDateTime);
+    setWaktuF3(formattedDateTime);
+    setWaktuF1B1(formattedDateTime);
+    setWaktuF1B2(formattedDateTime);
+    setWaktuF1B3(formattedDateTime);
+    setWaktuF2B1(formattedDateTime);
+    setWaktuF3B1(formattedDateTime);
+    setWaktuF3B2(formattedDateTime);
+    setWaktuRemedial(formattedDateTime);
+  }, []);
+
   return (
     <section className="rounded-sm   pb-5 shadow-default  h-full scrollbar-hide">
       <section
@@ -1500,7 +1548,7 @@ const TableDataUjian: React.FC = () => {
                           <Input
                             id="waktuF3"
                             type="text"
-                            placeholder="Masukkan waktu pelaksanaan remedial"
+                            placeholder=""
                             required
                             value={waktuF3}
                             onChange={(e) => setWaktuF3(e.target.value)}
@@ -1656,7 +1704,7 @@ const TableDataUjian: React.FC = () => {
                     className="block text-gray-800 text-sm font-medium mb-1"
                     htmlFor="noSertifikat"
                   >
-                    Waktu Pelaksanaan <span className="text-red-600">*</span>
+                    Waktu Remedial <span className="text-red-600">*</span>
                   </label>
                   <Input
                     id="waktuRemedial"
@@ -1670,8 +1718,7 @@ const TableDataUjian: React.FC = () => {
             </fieldset>
 
             <p className="text-gray-700 text-xs">
-              *Format Penginputan : 2025-01-09 10:15:00 (+0700/+0800/+0900)
-              (WIB/WITA/WIT)
+              *Hanya mengganti tanggal dan waktu saja!
             </p>
             <p className="text-rose-500 text-xs -mt-3">
               *Pastikan rekapitulasi penilaian sebelumnya telah didownload

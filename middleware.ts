@@ -44,6 +44,18 @@ export function middleware(request: any) {
   }
 
 
+  if (!XSRF096) {
+    const protectedPaths = [
+      '/lembaga/dpkakp/user/auth/guide',
+      '/lembaga/dpkakp/user/auth/exam',
+    ]
+
+    if (protectedPaths.includes(request.nextUrl.pathname)) {
+      return NextResponse.redirect(new URL('/lembaga/dpkakp/user/auth', request.url))
+    }
+  }
+
+
 
 
   if (!XSRF091) {
