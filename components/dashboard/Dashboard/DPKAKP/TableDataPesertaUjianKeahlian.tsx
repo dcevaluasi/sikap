@@ -1831,38 +1831,54 @@ const TableDataPesertaUjianKeahlian = () => {
                                     <span>{pesertaUjian?.NilaiF1B3 || 0}</span>
                                   </div>
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      ((pesertaUjian?.NilaiF1B1 || 0) +
-                                        (pesertaUjian?.NilaiF1B2 || 0) +
-                                        (pesertaUjian?.NilaiF1B3 || 0)) /
-                                        3 <
-                                        65 ||
-                                      ((pesertaUjian?.NilaiF1B1 || 0) +
-                                        (pesertaUjian?.NilaiF1B2 || 0)) /
-                                        2 <
-                                        65
-                                        ? "text-green-500"
-                                        : "text-rose-500"
-                                    }`}
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(() => {
+                                      const isAnkapinOrAtkapin =
+                                        dataUjian[0]?.TypeUjian ===
+                                          "ANKAPIN II" ||
+                                        dataUjian[0]?.TypeUjian ===
+                                          "ATKAPIN II";
+
+                                      // Hitung rata-rata nilai berdasarkan tipe ujian
+                                      const averageScore = isAnkapinOrAtkapin
+                                        ? ((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF1B2 || 0)) /
+                                          2
+                                        : ((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF1B2 || 0) +
+                                            (pesertaUjian?.NilaiF1B3 || 0)) /
+                                          3;
+
+                                      return averageScore < 65
+                                        ? "text-rose-500"
+                                        : "text-green-500";
+                                    })()}`}
                                   >
                                     <span>
-                                      {dataUjian[0]!.TypeUjian ==
-                                        "ANKAPIN II" ||
-                                      dataUjian[0]!.TypeUjian == "ATKAPIN II"
-                                        ? (
-                                            ((pesertaUjian?.NilaiF1B1 || 0) +
-                                              (pesertaUjian?.NilaiF1B2 || 0)) /
-                                            2
-                                          ).toFixed(2)
-                                        : (
-                                            ((pesertaUjian?.NilaiF1B1 || 0) +
-                                              (pesertaUjian?.NilaiF1B2 || 0) +
-                                              (pesertaUjian?.NilaiF1B3 || 0)) /
-                                            3
-                                          ).toFixed(2)}
-                                      {}
+                                      {(() => {
+                                        const isAnkapinOrAtkapin =
+                                          dataUjian[0]?.TypeUjian ===
+                                            "ANKAPIN II" ||
+                                          dataUjian[0]?.TypeUjian ===
+                                            "ATKAPIN II";
+
+                                        return isAnkapinOrAtkapin
+                                          ? (
+                                              ((pesertaUjian?.NilaiF1B1 || 0) +
+                                                (pesertaUjian?.NilaiF1B2 ||
+                                                  0)) /
+                                              2
+                                            ).toFixed(2)
+                                          : (
+                                              ((pesertaUjian?.NilaiF1B1 || 0) +
+                                                (pesertaUjian?.NilaiF1B2 || 0) +
+                                                (pesertaUjian?.NilaiF1B3 ||
+                                                  0)) /
+                                              3
+                                            ).toFixed(2);
+                                      })()}
                                     </span>
                                   </div>
+
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
                                       (pesertaUjian?.NilaiF2B1 || 0) < 65
