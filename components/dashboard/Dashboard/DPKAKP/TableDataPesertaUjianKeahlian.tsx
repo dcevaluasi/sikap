@@ -1841,8 +1841,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF1B2 || 0)) /
                                         2 <
                                         65
-                                        ? "text-rose-500"
-                                        : "text-green-500"
+                                        ? "text-green-500"
+                                        : "text-rose-500"
                                     }`}
                                   >
                                     <span>
