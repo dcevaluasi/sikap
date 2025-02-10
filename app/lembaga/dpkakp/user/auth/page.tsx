@@ -14,18 +14,22 @@ function page() {
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
 
+  const [isAccessingCode, setIsAccessingCode] = React.useState<boolean>(false);
+
   const handleClearFormLoginAdminDPKAKP = async () => {
     setEmail("");
     setPassword("");
   };
 
   const handleLoginAdminDPKAKP = async (e: any) => {
+    setIsAccessingCode(true);
     if (password == "") {
       Toast.fire({
         icon: "error",
         title: `Oopss!`,
         text: "Maaf, masukkan kode akses terlebih dahulu sebelum memulai ujian!",
       });
+      setIsAccessingCode(false);
       return;
     } else {
       try {
@@ -43,6 +47,7 @@ function page() {
           });
           await handleClearFormLoginAdminDPKAKP();
           Cookies.set("XSRF096", response?.data?.t);
+          setIsAccessingCode(false);
           router.replace("/lembaga/dpkakp/user/auth/guide");
         } else {
           Toast.fire({
@@ -51,6 +56,7 @@ function page() {
             text: response.statusText,
           });
 
+          setIsAccessingCode(false);
           await handleClearFormLoginAdminDPKAKP();
         }
       } catch (e) {
@@ -61,6 +67,7 @@ function page() {
               title: "Oopss!",
               text: `Unauthorized, ${e.response?.data.pesan}!`,
             });
+            setIsAccessingCode(false);
             await handleClearFormLoginAdminDPKAKP();
           } else {
             Toast.fire({
@@ -68,6 +75,7 @@ function page() {
               title: "Oopss!",
               text: `${e.response?.data.Pesan}!`,
             });
+            setIsAccessingCode(false);
             await handleClearFormLoginAdminDPKAKP();
           }
         } else {
@@ -75,6 +83,7 @@ function page() {
             icon: "error",
             title: `${e}!`,
           });
+          setIsAccessingCode(false);
           await handleClearFormLoginAdminDPKAKP();
         }
       }
@@ -133,33 +142,46 @@ function page() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <button
-              onClick={(e) => handleLoginAdminDPKAKP(e)}
-              className="text-white w-full bg-blue-500 rounded-xl bg-opacity-100 py-2 mt-2"
-            >
-              Mulai Ujian
-            </button>
-
-            <div className="flex items-center mt-6">
-              <div
-                className="border-t border-gray-300 grow mr-3"
-                aria-hidden="true"
-              ></div>
-              <div
-                className="border-t border-gray-300 grow ml-3"
-                aria-hidden="true"
-              ></div>
-            </div>
-            <div className="text-gray-200 text-center mt-6">
-              Dalam meningkatkan layanan pelaksanaan ujian keahlian silahkan
-              mengisi{" "}
-              <Link
-                href="/registrasi"
-                className="text-blue-500 hover:underline transition duration-150 ease-in-out"
+            {isAccessingCode ? (
+              <button
+                disabled={true}
+                className="text-white w-full  bg-blue-500 rounded-xl bg-opacity-80 py-2 mt-2"
               >
-                survey berikut
-              </Link>{" "}
-            </div>
+                Loading...
+              </button>
+            ) : (
+              <button
+                onClick={(e) => handleLoginAdminDPKAKP(e)}
+                className="text-white w-full bg-blue-500 rounded-xl bg-opacity-100 py-2 mt-2"
+              >
+                Mulai Ujian
+              </button>
+            )}
+
+            {!isAccessingCode && (
+              <>
+                <div className="flex items-center mt-6">
+                  <div
+                    className="border-t border-gray-300 grow mr-3"
+                    aria-hidden="true"
+                  ></div>
+                  <div
+                    className="border-t border-gray-300 grow ml-3"
+                    aria-hidden="true"
+                  ></div>
+                </div>
+                <div className="text-gray-200 text-center mt-6">
+                  Dalam meningkatkan layanan pelaksanaan ujian keahlian silahkan
+                  mengisi{" "}
+                  <Link
+                    href="/lembaga/dpkakp/user/survey"
+                    className="text-blue-500 hover:underline transition duration-150 ease-in-out"
+                  >
+                    survey berikut
+                  </Link>{" "}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>
