@@ -1836,9 +1836,13 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF1B2 || 0) +
                                         (pesertaUjian?.NilaiF1B3 || 0)) /
                                         3 <
-                                      65
+                                        65 ||
+                                      ((pesertaUjian?.NilaiF1B1 || 0) +
+                                        (pesertaUjian?.NilaiF1B2 || 0)) /
+                                        2 <
+                                        65
                                         ? "text-rose-500"
-                                        : "text-black"
+                                        : "text-green-500"
                                     }`}
                                   >
                                     <span>
