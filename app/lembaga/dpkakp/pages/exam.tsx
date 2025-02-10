@@ -453,7 +453,7 @@ function Exam() {
               />
             </div>
           </div>
-          {loading ? (
+          {loading || data == null ? (
             <SkeletonDataSoal />
           ) : (
             <section className="w-full  container flex items-center justify-center text-white relative z-50 h-full">
@@ -615,54 +615,56 @@ function Exam() {
             </section>
           )}
         </section>
-        <section className="h-full text-white w-1/3 py-20 z-0 hidden md:block">
-          <div className="flex flex-col gap-3 h-full">
-            <div className="flex flex-col  gap-0 items-start">
-              <h1 className="font-bold text-gray-200 text-sm md:text-xl max-w-xs md:max-w-md leading-[95%] mb-5 mt-2 text-left">
-                {data?.Ujian} <br />{" "}
-                <span className="font-normal text-xs md:text-base text-white leading-[90%]">
-                  {data?.Fungsi}
-                </span>{" "}
-                <br />
-                <span className="font-normal text-xs md:text-base text-white leading-[90%]">
-                  Tipe Soal : {data?.Bagian}
-                </span>
-                <br />
-                <span className="font-normal text-xs md:text-base text-white leading-[90%]">
-                  Jumlah Soal : {data?.jumlah} Soal
-                </span>
-                <br />
-                <span className="font-normal text-xs md:text-base text-white leading-[90%]">
-                  Waktu Pelaksanaan : {data?.waktu!} Menit
-                </span>
-              </h1>
-              <Timer countdownMinutes={data?.waktu!} />
-            </div>
-            <div className="grid grid-cols-6 grid-rows-6 space-x-0 space-y-0 gap-2">
-              {data?.Soal!.map((soal, index) => (
-                <div
-                  key={index}
-                  onClick={(e) => setSelectedIdSoal(index)}
-                  className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${
-                    selectedAnswers[index]!.jawaban_pengguna! != ""
-                      ? "bg-green-500 text-white bg-opacity-70"
-                      : "bg-blue-500 bg-opacity-30"
-                  } rounded-lg duration-700 `}
-                >
-                  <span
-                    className={`text-2xl font-semibold  ${
-                      selectedAnswers[index] != null
-                        ? " text-white"
-                        : "text-[#a5b4fc]"
-                    }`}
-                  >
-                    {index + 1}
+        {data != null && (
+          <section className="h-full text-white w-1/3 py-20 z-0 hidden md:block">
+            <div className="flex flex-col gap-3 h-full">
+              <div className="flex flex-col  gap-0 items-start">
+                <h1 className="font-bold text-gray-200 text-sm md:text-xl max-w-xs md:max-w-md leading-[95%] mb-5 mt-2 text-left">
+                  {data?.Ujian} <br />{" "}
+                  <span className="font-normal text-xs md:text-base text-white leading-[90%]">
+                    {data?.Fungsi}
+                  </span>{" "}
+                  <br />
+                  <span className="font-normal text-xs md:text-base text-white leading-[90%]">
+                    Tipe Soal : {data?.Bagian}
                   </span>
-                </div>
-              ))}
+                  <br />
+                  <span className="font-normal text-xs md:text-base text-white leading-[90%]">
+                    Jumlah Soal : {data?.jumlah} Soal
+                  </span>
+                  <br />
+                  <span className="font-normal text-xs md:text-base text-white leading-[90%]">
+                    Waktu Pelaksanaan : {data?.waktu!} Menit
+                  </span>
+                </h1>
+                <Timer countdownMinutes={data?.waktu!} />
+              </div>
+              <div className="grid grid-cols-6 grid-rows-6 space-x-0 space-y-0 gap-2">
+                {data?.Soal!.map((soal, index) => (
+                  <div
+                    key={index}
+                    onClick={(e) => setSelectedIdSoal(index)}
+                    className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${
+                      selectedAnswers[index]!.jawaban_pengguna! != ""
+                        ? "bg-green-500 text-white bg-opacity-70"
+                        : "bg-blue-500 bg-opacity-30"
+                    } rounded-lg duration-700 `}
+                  >
+                    <span
+                      className={`text-2xl font-semibold  ${
+                        selectedAnswers[index] != null
+                          ? " text-white"
+                          : "text-[#a5b4fc]"
+                      }`}
+                    >
+                      {index + 1}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </div>
     </main>
   );
