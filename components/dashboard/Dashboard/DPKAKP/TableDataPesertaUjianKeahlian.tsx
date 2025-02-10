@@ -134,26 +134,29 @@ const TableDataPesertaUjianKeahlian = () => {
 
   const handlePrintRekapitulasiNilai = async () => {
     const element = printRefRekapitulasiNilai.current;
-    const canvas = await html2canvas(element!, { scale: 3 }); // Gunakan skala tinggi untuk kualitas yang lebih tajam
+
+    if (!element) return;
+
+    // Tangkap elemen sebagai gambar dengan skala lebih kecil agar muat di satu halaman
+    const canvas = await html2canvas(element, { scale: 2 });
+
     const imgData = canvas.toDataURL("image/png");
 
     const pdf = new jsPDF("p", "mm", "a4");
-    const imgWidth = 190; // Lebar gambar dalam mm (A4: 210mm - margin)
+    const pageWidth = 210; // Lebar halaman A4 dalam mm
     const pageHeight = 297; // Tinggi halaman A4 dalam mm
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    const margin = 10; // Margin dalam mm
 
-    let yPosition = 10; // Mulai dari atas dengan margin
-    let remainingHeight = imgHeight;
+    let imgWidth = pageWidth - 2 * margin; // Sesuaikan dengan margin
+    let imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    while (remainingHeight > 0) {
-      pdf.addImage(imgData, "PNG", 10, yPosition, imgWidth, imgHeight);
-      remainingHeight -= pageHeight - 20; // Kurangi tinggi yang sudah digunakan
-
-      if (remainingHeight > 0) {
-        pdf.addPage(); // Tambahkan halaman baru jika masih ada konten
-        yPosition = 10; // Reset posisi ke atas untuk halaman baru
-      }
+    // Jika gambar lebih tinggi dari halaman, skala turun
+    if (imgHeight > pageHeight - 2 * margin) {
+      imgHeight = pageHeight - 2 * margin;
+      imgWidth = (canvas.width * imgHeight) / canvas.height;
     }
+
+    pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight);
 
     pdf.save(
       `Rekapitulasi_Hasil_Ujian_${dataUjian[0]?.NamaUjian || "Tanpa_Nama"}.pdf`
