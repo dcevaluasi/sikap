@@ -1849,8 +1849,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                           3;
 
                                       return averageScore < 65
-                                        ? "text-rose-500"
-                                        : "text-green-500";
+                                        ? "text-green-500"
+                                        : "text-rose-500";
                                     })()}`}
                                   >
                                     <span>
@@ -1883,7 +1883,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
                                       (pesertaUjian?.NilaiF2B1 || 0) < 65
                                         ? "text-rose-500"
-                                        : "text-black"
+                                        : "text-green-500"
                                     }`}
                                   >
                                     <span>{pesertaUjian?.NilaiF2B1 || 0}</span>
@@ -1913,7 +1913,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         2 <
                                       65
                                         ? "text-rose-500"
-                                        : "text-black"
+                                        : "text-green-500"
                                     }`}
                                   >
                                     <span>
@@ -1935,7 +1935,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         3 <
                                       65
                                       ? "text-rose-500"
-                                      : "text-black"
+                                      : "text-green-500"
                                     : ((pesertaUjian?.NilaiF1B1 || 0) +
                                         (pesertaUjian?.NilaiF1B2 || 0) +
                                         (pesertaUjian?.NilaiF1B3 || 0) +
@@ -1945,7 +1945,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         6 <
                                       65
                                     ? "text-rose-500"
-                                    : "text-black"
+                                    : "text-green-500"
                                 }`}
                               >
                                 <span>
