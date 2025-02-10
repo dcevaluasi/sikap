@@ -68,6 +68,7 @@ import {
   IoIosBook,
   IoIosInformationCircle,
   IoMdBook,
+  IoMdClock,
   IoMdGlobe,
   IoMdSchool,
 } from "react-icons/io";
@@ -719,8 +720,6 @@ const TableDataUjian: React.FC = () => {
     setSelectedIdUjian(0);
   };
 
-  console.log({ selectedStatusFilter });
-
   // EDIT UJIAN
   const [selectedIdUjian, setSelectedIdUjian] = React.useState<number>(0);
   const [selectedUjian, setSelectedUjian] = React.useState<Ujian | null>(null);
@@ -1276,38 +1275,129 @@ const TableDataUjian: React.FC = () => {
                               </Button>
                             )}
 
-                          {usePathname().includes("pukakp") && (
-                            <Button
-                              onClick={(e) => {
-                                setSelectedIdUjian(ujian!.IdUjian);
-
-                                setOpenFormRemedial(!openFormRemedial);
-                              }}
-                              variant="outline"
-                              className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md"
-                            >
-                              <IoReload className="h-4 w-4 mr-1" /> Remedial
-                            </Button>
-                          )}
-
-                          {usePathname().includes("dpkakp") &&
-                            ujian!.Status == "Aktif" &&
-                            ujian!.NamaPengawasUjian == "" && (
+                          {usePathname().includes("pukakp") &&
+                            ujian!.Status === "Aktif" && (
                               <Button
                                 onClick={(e) => {
-                                  setSelectedId(ujian!.IdUjian);
-                                  setStatus(ujian!.Status);
-                                  setIsOpenFormUjianKeahlian(
-                                    !isOpenFormUjianKeahlian
-                                  );
+                                  setSelectedIdUjian(ujian!.IdUjian);
+
+                                  setOpenFormRemedial(!openFormRemedial);
                                 }}
                                 variant="outline"
-                                className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200"
+                                className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md"
                               >
-                                <TbEditCircle className="h-5 w-5 mr-1" />
-                                Pilih Penguji
+                                <IoReload className="h-4 w-4 mr-1" /> Remedial
                               </Button>
                             )}
+
+                          {ujian!.Status === "Aktif" && (
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  variant="outline"
+                                  className="bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-fit"
+                                >
+                                  <IoMdClock className="h-4 w-4 text-lg " />{" "}
+                                  Waktu Ujian
+                                </Button>
+                              </AlertDialogTrigger>
+                              <AlertDialogContent className="max-w-xl">
+                                <AlertDialogHeader>
+                                  <div className="flex flex-col">
+                                    <AlertDialogTitle>
+                                      Daftar Waktu Pelaksanaan
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                      Berikut merupakan waktu pelaksanaan dari
+                                      setiap fungsi dan bagian!
+                                    </AlertDialogDescription>
+                                  </div>
+                                </AlertDialogHeader>
+
+                                <div className="w-full text-sm grid grid-cols-3 gap-4">
+                                  {data!.length > 0 ? (
+                                    <>
+                                      {data[0]!.TypeUjian.includes(
+                                        "Rewarding"
+                                      ) ? (
+                                        <>
+                                          <div className="font-bold text-center border border-gray-200 p-2">
+                                            F1
+                                          </div>
+                                          <div className="font-bold text-center border border-gray-200 p-2">
+                                            F2
+                                          </div>
+                                          <div className="font-bold text-center border border-gray-200 p-2">
+                                            F3
+                                          </div>
+
+                                          <div className="border border-gray-200 p-2 text-center">
+                                            {ujian!.WaktuF1}
+                                          </div>
+                                          <div className="border border-gray-200 p-2 text-center">
+                                            {ujian!.WaktuF2}
+                                          </div>
+                                          <div className="border border-gray-200 p-2 text-center">
+                                            {ujian!.WaktuF3}
+                                          </div>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <div className="font-bold text-center border border-gray-200 p-2">
+                                            F1B1
+                                          </div>
+                                          <div className="font-bold text-center border border-gray-200 p-2">
+                                            F1B2
+                                          </div>
+                                          <div className="font-bold text-center border border-gray-200 p-2">
+                                            F1B3
+                                          </div>
+
+                                          <div className="border border-gray-200 p-2 text-center">
+                                            {ujian!.WaktuF1B1}
+                                          </div>
+                                          <div className="border border-gray-200 p-2 text-center">
+                                            {ujian!.WaktuF1B2}
+                                          </div>
+                                          <div className="border border-gray-200 p-2 text-center">
+                                            {ujian!.WaktuF1B3}
+                                          </div>
+
+                                          <div className="font-bold text-center border border-gray-200 p-2">
+                                            F2B1
+                                          </div>
+                                          <div className="font-bold text-center border border-gray-200 p-2">
+                                            F3B1
+                                          </div>
+                                          <div className="font-bold text-center border border-gray-200 p-2">
+                                            F3B2
+                                          </div>
+
+                                          <div className="border border-gray-200 p-2 text-center">
+                                            {ujian!.WaktuF2B1}
+                                          </div>
+                                          <div className="border border-gray-200 p-2 text-center">
+                                            {ujian!.WaktuF3B1}
+                                          </div>
+                                          <div className="border border-gray-200 p-2 text-center">
+                                            {ujian!.WaktuF3B2}
+                                          </div>
+                                        </>
+                                      )}
+                                    </>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </div>
+
+                                <AlertDialogFooter>
+                                  <AlertDialogCancel className="bg-gray-900 text-white hover:bg-gray-800 hover:text-white">
+                                    Tutup
+                                  </AlertDialogCancel>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          )}
                         </div>
                       </CardFooter>
                     </Card>

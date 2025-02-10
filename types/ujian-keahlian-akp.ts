@@ -73,6 +73,15 @@ export type Ujian = {
   WaktuUjian: string
   JumlahPesertaUjian: number
   Status: string
+  WaktuF1B1: string;
+  WaktuF1B2: string;
+  WaktuF1B3: string;
+  WaktuF1: string;
+  WaktuF2: string;
+  WaktuF2B1: string;
+  WaktuF3: string;
+  WaktuF3B1: string;
+  WaktuF3B2: string;
   CreateAt: string
   UpdateAt: string
   FilePermohonan: string;
