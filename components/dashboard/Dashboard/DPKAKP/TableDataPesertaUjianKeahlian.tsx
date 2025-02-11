@@ -161,6 +161,57 @@ const TableDataPesertaUjianKeahlian = () => {
     return "LULUS";
   }
 
+  function countLulus(
+    usersUjian: UsersUjian[],
+    ujian: Ujian
+  ): { lulus: number; tidakLulus: number } {
+    let lulusCount = 0;
+    let tidakLulusCount = 0;
+
+    usersUjian.forEach((userUjian) => {
+      let scores: number[] = [];
+
+      if (ujian.TypeUjian == "ANKAPIN II" || ujian.TypeUjian === "ATKAPIN II") {
+        scores = [
+          userUjian.NilaiF1B1,
+          userUjian.NilaiF1B2,
+          userUjian.NilaiF2B1,
+          userUjian.NilaiF3B1,
+          userUjian.NilaiF3B2,
+        ];
+      } else {
+        scores = [
+          userUjian.NilaiF1B1,
+          userUjian.NilaiF1B2,
+          userUjian.NilaiF1B3,
+          userUjian.NilaiF2B1,
+          userUjian.NilaiF3B1,
+          userUjian.NilaiF3B2,
+        ];
+      }
+
+      // Check if all scores are numbers and if any score is less than 50
+      let isLulus = true;
+      for (let score of scores) {
+        if (score == null || isNaN(score) || score < 50) {
+          isLulus = false;
+          break; // Exit early as we already know the student failed
+        }
+      }
+
+      if (isLulus) {
+        lulusCount++;
+      } else {
+        tidakLulusCount++;
+      }
+    });
+
+    return {
+      lulus: lulusCount,
+      tidakLulus: tidakLulusCount,
+    };
+  }
+
   const [showRekapitulasiNilai, setShowRekapitulasiNilai] =
     React.useState<boolean>(false);
   const printRefRekapitulasiNilai = React.useRef<HTMLDivElement>(null);
@@ -2187,17 +2238,13 @@ const TableDataPesertaUjianKeahlian = () => {
                           <p className="text-sm font-semibold tracking-tight  ">
                             Lulus (L){"     "}: {"          "}{" "}
                             <span className="font-normal">
-                              {calculateResults(dataUjian, data).lulusCount}{" "}
-                              Orang
+                              {countLulus(data, dataUjian[0]).lulus} Orang
                             </span>
                           </p>
                           <p className="text-sm font-semibold tracking-tight  ">
                             Tidak Lulus (TL){"     "}: {"          "}{" "}
                             <span className="font-normal">
-                              {
-                                calculateResults(dataUjian, data)
-                                  .tidakLulusCount
-                              }{" "}
+                              {countLulus(data, dataUjian[0]).tidakLulus}{" "}
                               Orang
                             </span>
                           </p>
