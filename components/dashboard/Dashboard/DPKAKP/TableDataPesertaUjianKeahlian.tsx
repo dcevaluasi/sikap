@@ -1020,12 +1020,22 @@ const TableDataPesertaUjianKeahlian = () => {
 
     pesertaUjianList.forEach((pesertaUjian) => {
       const isRewarding = dataUjian[0]?.TypeUjian.includes("Rewarding");
+      const isTingkatII =
+        dataUjian[0]?.TypeUjian == "ANKAPIN II" ||
+        dataUjian[0]?.TypeUjian == "ATKAPIN II";
 
       const averageScore = isRewarding
         ? ((pesertaUjian?.NilaiF1B1 || 0) +
             (pesertaUjian?.NilaiF2B1 || 0) +
             (pesertaUjian?.NilaiF3B1 || 0)) /
           3
+        : isTingkatII
+        ? ((pesertaUjian?.NilaiF1B1 || 0) +
+            (pesertaUjian?.NilaiF1B2 || 0) +
+            (pesertaUjian?.NilaiF2B1 || 0) +
+            (pesertaUjian?.NilaiF3B1 || 0) +
+            (pesertaUjian?.NilaiF3B2 || 0)) /
+          5
         : ((pesertaUjian?.NilaiF1B1 || 0) +
             (pesertaUjian?.NilaiF1B2 || 0) +
             (pesertaUjian?.NilaiF1B3 || 0) +
@@ -1034,7 +1044,7 @@ const TableDataPesertaUjianKeahlian = () => {
             (pesertaUjian?.NilaiF3B2 || 0)) /
           6;
 
-      if (averageScore > 50) {
+      if (averageScore >= 50) {
         lulusCount++;
       } else {
         tidakLulusCount++;
@@ -2070,7 +2080,7 @@ const TableDataPesertaUjianKeahlian = () => {
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 text-center">
                                 <span
-                                  className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                  className={` ${
                                     dataUjian[0]!.TypeUjian.includes(
                                       "Rewarding"
                                     )
@@ -2089,10 +2099,10 @@ const TableDataPesertaUjianKeahlian = () => {
                                           (pesertaUjian?.NilaiF2B1 || 0) +
                                           (pesertaUjian?.NilaiF3B1 || 0) +
                                           (pesertaUjian?.NilaiF3B2 || 0)) /
-                                          5 <
-                                        50
-                                        ? "text-rose-500"
-                                        : "text-green-500"
+                                          5 >=
+                                        50.0
+                                        ? "text-green-500"
+                                        : "text-rose-500"
                                       : ((pesertaUjian?.NilaiF1B1 || 0) +
                                           (pesertaUjian?.NilaiF1B2 || 0) +
                                           (pesertaUjian?.NilaiF1B3 || 0) +
@@ -2109,7 +2119,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     ? ((pesertaUjian?.NilaiF1B1 || 0) +
                                         (pesertaUjian?.NilaiF2B1 || 0) +
                                         (pesertaUjian?.NilaiF3B1 || 0)) /
-                                        3 >
+                                        3 >=
                                       50
                                       ? "LULUS"
                                       : "TIDAK LULUS"
@@ -2120,7 +2130,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF2B1 || 0) +
                                         (pesertaUjian?.NilaiF3B1 || 0) +
                                         (pesertaUjian?.NilaiF3B2 || 0)) /
-                                        5 >
+                                        5 >=
                                       50
                                       ? "LULUS"
                                       : "TIDAK LULUS"
@@ -2130,7 +2140,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF2B1 || 0) +
                                         (pesertaUjian?.NilaiF3B1 || 0) +
                                         (pesertaUjian?.NilaiF3B2 || 0)) /
-                                        6 >
+                                        6 >=
                                       50
                                     ? "LULUS"
                                     : "TIDAK LULUS"}
