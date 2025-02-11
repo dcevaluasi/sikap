@@ -1019,45 +1019,62 @@ const TableDataPesertaUjianKeahlian = () => {
             6
           ).toFixed(2),
       "Nilai Komprehensif": pesertaUjian?.NilaiKomprensif || 0,
-      "LULUS/TDK LULUS": isRewarding
-        ? ((pesertaUjian?.NilaiF1B1 || 0) +
-            (pesertaUjian?.NilaiF2B1 || 0) +
-            (pesertaUjian?.NilaiF3B1 || 0)) /
-            3 >=
-          50
-          ? "LULUS"
-          : "TIDAK LULUS"
-        : isTingkatII
-        ? ((pesertaUjian?.NilaiF1B1 || 0) +
-            (pesertaUjian?.NilaiF1B2 || 0) +
-            (pesertaUjian?.NilaiF2B1 || 0) +
-            (pesertaUjian?.NilaiF3B1 || 0) +
-            (pesertaUjian?.NilaiF3B2 || 0)) /
-            5 >=
-          50
-          ? "LULUS"
-          : "TIDAK LULUS"
-        : ((pesertaUjian?.NilaiF1B1 || 0) +
-            (pesertaUjian?.NilaiF1B2 || 0) +
-            (pesertaUjian?.NilaiF1B3 || 0) +
-            (pesertaUjian?.NilaiF2B1 || 0) +
-            (pesertaUjian?.NilaiF3B1 || 0) +
-            (pesertaUjian?.NilaiF3B2 || 0)) /
-            6 >=
-          50
-        ? "LULUS"
-        : "TIDAK LULUS",
+      "LULUS/TDK LULUS": checkLulus(pesertaUjian, dataUjian[0]),
     }));
 
     // Membuat worksheet dari data
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
 
-    // Membuat workbook dan menambahkan worksheet
+    // Add red cell background color for each value < 50 in the specified columns
+    const columnsToCheck = [
+      "Nilai F1B1",
+      "Nilai F1B2",
+      "Nilai F1B3",
+      "Total F1",
+      "Nilai F2",
+      "Nilai F3B1",
+      "Nilai F3B2",
+      "Total F3",
+      "Nilai Kumulatif",
+      "Nilai Komprehensif",
+    ];
+
+    // Get the range of the sheet
+    const range = worksheet["!ref"];
+    const rows = XLSX.utils.decode_range(range!);
+
+    // Loop through each cell in the columns to check if the value is < 50
+    for (let row = rows.s.r; row <= rows.e.r; row++) {
+      for (let col = rows.s.c; col <= rows.e.c; col++) {
+        const cell = worksheet[XLSX.utils.encode_cell({ r: row, c: col })];
+
+        // Check if the column is in the columnsToCheck array
+        const columnName = Object.keys(formattedData[0])[col];
+        if (columnsToCheck.includes(columnName)) {
+          // If the value is less than 50, apply a red background
+          if (cell && !isNaN(cell.v) && cell.v < 50) {
+            if (!cell.s) cell.s = {}; // Create style if not already present
+            cell.s.fill = {
+              fgColor: { rgb: "FF0000" }, // Red background color
+            };
+          }
+        }
+      }
+    }
+
+    // Membuat workbook dan menambahkan worksheet dengan nama yang baru
     const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "Rekapitulasi Nilai Lengkap"
+    );
 
     // Menyimpan file Excel
-    XLSX.writeFile(workbook, "DataUjian.xlsx");
+    XLSX.writeFile(
+      workbook,
+      `Rekapitulasi_Nilai_${dataUjian[0]!.TypeUjian}.xlsx`
+    );
   };
 
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
@@ -2244,8 +2261,7 @@ const TableDataPesertaUjianKeahlian = () => {
                           <p className="text-sm font-semibold tracking-tight  ">
                             Tidak Lulus (TL){"     "}: {"          "}{" "}
                             <span className="font-normal">
-                              {countLulus(data, dataUjian[0]).tidakLulus}{" "}
-                              Orang
+                              {countLulus(data, dataUjian[0]).tidakLulus} Orang
                             </span>
                           </p>
                         </div>

@@ -7,12 +7,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import { HiOutlineEyeOff } from "react-icons/hi";
+import { HiOutlineEye } from "react-icons/hi2";
 
 function page() {
   const router = useRouter();
 
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
+
+  // Showing Code Access
+  const [isShowCode, setIsShowCode] = React.useState<boolean>(false);
 
   const [isAccessingCode, setIsAccessingCode] = React.useState<boolean>(false);
 
@@ -132,13 +137,22 @@ function page() {
             <p className="font-jakarta  leading-[100%] text-gray-300  sm:text-sm sm:leading-8 -mt-4">
               Kode Ujian
             </p>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className=" active:ring-blue-500 focus:ring-blue-500 active:outline-blue-500 mt-2 border rounded-xl text-white border-blue-500 bg-transparent w-full placeholder:text-white"
-              placeholder="Masukkan kode akses"
-            />
+            <span className="relative w-full h-fit mt-2">
+              <input
+                type={isShowCode ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className=" active:ring-blue-500 focus:ring-blue-500 active:outline-blue-500  border rounded-xl text-white border-blue-500 bg-transparent w-full placeholder:text-white"
+                placeholder="Masukkan kode akses"
+              />
+              <span onClick={(e) => setIsShowCode(!isShowCode)}>
+                {isShowCode ? (
+                  <HiOutlineEyeOff className="text-gray-200 my-auto top-3  mr-5 absolute right-0 text-xl cursor-pointer" />
+                ) : (
+                  <HiOutlineEye className="text-gray-200 my-auto top-3  mr-5 absolute right-0 text-xl cursor-pointer" />
+                )}
+              </span>
+            </span>
           </div>
 
           <div className="flex flex-col gap-1">
