@@ -18,7 +18,8 @@ import {
   SelectValue,
   SelectLabel,
 } from "@/components/ui/select";
-import { HiMiniUserGroup } from "react-icons/hi2";
+import { HiMiniUserGroup, HiOutlineEye } from "react-icons/hi2";
+import { HiOutlineEyeOff } from "react-icons/hi";
 
 function page() {
   const router = useRouter();
@@ -26,6 +27,9 @@ function page() {
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
   const [role, setRole] = React.useState<string>("");
+
+  // Showing Password
+  const [isShowPassword, setIsShowPassword] = React.useState<boolean>(false);
 
   const handleClearFormLoginAdminDPKAKP = async () => {
     setEmail("");
@@ -65,7 +69,7 @@ function page() {
         if (response.status == 200) {
           Toast.fire({
             icon: "success",
-            title: 'Yeayyy!',
+            title: "Yeayyy!",
             text: `Berhasil login, silahkan menggunakan layanan admin DPKAKP!`,
           });
           await handleClearFormLoginAdminDPKAKP();
@@ -93,14 +97,14 @@ function page() {
           if (e.response?.status == 401) {
             Toast.fire({
               icon: "error",
-              title: 'Oopsss!',
+              title: "Oopsss!",
               text: `Unauthorized, ${e.response?.data.pesan}!`,
             });
             await handleClearFormLoginAdminDPKAKP();
           } else {
             Toast.fire({
               icon: "error",
-              title: 'Oopsss!',
+              title: "Oopsss!",
               text: `${e.response?.data.pesan}!`,
             });
             await handleClearFormLoginAdminDPKAKP();
@@ -108,7 +112,7 @@ function page() {
         } else {
           Toast.fire({
             icon: "error",
-            title: 'Oopsss!',
+            title: "Oopsss!",
             text: `${e}!`,
           });
           await handleClearFormLoginAdminDPKAKP();
@@ -144,7 +148,7 @@ function page() {
             alt="DPKAKP Logo"
           />
           <h1 className="font-bold  font-calsans text-gray-200 text-4xl -mt-4">
-            Login {" "}
+            Login{" "}
             <span className=" bg-clip-text text-transparent bg-gradient-to-r leading-none pt-0 from-blue-500 to-teal-400">
               SIKAP
             </span>
@@ -171,13 +175,22 @@ function page() {
             <p className="font-jakarta  leading-[100%] text-gray-300  sm:text-sm sm:leading-8 ">
               Password
             </p>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className=" active:ring-blue-500 focus:ring-blue-500 active:outline-blue-500 border rounded-xl text-white border-blue-500 bg-transparent w-full placeholder:text-white"
-              placeholder="Enter your password"
-            />
+            <span className="relative w-full h-fit mt-2">
+              <input
+                type={isShowPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className=" active:ring-blue-500 focus:ring-blue-500 active:outline-blue-500  border rounded-xl text-white border-blue-500 bg-transparent w-full placeholder:text-white"
+                placeholder="Masukkan kode akses"
+              />
+              <span onClick={(e) => setIsShowPassword(!isShowPassword)}>
+                {isShowPassword ? (
+                  <HiOutlineEyeOff className="text-gray-200 my-auto top-3  mr-5 absolute right-0 text-xl cursor-pointer" />
+                ) : (
+                  <HiOutlineEye className="text-gray-200 my-auto top-3  mr-5 absolute right-0 text-xl cursor-pointer" />
+                )}
+              </span>
+            </span>
           </div>
           <div className="flex flex-col gap-1">
             <p className="font-jakarta  leading-[100%] text-gray-300  sm:text-sm sm:leading-8 ">
@@ -194,8 +207,8 @@ function page() {
                     ? role == "dpkakp"
                       ? "DPKAKP"
                       : role == "pukakp"
-                        ? "PUKAKP"
-                        : "Penguji"
+                      ? "PUKAKP"
+                      : "Penguji"
                     : "Pilih Role"}
                 </p>
               </SelectTrigger>

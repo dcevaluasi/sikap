@@ -111,6 +111,7 @@ import { DewanPenguji } from "@/types/dewanPenguji";
 import { TypeUjian, Ujian } from "@/types/ujian-keahlian-akp";
 import { BiPaperPlane } from "react-icons/bi";
 import { IoReload } from "react-icons/io5";
+import { formatIndonesianDate } from "@/lib/utils";
 
 const TableDataUjian: React.FC = () => {
   const [data, setData] = React.useState<Ujian[]>([]);
@@ -1288,11 +1289,12 @@ const TableDataUjian: React.FC = () => {
                                   Waktu Ujian
                                 </Button>
                               </AlertDialogTrigger>
-                              <AlertDialogContent className="max-w-xl">
+                              <AlertDialogContent className="max-w-2xl">
                                 <AlertDialogHeader>
-                                  <div className="flex flex-col">
-                                    <AlertDialogTitle>
-                                      Daftar Waktu Pelaksanaan
+                                  <div className="flex flex-col w-full items-center justify-center">
+                                    <AlertDialogTitle className="text-center leading-none">
+                                      Daftar Waktu Pelaksanaan{" "}
+                                      {ujian!.TypeUjian} di {ujian!.PUKAKP}
                                     </AlertDialogTitle>
                                     <AlertDialogDescription>
                                       Berikut merupakan waktu pelaksanaan dari
@@ -1300,86 +1302,9 @@ const TableDataUjian: React.FC = () => {
                                     </AlertDialogDescription>
                                   </div>
                                 </AlertDialogHeader>
-
-                                <div className="w-full text-sm grid grid-cols-3 gap-4">
-                                  {data!.length > 0 ? (
-                                    <>
-                                      {data[0]!.TypeUjian.includes(
-                                        "Rewarding"
-                                      ) ? (
-                                        <>
-                                          <div className="font-bold text-center border border-gray-200 p-2">
-                                            F1
-                                          </div>
-                                          <div className="font-bold text-center border border-gray-200 p-2">
-                                            F2
-                                          </div>
-                                          <div className="font-bold text-center border border-gray-200 p-2">
-                                            F3
-                                          </div>
-
-                                          <div className="border border-gray-200 p-2 text-center">
-                                            {ujian!.WaktuF1}
-                                          </div>
-                                          <div className="border border-gray-200 p-2 text-center">
-                                            {ujian!.WaktuF2}
-                                          </div>
-                                          <div className="border border-gray-200 p-2 text-center">
-                                            {ujian!.WaktuF3}
-                                          </div>
-                                        </>
-                                      ) : (
-                                        <>
-                                          <div className="font-bold text-center border border-gray-200 p-2">
-                                            F1B1
-                                          </div>
-                                          <div className="font-bold text-center border border-gray-200 p-2">
-                                            F1B2
-                                          </div>
-                                          <div className="font-bold text-center border border-gray-200 p-2">
-                                            F1B3
-                                          </div>
-
-                                          <div className="border border-gray-200 p-2 text-center">
-                                            {ujian!.WaktuF1B1}
-                                          </div>
-                                          <div className="border border-gray-200 p-2 text-center">
-                                            {ujian!.WaktuF1B2}
-                                          </div>
-                                          <div className="border border-gray-200 p-2 text-center">
-                                            {ujian!.WaktuF1B3}
-                                          </div>
-
-                                          <div className="font-bold text-center border border-gray-200 p-2">
-                                            F2B1
-                                          </div>
-                                          <div className="font-bold text-center border border-gray-200 p-2">
-                                            F3B1
-                                          </div>
-                                          <div className="font-bold text-center border border-gray-200 p-2">
-                                            F3B2
-                                          </div>
-
-                                          <div className="border border-gray-200 p-2 text-center">
-                                            {ujian!.WaktuF2B1}
-                                          </div>
-                                          <div className="border border-gray-200 p-2 text-center">
-                                            {ujian!.WaktuF3B1}
-                                          </div>
-                                          <div className="border border-gray-200 p-2 text-center">
-                                            {ujian!.WaktuF3B2}
-                                          </div>
-                                        </>
-                                      )}
-                                    </>
-                                  ) : (
-                                    <></>
-                                  )}
-                                  \
-                                </div>
-
+                                <ExamSchedule data={data} ujian={ujian} />
                                 <AlertDialogFooter>
-                                  <AlertDialogCancel className="bg-gray-900 text-white hover:bg-gray-800 hover:text-white">
+                                  <AlertDialogCancel className="bg-gray-900 w-full text-white hover:bg-gray-800 hover:text-white">
                                     Tutup
                                   </AlertDialogCancel>
                                 </AlertDialogFooter>
@@ -2200,4 +2125,50 @@ function EventBadge({ ujian }: { ujian: Ujian }) {
       Sedang Berlangsung
     </span>
   ) : null;
+}
+
+function ExamSchedule({ data, ujian }: { data: Ujian[]; ujian: Ujian }) {
+  if (data.length === 0) return null;
+
+  const isRewarding = data[0]?.TypeUjian.includes("Rewarding");
+  const isLevelII =
+    data[0]?.TypeUjian == "ANKAPIN II" || data[0]?.TypeUjian == "ATKAPIN II";
+
+  const scheduleItems = isRewarding
+    ? [
+        { label: "F1", time: ujian?.WaktuF1 },
+        { label: "F2", time: ujian?.WaktuF2 },
+        { label: "F3", time: ujian?.WaktuF3 },
+      ]
+    : isLevelII
+    ? [
+        { label: "F1B1", time: ujian?.WaktuF1B1 },
+        { label: "F1B2", time: ujian?.WaktuF1B2 },
+        { label: "F2", time: ujian?.WaktuF2B1 },
+        { label: "F3B1", time: ujian?.WaktuF3B1 },
+        { label: "F3B2", time: ujian?.WaktuF3B2 },
+      ]
+    : [
+        { label: "F1B1", time: ujian?.WaktuF1B1 },
+        { label: "F1B2", time: ujian?.WaktuF1B2 },
+        { label: "F1B3", time: ujian?.WaktuF1B3 },
+        { label: "F2", time: ujian?.WaktuF2B1 },
+        { label: "F3B1", time: ujian?.WaktuF3B1 },
+        { label: "F3B2", time: ujian?.WaktuF3B2 },
+      ];
+
+  return (
+    <div className="w-full text-sm grid grid-cols-3 gap-4">
+      {scheduleItems.map(({ label, time }) => (
+        <React.Fragment key={label}>
+          <div key={label} className="border border-gray-200 p-2 text-center">
+            <span className="font-bold block border-b border-b-gray-200 py-1 mb-1">
+              {label}
+            </span>
+            {time != "" ? formatIndonesianDate(time) : "-"}
+          </div>
+        </React.Fragment>
+      ))}
+    </div>
+  );
 }

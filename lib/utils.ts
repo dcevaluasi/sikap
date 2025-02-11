@@ -93,3 +93,40 @@ export function shuffleArray<T>(array: T[]): T[] {
   }
   return shuffledArray;
 }
+
+
+// Convert setting time on app to be indonesian format
+export function formatIndonesianDate(dateString: string): string {
+  // Parse input date string
+  const match = dateString.match(/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) ([+-]\d{4}) (WIB|WIT|WITA)/);
+  if (!match) {
+      throw new Error("Invalid date format");
+  }
+  
+  const [_, datePart, offset, timezone] = match;
+  
+  // Create a Date object with the timezone offset
+  const date = new Date(datePart + offset);
+  
+  // Define Indonesian time zone mappings
+  const timezoneMap: Record<string, string> = {
+      WIB: "Asia/Jakarta",
+      WITA: "Asia/Makassar",
+      WIT: "Asia/Jayapura"
+  };
+  
+  // Format the date to desired output
+  const options: Intl.DateTimeFormatOptions = {
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      timeZone: timezoneMap[timezone as keyof typeof timezoneMap],
+      hour12: false
+  };
+  
+  return new Intl.DateTimeFormat("en-GB", options).format(date) + ` ${timezone}`;
+}
