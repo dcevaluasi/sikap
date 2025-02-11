@@ -566,12 +566,13 @@ const TableDataUjian: React.FC = () => {
       const response = await axios.post(
         `${dpkakpBaseUrl}/adminPusat/getRemedial`,
         {
-          id_ujian: selectedIdUjian,
+          id_ujian: selectedIdUjian.toString(),
           waktu_code_ujian: waktuRemedial,
         },
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+            "Content-Type": "application/json",
           },
         }
       );

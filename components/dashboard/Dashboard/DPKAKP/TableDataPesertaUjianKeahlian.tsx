@@ -1844,7 +1844,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF1B1 || 0) < 65
+                                      (pesertaUjian?.NilaiF1B1 || 0) < 50
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -1853,7 +1853,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF2B1 || 0) < 65
+                                      (pesertaUjian?.NilaiF2B1 || 0) < 50
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -1862,7 +1862,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF3B1 || 0) < 65
+                                      (pesertaUjian?.NilaiF3B1 || 0) < 50
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -1874,7 +1874,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF1B1 || 0) < 65
+                                      (pesertaUjian?.NilaiF1B1 || 0) < 50
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -1883,7 +1883,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF1B2 || 0) < 65
+                                      (pesertaUjian?.NilaiF1B2 || 0) < 50
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -1897,7 +1897,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         ? "hidden"
                                         : "flex"
                                     } items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF1B3 || 0) < 65
+                                      (pesertaUjian?.NilaiF1B3 || 0) < 50
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -1922,7 +1922,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                             (pesertaUjian?.NilaiF1B3 || 0)) /
                                           3;
 
-                                      return averageScore < 65
+                                      return averageScore < 50
                                         ? "text-rose-500"
                                         : "text-green-500";
                                     })()}`}
@@ -1955,7 +1955,7 @@ const TableDataPesertaUjianKeahlian = () => {
 
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF2B1 || 0) < 65
+                                      (pesertaUjian?.NilaiF2B1 || 0) < 50
                                         ? "text-rose-500"
                                         : "text-green-500"
                                     }`}
@@ -1964,7 +1964,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF3B1 || 0) < 65
+                                      (pesertaUjian?.NilaiF3B1 || 0) < 50
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -1973,7 +1973,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF3B2 || 0) < 65
+                                      (pesertaUjian?.NilaiF3B2 || 0) < 50
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
