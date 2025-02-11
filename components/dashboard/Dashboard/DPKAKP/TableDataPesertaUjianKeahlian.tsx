@@ -1849,8 +1849,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                           3;
 
                                       return averageScore < 65
-                                        ? "text-green-500"
-                                        : "text-rose-500";
+                                        ? "text-rose-500"
+                                        : "text-green-500";
                                     })()}`}
                                   >
                                     <span>

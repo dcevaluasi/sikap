@@ -1275,21 +1275,6 @@ const TableDataUjian: React.FC = () => {
                               </Button>
                             )}
 
-                          {usePathname().includes("pukakp") &&
-                            ujian!.Status === "Aktif" && (
-                              <Button
-                                onClick={(e) => {
-                                  setSelectedIdUjian(ujian!.IdUjian);
-
-                                  setOpenFormRemedial(!openFormRemedial);
-                                }}
-                                variant="outline"
-                                className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md"
-                              >
-                                <IoReload className="h-4 w-4 mr-1" /> Remedial
-                              </Button>
-                            )}
-
                           {ujian!.Status === "Aktif" && (
                             <AlertDialog>
                               <AlertDialogTrigger asChild>
@@ -1388,6 +1373,7 @@ const TableDataUjian: React.FC = () => {
                                   ) : (
                                     <></>
                                   )}
+                                  \
                                 </div>
 
                                 <AlertDialogFooter>
@@ -1398,6 +1384,21 @@ const TableDataUjian: React.FC = () => {
                               </AlertDialogContent>
                             </AlertDialog>
                           )}
+
+                          {usePathname().includes("pukakp") &&
+                            ujian!.Status === "Aktif" && (
+                              <Button
+                                onClick={(e) => {
+                                  setSelectedIdUjian(ujian!.IdUjian);
+
+                                  setOpenFormRemedial(!openFormRemedial);
+                                }}
+                                variant="outline"
+                                className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md"
+                              >
+                                <IoReload className="h-4 w-4 mr-1" /> Remedial
+                              </Button>
+                            )}
                         </div>
                       </CardFooter>
                     </Card>
