@@ -2116,7 +2116,7 @@ const TableDataPesertaUjianKeahlian = () => {
                             </span>
                           </p>
                           <p className="text-sm font-semibold tracking-tight  ">
-                            Mengulang (UL){"     "}: {"          "}{" "}
+                            Tidak Lulus (TL){"     "}: {"          "}{" "}
                             <span className="font-normal">
                               {
                                 calculateResults(dataUjian, data)

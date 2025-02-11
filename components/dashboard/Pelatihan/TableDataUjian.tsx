@@ -2144,13 +2144,21 @@ export default TableDataUjian;
 function EventBadge({ ujian }: { ujian: Ujian }) {
   const [isOngoing, setIsOngoing] = useState(false);
 
+  // Check if all fields are empty strings ("")
+  const isEmpty = Object.values(ujian).every(
+    (value) => typeof value !== "string" || value.trim() === ""
+  );
+
+  if (isEmpty) return null; // Return nothing if all fields are empty
+
   React.useEffect(() => {
     const checkTime = () => {
       const now = new Date();
 
       // Check if any ujian time is within the 2-hour range
       const ongoing = Object.values(ujian).some((timeString) => {
-        if (typeof timeString !== "string") return false; // Ensure it's a string
+        if (typeof timeString !== "string" || timeString.trim() === "")
+          return false; // Ensure it's a valid string
         const eventTime = new Date(timeString);
 
         if (isNaN(eventTime.getTime())) return false; // Skip invalid dates
