@@ -877,6 +877,11 @@ const TableDataPesertaUjianKeahlian = () => {
 
   const exportToExcelRekapitulasi = () => {
     // Format data untuk ekspor
+    const isRewarding = dataUjian[0]?.TypeUjian.includes("Rewarding");
+    const isTingkatII =
+      dataUjian[0]?.TypeUjian == "ANKAPIN II" ||
+      dataUjian[0]?.TypeUjian == "ATKAPIN II";
+
     const formattedData = data.map((pesertaUjian, index) => ({
       No: index + 1,
       "Nomor Ujian": pesertaUjian?.NomorUjian || "-",
@@ -884,12 +889,19 @@ const TableDataPesertaUjianKeahlian = () => {
       "Nilai F1B1": pesertaUjian?.NilaiF1B1 || 0,
       "Nilai F1B2": pesertaUjian?.NilaiF1B2 || 0,
       "Nilai F1B3": pesertaUjian?.NilaiF1B3 || 0,
-      "Total F1": (
-        ((pesertaUjian?.NilaiF1B1 || 0) +
-          (pesertaUjian?.NilaiF1B2 || 0) +
-          (pesertaUjian?.NilaiF1B3 || 0)) /
-        3
-      ).toFixed(2),
+      "Total F1": isRewarding
+        ? ((pesertaUjian?.NilaiF1B1 || 0) / 1).toFixed(2)
+        : isTingkatII
+        ? (
+            ((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) /
+            2
+          ).toFixed(2)
+        : (
+            ((pesertaUjian?.NilaiF1B1 || 0) +
+              (pesertaUjian?.NilaiF1B2 || 0) +
+              (pesertaUjian?.NilaiF1B3 || 0)) /
+            3
+          ).toFixed(2),
       "Nilai F2": pesertaUjian?.NilaiF2B1 || 0,
       "Nilai F3B1": pesertaUjian?.NilaiF3B1 || 0,
       "Nilai F3B2": pesertaUjian?.NilaiF3B2 || 0,
@@ -897,27 +909,60 @@ const TableDataPesertaUjianKeahlian = () => {
         ((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) /
         2
       ).toFixed(2),
-      "Nilai Kumulatif": (
-        ((pesertaUjian?.NilaiF1B1 || 0) +
-          (pesertaUjian?.NilaiF1B2 || 0) +
-          (pesertaUjian?.NilaiF1B3 || 0) +
-          (pesertaUjian?.NilaiF2B1 || 0) +
-          (pesertaUjian?.NilaiF3B1 || 0) +
-          (pesertaUjian?.NilaiF3B2 || 0)) /
-        6
-      ).toFixed(2),
+      "Nilai Kumulatif": isRewarding
+        ? (
+            ((pesertaUjian?.NilaiF1B1 || 0) +
+              (pesertaUjian?.NilaiF2B1 || 0) +
+              (pesertaUjian?.NilaiF3B1 || 0)) /
+            6
+          ).toFixed(2)
+        : isTingkatII
+        ? (
+            ((pesertaUjian?.NilaiF1B1 || 0) +
+              (pesertaUjian?.NilaiF1B2 || 0) +
+              (pesertaUjian?.NilaiF2B1 || 0) +
+              (pesertaUjian?.NilaiF3B1 || 0) +
+              (pesertaUjian?.NilaiF3B2 || 0)) /
+            5
+          ).toFixed(2)
+        : (
+            ((pesertaUjian?.NilaiF1B1 || 0) +
+              (pesertaUjian?.NilaiF1B2 || 0) +
+              (pesertaUjian?.NilaiF1B3 || 0) +
+              (pesertaUjian?.NilaiF2B1 || 0) +
+              (pesertaUjian?.NilaiF3B1 || 0) +
+              (pesertaUjian?.NilaiF3B2 || 0)) /
+            6
+          ).toFixed(2),
       "Nilai Komprehensif": pesertaUjian?.NilaiKomprensif || 0,
-      "LULUS/TDK LULUS":
-        ((pesertaUjian?.NilaiF1B1 || 0) +
-          (pesertaUjian?.NilaiF1B2 || 0) +
-          (pesertaUjian?.NilaiF1B3 || 0) +
-          (pesertaUjian?.NilaiF2B1 || 0) +
-          (pesertaUjian?.NilaiF3B1 || 0) +
-          (pesertaUjian?.NilaiF3B2 || 0)) /
-          6 >
-        50
+      "LULUS/TDK LULUS": isRewarding
+        ? ((pesertaUjian?.NilaiF1B1 || 0) +
+            (pesertaUjian?.NilaiF2B1 || 0) +
+            (pesertaUjian?.NilaiF3B1 || 0)) /
+            3 >=
+          50
           ? "LULUS"
-          : "TIDAK LULUS",
+          : "TIDAK LULUS"
+        : isTingkatII
+        ? ((pesertaUjian?.NilaiF1B1 || 0) +
+            (pesertaUjian?.NilaiF1B2 || 0) +
+            (pesertaUjian?.NilaiF2B1 || 0) +
+            (pesertaUjian?.NilaiF3B1 || 0) +
+            (pesertaUjian?.NilaiF3B2 || 0)) /
+            5 >=
+          50
+          ? "LULUS"
+          : "TIDAK LULUS"
+        : ((pesertaUjian?.NilaiF1B1 || 0) +
+            (pesertaUjian?.NilaiF1B2 || 0) +
+            (pesertaUjian?.NilaiF1B3 || 0) +
+            (pesertaUjian?.NilaiF2B1 || 0) +
+            (pesertaUjian?.NilaiF3B1 || 0) +
+            (pesertaUjian?.NilaiF3B2 || 0)) /
+            6 >=
+          50
+        ? "LULUS"
+        : "TIDAK LULUS",
     }));
 
     // Membuat worksheet dari data
