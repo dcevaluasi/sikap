@@ -137,16 +137,15 @@ const TableDataPesertaUjianKeahlian = () => {
     if (!element) return;
 
     const pdf = new jsPDF("l", "mm", "a4"); // Landscape A4
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
     const margin = 10;
+    const pageWidth = pdf.internal.pageSize.getWidth();
 
     await pdf.html(element, {
       x: margin,
       y: margin,
       width: pageWidth - 2 * margin,
-      windowWidth: element.scrollWidth, // Ensures correct width scaling
-      autoPaging: "text", // Automatically adds new pages if content overflows
+      windowWidth: element.scrollWidth, // Memastikan ukuran sesuai tampilan asli
+      html2canvas: { scale: 2 }, // Menjaga resolusi tinggi agar teks tidak kecil
     });
 
     pdf.save(
