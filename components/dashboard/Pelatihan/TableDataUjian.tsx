@@ -2151,23 +2151,39 @@ function EventBadge({ ujian }: { ujian: Ujian }) {
 
   if (isEmpty) return null; // Return nothing if all fields are empty
 
+  const parseDate = (dateString: string): Date => {
+    // Menghapus bagian 'WIB' dan mengganti spasi sebelum zona waktu
+    const formattedDateString = dateString
+      .replace(" WIB", "")
+      .replace(" ", "T");
+
+    // Parse string waktu yang sudah diformat
+    return new Date(formattedDateString);
+  };
+
   React.useEffect(() => {
     const checkTime = () => {
       const now = new Date();
 
-      // Check if any ujian time is within the 2-hour range
+      // Cek setiap waktu ujian
       const ongoing = Object.values(ujian).some((timeString) => {
         if (typeof timeString !== "string" || timeString.trim() === "")
-          return false; // Ensure it's a valid string
-        const eventTime = new Date(timeString);
+          return false;
 
-        if (isNaN(eventTime.getTime())) return false; // Skip invalid dates
+        // Menggunakan fungsi parseDate
+        const eventTime = parseDate(timeString);
 
+        if (isNaN(eventTime.getTime())) {
+          console.warn("Invalid date:", timeString);
+          return false;
+        }
+
+        // Menambahkan waktu 2 jam
         const twoHoursLater = new Date(
           eventTime.getTime() + 2 * 60 * 60 * 1000
         );
 
-        // Check if the current time is within the 2-hour window
+        // Memeriksa apakah waktu sekarang berada dalam rentang 2 jam
         return now >= eventTime && now <= twoHoursLater;
       });
 
@@ -2175,11 +2191,10 @@ function EventBadge({ ujian }: { ujian: Ujian }) {
     };
 
     checkTime();
-    const interval = setInterval(checkTime, 1000); // Check every second
+    const interval = setInterval(checkTime, 1000);
 
     return () => clearInterval(interval);
   }, [ujian]);
-
   return isOngoing ? (
     <span className="bg-green-500 text-white px-3 py-1 rounded-lg text-sm">
       Sedang Berlangsung
