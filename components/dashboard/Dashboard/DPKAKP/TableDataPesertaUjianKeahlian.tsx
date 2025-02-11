@@ -84,6 +84,7 @@ import { generateTanggalPelatihan } from "@/utils/text";
 import { IoArrowBackSharp, IoPrintOutline } from "react-icons/io5";
 import { BiEditAlt } from "react-icons/bi";
 import { UserInformationDPKAKP } from "@/types/dpkakp";
+import UjianKeahlianAKP from "../UjianKeahlianAKP";
 
 const TableDataPesertaUjianKeahlian = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -127,6 +128,38 @@ const TableDataPesertaUjianKeahlian = () => {
       throw error;
     }
   };
+
+  function checkLulus(userUjian: UsersUjian, ujian: Ujian): string {
+    var scores: number[] = [];
+    if (ujian.TypeUjian == "ANKAPIN II" || ujian.TypeUjian === "ATKAPIN II") {
+      scores = [
+        userUjian.NilaiF1B1,
+        userUjian.NilaiF1B2,
+        userUjian.NilaiF2B1,
+        userUjian.NilaiF3B1,
+        userUjian.NilaiF3B2,
+      ];
+    } else {
+      scores = [
+        userUjian.NilaiF1B1,
+        userUjian.NilaiF1B2,
+        userUjian.NilaiF1B3,
+        userUjian.NilaiF2B1,
+        userUjian.NilaiF3B1,
+        userUjian.NilaiF3B2,
+      ];
+    }
+
+    // Check if all scores are numbers and if any score is less than 50
+    for (let score of scores) {
+      if (score == null || isNaN(score) || score < 50) {
+        return "TIDAK LULUS";
+      }
+    }
+
+    // If all scores are >= 50
+    return "LULUS";
+  }
 
   const [showRekapitulasiNilai, setShowRekapitulasiNilai] =
     React.useState<boolean>(false);
@@ -2125,70 +2158,14 @@ const TableDataPesertaUjianKeahlian = () => {
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 text-center">
                                 <span
-                                  className={` ${
-                                    dataUjian[0]!.TypeUjian.includes(
-                                      "Rewarding"
-                                    )
-                                      ? ((pesertaUjian?.NilaiF1B1 || 0) +
-                                          (pesertaUjian?.NilaiF2B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B1 || 0)) /
-                                          3 <
-                                        50
-                                        ? "text-rose-500"
-                                        : "text-green-500"
-                                      : dataUjian[0]!.TypeUjian ==
-                                          "ANKAPIN II" ||
-                                        dataUjian[0].TypeUjian == "ATKAPIN II"
-                                      ? ((pesertaUjian?.NilaiF1B1 || 0) +
-                                          (pesertaUjian?.NilaiF1B2 || 0) +
-                                          (pesertaUjian?.NilaiF2B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B2 || 0)) /
-                                          5 >=
-                                        50.0
-                                        ? "text-green-500"
-                                        : "text-rose-500"
-                                      : ((pesertaUjian?.NilaiF1B1 || 0) +
-                                          (pesertaUjian?.NilaiF1B2 || 0) +
-                                          (pesertaUjian?.NilaiF1B3 || 0) +
-                                          (pesertaUjian?.NilaiF2B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B2 || 0)) /
-                                          6 <
-                                        50
+                                  className={`  ${
+                                    checkLulus(pesertaUjian, dataUjian[0]) ==
+                                    "TIDAK LULUS"
                                       ? "text-rose-500"
                                       : "text-green-500"
                                   }`}
                                 >
-                                  {dataUjian[0]!.TypeUjian.includes("Rewarding")
-                                    ? ((pesertaUjian?.NilaiF1B1 || 0) +
-                                        (pesertaUjian?.NilaiF2B1 || 0) +
-                                        (pesertaUjian?.NilaiF3B1 || 0)) /
-                                        3 >=
-                                      50
-                                      ? "LULUS"
-                                      : "TIDAK LULUS"
-                                    : dataUjian[0]!.TypeUjian == "ANKAPIN II" ||
-                                      dataUjian[0]!.TypeUjian == "ATKAPIN II"
-                                    ? ((pesertaUjian?.NilaiF1B1 || 0) +
-                                        (pesertaUjian?.NilaiF1B2 || 0) +
-                                        (pesertaUjian?.NilaiF2B1 || 0) +
-                                        (pesertaUjian?.NilaiF3B1 || 0) +
-                                        (pesertaUjian?.NilaiF3B2 || 0)) /
-                                        5 >=
-                                      50
-                                      ? "LULUS"
-                                      : "TIDAK LULUS"
-                                    : ((pesertaUjian?.NilaiF1B1 || 0) +
-                                        (pesertaUjian?.NilaiF1B2 || 0) +
-                                        (pesertaUjian?.NilaiF1B3 || 0) +
-                                        (pesertaUjian?.NilaiF2B1 || 0) +
-                                        (pesertaUjian?.NilaiF3B1 || 0) +
-                                        (pesertaUjian?.NilaiF3B2 || 0)) /
-                                        6 >=
-                                      50
-                                    ? "LULUS"
-                                    : "TIDAK LULUS"}
+                                  {checkLulus(pesertaUjian, dataUjian[0])}
                                 </span>
                               </div>
                             </div>
