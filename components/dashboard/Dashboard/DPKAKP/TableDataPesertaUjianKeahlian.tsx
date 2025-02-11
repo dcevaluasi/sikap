@@ -134,30 +134,20 @@ const TableDataPesertaUjianKeahlian = () => {
 
   const handlePrintRekapitulasiNilai = async () => {
     const element = printRefRekapitulasiNilai.current;
-
     if (!element) return;
 
-    // Capture element as image with higher scale for clarity
-    const canvas = await html2canvas(element, { scale: 2 });
+    const pdf = new jsPDF("l", "mm", "a4"); // Landscape A4
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const margin = 10;
 
-    const imgData = canvas.toDataURL("image/png");
-
-    // Create a landscape PDF
-    const pdf = new jsPDF("l", "mm", "a4");
-    const pageWidth = 297; // A4 width in landscape mode
-    const pageHeight = 210; // A4 height in landscape mode
-    const margin = 10; // Margin in mm
-
-    let imgWidth = pageWidth - 2 * margin; // Adjust for margins
-    let imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    // Scale down if image is too tall for the page
-    if (imgHeight > pageHeight - 2 * margin) {
-      imgHeight = pageHeight - 2 * margin;
-      imgWidth = (canvas.width * imgHeight) / canvas.height;
-    }
-
-    pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight);
+    await pdf.html(element, {
+      x: margin,
+      y: margin,
+      width: pageWidth - 2 * margin,
+      windowWidth: element.scrollWidth, // Ensures correct width scaling
+      autoPaging: "text", // Automatically adds new pages if content overflows
+    });
 
     pdf.save(
       `Rekapitulasi_Hasil_Ujian_${dataUjian[0]?.NamaUjian || "Tanpa_Nama"}.pdf`
