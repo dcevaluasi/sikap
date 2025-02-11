@@ -132,40 +132,54 @@ const TableDataPesertaUjianKeahlian = () => {
     React.useState<boolean>(false);
   const printRefRekapitulasiNilai = React.useRef<HTMLDivElement>(null);
 
-  const handlePrintRekapitulasiNilai = async () => {
+  const handlePrintRekapitulasiNilai = React.useCallback(async () => {
     const element = printRefRekapitulasiNilai.current;
     if (!element) return;
 
-    // Capture element as image with high resolution
-    const canvas = await html2canvas(element, { scale: 3 });
+    window.scrollTo(0, 0);
+    const canvas = await html2canvas(element, { scale: 2 });
 
     const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF("p", "mm", "a4");
 
-    // Create a landscape A4 PDF
-    const pdf = new jsPDF("l", "mm", "a4");
-    const pageWidth = pdf.internal.pageSize.getWidth(); // 297 mm (A4 Landscape)
-    const pageHeight = pdf.internal.pageSize.getHeight(); // 210 mm (A4 Landscape)
-    const margin = 10; // Margin in mm
+    const imgWidth = 210 - 20; // Lebar A4 dikurangi margin
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    let imgWidth = pageWidth - 2 * margin; // Adjust for margins
-    let imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let y = 10;
+    pdf.addImage(imgData, "PNG", 10, y, imgWidth, imgHeight);
 
-    // If the image is taller than the page, adjust height
-    if (imgHeight > pageHeight - 2 * margin) {
-      imgHeight = pageHeight - 2 * margin;
-      imgWidth = (canvas.width * imgHeight) / canvas.height;
-    }
+    pdf.save(`Rekapitulasi_Hasil_Ujian.pdf`);
+  }, []);
 
-    // Center the image if it's smaller than the page
-    const xOffset = (pageWidth - imgWidth) / 2;
-    const yOffset = (pageHeight - imgHeight) / 2;
+  // const handlePrintRekapitulasiNilai = async () => {
+  //   const element = printRefRekapitulasiNilai.current;
+  //   if (!element) return;
 
-    pdf.addImage(imgData, "PNG", xOffset, yOffset, imgWidth, imgHeight);
+  //   const canvas = await html2canvas(element, { scale: 2 });
+  //   const imgData = canvas.toDataURL("image/png");
 
-    pdf.save(
-      `Rekapitulasi_Hasil_Ujian_${dataUjian[0]?.NamaUjian || "Tanpa_Nama"}.pdf`
-    );
-  };
+  //   const pdf = new jsPDF("p", "mm", "a4");
+  //   const imgWidth = 210 - 2 * 10; // A4 width minus margins
+  //   const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  //   let y = 10; // Start position for first page
+
+  //   if (imgHeight > 297 - 20) {
+  //     let heightLeft = imgHeight;
+
+  //     while (heightLeft > 0) {
+  //       pdf.addImage(imgData, "PNG", 10, y, imgWidth, imgHeight);
+  //       heightLeft -= 297 - 20;
+  //       if (heightLeft > 0) {
+  //         pdf.addPage();
+  //         y = 10;
+  //       }
+  //     }
+  //   } else {
+  //     pdf.addImage(imgData, "PNG", 10, y, imgWidth, imgHeight);
+  //   }
+
+  //   pdf.save(`Rekapitulasi_Hasil_Ujian.pdf`);
+  // };
 
   /**
    * =============================================================
@@ -861,6 +875,62 @@ const TableDataPesertaUjianKeahlian = () => {
     XLSX.writeFile(workbook, fileName);
   };
 
+  const exportToExcelRekapitulasi = () => {
+    // Format data untuk ekspor
+    const formattedData = data.map((pesertaUjian, index) => ({
+      No: index + 1,
+      "Nomor Ujian": pesertaUjian?.NomorUjian || "-",
+      "Nama Peserta": pesertaUjian?.Nama || "-",
+      "Nilai F1B1": pesertaUjian?.NilaiF1B1 || 0,
+      "Nilai F1B2": pesertaUjian?.NilaiF1B2 || 0,
+      "Nilai F1B3": pesertaUjian?.NilaiF1B3 || 0,
+      "Total F1": (
+        ((pesertaUjian?.NilaiF1B1 || 0) +
+          (pesertaUjian?.NilaiF1B2 || 0) +
+          (pesertaUjian?.NilaiF1B3 || 0)) /
+        3
+      ).toFixed(2),
+      "Nilai F2": pesertaUjian?.NilaiF2B1 || 0,
+      "Nilai F3B1": pesertaUjian?.NilaiF3B1 || 0,
+      "Nilai F3B2": pesertaUjian?.NilaiF3B2 || 0,
+      "Total F3": (
+        ((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) /
+        2
+      ).toFixed(2),
+      "Nilai Kumulatif": (
+        ((pesertaUjian?.NilaiF1B1 || 0) +
+          (pesertaUjian?.NilaiF1B2 || 0) +
+          (pesertaUjian?.NilaiF1B3 || 0) +
+          (pesertaUjian?.NilaiF2B1 || 0) +
+          (pesertaUjian?.NilaiF3B1 || 0) +
+          (pesertaUjian?.NilaiF3B2 || 0)) /
+        6
+      ).toFixed(2),
+      "Nilai Komprehensif": pesertaUjian?.NilaiKomprensif || 0,
+      "LULUS/TDK LULUS":
+        ((pesertaUjian?.NilaiF1B1 || 0) +
+          (pesertaUjian?.NilaiF1B2 || 0) +
+          (pesertaUjian?.NilaiF1B3 || 0) +
+          (pesertaUjian?.NilaiF2B1 || 0) +
+          (pesertaUjian?.NilaiF3B1 || 0) +
+          (pesertaUjian?.NilaiF3B2 || 0)) /
+          6 >
+        65
+          ? "LULUS"
+          : "TIDAK LULUS",
+    }));
+
+    // Membuat worksheet dari data
+    const worksheet = XLSX.utils.json_to_sheet(formattedData);
+
+    // Membuat workbook dan menambahkan worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+    // Menyimpan file Excel
+    XLSX.writeFile(workbook, "DataUjian.xlsx");
+  };
+
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
 
   const handleUploadNilaiKomprehensif = async (e: any) => {
@@ -1175,7 +1245,7 @@ const TableDataPesertaUjianKeahlian = () => {
                     </div>
                   ) : (
                     <div
-                      onClick={() => handlePrintRekapitulasiNilai()}
+                      onClick={() => exportToExcelRekapitulasi()}
                       className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
                     >
                       <IoPrintOutline />
