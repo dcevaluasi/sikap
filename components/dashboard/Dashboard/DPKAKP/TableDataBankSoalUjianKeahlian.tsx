@@ -337,29 +337,29 @@ const TableDataBankSoalUjianKeahlian = () => {
     //     </div>
     //   ),
     // },
-    {
-      accessorKey: "IdUsers",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className={`text-black font-semibold w-fit p-0 flex justify-start items-centee`}
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            <p className="leading-[105%]"> Jawaban Benar</p>
+    // {
+    //   accessorKey: "IdUsers",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className={`text-black font-semibold w-fit p-0 flex justify-start items-centee`}
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         <p className="leading-[105%]"> Jawaban Benar</p>
 
-            <RiVerifiedBadgeFill className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
-            {row.original?.JawabanBenar}
-          </p>
-        </div>
-      ),
-    },
+    //         <RiVerifiedBadgeFill className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div className={`${"ml-0"} text-left capitalize`}>
+    //       <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+    //         {row.original?.JawabanBenar}
+    //       </p>
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: "Jawaban",
       header: ({ column }) => {

@@ -1755,7 +1755,7 @@ const TableDataPesertaUjianKeahlian = () => {
 
                         {/* Table Rows */}
                         <div className="overflow-auto">
-                          {data!.map((pesertaUjian, index) => (
+                          {data!.map((pesertaUjian: any, index) => (
                             <div key={index} className="flex text-sm">
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
                                 <span>{index + 1}</span>
