@@ -1088,7 +1088,7 @@ const TableDataUjian: React.FC = () => {
                   </div>
                 ) : (
                   filteredData.map((ujian, index) => (
-                    <Card className="relative">
+                    <Card className="relative" key={index}>
                       {ujian!.Status == "Pending" && (
                         <div className="w-fit absolute top-5 right-5 text-[0.65rem] px-2 py-1 rounded-md bg-yellow-400 text-white flex gap-1 items-center animate-pulse">
                           {usePathname().includes("dpkakp")}
@@ -1096,6 +1096,7 @@ const TableDataUjian: React.FC = () => {
                       )}
 
                       <CardHeader>
+                        <EventBadge ujian={ujian!} />
                         <CardTitle>{ujian!.NamaUjian}</CardTitle>
                         <CardDescription>
                           {" "}
@@ -2139,3 +2140,41 @@ const TableDataUjian: React.FC = () => {
 };
 
 export default TableDataUjian;
+
+function EventBadge({ ujian }: { ujian: Ujian }) {
+  const [isOngoing, setIsOngoing] = useState(false);
+
+  React.useEffect(() => {
+    const checkTime = () => {
+      const now = new Date();
+
+      // Check if any ujian time is within the 2-hour range
+      const ongoing = Object.values(ujian).some((timeString) => {
+        if (typeof timeString !== "string") return false; // Ensure it's a string
+        const eventTime = new Date(timeString);
+
+        if (isNaN(eventTime.getTime())) return false; // Skip invalid dates
+
+        const twoHoursLater = new Date(
+          eventTime.getTime() + 2 * 60 * 60 * 1000
+        );
+
+        // Check if the current time is within the 2-hour window
+        return now >= eventTime && now <= twoHoursLater;
+      });
+
+      setIsOngoing(ongoing);
+    };
+
+    checkTime();
+    const interval = setInterval(checkTime, 1000); // Check every second
+
+    return () => clearInterval(interval);
+  }, [ujian]);
+
+  return isOngoing ? (
+    <span className="bg-green-500 text-white px-3 py-1 rounded-lg text-sm">
+      Sedang Berlangsung
+    </span>
+  ) : null;
+}

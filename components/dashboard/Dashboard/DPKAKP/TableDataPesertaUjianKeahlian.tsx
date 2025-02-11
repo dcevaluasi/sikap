@@ -1034,7 +1034,7 @@ const TableDataPesertaUjianKeahlian = () => {
             (pesertaUjian?.NilaiF3B2 || 0)) /
           6;
 
-      if (averageScore > 60) {
+      if (averageScore > 50) {
         lulusCount++;
       } else {
         tidakLulusCount++;
