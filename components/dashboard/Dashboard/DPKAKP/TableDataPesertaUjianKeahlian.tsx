@@ -136,17 +136,31 @@ const TableDataPesertaUjianKeahlian = () => {
     const element = printRefRekapitulasiNilai.current;
     if (!element) return;
 
-    const pdf = new jsPDF("l", "mm", "a4"); // Landscape A4
-    const margin = 10;
-    const pageWidth = pdf.internal.pageSize.getWidth();
+    // Capture element as image with high resolution
+    const canvas = await html2canvas(element, { scale: 3 });
 
-    await pdf.html(element, {
-      x: margin,
-      y: margin,
-      width: pageWidth - 2 * margin,
-      windowWidth: element.scrollWidth, // Memastikan ukuran sesuai tampilan asli
-      html2canvas: { scale: 2 }, // Menjaga resolusi tinggi agar teks tidak kecil
-    });
+    const imgData = canvas.toDataURL("image/png");
+
+    // Create a landscape A4 PDF
+    const pdf = new jsPDF("l", "mm", "a4");
+    const pageWidth = pdf.internal.pageSize.getWidth(); // 297 mm (A4 Landscape)
+    const pageHeight = pdf.internal.pageSize.getHeight(); // 210 mm (A4 Landscape)
+    const margin = 10; // Margin in mm
+
+    let imgWidth = pageWidth - 2 * margin; // Adjust for margins
+    let imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    // If the image is taller than the page, adjust height
+    if (imgHeight > pageHeight - 2 * margin) {
+      imgHeight = pageHeight - 2 * margin;
+      imgWidth = (canvas.width * imgHeight) / canvas.height;
+    }
+
+    // Center the image if it's smaller than the page
+    const xOffset = (pageWidth - imgWidth) / 2;
+    const yOffset = (pageHeight - imgHeight) / 2;
+
+    pdf.addImage(imgData, "PNG", xOffset, yOffset, imgWidth, imgHeight);
 
     pdf.save(
       `Rekapitulasi_Hasil_Ujian_${dataUjian[0]?.NamaUjian || "Tanpa_Nama"}.pdf`
