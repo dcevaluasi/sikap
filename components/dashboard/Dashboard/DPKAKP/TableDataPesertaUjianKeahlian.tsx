@@ -137,20 +137,21 @@ const TableDataPesertaUjianKeahlian = () => {
 
     if (!element) return;
 
-    // Tangkap elemen sebagai gambar dengan skala lebih kecil agar muat di satu halaman
+    // Capture element as image with higher scale for clarity
     const canvas = await html2canvas(element, { scale: 2 });
 
     const imgData = canvas.toDataURL("image/png");
 
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pageWidth = 210; // Lebar halaman A4 dalam mm
-    const pageHeight = 297; // Tinggi halaman A4 dalam mm
-    const margin = 10; // Margin dalam mm
+    // Create a landscape PDF
+    const pdf = new jsPDF("l", "mm", "a4");
+    const pageWidth = 297; // A4 width in landscape mode
+    const pageHeight = 210; // A4 height in landscape mode
+    const margin = 10; // Margin in mm
 
-    let imgWidth = pageWidth - 2 * margin; // Sesuaikan dengan margin
+    let imgWidth = pageWidth - 2 * margin; // Adjust for margins
     let imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    // Jika gambar lebih tinggi dari halaman, skala turun
+    // Scale down if image is too tall for the page
     if (imgHeight > pageHeight - 2 * margin) {
       imgHeight = pageHeight - 2 * margin;
       imgWidth = (canvas.width * imgHeight) / canvas.height;
