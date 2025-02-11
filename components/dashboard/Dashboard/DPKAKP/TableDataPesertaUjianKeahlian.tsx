@@ -915,7 +915,7 @@ const TableDataPesertaUjianKeahlian = () => {
           (pesertaUjian?.NilaiF3B1 || 0) +
           (pesertaUjian?.NilaiF3B2 || 0)) /
           6 >
-        65
+        50
           ? "LULUS"
           : "TIDAK LULUS",
     }));
@@ -1985,7 +1985,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                       ((pesertaUjian?.NilaiF3B1 || 0) +
                                         (pesertaUjian?.NilaiF3B2 || 0)) /
                                         2 <
-                                      65
+                                      50
                                         ? "text-rose-500"
                                         : "text-green-500"
                                     }`}
@@ -2007,7 +2007,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF2B1 || 0) +
                                         (pesertaUjian?.NilaiF3B1 || 0)) /
                                         3 <
-                                      65
+                                      50
                                       ? "text-rose-500"
                                       : "text-green-500"
                                     : ((pesertaUjian?.NilaiF1B1 || 0) +
@@ -2017,7 +2017,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF3B1 || 0) +
                                         (pesertaUjian?.NilaiF3B2 || 0)) /
                                         6 <
-                                      65
+                                      50
                                     ? "text-rose-500"
                                     : "text-green-500"
                                 }`}
@@ -2057,7 +2057,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           (pesertaUjian?.NilaiF2B1 || 0) +
                                           (pesertaUjian?.NilaiF3B1 || 0)) /
                                           3 >
-                                        65
+                                        50
                                         ? "text-green-500 font-bold"
                                         : "text-rose-500 font-bold"
                                       : ((pesertaUjian?.NilaiF1B1 || 0) +
@@ -2067,7 +2067,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           (pesertaUjian?.NilaiF3B1 || 0) +
                                           (pesertaUjian?.NilaiF3B2 || 0)) /
                                           6 >
-                                        65
+                                        50
                                       ? "text-green-500 font-bold"
                                       : "text-rose-500 font-bold"
                                   }
@@ -2077,7 +2077,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF2B1 || 0) +
                                         (pesertaUjian?.NilaiF3B1 || 0)) /
                                         3 >
-                                      65
+                                      50
                                       ? "LULUS"
                                       : "TIDAK LULUS"
                                     : ((pesertaUjian?.NilaiF1B1 || 0) +
@@ -2087,7 +2087,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF3B1 || 0) +
                                         (pesertaUjian?.NilaiF3B2 || 0)) /
                                         6 >
-                                      65
+                                      50
                                     ? "LULUS"
                                     : "TIDAK LULUS"}
                                 </span>
