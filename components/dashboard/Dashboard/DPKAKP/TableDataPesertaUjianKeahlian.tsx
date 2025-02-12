@@ -1826,10 +1826,10 @@ const TableDataPesertaUjianKeahlian = () => {
                           <div className="flex flex-col w-full border border-gray-400 mt-6 rounded-md">
                             {/* Table Header */}
                             <div className="flex  text-white text-sm">
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-gray-400 bg-[#338BF6] justify-center py-6">
+                              <div className="flex items-center flex-grow w-0 h-10 border-b border-gray-400 bg-[#338BF6] justify-center py-6">
                                 <span>No</span>
                               </div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
+                              <div className="flex items-center flex-grow w-0 h-10 px-4 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
                                 <span className="">Nomor Ujian</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
@@ -1837,23 +1837,23 @@ const TableDataPesertaUjianKeahlian = () => {
                               </div>
                               {dataUjian[0]!.TypeUjian.includes("Rewarding") ? (
                                 <>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
                                     <span className="">F1</span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6">
                                     <span className="">F2</span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
                                     <span className="">F3</span>
                                   </div>
                                 </>
                               ) : (
                                 <>
                                   {" "}
-                                  <div className="flex items-center flex-grow  h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] w-1 justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow  h-10 border-b border-l border-gray-400 bg-[#EA8F02] w-1 justify-center text-center leading-none py-6">
                                     <span className="">F1B1</span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
                                     <span className="">F1B2</span>
                                   </div>
                                   <div
@@ -1862,43 +1862,43 @@ const TableDataPesertaUjianKeahlian = () => {
                                       dataUjian[0]!.TypeUjian == "ATKAPIN II"
                                         ? "hidden"
                                         : "flex"
-                                    } items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6`}
+                                    } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6`}
                                   >
                                     <span className="">F1B3</span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
                                     <span className="">Total F1</span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6">
                                     <span className="">F2</span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
                                     <span className="">F3B1</span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
                                     <span className="">F3B2</span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400  bg-[#0796A6] justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400  bg-[#0796A6] justify-center text-center leading-none py-6">
                                     <span className="">Total F3</span>
                                   </div>{" "}
                                 </>
                               )}
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
                                 <span className="">Nilai Kumulatif</span>
                               </div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
                                 <span className="">Kompre F1</span>
                               </div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
                                 <span className="">Kompre F2</span>
                               </div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
                                 <span className="">Kompre F3</span>
                               </div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
                                 <span className="">Nilai Kumulatif Kompre</span>
                               </div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
                                 <span className="">LULUS/TDK LULUS</span>
                               </div>
                             </div>
@@ -1907,10 +1907,10 @@ const TableDataPesertaUjianKeahlian = () => {
                             <div className="overflow-auto">
                               {data!.map((pesertaUjian: any, index) => (
                                 <div key={index} className="flex text-sm">
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
                                     <span>{index + 1}</span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <div className="flex items-center flex-grow w-0 h-10 px-4 border-b border-l border-gray-400 justify-center py-7">
                                     <span>
                                       {pesertaUjian?.NomorUjian || "-"}
                                     </span>
@@ -1923,7 +1923,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   ) ? (
                                     <>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B1 || 0) <
                                           EXAM_THRESHOLD
                                             ? "text-rose-500"
@@ -1935,7 +1935,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF2B1 || 0) <
                                           EXAM_THRESHOLD
                                             ? "text-rose-500"
@@ -1947,7 +1947,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B1 || 0) <
                                           EXAM_THRESHOLD
                                             ? "text-rose-500"
@@ -1962,7 +1962,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   ) : (
                                     <>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B1 || 0) <
                                           EXAM_THRESHOLD
                                             ? "text-rose-500"
@@ -1974,7 +1974,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B2 || 0) <
                                           EXAM_THRESHOLD
                                             ? "text-rose-500"
@@ -1993,7 +1993,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                             "ATKAPIN II"
                                             ? "hidden"
                                             : "flex"
-                                        } items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                        } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B3 || 0) <
                                           EXAM_THRESHOLD
                                             ? "text-rose-500"
@@ -2005,7 +2005,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${(() => {
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(() => {
                                           const isAnkapinOrAtkapin =
                                             dataUjian[0]?.TypeUjian ===
                                               "ANKAPIN II" ||
@@ -2063,7 +2063,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                       </div>
 
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF2B1 || 0) <
                                           EXAM_THRESHOLD
                                             ? "text-rose-500"
@@ -2075,7 +2075,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B1 || 0) <
                                           EXAM_THRESHOLD
                                             ? "text-rose-500"
@@ -2087,7 +2087,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B2 || 0) <
                                           EXAM_THRESHOLD
                                             ? "text-rose-500"
@@ -2099,7 +2099,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           ((pesertaUjian?.NilaiF3B1 || 0) +
                                             (pesertaUjian?.NilaiF3B2 || 0)) /
                                             2 <
@@ -2119,7 +2119,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </>
                                   )}
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7  font-bold ${
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  font-bold ${
                                       dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
                                       )
@@ -2187,22 +2187,22 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </span>
                                   </div>
 
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
                                     <span>
                                       {pesertaUjian?.NilaiKomprensifF1 || 0}
                                     </span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
                                     <span>
                                       {pesertaUjian?.NilaiKomprensifF2 || 0}
                                     </span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
                                     <span>
                                       {pesertaUjian?.NilaiKomprensifF3 || 0}
                                     </span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 font-bold">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 font-bold">
                                     <span>
                                       {(pesertaUjian?.NilaiKomprensifF1 +
                                         pesertaUjian?.NilaiKomprensifF2 +
@@ -2210,7 +2210,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         3 || 0}
                                     </span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 font-bold justify-center py-7 text-center">
+                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 font-bold justify-center py-7 text-center">
                                     <span
                                       className={`  ${
                                         checkLulus(
