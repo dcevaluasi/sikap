@@ -953,25 +953,28 @@ const TableDataPesertaUjianKeahlian = () => {
             ((pesertaUjian?.NilaiF1B1 || 0) +
               (pesertaUjian?.NilaiF2B1 || 0) +
               (pesertaUjian?.NilaiF3B1 || 0)) /
-            6
+            3
           ).toFixed(2)
         : isTingkatII
         ? (
-            ((pesertaUjian?.NilaiF1B1 || 0) +
-              (pesertaUjian?.NilaiF1B2 || 0) +
+            (((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) /
+              2 +
               (pesertaUjian?.NilaiF2B1 || 0) +
-              (pesertaUjian?.NilaiF3B1 || 0) +
-              (pesertaUjian?.NilaiF3B2 || 0)) /
-            5
+              ((pesertaUjian?.NilaiF3B1 || 0) +
+                (pesertaUjian?.NilaiF3B2 || 0)) /
+                2) /
+            3
           ).toFixed(2)
         : (
-            ((pesertaUjian?.NilaiF1B1 || 0) +
+            (((pesertaUjian?.NilaiF1B1 || 0) +
               (pesertaUjian?.NilaiF1B2 || 0) +
-              (pesertaUjian?.NilaiF1B3 || 0) +
+              (pesertaUjian?.NilaiF1B3 || 0)) /
+              3 +
               (pesertaUjian?.NilaiF2B1 || 0) +
-              (pesertaUjian?.NilaiF3B1 || 0) +
-              (pesertaUjian?.NilaiF3B2 || 0)) /
-            6
+              ((pesertaUjian?.NilaiF3B1 || 0) +
+                (pesertaUjian?.NilaiF3B2 || 0)) /
+                2) /
+            3
           ).toFixed(2),
       "Nilai Komprehensif 1": pesertaUjian?.NilaiKomprensifF1 || 0,
       "Nilai Komprehensif 2": pesertaUjian?.NilaiKomprensifF2 || 0,
@@ -2180,21 +2183,27 @@ const TableDataPesertaUjianKeahlian = () => {
                                             "ANKAPIN II" ||
                                           dataUjian[0].TypeUjian == "ATKAPIN II"
                                         ? (
-                                            ((pesertaUjian?.NilaiF1B1 || 0) +
-                                              (pesertaUjian?.NilaiF1B2 || 0) +
+                                            (((pesertaUjian?.NilaiF1B1 || 0) +
+                                              (pesertaUjian?.NilaiF1B2 || 0)) /
+                                              2 +
                                               (pesertaUjian?.NilaiF2B1 || 0) +
-                                              (pesertaUjian?.NilaiF3B1 || 0) +
-                                              (pesertaUjian?.NilaiF3B2 || 0)) /
-                                            5
+                                              ((pesertaUjian?.NilaiF3B1 || 0) +
+                                                (pesertaUjian?.NilaiF3B2 ||
+                                                  0)) /
+                                                2) /
+                                            3
                                           ).toFixed(2)
                                         : (
-                                            ((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF1B2 || 0) +
-                                              (pesertaUjian?.NilaiF1B3 || 0) +
+                                              (pesertaUjian?.NilaiF1B3 || 0)) /
+                                              3 +
                                               (pesertaUjian?.NilaiF2B1 || 0) +
-                                              (pesertaUjian?.NilaiF3B1 || 0) +
-                                              (pesertaUjian?.NilaiF3B2 || 0)) /
-                                            6
+                                              ((pesertaUjian?.NilaiF3B1 || 0) +
+                                                (pesertaUjian?.NilaiF3B2 ||
+                                                  0)) /
+                                                2) /
+                                            3
                                           ).toFixed(2)}
                                     </span>
                                   </div>
