@@ -79,7 +79,11 @@ import { HashLoader } from "react-spinners";
 import autoTable from "jspdf-autotable";
 import Image from "next/image";
 import { generateTanggalPelatihan } from "@/utils/text";
-import { IoArrowBackSharp, IoPrintOutline } from "react-icons/io5";
+import {
+  IoArrowBackSharp,
+  IoPrintOutline,
+  IoRefreshOutline,
+} from "react-icons/io5";
 import { BiEditAlt } from "react-icons/bi";
 import { UserInformationDPKAKP } from "@/types/dpkakp";
 import UjianKeahlianAKP from "../UjianKeahlianAKP";
@@ -1308,6 +1312,14 @@ const TableDataPesertaUjianKeahlian = () => {
                     </>
                   )}
 
+                <div
+                  onClick={() => handleFetchingUjianKeahlianData()}
+                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                >
+                  <IoRefreshOutline />
+                  Refresh Data
+                </div>
+
                 {pathname.includes("dpkakp") && (
                   <>
                     <div
@@ -1926,7 +1938,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-rose-500"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -1938,7 +1950,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF2B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-rose-500"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -1950,7 +1962,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-rose-500"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -1965,7 +1977,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-rose-500"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -1977,7 +1989,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B2 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-rose-500"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -1996,7 +2008,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B3 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-rose-500"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2005,7 +2017,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(() => {
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${(() => {
                                           const isAnkapinOrAtkapin =
                                             dataUjian[0]?.TypeUjian ===
                                               "ANKAPIN II" ||
@@ -2063,10 +2075,10 @@ const TableDataPesertaUjianKeahlian = () => {
                                       </div>
 
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF2B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-rose-500"
+                                            ? "text-white bg-rose-500"
                                             : "text-green-500"
                                         }`}
                                       >
@@ -2078,7 +2090,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-rose-500"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2090,7 +2102,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B2 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-rose-500"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2099,7 +2111,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${
                                           ((pesertaUjian?.NilaiF3B1 || 0) +
                                             (pesertaUjian?.NilaiF3B2 || 0)) /
                                             2 <
@@ -2202,12 +2214,24 @@ const TableDataPesertaUjianKeahlian = () => {
                                       {pesertaUjian?.NilaiKomprensifF3 || 0}
                                     </span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 font-bold">
-                                    <span>
-                                      {(pesertaUjian?.NilaiKomprensifF1 +
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 font-bold ${
+                                      (pesertaUjian?.NilaiKomprensifF1 +
                                         pesertaUjian?.NilaiKomprensifF2 +
                                         pesertaUjian?.NilaiKomprensifF3) /
-                                        3 || 0}
+                                        3 >
+                                      EXAM_THRESHOLD
+                                        ? "text-green-500"
+                                        : "text-rose-500"
+                                    }`}
+                                  >
+                                    <span>
+                                      {(
+                                        (pesertaUjian?.NilaiKomprensifF1 +
+                                          pesertaUjian?.NilaiKomprensifF2 +
+                                          pesertaUjian?.NilaiKomprensifF3) /
+                                        3
+                                      ).toFixed(2) || 0}
                                     </span>
                                   </div>
                                   <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 font-bold justify-center py-7 text-center">
