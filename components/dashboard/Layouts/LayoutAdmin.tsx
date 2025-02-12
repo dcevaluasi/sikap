@@ -23,6 +23,8 @@ export default function LayoutAdmin({
     Cookies.remove("IsPUKAKP");
     Cookies.remove("PUKAKP");
     Cookies.remove("IdUsersDpkakp");
+    Cookies.remove("NamaUsersDpkakp");
+
     Toast.fire({
       icon: "success",
       title: `Berhasil logout dari admin DPKAKP!`,

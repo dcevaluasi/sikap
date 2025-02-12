@@ -93,6 +93,7 @@ import {
   THEORY_WEIGHT,
 } from "@/constants/globals";
 import { Input } from "@/components/ui/input";
+import { roundUpScore } from "@/lib/utils";
 
 const TableDataPesertaUjianKeahlian = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -140,34 +141,36 @@ const TableDataPesertaUjianKeahlian = () => {
     let finalScore: number;
 
     if (ujian.TypeUjian.includes("Rewarding")) {
-      finalScore =
+      finalScore = roundUpScore(
         (((userUjian.NilaiF1B1 || 0) +
           (userUjian.NilaiF2B1 || 0) +
           (userUjian.NilaiF3B1 || 0)) /
           3) *
           THEORY_WEIGHT +
-        ((userUjian.NilaiKomprensifF1 +
-          userUjian.NilaiKomprensifF2 +
-          userUjian.NilaiKomprensifF3) /
-          3) *
-          PRACTICE_WEIGHT;
+          ((userUjian.NilaiKomprensifF1 +
+            userUjian.NilaiKomprensifF2 +
+            userUjian.NilaiKomprensifF3) /
+            3) *
+            PRACTICE_WEIGHT
+      );
     } else if (
       ujian.TypeUjian === "ANKAPIN II" ||
       ujian.TypeUjian === "ATKAPIN II"
     ) {
-      finalScore =
+      finalScore = roundUpScore(
         ((((userUjian.NilaiF1B1 || 0) + (userUjian.NilaiF1B2 || 0)) / 2 +
           (userUjian.NilaiF2B1 || 0) +
           ((userUjian.NilaiF3B1 || 0) + (userUjian.NilaiF3B2 || 0)) / 2) /
           3) *
           THEORY_WEIGHT +
-        ((userUjian.NilaiKomprensifF1 +
-          userUjian.NilaiKomprensifF2 +
-          userUjian.NilaiKomprensifF3) /
-          3) *
-          PRACTICE_WEIGHT;
+          ((userUjian.NilaiKomprensifF1 +
+            userUjian.NilaiKomprensifF2 +
+            userUjian.NilaiKomprensifF3) /
+            3) *
+            PRACTICE_WEIGHT
+      );
     } else {
-      finalScore =
+      finalScore = roundUpScore(
         ((((userUjian.NilaiF1B1 || 0) +
           (userUjian.NilaiF1B2 || 0) +
           (userUjian.NilaiF1B3 || 0)) /
@@ -176,11 +179,12 @@ const TableDataPesertaUjianKeahlian = () => {
           ((userUjian.NilaiF3B1 || 0) + (userUjian.NilaiF3B2 || 0)) / 2) /
           3) *
           THEORY_WEIGHT +
-        ((userUjian.NilaiKomprensifF1 +
-          userUjian.NilaiKomprensifF2 +
-          userUjian.NilaiKomprensifF3) /
-          3) *
-          PRACTICE_WEIGHT;
+          ((userUjian.NilaiKomprensifF1 +
+            userUjian.NilaiKomprensifF2 +
+            userUjian.NilaiKomprensifF3) /
+            3) *
+            PRACTICE_WEIGHT
+      );
     }
 
     return finalScore >= EXAM_THRESHOLD ? "LULUS" : "TIDAK LULUS";
@@ -920,43 +924,42 @@ const TableDataPesertaUjianKeahlian = () => {
       "Nilai F1B2": pesertaUjian?.NilaiF1B2 || 0,
       "Nilai F1B3": pesertaUjian?.NilaiF1B3 || 0,
       "Total F1": isRewarding
-        ? ((pesertaUjian?.NilaiF1B1 || 0) / 1).toFixed(2)
+        ? roundUpScore((pesertaUjian?.NilaiF1B1 || 0) / 1)
         : isTingkatII
-        ? (
+        ? roundUpScore(
             ((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) /
-            2
-          ).toFixed(2)
-        : (
+              2
+          )
+        : roundUpScore(
             ((pesertaUjian?.NilaiF1B1 || 0) +
               (pesertaUjian?.NilaiF1B2 || 0) +
               (pesertaUjian?.NilaiF1B3 || 0)) /
-            3
-          ).toFixed(2),
+              3
+          ),
       "Nilai F2": pesertaUjian?.NilaiF2B1 || 0,
       "Nilai F3B1": pesertaUjian?.NilaiF3B1 || 0,
       "Nilai F3B2": pesertaUjian?.NilaiF3B2 || 0,
-      "Total F3": (
-        ((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) /
-        2
-      ).toFixed(2),
+      "Total F3": roundUpScore(
+        ((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) / 2
+      ),
       "Nilai Kumulatif": isRewarding
-        ? (
+        ? roundUpScore(
             ((pesertaUjian?.NilaiF1B1 || 0) +
               (pesertaUjian?.NilaiF2B1 || 0) +
               (pesertaUjian?.NilaiF3B1 || 0)) /
-            3
-          ).toFixed(2)
+              3
+          )
         : isTingkatII
-        ? (
+        ? roundUpScore(
             (((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) /
               2 +
               (pesertaUjian?.NilaiF2B1 || 0) +
               ((pesertaUjian?.NilaiF3B1 || 0) +
                 (pesertaUjian?.NilaiF3B2 || 0)) /
                 2) /
-            3
-          ).toFixed(2)
-        : (
+              3
+          )
+        : roundUpScore(
             (((pesertaUjian?.NilaiF1B1 || 0) +
               (pesertaUjian?.NilaiF1B2 || 0) +
               (pesertaUjian?.NilaiF1B3 || 0)) /
@@ -965,55 +968,64 @@ const TableDataPesertaUjianKeahlian = () => {
               ((pesertaUjian?.NilaiF3B1 || 0) +
                 (pesertaUjian?.NilaiF3B2 || 0)) /
                 2) /
-            3
-          ).toFixed(2),
+              3
+          ),
       "Nilai Komprehensif 1": pesertaUjian?.NilaiKomprensifF1 || 0,
       "Nilai Komprehensif 2": pesertaUjian?.NilaiKomprensifF2 || 0,
       "Nilai Komprehensif 3": pesertaUjian?.NilaiKomprensifF3 || 0,
-      "Total Komprehensif": (
+      "Total Komprehensif": roundUpScore(
         (pesertaUjian?.NilaiKomprensifF1 +
           pesertaUjian?.NilaiKomprensifF2 +
           pesertaUjian?.NilaiKomprensifF3) /
-        3
-      ).toFixed(2),
+          3
+      ),
       "Nilai Final": isRewarding
-        ? (((pesertaUjian?.NilaiF1B1 || 0) +
-            (pesertaUjian?.NilaiF2B1 || 0) +
-            (pesertaUjian?.NilaiF3B1 || 0)) /
-            3) *
-            THEORY_WEIGHT +
-          ((pesertaUjian?.NilaiKomprensifF1 +
-            pesertaUjian?.NilaiKomprensifF2 +
-            pesertaUjian?.NilaiKomprensifF3) /
-            3) *
-            PRACTICE_WEIGHT
+        ? roundUpScore(
+            (((pesertaUjian?.NilaiF1B1 || 0) +
+              (pesertaUjian?.NilaiF2B1 || 0) +
+              (pesertaUjian?.NilaiF3B1 || 0)) /
+              3) *
+              THEORY_WEIGHT +
+              ((pesertaUjian?.NilaiKomprensifF1 +
+                pesertaUjian?.NilaiKomprensifF2 +
+                pesertaUjian?.NilaiKomprensifF3) /
+                3) *
+                PRACTICE_WEIGHT
+          )
         : isTingkatII
-        ? ((((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) /
-            2 +
-            (pesertaUjian?.NilaiF2B1 || 0) +
-            ((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) /
-              2) /
-            3) *
-            THEORY_WEIGHT +
-          ((pesertaUjian?.NilaiKomprensifF1 +
-            pesertaUjian?.NilaiKomprensifF2 +
-            pesertaUjian?.NilaiKomprensifF3) /
-            3) *
-            PRACTICE_WEIGHT
-        : ((((pesertaUjian?.NilaiF1B1 || 0) +
-            (pesertaUjian?.NilaiF1B2 || 0) +
-            (pesertaUjian?.NilaiF1B3 || 0)) /
-            3 +
-            (pesertaUjian?.NilaiF2B1 || 0) +
-            ((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) /
-              2) /
-            3) *
-            THEORY_WEIGHT +
-          ((pesertaUjian?.NilaiKomprensifF1 +
-            pesertaUjian?.NilaiKomprensifF2 +
-            pesertaUjian?.NilaiKomprensifF3) /
-            3) *
-            PRACTICE_WEIGHT,
+        ? roundUpScore(
+            ((((pesertaUjian?.NilaiF1B1 || 0) +
+              (pesertaUjian?.NilaiF1B2 || 0)) /
+              2 +
+              (pesertaUjian?.NilaiF2B1 || 0) +
+              ((pesertaUjian?.NilaiF3B1 || 0) +
+                (pesertaUjian?.NilaiF3B2 || 0)) /
+                2) /
+              3) *
+              THEORY_WEIGHT +
+              ((pesertaUjian?.NilaiKomprensifF1 +
+                pesertaUjian?.NilaiKomprensifF2 +
+                pesertaUjian?.NilaiKomprensifF3) /
+                3) *
+                PRACTICE_WEIGHT
+          )
+        : roundUpScore(
+            ((((pesertaUjian?.NilaiF1B1 || 0) +
+              (pesertaUjian?.NilaiF1B2 || 0) +
+              (pesertaUjian?.NilaiF1B3 || 0)) /
+              3 +
+              (pesertaUjian?.NilaiF2B1 || 0) +
+              ((pesertaUjian?.NilaiF3B1 || 0) +
+                (pesertaUjian?.NilaiF3B2 || 0)) /
+                2) /
+              3) *
+              THEORY_WEIGHT +
+              ((pesertaUjian?.NilaiKomprensifF1 +
+                pesertaUjian?.NilaiKomprensifF2 +
+                pesertaUjian?.NilaiKomprensifF3) /
+                3) *
+                PRACTICE_WEIGHT
+          ),
       Kelulusan: checkLulus(pesertaUjian, dataUjian[0]),
     }));
 
@@ -1987,7 +1999,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -1999,7 +2011,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF2B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2011,7 +2023,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2026,7 +2038,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2038,7 +2050,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B2 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2057,7 +2069,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B3 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2127,7 +2139,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF2B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-rose-500"
                                             : "text-green-500"
                                         }`}
                                       >
@@ -2139,7 +2151,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2151,7 +2163,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B2 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-rose-500"
                                             : "text-black"
                                         }`}
                                       >

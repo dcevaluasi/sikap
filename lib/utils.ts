@@ -145,3 +145,7 @@ export const decryptValue = (encryptedValue: string): string => {
   const bytes = CryptoJS.AES.decrypt(decodeURIComponent(encryptedValue), SECRET_KEY);
   return bytes.toString(CryptoJS.enc.Utf8);
 };
+
+export function roundUpScore(value: number): number {
+  return Math.ceil(value);
+}
