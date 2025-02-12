@@ -269,6 +269,8 @@ const TableDataPesertaUjianKeahlian = () => {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const isPenguji = Cookies.get("IsPUKAKP") == "penguji";
+  const [isEditing, setEditing] = React.useState<boolean>(false)
   const columns: ColumnDef<UsersUjian>[] = [
     {
       accessorKey: "IdUserUjian",
@@ -291,9 +293,7 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className={`${
-            usePathname().includes("pukakp") ? "flex" : "hidden"
-          } w-full text-gray-900 font-semibold`}
+          className={`w-full text-gray-900 font-semibold`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Action
@@ -302,16 +302,26 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
       cell: ({ row }) => (
         <div
-          className={`w-full ${
-            usePathname().includes("pukakp") ? "flex" : "hidden"
-          }  flex-col gap-2`}
+          className={`w-full ${!isPenguji ? "flex" : "hidden"}  flex-col gap-2`}
         >
           <div className="flex  w-full items-center justify-center gap-1">
-            <Button
+          <Button
+              onClick={(e) => {
+                setSelectedIdPeserta(row.original.IdUserUjian);
+                setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+                if (row.original.NilaiKomprensifF1 != 0) {
+                  setEditing(true)
+                  setNilaiKomprehensif(row.original.NilaiKomprensifF1.toString())
+                  setNilaiKomprehensif2(row.original.NilaiKomprensifF2.toString())
+                  setNilaiKomprehensif3(row.original.NilaiKomprensifF3.toString())
+                }
+              }}
               variant="outline"
-              className="bg-[#000] text-white hover:text-white hover:bg-[#000] w-full"
+              className="bg-neutral-950 hover:bg-neutral-950 text-neutral-200 rounded-md hover:text-neutral-200"
             >
-              <TbInfoCircleFilled className="h-4 w-4" /> Detail Peserta
+              <TbEditCircle className="h-5 w-5 mr-1" />
+              {row.original.NilaiKomprensifF1 != 0 ? "Edit" : "Input"} Nilai
+              Kompre
             </Button>
             <AlertDialog>
               <AlertDialogTrigger asChild>
@@ -417,6 +427,7 @@ const TableDataPesertaUjianKeahlian = () => {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+           
           </div>
         </div>
       ),
@@ -447,7 +458,7 @@ const TableDataPesertaUjianKeahlian = () => {
               <span className="flex items-center gap-1 leading-[105%]">
                 <TbTargetArrow className="text-base" />
                 <span>
-                  TTL : {row.original.TempatLahir}, {row.original.TanggalLahir}
+                  TTL : {row.original.TempatLahir} {row.original.TanggalLahir}
                 </span>
               </span>
 
@@ -541,31 +552,6 @@ const TableDataPesertaUjianKeahlian = () => {
         </div>
       ),
     },
-    {
-      accessorKey: "UpdateAt",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <p className="leading-[105%]">Total F1</p>
-          <TbClipboardCheck className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => (
-        <div className="ml-auto capitalize w-full flex items-center justify-center">
-          <p className="text-sm font-normal tracking-tight leading-none">
-            {(
-              (row.original.NilaiF1B1 +
-                row.original.NilaiF1B2 +
-                row.original.NilaiF1B3) /
-              3
-            ).toFixed(2)}
-          </p>
-        </div>
-      ),
-    },
 
     {
       accessorKey: "NilaiF2B1",
@@ -626,115 +612,6 @@ const TableDataPesertaUjianKeahlian = () => {
           </p>
         </div>
       ),
-    },
-    {
-      accessorKey: "Status",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <p className="leading-[105%]">Total F3</p>
-          <TbClipboardCheck className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => (
-        <div className="ml-auto capitalize w-full flex items-center justify-center">
-          <p className="text-sm font-normal tracking-tight leading-none">
-            {((row.original.NilaiF3B1 + row.original.NilaiF3B2) / 2).toFixed(2)}
-          </p>
-        </div>
-      ),
-    },
-    {
-      accessorKey: "TanggalLahir",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <p className="leading-[105%]">Nilai Kumulatif</p>
-          <TbClipboardCheck className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => (
-        <div className="ml-auto capitalize w-full flex items-center justify-center">
-          <p className="text-sm font-normal tracking-tight leading-none">
-            {(
-              ((row.original.NilaiF1B1 +
-                row.original.NilaiF1B2 +
-                row.original.NilaiF1B3) /
-                3 +
-                row.original.NilaiF2B1 +
-                (row.original.NilaiF3B1 + row.original.NilaiF3B2) / 2) /
-              3
-            ).toFixed(2)}
-          </p>
-        </div>
-      ),
-    },
-
-    {
-      accessorKey: "NilaiKomprensif",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          <p className="leading-[105%]">Nilai Komprehensif</p>
-          <TbClipboardCheck className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => {
-        const {
-          NilaiF1B1,
-          NilaiF1B2,
-          NilaiF1B3,
-          NilaiF2B1,
-          NilaiF3B1,
-          NilaiF3B2,
-          NilaiKomprensif,
-        } = row.original;
-
-        // Check if all required values are not 0
-        const isVisible =
-          NilaiF1B1 !== 0 &&
-          NilaiF1B2 !== 0 &&
-          NilaiF1B3 !== 0 &&
-          NilaiF2B1 !== 0 &&
-          NilaiF3B1 !== 0 &&
-          NilaiF3B2 !== 0;
-
-        // Render only if all required fields are non-zero
-        return !isVisible ? (
-          <div className="ml-auto capitalize w-full flex items-center justify-center">
-            {row.original.NilaiKomprensifF1 === 0 ? (
-              <Button
-                onClick={(e) => {
-                  setSelectedIdPeserta(row.original.IdUserUjian);
-                  setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
-                }}
-                variant="outline"
-                className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200"
-              >
-                <TbEditCircle className="h-5 w-5 mr-1" />
-                Masukkan Nilai
-              </Button>
-            ) : (
-              <p className="text-sm font-normal tracking-tight leading-none">
-                F1 : {row.original.NilaiKomprensifF1} | F2 :{" "}
-                {row.original.NilaiKomprensifF2} | F3 :{" "}
-                {row.original.NilaiKomprensifF3}
-              </p>
-            )}
-          </div>
-        ) : null; // Hide if any of the required fields is 0
-
-        // Render only if all required fields are non-zero
-      },
     },
   ];
 
@@ -1283,16 +1160,19 @@ const TableDataPesertaUjianKeahlian = () => {
 
           <>
             <div className="flex w-full items-center justify-between mb-2">
-              <Input
-                placeholder="Cari Peserta..."
-                value={
-                  (table.getColumn("Nama")?.getFilterValue() as string) ?? ""
-                }
-                onChange={(event: any) =>
-                  table.getColumn("Nama")?.setFilterValue(event.target.value)
-                }
-                className="max-w-sm text-sm"
-              />
+              {!showRekapitulasiNilai && (
+                <Input
+                  placeholder="Cari Peserta..."
+                  value={
+                    (table.getColumn("Nama")?.getFilterValue() as string) ?? ""
+                  }
+                  onChange={(event: any) =>
+                    table.getColumn("Nama")?.setFilterValue(event.target.value)
+                  }
+                  className="max-w-sm text-sm"
+                />
+              )}
+
               <div className="w-fit flex gap-2">
                 {showKartuUjian || showRekapitulasiNilai ? (
                   <div
@@ -2614,6 +2494,13 @@ const TableDataPesertaUjianKeahlian = () => {
                       <AlertDialogCancel
                         onClick={(e) => {
                           setIsOpenFormUjianKeahlian(false);
+                          if (isEditing) {
+                            setNilaiKomprehensif('')
+                            setNilaiKomprehensif2('')
+                            setNilaiKomprehensif3('')
+                         
+                          }
+                          setEditing(false)
                         }}
                       >
                         Cancel
@@ -2623,7 +2510,9 @@ const TableDataPesertaUjianKeahlian = () => {
                           handleUploadNilaiKomprehensif(e);
                         }}
                       >
-                        Upload
+                        {
+                          isEditing ? 'Edit' : 'Upload'
+                        }
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </form>
