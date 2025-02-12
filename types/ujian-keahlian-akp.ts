@@ -107,6 +107,9 @@ export type UsersUjian = {
   NilaiF3B1: number;
   NilaiF3B2: number;
   NilaiKomprensif: number;
+  NilaiKomprensifF1: number;
+  NilaiKomprensifF2: number;
+  NilaiKomprensifF3: number;
   CreteAt: string;
   Status: string;
   UpdateAt: string;

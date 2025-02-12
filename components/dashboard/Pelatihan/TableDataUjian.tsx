@@ -92,7 +92,12 @@ import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
 import { Checkbox } from "@/components/ui/checkbox";
 import { PelatihanMasyarakat } from "@/types/product";
-import { FaBookOpen, FaRupiahSign, FaUserPen } from "react-icons/fa6";
+import {
+  FaBookOpen,
+  FaRupiahSign,
+  FaUserPen,
+  FaUserTag,
+} from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
 
 import { convertDate } from "@/utils";
@@ -1172,7 +1177,7 @@ const TableDataUjian: React.FC = () => {
                               )}
                               {ujian!.NamaVasilitatorUjian != "" && (
                                 <span className="flex items-center gap-1 ml-[0.125rem] leading-[105%]">
-                                  <FaUserPen className="text-base" />
+                                  <FaUserTag className="text-base" />
                                   <span>
                                     Fasilitator : {ujian!.NamaVasilitatorUjian}
                                   </span>
