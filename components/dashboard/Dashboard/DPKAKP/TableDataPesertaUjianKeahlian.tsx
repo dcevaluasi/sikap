@@ -88,6 +88,7 @@ import { BiEditAlt } from "react-icons/bi";
 import { UserInformationDPKAKP } from "@/types/dpkakp";
 import UjianKeahlianAKP from "../UjianKeahlianAKP";
 import { EXAM_THRESHOLD } from "@/constants/globals";
+import { Input } from "@/components/ui/input";
 
 const TableDataPesertaUjianKeahlian = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -1242,6 +1243,16 @@ const TableDataPesertaUjianKeahlian = () => {
 
           <>
             <div className="flex w-full items-center justify-between mb-2">
+              <Input
+                placeholder="Cari Peserta..."
+                value={
+                  (table.getColumn("Nama")?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event: any) =>
+                  table.getColumn("Nama")?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm text-sm"
+              />
               <div className="w-fit flex gap-2">
                 {showKartuUjian || showRekapitulasiNilai ? (
                   <div
