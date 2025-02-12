@@ -1071,6 +1071,8 @@ const TableDataPesertaUjianKeahlian = () => {
       setIsOpenFormUjianKeahlian(false);
       setIsUploading(false);
       setNilaiKomprehensif("");
+      setNilaiKomprehensif2("");
+      setNilaiKomprehensif3("");
       setSelectedIdPeserta(0);
     } catch (error) {
       console.error(error);
@@ -1082,6 +1084,8 @@ const TableDataPesertaUjianKeahlian = () => {
       setIsOpenFormUjianKeahlian(false);
       setIsUploading(false);
       setNilaiKomprehensif("");
+      setNilaiKomprehensif2("");
+      setNilaiKomprehensif3("");
       setSelectedIdPeserta(0);
     }
   };
