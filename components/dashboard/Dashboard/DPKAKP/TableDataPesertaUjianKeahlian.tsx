@@ -137,35 +137,53 @@ const TableDataPesertaUjianKeahlian = () => {
   };
 
   function checkLulus(userUjian: UsersUjian, ujian: Ujian): string {
-    var scores: number[] = [];
-    if (ujian.TypeUjian == "ANKAPIN II" || ujian.TypeUjian === "ATKAPIN II") {
-      scores = [
-        userUjian.NilaiF1B1,
-        userUjian.NilaiF1B2,
-        userUjian.NilaiF2B1,
-        userUjian.NilaiF3B1,
-        userUjian.NilaiF3B2,
-      ];
+    let finalScore: number;
+
+    if (ujian.TypeUjian.includes("Rewarding")) {
+      finalScore =
+        (((userUjian.NilaiF1B1 || 0) +
+          (userUjian.NilaiF2B1 || 0) +
+          (userUjian.NilaiF3B1 || 0)) /
+          3) *
+          THEORY_WEIGHT +
+        ((userUjian.NilaiKomprensifF1 +
+          userUjian.NilaiKomprensifF2 +
+          userUjian.NilaiKomprensifF3) /
+          3) *
+          PRACTICE_WEIGHT;
+    } else if (
+      ujian.TypeUjian === "ANKAPIN II" ||
+      ujian.TypeUjian === "ATKAPIN II"
+    ) {
+      finalScore =
+        ((((userUjian.NilaiF1B1 || 0) + (userUjian.NilaiF1B2 || 0)) / 2 +
+          (userUjian.NilaiF2B1 || 0) +
+          ((userUjian.NilaiF3B1 || 0) + (userUjian.NilaiF3B2 || 0)) / 2) /
+          3) *
+          THEORY_WEIGHT +
+        ((userUjian.NilaiKomprensifF1 +
+          userUjian.NilaiKomprensifF2 +
+          userUjian.NilaiKomprensifF3) /
+          3) *
+          PRACTICE_WEIGHT;
     } else {
-      scores = [
-        userUjian.NilaiF1B1,
-        userUjian.NilaiF1B2,
-        userUjian.NilaiF1B3,
-        userUjian.NilaiF2B1,
-        userUjian.NilaiF3B1,
-        userUjian.NilaiF3B2,
-      ];
+      finalScore =
+        ((((userUjian.NilaiF1B1 || 0) +
+          (userUjian.NilaiF1B2 || 0) +
+          (userUjian.NilaiF1B3 || 0)) /
+          3 +
+          (userUjian.NilaiF2B1 || 0) +
+          ((userUjian.NilaiF3B1 || 0) + (userUjian.NilaiF3B2 || 0)) / 2) /
+          3) *
+          THEORY_WEIGHT +
+        ((userUjian.NilaiKomprensifF1 +
+          userUjian.NilaiKomprensifF2 +
+          userUjian.NilaiKomprensifF3) /
+          3) *
+          PRACTICE_WEIGHT;
     }
 
-    // Check if all scores are numbers and if any score is less than 50
-    for (let score of scores) {
-      if (score == null || isNaN(score) || score < EXAM_THRESHOLD) {
-        return "TIDAK LULUS";
-      }
-    }
-
-    // If all scores are >= 50
-    return "LULUS";
+    return finalScore >= EXAM_THRESHOLD ? "LULUS" : "TIDAK LULUS";
   }
 
   function countLulus(
@@ -2001,7 +2019,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500 animate-pulse"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2013,7 +2031,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF2B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500 animate-pulse"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2025,7 +2043,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500 animate-pulse"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2040,7 +2058,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500 animate-pulse"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2052,7 +2070,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B2 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500 animate-pulse"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2071,7 +2089,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B3 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500 animate-pulse"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2141,7 +2159,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF2B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500 animate-pulse"
+                                            ? "text-white bg-rose-500"
                                             : "text-green-500"
                                         }`}
                                       >
@@ -2153,7 +2171,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500 animate-pulse"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
@@ -2165,7 +2183,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B2 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500 animate-pulse"
+                                            ? "text-white bg-rose-500"
                                             : "text-black"
                                         }`}
                                       >
