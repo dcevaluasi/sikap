@@ -712,7 +712,7 @@ const TableDataPesertaUjianKeahlian = () => {
         // Render only if all required fields are non-zero
         return !isVisible ? (
           <div className="ml-auto capitalize w-full flex items-center justify-center">
-            {NilaiKomprensif === 0 ? (
+            {row.original.NilaiKomprensifF1 === 0 ? (
               <Button
                 onClick={(e) => {
                   setSelectedIdPeserta(row.original.IdUserUjian);
