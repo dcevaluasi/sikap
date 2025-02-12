@@ -1896,7 +1896,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <span className="">Kompre F3</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">Total</span>
+                                <span className="">Nilai Kumulatif Kompre</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
                                 <span className="">LULUS/TDK LULUS</span>
