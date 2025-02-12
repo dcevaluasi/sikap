@@ -1956,7 +1956,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-white bg-rose-500 animate-pulse"
                                             : "text-black"
                                         }`}
                                       >
@@ -1968,7 +1968,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF2B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-white bg-rose-500 animate-pulse"
                                             : "text-black"
                                         }`}
                                       >
@@ -1980,7 +1980,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-white bg-rose-500 animate-pulse"
                                             : "text-black"
                                         }`}
                                       >
@@ -1995,7 +1995,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-white bg-rose-500 animate-pulse"
                                             : "text-black"
                                         }`}
                                       >
@@ -2007,7 +2007,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B2 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-white bg-rose-500 animate-pulse"
                                             : "text-black"
                                         }`}
                                       >
@@ -2026,7 +2026,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF1B3 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-white bg-rose-500 animate-pulse"
                                             : "text-black"
                                         }`}
                                       >
@@ -2096,7 +2096,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF2B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-white bg-rose-500 animate-pulse"
                                             : "text-green-500"
                                         }`}
                                       >
@@ -2108,7 +2108,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B1 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-white bg-rose-500 animate-pulse"
                                             : "text-black"
                                         }`}
                                       >
@@ -2120,7 +2120,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
                                           (pesertaUjian?.NilaiF3B2 || 0) <
                                           EXAM_THRESHOLD
-                                            ? "text-white bg-rose-500"
+                                            ? "text-white bg-rose-500 animate-pulse"
                                             : "text-black"
                                         }`}
                                       >
