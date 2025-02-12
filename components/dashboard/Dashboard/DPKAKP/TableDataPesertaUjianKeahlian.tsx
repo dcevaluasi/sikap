@@ -1565,7 +1565,7 @@ const TableDataPesertaUjianKeahlian = () => {
 
                           <div className="flex flex-col gap">
                             <div
-                              className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border border-gray-300 bg-gray-100 bg-opacity-20 font-medium  mt-5 text-base uppercase`}
+                              className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border border-gray-300 bg-neutral-200 bg-opacity-20 font-medium  mt-5 text-base uppercase`}
                             >
                               <p className="text-sm">Nomor Ujian{"     "}:</p>
                               <p className="font-semibold">
@@ -1628,7 +1628,7 @@ const TableDataPesertaUjianKeahlian = () => {
                           {dataUjian[0]!.TypeUjian.includes("Rewarding")
                             ? peserta!.CodeAksesUsersBagian!.length != 0 && (
                                 <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
-                                  <div className="flex flex-shrink-0 bg-gray-100 text-white">
+                                  <div className="flex flex-shrink-0 bg-neutral-200 text-white">
                                     <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
                                       <span>F1</span>
                                     </div>
@@ -1665,7 +1665,7 @@ const TableDataPesertaUjianKeahlian = () => {
                               )
                             : peserta!.CodeAksesUsersBagian!.length != 0 && (
                                 <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
-                                  <div className="flex flex-shrink-0 bg-gray-100 text-white">
+                                  <div className="flex flex-shrink-0 bg-neutral-200 text-white">
                                     <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
                                       <span>F1B1</span>
                                     </div>
@@ -2180,7 +2180,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </>
                                   )}
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-gray-100 font-bold ${
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${
                                       dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
                                       )
@@ -2270,7 +2270,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </span>
                                   </div>
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-gray-100 font-bold ${
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${
                                       (pesertaUjian?.NilaiKomprensifF1 +
                                         pesertaUjian?.NilaiKomprensifF2 +
                                         pesertaUjian?.NilaiKomprensifF3) /
@@ -2290,7 +2290,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </span>
                                   </div>
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-gray-100 font-bold ${
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-neutral-200 font-bold ${
                                       dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
                                       )
