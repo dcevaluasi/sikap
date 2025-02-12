@@ -87,7 +87,11 @@ import {
 import { BiEditAlt } from "react-icons/bi";
 import { UserInformationDPKAKP } from "@/types/dpkakp";
 import UjianKeahlianAKP from "../UjianKeahlianAKP";
-import { EXAM_THRESHOLD } from "@/constants/globals";
+import {
+  EXAM_THRESHOLD,
+  PRACTICE_WEIGHT,
+  THEORY_WEIGHT,
+} from "@/constants/globals";
 import { Input } from "@/components/ui/input";
 
 const TableDataPesertaUjianKeahlian = () => {
@@ -986,6 +990,44 @@ const TableDataPesertaUjianKeahlian = () => {
           pesertaUjian?.NilaiKomprensifF3) /
         3
       ).toFixed(2),
+      "Nilai Final": isRewarding
+        ? (((pesertaUjian?.NilaiF1B1 || 0) +
+            (pesertaUjian?.NilaiF2B1 || 0) +
+            (pesertaUjian?.NilaiF3B1 || 0)) /
+            3) *
+            THEORY_WEIGHT +
+          ((pesertaUjian?.NilaiKomprensifF1 +
+            pesertaUjian?.NilaiKomprensifF2 +
+            pesertaUjian?.NilaiKomprensifF3) /
+            3) *
+            PRACTICE_WEIGHT
+        : isTingkatII
+        ? ((((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) /
+            2 +
+            (pesertaUjian?.NilaiF2B1 || 0) +
+            ((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) /
+              2) /
+            3) *
+            THEORY_WEIGHT +
+          ((pesertaUjian?.NilaiKomprensifF1 +
+            pesertaUjian?.NilaiKomprensifF2 +
+            pesertaUjian?.NilaiKomprensifF3) /
+            3) *
+            PRACTICE_WEIGHT
+        : ((((pesertaUjian?.NilaiF1B1 || 0) +
+            (pesertaUjian?.NilaiF1B2 || 0) +
+            (pesertaUjian?.NilaiF1B3 || 0)) /
+            3 +
+            (pesertaUjian?.NilaiF2B1 || 0) +
+            ((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) /
+              2) /
+            3) *
+            THEORY_WEIGHT +
+          ((pesertaUjian?.NilaiKomprensifF1 +
+            pesertaUjian?.NilaiKomprensifF2 +
+            pesertaUjian?.NilaiKomprensifF3) /
+            3) *
+            PRACTICE_WEIGHT,
       Kelulusan: checkLulus(pesertaUjian, dataUjian[0]),
     }));
 
@@ -1929,6 +1971,9 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <span className="">Nilai Kumulatif Kompre</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                                <span className="">Nilai Final</span>
+                              </div>
+                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
                                 <span className="">LULUS/TDK LULUS</span>
                               </div>
                             </div>
@@ -2256,6 +2301,120 @@ const TableDataPesertaUjianKeahlian = () => {
                                           pesertaUjian?.NilaiKomprensifF3) /
                                         3
                                       ).toFixed(2) || 0}
+                                    </span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  font-bold ${
+                                      dataUjian[0]!.TypeUjian.includes(
+                                        "Rewarding"
+                                      )
+                                        ? (((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF2B1 || 0) +
+                                            (pesertaUjian?.NilaiF3B1 || 0)) /
+                                            3) *
+                                            THEORY_WEIGHT +
+                                            ((pesertaUjian?.NilaiKomprensifF1 +
+                                              pesertaUjian?.NilaiKomprensifF2 +
+                                              pesertaUjian?.NilaiKomprensifF3) /
+                                              3) *
+                                              PRACTICE_WEIGHT <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-green-500"
+                                        : dataUjian[0]!.TypeUjian ==
+                                            "ANKAPIN II" ||
+                                          dataUjian[0].TypeUjian == "ATKAPIN II"
+                                        ? ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF1B2 || 0)) /
+                                            2 +
+                                            (pesertaUjian?.NilaiF2B1 || 0) +
+                                            ((pesertaUjian?.NilaiF3B1 || 0) +
+                                              (pesertaUjian?.NilaiF3B2 || 0)) /
+                                              2) /
+                                            3) *
+                                            THEORY_WEIGHT +
+                                            ((pesertaUjian?.NilaiKomprensifF1 +
+                                              pesertaUjian?.NilaiKomprensifF2 +
+                                              pesertaUjian?.NilaiKomprensifF3) /
+                                              3) *
+                                              PRACTICE_WEIGHT <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-green-500"
+                                        : ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF1B2 || 0) +
+                                            (pesertaUjian?.NilaiF1B3 || 0)) /
+                                            3 +
+                                            (pesertaUjian?.NilaiF2B1 || 0) +
+                                            ((pesertaUjian?.NilaiF3B1 || 0) +
+                                              (pesertaUjian?.NilaiF3B2 || 0)) /
+                                              2) /
+                                            3) *
+                                            THEORY_WEIGHT +
+                                            ((pesertaUjian?.NilaiKomprensifF1 +
+                                              pesertaUjian?.NilaiKomprensifF2 +
+                                              pesertaUjian?.NilaiKomprensifF3) /
+                                              3) *
+                                              PRACTICE_WEIGHT <
+                                          EXAM_THRESHOLD
+                                        ? "text-rose-500"
+                                        : "text-green-500"
+                                    }`}
+                                  >
+                                    <span>
+                                      {dataUjian[0]!.TypeUjian.includes(
+                                        "Rewarding"
+                                      )
+                                        ? (
+                                            (((pesertaUjian?.NilaiF1B1 || 0) +
+                                              (pesertaUjian?.NilaiF2B1 || 0) +
+                                              (pesertaUjian?.NilaiF3B1 || 0)) /
+                                              3) *
+                                              THEORY_WEIGHT +
+                                            ((pesertaUjian?.NilaiKomprensifF1 +
+                                              pesertaUjian?.NilaiKomprensifF2 +
+                                              pesertaUjian?.NilaiKomprensifF3) /
+                                              3) *
+                                              PRACTICE_WEIGHT
+                                          ).toFixed(2)
+                                        : dataUjian[0]!.TypeUjian ==
+                                            "ANKAPIN II" ||
+                                          dataUjian[0].TypeUjian == "ATKAPIN II"
+                                        ? (
+                                            ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                              (pesertaUjian?.NilaiF1B2 || 0)) /
+                                              2 +
+                                              (pesertaUjian?.NilaiF2B1 || 0) +
+                                              ((pesertaUjian?.NilaiF3B1 || 0) +
+                                                (pesertaUjian?.NilaiF3B2 ||
+                                                  0)) /
+                                                2) /
+                                              3) *
+                                              THEORY_WEIGHT +
+                                            ((pesertaUjian?.NilaiKomprensifF1 +
+                                              pesertaUjian?.NilaiKomprensifF2 +
+                                              pesertaUjian?.NilaiKomprensifF3) /
+                                              3) *
+                                              PRACTICE_WEIGHT
+                                          ).toFixed(2)
+                                        : (
+                                            ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                              (pesertaUjian?.NilaiF1B2 || 0) +
+                                              (pesertaUjian?.NilaiF1B3 || 0)) /
+                                              3 +
+                                              (pesertaUjian?.NilaiF2B1 || 0) +
+                                              ((pesertaUjian?.NilaiF3B1 || 0) +
+                                                (pesertaUjian?.NilaiF3B2 ||
+                                                  0)) /
+                                                2) /
+                                              3) *
+                                              THEORY_WEIGHT +
+                                            ((pesertaUjian?.NilaiKomprensifF1 +
+                                              pesertaUjian?.NilaiKomprensifF2 +
+                                              pesertaUjian?.NilaiKomprensifF3) /
+                                              3) *
+                                              PRACTICE_WEIGHT
+                                          ).toFixed(2)}
                                     </span>
                                   </div>
                                   <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 font-bold justify-center py-7 text-center">
