@@ -194,47 +194,15 @@ const TableDataPesertaUjianKeahlian = () => {
     let tidakLulusCount = 0;
 
     usersUjian.forEach((userUjian) => {
-      let scores: number[] = [];
-
-      if (ujian.TypeUjian == "ANKAPIN II" || ujian.TypeUjian === "ATKAPIN II") {
-        scores = [
-          userUjian.NilaiF1B1,
-          userUjian.NilaiF1B2,
-          userUjian.NilaiF2B1,
-          userUjian.NilaiF3B1,
-          userUjian.NilaiF3B2,
-        ];
-      } else {
-        scores = [
-          userUjian.NilaiF1B1,
-          userUjian.NilaiF1B2,
-          userUjian.NilaiF1B3,
-          userUjian.NilaiF2B1,
-          userUjian.NilaiF3B1,
-          userUjian.NilaiF3B2,
-        ];
-      }
-
-      // Check if all scores are numbers and if any score is less than 50
-      let isLulus = true;
-      for (let score of scores) {
-        if (score == null || isNaN(score) || score < EXAM_THRESHOLD) {
-          isLulus = false;
-          break; // Exit early as we already know the student failed
-        }
-      }
-
-      if (isLulus) {
+      const result = checkLulus(userUjian, ujian); // Reuse the checkLulus function
+      if (result === "LULUS") {
         lulusCount++;
       } else {
         tidakLulusCount++;
       }
     });
 
-    return {
-      lulus: lulusCount,
-      tidakLulus: tidakLulusCount,
-    };
+    return { lulus: lulusCount, tidakLulus: tidakLulusCount };
   }
 
   const [showRekapitulasiNilai, setShowRekapitulasiNilai] =
@@ -2212,7 +2180,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </>
                                   )}
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  font-bold ${
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-gray-400 font-bold ${
                                       dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
                                       )
@@ -2302,7 +2270,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </span>
                                   </div>
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 font-bold ${
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-gray-400 font-bold ${
                                       (pesertaUjian?.NilaiKomprensifF1 +
                                         pesertaUjian?.NilaiKomprensifF2 +
                                         pesertaUjian?.NilaiKomprensifF3) /
@@ -2322,7 +2290,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </span>
                                   </div>
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  font-bold ${
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-gray-400 font-bold ${
                                       dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
                                       )
