@@ -1850,7 +1850,7 @@ const TableDataPesertaUjianKeahlian = () => {
                               ) : (
                                 <>
                                   {" "}
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
+                                  <div className="flex items-center flex-grow  h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] w-1 justify-center text-center leading-none py-6">
                                     <span className="">F1B1</span>
                                   </div>
                                   <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
@@ -1915,7 +1915,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                       {pesertaUjian?.NomorUjian || "-"}
                                     </span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 capitalize leading-none">
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center text-left py-7 capitalize leading-none">
                                     <span>{pesertaUjian?.Nama || "-"}</span>
                                   </div>
                                   {dataUjian[0]!.TypeUjian.includes(
@@ -2119,7 +2119,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </>
                                   )}
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7  font-bold ${
                                       dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
                                       )
@@ -2202,7 +2202,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                       {pesertaUjian?.NilaiKomprensifF3 || 0}
                                     </span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7">
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 font-bold">
                                     <span>
                                       {(pesertaUjian?.NilaiKomprensifF1 +
                                         pesertaUjian?.NilaiKomprensifF2 +
@@ -2210,7 +2210,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         3 || 0}
                                     </span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 text-center">
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 font-bold justify-center py-7 text-center">
                                     <span
                                       className={`  ${
                                         checkLulus(
