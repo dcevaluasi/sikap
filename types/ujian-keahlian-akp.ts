@@ -62,6 +62,7 @@ export type UjianKeahlian = {
 export type Ujian = {
   IdUjian: number
   IdTypeUjian: number
+  IdPengawasUjian: string;
   TypeUjian: string
   NamaUjian: string
   TempatUjian: string

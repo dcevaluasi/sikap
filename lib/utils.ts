@@ -1,5 +1,6 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
+import CryptoJS from 'crypto-js';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -100,33 +101,47 @@ export function formatIndonesianDate(dateString: string): string {
   // Parse input date string
   const match = dateString.match(/(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) ([+-]\d{4}) (WIB|WIT|WITA)/);
   if (!match) {
-      throw new Error("Invalid date format");
+    throw new Error("Invalid date format");
   }
-  
+
   const [_, datePart, offset, timezone] = match;
-  
+
   // Create a Date object with the timezone offset
   const date = new Date(datePart + offset);
-  
+
   // Define Indonesian time zone mappings
   const timezoneMap: Record<string, string> = {
-      WIB: "Asia/Jakarta",
-      WITA: "Asia/Makassar",
-      WIT: "Asia/Jayapura"
+    WIB: "Asia/Jakarta",
+    WITA: "Asia/Makassar",
+    WIT: "Asia/Jayapura"
   };
-  
+
   // Format the date to desired output
   const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      timeZone: timezoneMap[timezone as keyof typeof timezoneMap],
-      hour12: false
+    weekday: "long",
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone: timezoneMap[timezone as keyof typeof timezoneMap],
+    hour12: false
   };
-  
+
   return new Intl.DateTimeFormat("en-GB", options).format(date) + ` ${timezone}`;
 }
+
+const SECRET_KEY = process.env.NEXT_PUBLIC_ENCRYPT_KEY || ''
+
+// Encrypt function
+export const encryptValue = (value: string | number): string => {
+  const ciphertext = CryptoJS.AES.encrypt(value.toString(), SECRET_KEY).toString();
+  return encodeURIComponent(ciphertext); // URL safe
+};
+
+// Decrypt function
+export const decryptValue = (encryptedValue: string): string => {
+  const bytes = CryptoJS.AES.decrypt(decodeURIComponent(encryptedValue), SECRET_KEY);
+  return bytes.toString(CryptoJS.enc.Utf8);
+};

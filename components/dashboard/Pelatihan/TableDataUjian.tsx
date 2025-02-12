@@ -238,28 +238,36 @@ const TableDataUjian: React.FC = () => {
 
     try {
       // Check if idUsersDpkakp exists, and wait until it does (polling mechanism)
-      const getIdUsersDpkakp = async (): Promise<string | null> => {
-        let id = Cookies.get("IdUsersDpkakp");
+      const getIdUsersDpkakp = async (): Promise<{
+        id: string;
+        name: string;
+      }> => {
+        let id = Cookies.get("IdUsersDpkakp")!;
+        let name = Cookies.get("NamaUsersDpkakp")!;
         const timeout = 5000; // Maximum wait time (in ms)
         const interval = 200; // Check every 200ms
         const startTime = Date.now();
 
-        while (!id && Date.now() - startTime < timeout) {
+        while ((!id || !name) && Date.now() - startTime < timeout) {
           await new Promise((resolve) => setTimeout(resolve, interval));
-          id = Cookies.get("IdUsersDpkakp");
+          id = Cookies.get("IdUsersDpkakp")!;
+          name = Cookies.get("NamaUsersDpkakp")!;
         }
 
-        return id!;
+        return { id, name };
       };
 
-      const idUsersDpkakp = await getIdUsersDpkakp();
+      const idUsersDpkakp = (await getIdUsersDpkakp()).id;
+      const nameUsersDpkakp = (await getIdUsersDpkakp()).name;
 
       if (!idUsersDpkakp) {
         throw new Error("idUsersDpkakp not found within the timeout period.");
       }
 
+      // const isMatchIdUserDpkakp = data[0]!.
+
       const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminPusat/GetUjian?id_users_dpkakp=${idUsersDpkakp}`,
+        `${dpkakpBaseUrl}/adminPusat/GetUjian`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("XSRF095")}`,
@@ -272,12 +280,9 @@ const TableDataUjian: React.FC = () => {
       const pukakpCookie = Cookies.get("PUKAKP");
 
       // Filter the data by PUKAKP value if the cookie is available
-      const filteredData =
-        pukakpCookie != "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan"
-          ? response.data.data.filter(
-              (item: any) => item.PUKAKP === pukakpCookie
-            )
-          : response.data.data;
+      const filteredData = response.data.data.filter((item: any) =>
+        item.NamaPengawasUjian.includes(nameUsersDpkakp)
+      );
 
       // Sort the data first by status ('Pending' first) and then by CreateAt in descending order
       const sortedData = filteredData.sort((a: any, b: any) => {
@@ -316,7 +321,7 @@ const TableDataUjian: React.FC = () => {
         setData(sortedData);
       } else {
         // Sort original data by status and CreateAt if no filter is applied
-        const sortedOriginalData = response.data.data.sort((a: any, b: any) => {
+        const sortedOriginalData = filteredData.sort((a: any, b: any) => {
           // Sort by status: 'Pending' first
           if (a.Status === "Pending" && b.Status !== "Pending") return -1;
           if (a.Status !== "Pending" && b.Status === "Pending") return 1;
@@ -355,6 +360,36 @@ const TableDataUjian: React.FC = () => {
       throw error;
     }
   };
+
+  // ================== Penguji Setting (DPKAKP/Sekretariat DPKAKP)
+  const [jumlahPenguji, setJumlahPenguji] = React.useState<number>(1);
+
+  const [pengujiData, setPengujiData] = React.useState(
+    Array.from({ length: 3 }, () => ({ nama: "", id: "" }))
+  );
+
+  const handlePengujiChange = (index: number, value: any) => {
+    const [nama, id] = value.split("|");
+    const newPengujiData = [...pengujiData];
+    newPengujiData[index] = { nama, id };
+    setPengujiData(newPengujiData);
+  };
+
+  const generateIdPengujiString = () => {
+    return pengujiData
+      .map((penguji) => penguji.id)
+      .filter((id) => id)
+      .join(",");
+  };
+
+  const generateNamaPengujiString = () => {
+    return pengujiData
+      .map((penguji) => penguji.nama)
+      .filter((nama) => nama)
+      .join("|");
+  };
+
+  // =============================================================
 
   const [idTypeUjian, setIdTypeUjian] = React.useState<string>("");
   const [typeUjian, setTypeUjian] = React.useState<string>("");
@@ -432,7 +467,7 @@ const TableDataUjian: React.FC = () => {
     formData.append("TanggalMulaiUjian", tanggalMulai);
     formData.append("TanggalBerakhirUjian", tanggalBerakhir);
     formData.append("WaktuUjian", waktuUjian);
-    formData.append("JumlahPesertaUjian", jumlahPeserta.toString());
+    formData.append("JumlahPesertaUjian", (jumlahPeserta + 1).toString());
     formData.append("Status", "Draft");
     if (filePermohonan != null) {
       formData.append("filePermohonan", filePermohonan!);
@@ -491,8 +526,8 @@ const TableDataUjian: React.FC = () => {
       const response = await axios.put(
         `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedId}`,
         {
-          nama_pengawas_ujian: namaPengawas,
-          id_users_dpkakp: idPengawas,
+          nama_pengawas_ujian: generateNamaPengujiString(),
+          id_users_dpkakp: generateIdPengujiString(),
           nama_vasilitator_ujian: namaVasilitator,
         },
         {
@@ -1097,7 +1132,7 @@ const TableDataUjian: React.FC = () => {
                       )}
 
                       <CardHeader>
-                        <EventBadge ujian={ujian!} />
+                        {/* <EventBadge ujian={ujian!} /> */}
                         <CardTitle>{ujian!.NamaUjian}</CardTitle>
                         <CardDescription>
                           {" "}
@@ -1135,14 +1170,26 @@ const TableDataUjian: React.FC = () => {
                                   </span>
                                 </span>
                               )}
-                              <span className="flex items-center gap-1 leading-[105%]">
-                                <HiUserGroup className="text-base" />
-                                <span>
-                                  Jumlah peserta ujian :{" "}
-                                  {ujian!.UsersUjian.length}/
-                                  {ujian!.JumlahPesertaUjian}
+                              {ujian!.NamaVasilitatorUjian != "" && (
+                                <span className="flex items-center gap-1 ml-[0.125rem] leading-[105%]">
+                                  <FaUserPen className="text-base" />
+                                  <span>
+                                    Fasilitator : {ujian!.NamaVasilitatorUjian}
+                                  </span>
                                 </span>
-                              </span>
+                              )}
+                              {ujian!.UsersUjian != null && (
+                                <span className="flex items-center gap-1 leading-[105%]">
+                                  <HiUserGroup className="text-base" />
+                                  <span>
+                                    Jumlah peserta ujian :{" "}
+                                    {ujian!.UsersUjian.length}/
+                                    {ujian!.JumlahPesertaUjian == 0
+                                      ? 0
+                                      : ujian!.JumlahPesertaUjian - 1}
+                                  </span>
+                                </span>
+                              )}
                             </p>
                           </div>
                         </div>
@@ -1311,6 +1358,25 @@ const TableDataUjian: React.FC = () => {
                               </AlertDialogContent>
                             </AlertDialog>
                           )}
+
+                          {usePathname().includes("dpkakp") &&
+                            ujian!.Status == "Aktif" &&
+                            ujian!.NamaPengawasUjian == "" && (
+                              <Button
+                                onClick={(e) => {
+                                  setSelectedId(ujian!.IdUjian);
+                                  setStatus(ujian!.Status);
+                                  setIsOpenFormUjianKeahlian(
+                                    !isOpenFormUjianKeahlian
+                                  );
+                                }}
+                                variant="outline"
+                                className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200"
+                              >
+                                <TbEditCircle className="h-5 w-5 mr-1" />
+                                Pilih Penguji
+                              </Button>
+                            )}
 
                           {usePathname().includes("pukakp") &&
                             ujian!.Status === "Aktif" && (
@@ -1986,72 +2052,91 @@ const TableDataUjian: React.FC = () => {
             ) : (
               <form autoComplete="off">
                 <div className="flex flex-wrap -mx-3 mb-1">
-                  <div className="flex px-3 gap-2 mb-2 w-full">
-                    <div className="w-full">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
-                      >
-                        Nama Penguji <span className="text-red-600">*</span>
-                      </label>
-                      <select
-                        id="name"
-                        className="form-select w-full text-black border-gray-300 rounded-md"
-                        required
-                        value={`${namaPengawas}|${idPengawas}`} // Match the combined value
-                        onChange={(e) => {
-                          const [nama, id] = e.target.value.split("|"); // Split the combined value
-                          setNamaPengawas(nama); // Update state for NamaUsersDpkakp
-                          setIdPengawas(id); // Update state for IdUsersDpkakp
-                        }}
-                      >
-                        <option value="">Pilih Penguji</option>
-                        {dataPenguji!.map((penguji: any, index: number) => (
-                          <option
-                            key={penguji.IdUsersDpkakp}
-                            value={`${penguji.NamaUsersDpkakp}|${penguji.IdUsersDpkakp}`} // Combine the values
-                            className="capitalize"
-                          >
-                            {penguji.NamaUsersDpkakp}
-                          </option>
+                  <div className="w-full px-3 mb-2">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="jumlahPenguji"
+                    >
+                      Jumlah Penguji <span className="text-red-600">*</span>
+                    </label>
+                    <Select
+                      onValueChange={(value) => setJumlahPenguji(Number(value))}
+                      value={jumlahPenguji.toString()}
+                    >
+                      <SelectTrigger className="w-full py-5">
+                        <SelectValue placeholder="Pilih Jumlah Penguji" />
+                      </SelectTrigger>
+                      <SelectContent side="bottom" className="z-[999999]">
+                        {[1, 2, 3].map((num) => (
+                          <SelectItem key={num} value={num.toString()}>
+                            {num}
+                          </SelectItem>
                         ))}
-                      </select>
-                    </div>
-
-                    <div className="w-full">
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  {[...Array(jumlahPenguji)].map((_, index) => (
+                    <div key={index} className="w-full px-3 mb-2">
                       <label
                         className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
+                        htmlFor={`penguji-${index}`}
                       >
-                        Nama Fasilitator <span className="text-red-600">*</span>
+                        Nama Penguji {index + 1}{" "}
+                        <span className="text-red-600">*</span>
                       </label>
-                      <input
-                        id="name"
-                        type="text"
-                        className="form-input w-full text-black border-gray-300 rounded-md"
-                        placeholder="Nama Fasilitator"
-                        required
-                        value={namaVasilitator}
-                        onChange={(e) => setNamaVasilitator(e.target.value)}
-                      />
+                      <Select
+                        onValueChange={(value) =>
+                          handlePengujiChange(index, value)
+                        }
+                        value={`${pengujiData[index].nama}|${pengujiData[index].id}`}
+                      >
+                        <SelectTrigger className="w-full py-5">
+                          <SelectValue placeholder="Pilih Penguji" />
+                        </SelectTrigger>
+                        <SelectContent side="bottom" className="z-[999999]">
+                          {dataPenguji!.map((penguji) => (
+                            <SelectItem
+                              key={penguji.IdUsersDpkakp}
+                              value={`${penguji.NamaUsersDpkakp}|${penguji.IdUsersDpkakp}`}
+                              className="capitalize"
+                            >
+                              {penguji.NamaUsersDpkakp}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
+                  ))}
+
+                  <div className="w-full px-3 mb-2">
+                    <label
+                      className="block text-gray-800 text-sm font-medium mb-1"
+                      htmlFor="fasilitator"
+                    >
+                      Nama Fasilitator <span className="text-red-600">*</span>
+                    </label>
+                    <Input
+                      id="fasilitator"
+                      type="text"
+                      className="w-full text-black border-gray-300 text-sm rounded-md h-fit"
+                      placeholder="Nama Fasilitator"
+                      required
+                      value={namaVasilitator}
+                      onChange={(e) => setNamaVasilitator(e.target.value)}
+                    />
                   </div>
                 </div>
 
                 <AlertDialogFooter className="mt-3">
                   <AlertDialogCancel
-                    onClick={(e) => {
+                    onClick={() => {
                       handleCancelAddNewUjian();
                       setIsOpenFormUjianKeahlian(false);
                     }}
                   >
                     Cancel
                   </AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={(e) => {
-                      handleUpdateNewUjianKeahlian(e);
-                    }}
-                  >
+                  <AlertDialogAction onClick={handleUpdateNewUjianKeahlian}>
                     Upload
                   </AlertDialogAction>
                 </AlertDialogFooter>

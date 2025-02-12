@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import TableDataPelatihan from "../Pelatihan/TableDataPelatihan";
 import { TbSchool } from "react-icons/tb";
 import TableDataUjian from "../Pelatihan/TableDataUjian";
 import { HiMiniComputerDesktop } from "react-icons/hi2";

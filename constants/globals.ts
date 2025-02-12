@@ -1,0 +1,1 @@
+export const EXAM_THRESHOLD = 50

@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import * as XLSX from "xlsx";
 
-import jsPDF from "jspdf";
 import "jspdf-autotable";
 import { useReactToPrint } from "react-to-print";
-import html2canvas from "html2canvas";
 
 import {
   AlertDialog,
@@ -85,6 +83,7 @@ import { IoArrowBackSharp, IoPrintOutline } from "react-icons/io5";
 import { BiEditAlt } from "react-icons/bi";
 import { UserInformationDPKAKP } from "@/types/dpkakp";
 import UjianKeahlianAKP from "../UjianKeahlianAKP";
+import { EXAM_THRESHOLD } from "@/constants/globals";
 
 const TableDataPesertaUjianKeahlian = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -93,7 +92,6 @@ const TableDataPesertaUjianKeahlian = () => {
   console.log("PATHNAME", pathname);
   console.log("IDUJIAN", idUjianKeahlian);
   const id = extractSecondLastSegment(pathname);
-  const [noSertifikatTerbitkan, setNoSertifikatTerbitkan] = React.useState("");
 
   const printRef = React.useRef<HTMLDivElement>(null);
 
@@ -152,7 +150,7 @@ const TableDataPesertaUjianKeahlian = () => {
 
     // Check if all scores are numbers and if any score is less than 50
     for (let score of scores) {
-      if (score == null || isNaN(score) || score < 50) {
+      if (score == null || isNaN(score) || score < EXAM_THRESHOLD) {
         return "TIDAK LULUS";
       }
     }
@@ -193,7 +191,7 @@ const TableDataPesertaUjianKeahlian = () => {
       // Check if all scores are numbers and if any score is less than 50
       let isLulus = true;
       for (let score of scores) {
-        if (score == null || isNaN(score) || score < 50) {
+        if (score == null || isNaN(score) || score < EXAM_THRESHOLD) {
           isLulus = false;
           break; // Exit early as we already know the student failed
         }
@@ -215,55 +213,6 @@ const TableDataPesertaUjianKeahlian = () => {
   const [showRekapitulasiNilai, setShowRekapitulasiNilai] =
     React.useState<boolean>(false);
   const printRefRekapitulasiNilai = React.useRef<HTMLDivElement>(null);
-
-  const handlePrintRekapitulasiNilai = React.useCallback(async () => {
-    const element = printRefRekapitulasiNilai.current;
-    if (!element) return;
-
-    window.scrollTo(0, 0);
-    const canvas = await html2canvas(element, { scale: 2 });
-
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-
-    const imgWidth = 210 - 20; // Lebar A4 dikurangi margin
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    let y = 10;
-    pdf.addImage(imgData, "PNG", 10, y, imgWidth, imgHeight);
-
-    pdf.save(`Rekapitulasi_Hasil_Ujian.pdf`);
-  }, []);
-
-  // const handlePrintRekapitulasiNilai = async () => {
-  //   const element = printRefRekapitulasiNilai.current;
-  //   if (!element) return;
-
-  //   const canvas = await html2canvas(element, { scale: 2 });
-  //   const imgData = canvas.toDataURL("image/png");
-
-  //   const pdf = new jsPDF("p", "mm", "a4");
-  //   const imgWidth = 210 - 2 * 10; // A4 width minus margins
-  //   const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  //   let y = 10; // Start position for first page
-
-  //   if (imgHeight > 297 - 20) {
-  //     let heightLeft = imgHeight;
-
-  //     while (heightLeft > 0) {
-  //       pdf.addImage(imgData, "PNG", 10, y, imgWidth, imgHeight);
-  //       heightLeft -= 297 - 20;
-  //       if (heightLeft > 0) {
-  //         pdf.addPage();
-  //         y = 10;
-  //       }
-  //     }
-  //   } else {
-  //     pdf.addImage(imgData, "PNG", 10, y, imgWidth, imgHeight);
-  //   }
-
-  //   pdf.save(`Rekapitulasi_Hasil_Ujian.pdf`);
-  // };
 
   /**
    * =============================================================
@@ -308,6 +257,10 @@ const TableDataPesertaUjianKeahlian = () => {
   const [selectedIdPeserta, setSelectedIdPeserta] = React.useState(0);
 
   const [nilaiKomprehensif, setNilaiKomprehensif] = React.useState<string>("");
+  const [nilaiKomprehensif2, setNilaiKomprehensif2] =
+    React.useState<string>("");
+  const [nilaiKomprehensif3, setNilaiKomprehensif3] =
+    React.useState<string>("");
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -806,10 +759,6 @@ const TableDataPesertaUjianKeahlian = () => {
     },
   });
 
-  const [isOpenFormInputNilai, setIsOpenFormInputNilai] = React.useState(false);
-  const [nilaiPretest, setNilaiPretest] = React.useState("");
-  const [nilaiPosttest, setNilaiPosttest] = React.useState("");
-
   const [isOpenFormPeserta, setIsOpenFormPeserta] =
     React.useState<boolean>(false);
   const [fileExcelPesertaPelatihan, setFileExcelPesertaPelatihan] =
@@ -1052,7 +1001,7 @@ const TableDataPesertaUjianKeahlian = () => {
         const columnName = Object.keys(formattedData[0])[col];
         if (columnsToCheck.includes(columnName)) {
           // If the value is less than 50, apply a red background
-          if (cell && !isNaN(cell.v) && cell.v < 50) {
+          if (cell && !isNaN(cell.v) && cell.v < EXAM_THRESHOLD) {
             if (!cell.s) cell.s = {}; // Create style if not already present
             cell.s.fill = {
               fgColor: { rgb: "FF0000" }, // Red background color
@@ -1086,7 +1035,9 @@ const TableDataPesertaUjianKeahlian = () => {
       const response = await axios.post(
         `${dpkakpBaseUrl}/penguji/inputNilaiKompre?id=${selectedIdPeserta}`,
         {
-          nilai_komprensif: nilaiKomprehensif,
+          nilai_komprensif_f1: nilaiKomprehensif,
+          nilai_komprensif_f2: nilaiKomprehensif2,
+          nilai_komprensif_f3: nilaiKomprehensif3,
         },
         {
           headers: {
@@ -1190,7 +1141,7 @@ const TableDataPesertaUjianKeahlian = () => {
             (pesertaUjian?.NilaiF3B2 || 0)) /
           6;
 
-      if (averageScore >= 50) {
+      if (averageScore >= EXAM_THRESHOLD) {
         lulusCount++;
       } else {
         tidakLulusCount++;
@@ -1202,73 +1153,6 @@ const TableDataPesertaUjianKeahlian = () => {
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
-      <AlertDialog open={isOpenFormInputNilai}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2">
-              {" "}
-              <HiMiniUserGroup className="h-4 w-4" />
-              Upload Nilai Peserta
-            </AlertDialogTitle>
-            <AlertDialogDescription className="-mt-2">
-              Upload nilai peserta pelatihan yang diselenggarakan yang nantinya
-              akan tercantum pada sertifikat peserta pelatihan!
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <fieldset>
-            <form autoComplete="off">
-              <div className="flex gap-2 w-full">
-                <div className="flex gap-2 mb-1 w-full">
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Nilai Pre Test <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      required
-                      value={nilaiPretest}
-                      onChange={(e) => setNilaiPretest(e.target.value)}
-                    />
-                  </div>
-                  <div className="w-full">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Nilai Post Test <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      id="name"
-                      type="text"
-                      className="form-input w-full text-black border-gray-300 rounded-md"
-                      required
-                      value={nilaiPosttest}
-                      onChange={(e) => setNilaiPosttest(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <AlertDialogFooter className="mt-3">
-                <AlertDialogCancel
-                  onClick={(e) =>
-                    setIsOpenFormInputNilai(!isOpenFormInputNilai)
-                  }
-                >
-                  Cancel
-                </AlertDialogCancel>
-                <AlertDialogAction>Upload</AlertDialogAction>
-              </AlertDialogFooter>
-            </form>
-          </fieldset>
-        </AlertDialogContent>
-      </AlertDialog>
-
       <AlertDialog open={isOpenFormPeserta}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -2000,7 +1884,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF1B1 || 0) < 50
+                                      (pesertaUjian?.NilaiF1B1 || 0) <
+                                      EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -2009,7 +1894,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF2B1 || 0) < 50
+                                      (pesertaUjian?.NilaiF2B1 || 0) <
+                                      EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -2018,7 +1904,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF3B1 || 0) < 50
+                                      (pesertaUjian?.NilaiF3B1 || 0) <
+                                      EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -2030,7 +1917,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF1B1 || 0) < 50
+                                      (pesertaUjian?.NilaiF1B1 || 0) <
+                                      EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -2039,7 +1927,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF1B2 || 0) < 50
+                                      (pesertaUjian?.NilaiF1B2 || 0) <
+                                      EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -2053,7 +1942,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                         ? "hidden"
                                         : "flex"
                                     } items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF1B3 || 0) < 50
+                                      (pesertaUjian?.NilaiF1B3 || 0) <
+                                      EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -2078,7 +1968,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                             (pesertaUjian?.NilaiF1B3 || 0)) /
                                           3;
 
-                                      return averageScore < 50
+                                      return averageScore < EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-green-500";
                                     })()}`}
@@ -2111,7 +2001,8 @@ const TableDataPesertaUjianKeahlian = () => {
 
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF2B1 || 0) < 50
+                                      (pesertaUjian?.NilaiF2B1 || 0) <
+                                      EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-green-500"
                                     }`}
@@ -2120,7 +2011,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF3B1 || 0) < 50
+                                      (pesertaUjian?.NilaiF3B1 || 0) <
+                                      EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -2129,7 +2021,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center py-7 ${
-                                      (pesertaUjian?.NilaiF3B2 || 0) < 50
+                                      (pesertaUjian?.NilaiF3B2 || 0) <
+                                      EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-black"
                                     }`}
@@ -2141,7 +2034,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                       ((pesertaUjian?.NilaiF3B1 || 0) +
                                         (pesertaUjian?.NilaiF3B2 || 0)) /
                                         2 <
-                                      50
+                                      EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-green-500"
                                     }`}
@@ -2163,7 +2056,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF2B1 || 0) +
                                         (pesertaUjian?.NilaiF3B1 || 0)) /
                                         3 <
-                                      50
+                                      EXAM_THRESHOLD
                                       ? "text-rose-500"
                                       : "text-green-500"
                                     : dataUjian[0]!.TypeUjian == "ANKAPIN II" ||
@@ -2174,7 +2067,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF3B1 || 0) +
                                         (pesertaUjian?.NilaiF3B2 || 0)) /
                                         5 <
-                                      50
+                                      EXAM_THRESHOLD
                                       ? "text-rose-500"
                                       : "text-green-500"
                                     : ((pesertaUjian?.NilaiF1B1 || 0) +
@@ -2184,7 +2077,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                         (pesertaUjian?.NilaiF3B1 || 0) +
                                         (pesertaUjian?.NilaiF3B2 || 0)) /
                                         6 <
-                                      50
+                                      EXAM_THRESHOLD
                                     ? "text-rose-500"
                                     : "text-green-500"
                                 }`}
@@ -2357,8 +2250,7 @@ const TableDataPesertaUjianKeahlian = () => {
                         className="block text-gray-800 text-sm font-medium mb-1"
                         htmlFor="name"
                       >
-                        Nilai Ujian Komprehensif{" "}
-                        <span className="text-red-600">*</span>
+                        Nilai F1 <span className="text-red-600">*</span>
                       </label>
                       <input
                         id="name"
@@ -2368,6 +2260,44 @@ const TableDataPesertaUjianKeahlian = () => {
                         required
                         value={nilaiKomprehensif}
                         onChange={(e) => setNilaiKomprehensif(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex px-3 gap-2 mb-2 w-full">
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Nilai F2 <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Masukkan nilai"
+                        required
+                        value={nilaiKomprehensif2}
+                        onChange={(e) => setNilaiKomprehensif2(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex px-3 gap-2 mb-2 w-full">
+                    <div className="w-full">
+                      <label
+                        className="block text-gray-800 text-sm font-medium mb-1"
+                        htmlFor="name"
+                      >
+                        Nilai F3 <span className="text-red-600">*</span>
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        className="form-input w-full text-black border-gray-300 rounded-md"
+                        placeholder="Masukkan nilai"
+                        required
+                        value={nilaiKomprehensif3}
+                        onChange={(e) => setNilaiKomprehensif3(e.target.value)}
                       />
                     </div>
                   </div>

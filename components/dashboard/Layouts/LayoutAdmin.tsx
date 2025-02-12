@@ -58,6 +58,7 @@ export default function LayoutAdmin({
         }
       );
 
+      Cookies.set("NamaUsersDpkakp", data?.data?.NamaUsersDpkakp);
       Cookies.set("IdUsersDpkakp", data?.data?.IdUsersDpkakp!);
       console.log("PENGUJI", data);
     } catch (error) {
