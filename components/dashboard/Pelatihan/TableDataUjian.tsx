@@ -117,22 +117,51 @@ import { TypeUjian, Ujian } from "@/types/ujian-keahlian-akp";
 import { BiPaperPlane } from "react-icons/bi";
 import { IoReload } from "react-icons/io5";
 import { formatIndonesianDate } from "@/lib/utils";
+import EmptyData from "@/components/micro-components/EmptyData";
 
 const TableDataUjian: React.FC = () => {
+  // ================== STATE VARIABLES ==================
   const [data, setData] = React.useState<Ujian[]>([]);
-
   const [countVerified, setCountVerified] = React.useState<number>(0);
   const [countNotVerified, setCountNotVerified] = React.useState<number>(0);
   const [countDraft, setCountDraft] = React.useState<number>(0);
   const [countPilihPenguji, setCountPilihPenguji] = React.useState<number>(0);
-
   const [dataTypeUjian, setDataTypeUjian] = React.useState<TypeUjian[]>([]);
-
-  const pathPukakp = usePathname().includes("pukakp");
-
   const [dpkakpData, setDpkakpData] =
     React.useState<UserInformationDPKAKP | null>(null);
+  const [isFetching, setIsFetching] = React.useState<boolean>(false);
+  const [isPosting, setIsPosting] = React.useState<boolean>(false);
+  const [isOpenFormUjianKeahlian, setIsOpenFormUjianKeahlian] =
+    React.useState<boolean>(false);
+  const [selectedId, setSelectedId] = React.useState<number>(0);
+  const [filePermohonan, setFilePermohonan] = React.useState<File | null>(null);
+  const [dataPenguji, setDataPenguji] = React.useState<DewanPenguji[] | null>(
+    []
+  );
+  const [waktuRemedial, setWaktuRemedial] = React.useState<string>("");
+  const [openFormRemedial, setOpenFormRemedial] =
+    React.useState<boolean>(false);
+  const [isProcessingRemedial, setIsProcessingRemedial] =
+    React.useState<boolean>(false);
+  const [
+    openFormValidasiPelaksanaanUjian,
+    setOpenFormValidasiPelaksanaanUjian,
+  ] = React.useState<boolean>(false);
+  const [isValidating, setIsValidating] = React.useState<boolean>(false);
+  const [selectedSuratPermohonan, setSelectedSuratPermohonan] =
+    React.useState<string>("");
+  const [selectedStatusFilter, setSelectedStatusFilter] =
+    React.useState<string>("All");
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const [selectedIdUjian, setSelectedIdUjian] = React.useState<number>(0);
+  const [selectedUjian, setSelectedUjian] = React.useState<Ujian | null>(null);
 
+  // ================== PATH & COOKIE VARIABLES ==================
+  const pathPukakp = usePathname().includes("pukakp");
+  const isPenguji = Cookies.get("IsPUKAKP") == "penguji";
+  const idUsersDpkakp = Cookies.get("IdUsersDpkakp");
+
+  // ================== DATA FETCHING ==================
   const fetchInformationDPKAKP = async () => {
     try {
       const response = await axios.get(
@@ -144,20 +173,13 @@ const TableDataUjian: React.FC = () => {
         }
       );
       setDpkakpData(response.data.data);
-
-      console.log("DPKAKP INFO: ", response);
     } catch (error) {
       console.error("DPKAKP INFO: ", error);
     }
   };
 
-  /*================== LOADER VARIABLES ================= */
-  const [isFetching, setIsFetching] = React.useState<boolean>(false);
-  const idUsersDpkakp = Cookies.get("IdUsersDpkakp");
-
   const handleFetchingUjianKeahlianData = async () => {
     setIsFetching(true);
-
     try {
       const response: AxiosResponse = await axios.get(
         `${dpkakpBaseUrl}/adminPusat/GetUjian`,
@@ -168,11 +190,7 @@ const TableDataUjian: React.FC = () => {
         }
       );
 
-      console.log({ response });
-
       const pukakpCookie = Cookies.get("PUKAKP");
-
-      // Filter the data by PUKAKP value if the cookie is available
       const filteredData =
         pukakpCookie != "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan"
           ? response.data.data.filter(
@@ -180,19 +198,12 @@ const TableDataUjian: React.FC = () => {
             )
           : response.data.data;
 
-      // Sort the data first by status ('Pending' first) and then by CreateAt in descending order
       const sortedData = filteredData.sort((a: any, b: any) => {
-        // Sort by status: 'Pending' first
         if (a.Status === "Pending" && b.Status !== "Pending") return -1;
         if (a.Status !== "Pending" && b.Status === "Pending") return 1;
-
-        // Sort by CreateAt in descending order
         return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime();
       });
 
-      console.log({ filteredData });
-
-      // Count statuses
       const verifiedCount = filteredData.filter(
         (item: any) => item.Status === "Aktif"
       ).length;
@@ -206,28 +217,21 @@ const TableDataUjian: React.FC = () => {
         (item: any) => item.NamaPengawasUjian == ""
       ).length;
 
-      // Update state with counts
       setCountVerified(verifiedCount);
       setCountNotVerified(notVerifiedCount);
       setCountDraft(draft);
       setCountPilihPenguji(pilihPenguji);
 
-      // Set the data to the sorted data
       if (pathPukakp) {
         setData(sortedData);
       } else {
-        // Sort original data by status and CreateAt if no filter is applied
         const sortedOriginalData = response.data.data.sort((a: any, b: any) => {
-          // Sort by status: 'Pending' first
           if (a.Status === "Pending" && b.Status !== "Pending") return -1;
           if (a.Status !== "Pending" && b.Status === "Pending") return 1;
-
-          // Sort by CreateAt in descending order
           return (
             new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
           );
         });
-
         setData(sortedOriginalData);
       }
 
@@ -240,37 +244,7 @@ const TableDataUjian: React.FC = () => {
 
   const handleFetchingUjianKeahlianDataPenguji = async () => {
     setIsFetching(true);
-
     try {
-      // Check if idUsersDpkakp exists, and wait until it does (polling mechanism)
-      const getIdUsersDpkakp = async (): Promise<{
-        id: string;
-        name: string;
-      }> => {
-        let id = Cookies.get("IdUsersDpkakp")!;
-        let name = Cookies.get("NamaUsersDpkakp")!;
-        const timeout = 5000; // Maximum wait time (in ms)
-        const interval = 200; // Check every 200ms
-        const startTime = Date.now();
-
-        while ((!id || !name) && Date.now() - startTime < timeout) {
-          await new Promise((resolve) => setTimeout(resolve, interval));
-          id = Cookies.get("IdUsersDpkakp")!;
-          name = Cookies.get("NamaUsersDpkakp")!;
-        }
-
-        return { id, name };
-      };
-
-      const idUsersDpkakp = (await getIdUsersDpkakp()).id;
-      const nameUsersDpkakp = (await getIdUsersDpkakp()).name;
-
-      if (!idUsersDpkakp) {
-        throw new Error("idUsersDpkakp not found within the timeout period.");
-      }
-
-      // const isMatchIdUserDpkakp = data[0]!.
-
       const response: AxiosResponse = await axios.get(
         `${dpkakpBaseUrl}/adminPusat/GetUjian`,
         {
@@ -280,28 +254,17 @@ const TableDataUjian: React.FC = () => {
         }
       );
 
-      console.log({ response });
-
       const pukakpCookie = Cookies.get("PUKAKP");
-
-      // Filter the data by PUKAKP value if the cookie is available
       const filteredData = response.data.data.filter((item: any) =>
-        item.NamaPengawasUjian.includes(nameUsersDpkakp)
+        item.NamaPengawasUjian.includes(Cookies.get("NamaUsersDpkakp"))
       );
 
-      // Sort the data first by status ('Pending' first) and then by CreateAt in descending order
       const sortedData = filteredData.sort((a: any, b: any) => {
-        // Sort by status: 'Pending' first
         if (a.Status === "Pending" && b.Status !== "Pending") return -1;
         if (a.Status !== "Pending" && b.Status === "Pending") return 1;
-
-        // Sort by CreateAt in descending order
         return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime();
       });
 
-      console.log({ filteredData });
-
-      // Count statuses
       const verifiedCount = filteredData.filter(
         (item: any) => item.Status === "Aktif"
       ).length;
@@ -315,28 +278,21 @@ const TableDataUjian: React.FC = () => {
         (item: any) => item.NamaPengawasUjian == ""
       ).length;
 
-      // Update state with counts
       setCountVerified(verifiedCount);
       setCountNotVerified(notVerifiedCount);
       setCountDraft(draft);
       setCountPilihPenguji(pilihPenguji);
 
-      // Set the data to the sorted data
       if (pathPukakp) {
         setData(sortedData);
       } else {
-        // Sort original data by status and CreateAt if no filter is applied
         const sortedOriginalData = filteredData.sort((a: any, b: any) => {
-          // Sort by status: 'Pending' first
           if (a.Status === "Pending" && b.Status !== "Pending") return -1;
           if (a.Status !== "Pending" && b.Status === "Pending") return 1;
-
-          // Sort by CreateAt in descending order
           return (
             new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
           );
         });
-
         setData(sortedOriginalData);
       }
 
@@ -359,6 +315,25 @@ const TableDataUjian: React.FC = () => {
         }
       );
       setDataTypeUjian(response.data.data);
+      setIsFetching(false);
+    } catch (error) {
+      setIsFetching(false);
+      throw error;
+    }
+  };
+
+  const handleGetDataPenguji = async () => {
+    setIsFetching(true);
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${dpkakpBaseUrl}/adminpusat/getDataPenguji`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      setDataPenguji(response.data.data);
       setIsFetching(false);
     } catch (error) {
       setIsFetching(false);
@@ -422,11 +397,6 @@ const TableDataUjian: React.FC = () => {
   const [waktuF2B1, setWaktuF2B1] = React.useState<string>("");
   const [waktuF3B1, setWaktuF3B1] = React.useState<string>("");
   const [waktuF3B2, setWaktuF3B2] = React.useState<string>("");
-
-  /*================== LOADER VARIABLES ================= */
-  const [isPosting, setIsPosting] = React.useState<boolean>(false);
-  const [isOpenFormUjianKeahlian, setIsOpenFormUjianKeahlian] =
-    React.useState<boolean>(false);
 
   /*======= HANDLING CLEAR STATE VARIABLES UJIAN ======== */
   const handleClearNewUjianKeahlian = async () => {
@@ -563,44 +533,6 @@ const TableDataUjian: React.FC = () => {
     }
   };
 
-  const [selectedId, setSelectedId] = React.useState<number>(0);
-
-  const [filePermohonan, setFilePermohonan] = React.useState<File | null>(null);
-  const handleFileChange = (e: any) => {
-    setFilePermohonan(e.target.files[0]);
-  };
-
-  const [dataPenguji, setDataPenguji] = React.useState<DewanPenguji[] | null>(
-    []
-  );
-
-  const handleGetDataPenguji = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminpusat/getDataPenguji`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`, // Add Bearer token in Authorization header
-          },
-        }
-      );
-
-      console.log("RESPONSE Data Penguji ", response);
-      setDataPenguji(response.data.data);
-      setIsFetching(false);
-    } catch (error) {
-      console.error("ERROR BLANKO KELUAR : ", error);
-      setIsFetching(false);
-      throw error;
-    }
-  };
-
-  const [waktuRemedial, setWaktuRemedial] = React.useState<string>("");
-  const [openFormRemedial, setOpenFormRemedial] =
-    React.useState<boolean>(false);
-  const [isProcessingRemedial, setIsProcessingRemedial] =
-    React.useState<boolean>(false);
   const handleRemedial = async (e: any) => {
     setIsProcessingRemedial(true);
     try {
@@ -640,14 +572,6 @@ const TableDataUjian: React.FC = () => {
       setIsProcessingRemedial(false);
     }
   };
-
-  const [
-    openFormValidasiPelaksanaanUjian,
-    setOpenFormValidasiPelaksanaanUjian,
-  ] = React.useState<boolean>(false);
-  const [isValidating, setIsValidating] = React.useState<boolean>(false);
-  const [selectedSuratPermohonan, setSelectedSuratPermohonan] =
-    React.useState<string>("");
 
   const handleValidasiPelaksaanUjian = async (e: any) => {
     setIsValidating(true);
@@ -725,13 +649,6 @@ const TableDataUjian: React.FC = () => {
     }
   };
 
-  // STATUS FILTERING
-  const [selectedStatusFilter, setSelectedStatusFilter] =
-    React.useState<string>("All");
-
-  // SEARCHING
-  const [searchQuery, setSearchQuery] = React.useState<string>("");
-
   const filteredData = data.filter((ujian) => {
     const matchesSearchQuery =
       ujian.TypeUjian.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -762,9 +679,6 @@ const TableDataUjian: React.FC = () => {
     setSelectedIdUjian(0);
   };
 
-  // EDIT UJIAN
-  const [selectedIdUjian, setSelectedIdUjian] = React.useState<number>(0);
-  const [selectedUjian, setSelectedUjian] = React.useState<Ujian | null>(null);
   const handleFetchingDataUjianById = async (idUjian: number) => {
     setSelectedIdUjian(idUjian);
     try {
@@ -839,6 +753,7 @@ const TableDataUjian: React.FC = () => {
     }
   };
 
+  // ================== EFFECTS ==================
   React.useEffect(() => {
     fetchInformationDPKAKP();
     if (isPenguji) {
@@ -848,7 +763,7 @@ const TableDataUjian: React.FC = () => {
       handleGetDataPenguji();
       handleFetchingTypeUjianKeahlianData();
     }
-  }, []);
+  }, [isPenguji]);
 
   // DELETE UJIAN
   const handleDeleteUjian = async () => {
@@ -877,8 +792,6 @@ const TableDataUjian: React.FC = () => {
       handleFetchingUjianKeahlianData();
     }
   };
-
-  const isPenguji = Cookies.get("IsPUKAKP") == "penguji";
 
   React.useEffect(() => {
     // Function to get formatted date-time with timezone offset and name
@@ -927,6 +840,10 @@ const TableDataUjian: React.FC = () => {
     setWaktuF3B2(formattedDateTime);
     setWaktuRemedial(formattedDateTime);
   }, []);
+
+  const handleFileChange = (e: any) => {
+    setFilePermohonan(e.target.files[0]);
+  };
 
   return (
     <section className="rounded-sm   pb-5 shadow-default  h-full scrollbar-hide">
@@ -1108,25 +1025,7 @@ const TableDataUjian: React.FC = () => {
                   />
                 </div>
                 {filteredData.length == 0 ? (
-                  <div className="pt-12 md:pt-20 flex flex-col items-center">
-                    <Image
-                      src={"/illustrations/not-found.png"}
-                      alt="Not Found"
-                      width={0}
-                      height={0}
-                      className="w-[400px]"
-                    />
-                    <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
-                      <h1 className="text-3xl font-calsans leading-[110%] text-black">
-                        Belum Ada Ujian
-                      </h1>
-                      <div className="text-gray-600 text-sm text-center  max-w-md">
-                        Pelaksana Ujian Keahlian Awak Kapal Perikanan (PUKAKP)
-                        belum ada yang melakukan pengjuan permohonan pelaksanaan
-                        ujian keahlian Awak Kapal Perikanan!{" "}
-                      </div>
-                    </div>
-                  </div>
+                  <EmptyData />
                 ) : (
                   filteredData.map((ujian, index) => (
                     <Card className="relative" key={index}>

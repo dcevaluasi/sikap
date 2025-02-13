@@ -94,6 +94,7 @@ import {
 } from "@/constants/globals";
 import { Input } from "@/components/ui/input";
 import { roundUpScore } from "@/lib/utils";
+import EmptyData from "@/components/micro-components/EmptyData";
 
 const TableDataPesertaUjianKeahlian = () => {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -270,7 +271,7 @@ const TableDataPesertaUjianKeahlian = () => {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
   const isPenguji = Cookies.get("IsPUKAKP") == "penguji";
-  const [isEditing, setEditing] = React.useState<boolean>(false)
+  const [isEditing, setEditing] = React.useState<boolean>(false);
   const columns: ColumnDef<UsersUjian>[] = [
     {
       accessorKey: "IdUserUjian",
@@ -305,15 +306,21 @@ const TableDataPesertaUjianKeahlian = () => {
           className={`w-full ${!isPenguji ? "flex" : "hidden"}  flex-col gap-2`}
         >
           <div className="flex  w-full items-center justify-center gap-1">
-          <Button
+            <Button
               onClick={(e) => {
                 setSelectedIdPeserta(row.original.IdUserUjian);
                 setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
                 if (row.original.NilaiKomprensifF1 != 0) {
-                  setEditing(true)
-                  setNilaiKomprehensif(row.original.NilaiKomprensifF1.toString())
-                  setNilaiKomprehensif2(row.original.NilaiKomprensifF2.toString())
-                  setNilaiKomprehensif3(row.original.NilaiKomprensifF3.toString())
+                  setEditing(true);
+                  setNilaiKomprehensif(
+                    row.original.NilaiKomprensifF1.toString()
+                  );
+                  setNilaiKomprehensif2(
+                    row.original.NilaiKomprensifF2.toString()
+                  );
+                  setNilaiKomprehensif3(
+                    row.original.NilaiKomprensifF3.toString()
+                  );
                 }
               }}
               variant="outline"
@@ -427,7 +434,6 @@ const TableDataPesertaUjianKeahlian = () => {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
-           
           </div>
         </div>
       ),
@@ -1337,38 +1343,44 @@ const TableDataPesertaUjianKeahlian = () => {
             {!showKartuUjian && !showRekapitulasiNilai && (
               <div>
                 <div id="chartOne" className="-ml-5"></div>
-                <TableData
-                  isLoading={false}
-                  columns={columns}
-                  table={table}
-                  type={"long"}
-                />
-                <div className="flex items-center justify-end space-x-2 py-4">
-                  <div className="text-muted-foreground flex-1 text-sm">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                  </div>
-                  <div className="space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="font-inter"
-                      onClick={() => table.previousPage()}
-                      disabled={!table.getCanPreviousPage()}
-                    >
-                      Previous
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="font-inter"
-                      onClick={() => table.nextPage()}
-                      disabled={!table.getCanNextPage()}
-                    >
-                      Next
-                    </Button>
-                  </div>
-                </div>
+
+          
+                  <>
+                    <TableData
+                      isLoading={false}
+                      columns={columns}
+                      table={table}
+                      type={"long"}
+                    />
+                    <div className="flex items-center justify-end space-x-2 py-4">
+                      <div className="text-muted-foreground flex-1 text-sm">
+                        {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                        {table.getFilteredRowModel().rows.length} row(s)
+                        selected.
+                      </div>
+                      <div className="space-x-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="font-inter"
+                          onClick={() => table.previousPage()}
+                          disabled={!table.getCanPreviousPage()}
+                        >
+                          Previous
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="font-inter"
+                          onClick={() => table.nextPage()}
+                          disabled={!table.getCanNextPage()}
+                        >
+                          Next
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+             
               </div>
             )}
 
@@ -2424,8 +2436,8 @@ const TableDataPesertaUjianKeahlian = () => {
                 </AlertDialogHeader>
                 <fieldset>
                   <form autoComplete="off">
-                    <div className="flex flex-wrap -mx-3 mb-1">
-                      <div className="flex px-3 gap-2 mb-2 w-full">
+                    <div className="grid grid-cols-3  gap-2 mb-1">
+                      <div className="flex  gap-2 mb-2 w-full">
                         <div className="w-full">
                           <label
                             className="block text-gray-800 text-sm font-medium mb-1"
@@ -2446,7 +2458,7 @@ const TableDataPesertaUjianKeahlian = () => {
                           />
                         </div>
                       </div>
-                      <div className="flex px-3 gap-2 mb-2 w-full">
+                      <div className="flex  gap-2 mb-2 w-full">
                         <div className="w-full">
                           <label
                             className="block text-gray-800 text-sm font-medium mb-1"
@@ -2467,7 +2479,7 @@ const TableDataPesertaUjianKeahlian = () => {
                           />
                         </div>
                       </div>
-                      <div className="flex px-3 gap-2 mb-2 w-full">
+                      <div className="flex gap-2 mb-2 w-full">
                         <div className="w-full">
                           <label
                             className="block text-gray-800 text-sm font-medium mb-1"
@@ -2495,12 +2507,11 @@ const TableDataPesertaUjianKeahlian = () => {
                         onClick={(e) => {
                           setIsOpenFormUjianKeahlian(false);
                           if (isEditing) {
-                            setNilaiKomprehensif('')
-                            setNilaiKomprehensif2('')
-                            setNilaiKomprehensif3('')
-                         
+                            setNilaiKomprehensif("");
+                            setNilaiKomprehensif2("");
+                            setNilaiKomprehensif3("");
                           }
-                          setEditing(false)
+                          setEditing(false);
                         }}
                       >
                         Cancel
@@ -2510,9 +2521,7 @@ const TableDataPesertaUjianKeahlian = () => {
                           handleUploadNilaiKomprehensif(e);
                         }}
                       >
-                        {
-                          isEditing ? 'Edit' : 'Upload'
-                        }
+                        {isEditing ? "Edit" : "Upload"}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </form>
