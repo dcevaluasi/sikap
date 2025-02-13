@@ -58,7 +58,6 @@ import {
   HiOutlineDocument,
   HiUserGroup,
 } from "react-icons/hi2";
-import { RiShipLine, RiVerifiedBadgeFill } from "react-icons/ri";
 import Link from "next/link";
 import { FaBookOpen, FaMapPin, FaRupiahSign } from "react-icons/fa6";
 import Toast from "@/components/toast";
@@ -93,15 +92,16 @@ import {
   THEORY_WEIGHT,
 } from "@/constants/globals";
 import { Input } from "@/components/ui/input";
-import { roundUpScore } from "@/lib/utils";
-import EmptyData from "@/components/micro-components/EmptyData";
+import {
+  checkLulus,
+  countLulus,
+  exportToExcelFinalScoring,
+  roundUpScore,
+} from "@/components/utils/dpkakp/scoring";
 
 const TableDataPesertaUjianKeahlian = () => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const pathname = usePathname();
   const idUjianKeahlian = getIdUjianKeahlianInPathPesertaUjian(pathname!);
-  console.log("PATHNAME", pathname);
-  console.log("IDUJIAN", idUjianKeahlian);
   const id = extractSecondLastSegment(pathname);
 
   const printRef = React.useRef<HTMLDivElement>(null);
@@ -137,78 +137,6 @@ const TableDataPesertaUjianKeahlian = () => {
       throw error;
     }
   };
-
-  function checkLulus(userUjian: UsersUjian, ujian: Ujian): string {
-    let finalScore: number;
-
-    if (ujian.TypeUjian.includes("Rewarding")) {
-      finalScore = roundUpScore(
-        (((userUjian.NilaiF1B1 || 0) +
-          (userUjian.NilaiF2B1 || 0) +
-          (userUjian.NilaiF3B1 || 0)) /
-          3) *
-          THEORY_WEIGHT +
-          ((userUjian.NilaiKomprensifF1 +
-            userUjian.NilaiKomprensifF2 +
-            userUjian.NilaiKomprensifF3) /
-            3) *
-            PRACTICE_WEIGHT
-      );
-    } else if (
-      ujian.TypeUjian === "ANKAPIN II" ||
-      ujian.TypeUjian === "ATKAPIN II"
-    ) {
-      finalScore = roundUpScore(
-        ((((userUjian.NilaiF1B1 || 0) + (userUjian.NilaiF1B2 || 0)) / 2 +
-          (userUjian.NilaiF2B1 || 0) +
-          ((userUjian.NilaiF3B1 || 0) + (userUjian.NilaiF3B2 || 0)) / 2) /
-          3) *
-          THEORY_WEIGHT +
-          ((userUjian.NilaiKomprensifF1 +
-            userUjian.NilaiKomprensifF2 +
-            userUjian.NilaiKomprensifF3) /
-            3) *
-            PRACTICE_WEIGHT
-      );
-    } else {
-      finalScore = roundUpScore(
-        ((((userUjian.NilaiF1B1 || 0) +
-          (userUjian.NilaiF1B2 || 0) +
-          (userUjian.NilaiF1B3 || 0)) /
-          3 +
-          (userUjian.NilaiF2B1 || 0) +
-          ((userUjian.NilaiF3B1 || 0) + (userUjian.NilaiF3B2 || 0)) / 2) /
-          3) *
-          THEORY_WEIGHT +
-          ((userUjian.NilaiKomprensifF1 +
-            userUjian.NilaiKomprensifF2 +
-            userUjian.NilaiKomprensifF3) /
-            3) *
-            PRACTICE_WEIGHT
-      );
-    }
-
-    return finalScore >= EXAM_THRESHOLD ? "LULUS" : "TIDAK LULUS";
-  }
-
-  function countLulus(
-    usersUjian: UsersUjian[],
-    ujian: Ujian
-  ): { lulus: number; tidakLulus: number } {
-    let lulusCount = 0;
-    let tidakLulusCount = 0;
-
-    usersUjian.forEach((userUjian) => {
-      const result = checkLulus(userUjian, ujian); // Reuse the checkLulus function
-      if (result === "LULUS") {
-        lulusCount++;
-      } else {
-        tidakLulusCount++;
-      }
-    });
-
-    return { lulus: lulusCount, tidakLulus: tidakLulusCount };
-  }
 
   const [showRekapitulasiNilai, setShowRekapitulasiNilai] =
     React.useState<boolean>(false);
@@ -621,9 +549,6 @@ const TableDataPesertaUjianKeahlian = () => {
     },
   ];
 
-  const [showFormAjukanPelatihan, setShowFormAjukanPelatihan] =
-    React.useState<boolean>(false);
-
   const table = useReactTable({
     data,
     columns,
@@ -790,181 +715,6 @@ const TableDataPesertaUjianKeahlian = () => {
     const currentDate = new Date().toISOString().slice(0, 10);
     const fileName = `ExportedData_${currentDate}.xlsx`;
     XLSX.writeFile(workbook, fileName);
-  };
-
-  const exportToExcelRekapitulasi = () => {
-    // Format data untuk ekspor
-    const isRewarding = dataUjian[0]?.TypeUjian.includes("Rewarding");
-    const isTingkatII =
-      dataUjian[0]?.TypeUjian == "ANKAPIN II" ||
-      dataUjian[0]?.TypeUjian == "ATKAPIN II";
-
-    const formattedData = data.map((pesertaUjian, index) => ({
-      No: index + 1,
-      "Nomor Ujian": pesertaUjian?.NomorUjian || "-",
-      "Nama Peserta": pesertaUjian?.Nama || "-",
-      "Nilai F1B1": pesertaUjian?.NilaiF1B1 || 0,
-      "Nilai F1B2": pesertaUjian?.NilaiF1B2 || 0,
-      "Nilai F1B3": pesertaUjian?.NilaiF1B3 || 0,
-      "Total F1": isRewarding
-        ? roundUpScore((pesertaUjian?.NilaiF1B1 || 0) / 1)
-        : isTingkatII
-        ? roundUpScore(
-            ((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) /
-              2
-          )
-        : roundUpScore(
-            ((pesertaUjian?.NilaiF1B1 || 0) +
-              (pesertaUjian?.NilaiF1B2 || 0) +
-              (pesertaUjian?.NilaiF1B3 || 0)) /
-              3
-          ),
-      "Nilai F2": pesertaUjian?.NilaiF2B1 || 0,
-      "Nilai F3B1": pesertaUjian?.NilaiF3B1 || 0,
-      "Nilai F3B2": pesertaUjian?.NilaiF3B2 || 0,
-      "Total F3": roundUpScore(
-        ((pesertaUjian?.NilaiF3B1 || 0) + (pesertaUjian?.NilaiF3B2 || 0)) / 2
-      ),
-      "Nilai Kumulatif": isRewarding
-        ? roundUpScore(
-            ((pesertaUjian?.NilaiF1B1 || 0) +
-              (pesertaUjian?.NilaiF2B1 || 0) +
-              (pesertaUjian?.NilaiF3B1 || 0)) /
-              3
-          )
-        : isTingkatII
-        ? roundUpScore(
-            (((pesertaUjian?.NilaiF1B1 || 0) + (pesertaUjian?.NilaiF1B2 || 0)) /
-              2 +
-              (pesertaUjian?.NilaiF2B1 || 0) +
-              ((pesertaUjian?.NilaiF3B1 || 0) +
-                (pesertaUjian?.NilaiF3B2 || 0)) /
-                2) /
-              3
-          )
-        : roundUpScore(
-            (((pesertaUjian?.NilaiF1B1 || 0) +
-              (pesertaUjian?.NilaiF1B2 || 0) +
-              (pesertaUjian?.NilaiF1B3 || 0)) /
-              3 +
-              (pesertaUjian?.NilaiF2B1 || 0) +
-              ((pesertaUjian?.NilaiF3B1 || 0) +
-                (pesertaUjian?.NilaiF3B2 || 0)) /
-                2) /
-              3
-          ),
-      "Nilai Komprehensif 1": pesertaUjian?.NilaiKomprensifF1 || 0,
-      "Nilai Komprehensif 2": pesertaUjian?.NilaiKomprensifF2 || 0,
-      "Nilai Komprehensif 3": pesertaUjian?.NilaiKomprensifF3 || 0,
-      "Total Komprehensif": roundUpScore(
-        (pesertaUjian?.NilaiKomprensifF1 +
-          pesertaUjian?.NilaiKomprensifF2 +
-          pesertaUjian?.NilaiKomprensifF3) /
-          3
-      ),
-      "Nilai Final": isRewarding
-        ? roundUpScore(
-            (((pesertaUjian?.NilaiF1B1 || 0) +
-              (pesertaUjian?.NilaiF2B1 || 0) +
-              (pesertaUjian?.NilaiF3B1 || 0)) /
-              3) *
-              THEORY_WEIGHT +
-              ((pesertaUjian?.NilaiKomprensifF1 +
-                pesertaUjian?.NilaiKomprensifF2 +
-                pesertaUjian?.NilaiKomprensifF3) /
-                3) *
-                PRACTICE_WEIGHT
-          )
-        : isTingkatII
-        ? roundUpScore(
-            ((((pesertaUjian?.NilaiF1B1 || 0) +
-              (pesertaUjian?.NilaiF1B2 || 0)) /
-              2 +
-              (pesertaUjian?.NilaiF2B1 || 0) +
-              ((pesertaUjian?.NilaiF3B1 || 0) +
-                (pesertaUjian?.NilaiF3B2 || 0)) /
-                2) /
-              3) *
-              THEORY_WEIGHT +
-              ((pesertaUjian?.NilaiKomprensifF1 +
-                pesertaUjian?.NilaiKomprensifF2 +
-                pesertaUjian?.NilaiKomprensifF3) /
-                3) *
-                PRACTICE_WEIGHT
-          )
-        : roundUpScore(
-            ((((pesertaUjian?.NilaiF1B1 || 0) +
-              (pesertaUjian?.NilaiF1B2 || 0) +
-              (pesertaUjian?.NilaiF1B3 || 0)) /
-              3 +
-              (pesertaUjian?.NilaiF2B1 || 0) +
-              ((pesertaUjian?.NilaiF3B1 || 0) +
-                (pesertaUjian?.NilaiF3B2 || 0)) /
-                2) /
-              3) *
-              THEORY_WEIGHT +
-              ((pesertaUjian?.NilaiKomprensifF1 +
-                pesertaUjian?.NilaiKomprensifF2 +
-                pesertaUjian?.NilaiKomprensifF3) /
-                3) *
-                PRACTICE_WEIGHT
-          ),
-      Kelulusan: checkLulus(pesertaUjian, dataUjian[0]),
-    }));
-
-    // Membuat worksheet dari data
-    const worksheet = XLSX.utils.json_to_sheet(formattedData);
-
-    // Add red cell background color for each value < 50 in the specified columns
-    const columnsToCheck = [
-      "Nilai F1B1",
-      "Nilai F1B2",
-      "Nilai F1B3",
-      "Total F1",
-      "Nilai F2",
-      "Nilai F3B1",
-      "Nilai F3B2",
-      "Total F3",
-      "Nilai Kumulatif",
-      "Nilai Komprehensif",
-    ];
-
-    // Get the range of the sheet
-    const range = worksheet["!ref"];
-    const rows = XLSX.utils.decode_range(range!);
-
-    // Loop through each cell in the columns to check if the value is < 50
-    for (let row = rows.s.r; row <= rows.e.r; row++) {
-      for (let col = rows.s.c; col <= rows.e.c; col++) {
-        const cell = worksheet[XLSX.utils.encode_cell({ r: row, c: col })];
-
-        // Check if the column is in the columnsToCheck array
-        const columnName = Object.keys(formattedData[0])[col];
-        if (columnsToCheck.includes(columnName)) {
-          // If the value is less than 50, apply a red background
-          if (cell && !isNaN(cell.v) && cell.v < EXAM_THRESHOLD) {
-            if (!cell.s) cell.s = {}; // Create style if not already present
-            cell.s.fill = {
-              fgColor: { rgb: "FF0000" }, // Red background color
-            };
-          }
-        }
-      }
-    }
-
-    // Membuat workbook dan menambahkan worksheet dengan nama yang baru
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(
-      workbook,
-      worksheet,
-      "Rekapitulasi Nilai Lengkap"
-    );
-
-    // Menyimpan file Excel
-    XLSX.writeFile(
-      workbook,
-      `Rekapitulasi_Nilai_${dataUjian[0]!.TypeUjian}.xlsx`
-    );
   };
 
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
@@ -1246,11 +996,13 @@ const TableDataPesertaUjianKeahlian = () => {
                           </div>
                         ) : (
                           <div
-                            onClick={() => exportToExcelRekapitulasi()}
+                            onClick={() =>
+                              exportToExcelFinalScoring({ dataUjian, data })
+                            }
                             className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
                           >
-                            <IoPrintOutline />
-                            Save Nilai Ujian
+                            <PiMicrosoftExcelLogoFill />
+                            Export Excel Hasil Rekap{" "}
                           </div>
                         ))}
                     </>
@@ -1344,43 +1096,40 @@ const TableDataPesertaUjianKeahlian = () => {
               <div>
                 <div id="chartOne" className="-ml-5"></div>
 
-          
-                  <>
-                    <TableData
-                      isLoading={false}
-                      columns={columns}
-                      table={table}
-                      type={"long"}
-                    />
-                    <div className="flex items-center justify-end space-x-2 py-4">
-                      <div className="text-muted-foreground flex-1 text-sm">
-                        {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                        {table.getFilteredRowModel().rows.length} row(s)
-                        selected.
-                      </div>
-                      <div className="space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="font-inter"
-                          onClick={() => table.previousPage()}
-                          disabled={!table.getCanPreviousPage()}
-                        >
-                          Previous
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="font-inter"
-                          onClick={() => table.nextPage()}
-                          disabled={!table.getCanNextPage()}
-                        >
-                          Next
-                        </Button>
-                      </div>
+                <>
+                  <TableData
+                    isLoading={false}
+                    columns={columns}
+                    table={table}
+                    type={"long"}
+                  />
+                  <div className="flex items-center justify-end space-x-2 py-4">
+                    <div className="text-muted-foreground flex-1 text-sm">
+                      {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                      {table.getFilteredRowModel().rows.length} row(s) selected.
                     </div>
-                  </>
-             
+                    <div className="space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="font-inter"
+                        onClick={() => table.previousPage()}
+                        disabled={!table.getCanPreviousPage()}
+                      >
+                        Previous
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="font-inter"
+                        onClick={() => table.nextPage()}
+                        disabled={!table.getCanNextPage()}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                </>
               </div>
             )}
 
@@ -1709,9 +1458,12 @@ const TableDataPesertaUjianKeahlian = () => {
 
             {showRekapitulasiNilai && (
               <div className="border border-gray-300">
-                <div className="" ref={printRefRekapitulasiNilai}>
+                <div className="">
                   {" "}
-                  <div className="grid grid-cols-1 gap-2 w-full">
+                  <div
+                    className="grid grid-cols-1 gap-2 w-full"
+                    ref={printRefRekapitulasiNilai}
+                  >
                     {dataUjian.length != 0 && (
                       <div className="flex w-full gap-2">
                         <div className="w-full rounded-lg p-6 flex flex-col items-center justify-center">

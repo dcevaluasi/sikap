@@ -146,6 +146,3 @@ export const decryptValue = (encryptedValue: string): string => {
   return bytes.toString(CryptoJS.enc.Utf8);
 };
 
-export function roundUpScore(value: number): number {
-  return Math.ceil(value);
-}
