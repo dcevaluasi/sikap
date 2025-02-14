@@ -2,6 +2,7 @@
 
 import Toast from "@/components/toast";
 import { dpkakpBaseUrl } from "@/constants/urls";
+import { UserInformationDPKAKP } from "@/types/dpkakp";
 import axios from "axios";
 import Cookies from "js-cookie";
 import Image from "next/image";
@@ -15,6 +16,9 @@ export default function LayoutAdmin({
 }) {
   const [isPUKAKP, setIsPUKAKP] = useState<string>("false");
   const router = useRouter();
+
+  const [dataAdmin, setDataAdmin] =
+    React.useState<UserInformationDPKAKP | null>(null);
 
   const isPenguji = Cookies.get("IsPUKAKP") == "penguji";
 
@@ -42,7 +46,7 @@ export default function LayoutAdmin({
           },
         }
       );
-
+      setDataAdmin(data.data);
       Cookies.set("PUKAKP", data.data.Nama);
     } catch (error) {
       console.error("Failed to fetch admin data", error);
@@ -172,7 +176,52 @@ export default function LayoutAdmin({
 
       {/* Main Content */}
       <main className="flex-grow overflow-y-scroll scrollbar-hide">
-        {children}
+        <div className="flex flex-1 flex-col">
+          {/* section body top nav */}
+          <nav
+            aria-label="top bar"
+            className="flex-none flex justify-between bg-white h-16"
+          >
+            {/* top bar left */}
+            <ul
+              aria-label="top bar left"
+              aria-orientation="horizontal"
+              className="flex"
+            ></ul>
+            {/* to bar right  */}
+            <ul
+              aria-label="top bar right"
+              aria-orientation="horizontal"
+              className="px-8 flex items-center"
+            >
+              <div className="flex gap-2 items-center">
+                {dataAdmin != null ? (
+                  <div className="flex flex-col items-end">
+                    <h1 className="font-semibold text-sm">{dataAdmin!.Nama}</h1>
+                    <p className="text-xs font-normal"> {dataAdmin!.Status != '' ? dataAdmin!.Status + ' | '  : ''} {dataAdmin!.Nip != '' ? dataAdmin!.Nip : dataAdmin!.Email}</p>
+                  </div>
+                ) : (
+                  <></>
+                )}
+
+                <li className="h-10 w-10 ml-3">
+                  <button
+                    title="Page Menu"
+                    aria-label="page menu"
+                    className="h-full w-full rounded-full border focus:outline-none focus:shadow-outline"
+                  >
+                    <img
+                      className="h-full w-full rounded-full mx-auto"
+                      src="https://raw.githubusercontent.com/bluebrown/tailwind-zendesk-clone/master/public/assets/me.jpg"
+                    />
+                  </button>
+                </li>
+              </div>
+            </ul>
+          </nav>
+          {/* section body header */}
+          {children}
+        </div>
       </main>
     </div>
   );

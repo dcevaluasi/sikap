@@ -231,7 +231,7 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
       cell: ({ row }) => (
         <div
-          className={`w-full ${!isPenguji ? "flex" : "hidden"}  flex-col gap-2`}
+          className={`w-full ${!!isPenguji ? "flex" : "hidden"}  flex-col gap-2`}
         >
           <div className="flex  w-full items-center justify-center gap-1">
             <Button
@@ -410,7 +410,7 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="text-black font-semibold w-full  p-0 flex justify-center items-center"
+          className="text-black font-semibold w-full  p-0 justify-center items-center"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           <p className="leading-[105%]">Nomor Ujian</p>
@@ -431,7 +431,7 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          className={`${!isPenguji ? 'flex' : 'hidden'} text-black font-semibold w-full ml-auto p-0 justify-center items-center`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           <p className="leading-[105%]">F1B1</p>
@@ -439,7 +439,7 @@ const TableDataPesertaUjianKeahlian = () => {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="ml-auto capitalize w-full flex items-center justify-center">
+        <div className={`${!isPenguji ? 'flex' : 'hidden'} ml-auto capitalize w-full flex items-center justify-center`}>
           <p className="text-sm font-normal tracking-tight leading-none">
             {row.getValue("NilaiF1B1")}
           </p>
@@ -451,7 +451,7 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          className={`${!isPenguji ? 'flex' : 'hidden'} text-black font-semibold w-full ml-auto p-0 justify-center items-center`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           <p className="leading-[105%]">F1B2</p>
@@ -459,7 +459,7 @@ const TableDataPesertaUjianKeahlian = () => {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="ml-auto capitalize w-full flex items-center justify-center">
+        <div className={`${!isPenguji ? 'flex' : 'hidden'} ml-auto capitalize w-full flex items-center justify-center`}>
           <p className="text-sm font-normal tracking-tight leading-none">
             {row.getValue("NilaiF1B2")}
           </p>
@@ -471,7 +471,7 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          className={`${!isPenguji ? 'flex' : 'hidden'} text-black font-semibold w-full ml-auto p-0 justify-center items-center`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           <p className="leading-[105%]">F1B3</p>
@@ -479,7 +479,7 @@ const TableDataPesertaUjianKeahlian = () => {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="ml-auto capitalize w-full flex items-center justify-center">
+        <div className={`${!isPenguji ? 'flex' : 'hidden'} ml-auto capitalize w-full flex items-center justify-center`}>
           <p className="text-sm font-normal tracking-tight leading-none">
             {row.getValue("NilaiF1B3")}
           </p>
@@ -492,7 +492,7 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          className={`${!isPenguji ? 'flex' : 'hidden'} text-black font-semibold w-full ml-auto p-0 justify-center items-center`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           <p className="leading-[105%]">F2B1</p>
@@ -500,7 +500,7 @@ const TableDataPesertaUjianKeahlian = () => {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="ml-auto capitalize w-full flex items-center justify-center">
+        <div className={`${!isPenguji ? 'flex' : 'hidden'} ml-auto capitalize w-full flex items-center justify-center`}>
           <p className="text-sm font-normal tracking-tight leading-none">
             {row.getValue("NilaiF2B1")}
           </p>
@@ -512,7 +512,7 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          className={`${!isPenguji ? 'flex' : 'hidden'} text-black font-semibold w-full ml-auto p-0 justify-center items-center`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           <p className="leading-[105%]">F3B1</p>
@@ -520,7 +520,7 @@ const TableDataPesertaUjianKeahlian = () => {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="ml-auto capitalize w-full flex items-center justify-center">
+        <div className={`${!isPenguji ? 'flex' : 'hidden'} ml-auto capitalize w-full flex items-center justify-center`}>
           <p className="text-sm font-normal tracking-tight leading-none">
             {row.getValue("NilaiF3B1")}
           </p>
@@ -532,7 +532,7 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="text-black font-semibold w-full ml-auto p-0 flex justify-center items-center"
+          className={`${!isPenguji ? 'flex' : 'hidden'} text-black font-semibold w-full ml-auto p-0 justify-center items-center`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           <p className="leading-[105%]">F3B2</p>
@@ -540,7 +540,7 @@ const TableDataPesertaUjianKeahlian = () => {
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="ml-auto capitalize w-full flex items-center justify-center">
+        <div className={`${!isPenguji ? 'flex' : 'hidden'} ml-auto capitalize w-full flex items-center justify-center`}>
           <p className="text-sm font-normal tracking-tight leading-none">
             {row.getValue("NilaiF3B2")}
           </p>
