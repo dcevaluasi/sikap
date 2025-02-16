@@ -103,7 +103,7 @@ export default function LandingDPKAKP() {
       className={`${top ? "bg-white" : "bg-darkDPKAKP"
         } duration-700 w-full h-full`}
     >
-      <button onClick={() => handleForm()}>CLICK FIRSEBASE ADD DATA</button>
+      {/* <button onClick={() => handleForm()}>CLICK FIRSEBASE ADD DATA</button> */}
       <HeroDPKAKP />
       <section className="mb-10 mt-8 h-fit w-full px-5 py-4 ">
         <Marquee>
