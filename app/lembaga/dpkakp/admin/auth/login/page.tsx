@@ -55,6 +55,13 @@ function page() {
         title: `Isi terlebih dahulu passwordmu!`,
       });
       return;
+    } else if (email.includes('pukakp') && role == 'dpkakp') {
+      Toast.fire({
+        icon: "error",
+        title: 'Oopsss!',
+        text: `Role kamu bukan DPKAKP!`,
+      });
+      return;
     } else {
       try {
         const response = await axios.post(
@@ -207,8 +214,8 @@ function page() {
                     ? role == "dpkakp"
                       ? "DPKAKP"
                       : role == "pukakp"
-                      ? "PUKAKP"
-                      : "Penguji"
+                        ? "PUKAKP"
+                        : "Penguji"
                     : "Pilih Role"}
                 </p>
               </SelectTrigger>

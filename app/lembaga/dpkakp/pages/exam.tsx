@@ -30,6 +30,7 @@ import { Button } from "@/components/ui/button";
 import { dpkakpBaseUrl } from "@/constants/urls";
 import {
   JawabanUser,
+  JawabanUserStore,
   SoalBagian,
   SoalUjianBagian,
   Ujian,
@@ -40,6 +41,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
+import addData from "@/firebase/firestore/addData";
 
 function Exam() {
   const router = useRouter();
@@ -50,6 +52,10 @@ function Exam() {
   const [selectedAnswers, setSelectedAnswers] = React.useState<JawabanUser[]>(
     []
   );
+  const [selectedAnswersStore, setSelectedAnswersStore] = React.useState<JawabanUserStore[]>(
+    []
+  );
+
   const handleFetchExamInformation = async () => {
     try {
       const response = await axios.get(
@@ -65,7 +71,15 @@ function Exam() {
         jawaban_pengguna: "",
       }));
 
+      const initialAnswersStore = response.data.Soal.map(() => ({
+        id_soal: null,
+        soal: '',
+        jawaban_benar: '',
+        jawaban_pengguna: "",
+      }));
+
       setSelectedAnswers(initialAnswers);
+      setSelectedAnswersStore(initialAnswersStore)
 
       // const shuffledSoal = response.data.Soal.sort(() => Math.random() - 0.5);
       const shuffledSoal = response.data.Soal.map((soal: SoalUjianBagian) => ({
@@ -83,6 +97,7 @@ function Exam() {
   };
 
   console.log(selectedAnswers);
+  console.log(selectedAnswersStore)
   console.log("DATA: ", data);
 
   const [selectedIdSoal, setSelectedIdSoal] = React.useState<number>(0);
@@ -112,6 +127,26 @@ function Exam() {
     });
   };
 
+  const handleAnswerStoreChange = (idSoal: number, answer: string, soal: string, jawabanBenar: string) => {
+    setSelectedAnswersStore((prevAnswers) => {
+      const newAnswers = [...prevAnswers];
+
+      // Update the answer for the current question
+      newAnswers[selectedIdSoal] = {
+        id_soal: idSoal.toString(),
+        soal: soal,
+        jawaban_benar: jawabanBenar,
+        jawaban_pengguna:
+          newAnswers[selectedIdSoal]?.jawaban_pengguna === answer
+            ? "" // Deselect if the same answer is clicked again
+            : answer,
+        isCorrect: jawabanBenar == answer
+      };
+
+      return newAnswers;
+    });
+  };
+
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!data || !data.Soal[selectedIdSoal]) return;
@@ -131,6 +166,12 @@ function Exam() {
             selectedAnswer.IdSoalUjianBagian,
             selectedAnswer.NameJawaban
           );
+          handleAnswerStoreChange(
+            selectedAnswer.IdSoalUjianBagian,
+            selectedAnswer.NameJawaban,
+            currentQuestion.Soal,
+            currentQuestion.JawabanBenar,
+          )
         }
       }
     };
@@ -164,6 +205,21 @@ function Exam() {
 
   const [showAlert, setShowAlert] = React.useState(false);
   const [showSubmitAlert, setShowSubmitAlert] = React.useState(false);
+
+  const handleStoreAnsweredUser = async () => {
+    const data = {
+      selectedAnswersStore
+    }
+    const { result, error } = await addData('answers', `testing`, data)
+
+    if (error) {
+      return console.log(error)
+    }
+
+
+    return console.log(result)
+  }
+
   const handleSubmit = async () => {
     // Check if any answer is still empty
     const hasEmptyAnswers = selectedAnswers.some(
@@ -195,6 +251,7 @@ function Exam() {
         title: "Yeayyy!",
         text: `Berhasil mensubmit jawabanmu, semoga hasilnya memuaskan ya sobat!`,
       });
+      handleStoreAnsweredUser()
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
       localStorage.removeItem("selectedIdSoal");
@@ -377,18 +434,16 @@ function Exam() {
                     <div
                       key={index}
                       onClick={(e) => setSelectedIdSoal(index)}
-                      className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${
-                        selectedAnswers[index]!.jawaban_pengguna! != ""
-                          ? "bg-green-500 text-white bg-opacity-70"
-                          : "bg-blue-500 bg-opacity-30"
-                      } rounded-lg duration-700 `}
+                      className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
+                        ? "bg-green-500 text-white bg-opacity-70"
+                        : "bg-blue-500 bg-opacity-30"
+                        } rounded-lg duration-700 `}
                     >
                       <span
-                        className={`text-2xl font-semibold  ${
-                          selectedAnswers[index] != null
-                            ? " text-white"
-                            : "text-[#a5b4fc]"
-                        }`}
+                        className={`text-2xl font-semibold  ${selectedAnswers[index] != null
+                          ? " text-white"
+                          : "text-[#a5b4fc]"
+                          }`}
                       >
                         {index + 1}
                       </span>
@@ -524,11 +579,19 @@ function Exam() {
                                 selectedAnswers[selectedIdSoal]
                                   ?.jawaban_pengguna === jawaban.NameJawaban
                               }
-                              onChange={() =>
+                              onChange={() => {
                                 handleAnswerChange(
                                   jawaban.IdSoalUjianBagian,
                                   jawaban.NameJawaban
                                 )
+                                handleAnswerStoreChange(
+                                  jawaban.IdSoalUjianBagian,
+                                  jawaban.NameJawaban,
+                                  data.Soal[selectedIdSoal]?.Soal,
+                                  data.Soal[selectedIdSoal]?.JawabanBenar,
+                                )
+                              }
+
                               }
                             />
                             <label
@@ -538,10 +601,10 @@ function Exam() {
                               {index === 0
                                 ? "A"
                                 : index === 1
-                                ? "B"
-                                : index === 2
-                                ? "C"
-                                : "D"}
+                                  ? "B"
+                                  : index === 2
+                                    ? "C"
+                                    : "D"}
                               . {jawaban.NameJawaban}
                             </label>
                           </div>
@@ -644,18 +707,16 @@ function Exam() {
                   <div
                     key={index}
                     onClick={(e) => setSelectedIdSoal(index)}
-                    className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${
-                      selectedAnswers[index]!.jawaban_pengguna! != ""
-                        ? "bg-green-500 text-white bg-opacity-70"
-                        : "bg-blue-500 bg-opacity-30"
-                    } rounded-lg duration-700 `}
+                    className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
+                      ? "bg-green-500 text-white bg-opacity-70"
+                      : "bg-blue-500 bg-opacity-30"
+                      } rounded-lg duration-700 `}
                   >
                     <span
-                      className={`text-2xl font-semibold  ${
-                        selectedAnswers[index] != null
-                          ? " text-white"
-                          : "text-[#a5b4fc]"
-                      }`}
+                      className={`text-2xl font-semibold  ${selectedAnswers[index] != null
+                        ? " text-white"
+                        : "text-[#a5b4fc]"
+                        }`}
                     >
                       {index + 1}
                     </span>

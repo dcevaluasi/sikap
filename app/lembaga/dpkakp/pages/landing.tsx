@@ -22,8 +22,33 @@ import { EffectCoverflow, Pagination } from "swiper/modules";
 import { Slide } from "react-awesome-reveal";
 import { PropagateLoader } from "react-spinners";
 import HeroDPKAKP from "@/components/dpkakp/HeroDPKAKP";
+import addData from "@/firebase/firestore/addData";
+import getDocument from "@/firebase/firestore/getData";
+import { DocumentData } from "firebase/firestore";
 
 export default function LandingDPKAKP() {
+  const handleForm = async () => {
+    const data = {
+      data: JSON.stringify([{
+        name: 'John snow',
+        house: 'Stark'
+      }, {
+        name: 'John snow',
+        house: 'Stark'
+      }, {
+        name: 'John snow',
+        house: 'Stark'
+      },])
+    }
+    const { result, error } = await addData('answers', 'answers-1', data)
+
+    if (error) {
+      return console.log(error)
+    }
+
+
+    return console.log(result)
+  }
   const marketingConfig = [
     {
       title: "Beranda",
@@ -61,12 +86,24 @@ export default function LandingDPKAKP() {
     return () => window.removeEventListener("scroll", scrollHandler);
   }, [top]);
 
+  const [dataAnswer, setDataAnswer] = React.useState<DocumentData | null>(null)
+
+  async function fetchData() {
+    const dataResult = await getDocument('answers', 'answers-1');
+    console.log(dataResult.data); // Logs the actual result
+    setDataAnswer(dataResult.data)
+  }
+
+  fetchData();
+  console.log(dataAnswer != null ? JSON.parse(dataAnswer!.data) : null)
+
+
   return (
     <main
-      className={`${
-        top ? "bg-white" : "bg-darkDPKAKP"
-      } duration-700 w-full h-full`}
+      className={`${top ? "bg-white" : "bg-darkDPKAKP"
+        } duration-700 w-full h-full`}
     >
+      <button onClick={() => handleForm()}>CLICK FIRSEBASE ADD DATA</button>
       <HeroDPKAKP />
       <section className="mb-10 mt-8 h-fit w-full px-5 py-4 ">
         <Marquee>
@@ -240,21 +277,21 @@ export default function LandingDPKAKP() {
               <div className="max-w-[90%] text-xl italic leading-normal text-mutedForegroundDPKAKP sm:leading-7">
                 <ReactTyped
                   backSpeed={50}
-                  onBegin={function noRefCheck() {}}
-                  onComplete={function noRefCheck() {}}
-                  onDestroy={function noRefCheck() {}}
-                  onLastStringBackspaced={function noRefCheck() {}}
-                  onReset={function noRefCheck() {}}
-                  onStart={function noRefCheck() {}}
-                  onStop={function noRefCheck() {}}
-                  onStringTyped={function noRefCheck() {}}
-                  onTypingPaused={function noRefCheck() {}}
-                  onTypingResumed={function noRefCheck() {}}
+                  onBegin={function noRefCheck() { }}
+                  onComplete={function noRefCheck() { }}
+                  onDestroy={function noRefCheck() { }}
+                  onLastStringBackspaced={function noRefCheck() { }}
+                  onReset={function noRefCheck() { }}
+                  onStart={function noRefCheck() { }}
+                  onStop={function noRefCheck() { }}
+                  onStringTyped={function noRefCheck() { }}
+                  onTypingPaused={function noRefCheck() { }}
+                  onTypingResumed={function noRefCheck() { }}
                   strings={[
                     "&ldquo; Dewan Penguji Keahlian Awak Kapal Perikanan (DPKAKP) berjanji untuk menerapkan pencapaian mutu, perbaikan secara terus menerus dan berkelanjutan untuk meyakinkan seluruh pengguna jasa mendapatkan pelayanan pengujian terbaik serta bersedia menerima sanksi administrasi dan ganti rugi materiil apabila tidak melaksanakan manajemen pelayanan.&rdquo;",
                   ]}
                   typeSpeed={50}
-                  typedRef={function noRefCheck() {}}
+                  typedRef={function noRefCheck() { }}
                 />
               </div>
             </div>

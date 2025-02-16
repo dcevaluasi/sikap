@@ -225,13 +225,13 @@ const TableDataPesertaUjianKeahlian = () => {
           className={`w-full text-gray-900 font-semibold`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Action
+          Actions
           <TbDatabaseEdit className="ml-1 h-4 w-4" />
         </Button>
       ),
       cell: ({ row }) => (
         <div
-          className={`w-full ${!!isPenguji ? "flex" : "hidden"}  flex-col gap-2`}
+          className={`w-full ${!isPenguji ? "flex" : "hidden"}  flex-col gap-2`}
         >
           <div className="flex  w-full items-center justify-center gap-1">
             <Button
@@ -818,17 +818,17 @@ const TableDataPesertaUjianKeahlian = () => {
 
       const averageScore = isRewarding
         ? ((pesertaUjian?.NilaiF1B1 || 0) +
-            (pesertaUjian?.NilaiF2B1 || 0) +
-            (pesertaUjian?.NilaiF3B1 || 0)) /
-          3
+          (pesertaUjian?.NilaiF2B1 || 0) +
+          (pesertaUjian?.NilaiF3B1 || 0)) /
+        3
         : isTingkatII
-        ? ((pesertaUjian?.NilaiF1B1 || 0) +
+          ? ((pesertaUjian?.NilaiF1B1 || 0) +
             (pesertaUjian?.NilaiF1B2 || 0) +
             (pesertaUjian?.NilaiF2B1 || 0) +
             (pesertaUjian?.NilaiF3B1 || 0) +
             (pesertaUjian?.NilaiF3B2 || 0)) /
           5
-        : ((pesertaUjian?.NilaiF1B1 || 0) +
+          : ((pesertaUjian?.NilaiF1B1 || 0) +
             (pesertaUjian?.NilaiF1B2 || 0) +
             (pesertaUjian?.NilaiF1B3 || 0) +
             (pesertaUjian?.NilaiF2B1 || 0) +
@@ -1071,11 +1071,11 @@ const TableDataPesertaUjianKeahlian = () => {
                 )}
 
                 {dataUjian.length > 0 &&
-                dataUjian != null &&
-                pathname.includes("pukakp") ? (
+                  dataUjian != null &&
+                  pathname.includes("pukakp") ? (
                   dataUjian[0].UsersUjian.length ==
                     dataUjian[0].JumlahPesertaUjian &&
-                  dataUjian[0].UsersUjian.length > 0 ? (
+                    dataUjian[0].UsersUjian.length > 0 ? (
                     <></>
                   ) : (
                     <div
@@ -1182,11 +1182,10 @@ const TableDataPesertaUjianKeahlian = () => {
                           </div>
 
                           <div
-                            className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border ${
-                              dataUjian[0]!.TypeUjian.includes("ATKAPIN")
+                            className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border ${dataUjian[0]!.TypeUjian.includes("ATKAPIN")
                                 ? "border-rose-500 bg-rose-500 text-rose-600"
                                 : "border-blue-500 bg-blue-500 text-blue-600"
-                            } bg-opacity-20 font-medium  mt-5 text-lg`}
+                              } bg-opacity-20 font-medium  mt-5 text-lg`}
                           >
                             KARTU PESERTA UJIAN {dataUjian[0]!.TypeUjian}
                           </div>
@@ -1280,125 +1279,123 @@ const TableDataPesertaUjianKeahlian = () => {
                         <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
                           {dataUjian[0]!.TypeUjian.includes("Rewarding")
                             ? peserta!.CodeAksesUsersBagian!.length != 0 && (
-                                <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
-                                  <div className="flex flex-shrink-0 bg-neutral-200 text-white">
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>F1</span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>F2</span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>F3</span>
-                                    </div>
+                              <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
+                                <div className="flex flex-shrink-0 bg-neutral-200 text-white">
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                    <span>F1</span>
                                   </div>
-                                  <div className="overflow-auto">
-                                    <div className="flex flex-shrink-0">
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                        <span>
-                                          {peserta!.CodeAksesUsersBagian[0]!
-                                            .KodeAkses || ""}
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                        <span>
-                                          {peserta!.CodeAksesUsersBagian[1]!
-                                            .KodeAkses || ""}
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                        <span>
-                                          {peserta!.CodeAksesUsersBagian[2]!
-                                            .KodeAkses || ""}
-                                        </span>
-                                      </div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                    <span>F2</span>
+                                  </div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                    <span>F3</span>
+                                  </div>
+                                </div>
+                                <div className="overflow-auto">
+                                  <div className="flex flex-shrink-0">
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                      <span>
+                                        {peserta!.CodeAksesUsersBagian[0]!
+                                          .KodeAkses || ""}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                      <span>
+                                        {peserta!.CodeAksesUsersBagian[1]!
+                                          .KodeAkses || ""}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                      <span>
+                                        {peserta!.CodeAksesUsersBagian[2]!
+                                          .KodeAkses || ""}
+                                      </span>
                                     </div>
                                   </div>
                                 </div>
-                              )
+                              </div>
+                            )
                             : peserta!.CodeAksesUsersBagian!.length != 0 && (
-                                <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
-                                  <div className="flex flex-shrink-0 bg-neutral-200 text-white">
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>F1B1</span>
-                                    </div>
-                                    <div
-                                      className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center`}
-                                    >
-                                      <span>F1B2</span>
-                                    </div>
-                                    <div
-                                      className={`${
-                                        dataUjian[0]!.TypeUjian ==
-                                          "ANKAPIN II" ||
+                              <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
+                                <div className="flex flex-shrink-0 bg-neutral-200 text-white">
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                    <span>F1B1</span>
+                                  </div>
+                                  <div
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center`}
+                                  >
+                                    <span>F1B2</span>
+                                  </div>
+                                  <div
+                                    className={`${dataUjian[0]!.TypeUjian ==
+                                        "ANKAPIN II" ||
                                         dataUjian[0]!.TypeUjian == "ATKAPIN II"
+                                        ? "hidden"
+                                        : "flex"
+                                      } flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center`}
+                                  >
+                                    <span>F1B3</span>
+                                  </div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                    <span>F2B1</span>
+                                  </div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                    <span>F3B1</span>
+                                  </div>
+                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                    <span>F3B2</span>
+                                  </div>
+                                </div>
+                                <div className="overflow-auto">
+                                  <div className="flex flex-shrink-0">
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                      <span>
+                                        {peserta!.CodeAksesUsersBagian[0]!
+                                          .KodeAkses || ""}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                      <span>
+                                        {peserta!.CodeAksesUsersBagian[1]!
+                                          .KodeAkses || ""}
+                                      </span>
+                                    </div>
+                                    <div
+                                      className={`${dataUjian[0]!.TypeUjian ==
+                                          "ANKAPIN II" ||
+                                          dataUjian[0]!.TypeUjian ==
+                                          "ATKAPIN II"
                                           ? "hidden"
                                           : "flex"
-                                      } flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center`}
-                                    >
-                                      <span>F1B3</span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>F2B1</span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>F3B1</span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>F3B2</span>
-                                    </div>
-                                  </div>
-                                  <div className="overflow-auto">
-                                    <div className="flex flex-shrink-0">
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                        <span>
-                                          {peserta!.CodeAksesUsersBagian[0]!
-                                            .KodeAkses || ""}
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                        <span>
-                                          {peserta!.CodeAksesUsersBagian[1]!
-                                            .KodeAkses || ""}
-                                        </span>
-                                      </div>
-                                      <div
-                                        className={`${
-                                          dataUjian[0]!.TypeUjian ==
-                                            "ANKAPIN II" ||
-                                          dataUjian[0]!.TypeUjian ==
-                                            "ATKAPIN II"
-                                            ? "hidden"
-                                            : "flex"
                                         } items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center`}
-                                      >
-                                        <span>
-                                          {peserta!.CodeAksesUsersBagian[2]!
-                                            .KodeAkses || ""}
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                        <span>
-                                          {peserta!.CodeAksesUsersBagian[3]!
-                                            .KodeAkses || ""}
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                        <span>
-                                          {peserta!.CodeAksesUsersBagian[4]!
-                                            .KodeAkses || ""}
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                        <span>
-                                          {peserta!.CodeAksesUsersBagian[5]!
-                                            .KodeAkses || ""}
-                                        </span>
-                                      </div>
+                                    >
+                                      <span>
+                                        {peserta!.CodeAksesUsersBagian[2]!
+                                          .KodeAkses || ""}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                      <span>
+                                        {peserta!.CodeAksesUsersBagian[3]!
+                                          .KodeAkses || ""}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                      <span>
+                                        {peserta!.CodeAksesUsersBagian[4]!
+                                          .KodeAkses || ""}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
+                                      <span>
+                                        {peserta!.CodeAksesUsersBagian[5]!
+                                          .KodeAkses || ""}
+                                      </span>
                                     </div>
                                   </div>
                                 </div>
-                              )}
+                              </div>
+                            )}
 
                           {dataPukakp != null ? (
                             <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
@@ -1571,12 +1568,11 @@ const TableDataPesertaUjianKeahlian = () => {
                                     <span className="">F1B2</span>
                                   </div>
                                   <div
-                                    className={`${
-                                      dataUjian[0]!.TypeUjian == "ANKAPIN II" ||
-                                      dataUjian[0]!.TypeUjian == "ATKAPIN II"
+                                    className={`${dataUjian[0]!.TypeUjian == "ANKAPIN II" ||
+                                        dataUjian[0]!.TypeUjian == "ATKAPIN II"
                                         ? "hidden"
                                         : "flex"
-                                    } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6`}
+                                      } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6`}
                                   >
                                     <span className="">F1B3</span>
                                   </div>
@@ -1640,36 +1636,33 @@ const TableDataPesertaUjianKeahlian = () => {
                                   ) ? (
                                     <>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
-                                          (pesertaUjian?.NilaiF1B1 || 0) <
-                                          EXAM_THRESHOLD
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-black"
-                                        }`}
+                                          }`}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF1B1 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
-                                          (pesertaUjian?.NilaiF2B1 || 0) <
-                                          EXAM_THRESHOLD
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) <
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-black"
-                                        }`}
+                                          }`}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF2B1 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
-                                          (pesertaUjian?.NilaiF3B1 || 0) <
-                                          EXAM_THRESHOLD
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF3B1 || 0) <
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-black"
-                                        }`}
+                                          }`}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF3B1 || 0}
@@ -1679,43 +1672,39 @@ const TableDataPesertaUjianKeahlian = () => {
                                   ) : (
                                     <>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
-                                          (pesertaUjian?.NilaiF1B1 || 0) <
-                                          EXAM_THRESHOLD
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-black"
-                                        }`}
+                                          }`}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF1B1 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
-                                          (pesertaUjian?.NilaiF1B2 || 0) <
-                                          EXAM_THRESHOLD
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B2 || 0) <
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-black"
-                                        }`}
+                                          }`}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF1B2 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`${
-                                          dataUjian[0]!.TypeUjian ==
+                                        className={`${dataUjian[0]!.TypeUjian ==
                                             "ANKAPIN II" ||
-                                          dataUjian[0]!.TypeUjian ==
+                                            dataUjian[0]!.TypeUjian ==
                                             "ATKAPIN II"
                                             ? "hidden"
                                             : "flex"
-                                        } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
-                                          (pesertaUjian?.NilaiF1B3 || 0) <
-                                          EXAM_THRESHOLD
+                                          } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B3 || 0) <
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-black"
-                                        }`}
+                                          }`}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF1B3 || 0}
@@ -1725,25 +1714,25 @@ const TableDataPesertaUjianKeahlian = () => {
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${(() => {
                                           const isAnkapinOrAtkapin =
                                             dataUjian[0]?.TypeUjian ===
-                                              "ANKAPIN II" ||
+                                            "ANKAPIN II" ||
                                             dataUjian[0]?.TypeUjian ===
-                                              "ATKAPIN II";
+                                            "ATKAPIN II";
 
                                           // Hitung rata-rata nilai berdasarkan tipe ujian
                                           const averageScore =
                                             isAnkapinOrAtkapin
                                               ? ((pesertaUjian?.NilaiF1B1 ||
-                                                  0) +
-                                                  (pesertaUjian?.NilaiF1B2 ||
-                                                    0)) /
-                                                2
+                                                0) +
+                                                (pesertaUjian?.NilaiF1B2 ||
+                                                  0)) /
+                                              2
                                               : ((pesertaUjian?.NilaiF1B1 ||
+                                                0) +
+                                                (pesertaUjian?.NilaiF1B2 ||
                                                   0) +
-                                                  (pesertaUjian?.NilaiF1B2 ||
-                                                    0) +
-                                                  (pesertaUjian?.NilaiF1B3 ||
-                                                    0)) /
-                                                3;
+                                                (pesertaUjian?.NilaiF1B3 ||
+                                                  0)) /
+                                              3;
 
                                           return averageScore < EXAM_THRESHOLD
                                             ? "text-rose-500"
@@ -1754,76 +1743,72 @@ const TableDataPesertaUjianKeahlian = () => {
                                           {(() => {
                                             const isAnkapinOrAtkapin =
                                               dataUjian[0]?.TypeUjian ===
-                                                "ANKAPIN II" ||
+                                              "ANKAPIN II" ||
                                               dataUjian[0]?.TypeUjian ===
-                                                "ATKAPIN II";
+                                              "ATKAPIN II";
 
                                             return isAnkapinOrAtkapin
                                               ? (
-                                                  ((pesertaUjian?.NilaiF1B1 ||
-                                                    0) +
-                                                    (pesertaUjian?.NilaiF1B2 ||
-                                                      0)) /
-                                                  2
-                                                ).toFixed(2)
+                                                ((pesertaUjian?.NilaiF1B1 ||
+                                                  0) +
+                                                  (pesertaUjian?.NilaiF1B2 ||
+                                                    0)) /
+                                                2
+                                              ).toFixed(2)
                                               : (
-                                                  ((pesertaUjian?.NilaiF1B1 ||
+                                                ((pesertaUjian?.NilaiF1B1 ||
+                                                  0) +
+                                                  (pesertaUjian?.NilaiF1B2 ||
                                                     0) +
-                                                    (pesertaUjian?.NilaiF1B2 ||
-                                                      0) +
-                                                    (pesertaUjian?.NilaiF1B3 ||
-                                                      0)) /
-                                                  3
-                                                ).toFixed(2);
+                                                  (pesertaUjian?.NilaiF1B3 ||
+                                                    0)) /
+                                                3
+                                              ).toFixed(2);
                                           })()}
                                         </span>
                                       </div>
 
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${
-                                          (pesertaUjian?.NilaiF2B1 || 0) <
-                                          EXAM_THRESHOLD
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) <
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-green-500"
-                                        }`}
+                                          }`}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF2B1 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
-                                          (pesertaUjian?.NilaiF3B1 || 0) <
-                                          EXAM_THRESHOLD
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF3B1 || 0) <
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-black"
-                                        }`}
+                                          }`}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF3B1 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${
-                                          (pesertaUjian?.NilaiF3B2 || 0) <
-                                          EXAM_THRESHOLD
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF3B2 || 0) <
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-black"
-                                        }`}
+                                          }`}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF3B2 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${
-                                          ((pesertaUjian?.NilaiF3B1 || 0) +
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${((pesertaUjian?.NilaiF3B1 || 0) +
                                             (pesertaUjian?.NilaiF3B2 || 0)) /
                                             2 <
-                                          EXAM_THRESHOLD
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-green-500"
-                                        }`}
+                                          }`}
                                       >
                                         <span>
                                           {(
@@ -1836,55 +1821,54 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </>
                                   )}
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${
-                                      dataUjian[0]!.TypeUjian.includes(
-                                        "Rewarding"
-                                      )
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
+                                      "Rewarding"
+                                    )
                                         ? ((pesertaUjian?.NilaiF1B1 || 0) +
-                                            (pesertaUjian?.NilaiF2B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B1 || 0)) /
-                                            3 <
+                                          (pesertaUjian?.NilaiF2B1 || 0) +
+                                          (pesertaUjian?.NilaiF3B1 || 0)) /
+                                          3 <
                                           EXAM_THRESHOLD
                                           ? "text-rose-500"
                                           : "text-green-500"
                                         : dataUjian[0]!.TypeUjian ==
-                                            "ANKAPIN II" ||
+                                          "ANKAPIN II" ||
                                           dataUjian[0].TypeUjian == "ATKAPIN II"
-                                        ? ((pesertaUjian?.NilaiF1B1 || 0) +
+                                          ? ((pesertaUjian?.NilaiF1B1 || 0) +
                                             (pesertaUjian?.NilaiF1B2 || 0) +
                                             (pesertaUjian?.NilaiF2B1 || 0) +
                                             (pesertaUjian?.NilaiF3B1 || 0) +
                                             (pesertaUjian?.NilaiF3B2 || 0)) /
                                             5 <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-green-500"
-                                        : ((pesertaUjian?.NilaiF1B1 || 0) +
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-green-500"
+                                          : ((pesertaUjian?.NilaiF1B1 || 0) +
                                             (pesertaUjian?.NilaiF1B2 || 0) +
                                             (pesertaUjian?.NilaiF1B3 || 0) +
                                             (pesertaUjian?.NilaiF2B1 || 0) +
                                             (pesertaUjian?.NilaiF3B1 || 0) +
                                             (pesertaUjian?.NilaiF3B2 || 0)) /
                                             6 <
-                                          EXAM_THRESHOLD
-                                        ? "text-rose-500"
-                                        : "text-green-500"
-                                    }`}
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-green-500"
+                                      }`}
                                   >
                                     <span>
                                       {dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
                                       )
                                         ? (
-                                            ((pesertaUjian?.NilaiF1B1 || 0) +
-                                              (pesertaUjian?.NilaiF2B1 || 0) +
-                                              (pesertaUjian?.NilaiF3B1 || 0)) /
-                                            3
-                                          ).toFixed(2)
+                                          ((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF2B1 || 0) +
+                                            (pesertaUjian?.NilaiF3B1 || 0)) /
+                                          3
+                                        ).toFixed(2)
                                         : dataUjian[0]!.TypeUjian ==
-                                            "ANKAPIN II" ||
+                                          "ANKAPIN II" ||
                                           dataUjian[0].TypeUjian == "ATKAPIN II"
-                                        ? (
+                                          ? (
                                             (((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF1B2 || 0)) /
                                               2 +
@@ -1892,10 +1876,10 @@ const TableDataPesertaUjianKeahlian = () => {
                                               ((pesertaUjian?.NilaiF3B1 || 0) +
                                                 (pesertaUjian?.NilaiF3B2 ||
                                                   0)) /
-                                                2) /
+                                              2) /
                                             3
                                           ).toFixed(2)
-                                        : (
+                                          : (
                                             (((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF1B2 || 0) +
                                               (pesertaUjian?.NilaiF1B3 || 0)) /
@@ -1904,7 +1888,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                               ((pesertaUjian?.NilaiF3B1 || 0) +
                                                 (pesertaUjian?.NilaiF3B2 ||
                                                   0)) /
-                                                2) /
+                                              2) /
                                             3
                                           ).toFixed(2)}
                                     </span>
@@ -1926,15 +1910,14 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </span>
                                   </div>
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${
-                                      (pesertaUjian?.NilaiKomprensifF1 +
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${(pesertaUjian?.NilaiKomprensifF1 +
                                         pesertaUjian?.NilaiKomprensifF2 +
                                         pesertaUjian?.NilaiKomprensifF3) /
                                         3 >
-                                      EXAM_THRESHOLD
+                                        EXAM_THRESHOLD
                                         ? "text-green-500"
                                         : "text-rose-500"
-                                    }`}
+                                      }`}
                                   >
                                     <span>
                                       {(
@@ -1946,83 +1929,82 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </span>
                                   </div>
                                   <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-neutral-200 font-bold ${
-                                      dataUjian[0]!.TypeUjian.includes(
-                                        "Rewarding"
-                                      )
+                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
+                                      "Rewarding"
+                                    )
                                         ? (((pesertaUjian?.NilaiF1B1 || 0) +
-                                            (pesertaUjian?.NilaiF2B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B1 || 0)) /
+                                          (pesertaUjian?.NilaiF2B1 || 0) +
+                                          (pesertaUjian?.NilaiF3B1 || 0)) /
+                                          3) *
+                                          THEORY_WEIGHT +
+                                          ((pesertaUjian?.NilaiKomprensifF1 +
+                                            pesertaUjian?.NilaiKomprensifF2 +
+                                            pesertaUjian?.NilaiKomprensifF3) /
                                             3) *
-                                            THEORY_WEIGHT +
-                                            ((pesertaUjian?.NilaiKomprensifF1 +
-                                              pesertaUjian?.NilaiKomprensifF2 +
-                                              pesertaUjian?.NilaiKomprensifF3) /
-                                              3) *
-                                              PRACTICE_WEIGHT <
+                                          PRACTICE_WEIGHT <
                                           EXAM_THRESHOLD
                                           ? "text-rose-500"
                                           : "text-green-500"
                                         : dataUjian[0]!.TypeUjian ==
-                                            "ANKAPIN II" ||
+                                          "ANKAPIN II" ||
                                           dataUjian[0].TypeUjian == "ATKAPIN II"
-                                        ? ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                          ? ((((pesertaUjian?.NilaiF1B1 || 0) +
                                             (pesertaUjian?.NilaiF1B2 || 0)) /
                                             2 +
                                             (pesertaUjian?.NilaiF2B1 || 0) +
                                             ((pesertaUjian?.NilaiF3B1 || 0) +
                                               (pesertaUjian?.NilaiF3B2 || 0)) /
-                                              2) /
+                                            2) /
                                             3) *
                                             THEORY_WEIGHT +
                                             ((pesertaUjian?.NilaiKomprensifF1 +
                                               pesertaUjian?.NilaiKomprensifF2 +
                                               pesertaUjian?.NilaiKomprensifF3) /
                                               3) *
-                                              PRACTICE_WEIGHT <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-green-500"
-                                        : ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                            PRACTICE_WEIGHT <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-green-500"
+                                          : ((((pesertaUjian?.NilaiF1B1 || 0) +
                                             (pesertaUjian?.NilaiF1B2 || 0) +
                                             (pesertaUjian?.NilaiF1B3 || 0)) /
                                             3 +
                                             (pesertaUjian?.NilaiF2B1 || 0) +
                                             ((pesertaUjian?.NilaiF3B1 || 0) +
                                               (pesertaUjian?.NilaiF3B2 || 0)) /
-                                              2) /
+                                            2) /
                                             3) *
                                             THEORY_WEIGHT +
                                             ((pesertaUjian?.NilaiKomprensifF1 +
                                               pesertaUjian?.NilaiKomprensifF2 +
                                               pesertaUjian?.NilaiKomprensifF3) /
                                               3) *
-                                              PRACTICE_WEIGHT <
-                                          EXAM_THRESHOLD
-                                        ? "text-rose-500"
-                                        : "text-green-500"
-                                    }`}
+                                            PRACTICE_WEIGHT <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-green-500"
+                                      }`}
                                   >
                                     <span>
                                       {dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
                                       )
                                         ? (
-                                            (((pesertaUjian?.NilaiF1B1 || 0) +
-                                              (pesertaUjian?.NilaiF2B1 || 0) +
-                                              (pesertaUjian?.NilaiF3B1 || 0)) /
-                                              3) *
-                                              THEORY_WEIGHT +
-                                            ((pesertaUjian?.NilaiKomprensifF1 +
-                                              pesertaUjian?.NilaiKomprensifF2 +
-                                              pesertaUjian?.NilaiKomprensifF3) /
-                                              3) *
-                                              PRACTICE_WEIGHT
-                                          ).toFixed(2)
+                                          (((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF2B1 || 0) +
+                                            (pesertaUjian?.NilaiF3B1 || 0)) /
+                                            3) *
+                                          THEORY_WEIGHT +
+                                          ((pesertaUjian?.NilaiKomprensifF1 +
+                                            pesertaUjian?.NilaiKomprensifF2 +
+                                            pesertaUjian?.NilaiKomprensifF3) /
+                                            3) *
+                                          PRACTICE_WEIGHT
+                                        ).toFixed(2)
                                         : dataUjian[0]!.TypeUjian ==
-                                            "ANKAPIN II" ||
+                                          "ANKAPIN II" ||
                                           dataUjian[0].TypeUjian == "ATKAPIN II"
-                                        ? (
+                                          ? (
                                             ((((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF1B2 || 0)) /
                                               2 +
@@ -2030,16 +2012,16 @@ const TableDataPesertaUjianKeahlian = () => {
                                               ((pesertaUjian?.NilaiF3B1 || 0) +
                                                 (pesertaUjian?.NilaiF3B2 ||
                                                   0)) /
-                                                2) /
+                                              2) /
                                               3) *
-                                              THEORY_WEIGHT +
+                                            THEORY_WEIGHT +
                                             ((pesertaUjian?.NilaiKomprensifF1 +
                                               pesertaUjian?.NilaiKomprensifF2 +
                                               pesertaUjian?.NilaiKomprensifF3) /
                                               3) *
-                                              PRACTICE_WEIGHT
+                                            PRACTICE_WEIGHT
                                           ).toFixed(2)
-                                        : (
+                                          : (
                                             ((((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF1B2 || 0) +
                                               (pesertaUjian?.NilaiF1B3 || 0)) /
@@ -2048,27 +2030,26 @@ const TableDataPesertaUjianKeahlian = () => {
                                               ((pesertaUjian?.NilaiF3B1 || 0) +
                                                 (pesertaUjian?.NilaiF3B2 ||
                                                   0)) /
-                                                2) /
+                                              2) /
                                               3) *
-                                              THEORY_WEIGHT +
+                                            THEORY_WEIGHT +
                                             ((pesertaUjian?.NilaiKomprensifF1 +
                                               pesertaUjian?.NilaiKomprensifF2 +
                                               pesertaUjian?.NilaiKomprensifF3) /
                                               3) *
-                                              PRACTICE_WEIGHT
+                                            PRACTICE_WEIGHT
                                           ).toFixed(2)}
                                     </span>
                                   </div>
                                   <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 font-bold justify-center py-7 text-center">
                                     <span
-                                      className={`  ${
-                                        checkLulus(
-                                          pesertaUjian,
-                                          dataUjian[0]
-                                        ) == "TIDAK LULUS"
+                                      className={`  ${checkLulus(
+                                        pesertaUjian,
+                                        dataUjian[0]
+                                      ) == "TIDAK LULUS"
                                           ? "text-rose-500"
                                           : "text-green-500"
-                                      }`}
+                                        }`}
                                     >
                                       {checkLulus(pesertaUjian, dataUjian[0])}
                                     </span>
