@@ -34,6 +34,7 @@ import {
   SoalBagian,
   SoalUjianBagian,
   Ujian,
+  UserExamInfo,
 } from "@/types/ujian-keahlian-akp";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import Cookies from "js-cookie";
@@ -96,9 +97,26 @@ function Exam() {
     }
   };
 
-  console.log(selectedAnswers);
-  console.log(selectedAnswersStore)
-  console.log("DATA: ", data);
+  const [dataUserExam, setDataUserExam] = React.useState<UserExamInfo | null>(null)
+  const handleFetchUserExamInformation = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL}/getInfoUsers`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF096")}`,
+          },
+        }
+      );
+
+      setDataUserExam(response.data.data)
+
+      console.log({ response });
+    } catch (error) {
+      console.log({ error });
+    }
+  };
+
 
   const [selectedIdSoal, setSelectedIdSoal] = React.useState<number>(0);
 
@@ -127,7 +145,7 @@ function Exam() {
     });
   };
 
-  const handleAnswerStoreChange = (idSoal: number, answer: string, soal: string, jawabanBenar: string) => {
+  const handleAnswerStoreChange = (idSoal: number, answer: string, soal: string, gambarSoal: string, jawabanBenar: string) => {
     setSelectedAnswersStore((prevAnswers) => {
       const newAnswers = [...prevAnswers];
 
@@ -135,6 +153,7 @@ function Exam() {
       newAnswers[selectedIdSoal] = {
         id_soal: idSoal.toString(),
         soal: soal,
+        gambarSoal: gambarSoal,
         jawaban_benar: jawabanBenar,
         jawaban_pengguna:
           newAnswers[selectedIdSoal]?.jawaban_pengguna === answer
@@ -170,6 +189,7 @@ function Exam() {
             selectedAnswer.IdSoalUjianBagian,
             selectedAnswer.NameJawaban,
             currentQuestion.Soal,
+            currentQuestion.GambarSoal!,
             currentQuestion.JawabanBenar,
           )
         }
@@ -182,7 +202,6 @@ function Exam() {
     };
   }, [data, selectedIdSoal]);
 
-  console.log("SELECTED ANSWERS", selectedAnswers);
 
   React.useEffect(() => {
     // Load state from local storage on component mount
@@ -206,11 +225,11 @@ function Exam() {
   const [showAlert, setShowAlert] = React.useState(false);
   const [showSubmitAlert, setShowSubmitAlert] = React.useState(false);
 
-  const handleStoreAnsweredUser = async () => {
+  const handleStoreAnsweredUser = async (idUserUjian: number, fungsiBagian: string) => {
     const data = {
       selectedAnswersStore
     }
-    const { result, error } = await addData('answers', `testing`, data)
+    const { result, error } = await addData('answers', `${idUserUjian}_${fungsiBagian}`, data)
 
     if (error) {
       return console.log(error)
@@ -251,7 +270,7 @@ function Exam() {
         title: "Yeayyy!",
         text: `Berhasil mensubmit jawabanmu, semoga hasilnya memuaskan ya sobat!`,
       });
-      handleStoreAnsweredUser()
+      handleStoreAnsweredUser(dataUserExam!.id_user_ujian, data!.Bagian)
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
       localStorage.removeItem("selectedIdSoal");
@@ -357,6 +376,7 @@ function Exam() {
 
   React.useEffect(() => {
     handleFetchExamInformation();
+    handleFetchUserExamInformation()
   }, []);
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -588,6 +608,7 @@ function Exam() {
                                   jawaban.IdSoalUjianBagian,
                                   jawaban.NameJawaban,
                                   data.Soal[selectedIdSoal]?.Soal,
+                                  data.Soal[selectedIdSoal]?.GambarSoal!,
                                   data.Soal[selectedIdSoal]?.JawabanBenar,
                                 )
                               }

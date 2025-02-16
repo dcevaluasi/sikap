@@ -86,17 +86,6 @@ export default function LandingDPKAKP() {
     return () => window.removeEventListener("scroll", scrollHandler);
   }, [top]);
 
-  const [dataAnswer, setDataAnswer] = React.useState<DocumentData | null>(null)
-
-  async function fetchData() {
-    const dataResult = await getDocument('answers', 'answers-1');
-    console.log(dataResult.data); // Logs the actual result
-    setDataAnswer(dataResult.data)
-  }
-
-  fetchData();
-  console.log(dataAnswer != null ? JSON.parse(dataAnswer!.data) : null)
-
 
   return (
     <main

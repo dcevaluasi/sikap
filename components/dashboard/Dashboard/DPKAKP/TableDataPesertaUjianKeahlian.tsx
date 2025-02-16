@@ -4,6 +4,18 @@ import * as XLSX from "xlsx";
 import "jspdf-autotable";
 import { useReactToPrint } from "react-to-print";
 
+import { Label } from "@/components/ui/label"
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -73,7 +85,7 @@ import TableData from "../../Tables/TableData";
 import { dpkakpBaseUrl } from "@/constants/urls";
 import { getIdUjianKeahlianInPathPesertaUjian } from "@/components/utils/dpkakp/pathname";
 import { BsFileExcel, BsPersonVcard } from "react-icons/bs";
-import { Ujian, UsersUjian } from "@/types/ujian-keahlian-akp";
+import { JawabanUserStore, Ujian, UsersUjian } from "@/types/ujian-keahlian-akp";
 import { HashLoader } from "react-spinners";
 import autoTable from "jspdf-autotable";
 import Image from "next/image";
@@ -98,6 +110,9 @@ import {
   exportToExcelFinalScoring,
   roundUpScore,
 } from "@/components/utils/dpkakp/scoring";
+import getDocument from "@/firebase/firestore/getData";
+import { DocumentData } from "firebase/firestore";
+import EmptyData from "@/components/micro-components/EmptyData";
 
 const TableDataPesertaUjianKeahlian = () => {
   const pathname = usePathname();
@@ -342,16 +357,15 @@ const TableDataPesertaUjianKeahlian = () => {
                           </td>
                         )
                       )}
-                      {Array.from({
+                      {/* {Array.from({
                         length: 6 - row.original.CodeAksesUsersBagian.length,
                       }).map((_, index) => (
                         <td
                           key={`empty-${index}`}
                           className="border text-center border-gray-200"
                         >
-                          {/* Empty cell */}
                         </td>
-                      ))}
+                      ))} */}
                     </tr>
                   </tbody>
                 </table>
@@ -846,6 +860,37 @@ const TableDataPesertaUjianKeahlian = () => {
     return { lulusCount, tidakLulusCount };
   };
 
+
+  const [dataAnswer, setDataAnswer] = React.useState<JawabanUserStore[]>([])
+  const [isShowHistoryUserAnswers, setIsShowHistoryUserAnswers] = React.useState<boolean>(false)
+  const [isFetchingHistoryUserAnswers, setIsFetchingHistoryUserAnswers] = React.useState<boolean>(false)
+
+  async function fetchData(idUserUjian: number, bagianFungsi: string) {
+    setIsFetchingHistoryUserAnswers(true)
+    const dataResult = await getDocument('answers', `${idUserUjian}_${bagianFungsi}`);
+    console.log(`${idUserUjian}_${bagianFungsi}`)
+    console.log(dataResult.data); // Logs the actual result
+    if (dataResult!.data! == null) {
+      setDataAnswer([])
+      setIsFetchingHistoryUserAnswers(false)
+    } else {
+      const result = dataResult!.data!.selectedAnswersStore! as JawabanUserStore[]
+      setDataAnswer(result)
+      setIsFetchingHistoryUserAnswers(false)
+    }
+
+  }
+
+  const trueCount = dataAnswer.filter(item => item.isCorrect === true).length;
+  const falseCount = dataAnswer.filter(item => item.isCorrect === false).length;
+
+  console.log({ dataAnswer })
+  console.log({ trueCount })
+  console.log({ falseCount })
+
+
+
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       {data != null ? (
@@ -1183,8 +1228,8 @@ const TableDataPesertaUjianKeahlian = () => {
 
                           <div
                             className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border ${dataUjian[0]!.TypeUjian.includes("ATKAPIN")
-                                ? "border-rose-500 bg-rose-500 text-rose-600"
-                                : "border-blue-500 bg-blue-500 text-blue-600"
+                              ? "border-rose-500 bg-rose-500 text-rose-600"
+                              : "border-blue-500 bg-blue-500 text-blue-600"
                               } bg-opacity-20 font-medium  mt-5 text-lg`}
                           >
                             KARTU PESERTA UJIAN {dataUjian[0]!.TypeUjian}
@@ -1280,7 +1325,7 @@ const TableDataPesertaUjianKeahlian = () => {
                           {dataUjian[0]!.TypeUjian.includes("Rewarding")
                             ? peserta!.CodeAksesUsersBagian!.length != 0 && (
                               <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
-                                <div className="flex flex-shrink-0 bg-neutral-200 text-white">
+                                <div className="flex flex-shrink-0 bg-neutral-500 text-white">
                                   <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
                                     <span>F1</span>
                                   </div>
@@ -1317,7 +1362,7 @@ const TableDataPesertaUjianKeahlian = () => {
                             )
                             : peserta!.CodeAksesUsersBagian!.length != 0 && (
                               <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
-                                <div className="flex flex-shrink-0 bg-neutral-200 text-white">
+                                <div className="flex flex-shrink-0 bg-neutral-500 text-white">
                                   <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
                                     <span>F1B1</span>
                                   </div>
@@ -1328,10 +1373,10 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`${dataUjian[0]!.TypeUjian ==
-                                        "ANKAPIN II" ||
-                                        dataUjian[0]!.TypeUjian == "ATKAPIN II"
-                                        ? "hidden"
-                                        : "flex"
+                                      "ANKAPIN II" ||
+                                      dataUjian[0]!.TypeUjian == "ATKAPIN II"
+                                      ? "hidden"
+                                      : "flex"
                                       } flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center`}
                                   >
                                     <span>F1B3</span>
@@ -1362,11 +1407,11 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </div>
                                     <div
                                       className={`${dataUjian[0]!.TypeUjian ==
-                                          "ANKAPIN II" ||
-                                          dataUjian[0]!.TypeUjian ==
-                                          "ATKAPIN II"
-                                          ? "hidden"
-                                          : "flex"
+                                        "ANKAPIN II" ||
+                                        dataUjian[0]!.TypeUjian ==
+                                        "ATKAPIN II"
+                                        ? "hidden"
+                                        : "flex"
                                         } items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center`}
                                     >
                                       <span>
@@ -1455,6 +1500,104 @@ const TableDataPesertaUjianKeahlian = () => {
 
             {showRekapitulasiNilai && (
               <div className="border border-gray-300">
+                <Sheet onOpenChange={setIsShowHistoryUserAnswers} open={isShowHistoryUserAnswers}>
+
+                  <SheetContent className="overflow-y-scroll h-full w-[800px]  !sm:max-w-4xl ">
+                    <SheetHeader>
+                      <div className="flex items-center justify-between w-full mb-2">
+                        <div className="flex flex-col gap-0">
+                          <SheetTitle className='leading-none'>History Jawaban</SheetTitle>
+                          <SheetDescription>
+                            Make changes to your profile here. Click save when you're done.
+                          </SheetDescription>
+                        </div>
+                        {
+                          dataAnswer.length != 0 && <Button type="button" onClick={() => setIsShowHistoryUserAnswers(false)} className="mt-2 bg-white hover:bg-gray-300 border-gray-300 border text-black" >Close</Button>
+                        }
+
+                      </div>
+
+
+
+
+                    </SheetHeader>
+
+                    {
+                      isFetchingHistoryUserAnswers ? <div className="mt-32 w-full flex items-center justify-center">
+                        <HashLoader color="#338CF5" size={50} />
+                      </div> :
+                        dataAnswer.length == 0 ? <EmptyData type='soal' /> : <>
+                          <ul className="flex mb-2 w-full">
+                            <li className="w-full">
+                              <button
+                                className={`focus:outline-none p-2 rounded-l-md border  flex flex-col items-center w-full ${"bg-white text-black"}`}
+                              >
+                                <p className="font-semibold text-lg text-green-500">{trueCount}</p>
+                                <p className={`uppercase text-sm ${"text-gray-600"}`}>
+                                  Total Jawaban Benar
+                                </p>
+                              </button>
+                            </li>
+                            <li className="w-full">
+                              <button
+                                className={`focus:outline-none p-2  border  flex flex-col items-center w-full ${"bg-white text-black"}`}
+                              >
+                                <p className="font-semibold text-lg text-rose-500">
+                                  {falseCount}
+                                </p>
+                                <p className={`uppercase text-sm ${"text-gray-600"}`}>
+                                  Total Jawaban Salah
+                                </p>
+                              </button>
+                            </li>
+
+                          </ul>
+                          <div className="grid grid-cols-4 gap-0">
+
+                            <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
+                              No
+                            </div>
+                            <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
+                              Soal
+                            </div>
+                            <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
+                              Jawaban Benar
+                            </div>
+                            <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
+                              Jawaban User
+                            </div>
+                            {
+                              dataAnswer.map((data, index) => (
+                                <>
+                                  <SheetDescription className='text-black font-semibold w-full border border-gray-300 p-2 text-center'>
+                                    {index + 1}
+                                  </SheetDescription>
+                                  <SheetDescription className='text-black font-semibold border border-gray-300 p-2'>
+                                    {data.soal}
+                                  </SheetDescription>
+                                  <SheetDescription className='border border-gray-300 p-2'>
+                                    <span >{data.jawaban_benar} </span>
+                                  </SheetDescription>
+                                  <SheetDescription className={`border border-gray-300 p-2 ${data.isCorrect ? 'text-green-500' : 'text-rose-500'}`}>
+                                    {data.jawaban_pengguna}
+                                  </SheetDescription>
+                                </>
+                              ))
+                            }
+
+                          </div></>
+                    }
+
+                    {
+                      !isFetchingHistoryUserAnswers && <SheetFooter >
+                        <SheetClose asChild>
+                          <Button type="button" onClick={() => setIsShowHistoryUserAnswers(false)} className="mt-2" >Close</Button>
+                        </SheetClose>
+                      </SheetFooter>
+                    }
+
+                  </SheetContent>
+                </Sheet>
                 <div className="">
                   {" "}
                   <div
@@ -1569,9 +1712,9 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`${dataUjian[0]!.TypeUjian == "ANKAPIN II" ||
-                                        dataUjian[0]!.TypeUjian == "ATKAPIN II"
-                                        ? "hidden"
-                                        : "flex"
+                                      dataUjian[0]!.TypeUjian == "ATKAPIN II"
+                                      ? "hidden"
+                                      : "flex"
                                       } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6`}
                                   >
                                     <span className="">F1B3</span>
@@ -1618,7 +1761,7 @@ const TableDataPesertaUjianKeahlian = () => {
 
                             {/* Table Rows */}
                             <div className="overflow-auto">
-                              {data!.map((pesertaUjian: any, index) => (
+                              {data!.map((pesertaUjian: UsersUjian, index) => (
                                 <div key={index} className="flex text-sm">
                                   <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
                                     <span>{index + 1}</span>
@@ -1636,33 +1779,45 @@ const TableDataPesertaUjianKeahlian = () => {
                                   ) ? (
                                     <>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-black"
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-black"
                                           }`}
+                                        onClick={() => {
+                                          setIsShowHistoryUserAnswers(true)
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F1B1')
+                                        }}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF1B1 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-black"
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-black"
                                           }`}
+                                        onClick={() => {
+                                          setIsShowHistoryUserAnswers(true)
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F2B1')
+                                        }}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF2B1 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF3B1 || 0) <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-black"
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF3B1 || 0) <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-black"
                                           }`}
+                                        onClick={() => {
+                                          setIsShowHistoryUserAnswers(true)
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F3B1')
+                                        }}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF3B1 || 0}
@@ -1672,22 +1827,32 @@ const TableDataPesertaUjianKeahlian = () => {
                                   ) : (
                                     <>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-black"
+                                        className={`flex items-center  hover:bg-blue-500 hover:text-white duration-700 cursor-pointer flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-black"
                                           }`}
+                                        onClick={() => {
+                                          setIsShowHistoryUserAnswers(true)
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F1B1')
+                                        }}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF1B1 || 0}
                                         </span>
                                       </div>
+
+
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B2 || 0) <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-black"
+                                        className={`flex items-center flex-grow w-0 h-10 border-b hover:bg-blue-500 hover:text-white duration-700 cursor-pointer border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B2 || 0) <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-black"
                                           }`}
+                                        onClick={() => {
+                                          setIsShowHistoryUserAnswers(true)
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F1B2')
+                                        }}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF1B2 || 0}
@@ -1695,16 +1860,20 @@ const TableDataPesertaUjianKeahlian = () => {
                                       </div>
                                       <div
                                         className={`${dataUjian[0]!.TypeUjian ==
-                                            "ANKAPIN II" ||
-                                            dataUjian[0]!.TypeUjian ==
-                                            "ATKAPIN II"
-                                            ? "hidden"
-                                            : "flex"
-                                          } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B3 || 0) <
+                                          "ANKAPIN II" ||
+                                          dataUjian[0]!.TypeUjian ==
+                                          "ATKAPIN II"
+                                          ? "hidden"
+                                          : "flex"
+                                          } items-center flex-grow w-0 h-10 border-b border-l hover:bg-blue-500 hover:text-white duration-700 cursor-pointer border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B3 || 0) <
                                             EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-black"
                                           }`}
+                                        onClick={() => {
+                                          setIsShowHistoryUserAnswers(true)
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F1B3')
+                                        }}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF1B3 || 0}
@@ -1769,33 +1938,45 @@ const TableDataPesertaUjianKeahlian = () => {
                                       </div>
 
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-green-500"
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l hover:bg-blue-500 hover:text-white duration-700 cursor-pointer font-bold border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-green-500"
                                           }`}
+                                        onClick={() => {
+                                          setIsShowHistoryUserAnswers(true)
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F2B1')
+                                        }}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF2B1 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF3B1 || 0) <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-black"
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center hover:bg-blue-500 hover:text-white duration-700 cursor-pointer py-7 ${(pesertaUjian?.NilaiF3B1 || 0) <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-black"
                                           }`}
+                                        onClick={() => {
+                                          setIsShowHistoryUserAnswers(true)
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F3B1')
+                                        }}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF3B1 || 0}
                                         </span>
                                       </div>
                                       <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF3B2 || 0) <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-black"
+                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center hover:bg-blue-500 hover:text-white duration-700 cursor-pointer py-7 ${(pesertaUjian?.NilaiF3B2 || 0) <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-black"
                                           }`}
+                                        onClick={() => {
+                                          setIsShowHistoryUserAnswers(true)
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F3B2')
+                                        }}
                                       >
                                         <span>
                                           {pesertaUjian?.NilaiF3B2 || 0}
@@ -1803,11 +1984,11 @@ const TableDataPesertaUjianKeahlian = () => {
                                       </div>
                                       <div
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${((pesertaUjian?.NilaiF3B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B2 || 0)) /
-                                            2 <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-green-500"
+                                          (pesertaUjian?.NilaiF3B2 || 0)) /
+                                          2 <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-green-500"
                                           }`}
                                       >
                                         <span>
@@ -1824,35 +2005,35 @@ const TableDataPesertaUjianKeahlian = () => {
                                     className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
                                       "Rewarding"
                                     )
+                                      ? ((pesertaUjian?.NilaiF1B1 || 0) +
+                                        (pesertaUjian?.NilaiF2B1 || 0) +
+                                        (pesertaUjian?.NilaiF3B1 || 0)) /
+                                        3 <
+                                        EXAM_THRESHOLD
+                                        ? "text-rose-500"
+                                        : "text-green-500"
+                                      : dataUjian[0]!.TypeUjian ==
+                                        "ANKAPIN II" ||
+                                        dataUjian[0].TypeUjian == "ATKAPIN II"
                                         ? ((pesertaUjian?.NilaiF1B1 || 0) +
+                                          (pesertaUjian?.NilaiF1B2 || 0) +
                                           (pesertaUjian?.NilaiF2B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B1 || 0)) /
-                                          3 <
+                                          (pesertaUjian?.NilaiF3B1 || 0) +
+                                          (pesertaUjian?.NilaiF3B2 || 0)) /
+                                          5 <
                                           EXAM_THRESHOLD
                                           ? "text-rose-500"
                                           : "text-green-500"
-                                        : dataUjian[0]!.TypeUjian ==
-                                          "ANKAPIN II" ||
-                                          dataUjian[0].TypeUjian == "ATKAPIN II"
-                                          ? ((pesertaUjian?.NilaiF1B1 || 0) +
-                                            (pesertaUjian?.NilaiF1B2 || 0) +
-                                            (pesertaUjian?.NilaiF2B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B2 || 0)) /
-                                            5 <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-green-500"
-                                          : ((pesertaUjian?.NilaiF1B1 || 0) +
-                                            (pesertaUjian?.NilaiF1B2 || 0) +
-                                            (pesertaUjian?.NilaiF1B3 || 0) +
-                                            (pesertaUjian?.NilaiF2B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B2 || 0)) /
-                                            6 <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-green-500"
+                                        : ((pesertaUjian?.NilaiF1B1 || 0) +
+                                          (pesertaUjian?.NilaiF1B2 || 0) +
+                                          (pesertaUjian?.NilaiF1B3 || 0) +
+                                          (pesertaUjian?.NilaiF2B1 || 0) +
+                                          (pesertaUjian?.NilaiF3B1 || 0) +
+                                          (pesertaUjian?.NilaiF3B2 || 0)) /
+                                          6 <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-green-500"
                                       }`}
                                   >
                                     <span>
@@ -1911,12 +2092,12 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${(pesertaUjian?.NilaiKomprensifF1 +
-                                        pesertaUjian?.NilaiKomprensifF2 +
-                                        pesertaUjian?.NilaiKomprensifF3) /
-                                        3 >
-                                        EXAM_THRESHOLD
-                                        ? "text-green-500"
-                                        : "text-rose-500"
+                                      pesertaUjian?.NilaiKomprensifF2 +
+                                      pesertaUjian?.NilaiKomprensifF3) /
+                                      3 >
+                                      EXAM_THRESHOLD
+                                      ? "text-green-500"
+                                      : "text-rose-500"
                                       }`}
                                   >
                                     <span>
@@ -1932,9 +2113,29 @@ const TableDataPesertaUjianKeahlian = () => {
                                     className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
                                       "Rewarding"
                                     )
-                                        ? (((pesertaUjian?.NilaiF1B1 || 0) +
+                                      ? (((pesertaUjian?.NilaiF1B1 || 0) +
+                                        (pesertaUjian?.NilaiF2B1 || 0) +
+                                        (pesertaUjian?.NilaiF3B1 || 0)) /
+                                        3) *
+                                        THEORY_WEIGHT +
+                                        ((pesertaUjian?.NilaiKomprensifF1 +
+                                          pesertaUjian?.NilaiKomprensifF2 +
+                                          pesertaUjian?.NilaiKomprensifF3) /
+                                          3) *
+                                        PRACTICE_WEIGHT <
+                                        EXAM_THRESHOLD
+                                        ? "text-rose-500"
+                                        : "text-green-500"
+                                      : dataUjian[0]!.TypeUjian ==
+                                        "ANKAPIN II" ||
+                                        dataUjian[0].TypeUjian == "ATKAPIN II"
+                                        ? ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                          (pesertaUjian?.NilaiF1B2 || 0)) /
+                                          2 +
                                           (pesertaUjian?.NilaiF2B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B1 || 0)) /
+                                          ((pesertaUjian?.NilaiF3B1 || 0) +
+                                            (pesertaUjian?.NilaiF3B2 || 0)) /
+                                          2) /
                                           3) *
                                           THEORY_WEIGHT +
                                           ((pesertaUjian?.NilaiKomprensifF1 +
@@ -1945,44 +2146,24 @@ const TableDataPesertaUjianKeahlian = () => {
                                           EXAM_THRESHOLD
                                           ? "text-rose-500"
                                           : "text-green-500"
-                                        : dataUjian[0]!.TypeUjian ==
-                                          "ANKAPIN II" ||
-                                          dataUjian[0].TypeUjian == "ATKAPIN II"
-                                          ? ((((pesertaUjian?.NilaiF1B1 || 0) +
-                                            (pesertaUjian?.NilaiF1B2 || 0)) /
-                                            2 +
-                                            (pesertaUjian?.NilaiF2B1 || 0) +
-                                            ((pesertaUjian?.NilaiF3B1 || 0) +
-                                              (pesertaUjian?.NilaiF3B2 || 0)) /
-                                            2) /
+                                        : ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                          (pesertaUjian?.NilaiF1B2 || 0) +
+                                          (pesertaUjian?.NilaiF1B3 || 0)) /
+                                          3 +
+                                          (pesertaUjian?.NilaiF2B1 || 0) +
+                                          ((pesertaUjian?.NilaiF3B1 || 0) +
+                                            (pesertaUjian?.NilaiF3B2 || 0)) /
+                                          2) /
+                                          3) *
+                                          THEORY_WEIGHT +
+                                          ((pesertaUjian?.NilaiKomprensifF1 +
+                                            pesertaUjian?.NilaiKomprensifF2 +
+                                            pesertaUjian?.NilaiKomprensifF3) /
                                             3) *
-                                            THEORY_WEIGHT +
-                                            ((pesertaUjian?.NilaiKomprensifF1 +
-                                              pesertaUjian?.NilaiKomprensifF2 +
-                                              pesertaUjian?.NilaiKomprensifF3) /
-                                              3) *
-                                            PRACTICE_WEIGHT <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-green-500"
-                                          : ((((pesertaUjian?.NilaiF1B1 || 0) +
-                                            (pesertaUjian?.NilaiF1B2 || 0) +
-                                            (pesertaUjian?.NilaiF1B3 || 0)) /
-                                            3 +
-                                            (pesertaUjian?.NilaiF2B1 || 0) +
-                                            ((pesertaUjian?.NilaiF3B1 || 0) +
-                                              (pesertaUjian?.NilaiF3B2 || 0)) /
-                                            2) /
-                                            3) *
-                                            THEORY_WEIGHT +
-                                            ((pesertaUjian?.NilaiKomprensifF1 +
-                                              pesertaUjian?.NilaiKomprensifF2 +
-                                              pesertaUjian?.NilaiKomprensifF3) /
-                                              3) *
-                                            PRACTICE_WEIGHT <
-                                            EXAM_THRESHOLD
-                                            ? "text-rose-500"
-                                            : "text-green-500"
+                                          PRACTICE_WEIGHT <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-green-500"
                                       }`}
                                   >
                                     <span>
@@ -2047,8 +2228,8 @@ const TableDataPesertaUjianKeahlian = () => {
                                         pesertaUjian,
                                         dataUjian[0]
                                       ) == "TIDAK LULUS"
-                                          ? "text-rose-500"
-                                          : "text-green-500"
+                                        ? "text-rose-500"
+                                        : "text-green-500"
                                         }`}
                                     >
                                       {checkLulus(pesertaUjian, dataUjian[0])}
@@ -2265,8 +2446,9 @@ const TableDataPesertaUjianKeahlian = () => {
         </>
       ) : (
         <></>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 };
 

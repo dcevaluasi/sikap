@@ -39,6 +39,7 @@ export type JawabanUser = {
 export type JawabanUserStore = {
   id_soal: string
   soal: string
+  gambarSoal: string
   jawaban_benar: string
   jawaban_pengguna: string
   isCorrect: boolean
@@ -165,4 +166,12 @@ export type PaketBagianDetail = {
   IdPaketBagian: number
   Paket: number
   SoalUjianBagian: SoalUjianBagian[]
+}
+
+export type UserExamInfo = {
+  nama: string
+  nik: string
+  no_ujian: number
+  id_user_ujian: number
+  instansi: string
 }
