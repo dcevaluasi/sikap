@@ -870,6 +870,7 @@ const TableDataPesertaUjianKeahlian = () => {
     const dataResult = await getDocument('answers', `${idUserUjian}_${bagianFungsi}`);
     console.log(`${idUserUjian}_${bagianFungsi}`)
     console.log(dataResult.data); // Logs the actual result
+    console.log('RESULT', dataResult)
     if (dataResult!.data! == null) {
       setDataAnswer([])
       setIsFetchingHistoryUserAnswers(false)
@@ -1786,7 +1787,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F1B1')
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F1')
                                         }}
                                       >
                                         <span>
@@ -1801,7 +1802,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F2B1')
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F2')
                                         }}
                                       >
                                         <span>
@@ -1816,7 +1817,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F3B1')
+                                          fetchData(pesertaUjian?.IdUserUjian, 'F3')
                                         }}
                                       >
                                         <span>
