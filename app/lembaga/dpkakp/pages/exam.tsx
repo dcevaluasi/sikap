@@ -82,7 +82,11 @@ function Exam() {
       setSelectedAnswers(initialAnswers);
       setSelectedAnswersStore(initialAnswersStore)
 
+
       // const shuffledSoal = response.data.Soal.sort(() => Math.random() - 0.5);
+      // if (response.data != null) {
+      //  const  response.data.Ujian as string
+      // }
       const shuffledSoal = response.data.Soal.map((soal: SoalUjianBagian) => ({
         ...soal,
         Jawaban: [...soal.Jawaban] // Salin array agar tidak mengubah data asli

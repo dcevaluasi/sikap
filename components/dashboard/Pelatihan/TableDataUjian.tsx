@@ -2105,7 +2105,7 @@ function EventBadge({ ujian }: { ujian: Ujian }) {
 function ExamSchedule({ data, ujian }: { data: Ujian[]; ujian: Ujian }) {
   if (data.length === 0) return null;
 
-  const isRewarding = data[0]?.TypeUjian.includes("Rewarding");
+  const isRewarding = data[0]?.TypeUjian.includes("Rewarding") || data[0]?.TypeUjian.includes('TRYOUT');
   const isLevelII =
     data[0]?.TypeUjian == "ANKAPIN II" || data[0]?.TypeUjian == "ATKAPIN II";
 
