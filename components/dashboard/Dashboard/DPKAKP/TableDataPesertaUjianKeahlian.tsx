@@ -324,7 +324,7 @@ const TableDataPesertaUjianKeahlian = () => {
                 <table className="w-full text-sm">
                   {dataUjian!.length > 0 ? (
                     <thead>
-                      {dataUjian[0]!.TypeUjian.includes("Rewarding") ? (
+                      {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
                         <tr>
                           <th className="border border-gray-200">F1</th>
                           <th className="border border-gray-200">F2</th>
@@ -825,7 +825,7 @@ const TableDataPesertaUjianKeahlian = () => {
     let tidakLulusCount = 0;
 
     pesertaUjianList.forEach((pesertaUjian) => {
-      const isRewarding = dataUjian[0]?.TypeUjian.includes("Rewarding");
+      const isRewarding = dataUjian[0]?.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT');
       const isTingkatII =
         dataUjian[0]?.TypeUjian == "ANKAPIN II" ||
         dataUjian[0]?.TypeUjian == "ATKAPIN II";
@@ -1323,7 +1323,7 @@ const TableDataPesertaUjianKeahlian = () => {
                           )}
                         </div>
                         <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
-                          {dataUjian[0]!.TypeUjian.includes("Rewarding")
+                          {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                             ? peserta!.CodeAksesUsersBagian!.length != 0 && (
                               <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
                                 <div className="flex flex-shrink-0 bg-neutral-500 text-white">
@@ -1690,7 +1690,7 @@ const TableDataPesertaUjianKeahlian = () => {
                               <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
                                 <span className="">Nama Peserta</span>
                               </div>
-                              {dataUjian[0]!.TypeUjian.includes("Rewarding") ? (
+                              {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
                                 <>
                                   <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
                                     <span className="">F1</span>
@@ -1777,7 +1777,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   {dataUjian[0]!.TypeUjian.includes(
                                     "Rewarding"
-                                  ) ? (
+                                  ) || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
                                     <>
                                       <div
                                         className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
@@ -2005,7 +2005,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
                                       "Rewarding"
-                                    )
+                                    ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                       ? ((pesertaUjian?.NilaiF1B1 || 0) +
                                         (pesertaUjian?.NilaiF2B1 || 0) +
                                         (pesertaUjian?.NilaiF3B1 || 0)) /
@@ -2040,7 +2040,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     <span>
                                       {dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
-                                      )
+                                      ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                         ? (
                                           ((pesertaUjian?.NilaiF1B1 || 0) +
                                             (pesertaUjian?.NilaiF2B1 || 0) +
@@ -2113,7 +2113,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   <div
                                     className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
                                       "Rewarding"
-                                    )
+                                    ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                       ? (((pesertaUjian?.NilaiF1B1 || 0) +
                                         (pesertaUjian?.NilaiF2B1 || 0) +
                                         (pesertaUjian?.NilaiF3B1 || 0)) /
@@ -2170,7 +2170,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     <span>
                                       {dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
-                                      )
+                                      ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                         ? (
                                           (((pesertaUjian?.NilaiF1B1 || 0) +
                                             (pesertaUjian?.NilaiF2B1 || 0) +
