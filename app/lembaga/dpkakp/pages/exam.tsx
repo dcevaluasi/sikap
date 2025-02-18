@@ -87,13 +87,13 @@ function Exam() {
       // if (response.data != null) {
       //  const  response.data.Ujian as string
       // }
-      const shuffledSoal = response.data.Soal.map((soal: SoalUjianBagian) => ({
+      const dataSoal = response.data.Soal.map((soal: SoalUjianBagian) => ({
         ...soal,
-        Jawaban: [...soal.Jawaban] // Salin array agar tidak mengubah data asli
-          .sort(() => Math.random() - 0.5) // Acak dulu
+        Jawaban: [...soal.Jawaban]
+          .sort(() => Math.random() - 0.5)
           .sort((a, b) => a.IdJawaban - b.IdJawaban),
       })).sort(() => Math.random() - 0.5);
-      setData({ ...response.data, Soal: shuffledSoal });
+      setData({ ...response.data, Soal: dataSoal });
       // setData(response.data);
       console.log({ response });
     } catch (error) {
