@@ -699,45 +699,6 @@ const TableDataPesertaUjianKeahlian = () => {
 
   const [handleOpenFormSematkan, setHandleOpenFormSematkan] =
     React.useState<boolean>(false);
-  const calculateResults = (dataUjian: any[], pesertaUjianList: any[]) => {
-    let lulusCount = 0;
-    let tidakLulusCount = 0;
-
-    pesertaUjianList.forEach((pesertaUjian) => {
-      const isRewarding = dataUjian[0]?.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT');
-      const isTingkatII =
-        dataUjian[0]?.TypeUjian == "ANKAPIN II" ||
-        dataUjian[0]?.TypeUjian == "ATKAPIN II";
-
-      const averageScore = isRewarding
-        ? ((pesertaUjian?.NilaiF1B1 || 0) +
-          (pesertaUjian?.NilaiF2B1 || 0) +
-          (pesertaUjian?.NilaiF3B1 || 0)) /
-        3
-        : isTingkatII
-          ? ((pesertaUjian?.NilaiF1B1 || 0) +
-            (pesertaUjian?.NilaiF1B2 || 0) +
-            (pesertaUjian?.NilaiF2B1 || 0) +
-            (pesertaUjian?.NilaiF3B1 || 0) +
-            (pesertaUjian?.NilaiF3B2 || 0)) /
-          5
-          : ((pesertaUjian?.NilaiF1B1 || 0) +
-            (pesertaUjian?.NilaiF1B2 || 0) +
-            (pesertaUjian?.NilaiF1B3 || 0) +
-            (pesertaUjian?.NilaiF2B1 || 0) +
-            (pesertaUjian?.NilaiF3B1 || 0) +
-            (pesertaUjian?.NilaiF3B2 || 0)) /
-          6;
-
-      if (averageScore >= EXAM_THRESHOLD) {
-        lulusCount++;
-      } else {
-        tidakLulusCount++;
-      }
-    });
-
-    return { lulusCount, tidakLulusCount };
-  };
 
 
   const [dataAnswer, setDataAnswer] = React.useState<JawabanUserStore[]>([])
@@ -1388,7 +1349,7 @@ const TableDataPesertaUjianKeahlian = () => {
                         <div className="flex flex-col gap-0">
                           <SheetTitle className='leading-none'>History Jawaban</SheetTitle>
                           <SheetDescription>
-                            Make changes to your profile here. Click save when you're done.
+                            Lihat history jawaban peserta ujian berapa soal yang berhasil dijawab!
                           </SheetDescription>
                         </div>
                         {
