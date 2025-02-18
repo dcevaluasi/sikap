@@ -82,15 +82,18 @@ import { Input } from "@/components/ui/input";
 import { FiEdit2, FiTrash, FiUploadCloud } from "react-icons/fi";
 import { countDistinctMateri } from "@/lib/utils";
 import { FaBookOpen } from "react-icons/fa6";
+import { HashLoader } from "react-spinners";
 
 const TableDataBankSoalUjianKeahlian = () => {
   const pathname = usePathname();
   const [data, setData] = React.useState<SoalUjianBagian[]>([]);
   const [dataBagian, setDataBagian] = React.useState<Bagian | null>(null);
+  const [duplicateData, setDuplicateData] = React.useState<SoalUjianBagian[]>([]);
 
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
   const [countSoalBergambar, setCountSoalBergambar] = React.useState<number>(0);
   const [countSoalDuplikasi, setCountSoalDuplikasi] = React.useState<number>(0);
+  const [countReal, setCountReal] = React.useState<number>(0);
 
   const handleFetchingBagianUjian = async () => {
     setIsFetching(true);
@@ -111,6 +114,16 @@ const TableDataBankSoalUjianKeahlian = () => {
         (soal: any) => soal.GambarSoal && soal.GambarSoal.trim() !== ""
       ).length;
 
+
+
+      const tmpSoalFrequency: Record<string, SoalUjianBagian[]> = {};
+      response.data!.data[0]!.SoalUjianBagian.forEach((soal: any) => {
+        const key = soal.Soal?.trim(); // Ensure trimming for consistency
+        if (!tmpSoalFrequency[key]) tmpSoalFrequency[key] = [];
+        tmpSoalFrequency[key].push(soal);
+      });
+
+
       // Count duplicate Soal values
       const soalFrequency = response.data!.data[0]!.SoalUjianBagian.reduce(
         (acc: Record<string, number>, soal: any) => {
@@ -125,17 +138,26 @@ const TableDataBankSoalUjianKeahlian = () => {
         (count: any) => count > 1
       ).length;
 
+      const duplicateSoal = Object.values(tmpSoalFrequency).filter(
+        (list) => list.length > 1
+      ).flat();
+
       setCountSoalBergambar(countGambarSoal);
-      setCountSoalDuplikasi(countSoalDuplikasi);
+      setCountSoalDuplikasi(duplicateSoal.length / 2);
+      setDuplicateData(duplicateSoal!);
 
       setDataBagian(response.data.data[0]!);
+      setCountReal(response.data!.data[0]!.SoalUjianBagian!.length)
       setData(response.data!.data[0]!.SoalUjianBagian);
+      setIsFetching(false);
     } catch (error) {
       console.error("Error posting tipe ujian:", error);
       setIsFetching(false);
       throw error;
     }
   };
+
+  console.log({ duplicateData })
 
   console.log({ countSoalDuplikasi });
   console.log({ countSoalBergambar });
@@ -566,6 +588,18 @@ const TableDataBankSoalUjianKeahlian = () => {
 
   }, []);
 
+  const handleShowDuplicates = () => {
+    setIsFetching(true); // Start loading state
+
+    setTimeout(() => {
+      setData(duplicateData); // Set duplicate data after 3 seconds
+      setIsFetching(false); // Stop loading state
+    }, 3000);
+  };
+
+
+
+
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       <AlertDialog open={isOpenFormPeserta}>
@@ -660,11 +694,13 @@ const TableDataBankSoalUjianKeahlian = () => {
             <>
               <div className="flex w-full items-center justify-between">
                 <ul className="flex">
+
                   <li>
                     <button
+                      onClick={() => handleFetchingBagianUjian()}
                       className={`focus:outline-none p-2 rounded-l-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
                     >
-                      <p className="font-semibold text-lg">{data!.length}</p>
+                      <p className="font-semibold text-lg">{countReal}</p>
                       <p className={`uppercase text-sm ${"text-gray-600"}`}>
                         Total Soal
                       </p>
@@ -672,6 +708,7 @@ const TableDataBankSoalUjianKeahlian = () => {
                   </li>
                   <li>
                     <button
+                      onClick={() => handleShowDuplicates()}
                       className={`focus:outline-none p-2  border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
                     >
                       <p className="font-semibold text-lg">
@@ -842,12 +879,17 @@ const TableDataBankSoalUjianKeahlian = () => {
                   </AlertDialog>
                 </div>
               </div>
-              <TableData
-                isLoading={false}
-                columns={columns}
-                table={table}
-                type={"short"}
-              />{" "}
+              {
+                isFetching ? <div className="mt-32 w-full flex items-center justify-center">
+                  <HashLoader color="#338CF5" size={50} />
+                </div> : <TableData
+                  isLoading={false}
+                  columns={columns}
+                  table={table}
+                  type={"short"}
+                />
+              }
+              {" "}
               <div className="flex items-center justify-end space-x-2 py-4">
                 <div className="text-muted-foreground flex-1 text-sm">
                   {table.getFilteredSelectedRowModel().rows.length} of{" "}
