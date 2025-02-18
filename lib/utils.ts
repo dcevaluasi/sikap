@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 import CryptoJS from 'crypto-js';
+import { Bagian, SoalBagian, SoalUjianBagian } from "@/types/ujian-keahlian-akp";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -146,3 +147,13 @@ export const decryptValue = (encryptedValue: string): string => {
   return bytes.toString(CryptoJS.enc.Utf8);
 };
 
+export const countDistinctMateri = (data: SoalUjianBagian[]) => {
+  const materiCount: Record<string, number> = {}
+  data.forEach((item: any) =>{
+    if (item.Materi) {
+      materiCount[item.Materi] =(materiCount[item.Materi] || 0) + 1;
+    }
+  })
+
+  return Object.entries(materiCount).map(([name, count]) => ({name, count}))
+} 

@@ -18,6 +18,7 @@ export type SoalUjianBagian = {
   JawabanBenar: string
   Status: string
   CreateAt: string
+  Materi: string
   UpdateAt: string
   Jawaban: Jawaban[]
 }
@@ -159,6 +160,7 @@ export type SoalBagian = {
   Ujian: string
   jumlah: number
   waktu?: number
+  Materi?: string
 }
 
 export type PaketBagianDetail = {

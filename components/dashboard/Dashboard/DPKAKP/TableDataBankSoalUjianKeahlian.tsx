@@ -12,6 +12,15 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+} from "@/components/ui/select"
+
+import {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -71,6 +80,8 @@ import {
 import { SelectValue } from "@radix-ui/react-select";
 import { Input } from "@/components/ui/input";
 import { FiEdit2, FiTrash, FiUploadCloud } from "react-icons/fi";
+import { countDistinctMateri } from "@/lib/utils";
+import { FaBookOpen } from "react-icons/fa6";
 
 const TableDataBankSoalUjianKeahlian = () => {
   const pathname = usePathname();
@@ -136,6 +147,8 @@ const TableDataBankSoalUjianKeahlian = () => {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+
+  countDistinctMateri(data)
 
   const handleDeleteBankSoal = async (idBagian: number) => {
     try {
@@ -273,6 +286,29 @@ const TableDataBankSoalUjianKeahlian = () => {
       ),
     },
     {
+      accessorKey: "Materi",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={`text-black font-semibold w-fit p-0 flex justify-start items-centee`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <p className="leading-[105%]"> Materi</p>
+
+            <RiFilePaper2Line className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"} text-left flex flex-col gap-1`}>
+          <p className="text-base font-semibold tracking-tight leading-none">
+            {row.original.Materi}
+          </p>
+        </div>
+      ),
+    },
+    {
       accessorKey: "Soal",
       header: ({ column }) => {
         return (
@@ -306,6 +342,7 @@ const TableDataBankSoalUjianKeahlian = () => {
         </div>
       ),
     },
+
     // {
     //   accessorKey: "Gambar Soal",
     //   header: ({ column }) => {
@@ -521,8 +558,12 @@ const TableDataBankSoalUjianKeahlian = () => {
   const [isOpenFormDelete, setIsOpenFormDelete] =
     React.useState<boolean>(false);
 
+  const dataKomposisiSoal = countDistinctMateri(data)
+  console.log({ dataKomposisiSoal })
+
   React.useEffect(() => {
     handleFetchingBagianUjian();
+
   }, []);
 
   return (
@@ -617,53 +658,147 @@ const TableDataBankSoalUjianKeahlian = () => {
               </SelectContent>
             </Select> */}
             <>
-              <ul className="flex">
-                <li>
-                  <button
-                    className={`focus:outline-none p-2 rounded-l-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
-                  >
-                    <p className="font-semibold text-lg">{data!.length}</p>
-                    <p className={`uppercase text-sm ${"text-gray-600"}`}>
-                      Total Soal
-                    </p>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className={`focus:outline-none p-2  border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
-                  >
-                    <p className="font-semibold text-lg">
-                      {countSoalDuplikasi}
-                    </p>
-                    <p className={`uppercase text-sm ${"text-gray-600"}`}>
-                      Soal Duplikat
-                    </p>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    className={`focus:outline-none p-2 rounded-r-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
-                  >
-                    <p className="font-semibold text-lg">
-                      {countSoalBergambar}
-                    </p>
-                    <p className={`uppercase text-sm ${"text-gray-600"}`}>
-                      Soal Gambar
-                    </p>
-                  </button>
-                </li>
-              </ul>
               <div className="flex w-full items-center justify-between">
-                <Input
-                  placeholder="Cari Soal..."
-                  value={
-                    (table.getColumn("Soal")?.getFilterValue() as string) ?? ""
+                <ul className="flex">
+                  <li>
+                    <button
+                      className={`focus:outline-none p-2 rounded-l-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                    >
+                      <p className="font-semibold text-lg">{data!.length}</p>
+                      <p className={`uppercase text-sm ${"text-gray-600"}`}>
+                        Total Soal
+                      </p>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className={`focus:outline-none p-2  border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                    >
+                      <p className="font-semibold text-lg">
+                        {countSoalDuplikasi}
+                      </p>
+                      <p className={`uppercase text-sm ${"text-gray-600"}`}>
+                        Soal Duplikat
+                      </p>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      className={`focus:outline-none p-2 rounded-r-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                    >
+                      <p className="font-semibold text-lg">
+                        {countSoalBergambar}
+                      </p>
+                      <p className={`uppercase text-sm ${"text-gray-600"}`}>
+                        Soal Gambar
+                      </p>
+                    </button>
+                  </li>
+                </ul>
+
+                <ul className="flex">
+                  {
+                    dataKomposisiSoal ?
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild><li>
+                          <button
+                            className={`focus:outline-none p-2 rounded-l-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                          >
+                            <p className="font-semibold text-xl text-gray-600"><FaBookOpen className="h-6 w-6" /></p>
+                            <p className={`uppercase text-sm ${"text-gray-600"}`}>
+                              Komposisi Soal
+                            </p>
+                          </button>
+                        </li></AlertDialogTrigger>
+                        <AlertDialogContent className='max-w-3xl'>
+                          <AlertDialogHeader>
+                            <div className="flex flex-col gap-2">
+                              <AlertDialogTitle className="flex items-center gap-2">
+                                {" "}
+                                <FaBookOpen className="h-4 w-4" />
+                                Komposisi Materi Fungsi Bagian
+                              </AlertDialogTitle>
+                              <AlertDialogDescription className="-mt-2">
+                                Daftarkan komposisi materi ujian keahlian awak kapal perikanan fungsi bagian!
+                              </AlertDialogDescription>
+                            </div>
+
+                          </AlertDialogHeader>
+                          <fieldset>
+                            <form autoComplete="off">
+                              <div className="overflow-x-auto !text-sm">
+                                <table className="min-w-full border border-gray-300">
+                                  <thead className="bg-gray-100">
+                                    <tr>
+                                      <th className="border p-1">No</th>
+                                      <th className="border p-1">Nama Materi</th>
+                                      <th className="border p-1">Jumlah Soal</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {dataKomposisiSoal!.map((item: any, index: number) => (
+                                      <tr key={index} className="odd:bg-white even:bg-gray-50">
+                                        <td className="border p-1 text-center">{index + 1}</td>
+                                        <td className="border p-1">{item.name}</td>
+                                        <td className="border p-1 capitalize">{item.count}</td>
+
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+
+                              <AlertDialogFooter className="mt-3">
+                                <AlertDialogCancel
+
+                                >
+                                  Close
+                                </AlertDialogCancel>
+
+                              </AlertDialogFooter>
+                            </form>
+                          </fieldset>
+                        </AlertDialogContent>
+                      </AlertDialog> : <></>
                   }
-                  onChange={(event) =>
-                    table.getColumn("Soal")?.setFilterValue(event.target.value)
+
+
+                </ul>
+              </div>
+
+              <div className="flex w-full items-center justify-between">
+                <div className="flex gap-2 w-full">
+                  <Input
+                    placeholder="Cari Soal..."
+                    value={
+                      (table.getColumn("Soal")?.getFilterValue() as string) ?? ""
+                    }
+                    onChange={(event) =>
+                      table.getColumn("Soal")?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm text-sm"
+                  />
+                  {
+                    dataKomposisiSoal ? <Select onValueChange={(value) => table.getColumn("Materi")?.setFilterValue(value)}>
+                      <SelectTrigger className="w-[180px] py-[1.2rem]">
+                        <SelectValue placeholder="Filter By Materi Ujian" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Materi Ujian</SelectLabel>
+                          <SelectItem value={"A"}>Semua Materi</SelectItem>
+                          {
+                            dataKomposisiSoal.map((item: any, index: number) => (
+                              <SelectItem value={item.name} key={index}>{item.name}</SelectItem>
+                            ))
+                          }
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select> : <></>
                   }
-                  className="max-w-sm text-sm"
-                />
+
+                </div>
+
                 <div className="w-full flex justify-end gap-2">
                   <div
                     onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
@@ -742,8 +877,9 @@ const TableDataBankSoalUjianKeahlian = () => {
             </>
           </div>
         </>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 };
 
