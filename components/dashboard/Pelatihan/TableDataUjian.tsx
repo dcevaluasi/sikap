@@ -118,6 +118,7 @@ import { BiPaperPlane } from "react-icons/bi";
 import { IoReload } from "react-icons/io5";
 import { formatIndonesianDate } from "@/lib/utils";
 import EmptyData from "@/components/micro-components/EmptyData";
+import { HashLoader } from "react-spinners";
 
 const TableDataUjian: React.FC = () => {
   // ================== STATE VARIABLES ==================
@@ -1014,7 +1015,9 @@ const TableDataUjian: React.FC = () => {
                 </div>
                 {filteredData.length == 0 ? (
                   <EmptyData />
-                ) : (
+                ) : isFetching ? <div className="mt-32 w-full flex items-center justify-center">
+                  <HashLoader color="#338CF5" size={50} />
+                </div> : (
                   filteredData.map((ujian, index) => (
                     <Card className="relative" key={index}>
                       {ujian!.Status == "Pending" && (
