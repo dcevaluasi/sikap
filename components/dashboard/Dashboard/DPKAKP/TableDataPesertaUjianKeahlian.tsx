@@ -847,7 +847,7 @@ const TableDataPesertaUjianKeahlian = () => {
 
           <>
             <div className="flex w-full items-center justify-between mb-2">
-              {!showRekapitulasiNilai && (
+              {!showRekapitulasiNilai && !showKartuUjian && (
                 <Input
                   placeholder="Cari Peserta..."
                   value={
