@@ -265,7 +265,7 @@ const TableDataPesertaUjianKeahlian = () => {
                   setNilaiKomprehensif3(
                     row.original.NilaiKomprensifF3.toString()
                   );
-                  setSelectedNamePeserta(row.original.Nama)
+                  setSelectedNamaPeserta(row.original.Nama)
                 }
               }}
               variant="outline"
