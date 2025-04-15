@@ -198,6 +198,7 @@ const TableDataPesertaUjianKeahlian = () => {
     React.useState<boolean>(false);
 
   const [selectedIdPeserta, setSelectedIdPeserta] = React.useState(0);
+  const [selectedNamaPeserta, setSelectedNamaPeserta] = React.useState("");
 
   const [nilaiKomprehensif, setNilaiKomprehensif] = React.useState<string>("");
   const [nilaiKomprehensif2, setNilaiKomprehensif2] =
@@ -264,6 +265,7 @@ const TableDataPesertaUjianKeahlian = () => {
                   setNilaiKomprehensif3(
                     row.original.NilaiKomprensifF3.toString()
                   );
+                  setSelectedNamePeserta(row.original.Nama)
                 }
               }}
               variant="outline"
@@ -2180,7 +2182,7 @@ const TableDataPesertaUjianKeahlian = () => {
                   <AlertDialogTitle className="flex items-center gap-2 text-2xl">
                     {" "}
                     <FaBookOpen className="h-4 w-4" />
-                    Masukkan Nilai Komprehensif
+                    Masukkan Nilai Komprehensif {selectedNamaPeserta}
                   </AlertDialogTitle>
                   <AlertDialogDescription className="-mt-6">
                     Sebagai kelengkapan penilaian dari pelaksanaan ujian
