@@ -113,6 +113,8 @@ import {
 import getDocument from "@/firebase/firestore/getData";
 import { DocumentData } from "firebase/firestore";
 import EmptyData from "@/components/micro-components/EmptyData";
+import { jsPDF } from 'jspdf';
+import domtoimage from 'dom-to-image';
 
 const TableDataPesertaUjianKeahlian = () => {
   const pathname = usePathname();
@@ -156,6 +158,45 @@ const TableDataPesertaUjianKeahlian = () => {
   const [showRekapitulasiNilai, setShowRekapitulasiNilai] =
     React.useState<boolean>(false);
   const printRefRekapitulasiNilai = React.useRef<HTMLDivElement>(null);
+
+  const handleDownloadRekapitulasiNilai = () => {
+    const element = printRefRekapitulasiNilai.current;
+
+    if (!element) {
+      console.error('Element is null');
+      return;
+    }
+
+    // setIsGenerating(true); // ✅ Start loading
+
+    domtoimage.toPng(element, { quality: 1 })
+      .then((dataUrl: any) => {
+        const img = document.createElement('img');
+        img.src = dataUrl;
+
+        img.onload = () => {
+          const pdf = new jsPDF('landscape', 'mm', 'a4');
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+
+          const imgWidth = img.width;
+          const imgHeight = img.height;
+          const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
+
+          const imgX = (pageWidth - imgWidth * ratio) / 2;
+          const imgY = (pageHeight - imgHeight * ratio) / 2;
+
+          pdf.addImage(img, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
+          pdf.save('rekap_nilai.pdf');
+          // setIsGenerating(false); // ✅ Done
+        };
+      })
+      .catch((error: any) => {
+        console.error('Error generating PDF:', error);
+        // setIsGenerating(false); // ✅ Even if failed
+      });
+  };
+
 
   /**
    * =============================================================
@@ -588,29 +629,31 @@ const TableDataPesertaUjianKeahlian = () => {
       return;
     }
 
-    // Flatten the data and format as per the requirements
-    const flattenedData = data.flatMap((user) => {
-      return user.CodeAksesUsersBagian.map((bagian) => ({
+    const transformedData = data.map((user) => {
+      const base: { [key: string]: string } = {
         Nama: user.Nama,
         NIK: user.Nik,
         Instansi: user.Instansi,
         "Nomor Ujian": user.NomorUjian,
-        "ID Bagian": bagian.IdBagian,
-        "Nama Bagian": bagian.NamaBagian,
-        "Kode Akses": bagian.KodeAkses, // Add KodeAkses value for each NamaBagian
-      }));
+      };
+
+      user.CodeAksesUsersBagian.forEach((bagian) => {
+        base[bagian.NamaBagian] = bagian.KodeAkses;
+      });
+
+      return base;
     });
 
-    // Create a worksheet and workbook
-    const worksheet = XLSX.utils.json_to_sheet(flattenedData);
+    const worksheet = XLSX.utils.json_to_sheet(transformedData);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "ExportedData");
 
-    // Export the Excel file
     const currentDate = new Date().toISOString().slice(0, 10);
     const fileName = `ExportedData_${currentDate}.xlsx`;
     XLSX.writeFile(workbook, fileName);
   };
+
+
 
   const [isUploading, setIsUploading] = React.useState<boolean>(false);
 
@@ -866,33 +909,44 @@ const TableDataPesertaUjianKeahlian = () => {
                   dataUjian[0]!.UsersUjian.length != 0 && (
                     <>
                       {" "}
-                      <div
-                        onClick={() => exportToExcel()}
-                        className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                      >
-                        <PiMicrosoftExcelLogoFill />
-                        Export Kode
-                      </div>
-                      {!showKartuUjian &&
-                        (!showRekapitulasiNilai ? (
-                          <div
-                            onClick={() => setShowRekapitulasiNilai(true)}
-                            className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                          >
-                            <BiEditAlt />
-                            Rekapitulasi Nilai Ujian
-                          </div>
+
+                      {!showKartuUjian ?
+                        (showRekapitulasiNilai ? (
+                          <>
+
+                            <div
+                              onClick={() => handleDownloadRekapitulasiNilai()}
+                              className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                            >
+                              <BiEditAlt />
+                              Download Rekapitulasi
+                            </div>
+                            <div
+                              onClick={() =>
+                                exportToExcelFinalScoring({ dataUjian, data })
+                              }
+                              className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                            >
+                              <PiMicrosoftExcelLogoFill />
+                              Export Excel Hasil Rekap{" "}
+                            </div></>
                         ) : (
-                          <div
-                            onClick={() =>
-                              exportToExcelFinalScoring({ dataUjian, data })
-                            }
-                            className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                          >
-                            <PiMicrosoftExcelLogoFill />
-                            Export Excel Hasil Rekap{" "}
-                          </div>
-                        ))}
+                          <>
+
+                            <div
+                              onClick={() => setShowRekapitulasiNilai(true)}
+                              className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                            >
+                              <BiEditAlt />
+                              Rekapitulasi Nilai Ujian
+                            </div></>
+                        )) : <div
+                          onClick={() => exportToExcel()}
+                          className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                        >
+                          <PiMicrosoftExcelLogoFill />
+                          Export Kode
+                        </div>}
                     </>
                   )}
 
@@ -961,9 +1015,7 @@ const TableDataPesertaUjianKeahlian = () => {
                 {dataUjian.length > 0 &&
                   dataUjian != null &&
                   pathname.includes("pukakp") ? (
-                  dataUjian[0].UsersUjian.length ==
-                    dataUjian[0].JumlahPesertaUjian &&
-                    dataUjian[0].UsersUjian.length > 0 ? (
+                  dataUjian[0].UsersUjian.length > 0 ? (
                     <></>
                   ) : (
                     <div
@@ -1365,6 +1417,8 @@ const TableDataPesertaUjianKeahlian = () => {
 
                     </SheetHeader>
 
+
+
                     {
                       isFetchingHistoryUserAnswers ? <div className="mt-32 w-full flex items-center justify-center">
                         <HashLoader color="#338CF5" size={50} />
@@ -1395,40 +1449,63 @@ const TableDataPesertaUjianKeahlian = () => {
                             </li>
 
                           </ul>
-                          <div className="grid grid-cols-4 gap-0">
+                          {
+                            !pathname.includes("pukakp") ? <div className="grid grid-cols-4 gap-0">
 
-                            <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
-                              No
-                            </div>
-                            <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
-                              Soal
-                            </div>
-                            <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
-                              Jawaban Benar
-                            </div>
-                            <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
-                              Jawaban User
-                            </div>
-                            {
-                              dataAnswer.map((data, index) => (
-                                <>
-                                  <SheetDescription className='text-black font-semibold w-full border border-gray-300 p-2 text-center'>
-                                    {index + 1}
-                                  </SheetDescription>
-                                  <SheetDescription className='text-black font-semibold border border-gray-300 p-2'>
-                                    {data.soal}
-                                  </SheetDescription>
-                                  <SheetDescription className='border border-gray-300 p-2'>
-                                    <span >{data.jawaban_benar} </span>
-                                  </SheetDescription>
-                                  <SheetDescription className={`border border-gray-300 p-2 ${data.isCorrect ? 'text-green-500' : 'text-rose-500'}`}>
-                                    {data.jawaban_pengguna}
-                                  </SheetDescription>
-                                </>
-                              ))
-                            }
+                              <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
+                                No
+                              </div>
+                              <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
+                                Soal
+                              </div>
+                              <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
+                                Jawaban Benar
+                              </div>
+                              <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
+                                Jawaban User
+                              </div>
+                              {
+                                dataAnswer.map((data, index) => (
+                                  <>
+                                    <SheetDescription className='text-black font-semibold w-full border border-gray-300 p-2 text-center'>
+                                      {index + 1}
+                                    </SheetDescription>
+                                    <SheetDescription className='text-black font-semibold border border-gray-300 p-2'>
+                                      {data.soal}
+                                    </SheetDescription>
+                                    <SheetDescription className='border border-gray-300 p-2'>
+                                      <span >{data.jawaban_benar} </span>
+                                    </SheetDescription>
+                                    <SheetDescription className={`border border-gray-300 p-2 ${data.isCorrect ? 'text-green-500' : 'text-rose-500'}`}>
+                                      {data.jawaban_pengguna}
+                                    </SheetDescription>
+                                  </>
+                                ))
+                              }
 
-                          </div></>
+                            </div> : <div className='w-full flex items-center justify-center my-32'>
+
+                              <div className="pt-12 md:pt-20 flex flex-col items-center">
+                                <Image
+                                  src={"/illustrations/not-found.png"}
+                                  alt="Not Found"
+                                  width={400} // Specify an actual width
+                                  height={400} // Specify an actual height
+                                  className="w-[400px]"
+                                />
+                                <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
+                                  <h1 className="text-3xl font-calsans leading-[110%] text-black">
+                                    Akses Ditutup
+                                  </h1>
+                                  <div className="text-gray-600 text-sm text-center max-w-md">
+                                    Oopssss Akses Rincian Jawaban dan Soal Peserta Hanya Dapat Diakses oleh Tim Sekretariat DPKAKP
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          }
+
+                        </>
                     }
 
                     {
@@ -1444,7 +1521,7 @@ const TableDataPesertaUjianKeahlian = () => {
                 <div className="">
                   {" "}
                   <div
-                    className="grid grid-cols-1 gap-2 w-full"
+                    className="grid grid-cols-1 gap-2 w-full h-feull"
                     ref={printRefRekapitulasiNilai}
                   >
                     {dataUjian.length != 0 && (
@@ -1605,7 +1682,7 @@ const TableDataPesertaUjianKeahlian = () => {
                             {/* Table Rows */}
                             <div className="overflow-auto">
                               {data!.map((pesertaUjian: UsersUjian, index) => (
-                                <div key={index} className="flex text-sm">
+                                <div key={index} className={`flex text-sm ${index % 25 == 1 ? 'page-break' : ''}`}>
                                   <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
                                     <span>{index + 1}</span>
                                   </div>
@@ -2182,7 +2259,7 @@ const TableDataPesertaUjianKeahlian = () => {
                   <AlertDialogTitle className="flex items-center gap-2 text-2xl">
                     {" "}
                     <FaBookOpen className="h-4 w-4" />
-                    Masukkan Nilai Komprehensif {selectedNamaPeserta}
+                    Masukkan Nilai Komprehensif <br /><span className='capitalize'>{selectedNamaPeserta}</span>
                   </AlertDialogTitle>
                   <AlertDialogDescription className="-mt-6">
                     Sebagai kelengkapan penilaian dari pelaksanaan ujian
