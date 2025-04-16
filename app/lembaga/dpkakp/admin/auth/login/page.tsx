@@ -85,7 +85,7 @@ function page() {
             "IsPUKAKP",
             role == "pukakp" ? "true" : role == "penguji" ? "penguji" : "false"
           );
-          if (containsPukakp(email)) {
+          if (containsPukakp(email) || email.includes('tryout')) {
             router.replace("/lembaga/pukakp/admin/dashboard/ujian");
           } else {
             router.replace("/lembaga/dpkakp/admin/dashboard/ujian");

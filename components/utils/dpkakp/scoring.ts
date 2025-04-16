@@ -282,8 +282,8 @@ export function exportToExcelFinalScoring({
         // If the value is less than 50, apply a red background
         if (cell && !isNaN(cell.v) && cell.v < EXAM_THRESHOLD) {
           if (!cell.s) cell.s = {} // Create style if not already present
-          cell.s.fill = {
-            fgColor: { rgb: 'FF0000' }, // Red background color
+          cell.s.font = {
+            color: { rgb: 'FF0000' }, // Red background color
           }
         }
       }
