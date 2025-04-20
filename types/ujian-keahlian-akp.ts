@@ -97,6 +97,7 @@ export type Ujian = {
   UpdateAt: string
   FilePermohonan: string
   UsersUjian: UsersUjian[]
+  IsSelesai: string
 }
 
 export type UsersUjian = {

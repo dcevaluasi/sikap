@@ -157,3 +157,36 @@ export const countDistinctMateri = (data: SoalUjianBagian[]) => {
 
   return Object.entries(materiCount).map(([name, count]) => ({name, count}))
 } 
+
+export const isTodaySameAs = (dateString: string): boolean => {
+  const today = new Date();
+  const inputDate = new Date(dateString);
+
+  return (
+    today.getFullYear() === inputDate.getFullYear() &&
+    today.getMonth() === inputDate.getMonth() &&
+    today.getDate() === inputDate.getDate()
+  );
+}
+
+export const isTodayBefore = (dateString: string): boolean => {
+  const today = new Date();
+  const inputDate = new Date(dateString);
+
+  today.setHours(0, 0, 0, 0);
+  inputDate.setHours(0, 0, 0, 0);
+
+  return today < inputDate;
+}
+
+export const isTodayBetween = (startDateString: string, endDateString: string): boolean => {
+  const today = new Date();
+  const startDate = new Date(startDateString);
+  const endDate = new Date(endDateString);
+
+  today.setHours(0, 0, 0, 0);
+  startDate.setHours(0, 0, 0, 0);
+  endDate.setHours(0, 0, 0, 0);
+
+  return today >= startDate && today <= endDate;
+}

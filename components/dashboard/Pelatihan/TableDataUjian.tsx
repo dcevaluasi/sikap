@@ -85,7 +85,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { MdOutlinePayments, MdOutlineSaveAlt } from "react-icons/md";
+import { MdOutlinePayments, MdOutlinePodcasts, MdOutlineSaveAlt } from "react-icons/md";
 import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import Image from "next/image";
@@ -114,15 +114,21 @@ import { generateTanggalPelatihan } from "@/utils/text";
 import { FaEdit } from "react-icons/fa";
 import { DewanPenguji } from "@/types/dewanPenguji";
 import { TypeUjian, Ujian } from "@/types/ujian-keahlian-akp";
-import { BiPaperPlane } from "react-icons/bi";
+import { BiPaperPlane, BiSolidLockAlt } from "react-icons/bi";
 import { IoReload } from "react-icons/io5";
-import { formatIndonesianDate } from "@/lib/utils";
+import { formatIndonesianDate, isTodayBefore, isTodayBetween, isTodaySameAs } from "@/lib/utils";
 import EmptyData from "@/components/micro-components/EmptyData";
 import { HashLoader } from "react-spinners";
 
 const TableDataUjian: React.FC = () => {
   // ================== STATE VARIABLES ==================
   const [data, setData] = React.useState<Ujian[]>([]);
+
+
+  const [counterFinished, setCounterFinished] = React.useState<number>(0);
+  const [counterWillDo, setCounterWillDo] = React.useState<number>(0);
+  const [counterDoing, setCounterDoing] = React.useState<number>(0);
+
   const [countVerified, setCountVerified] = React.useState<number>(0);
   const [countNotVerified, setCountNotVerified] = React.useState<number>(0);
   const [countDraft, setCountDraft] = React.useState<number>(0);
@@ -191,6 +197,8 @@ const TableDataUjian: React.FC = () => {
         }
       );
 
+      console.log({ response })
+
       const pukakpCookie = Cookies.get("PUKAKP");
       const filteredData =
         pukakpCookie != "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan"
@@ -208,6 +216,7 @@ const TableDataUjian: React.FC = () => {
       const verifiedCount = filteredData.filter(
         (item: any) => item.Status === "Aktif"
       ).length;
+
       const notVerifiedCount = filteredData.filter(
         (item: any) => item.Status === "Pending"
       ).length;
@@ -217,6 +226,21 @@ const TableDataUjian: React.FC = () => {
       const pilihPenguji = filteredData.filter(
         (item: any) => item.NamaPengawasUjian == ""
       ).length;
+
+      const finishedCount = filteredData.filter(
+        (item: any) => item.IsSelesai === "1"
+      ).length;
+      setCounterFinished(finishedCount);
+
+      const willDoCount = filteredData.filter(
+        (item: any) => isTodayBefore(item.TanggalMulaiUjian) && item.IsSelesai === ""
+      ).length;
+      setCounterWillDo(willDoCount);
+
+      const doingCount = filteredData.filter(
+        (item: any) => isTodayBetween(item.TanggalMulaiUjian, item.TanggalBerakhirUjian)
+      ).length;
+      setCounterDoing(doingCount);
 
       setCountVerified(verifiedCount);
       setCountNotVerified(notVerifiedCount);
@@ -254,6 +278,8 @@ const TableDataUjian: React.FC = () => {
           },
         }
       );
+
+
 
       const pukakpCookie = Cookies.get("PUKAKP");
       const filteredData = response.data.data.filter((item: any) =>
@@ -658,6 +684,12 @@ const TableDataUjian: React.FC = () => {
     let matchesStatus;
     if (selectedStatusFilter == "Pilih Penguji") {
       matchesStatus = ujian.NamaPengawasUjian === "";
+    } else if (selectedStatusFilter == "Telah Selesai") {
+      matchesStatus = ujian.IsSelesai === "1";
+    } else if (selectedStatusFilter == "Akan Dilaksanakan") {
+      matchesStatus = isTodayBefore(ujian.TanggalMulaiUjian) && ujian.IsSelesai == "";
+    } else if (selectedStatusFilter == 'Sedang Berlangsung') {
+      matchesStatus = isTodayBetween(ujian.TanggalMulaiUjian, ujian.TanggalBerakhirUjian)
     } else {
       matchesStatus =
         selectedStatusFilter === "All" || ujian.Status === selectedStatusFilter;
@@ -851,6 +883,46 @@ const TableDataUjian: React.FC = () => {
     setFilePermohonan(e.target.files[0]);
   };
 
+  const [openFormCloseExam, setOpenFormCloseExam] =
+    React.useState<boolean>(false);
+  const handleCloseExam = async () => {
+    setIsPosting(true);
+    setOpenFormCloseExam(true)
+    try {
+      const response = await axios.put(
+        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedIdUjian}`,
+        {
+          is_selesai: '1'
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: 'Yeayyy!',
+        text: `Berhasil menutup ujian!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setOpenFormCloseExam(false);
+      setIsPosting(false);
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal menutup ujian, harap cek internet atau admin pusat!`,
+      });
+      handleFetchingUjianKeahlianData();
+      setOpenFormCloseExam(false);
+      setIsPosting(false);
+    }
+  };
+
+
+
   return (
     <section className="rounded-sm   pb-5 shadow-default  h-full scrollbar-hide">
       <section
@@ -970,7 +1042,7 @@ const TableDataUjian: React.FC = () => {
                   </li>
                 )}
 
-                <li>
+                {/* <li>
                   <button
                     onClick={() => setSelectedStatusFilter("Aktif")}
                     className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-24 ${selectedStatusFilter === "Aktif"
@@ -986,6 +1058,65 @@ const TableDataUjian: React.FC = () => {
                         }`}
                     >
                       Disetujui
+                    </p>
+                  </button>
+                </li> */}
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("Akan Dilaksanakan")}
+                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-fit ${selectedStatusFilter === "Akan Dilaksanakan"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                      }`}
+                  >
+                    <p className="font-semibold text-lg">{counterWillDo}</p>
+                    <p
+                      className={`uppercase text-sm ${selectedStatusFilter === "Akan Dilaksanakan"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
+                        }`}
+                    >
+                      Akan Dilaksanakan
+                    </p>
+                  </button>
+
+                </li>
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("Sedang Berlangsung")}
+                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-fit ${selectedStatusFilter === "Sedang Berlangsung"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                      }`}
+                  >
+                    <p className="font-semibold text-lg">{counterDoing}</p>
+                    <p
+                      className={`uppercase text-sm ${selectedStatusFilter === "Sedang Berlangsung"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
+                        }`}
+                    >
+                      Sedang Berlangsung
+                    </p>
+                  </button>
+
+                </li>
+                <li>
+                  <button
+                    onClick={() => setSelectedStatusFilter("Telah Selesai")}
+                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-fit ${selectedStatusFilter === "Telah Selesai"
+                      ? "bg-blue-500 text-white"
+                      : "bg-white text-black"
+                      }`}
+                  >
+                    <p className="font-semibold text-lg">{counterFinished}</p>
+                    <p
+                      className={`uppercase text-sm ${selectedStatusFilter === "Telah Selesai"
+                        ? "text-white font-bold"
+                        : "text-gray-600"
+                        }`}
+                    >
+                      Telah Selesai
                     </p>
                   </button>
                 </li>
@@ -1030,6 +1161,25 @@ const TableDataUjian: React.FC = () => {
                           {usePathname().includes("dpkakp") ? 'Segera Verifikasi' : 'Menunggu Verifikasi'}
                         </div>
                       )}
+                      {
+                        ujian!.IsSelesai == '1' && <Button
+
+                          variant="outline"
+                          className="bg-gray-600 hover:bg-gray-700 hover:text-white text-white  absolute top-5 right-5 rounded-full animate-pulse duration-700"
+                        >
+                          <BiSolidLockAlt className="h-4 w-4 mr-1" /> Telah Selesai
+                        </Button>
+                      }
+
+                      {
+                        isTodayBetween(ujian!.TanggalMulaiUjian, ujian.TanggalBerakhirUjian) && <Button
+
+                          variant="outline"
+                          className="bg-teal-500 hover:bg-teal-600 hover:text-white text-white  absolute top-5 right-5 rounded-full animate-pulse duration-700"
+                        >
+                          <MdOutlinePodcasts className="h-4 w-4 mr-1" /> Sedang Berlangsung
+                        </Button>
+                      }
 
                       <CardHeader>
                         {/* <EventBadge ujian={ujian!} /> */}
@@ -1040,6 +1190,7 @@ const TableDataUjian: React.FC = () => {
                         </CardDescription>
                       </CardHeader>
                       <CardContent className="space-y-2 relative">
+
                         <div className="ml-0 text-left capitalize -mt-6">
                           <div className="ml-0 text-left mt-1 text-neutral-500 ">
                             <p className="text-sm ">
@@ -1203,6 +1354,38 @@ const TableDataUjian: React.FC = () => {
                             <></>
                           )}
 
+                          {usePathname().includes("pukakp") &&
+                            ujian!.IsSelesai == "" ? (
+                            <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
+
+                              <AlertDialogContent>
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle>
+                                    Apakah kamu yakin menutup ujian ini?
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                  {
+                                    !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
+
+                                      <AlertDialogAction
+                                        onClick={() => handleCloseExam()}
+                                        className="bg-gray-700"
+                                      >
+                                        Tutup
+                                      </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
+                                  }
+
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
+                          ) : (
+                            <></>
+                          )}
+
                           {usePathname().includes("dpkakp") &&
                             ujian!.Status != "Aktif" && (
                               <Button
@@ -1277,7 +1460,7 @@ const TableDataUjian: React.FC = () => {
                             )}
 
                           {usePathname().includes("pukakp") &&
-                            ujian!.Status === "Aktif" && (
+                            ujian!.Status === "Aktif" && ujian!.IsSelesai == "" && isTodaySameAs(ujian!.TanggalMulaiUjian) && (
                               <Button
                                 onClick={(e) => {
                                   setSelectedIdUjian(ujian!.IdUjian);
@@ -1288,6 +1471,20 @@ const TableDataUjian: React.FC = () => {
                                 className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md"
                               >
                                 <IoReload className="h-4 w-4 mr-1" /> Remedial
+                              </Button>
+                            )}
+
+                          {usePathname().includes("pukakp") &&
+                            ujian!.IsSelesai === "" && isTodaySameAs(ujian!.TanggalBerakhirUjian) && (
+                              <Button
+                                onClick={(e) => {
+                                  setSelectedIdUjian(ujian!.IdUjian);
+                                  setOpenFormCloseExam(!openFormRemedial);
+                                }}
+                                variant="outline"
+                                className="bg-teal-600 hover:bg-teal-700 hover:text-white text-white rounded-md"
+                              >
+                                <BiSolidLockAlt className="h-4 w-4 mr-1" /> Tutup Ujian
                               </Button>
                             )}
                         </div>
