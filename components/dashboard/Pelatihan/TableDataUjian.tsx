@@ -655,8 +655,7 @@ const TableDataUjian: React.FC = () => {
       ujian.TypeUjian.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ujian.NamaUjian.toLowerCase().includes(searchQuery.toLowerCase());
 
-    var matchesStatus;
-
+    let matchesStatus;
     if (selectedStatusFilter == "Pilih Penguji") {
       matchesStatus = ujian.NamaPengawasUjian === "";
     } else {
@@ -664,8 +663,14 @@ const TableDataUjian: React.FC = () => {
         selectedStatusFilter === "All" || ujian.Status === selectedStatusFilter;
     }
 
-    return matchesSearchQuery && matchesStatus;
+    const pathname = usePathname();
+    const shouldExcludeTryOut =
+      !pathname.includes("pukakp") &&
+      ujian.NamaUjian.toLowerCase().includes("try out");
+
+    return matchesSearchQuery && matchesStatus && !shouldExcludeTryOut;
   });
+
 
   // CANCEL ADD NEW UJIAN
   const handleCancelAddNewUjian = () => {
