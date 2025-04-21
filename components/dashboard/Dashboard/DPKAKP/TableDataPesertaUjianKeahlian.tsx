@@ -89,7 +89,7 @@ import { JawabanUserStore, Ujian, UsersUjian } from "@/types/ujian-keahlian-akp"
 import { HashLoader } from "react-spinners";
 import autoTable from "jspdf-autotable";
 import Image from "next/image";
-import { generateTanggalPelatihan } from "@/utils/text";
+import { generateTanggalPelatihan, shortenName } from "@/utils/text";
 import {
   IoArrowBackSharp,
   IoPrintOutline,
@@ -158,44 +158,39 @@ const TableDataPesertaUjianKeahlian = () => {
   const [showRekapitulasiNilai, setShowRekapitulasiNilai] =
     React.useState<boolean>(false);
   const printRefRekapitulasiNilai = React.useRef<HTMLDivElement>(null);
+  const printRefRekapitulasiNilaiPage = React.useRef<HTMLDivElement>(null);
 
-  const handleDownloadRekapitulasiNilai = () => {
-    const element = printRefRekapitulasiNilai.current;
+  const handleDownloadRekapitulasiNilai = async () => {
+    const html2pdf = (await import("html2pdf.js")).default;
 
-    if (!element) {
-      console.error('Element is null');
+    if (!printRefRekapitulasiNilai.current) {
+      console.error("Component reference is null");
+      setIsUploading(false);
       return;
     }
 
-    // setIsGenerating(true); // ✅ Start loading
+    const element = printRefRekapitulasiNilai.current;
 
-    domtoimage.toPng(element, { quality: 1 })
-      .then((dataUrl: any) => {
-        const img = document.createElement('img');
-        img.src = dataUrl;
+    const opt = {
+      margin: [7, 7, 7, 7], // top, right, bottom, left
+      filename: `Rekapitulasi Nilai Ujian Keahlian AKP.pdf`,
+      pagebreak: { mode: ["avoid-all", "css"] },
+      html2canvas: {
+        scale: 1.5,
+        useCORS: true,
+        logging: false,
+        backgroundColor: "#fff",
+      },
+      jsPDF: {
+        unit: "mm",
+        format: "a4",
+        orientation: "landscape",
+      },
+    };
 
-        img.onload = () => {
-          const pdf = new jsPDF('landscape', 'mm', 'a4');
-          const pageWidth = pdf.internal.pageSize.getWidth();
-          const pageHeight = pdf.internal.pageSize.getHeight();
-
-          const imgWidth = img.width;
-          const imgHeight = img.height;
-          const ratio = Math.min(pageWidth / imgWidth, pageHeight / imgHeight);
-
-          const imgX = (pageWidth - imgWidth * ratio) / 2;
-          const imgY = (pageHeight - imgHeight * ratio) / 2;
-
-          pdf.addImage(img, 'PNG', imgX, imgY, imgWidth * ratio, imgHeight * ratio);
-          pdf.save('rekap_nilai.pdf');
-          // setIsGenerating(false); // ✅ Done
-        };
-      })
-      .catch((error: any) => {
-        console.error('Error generating PDF:', error);
-        // setIsGenerating(false); // ✅ Even if failed
-      });
+    html2pdf().from(element).set(opt).save();
   };
+
 
 
   /**
@@ -1518,11 +1513,11 @@ const TableDataPesertaUjianKeahlian = () => {
 
                   </SheetContent>
                 </Sheet>
-                <div className="">
+                <div className="" ref={printRefRekapitulasiNilai}>
                   {" "}
                   <div
                     className="grid grid-cols-1 gap-2 w-full h-feull"
-                    ref={printRefRekapitulasiNilai}
+                    ref={printRefRekapitulasiNilaiPage}
                   >
                     {dataUjian.length != 0 && (
                       <div className="flex w-full gap-2">
@@ -1600,7 +1595,7 @@ const TableDataPesertaUjianKeahlian = () => {
                           <div className="flex flex-col w-full border border-gray-400 mt-6 rounded-md">
                             {/* Table Header */}
                             <div className="flex  text-white text-sm">
-                              <div className="flex items-center flex-grow w-0 h-10 border-b border-gray-400 bg-[#338BF6] justify-center py-6">
+                              <div className="flex items-center flex-grow !w-10 h-10 border-b border-gray-400 bg-[#338BF6] justify-center py-6">
                                 <span>No</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 px-4 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
@@ -1683,7 +1678,7 @@ const TableDataPesertaUjianKeahlian = () => {
                             <div className="overflow-auto">
                               {data!.map((pesertaUjian: UsersUjian, index) => (
                                 <div key={index} className={`flex text-sm ${index % 25 == 1 ? 'page-break' : ''}`}>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
+                                  <div className="flex items-center flex-grow !w-10 h-10 border-b border-l border-gray-400 justify-center py-7">
                                     <span>{index + 1}</span>
                                   </div>
                                   <div className="flex items-center flex-grow w-0 h-10 px-4 border-b border-l border-gray-400 justify-center py-7">
@@ -1692,7 +1687,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </span>
                                   </div>
                                   <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center text-left py-7 capitalize leading-none">
-                                    <span>{pesertaUjian?.Nama || "-"}</span>
+                                    <span>{shortenName(pesertaUjian?.Nama) || "-"}</span>
                                   </div>
                                   {dataUjian[0]!.TypeUjian.includes(
                                     "Rewarding"
@@ -2206,7 +2201,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   <p className="text-xs -mt-1">
                                     {dataUjian[0]!.PUKAKP}
                                   </p>
-                                  <p className="text-sm border-b-black border-b mt-14 w-2/3">
+                                  <p className="text-sm border-b-black border-b  pb-5 mt-14 w-2/3">
                                     {dataPukakp?.KetuaPukakp}
                                   </p>
                                   <p className="text-sm ">
@@ -2221,7 +2216,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                   <p className="text-xs -mt-1">
                                     {dataUjian[0]!.PUKAKP}
                                   </p>
-                                  <p className="text-sm border-b-black border-b mt-14 w-2/3">
+                                  <p className="text-sm border-b-black border-b mt-14 pb-5 w-2/3">
                                     {dataPukakp?.SesPukakp}
                                   </p>
                                   <p className="text-sm ">
@@ -2237,7 +2232,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <p className="font-semibold text-sm leading-none">
                                   Ketua DPKAKP,
                                 </p>
-                                <p className="text-sm border-b-black border-b mt-14 ">
+                                <p className="text-sm border-b-black border-b mt-14 pb-5">
                                   Achmad Subijakto, A.Pi., MP.
                                 </p>
                               </div>
