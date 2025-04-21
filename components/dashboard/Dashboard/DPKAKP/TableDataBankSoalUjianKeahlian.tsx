@@ -365,37 +365,29 @@ const TableDataBankSoalUjianKeahlian = () => {
       ),
     },
 
-    // {
-    //   accessorKey: "Gambar Soal",
-    //   header: ({ column }) => {
-    //     return (
-    //       <Button
-    //         variant="ghost"
-    //         className={`text-black font-semibold w-fit p-0 flex justify-start items-center`}
-    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    //       >
-    //         <p className="leading-[105%]">Gambar Soal</p>
+    {
+      accessorKey: "GambarSoal",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            className={`text-black font-semibold w-fit p-0 flex justify-start items-center`}
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            <p className="leading-[105%]">Gambar Soal</p>
 
-    //         <RiVerifiedBadgeFill className="ml-2 h-4 w-4" />
-    //       </Button>
-    //     );
-    //   },
-    //   cell: ({ row }) => (
-    //     <div className={`${"ml-0"} text-left capitalize w-[200px]`}>
-    //       {row.original.GambarSoal ? (
-    //         <Image
-    //           src={row.original.GambarSoal!}
-    //           alt={row.original.Soal}
-    //           width={0}
-    //           height={0}
-    //           className="w-48"
-    //         />
-    //       ) : (
-    //         <></>
-    //       )}
-    //     </div>
-    //   ),
-    // },
+            <RiVerifiedBadgeFill className="ml-2 h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className={`${"ml-0"} text-left capitalize w-[200px]`}>
+          {
+            row.original.GambarSoal != "" ? <Link href={row.original.GambarSoal!} className='text-blue-500 underline'>{row.original.GambarSoal}</Link> : <p>-</p>
+          }
+        </div>
+      ),
+    },
     {
       accessorKey: "IdUsers",
       header: ({ column }) => {
