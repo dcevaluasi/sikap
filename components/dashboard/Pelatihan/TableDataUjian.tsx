@@ -1127,7 +1127,7 @@ const TableDataUjian: React.FC = () => {
 
         <div className="px-4 -mt-4">
           <Tabs defaultValue="account" className="w-full">
-            {usePathname().includes("pukakp") && (
+            {usePathname().includes("pukakp") && !isPenguji && (
               <TabsList className={`grid w-full grid-cols-2`}>
                 <TabsTrigger value="account">
                   Daftar Pelaksanan Ujian
