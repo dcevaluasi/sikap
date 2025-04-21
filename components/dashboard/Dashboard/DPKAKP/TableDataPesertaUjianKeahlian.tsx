@@ -1595,13 +1595,13 @@ const TableDataPesertaUjianKeahlian = () => {
                           <div className="flex flex-col w-full border border-gray-400 mt-6 rounded-md">
                             {/* Table Header */}
                             <div className="flex  text-white text-sm">
-                              <div className="flex items-center flex-grow !w-10 h-10 border-b border-gray-400 bg-[#338BF6] justify-center py-6">
+                              <div className="flex items-center flex-grow !w-0 h-10 border-b border-gray-400 bg-[#338BF6] justify-center py-6">
                                 <span>No</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 px-4 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
                                 <span className="">Nomor Ujian</span>
                               </div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
+                              <div className="flex items-center flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
                                 <span className="">Nama Peserta</span>
                               </div>
                               {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
@@ -1678,7 +1678,7 @@ const TableDataPesertaUjianKeahlian = () => {
                             <div className="overflow-auto">
                               {data!.map((pesertaUjian: UsersUjian, index) => (
                                 <div key={index} className={`flex text-sm ${index % 25 == 1 ? 'page-break' : ''}`}>
-                                  <div className="flex items-center flex-grow !w-10 h-10 border-b border-l border-gray-400 justify-center py-7">
+                                  <div className="flex items-center flex-grow !w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
                                     <span>{index + 1}</span>
                                   </div>
                                   <div className="flex items-center flex-grow w-0 h-10 px-4 border-b border-l border-gray-400 justify-center py-7">
@@ -1686,7 +1686,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                       {pesertaUjian?.NomorUjian || "-"}
                                     </span>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center text-left py-7 capitalize leading-none">
+                                  <div className="flex items-center flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400 justify-center text-left py-7 capitalize leading-none">
                                     <span>{shortenName(pesertaUjian?.Nama) || "-"}</span>
                                   </div>
                                   {dataUjian[0]!.TypeUjian.includes(
