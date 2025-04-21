@@ -290,6 +290,7 @@ const TableDataPesertaUjianKeahlian = () => {
               onClick={(e) => {
                 setSelectedIdPeserta(row.original.IdUserUjian);
                 setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+                setSelectedNamaPeserta(row.original.Nama)
                 if (row.original.NilaiKomprensifF1 != 0) {
                   setEditing(true);
                   setNilaiKomprehensif(
@@ -301,7 +302,7 @@ const TableDataPesertaUjianKeahlian = () => {
                   setNilaiKomprehensif3(
                     row.original.NilaiKomprensifF3.toString()
                   );
-                  setSelectedNamaPeserta(row.original.Nama)
+
                 }
               }}
               variant="outline"
