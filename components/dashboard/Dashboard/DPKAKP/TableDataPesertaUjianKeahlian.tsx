@@ -283,7 +283,7 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
       cell: ({ row }) => (
         <div
-          className={`w-full ${!isPenguji ? "flex" : "hidden"}  flex-col gap-2`}
+          className={`w-full flex  flex-col gap-2`}
         >
           <div className="flex  w-full items-center justify-center gap-1">
             <Button
