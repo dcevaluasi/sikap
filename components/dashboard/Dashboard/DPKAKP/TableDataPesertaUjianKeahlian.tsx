@@ -953,7 +953,7 @@ const TableDataPesertaUjianKeahlian = () => {
                   Refresh Data
                 </div>
 
-                {pathname.includes("dpkakp") && (
+                {pathname.includes("dpkakp") && !isPenguji && (
                   <>
                     <div
                       onClick={() => setHandleOpenFormSematkan(true)}
