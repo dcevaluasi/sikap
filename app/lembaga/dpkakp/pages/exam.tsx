@@ -43,13 +43,71 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import addData from "@/firebase/firestore/addData";
+import getDocument from "@/firebase/firestore/getData";
+import isDocumentExists from "@/firebase/firestore/checkDoc";
+import updateData from "@/firebase/firestore/updateData";
 
 function Exam() {
   const router = useRouter();
+  const codeStored = Cookies.get('XSRF097_CODE')
+
+  const handleBackUpForTheFirstTime = async (initialBackUpData: any, selectedAnswers: any, selectedAnswersStore: any) => {
+    const data = {
+      initialBackUpData,
+      selectedAnswers,
+      selectedAnswersStore
+    }
+    const { result, error } = await addData('backup_exam', `${codeStored}`, data)
+
+    if (error) {
+      return console.log(error)
+    }
+
+    return console.log(result)
+  }
+
+  const [data, setData] = React.useState<SoalBagian | null>(null);
+
+  async function fetchDataBackUp() {
+    const dataResult = await getDocument('backup_exam', `${codeStored}`);
+    console.log(`${codeStored}`)
+    console.log(dataResult.data);
+    console.log('RESULT', dataResult)
+    if (dataResult!.data! == null) {
+      setData(null)
+    } else {
+      const resultInitialBackUpData = dataResult!.data!.initialBackUpData! as SoalBagian
+      const resultSelectedAnswers = dataResult!.data!.selectedAnswers as JawabanUser[]
+      const resultSelectedAnswersStore = dataResult!.data!.selectedAnswersStore as JawabanUserStore[]
+      setSelectedAnswers(resultSelectedAnswers);
+      setSelectedAnswersStore(resultSelectedAnswersStore)
+      setData(resultInitialBackUpData)
+    }
+
+  }
+
+  async function handleUpdateDataBackUp(selectedAnswers: any, selectedAnswersStore: any) {
+    const backUpData = {
+      initialBackUpData: data,
+      selectedAnswers: selectedAnswers,
+      selectedAnswersStore: selectedAnswersStore
+    }
+
+    try {
+      const updateDataBackUp = await updateData(
+        'backup_exam',
+        codeStored!,
+        backUpData,
+      )
+      console.log({ updateDataBackUp })
+    } catch (error) {
+      console.error('Error updating data:', error)
+    }
+  }
 
   const [selectedUjian, setSelectedUjian] = React.useState<Ujian | null>(null);
 
-  const [data, setData] = React.useState<SoalBagian | null>(null);
+
   const [selectedAnswers, setSelectedAnswers] = React.useState<JawabanUser[]>(
     []
   );
@@ -79,8 +137,7 @@ function Exam() {
         jawaban_pengguna: "",
       }));
 
-      setSelectedAnswers(initialAnswers);
-      setSelectedAnswersStore(initialAnswersStore)
+
 
 
       // const shuffledSoal = response.data.Soal.sort(() => Math.random() - 0.5);
@@ -93,7 +150,20 @@ function Exam() {
           .sort(() => Math.random() - 0.5)
           .sort((a, b) => a.IdJawaban - b.IdJawaban),
       })).sort(() => Math.random() - 0.5);
-      setData({ ...response.data, Soal: dataSoal });
+      const isCodeBackUp = await isDocumentExists('backup_exam', codeStored!)
+      if (!isCodeBackUp) {
+        console.log(isCodeBackUp)
+        handleBackUpForTheFirstTime({ ...response.data, Soal: dataSoal }, initialAnswers, initialAnswersStore)
+        setData({ ...response.data, Soal: dataSoal });
+        setSelectedAnswers(initialAnswers);
+        setSelectedAnswersStore(initialAnswersStore)
+      } else {
+        console.log(isCodeBackUp)
+        fetchDataBackUp()
+
+      }
+
+
       // setData(response.data);
       console.log({ response });
     } catch (error) {
@@ -132,22 +202,68 @@ function Exam() {
     }, 2000); // Adjust the timeout duration as needed
   }, []);
 
-  const handleAnswerChange = (idSoal: number, answer: string) => {
-    setSelectedAnswers((prevAnswers) => {
+  // const handleAnswerChange = (idSoal: number, answer: string) => {
+  //   setSelectedAnswers((prevAnswers) => {
+  //     const newAnswers = [...prevAnswers];
+
+  //     // Update the answer for the current question
+  //     newAnswers[selectedIdSoal] = {
+  //       id_soal_bagian: idSoal.toString(),
+  //       jawaban_pengguna:
+  //         newAnswers[selectedIdSoal]?.jawaban_pengguna === answer
+  //           ? "" // Deselect if the same answer is clicked again
+  //           : answer,
+  //     };
+
+  //     return newAnswers;
+  //   });
+  //   handleUpdateDataBackUp(selectedAnswers)
+  // };
+
+  const handleAnswerChange = (idSoal: number, answer: string, soal: string, gambarSoal: string, jawabanBenar: string) => {
+    const updateAnswers = (prevAnswers: typeof selectedAnswers) => {
       const newAnswers = [...prevAnswers];
 
-      // Update the answer for the current question
       newAnswers[selectedIdSoal] = {
         id_soal_bagian: idSoal.toString(),
         jawaban_pengguna:
           newAnswers[selectedIdSoal]?.jawaban_pengguna === answer
-            ? "" // Deselect if the same answer is clicked again
+            ? ""
             : answer,
       };
 
       return newAnswers;
-    });
+    };
+
+
+    const updatedAnswers = updateAnswers(selectedAnswers);
+    setSelectedAnswers(updateAnswers);
+
+    const updateAnswersStore = (prevAnswers: typeof selectedAnswersStore) => {
+      const newAnswers = [...prevAnswers];
+
+      // Update the answer for the current question
+      newAnswers[selectedIdSoal] = {
+        id_soal: idSoal.toString(),
+        soal: soal,
+        gambarSoal: gambarSoal,
+        jawaban_benar: jawabanBenar,
+        jawaban_pengguna:
+          newAnswers[selectedIdSoal]?.jawaban_pengguna === answer
+            ? "" // Deselect if the same answer is clicked again
+            : answer,
+        isCorrect: jawabanBenar == answer
+      };
+
+      return newAnswers;
+    }
+
+    const updatedAnswersStore = updateAnswersStore(selectedAnswersStore);
+    setSelectedAnswersStore(updatedAnswersStore);
+
+    handleUpdateDataBackUp(updatedAnswers, updatedAnswersStore); // Now uses the exact same update logic
   };
+
 
   const handleAnswerStoreChange = (idSoal: number, answer: string, soal: string, gambarSoal: string, jawabanBenar: string) => {
     setSelectedAnswersStore((prevAnswers) => {
@@ -168,6 +284,7 @@ function Exam() {
 
       return newAnswers;
     });
+
   };
 
   React.useEffect(() => {
@@ -187,15 +304,12 @@ function Exam() {
         if (selectedAnswer) {
           handleAnswerChange(
             selectedAnswer.IdSoalUjianBagian,
-            selectedAnswer.NameJawaban
-          );
-          handleAnswerStoreChange(
-            selectedAnswer.IdSoalUjianBagian,
             selectedAnswer.NameJawaban,
             currentQuestion.Soal,
             currentQuestion.GambarSoal!,
             currentQuestion.JawabanBenar,
-          )
+          );
+
         }
       }
     };
@@ -277,6 +391,7 @@ function Exam() {
       handleStoreAnsweredUser(dataUserExam!.id_user_ujian, data!.Bagian)
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
+      Cookies.remove("XSRF097_CODE");
       localStorage.removeItem("selectedIdSoal");
       localStorage.removeItem("answer");
       localStorage.removeItem("answers");
@@ -450,32 +565,35 @@ function Exam() {
               </SheetDescription>
               <Timer countdownMinutes={data?.waktu!} />
             </SheetHeader>
-            <section className="h-full text-white w-full py-20 z-0 block -mt-14 pb-10 ml-2">
-              <div className="flex flex-col gap-3 h-full">
-                <div className="flex flex-col  gap-0 items-start"></div>
-                <div className="grid grid-cols-4 grid-rows-6 space-x-0 space-y-0 gap-1">
-                  {data?.Soal!.map((soal, index) => (
-                    <div
-                      key={index}
-                      onClick={(e) => setSelectedIdSoal(index)}
-                      className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
-                        ? "bg-green-500 text-white bg-opacity-70"
-                        : "bg-blue-500 bg-opacity-30"
-                        } rounded-lg duration-700 `}
-                    >
-                      <span
-                        className={`text-2xl font-semibold  ${selectedAnswers[index] != null
-                          ? " text-white"
-                          : "text-[#a5b4fc]"
-                          }`}
+            {
+              selectedAnswers.length != 0 && <section className="h-full text-white w-full py-20 z-0 block -mt-14 pb-10 ml-2">
+                <div className="flex flex-col gap-3 h-full">
+                  <div className="flex flex-col  gap-0 items-start"></div>
+                  <div className="grid grid-cols-4 grid-rows-6 space-x-0 space-y-0 gap-1">
+                    {data?.Soal!.map((soal, index) => (
+                      <div
+                        key={index}
+                        onClick={(e) => setSelectedIdSoal(index)}
+                        className={`h-12 w-12 flex justify-center items-center cursor-pointer hover:scale-105 ${selectedAnswers[index]!.jawaban_pengguna! != ""
+                          ? "bg-green-500 text-white bg-opacity-70"
+                          : "bg-blue-500 bg-opacity-30"
+                          } rounded-lg duration-700 `}
                       >
-                        {index + 1}
-                      </span>
-                    </div>
-                  ))}
+                        <span
+                          className={`text-2xl font-semibold  ${selectedAnswers[index] != null
+                            ? " text-white"
+                            : "text-[#a5b4fc]"
+                            }`}
+                        >
+                          {index + 1}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            }
+
           </SheetContent>
         </Sheet>
         <section className="relative h-full space-y-6 pb-8  md:pb-12 mt-36 md:mt-10 flex items-center justify-center flex-col md:w-2/3">
@@ -550,7 +668,7 @@ function Exam() {
                       {/* Image with onClick to show the modal */}
                       {data?.Soal[selectedIdSoal]?.GambarSoal !== "" && (
                         <Image
-                          className="block w-fit h-50 object-contain my-5 rounded-lg cursor-pointer z-[9999999]"
+                          className="block w-50 h-50 object-contain my-5 rounded-lg cursor-pointer z-[9999999]"
                           src={data!.Soal[selectedIdSoal]?.GambarSoal!}
                           width={0}
                           height={0}
@@ -606,15 +724,12 @@ function Exam() {
                               onChange={() => {
                                 handleAnswerChange(
                                   jawaban.IdSoalUjianBagian,
-                                  jawaban.NameJawaban
-                                )
-                                handleAnswerStoreChange(
-                                  jawaban.IdSoalUjianBagian,
                                   jawaban.NameJawaban,
                                   data.Soal[selectedIdSoal]?.Soal,
                                   data.Soal[selectedIdSoal]?.GambarSoal!,
                                   data.Soal[selectedIdSoal]?.JawabanBenar,
                                 )
+
                               }
 
                               }

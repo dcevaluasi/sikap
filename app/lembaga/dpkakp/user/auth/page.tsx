@@ -26,8 +26,12 @@ function page() {
     setPassword("");
   };
 
+
+
+
   const handleLoginAdminDPKAKP = async (e: any) => {
     setIsAccessingCode(true);
+
     if (password == "") {
       Toast.fire({
         icon: "error",
@@ -52,6 +56,7 @@ function page() {
           });
           await handleClearFormLoginAdminDPKAKP();
           Cookies.set("XSRF096", response?.data?.t);
+          Cookies.set("XSRF097_CODE", password);
           setIsAccessingCode(false);
           router.replace("/lembaga/dpkakp/user/auth/guide");
         } else {

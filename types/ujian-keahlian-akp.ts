@@ -178,3 +178,12 @@ export type UserExamInfo = {
   id_user_ujian: number
   instansi: string
 }
+
+export type BackupExam = {
+  id_soal: string
+  soal: string
+  gambarSoal: string
+  jawaban_benar: string
+  jawaban_pengguna: string
+  isCorrect: boolean
+}

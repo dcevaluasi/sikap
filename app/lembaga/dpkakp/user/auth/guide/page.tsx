@@ -1,6 +1,7 @@
 "use client";
 
 import Toast from "@/components/toast";
+import isDocumentExists from "@/firebase/firestore/checkDoc";
 import { SoalBagian } from "@/types/ujian-keahlian-akp";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
@@ -14,9 +15,11 @@ function page() {
 
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
+  const codeStored = Cookies.get('XSRF097_CODE')
 
   const [data, setData] = React.useState<SoalBagian | null>(null);
   const handleFetchExamInformation = async () => {
+
     try {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL}/getSoalBagian`,
@@ -32,6 +35,8 @@ function page() {
       console.log({ error });
     }
   };
+
+
 
   React.useEffect(() => {
     handleFetchExamInformation();
