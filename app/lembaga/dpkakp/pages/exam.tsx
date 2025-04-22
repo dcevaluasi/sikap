@@ -151,17 +151,21 @@ function Exam() {
           .sort((a, b) => a.IdJawaban - b.IdJawaban),
       })).sort(() => Math.random() - 0.5);
       const isCodeBackUp = await isDocumentExists('backup_exam', codeStored!)
-      if (!isCodeBackUp) {
-        console.log(isCodeBackUp)
-        handleBackUpForTheFirstTime({ ...response.data, Soal: dataSoal }, initialAnswers, initialAnswersStore)
-        setData({ ...response.data, Soal: dataSoal });
-        setSelectedAnswers(initialAnswers);
-        setSelectedAnswersStore(initialAnswersStore)
-      } else {
-        console.log(isCodeBackUp)
-        fetchDataBackUp()
+      // if (!isCodeBackUp) {
+      //   console.log(isCodeBackUp)
+      //   handleBackUpForTheFirstTime({ ...response.data, Soal: dataSoal }, initialAnswers, initialAnswersStore)
+      //   setData({ ...response.data, Soal: dataSoal });
+      //   setSelectedAnswers(initialAnswers);
+      //   setSelectedAnswersStore(initialAnswersStore)
+      // } else {
+      //   console.log(isCodeBackUp)
+      //   fetchDataBackUp()
 
-      }
+      // }
+
+      setData({ ...response.data, Soal: dataSoal });
+      setSelectedAnswers(initialAnswers);
+      setSelectedAnswersStore(initialAnswersStore)
 
 
       // setData(response.data);
@@ -259,9 +263,9 @@ function Exam() {
     }
 
     const updatedAnswersStore = updateAnswersStore(selectedAnswersStore);
-    setSelectedAnswersStore(updatedAnswersStore);
+    setSelectedAnswersStore(updateAnswersStore);
 
-    handleUpdateDataBackUp(updatedAnswers, updatedAnswersStore); // Now uses the exact same update logic
+    // handleUpdateDataBackUp(updatedAnswers, updatedAnswersStore); // Now uses the exact same update logic
   };
 
 
