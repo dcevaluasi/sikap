@@ -27,7 +27,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { dpkakpBaseUrl } from "@/constants/urls";
+import { backupBaseUrl, dpkakpBaseUrl } from "@/constants/urls";
 import {
   JawabanUser,
   JawabanUserStore,
@@ -51,59 +51,90 @@ function Exam() {
   const router = useRouter();
   const codeStored = Cookies.get('XSRF097_CODE')
 
-  const handleBackUpForTheFirstTime = async (initialBackUpData: any, selectedAnswers: any, selectedAnswersStore: any) => {
+  const handleBackUpForTheFirstTime = async (
+    initialBackUpData: any,
+    selectedAnswers: any,
+    selectedAnswersStore: any
+  ) => {
     const data = {
-      initialBackUpData,
-      selectedAnswers,
-      selectedAnswersStore
-    }
-    const { result, error } = await addData('backup_exam', `${codeStored}`, data)
-
-    if (error) {
-      return console.log(error)
+      kode_akses: codeStored,
+      backup: JSON.stringify({
+        initialBackUpData,
+        selectedAnswers,
+        selectedAnswersStore,
+      }),
     }
 
-    return console.log(result)
+    try {
+      const response = await axios.post(`${backupBaseUrl}/api/backup`, data)
+      console.log('Backup saved:', response.data)
+    } catch (error) {
+      console.error('Error saving backup:', error)
+    }
   }
 
   const [data, setData] = React.useState<SoalBagian | null>(null);
 
-  async function fetchDataBackUp() {
-    const dataResult = await getDocument('backup_exam', `${codeStored}`);
-    console.log(`${codeStored}`)
-    console.log(dataResult.data);
-    console.log('RESULT', dataResult)
-    if (dataResult!.data! == null) {
-      setData(null)
-    } else {
-      const resultInitialBackUpData = dataResult!.data!.initialBackUpData! as SoalBagian
-      const resultSelectedAnswers = dataResult!.data!.selectedAnswers as JawabanUser[]
-      const resultSelectedAnswersStore = dataResult!.data!.selectedAnswersStore as JawabanUserStore[]
+
+  const handleGetBackUpData = async () => {
+    try {
+      const response = await axios.get(`${backupBaseUrl}/api/backup/${codeStored}`);
+      console.log(`${codeStored}`);
+      console.log('Raw response:', response.data);
+
+      if (!response.data || !response.data.backup) {
+        setData(null);
+        return;
+      }
+
+      let parsedBackup;
+
+      // ✅ Avoid parsing if already an object
+      if (typeof response.data.backup === 'string') {
+        parsedBackup = JSON.parse(response.data.backup);
+      } else {
+        parsedBackup = response.data.backup;
+      }
+
+      const resultInitialBackUpData = parsedBackup.initialBackUpData as SoalBagian;
+      const resultSelectedAnswers = parsedBackup.selectedAnswers as JawabanUser[];
+      const resultSelectedAnswersStore = parsedBackup.selectedAnswersStore as JawabanUserStore[];
+
       setSelectedAnswers(resultSelectedAnswers);
-      setSelectedAnswersStore(resultSelectedAnswersStore)
-      setData(resultInitialBackUpData)
-    }
+      setSelectedAnswersStore(resultSelectedAnswersStore);
+      setData(resultInitialBackUpData);
 
-  }
-
-  async function handleUpdateDataBackUp(selectedAnswers: any, selectedAnswersStore: any) {
-    const backUpData = {
-      initialBackUpData: data,
-      selectedAnswers: selectedAnswers,
-      selectedAnswersStore: selectedAnswersStore
+      console.log('Backup loaded and set');
+    } catch (error) {
+      console.error('Error fetching or parsing backup:', error);
+      setData(null);
     }
+  };
+
+
+
+
+  async function handleUpdateDataBackUp(
+    selectedAnswers: any,
+    selectedAnswersStore: any
+  ) {
+    const backupPayload = {
+      kode_akses: codeStored,
+      backup: JSON.stringify({
+        initialBackUpData: data, // assuming `data` is in scope
+        selectedAnswers,
+        selectedAnswersStore,
+      }),
+    };
 
     try {
-      const updateDataBackUp = await updateData(
-        'backup_exam',
-        codeStored!,
-        backUpData,
-      )
-      console.log({ updateDataBackUp })
+      const response = await axios.post(`${backupBaseUrl}/api/backup`, backupPayload);
+      console.log('Backup updated:', response.data);
     } catch (error) {
-      console.error('Error updating data:', error)
+      console.error('Error updating backup:', error);
     }
   }
+
 
   const [selectedUjian, setSelectedUjian] = React.useState<Ujian | null>(null);
 
@@ -114,6 +145,20 @@ function Exam() {
   const [selectedAnswersStore, setSelectedAnswersStore] = React.useState<JawabanUserStore[]>(
     []
   );
+
+
+  const isCodeExist = async (): Promise<boolean> => {
+    try {
+      const response = await axios.get(
+        `${backupBaseUrl}/api/verify/${codeStored!}`,
+      );
+      return response.data.exists;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  };
+
 
   const handleFetchExamInformation = async () => {
     try {
@@ -150,25 +195,22 @@ function Exam() {
           .sort(() => Math.random() - 0.5)
           .sort((a, b) => a.IdJawaban - b.IdJawaban),
       })).sort(() => Math.random() - 0.5);
-      const isCodeBackUp = await isDocumentExists('backup_exam', codeStored!)
-      // if (!isCodeBackUp) {
-      //   console.log(isCodeBackUp)
-      //   handleBackUpForTheFirstTime({ ...response.data, Soal: dataSoal }, initialAnswers, initialAnswersStore)
-      //   setData({ ...response.data, Soal: dataSoal });
-      //   setSelectedAnswers(initialAnswers);
-      //   setSelectedAnswersStore(initialAnswersStore)
-      // } else {
-      //   console.log(isCodeBackUp)
-      //   fetchDataBackUp()
+      const isCodeBackUp = await isCodeExist()
 
-      // }
+      const exists = await isCodeExist();
+      if (exists) {
+        console.log(exists)
+        handleGetBackUpData()
+        console.log("Code exists!");
+      } else {
+        console.log("Code not found.");
+        setData({ ...response.data, Soal: dataSoal });
+        setSelectedAnswers(initialAnswers);
+        setSelectedAnswersStore(initialAnswersStore)
+        handleBackUpForTheFirstTime({ ...response.data, Soal: dataSoal }, initialAnswers, initialAnswersStore)
 
-      setData({ ...response.data, Soal: dataSoal });
-      setSelectedAnswers(initialAnswers);
-      setSelectedAnswersStore(initialAnswersStore)
+      }
 
-
-      // setData(response.data);
       console.log({ response });
     } catch (error) {
       console.log({ error });
@@ -265,7 +307,7 @@ function Exam() {
     const updatedAnswersStore = updateAnswersStore(selectedAnswersStore);
     setSelectedAnswersStore(updateAnswersStore);
 
-    // handleUpdateDataBackUp(updatedAnswers, updatedAnswersStore); // Now uses the exact same update logic
+    handleUpdateDataBackUp(updatedAnswers, updatedAnswersStore); // Now uses the exact same update logic
   };
 
 

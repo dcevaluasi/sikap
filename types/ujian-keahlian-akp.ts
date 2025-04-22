@@ -187,3 +187,7 @@ export type BackupExam = {
   jawaban_pengguna: string
   isCorrect: boolean
 }
+
+export type VerifyBackup = {
+  exists: boolean
+}
