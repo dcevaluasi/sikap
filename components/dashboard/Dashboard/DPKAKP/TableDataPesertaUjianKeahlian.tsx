@@ -286,32 +286,35 @@ const TableDataPesertaUjianKeahlian = () => {
           className={`w-full flex  flex-col gap-2`}
         >
           <div className="flex  w-full items-center justify-center gap-1">
-            <Button
-              onClick={(e) => {
-                setSelectedIdPeserta(row.original.IdUserUjian);
-                setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
-                setSelectedNamaPeserta(row.original.Nama)
-                if (row.original.NilaiKomprensifF1 != 0) {
-                  setEditing(true);
-                  setNilaiKomprehensif(
-                    row.original.NilaiKomprensifF1.toString()
-                  );
-                  setNilaiKomprehensif2(
-                    row.original.NilaiKomprensifF2.toString()
-                  );
-                  setNilaiKomprehensif3(
-                    row.original.NilaiKomprensifF3.toString()
-                  );
+            {
+              usePathname().includes('dpkakp') && <Button
+                onClick={(e) => {
+                  setSelectedIdPeserta(row.original.IdUserUjian);
+                  setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+                  setSelectedNamaPeserta(row.original.Nama)
+                  if (row.original.NilaiKomprensifF1 != 0) {
+                    setEditing(true);
+                    setNilaiKomprehensif(
+                      row.original.NilaiKomprensifF1.toString()
+                    );
+                    setNilaiKomprehensif2(
+                      row.original.NilaiKomprensifF2.toString()
+                    );
+                    setNilaiKomprehensif3(
+                      row.original.NilaiKomprensifF3.toString()
+                    );
 
-                }
-              }}
-              variant="outline"
-              className="bg-neutral-950 hover:bg-neutral-950 text-neutral-200 rounded-md hover:text-neutral-200"
-            >
-              <TbEditCircle className="h-5 w-5 mr-1" />
-              {row.original.NilaiKomprensifF1 != 0 ? "Edit" : "Input"} Nilai
-              Kompre
-            </Button>
+                  }
+                }}
+                variant="outline"
+                className="bg-neutral-950 hover:bg-neutral-950 text-neutral-200 rounded-md hover:text-neutral-200"
+              >
+                <TbEditCircle className="h-5 w-5 mr-1" />
+                {row.original.NilaiKomprensifF1 != 0 ? "Edit" : "Input"} Nilai
+                Kompre
+              </Button>
+            }
+
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button
