@@ -75,6 +75,21 @@ function Exam() {
 
   const [data, setData] = React.useState<SoalBagian | null>(null);
 
+  async function handleDeleteBackupData(codeStored: string): Promise<void> {
+    if (!codeStored) {
+      console.error('kode_akses is missing!')
+      return
+    }
+
+    try {
+      const response = await axios.delete(`${backupBaseUrl}/api/backup/${codeStored}`)
+
+      console.log('✅ Backup deleted successfully:', response.data)
+      // Bisa tambah notif/toast di sini kalau perlu
+    } catch (error: any) {
+      console.error('❌ Error deleting backup:', error.response?.data || error.message)
+    }
+  }
 
   const handleGetBackUpData = async () => {
     try {
@@ -434,6 +449,7 @@ function Exam() {
         title: "Yeayyy!",
         text: `Berhasil mensubmit jawabanmu, semoga hasilnya memuaskan ya sobat!`,
       });
+      handleDeleteBackupData(codeStored!)
       handleStoreAnsweredUser(dataUserExam!.id_user_ujian, data!.Bagian)
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");

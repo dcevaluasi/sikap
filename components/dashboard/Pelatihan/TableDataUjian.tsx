@@ -1460,7 +1460,7 @@ const TableDataUjian: React.FC = () => {
                             )}
 
                           {usePathname().includes("pukakp") &&
-                            ujian!.Status === "Aktif" && ujian!.IsSelesai == "" && isTodaySameAs(ujian!.TanggalMulaiUjian) && (
+                            ujian!.Status === "Aktif" && ujian!.IsSelesai == "" && isTodayBetween(ujian!.TanggalMulaiUjian, ujian!.TanggalBerakhirUjian) && (
                               <Button
                                 onClick={(e) => {
                                   setSelectedIdUjian(ujian!.IdUjian);
