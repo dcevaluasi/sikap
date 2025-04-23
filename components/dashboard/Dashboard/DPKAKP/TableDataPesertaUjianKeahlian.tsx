@@ -907,6 +907,7 @@ const TableDataPesertaUjianKeahlian = () => {
                       {" "}
 
                       {!showKartuUjian ?
+                        !usePathname().includes('pukakp') &&
                         (showRekapitulasiNilai ? (
                           <>
 
