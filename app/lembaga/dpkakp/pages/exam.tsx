@@ -449,8 +449,9 @@ function Exam() {
         title: "Yeayyy!",
         text: `Berhasil mensubmit jawabanmu, semoga hasilnya memuaskan ya sobat!`,
       });
-      handleDeleteBackupData(codeStored!)
+
       handleStoreAnsweredUser(dataUserExam!.id_user_ujian, data!.Bagian)
+      handleDeleteBackupData(codeStored!)
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
       Cookies.remove("XSRF097_CODE");
