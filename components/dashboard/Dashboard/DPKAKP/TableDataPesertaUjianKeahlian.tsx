@@ -287,7 +287,7 @@ const TableDataPesertaUjianKeahlian = () => {
         >
           <div className="flex  w-full items-center justify-center gap-1">
             {
-              usePathname().includes('dpkakp') && <Button
+              usePathname().includes('dpkakp') && !isPenguji && <Button
                 onClick={(e) => {
                   setSelectedIdPeserta(row.original.IdUserUjian);
                   setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
@@ -931,36 +931,36 @@ const TableDataPesertaUjianKeahlian = () => {
 
                 {pathname.includes("dpkakp") && !isPenguji && (
                   <>
-                    (showRekapitulasiNilai ? (
-                    <>
+                    {showRekapitulasiNilai ? (
+                      <>
 
-                      <div
-                        onClick={() => handleDownloadRekapitulasiNilai()}
-                        className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                      >
-                        <BiEditAlt />
-                        Download Rekapitulasi
-                      </div>
-                      <div
-                        onClick={() =>
-                          exportToExcelFinalScoring({ dataUjian, data })
-                        }
-                        className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                      >
-                        <PiMicrosoftExcelLogoFill />
-                        Export Excel Hasil Rekap{" "}
-                      </div></>
+                        <div
+                          onClick={() => handleDownloadRekapitulasiNilai()}
+                          className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                        >
+                          <BiEditAlt />
+                          Download Rekapitulasi
+                        </div>
+                        <div
+                          onClick={() =>
+                            exportToExcelFinalScoring({ dataUjian, data })
+                          }
+                          className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                        >
+                          <PiMicrosoftExcelLogoFill />
+                          Export Excel Hasil Rekap{" "}
+                        </div></>
                     ) : (
-                    <>
+                      <>
 
-                      <div
-                        onClick={() => setShowRekapitulasiNilai(true)}
-                        className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                      >
-                        <BiEditAlt />
-                        Rekapitulasi Nilai Ujian
-                      </div></>
-                    ))
+                        <div
+                          onClick={() => setShowRekapitulasiNilai(true)}
+                          className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                        >
+                          <BiEditAlt />
+                          Rekapitulasi Nilai Ujian
+                        </div></>
+                    )}
                     <div
                       onClick={() => setHandleOpenFormSematkan(true)}
                       className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer"
