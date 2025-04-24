@@ -2022,12 +2022,12 @@ const TableDataPesertaUjianKeahlian = () => {
                                       }`}
                                   >
                                     <span>
-                                      {(
+                                      {((
                                         (pesertaUjian?.NilaiKomprensifF1 +
                                           pesertaUjian?.NilaiKomprensifF2 +
                                           pesertaUjian?.NilaiKomprensifF3) /
                                         3
-                                      ).toFixed(2) || 0}
+                                      ).toFixed(2)) || 0}
                                     </span>
                                   </div>
                                   <div
@@ -2092,22 +2092,22 @@ const TableDataPesertaUjianKeahlian = () => {
                                         "Rewarding"
                                       ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                         ? (
-                                          (((pesertaUjian?.NilaiF1B1 || 0) +
+                                          roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
                                             (pesertaUjian?.NilaiF2B1 || 0) +
                                             (pesertaUjian?.NilaiF3B1 || 0)) /
                                             3) *
-                                          THEORY_WEIGHT +
-                                          ((pesertaUjian?.NilaiKomprensifF1 +
-                                            pesertaUjian?.NilaiKomprensifF2 +
-                                            pesertaUjian?.NilaiKomprensifF3) /
-                                            3) *
-                                          PRACTICE_WEIGHT
-                                        ).toFixed(2)
+                                            THEORY_WEIGHT +
+                                            ((pesertaUjian?.NilaiKomprensifF1 +
+                                              pesertaUjian?.NilaiKomprensifF2 +
+                                              pesertaUjian?.NilaiKomprensifF3) /
+                                              3) *
+                                            PRACTICE_WEIGHT
+                                          )).toFixed(2)
                                         : dataUjian[0]!.TypeUjian ==
                                           "ANKAPIN II" ||
                                           dataUjian[0].TypeUjian == "ATKAPIN II"
                                           ? (
-                                            ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                            roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF1B2 || 0)) /
                                               2 +
                                               (pesertaUjian?.NilaiF2B1 || 0) +
@@ -2116,15 +2116,15 @@ const TableDataPesertaUjianKeahlian = () => {
                                                   0)) /
                                               2) /
                                               3) *
-                                            THEORY_WEIGHT +
-                                            ((pesertaUjian?.NilaiKomprensifF1 +
-                                              pesertaUjian?.NilaiKomprensifF2 +
-                                              pesertaUjian?.NilaiKomprensifF3) /
-                                              3) *
-                                            PRACTICE_WEIGHT
-                                          ).toFixed(2)
+                                              THEORY_WEIGHT +
+                                              ((pesertaUjian?.NilaiKomprensifF1 +
+                                                pesertaUjian?.NilaiKomprensifF2 +
+                                                pesertaUjian?.NilaiKomprensifF3) /
+                                                3) *
+                                              PRACTICE_WEIGHT
+                                            )).toFixed(2)
                                           : (
-                                            ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                            roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF1B2 || 0) +
                                               (pesertaUjian?.NilaiF1B3 || 0)) /
                                               3 +
@@ -2134,12 +2134,12 @@ const TableDataPesertaUjianKeahlian = () => {
                                                   0)) /
                                               2) /
                                               3) *
-                                            THEORY_WEIGHT +
-                                            ((pesertaUjian?.NilaiKomprensifF1 +
-                                              pesertaUjian?.NilaiKomprensifF2 +
-                                              pesertaUjian?.NilaiKomprensifF3) /
-                                              3) *
-                                            PRACTICE_WEIGHT
+                                              THEORY_WEIGHT +
+                                              ((pesertaUjian?.NilaiKomprensifF1 +
+                                                pesertaUjian?.NilaiKomprensifF2 +
+                                                pesertaUjian?.NilaiKomprensifF3) /
+                                                3) *
+                                              PRACTICE_WEIGHT)
                                           ).toFixed(2)}
                                     </span>
                                   </div>
