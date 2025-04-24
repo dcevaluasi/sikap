@@ -1926,32 +1926,32 @@ const TableDataPesertaUjianKeahlian = () => {
                                     className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
                                       "Rewarding"
                                     ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
-                                      ? ((pesertaUjian?.NilaiF1B1 || 0) +
+                                      ? roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
                                         (pesertaUjian?.NilaiF2B1 || 0) +
                                         (pesertaUjian?.NilaiF3B1 || 0)) /
-                                        3 <
+                                        3) <
                                         EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-green-500"
                                       : dataUjian[0]!.TypeUjian ==
                                         "ANKAPIN II" ||
                                         dataUjian[0].TypeUjian == "ATKAPIN II"
-                                        ? ((pesertaUjian?.NilaiF1B1 || 0) +
+                                        ? roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
                                           (pesertaUjian?.NilaiF1B2 || 0) +
                                           (pesertaUjian?.NilaiF2B1 || 0) +
                                           (pesertaUjian?.NilaiF3B1 || 0) +
                                           (pesertaUjian?.NilaiF3B2 || 0)) /
-                                          5 <
+                                          5) <
                                           EXAM_THRESHOLD
                                           ? "text-rose-500"
                                           : "text-green-500"
-                                        : ((pesertaUjian?.NilaiF1B1 || 0) +
+                                        : roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
                                           (pesertaUjian?.NilaiF1B2 || 0) +
                                           (pesertaUjian?.NilaiF1B3 || 0) +
                                           (pesertaUjian?.NilaiF2B1 || 0) +
                                           (pesertaUjian?.NilaiF3B1 || 0) +
                                           (pesertaUjian?.NilaiF3B2 || 0)) /
-                                          6 <
+                                          6) <
                                           EXAM_THRESHOLD
                                           ? "text-rose-500"
                                           : "text-green-500"
@@ -1962,16 +1962,16 @@ const TableDataPesertaUjianKeahlian = () => {
                                         "Rewarding"
                                       ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                         ? (
-                                          ((pesertaUjian?.NilaiF1B1 || 0) +
+                                          roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
                                             (pesertaUjian?.NilaiF2B1 || 0) +
                                             (pesertaUjian?.NilaiF3B1 || 0)) /
-                                          3
+                                            3)
                                         ).toFixed(2)
                                         : dataUjian[0]!.TypeUjian ==
                                           "ANKAPIN II" ||
                                           dataUjian[0].TypeUjian == "ATKAPIN II"
                                           ? (
-                                            (((pesertaUjian?.NilaiF1B1 || 0) +
+                                            roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF1B2 || 0)) /
                                               2 +
                                               (pesertaUjian?.NilaiF2B1 || 0) +
@@ -1979,10 +1979,10 @@ const TableDataPesertaUjianKeahlian = () => {
                                                 (pesertaUjian?.NilaiF3B2 ||
                                                   0)) /
                                               2) /
-                                            3
+                                              3)
                                           ).toFixed(2)
                                           : (
-                                            (((pesertaUjian?.NilaiF1B1 || 0) +
+                                            roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF1B2 || 0) +
                                               (pesertaUjian?.NilaiF1B3 || 0)) /
                                               3 +
@@ -1991,7 +1991,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                                 (pesertaUjian?.NilaiF3B2 ||
                                                   0)) /
                                               2) /
-                                            3
+                                              3)
                                           ).toFixed(2)}
                                     </span>
                                   </div>
@@ -2034,7 +2034,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
                                       "Rewarding"
                                     ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
-                                      ? (((pesertaUjian?.NilaiF1B1 || 0) +
+                                      ? roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
                                         (pesertaUjian?.NilaiF2B1 || 0) +
                                         (pesertaUjian?.NilaiF3B1 || 0)) /
                                         3) *
@@ -2043,14 +2043,14 @@ const TableDataPesertaUjianKeahlian = () => {
                                           pesertaUjian?.NilaiKomprensifF2 +
                                           pesertaUjian?.NilaiKomprensifF3) /
                                           3) *
-                                        PRACTICE_WEIGHT <
+                                        PRACTICE_WEIGHT) <
                                         EXAM_THRESHOLD
                                         ? "text-rose-500"
                                         : "text-green-500"
                                       : dataUjian[0]!.TypeUjian ==
                                         "ANKAPIN II" ||
                                         dataUjian[0].TypeUjian == "ATKAPIN II"
-                                        ? ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                        ? roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
                                           (pesertaUjian?.NilaiF1B2 || 0)) /
                                           2 +
                                           (pesertaUjian?.NilaiF2B1 || 0) +
@@ -2063,11 +2063,11 @@ const TableDataPesertaUjianKeahlian = () => {
                                             pesertaUjian?.NilaiKomprensifF2 +
                                             pesertaUjian?.NilaiKomprensifF3) /
                                             3) *
-                                          PRACTICE_WEIGHT <
+                                          PRACTICE_WEIGHT) <
                                           EXAM_THRESHOLD
                                           ? "text-rose-500"
                                           : "text-green-500"
-                                        : ((((pesertaUjian?.NilaiF1B1 || 0) +
+                                        : roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
                                           (pesertaUjian?.NilaiF1B2 || 0) +
                                           (pesertaUjian?.NilaiF1B3 || 0)) /
                                           3 +
@@ -2081,7 +2081,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                             pesertaUjian?.NilaiKomprensifF2 +
                                             pesertaUjian?.NilaiKomprensifF3) /
                                             3) *
-                                          PRACTICE_WEIGHT <
+                                          PRACTICE_WEIGHT) <
                                           EXAM_THRESHOLD
                                           ? "text-rose-500"
                                           : "text-green-500"
