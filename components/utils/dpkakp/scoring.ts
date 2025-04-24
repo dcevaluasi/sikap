@@ -16,7 +16,7 @@ export function checkLulus(userUjian: UsersUjian, ujian: Ujian): string {
 
   if (ujian.TypeUjian.includes('Rewarding')) {
     finalScore = roundUpScore(
-      ((((userUjian.NilaiF1B1 || 0) +
+      (((userUjian.NilaiF1B1 || 0) +
         (userUjian.NilaiF2B1 || 0) +
         (userUjian.NilaiF3B1 || 0)) /
         3) *
@@ -25,15 +25,14 @@ export function checkLulus(userUjian: UsersUjian, ujian: Ujian): string {
           userUjian.NilaiKomprensifF2 +
           userUjian.NilaiKomprensifF3) /
           3) *
-          PRACTICE_WEIGHT) /
-        2,
+          PRACTICE_WEIGHT,
     )
   } else if (
     ujian.TypeUjian === 'ANKAPIN II' ||
     ujian.TypeUjian === 'ATKAPIN II'
   ) {
     finalScore = roundUpScore(
-      (((((userUjian.NilaiF1B1 || 0) + (userUjian.NilaiF1B2 || 0)) / 2 +
+      ((((userUjian.NilaiF1B1 || 0) + (userUjian.NilaiF1B2 || 0)) / 2 +
         (userUjian.NilaiF2B1 || 0) +
         ((userUjian.NilaiF3B1 || 0) + (userUjian.NilaiF3B2 || 0)) / 2) /
         3) *
@@ -42,12 +41,11 @@ export function checkLulus(userUjian: UsersUjian, ujian: Ujian): string {
           userUjian.NilaiKomprensifF2 +
           userUjian.NilaiKomprensifF3) /
           3) *
-          PRACTICE_WEIGHT) /
-        2,
+          PRACTICE_WEIGHT,
     )
   } else {
     finalScore = roundUpScore(
-      (((((userUjian.NilaiF1B1 || 0) +
+      ((((userUjian.NilaiF1B1 || 0) +
         (userUjian.NilaiF1B2 || 0) +
         (userUjian.NilaiF1B3 || 0)) /
         3 +
@@ -59,8 +57,7 @@ export function checkLulus(userUjian: UsersUjian, ujian: Ujian): string {
           userUjian.NilaiKomprensifF2 +
           userUjian.NilaiKomprensifF3) /
           3) *
-          PRACTICE_WEIGHT) /
-        2,
+          PRACTICE_WEIGHT,
     )
   }
 
