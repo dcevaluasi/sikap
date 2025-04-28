@@ -397,9 +397,9 @@ const TableDataPesertaUjianKeahlian = () => {
                             className="border text-center border-gray-200"
                           >
                             <div className="flex flex-col items-center space-x-2">
-                              <Label htmlFor="airplane-mode">{codeAccess.KodeAkses}</Label>
-                              <Switch id="airplane-mode" />
 
+                              <Switch id="airplane-mode" />
+                              <Label htmlFor="airplane-mode">{codeAccess.KodeAkses}</Label>
                             </div>
                           </td>
                         )
