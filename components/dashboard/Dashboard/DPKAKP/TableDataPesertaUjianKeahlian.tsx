@@ -4,6 +4,7 @@ import * as XLSX from "xlsx";
 import "jspdf-autotable";
 import { useReactToPrint } from "react-to-print";
 
+import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import {
   Sheet,
@@ -274,7 +275,7 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className={`w-full text-gray-900 font-semibold`}
+          className={`w-full text-gray-900 font-semibold ${usePathname().includes('dpkakp') && !isPenguji ? 'flex' : 'hidden'}`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Actions
@@ -283,7 +284,7 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
       cell: ({ row }) => (
         <div
-          className={`w-full flex  flex-col gap-2`}
+          className={`w-full ${usePathname().includes('dpkakp') && !isPenguji ? 'flex' : 'hidden'}  flex-col gap-2`}
         >
           <div className="flex  w-full items-center justify-center gap-1">
             {
@@ -395,19 +396,14 @@ const TableDataPesertaUjianKeahlian = () => {
                             key={index}
                             className="border text-center border-gray-200"
                           >
-                            {codeAccess.KodeAkses}
+                            <div className="flex items-center space-x-2">
+                              <Switch id="airplane-mode" />
+                              <Label htmlFor="airplane-mode">{codeAccess.KodeAkses}</Label>
+                            </div>
                           </td>
                         )
                       )}
-                      {/* {Array.from({
-                        length: 6 - row.original.CodeAksesUsersBagian.length,
-                      }).map((_, index) => (
-                        <td
-                          key={`empty-${index}`}
-                          className="border text-center border-gray-200"
-                        >
-                        </td>
-                      ))} */}
+
                     </tr>
                   </tbody>
                 </table>
