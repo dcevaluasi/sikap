@@ -353,7 +353,7 @@ const TableDataPesertaUjianKeahlian = () => {
                   <PiKeyFill className="h-4 w-4 text-lg " /> Kode Akses
                 </Button>
               </AlertDialogTrigger>
-              <AlertDialogContent>
+              <AlertDialogContent className='max-w-xl'>
                 <AlertDialogHeader>
                   <AlertDialogTitle>
                     Daftar Kode Akses Ujian Keahlian
