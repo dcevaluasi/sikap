@@ -696,11 +696,9 @@ const TableDataUjian: React.FC = () => {
     }
 
     const pathname = usePathname();
-    const shouldExcludeTryOut =
-      !pathname.includes("pukakp") &&
-      ujian.NamaUjian.toLowerCase().includes("tryout");
 
-    return matchesSearchQuery && matchesStatus && !shouldExcludeTryOut;
+
+    return matchesSearchQuery && matchesStatus;
   });
 
 
