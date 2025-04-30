@@ -116,7 +116,7 @@ import { DewanPenguji } from "@/types/dewanPenguji";
 import { TypeUjian, Ujian } from "@/types/ujian-keahlian-akp";
 import { BiPaperPlane, BiSolidLockAlt } from "react-icons/bi";
 import { IoReload } from "react-icons/io5";
-import { formatIndonesianDate, isTodayBefore, isTodayBetween, isTodaySameAs } from "@/lib/utils";
+import { formatIndonesianDate, isTodayAfter, isTodayBefore, isTodayBetween, isTodaySameAs } from "@/lib/utils";
 import EmptyData from "@/components/micro-components/EmptyData";
 import { HashLoader } from "react-spinners";
 
@@ -1473,7 +1473,7 @@ const TableDataUjian: React.FC = () => {
                             )}
 
                           {usePathname().includes("pukakp") &&
-                            ujian!.IsSelesai === "" && isTodaySameAs(ujian!.TanggalBerakhirUjian) && (
+                            ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
                               <Button
                                 onClick={(e) => {
                                   setSelectedIdUjian(ujian!.IdUjian);

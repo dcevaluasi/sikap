@@ -179,6 +179,16 @@ export const isTodayBefore = (dateString: string): boolean => {
   return today < inputDate;
 }
 
+export const isTodayAfter = (dateString: string): boolean => {
+  const today = new Date();
+  const inputDate = new Date(dateString);
+
+  today.setHours(0, 0, 0, 0);
+  inputDate.setHours(0, 0, 0, 0);
+
+  return today >= inputDate;
+}
+
 export const isTodayBetween = (startDateString: string, endDateString: string): boolean => {
   const today = new Date();
   const startDate = new Date(startDateString);
