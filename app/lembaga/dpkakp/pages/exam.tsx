@@ -444,6 +444,7 @@ function Exam() {
         }
       );
       console.log("Response:", response.data);
+      console.log({ selectedAnswers })
       Toast.fire({
         icon: "success",
         title: "Yeayyy!",

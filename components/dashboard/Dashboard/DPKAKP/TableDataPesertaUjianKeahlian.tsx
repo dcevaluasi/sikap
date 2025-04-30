@@ -1658,13 +1658,13 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <span className="">Nilai Kumulatif</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">Kompre F1</span>
+                                <span className="">K.F1</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">Kompre F2</span>
+                                <span className="">K.F2</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">Kompre F3</span>
+                                <span className="">K.F3</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
                                 <span className="">Nilai Kumulatif Kompre</span>
@@ -1673,7 +1673,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <span className="">Nilai Final</span>
                               </div>
                               <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">LULUS/TDK LULUS</span>
+                                <span className="">HASIL</span>
                               </div>
                             </div>
 
@@ -1689,7 +1689,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                       {pesertaUjian?.NomorUjian || "-"}
                                     </span>
                                   </div>
-                                  <div className="flex items-center flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400 justify-center text-left py-7 capitalize leading-none">
+                                  <div className="flex items-center justify-start text-left flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400  py-7 capitalize leading-none">
                                     <span>{shortenName(pesertaUjian?.Nama) || "-"}</span>
                                   </div>
                                   {dataUjian[0]!.TypeUjian.includes(
