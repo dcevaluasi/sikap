@@ -141,6 +141,7 @@ export type CodeAksesUsersBagian = {
   IdBagian: number
   NamaBagian: string
   KodeAkses: string
+  IsUse: string
   CreteAt: string
   UpdateAt: string
 }

@@ -192,6 +192,38 @@ const TableDataPesertaUjianKeahlian = () => {
     html2pdf().from(element).set(opt).save();
   };
 
+  const handleSwitchCodeAccessIsUse = async (kodeAkses: string, isUseCode: string) => {
+    const isUse = isUseCode == 'true' ? 'false' : 'true'
+    try {
+      const response: AxiosResponse = await axios.put(
+        `${dpkakpBaseUrl}/updateIsUse?kode_akses=${kodeAkses}`, {
+        is_use: isUse,
+      },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+      console.log({ kodeAkses })
+      console.log({ isUse })
+      Toast.fire({
+        icon: "success",
+        title: 'Yeayyy!',
+        text: `Selamat anda berhasil mengupdate status kode!`,
+      });
+      console.log(response); handleFetchingUjianKeahlianData()
+      setDataPukakp(response.data.data);
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: 'Oopsss!',
+        text: `Maaf anda gagal mengupdate status kode!`,
+      });
+      throw error;
+    }
+  }
 
 
   /**
@@ -230,6 +262,8 @@ const TableDataPesertaUjianKeahlian = () => {
       throw error;
     }
   };
+
+  console.log({ data })
 
   const [isOpenFormUjianKeahlian, setIsOpenFormUjianKeahlian] =
     React.useState<boolean>(false);
@@ -398,7 +432,7 @@ const TableDataPesertaUjianKeahlian = () => {
                           >
                             <div className="flex gap-1 justify-center items-center">
 
-                              <Switch id="airplane-mode" />
+                              <Switch id="airplane-mode" checked={codeAccess.IsUse == 'true' ? true : false} onCheckedChange={() => handleSwitchCodeAccessIsUse(codeAccess.KodeAkses, codeAccess.IsUse)} />
                               <Label htmlFor="airplane-mode">{codeAccess.KodeAkses}</Label>
                             </div>
                           </td>
