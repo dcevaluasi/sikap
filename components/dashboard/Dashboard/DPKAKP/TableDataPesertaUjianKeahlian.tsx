@@ -430,7 +430,7 @@ const TableDataPesertaUjianKeahlian = () => {
                             key={index}
                             className="border text-center border-gray-200"
                           >
-                            <div className="flex gap-1 justify-center items-center">
+                            <div className="flex gap-5 justify-center flex-col items-center">
 
                               <Switch id="airplane-mode" checked={codeAccess.IsUse == 'true' ? true : false} onCheckedChange={() => handleSwitchCodeAccessIsUse(codeAccess.KodeAkses, codeAccess.IsUse)} />
                               <Label htmlFor="airplane-mode">{codeAccess.KodeAkses}</Label>
