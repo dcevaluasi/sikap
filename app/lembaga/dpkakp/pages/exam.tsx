@@ -627,7 +627,7 @@ function Exam() {
                 Tipe Soal : {data?.Bagian} • Jumlah Soal : {data?.jumlah} Soal •
                 Waktu Pelaksanaan : {data?.waktu!} Menit
               </SheetDescription>
-              <Timer countdownMinutes={data?.waktu!} />
+              <Timer countdownMinutes={data?.waktu!} handleSubmit={handleSubmit} />
             </SheetHeader>
             {
               selectedAnswers.length != 0 && <section className="h-full text-white w-full py-20 z-0 block -mt-14 pb-10 ml-2">
@@ -720,7 +720,7 @@ function Exam() {
             <section className="w-full  container flex items-center justify-center text-white relative z-50 h-full">
               <div className="flex flex-col md:flex-row w-full h-fit mx-auto items-center justify-between gap-10">
                 <div className="block md:hidden">
-                  <Timer countdownMinutes={data?.waktu!} />
+                  <Timer countdownMinutes={data?.waktu!} handleSubmit={handleSubmit} />
                 </div>
                 <div className="rounded-md h-full  px-6 py-3 flex-1 -mt-8 md:mt-0">
                   <h2 className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 text-2xl">
@@ -904,7 +904,7 @@ function Exam() {
                     Waktu Pelaksanaan : {data?.waktu!} Menit
                   </span>
                 </h1>
-                <Timer countdownMinutes={data?.waktu!} />
+                <Timer countdownMinutes={data?.waktu!} handleSubmit={handleSubmit} />
               </div>
               <div className="grid grid-cols-6 grid-rows-6 space-x-0 space-y-0 gap-2">
                 {data?.Soal!.map((soal, index) => (
@@ -965,9 +965,10 @@ interface CountDownTime {
 
 interface TimerProps {
   countdownMinutes: number; // Custom countdown in minutes
+  handleSubmit: any
 }
 
-const Timer: React.FC<TimerProps> = ({ countdownMinutes }) => {
+const Timer: React.FC<TimerProps> = ({ countdownMinutes, handleSubmit }) => {
   const [countDownTime, setCountDownTime] = React.useState<CountDownTime>({
     days: "00",
     hours: "00",
@@ -988,6 +989,7 @@ const Timer: React.FC<TimerProps> = ({ countdownMinutes }) => {
         minutes: "00",
         seconds: "00",
       });
+      handleSubmit()
       localStorage.removeItem("countDownDate");
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
