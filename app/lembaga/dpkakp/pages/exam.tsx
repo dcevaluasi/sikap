@@ -472,6 +472,48 @@ function Exam() {
     }
   };
 
+  const handleSubmitRunOut = async () => {
+
+
+    try {
+      const response = await axios.post(
+        `${dpkakpBaseUrl}/SumbitExam`,
+        selectedAnswers,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF096")}`,
+          },
+        }
+      );
+      console.log("Response:", response.data);
+      console.log({ selectedAnswers })
+      Toast.fire({
+        icon: "success",
+        title: "Yeayyy!",
+        text: `Berhasil mensubmit jawabanmu, semoga hasilnya memuaskan ya sobat!`,
+      });
+
+      handleStoreAnsweredUser(dataUserExam!.id_user_ujian, data!.Bagian)
+      handleDeleteBackupData(codeStored!)
+      Cookies.remove("XSRF096");
+      Cookies.remove("XSRF097");
+      Cookies.remove("XSRF097_CODE");
+      localStorage.removeItem("selectedIdSoal");
+      localStorage.removeItem("answer");
+      localStorage.removeItem("answers");
+      localStorage.removeItem("countDownDate");
+
+      router.replace("/lembaga/dpkakp/user/auth");
+    } catch (error) {
+      console.error("Error submitting exam:", error);
+      Toast.fire({
+        icon: "error",
+        title: "Oopsss!",
+        text: "Terjadi kesalahan saat submit, coba lagi nanti!",
+      });
+    }
+  };
+
   const handleNextClick = () => {
     if (selectedIdSoal != 59) {
       setSelectedIdSoal(selectedIdSoal + 1);
@@ -627,7 +669,7 @@ function Exam() {
                 Tipe Soal : {data?.Bagian} • Jumlah Soal : {data?.jumlah} Soal •
                 Waktu Pelaksanaan : {data?.waktu!} Menit
               </SheetDescription>
-              <Timer countdownMinutes={data?.waktu!} handleSubmit={handleSubmit} />
+              <Timer countdownMinutes={data?.waktu!} handleSubmit={handleSubmitRunOut} />
             </SheetHeader>
             {
               selectedAnswers.length != 0 && <section className="h-full text-white w-full py-20 z-0 block -mt-14 pb-10 ml-2">
@@ -720,7 +762,7 @@ function Exam() {
             <section className="w-full  container flex items-center justify-center text-white relative z-50 h-full">
               <div className="flex flex-col md:flex-row w-full h-fit mx-auto items-center justify-between gap-10">
                 <div className="block md:hidden">
-                  <Timer countdownMinutes={data?.waktu!} handleSubmit={handleSubmit} />
+                  <Timer countdownMinutes={data?.waktu!} handleSubmit={handleSubmitRunOut} />
                 </div>
                 <div className="rounded-md h-full  px-6 py-3 flex-1 -mt-8 md:mt-0">
                   <h2 className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400 text-2xl">
@@ -904,7 +946,7 @@ function Exam() {
                     Waktu Pelaksanaan : {data?.waktu!} Menit
                   </span>
                 </h1>
-                <Timer countdownMinutes={data?.waktu!} handleSubmit={handleSubmit} />
+                <Timer countdownMinutes={data?.waktu!} handleSubmit={handleSubmitRunOut} />
               </div>
               <div className="grid grid-cols-6 grid-rows-6 space-x-0 space-y-0 gap-2">
                 {data?.Soal!.map((soal, index) => (
