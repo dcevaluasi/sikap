@@ -2308,19 +2308,16 @@ function EventBadge({ ujian }: { ujian: Ujian }) {
 function ExamSchedule({ data, ujian }: { data: Ujian[]; ujian: Ujian }) {
   if (data.length === 0) return null;
 
-  const isRewarding = data[0]?.TypeUjian.includes("Rewarding") || data[0]?.TypeUjian.includes('TRYOUT');
-  const isLevelII =
-    data[0]?.TypeUjian == "ANKAPIN II" || data[0]?.TypeUjian == "ATKAPIN II";
 
   let scheduleItems;
 
-  if (isRewarding) {
+  if (data[0]?.TypeUjian.includes("Rewarding") || data[0]?.TypeUjian.includes('TRYOUT')) {
     scheduleItems = [
       { label: "F1", time: ujian?.WaktuF1 },
       { label: "F2", time: ujian?.WaktuF2 },
       { label: "F3", time: ujian?.WaktuF3 },
     ];
-  } else if (isLevelII) {
+  } else if (data[0]?.TypeUjian == "ANKAPIN II" || data[0]?.TypeUjian == "ATKAPIN II") {
     scheduleItems = [
       { label: "F1B1", time: ujian?.WaktuF1B1 },
       { label: "F1B2", time: ujian?.WaktuF1B2 },
