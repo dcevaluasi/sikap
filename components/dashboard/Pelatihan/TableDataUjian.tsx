@@ -2312,28 +2312,33 @@ function ExamSchedule({ data, ujian }: { data: Ujian[]; ujian: Ujian }) {
   const isLevelII =
     data[0]?.TypeUjian == "ANKAPIN II" || data[0]?.TypeUjian == "ATKAPIN II";
 
-  const scheduleItems = isRewarding
-    ? [
+  let scheduleItems;
+
+  if (isRewarding) {
+    scheduleItems = [
       { label: "F1", time: ujian?.WaktuF1 },
       { label: "F2", time: ujian?.WaktuF2 },
       { label: "F3", time: ujian?.WaktuF3 },
-    ]
-    : isLevelII
-      ? [
-        { label: "F1B1", time: ujian?.WaktuF1B1 },
-        { label: "F1B2", time: ujian?.WaktuF1B2 },
-        { label: "F2", time: ujian?.WaktuF2B1 },
-        { label: "F3B1", time: ujian?.WaktuF3B1 },
-        { label: "F3B2", time: ujian?.WaktuF3B2 },
-      ]
-      : [
-        { label: "F1B1", time: ujian?.WaktuF1B1 },
-        { label: "F1B2", time: ujian?.WaktuF1B2 },
-        { label: "F1B3", time: ujian?.WaktuF1B3 },
-        { label: "F2", time: ujian?.WaktuF2B1 },
-        { label: "F3B1", time: ujian?.WaktuF3B1 },
-        { label: "F3B2", time: ujian?.WaktuF3B2 },
-      ];
+    ];
+  } else if (isLevelII) {
+    scheduleItems = [
+      { label: "F1B1", time: ujian?.WaktuF1B1 },
+      { label: "F1B2", time: ujian?.WaktuF1B2 },
+      { label: "F2", time: ujian?.WaktuF2B1 },
+      { label: "F3B1", time: ujian?.WaktuF3B1 },
+      { label: "F3B2", time: ujian?.WaktuF3B2 },
+    ];
+  } else {
+    scheduleItems = [
+      { label: "F1B1", time: ujian?.WaktuF1B1 },
+      { label: "F1B2", time: ujian?.WaktuF1B2 },
+      { label: "F1B3", time: ujian?.WaktuF1B3 },
+      { label: "F2", time: ujian?.WaktuF2B1 },
+      { label: "F3B1", time: ujian?.WaktuF3B1 },
+      { label: "F3B2", time: ujian?.WaktuF3B2 },
+    ];
+  }
+
 
   return (
     <div className="w-full text-sm grid grid-cols-3 gap-4">
