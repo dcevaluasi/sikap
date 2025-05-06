@@ -1266,19 +1266,19 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <div className="overflow-auto">
                                   <div className="flex flex-shrink-0">
                                     <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>
+                                      <span className="text-2xl">
                                         {peserta!.CodeAksesUsersBagian[0]!
                                           .KodeAkses || ""}
                                       </span>
                                     </div>
                                     <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>
+                                      <span className="text-2xl">
                                         {peserta!.CodeAksesUsersBagian[1]!
                                           .KodeAkses || ""}
                                       </span>
                                     </div>
                                     <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>
+                                      <span className="text-2xl">
                                         {peserta!.CodeAksesUsersBagian[2]!
                                           .KodeAkses || ""}
                                       </span>
