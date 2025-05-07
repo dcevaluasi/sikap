@@ -1736,7 +1736,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           ? "text-rose-500"
                                           : "text-black"
                                           } ${(pesertaUjian?.NilaiF1B1 == 0)
-                                          && 'bg-rose-500 text-black font-semibold'
+                                          && 'bg-rose-500 !text-black font-semibold'
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
@@ -1753,7 +1753,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           ? "text-rose-500"
                                           : "text-black"
                                           } ${(pesertaUjian?.NilaiF2B1 == 0)
-                                          && 'bg-rose-500 text-black font-semibold'
+                                          && 'bg-rose-500 !text-black font-semibold'
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
@@ -1770,7 +1770,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           ? "text-rose-500"
                                           : "text-black"
                                           } ${(pesertaUjian?.NilaiF3B1 == 0)
-                                          && 'bg-rose-500 text-black font-semibold'
+                                          && 'bg-rose-500 !text-black font-semibold'
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
@@ -1790,7 +1790,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           ? "text-rose-500"
                                           : "text-black"
                                           } ${(pesertaUjian?.NilaiF1B1 == 0)
-                                          && 'bg-rose-500 text-black font-semibold'
+                                          && 'bg-rose-500 !text-black font-semibold'
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
@@ -1809,7 +1809,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           ? "text-rose-500"
                                           : "text-black"
                                           } ${(pesertaUjian?.NilaiF1B2 == 0)
-                                          && 'bg-rose-500 text-black font-semibold'
+                                          && 'bg-rose-500 !text-black font-semibold'
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
@@ -1832,7 +1832,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                             ? "text-rose-500"
                                             : "text-black"
                                           } ${(pesertaUjian?.NilaiF1B3 == 0)
-                                          && 'bg-rose-500 text-black font-semibold'
+                                          && 'bg-rose-500 !text-black font-semibold'
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
@@ -1907,7 +1907,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           ? "text-rose-500"
                                           : "text-green-500"
                                           } ${(pesertaUjian?.NilaiF2B1 == 0)
-                                          && 'bg-rose-500 text-black font-semibold'
+                                          && 'bg-rose-500 !text-black font-semibold'
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
@@ -1924,7 +1924,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           ? "text-rose-500"
                                           : "text-black"
                                           } ${(pesertaUjian?.NilaiF3B1 == 0)
-                                          && 'bg-rose-500 text-black font-semibold'
+                                          && 'bg-rose-500 !text-black font-semibold'
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
@@ -1941,7 +1941,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                           ? "text-rose-500"
                                           : "text-black"
                                           } ${(pesertaUjian?.NilaiF3B2 == 0)
-                                          && 'bg-rose-500 text-black font-semibold'
+                                          && 'bg-rose-500 !text-black font-semibold'
                                           }`}
                                         onClick={() => {
                                           setIsShowHistoryUserAnswers(true)
