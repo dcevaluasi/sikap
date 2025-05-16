@@ -2345,7 +2345,7 @@ function ExamSchedule({ data, ujian }: { data: Ujian[]; ujian: Ujian }) {
             <span className="font-bold block border-b border-b-gray-200 py-1 mb-1">
               {label}
             </span>
-            {time != "" ? formatIndonesianDate(time) : "-"}
+            {time != "" ? time : "-"}
           </div>
         </React.Fragment>
       ))}
