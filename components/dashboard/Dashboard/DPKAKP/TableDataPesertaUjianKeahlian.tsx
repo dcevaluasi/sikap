@@ -383,7 +383,7 @@ const TableDataPesertaUjianKeahlian = () => {
               <AlertDialogTrigger asChild>
                 <Button
                   variant="outline"
-                  className={`bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full ${pathname.includes('dpkakp') ? 'flex' : 'hidden'}`}
+                  className={`bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full ${pathname.includes('dpkakp') || Cookies.get('PUKAKP') == 'PUKAKP III (Politeknik KP Dumai) - Pelaksan Ujian Keahlian Awak Kapal Perikanan' || Cookies.get('PUKAKP') == 'PUKAKP VII (BPPP Banyuwangi) - Pelaksan Ujian Keahlian Awak Kapal Perikanan' || Cookies.get('PUKAKP') == 'PUKAKP XII (Poltiteknik KP Bone) - Pelaksan Ujian Keahlian Awak Kapal Perikanan' ? 'flex' : 'hidden'}`}
                 >
                   <PiKeyFill className="h-4 w-4 text-lg " /> Kode Akses
                 </Button>
