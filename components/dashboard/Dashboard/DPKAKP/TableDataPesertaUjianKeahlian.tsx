@@ -383,7 +383,7 @@ const TableDataPesertaUjianKeahlian = () => {
               <AlertDialogTrigger asChild>
                 <Button
                   variant="outline"
-                  className="bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full"
+                  className={`bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full ${pathname.includes('dpkakp') ? 'flex' : 'hidden'}`}
                 >
                   <PiKeyFill className="h-4 w-4 text-lg " /> Kode Akses
                 </Button>
