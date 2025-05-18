@@ -309,7 +309,7 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className={`w-full text-gray-900 font-semibold ${usePathname().includes('dpkakp') && !isPenguji ? 'flex' : 'hidden'}`}
+          className={`w-full text-gray-900 font-semibold flex`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Actions
@@ -318,37 +318,37 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
       cell: ({ row }) => (
         <div
-          className={`w-full ${usePathname().includes('dpkakp') && !isPenguji ? 'flex' : 'hidden'}  flex-col gap-2`}
+          className={`w-full flex  flex-col gap-2`}
         >
           <div className="flex  w-full items-center justify-center gap-1">
-            {
-              usePathname().includes('dpkakp') && !isPenguji && <Button
-                onClick={(e) => {
-                  setSelectedIdPeserta(row.original.IdUserUjian);
-                  setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
-                  setSelectedNamaPeserta(row.original.Nama)
-                  if (row.original.NilaiKomprensifF1 != 0) {
-                    setEditing(true);
-                    setNilaiKomprehensif(
-                      row.original.NilaiKomprensifF1.toString()
-                    );
-                    setNilaiKomprehensif2(
-                      row.original.NilaiKomprensifF2.toString()
-                    );
-                    setNilaiKomprehensif3(
-                      row.original.NilaiKomprensifF3.toString()
-                    );
 
-                  }
-                }}
-                variant="outline"
-                className="bg-neutral-950 hover:bg-neutral-950 text-neutral-200 rounded-md hover:text-neutral-200"
-              >
-                <TbEditCircle className="h-5 w-5 mr-1" />
-                {row.original.NilaiKomprensifF1 != 0 ? "Edit" : "Input"} Nilai
-                Kompre
-              </Button>
-            }
+            <Button
+              onClick={(e) => {
+                setSelectedIdPeserta(row.original.IdUserUjian);
+                setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+                setSelectedNamaPeserta(row.original.Nama)
+                if (row.original.NilaiKomprensifF1 != 0) {
+                  setEditing(true);
+                  setNilaiKomprehensif(
+                    row.original.NilaiKomprensifF1.toString()
+                  );
+                  setNilaiKomprehensif2(
+                    row.original.NilaiKomprensifF2.toString()
+                  );
+                  setNilaiKomprehensif3(
+                    row.original.NilaiKomprensifF3.toString()
+                  );
+
+                }
+              }}
+              variant="outline"
+              className="bg-neutral-950 hover:bg-neutral-950 text-neutral-200 rounded-md hover:text-neutral-200"
+            >
+              <TbEditCircle className="h-5 w-5 mr-1" />
+              {row.original.NilaiKomprensifF1 != 0 ? "Edit" : "Input"} Nilai
+              Kompre
+            </Button>
+
 
             <AlertDialog>
               <AlertDialogTrigger asChild>
@@ -378,6 +378,7 @@ const TableDataPesertaUjianKeahlian = () => {
                 </AlertDialogFooter>
               </AlertDialogContent>
             </AlertDialog>
+
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <Button

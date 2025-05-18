@@ -452,7 +452,7 @@ function Exam() {
       });
 
       handleStoreAnsweredUser(dataUserExam!.id_user_ujian, data!.Bagian)
-      // handleDeleteBackupData(codeStored!)
+      handleDeleteBackupData(codeStored!)
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
       Cookies.remove("XSRF097_CODE");
@@ -494,7 +494,7 @@ function Exam() {
       });
 
       handleStoreAnsweredUser(dataUserExam!.id_user_ujian, data!.Bagian)
-      // handleDeleteBackupData(codeStored!)
+      handleDeleteBackupData(codeStored!)
       Cookies.remove("XSRF096");
       Cookies.remove("XSRF097");
       Cookies.remove("XSRF097_CODE");
