@@ -961,7 +961,7 @@ const TableDataPesertaUjianKeahlian = () => {
                   Refresh Data
                 </div>
 
-                {pathname.includes("dpkakp") && !isPenguji && (
+                {((pathname.includes("dpkakp") && !isPenguji) || (Cookies.get('PUKAKP') == 'PUKAKP III (Politeknik KP Dumai) - Pelaksan Ujian Keahlian Awak Kapal Perikanan' || Cookies.get('PUKAKP') == 'PUKAKP VII (BPPP Banyuwangi) - Pelaksan Ujian Keahlian Awak Kapal Perikanan' || Cookies.get('PUKAKP') == 'PUKAKP XII (Poltiteknik KP Bone) - Pelaksan Ujian Keahlian Awak Kapal Perikanan')) && (
                   <>
                     {showRekapitulasiNilai ? (
                       <>
