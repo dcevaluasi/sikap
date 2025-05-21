@@ -1457,7 +1457,7 @@ const TableDataUjian: React.FC = () => {
                               </Button>
                             )}
 
-                          {usePathname().includes("pukakp") &&
+                          {
                             ujian!.Status === "Aktif" && ujian!.IsSelesai == "" && isTodayBetween(ujian!.TanggalMulaiUjian, ujian!.TanggalBerakhirUjian) && (
                               <Button
                                 onClick={(e) => {
