@@ -238,7 +238,7 @@ const TableDataUjian: React.FC = () => {
       setCounterWillDo(willDoCount);
 
       const doingCount = filteredData.filter(
-        (item: any) => isTodayBetween(item.TanggalMulaiUjian, item.TanggalBerakhirUjian)
+        (item: any) => isTodayBetween(item.TanggalMulaiUjian, item.TanggalBerakhirUjian) && item.IsSelesai !== "1"
       ).length;
       setCounterDoing(doingCount);
 
@@ -689,7 +689,7 @@ const TableDataUjian: React.FC = () => {
     } else if (selectedStatusFilter == "Akan Dilaksanakan") {
       matchesStatus = isTodayBefore(ujian.TanggalMulaiUjian) && ujian.IsSelesai == "";
     } else if (selectedStatusFilter == 'Sedang Berlangsung') {
-      matchesStatus = isTodayBetween(ujian.TanggalMulaiUjian, ujian.TanggalBerakhirUjian)
+      matchesStatus = isTodayBetween(ujian.TanggalMulaiUjian, ujian.TanggalBerakhirUjian) && ujian.IsSelesai !== "1"
     } else {
       matchesStatus =
         selectedStatusFilter === "All" || ujian.Status === selectedStatusFilter;
@@ -1147,11 +1147,11 @@ const TableDataUjian: React.FC = () => {
                     className="w-full text-sm"
                   />
                 </div>
-                {filteredData.length == 0 ? (
-                  <EmptyData />
-                ) : isFetching ? <div className="mt-32 w-full flex items-center justify-center">
-                  <HashLoader color="#338CF5" size={50} />
-                </div> : (
+                {filteredData.length == 0 && isFetching ? (
+                  <div className="mt-32 w-full flex items-center justify-center">
+                    <HashLoader color="#338CF5" size={50} />
+                  </div>
+                ) : filteredData.length == 0 ? <EmptyData /> : (
                   filteredData.map((ujian, index) => (
                     <Card className="relative" key={index}>
                       {ujian!.Status == "Pending" && (
