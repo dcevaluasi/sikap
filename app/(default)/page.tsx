@@ -61,7 +61,7 @@ export const metadata = {
   type: "website",
   robots: "index, follow",
   og: {
-    title: "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan",
+    title: "SIKAP - Sistem Informasi Ujian Keahlian Awak Kapal Perikanan",
     description:
       "Dewan yang menyelenggarakan Ujian Keahlian Awak Kapal Perikanan untuk mendapatkan Sertifikat Keahlian Awak Kapal Perikanan sesuai dengan standar Kompetensi Nasional dan Internasional.",
     type: "website",
@@ -70,7 +70,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan",
+    title: "SIKAP - Sistem Informasi Ujian Keahlian Awak Kapal Perikanan",
     description:
       "Dewan yang menyelenggarakan Ujian Keahlian Awak Kapal Perikanan untuk mendapatkan Sertifikat Keahlian Awak Kapal Perikanan sesuai dengan standar Kompetensi Nasional dan Internasional.",
     image: "/lembaga/logo/logo-sertifikasi-akp-blue.png",
