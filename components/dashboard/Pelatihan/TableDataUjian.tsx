@@ -1170,7 +1170,7 @@ const TableDataUjian: React.FC = () => {
                       }
 
                       {
-                        isTodayBetween(ujian!.TanggalMulaiUjian, ujian.TanggalBerakhirUjian) && <Button
+                        (isTodayBetween(ujian!.TanggalMulaiUjian, ujian.TanggalBerakhirUjian) && ujian!.IsSelesai != '1') && <Button
 
                           variant="outline"
                           className="bg-teal-500 hover:bg-teal-600 hover:text-white text-white  absolute top-5 right-5 rounded-full animate-pulse duration-700"
@@ -1245,12 +1245,7 @@ const TableDataUjian: React.FC = () => {
                       </CardContent>
                       <CardFooter>
                         <div className="flex items-center justify-center gap-1 flex-wrap  -mt-2">
-                          {/* <Button
-                            variant="outline"
-                            className=" bg-gray-900 text-white hover:text-white hover:bg-gray-900"
-                          >
-                            <FaBookOpen className="h-4 w-4 mr-1" /> Info Ujian
-                          </Button> */}
+
                           {ujian!.Status == "Aktif" && (
                             <Link
                               href={`/lembaga/${usePathname().includes("pukakp")

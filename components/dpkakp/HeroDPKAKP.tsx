@@ -12,10 +12,10 @@ import { HiOutlinePlay } from "react-icons/hi2";
 export default function HeroDPKAKP() {
   const [imageIndex, setImageIndex] = React.useState(0);
   const images = [
-    "/dpkakp/image4.jpg",
-    "/dpkakp/image4.jpg",
-    "/dpkakp/image4.jpg",
-    "/dpkakp/image4.jpg",
+    "/dpkakp/image2.jpg",
+    "/dpkakp/image3.jpg",
+    "/dpkakp/image2.jpg",
+    "/dpkakp/image3.jpg",
   ];
 
   React.useEffect(() => {
@@ -87,13 +87,15 @@ export default function HeroDPKAKP() {
               alt="DPKAKP Logo"
             />
             <h1
-              className="text-4xl md:text-[3.5rem] font-normal leading-tighter tracking-tighter mb-3 -mt-2 text-white font-calsans"
+              className="text-4xl md:text-[3.5rem] font-normal leading-tighter tracking-tighter -mt-2 text-white font-calsans"
             >
-              Sistem Ujian Keahlian  <br />
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                Awak Kapal Perikanan
+                SIKAP
               </span>
             </h1>
+            <h2 className="text-3xl text-white leading-none font-calsans mb-2">Sistem Informasi Ujian <br /> <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
+              Keahlian Awak Kapal Perikanan
+            </span></h2>
             <div className="max-w-3xl mx-auto">
               <p
                 className="text-sm text-gray-200 mb-8"

@@ -2,7 +2,7 @@ import React from "react";
 import LandingDPKAKP from "../lembaga/dpkakp/pages/landing";
 
 export const metadata = {
-  title: "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan",
+  title: "SIKAP - Sistem Informasi Ujian Awak Kapal Perikanan",
   description:
     "Dewan yang menyelenggarakan Ujian Keahlian Awak Kapal Perikanan untuk mendapatkan Sertifikat Keahlian Awak Kapal Perikanan sesuai dengan standar Kompetensi Nasional dan Internasional.",
   icons: ["/lembaga/logo/logo-sertifikasi-akp-blue.png"],

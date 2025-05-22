@@ -35,7 +35,7 @@ function page() {
   return (
     <main className="bg-darkDPKAKP w-full h-full md:h-screen py-20 md:py-0 relative">
       <Image
-        src={"/dpkakp/image4.jpg"}
+        src={"/dpkakp/image3.jpg"}
         className="absolute w-full h-screen z-10 object-cover duration-1000"
         alt=""
         layout="fill"
@@ -79,7 +79,7 @@ function page() {
             target="_blank"
             className="text-white w-full flex items-center justify-center bg-blue-500 rounded-xl bg-opacity-100 py-2 mt-2"
             href={
-              "https://docs.google.com/forms/d/e/1FAIpQLScgUTuZ8i5e8qkrgBdxfzX6IIj0bySUPAWOHiFodWkjU5_1HQ/viewform?usp=dialog"
+              " https://forms.gle/gnkKwhU7sn28oyDA9"
             }
           >
             Isi Survey

@@ -22,51 +22,9 @@ import { EffectCoverflow, Pagination } from "swiper/modules";
 import { Slide } from "react-awesome-reveal";
 import { PropagateLoader } from "react-spinners";
 import HeroDPKAKP from "@/components/dpkakp/HeroDPKAKP";
-import addData from "@/firebase/firestore/addData";
-import getDocument from "@/firebase/firestore/getData";
-import { DocumentData } from "firebase/firestore";
 
 export default function LandingDPKAKP() {
-  const handleForm = async () => {
-    const data = {
-      data: JSON.stringify([{
-        name: 'John snow',
-        house: 'Stark'
-      }, {
-        name: 'John snow',
-        house: 'Stark'
-      }, {
-        name: 'John snow',
-        house: 'Stark'
-      },])
-    }
-    const { result, error } = await addData('answers', 'answers-1', data)
 
-    if (error) {
-      return console.log(error)
-    }
-
-
-    return console.log(result)
-  }
-  const marketingConfig = [
-    {
-      title: "Beranda",
-      href: "/",
-    },
-    {
-      title: "Sertifikasi AKP",
-      href: "/#",
-    },
-    {
-      title: "Lemdiklat dan Bimtek AKP",
-      href: "/#",
-    },
-    {
-      title: "Komite Approval",
-      href: "/#",
-    },
-  ];
 
   const [loading, setLoading] = React.useState<boolean>(true);
 
