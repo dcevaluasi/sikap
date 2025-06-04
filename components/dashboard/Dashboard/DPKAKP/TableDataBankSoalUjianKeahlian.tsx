@@ -94,6 +94,7 @@ const TableDataBankSoalUjianKeahlian = () => {
   const [countSoalBergambar, setCountSoalBergambar] = React.useState<number>(0);
   const [countSoalDuplikasi, setCountSoalDuplikasi] = React.useState<number>(0);
   const [countReal, setCountReal] = React.useState<number>(0);
+  const [countNotClassified, setCountNotClassified] = React.useState<number>(0);
 
   const handleFetchingBagianUjian = async () => {
     setIsFetching(true);
@@ -112,6 +113,10 @@ const TableDataBankSoalUjianKeahlian = () => {
 
       const countGambarSoal = response.data!.data[0]!.SoalUjianBagian.filter(
         (soal: any) => soal.GambarSoal && soal.GambarSoal.trim() !== ""
+      ).length;
+
+      const countNotClassifiedMateri = response.data!.data[0]!.SoalUjianBagian.filter(
+        (soal: any) => soal.Materi == ''
       ).length;
 
 
@@ -142,9 +147,11 @@ const TableDataBankSoalUjianKeahlian = () => {
         (list) => list.length > 1
       ).flat();
 
+
       setCountSoalBergambar(countGambarSoal);
       setCountSoalDuplikasi(duplicateSoal.length / 2);
       setDuplicateData(duplicateSoal!);
+      setCountNotClassified(countNotClassifiedMateri)
 
       setDataBagian(response.data.data[0]!);
       setCountReal(response.data!.data[0]!.SoalUjianBagian!.length)
@@ -588,6 +595,16 @@ const TableDataBankSoalUjianKeahlian = () => {
     }, 3000);
   };
 
+  const handleShowNotClassified = () => {
+    setIsFetching(true); // Start loading state
+
+    setTimeout(() => {
+      const filteredData = data.filter(item => item.Materi === '');
+      setData(filteredData); // Set filtered data
+      setIsFetching(false); // Stop loading state
+    }, 3000);
+  };
+
 
 
 
@@ -712,6 +729,7 @@ const TableDataBankSoalUjianKeahlian = () => {
                   </li>
                   <li>
                     <button
+
                       className={`focus:outline-none p-2 rounded-r-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
                     >
                       <p className="font-semibold text-lg">
@@ -719,6 +737,19 @@ const TableDataBankSoalUjianKeahlian = () => {
                       </p>
                       <p className={`uppercase text-sm ${"text-gray-600"}`}>
                         Soal Gambar
+                      </p>
+                    </button>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => handleShowNotClassified()}
+                      className={`focus:outline-none p-2 rounded-r-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                    >
+                      <p className="font-semibold text-lg">
+                        {countNotClassified}
+                      </p>
+                      <p className={`uppercase text-sm ${"text-gray-600"}`}>
+                        Belum Diklasifikasi Materi
                       </p>
                     </button>
                   </li>
