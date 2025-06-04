@@ -597,6 +597,7 @@ const TableDataBankSoalUjianKeahlian = () => {
 
   const handleShowNotClassified = () => {
     setIsFetching(true); // Start loading state
+    handleFetchingBagianUjian()
 
     setTimeout(() => {
       const filteredData = data.filter(item => item.Materi === '');
@@ -607,6 +608,7 @@ const TableDataBankSoalUjianKeahlian = () => {
 
   const handleShowImage = () => {
     setIsFetching(true); // Start loading state
+    handleFetchingBagianUjian()
 
     setTimeout(() => {
       const filteredData = data.filter(item => item.GambarSoal !== '');
