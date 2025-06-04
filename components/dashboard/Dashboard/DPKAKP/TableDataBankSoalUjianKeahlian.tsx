@@ -921,7 +921,7 @@ const TableDataBankSoalUjianKeahlian = () => {
 
                 <div className="w-full flex justify-end gap-2">
 
-                  <AlertDialog>
+                  {/* <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
                         <FiTrash />
@@ -952,7 +952,7 @@ const TableDataBankSoalUjianKeahlian = () => {
                         </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
-                  </AlertDialog>
+                  </AlertDialog> */}
                 </div>
               </div>
               {
