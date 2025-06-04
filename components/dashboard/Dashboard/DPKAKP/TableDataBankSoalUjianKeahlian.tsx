@@ -166,11 +166,10 @@ const TableDataBankSoalUjianKeahlian = () => {
 
   const handleFetchingBagianUjianGambar = async () => {
     setIsFetching(true);
+
     try {
       const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminPusat/getBagian?id=${getIdUjianKeahlianInBankSoal(
-          pathname!
-        )}`,
+        `${dpkakpBaseUrl}/adminPusat/getBagian?id=${getIdUjianKeahlianInBankSoal(pathname!)}`,
         {
           headers: {
             Authorization: `Bearer ${Cookies.get("XSRF095")}`,
@@ -178,13 +177,16 @@ const TableDataBankSoalUjianKeahlian = () => {
         }
       );
 
+      const allData = response.data?.data ?? [];
+      const firstGroup = Array.isArray(allData) && allData.length > 0 ? allData[0] : [];
 
-      setData(response.data!.data[0]!.filter((item: SoalUjianBagian) => item.GambarSoal !== ''));
-      setIsFetching(false);
+      const filtered = firstGroup.filter((item: SoalUjianBagian) => item.GambarSoal !== '');
+
+      setData(filtered);
     } catch (error) {
-      console.error("Error posting tipe ujian:", error);
+      console.error("Error fetching bagian ujian not classified materi:", error);
+    } finally {
       setIsFetching(false);
-      throw error;
     }
   };
 
@@ -659,7 +661,6 @@ const TableDataBankSoalUjianKeahlian = () => {
     setIsFetching(true); // Start loading state
     handleFetchingBagianUjianGambar()
     setTimeout(() => {
-
       setIsFetching(false); // Stop loading state
     }, 3000);
 
