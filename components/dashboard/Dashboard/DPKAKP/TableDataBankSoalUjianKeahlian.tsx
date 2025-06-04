@@ -164,6 +164,54 @@ const TableDataBankSoalUjianKeahlian = () => {
     }
   };
 
+  const handleFetchingBagianUjianGambar = async () => {
+    setIsFetching(true);
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${dpkakpBaseUrl}/adminPusat/getBagian?id=${getIdUjianKeahlianInBankSoal(
+          pathname!
+        )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+
+
+      setData(response.data!.data[0]!.filter((item: SoalUjianBagian) => item.GambarSoal !== ''));
+      setIsFetching(false);
+    } catch (error) {
+      console.error("Error posting tipe ujian:", error);
+      setIsFetching(false);
+      throw error;
+    }
+  };
+
+  const handleFetchingBagianUjianNotClassifiedMateri = async () => {
+    setIsFetching(true);
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${dpkakpBaseUrl}/adminPusat/getBagian?id=${getIdUjianKeahlianInBankSoal(
+          pathname!
+        )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
+          },
+        }
+      );
+
+
+      setData(response.data!.data[0]!.filter((item: SoalUjianBagian) => item.Materi === ''));
+      setIsFetching(false);
+    } catch (error) {
+      console.error("Error posting tipe ujian:", error);
+      setIsFetching(false);
+      throw error;
+    }
+  };
+
   console.log({ duplicateData })
 
   console.log({ countSoalDuplikasi });
@@ -597,21 +645,24 @@ const TableDataBankSoalUjianKeahlian = () => {
 
   const handleShowNotClassified = () => {
     setIsFetching(true); // Start loading state
+    handleFetchingBagianUjianNotClassifiedMateri()
 
+    setTimeout(() => {
 
-    const filteredData = data.filter(item => item.Materi === '');
-    setData(filteredData); // Set filtered data
-    setIsFetching(false); // Stop loading state
+      setIsFetching(false); // Stop loading state
+    }, 3000);
+
 
   };
 
   const handleShowImage = () => {
     setIsFetching(true); // Start loading state
+    handleFetchingBagianUjianGambar()
+    setTimeout(() => {
 
+      setIsFetching(false); // Stop loading state
+    }, 3000);
 
-    const filteredData = data.filter(item => item.GambarSoal !== '');
-    setData(filteredData); // Set filtered data
-    setIsFetching(false); // Stop loading state
 
   };
 
