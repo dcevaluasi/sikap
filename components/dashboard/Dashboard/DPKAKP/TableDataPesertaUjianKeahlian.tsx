@@ -1640,7 +1640,10 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <span className="">Nomor Ujian</span>
                               </div>
                               <div className="flex items-center flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
-                                <span className="">Nama Peserta</span>
+                                <span className="">Nama</span>
+                              </div>
+                              <div className="flex items-center flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
+                                <span className="">Asal</span>
                               </div>
                               {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
                                 <>
@@ -1726,6 +1729,9 @@ const TableDataPesertaUjianKeahlian = () => {
                                   </div>
                                   <div className="flex items-center justify-start text-left flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400  py-7 capitalize leading-none">
                                     <span>{shortenName(pesertaUjian?.Nama) || "-"}</span>
+                                  </div>
+                                  <div className="flex items-center justify-start text-left flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400  py-7 capitalize leading-none">
+                                    <span>{pesertaUjian?.Instansi || "-"}</span>
                                   </div>
                                   {dataUjian[0]!.TypeUjian.includes(
                                     "Rewarding"
