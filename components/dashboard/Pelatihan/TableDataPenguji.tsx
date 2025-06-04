@@ -66,7 +66,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useRouter } from "next/navigation";
 import { MdOutlineSaveAlt, MdWork } from "react-icons/md";
-import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import { PiMicrosoftExcelLogoFill, PiStampLight } from "react-icons/pi";
 import Image from "next/image";
