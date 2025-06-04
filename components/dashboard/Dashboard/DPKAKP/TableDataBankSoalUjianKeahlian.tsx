@@ -605,6 +605,16 @@ const TableDataBankSoalUjianKeahlian = () => {
     }, 3000);
   };
 
+  const handleShowImage = () => {
+    setIsFetching(true); // Start loading state
+
+    setTimeout(() => {
+      const filteredData = data.filter(item => item.GambarSoal !== '');
+      setData(filteredData); // Set filtered data
+      setIsFetching(false); // Stop loading state
+    }, 3000);
+  };
+
 
 
 
@@ -729,7 +739,7 @@ const TableDataBankSoalUjianKeahlian = () => {
                   </li>
                   <li>
                     <button
-
+                      onClick={() => handleShowImage()}
                       className={`focus:outline-none p-2 rounded-r-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
                     >
                       <p className="font-semibold text-lg">
