@@ -597,24 +597,22 @@ const TableDataBankSoalUjianKeahlian = () => {
 
   const handleShowNotClassified = () => {
     setIsFetching(true); // Start loading state
-    handleFetchingBagianUjian()
 
-    setTimeout(() => {
-      const filteredData = data.filter(item => item.Materi === '');
-      setData(filteredData); // Set filtered data
-      setIsFetching(false); // Stop loading state
-    }, 3000);
+
+    const filteredData = data.filter(item => item.Materi === '');
+    setData(filteredData); // Set filtered data
+    setIsFetching(false); // Stop loading state
+
   };
 
   const handleShowImage = () => {
     setIsFetching(true); // Start loading state
-    handleFetchingBagianUjian()
 
-    setTimeout(() => {
-      const filteredData = data.filter(item => item.GambarSoal !== '');
-      setData(filteredData); // Set filtered data
-      setIsFetching(false); // Stop loading state
-    }, 3000);
+
+    const filteredData = data.filter(item => item.GambarSoal !== '');
+    setData(filteredData); // Set filtered data
+    setIsFetching(false); // Stop loading state
+
   };
 
 
