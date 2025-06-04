@@ -1,20 +1,5 @@
 import React, { ReactElement, useState } from "react";
-import {
-  RiRadioButtonLine,
-  RiShipLine,
-  RiVerifiedBadgeFill,
-} from "react-icons/ri";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -104,7 +89,6 @@ import { Progress } from "@/components/ui/progress";
 import { GiBookmarklet } from "react-icons/gi";
 import Link from "next/link";
 import { Blanko } from "@/types/blanko";
-import FormPelatihan from "../dashboard/admin/formPelatihan";
 import TableData from "../dashboard/Tables/TableData";
 
 const TableDataPenguji: React.FC = () => {
@@ -656,7 +640,7 @@ const TableDataPenguji: React.FC = () => {
 
           {/* List Data Pelatihan */}
           <div>
-            <FormPelatihan edit={false} />
+
           </div>
         </>
       ) : showCertificateSetting ? (

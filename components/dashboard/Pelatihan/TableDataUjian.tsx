@@ -86,7 +86,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { MdOutlinePayments, MdOutlinePodcasts, MdOutlineSaveAlt } from "react-icons/md";
-import FormPelatihan from "../admin/formPelatihan";
 import Toast from "@/components/toast";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
@@ -119,8 +118,13 @@ import { IoReload } from "react-icons/io5";
 import { formatIndonesianDate, isTodayAfter, isTodayBefore, isTodayBetween, isTodaySameAs } from "@/lib/utils";
 import EmptyData from "@/components/micro-components/EmptyData";
 import { HashLoader } from "react-spinners";
+import { generatedYears } from "@/utils/globals";
 
 const TableDataUjian: React.FC = () => {
+  // ================== UTILS ==================
+  const [selectedTahun, setSelectedTahun] = React.useState<number>(new Date().getFullYear())
+  const years = generatedYears()
+
   // ================== STATE VARIABLES ==================
   const [data, setData] = React.useState<Ujian[]>([]);
 
@@ -1139,13 +1143,31 @@ const TableDataUjian: React.FC = () => {
             <TabsContent value="account">
               <div className="flex flex-col gap-1">
                 <div className="mb-1">
-                  <Input
-                    type="text"
-                    placeholder="Cari berdasarkan Program Ujian atau Nama Ujian"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full text-sm"
-                  />
+                  <div className="flex w-full gap-1 items-center">
+                    <Input
+                      type="text"
+                      placeholder="Cari berdasarkan Program Ujian atau Nama Ujian"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full text-sm"
+                    />
+
+                    <Select
+                      value={selectedTahun.toString()} onValueChange={(val) => setSelectedTahun(parseInt(val))}
+                    >
+                      <SelectTrigger className="w-fit text-base py-5">
+                        <SelectValue placeholder="Tahun Pelaksanaan" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {years.map((year) => (
+                          <SelectItem key={year} value={year.toString()} className='text-gray-300'>
+                            {year}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                  </div>
                 </div>
                 {filteredData.length == 0 && isFetching ? (
                   <div className="mt-32 w-full flex items-center justify-center">
@@ -1486,6 +1508,7 @@ const TableDataUjian: React.FC = () => {
                   ))
                 )}
               </div>
+
             </TabsContent>
             <TabsContent value="password">
               <Card>
