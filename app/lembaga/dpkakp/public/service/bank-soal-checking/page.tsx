@@ -41,7 +41,7 @@ export default function Page() {
                         </span>
                     </h1>
                 </div>
-                <section className="flex-1 flex flex-col h-full overflow-y-scroll">
+                <section className="flex-1 flex flex-col">
                     <div className="mt-4 md:mt-6 2xl:mt-7.5 h-full"><TableDataTipeUjianKeahlianChecking /></div>
                 </section>
             </section>
