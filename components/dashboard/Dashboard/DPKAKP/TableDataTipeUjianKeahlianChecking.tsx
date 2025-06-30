@@ -18,6 +18,7 @@ import { TypeUjian } from "@/types/ujian-keahlian-akp";
 import Toast from "@/components/toast";
 import Loader from "@/components/Loader";
 import { HashLoader } from "react-spinners";
+import { Textarea } from "@/components/ui/textarea";
 
 
 
@@ -161,12 +162,15 @@ const TableDataTipeUjianKeahlianChecking: React.FC = () => {
           {idFungsiSelected && (
             <div>
               <Label htmlFor="soalCheck" className="text-gray-200">Cek Duplikasi Soal</Label>
-              <Input
+
+              <Textarea
                 value={inputSoal}
-                className='text-gray-200 max-w-4xl w-full'
+                className="text-gray-200 max-w-4xl w-full resize-none"
                 onChange={(e) => checkDuplicate(e.target.value)}
                 placeholder="Tulis atau paste soal di sini..."
+                rows={5}
               />
+
 
             </div>
           )}</div>
