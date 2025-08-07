@@ -573,412 +573,414 @@ const TableDataTryout: React.FC = () => {
                     countersUjian={countersUjian}
                 />
 
-                <div className="px-4 -mt-4">
-                    <Tabs defaultValue="account" className="w-full">
+                {
+                    isFetchingDataUjian ? <div className="my-32 w-full flex items-center justify-center">
+                        <HashLoader color="#338CF5" size={50} />
+                    </div> : <div className="px-4 -mt-4">
+                        <Tabs defaultValue="account" className="w-full">
 
-                        <TabsList className={`grid w-full grid-cols-2`}>
-                            <TabsTrigger value="account">
-                                Daftar Pelaksanan Tryout
-                            </TabsTrigger>
-                            <TabsTrigger value="password">
-                                Buat Pelaksanaan Tryout
-                            </TabsTrigger>
-                        </TabsList>
+                            <TabsList className={`grid w-full grid-cols-2`}>
+                                <TabsTrigger value="account">
+                                    Daftar Pelaksanan Tryout
+                                </TabsTrigger>
+                                <TabsTrigger value="password">
+                                    Buat Pelaksanaan Tryout
+                                </TabsTrigger>
+                            </TabsList>
 
 
-                        <TabsContent value="account">
-                            <div className="flex flex-col gap-1">
-                                <div className="mb-1">
-                                    <div className="flex w-full gap-1 items-center">
-                                        <Input
-                                            type="text"
-                                            placeholder="Cari berdasarkan Program Ujian atau Nama Ujian"
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                            className="w-full text-sm"
-                                        />
+                            <TabsContent value="account">
+                                <div className="flex flex-col gap-1">
+                                    <div className="mb-1">
+                                        <div className="flex w-full gap-1 items-center">
+                                            <Input
+                                                type="text"
+                                                placeholder="Cari berdasarkan Program Ujian atau Nama Ujian"
+                                                value={searchQuery}
+                                                onChange={(e) => setSearchQuery(e.target.value)}
+                                                className="w-full text-sm"
+                                            />
 
-                                        <Select
-                                            value={selectedTahun.toString()} onValueChange={(val) => setSelectedTahun(parseInt(val))}
-                                        >
-                                            <SelectTrigger className="w-fit text-base py-5">
-                                                <SelectValue placeholder="Tahun Pelaksanaan" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {years.map((year) => (
-                                                    <SelectItem key={year} value={year.toString()} className='text-gray-300'>
-                                                        {year}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
+                                            <Select
+                                                value={selectedTahun.toString()} onValueChange={(val) => setSelectedTahun(parseInt(val))}
+                                            >
+                                                <SelectTrigger className="w-fit text-base py-5">
+                                                    <SelectValue placeholder="Tahun Pelaksanaan" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {years.map((year) => (
+                                                        <SelectItem key={year} value={year.toString()} className='text-gray-300'>
+                                                            {year}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
 
+                                        </div>
                                     </div>
-                                </div>
-                                {filteredData.length === 0 && isFetching ? (
-                                    <div className="mt-32 w-full flex items-center justify-center">
-                                        <HashLoader color="#338CF5" size={50} />
-                                    </div>
-                                ) : filteredData.length === 0 ? (
-                                    <EmptyData />
-                                ) : (
-                                    <>
-                                        <div className="overflow-x-auto rounded-lg border">
-                                            <table className="min-w-full text-sm text-left">
-                                                <thead className="bg-gray-100 text-gray-700">
-                                                    <tr>
-                                                        <th className="p-4 text-center">No</th>
-                                                        <th className="p-4 text-center">Nama Ujian</th>
-                                                        <th className="p-4 text-center">Tempat</th>
-                                                        <th className="p-4 text-center">Waktu</th>
+                                    {filteredData.length === 0 ? (
+                                        <EmptyData />
+                                    ) : (
+                                        <>
+                                            <div className="overflow-x-auto rounded-lg border">
+                                                <table className="min-w-full text-sm text-left">
+                                                    <thead className="bg-gray-100 text-gray-700">
+                                                        <tr>
+                                                            <th className="p-4 text-center">No</th>
+                                                            <th className="p-4 text-center">Nama Ujian</th>
+                                                            <th className="p-4 text-center">Tempat</th>
+                                                            <th className="p-4 text-center">Waktu</th>
 
 
-                                                        <th className="p-4 text-center">Peserta</th>
-                                                        <th className="p-4 text-center">Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {currentPageData.map((ujian, index) => (
-                                                        <tr
-                                                            key={index}
-                                                            className="border-b hover:bg-gray-50 transition-colors"
-                                                        >
-                                                            <td className="p-4 text-center font-medium">
-                                                                {(indexOfFirstItem + index + 1)}
-                                                            </td>
+                                                            <th className="p-4 text-center">Peserta</th>
+                                                            <th className="p-4 text-center">Aksi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {currentPageData.map((ujian, index) => (
+                                                            <tr
+                                                                key={index}
+                                                                className="border-b hover:bg-gray-50 transition-colors"
+                                                            >
+                                                                <td className="p-4 text-center font-medium">
+                                                                    {(indexOfFirstItem + index + 1)}
+                                                                </td>
 
-                                                            <td className="p-4 font-medium text-gray-900">
-                                                                <div>{ujian.NamaUjian}</div>
-                                                                <div className="text-xs text-gray-500">
-                                                                    {ujian.TypeUjian} • {ujian.PUKAKP}
-                                                                </div>
-                                                            </td>
-                                                            <td className="p-4 text-center">{ujian.TempatUjian}</td>
-                                                            <td className="p-4  text-center">
-                                                                {generateTanggalPelatihan(ujian.TanggalMulaiUjian)} s.d{" "}
-                                                                {generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}
-                                                            </td>
+                                                                <td className="p-4 font-medium text-gray-900">
+                                                                    <div>{ujian.NamaUjian}</div>
+                                                                    <div className="text-xs text-gray-500">
+                                                                        {ujian.TypeUjian} • {ujian.PUKAKP}
+                                                                    </div>
+                                                                </td>
+                                                                <td className="p-4 text-center">{ujian.TempatUjian}</td>
+                                                                <td className="p-4  text-center">
+                                                                    {generateTanggalPelatihan(ujian.TanggalMulaiUjian)} s.d{" "}
+                                                                    {generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}
+                                                                </td>
 
-                                                            <td className="p-4 text-center">
-                                                                {ujian.UsersUjian?.length ?? 0}/{ujian.JumlahPesertaUjian - 1}
-                                                            </td>
-                                                            <td className="p-4 text-right">
-                                                                <div className="flex gap-1 justify-end flex-wrap">
-                                                                    {ujian!.Status == "Aktif" && (
-                                                                        <Link
-                                                                            href={`/lembaga/${usePathname().includes("pukakp")
-                                                                                ? "pukakp"
-                                                                                : "dpkakp"
-                                                                                }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
-                                                                                }/${ujian!.IdTypeUjian}`}
-                                                                            className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm w-full justify-center"
-                                                                        >
-                                                                            <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
-                                                                            Peserta Tryout
-                                                                        </Link>
-                                                                    )}
+                                                                <td className="p-4 text-center">
+                                                                    {ujian.UsersUjian?.length ?? 0}/{ujian.JumlahPesertaUjian - 1}
+                                                                </td>
+                                                                <td className="p-4 text-right">
+                                                                    <div className="flex gap-1 justify-end flex-wrap">
+                                                                        {ujian!.Status == "Aktif" && (
+                                                                            <Link
+                                                                                href={`/lembaga/${usePathname().includes("pukakp")
+                                                                                    ? "pukakp"
+                                                                                    : "dpkakp"
+                                                                                    }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
+                                                                                    }/${ujian!.IdTypeUjian}`}
+                                                                                className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm w-full justify-center"
+                                                                            >
+                                                                                <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
+                                                                                Peserta Tryout
+                                                                            </Link>
+                                                                        )}
 
 
-                                                                    <DeleteAction
-                                                                        idUjian={ujian.IdUjian.toString()}
-                                                                        status={ujian.Status}
-                                                                        refetchUjian={refetchUjian}
-                                                                    />
+                                                                        <DeleteAction
+                                                                            idUjian={ujian.IdUjian.toString()}
+                                                                            status={ujian.Status}
+                                                                            refetchUjian={refetchUjian}
+                                                                        />
 
-                                                                    {
-                                                                        ujian!.IsSelesai == "" && (
-                                                                            <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
+                                                                        {
+                                                                            ujian!.IsSelesai == "" && (
+                                                                                <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
 
-                                                                                <AlertDialogContent>
+                                                                                    <AlertDialogContent>
+                                                                                        <AlertDialogHeader>
+                                                                                            <AlertDialogTitle>
+                                                                                                Apakah kamu yakin menutup ujian ini?
+                                                                                            </AlertDialogTitle>
+                                                                                            <AlertDialogDescription>
+                                                                                                Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
+                                                                                            </AlertDialogDescription>
+                                                                                        </AlertDialogHeader>
+                                                                                        <AlertDialogFooter>
+                                                                                            {
+                                                                                                !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
+
+                                                                                                    <AlertDialogAction
+                                                                                                        onClick={() => handleCloseExam()}
+                                                                                                        className="bg-gray-700"
+                                                                                                    >
+                                                                                                        Tutup
+                                                                                                    </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
+                                                                                            }
+
+                                                                                        </AlertDialogFooter>
+                                                                                    </AlertDialogContent>
+                                                                                </AlertDialog>
+                                                                            )}
+
+
+                                                                        {ujian!.Status === "Aktif" && (
+                                                                            <AlertDialog>
+                                                                                <AlertDialogTrigger asChild>
+                                                                                    <Button
+                                                                                        variant="outline"
+                                                                                        className="bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full"
+                                                                                    >
+                                                                                        <IoMdClock className="h-4 w-4 text-lg " />{" "}
+                                                                                        Waktu Ujian
+                                                                                    </Button>
+                                                                                </AlertDialogTrigger>
+                                                                                <AlertDialogContent className="max-w-2xl">
                                                                                     <AlertDialogHeader>
-                                                                                        <AlertDialogTitle>
-                                                                                            Apakah kamu yakin menutup ujian ini?
-                                                                                        </AlertDialogTitle>
-                                                                                        <AlertDialogDescription>
-                                                                                            Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
-                                                                                        </AlertDialogDescription>
+                                                                                        <div className="flex flex-col w-full items-center justify-center">
+                                                                                            <AlertDialogTitle className="text-center leading-none">
+                                                                                                Daftar Waktu Pelaksanaan{" "}
+                                                                                                {ujian!.TypeUjian} di {ujian!.PUKAKP}
+                                                                                            </AlertDialogTitle>
+                                                                                            <AlertDialogDescription>
+                                                                                                Berikut merupakan waktu pelaksanaan dari
+                                                                                                setiap fungsi dan bagian!
+                                                                                            </AlertDialogDescription>
+                                                                                        </div>
                                                                                     </AlertDialogHeader>
+                                                                                    <JadwalUjianKeahlianAKP data={dataUjian} ujian={ujian} />
                                                                                     <AlertDialogFooter>
-                                                                                        {
-                                                                                            !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
-
-                                                                                                <AlertDialogAction
-                                                                                                    onClick={() => handleCloseExam()}
-                                                                                                    className="bg-gray-700"
-                                                                                                >
-                                                                                                    Tutup
-                                                                                                </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
-                                                                                        }
-
+                                                                                        <AlertDialogCancel className="bg-gray-900 w-full text-white hover:bg-gray-800 hover:text-white">
+                                                                                            Tutup
+                                                                                        </AlertDialogCancel>
                                                                                     </AlertDialogFooter>
                                                                                 </AlertDialogContent>
                                                                             </AlertDialog>
                                                                         )}
 
-
-                                                                    {ujian!.Status === "Aktif" && (
-                                                                        <AlertDialog>
-                                                                            <AlertDialogTrigger asChild>
+                                                                        {usePathname().includes("pukakp") &&
+                                                                            ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
                                                                                 <Button
+                                                                                    onClick={(e) => {
+                                                                                        setSelectedIdUjian(ujian!.IdUjian);
+                                                                                        setOpenFormCloseExam(!openFormRemedial);
+                                                                                    }}
                                                                                     variant="outline"
-                                                                                    className="bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full"
+                                                                                    className="bg-teal-600 hover:bg-teal-700 hover:text-white text-white rounded-md w-full"
                                                                                 >
-                                                                                    <IoMdClock className="h-4 w-4 text-lg " />{" "}
-                                                                                    Waktu Ujian
+                                                                                    <BiSolidLockAlt className="h-4 w-4 mr-1" /> Tutup Tryout
                                                                                 </Button>
-                                                                            </AlertDialogTrigger>
-                                                                            <AlertDialogContent className="max-w-2xl">
-                                                                                <AlertDialogHeader>
-                                                                                    <div className="flex flex-col w-full items-center justify-center">
-                                                                                        <AlertDialogTitle className="text-center leading-none">
-                                                                                            Daftar Waktu Pelaksanaan{" "}
-                                                                                            {ujian!.TypeUjian} di {ujian!.PUKAKP}
-                                                                                        </AlertDialogTitle>
-                                                                                        <AlertDialogDescription>
-                                                                                            Berikut merupakan waktu pelaksanaan dari
-                                                                                            setiap fungsi dan bagian!
-                                                                                        </AlertDialogDescription>
-                                                                                    </div>
-                                                                                </AlertDialogHeader>
-                                                                                <JadwalUjianKeahlianAKP data={dataUjian} ujian={ujian} />
-                                                                                <AlertDialogFooter>
-                                                                                    <AlertDialogCancel className="bg-gray-900 w-full text-white hover:bg-gray-800 hover:text-white">
-                                                                                        Tutup
-                                                                                    </AlertDialogCancel>
-                                                                                </AlertDialogFooter>
-                                                                            </AlertDialogContent>
-                                                                        </AlertDialog>
-                                                                    )}
-
-                                                                    {usePathname().includes("pukakp") &&
-                                                                        ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
-                                                                            <Button
-                                                                                onClick={(e) => {
-                                                                                    setSelectedIdUjian(ujian!.IdUjian);
-                                                                                    setOpenFormCloseExam(!openFormRemedial);
-                                                                                }}
-                                                                                variant="outline"
-                                                                                className="bg-teal-600 hover:bg-teal-700 hover:text-white text-white rounded-md w-full"
-                                                                            >
-                                                                                <BiSolidLockAlt className="h-4 w-4 mr-1" /> Tutup Tryout
-                                                                            </Button>
-                                                                        )}
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                        {/* Pagination */}
-                                        <div className="mt-4 flex justify-end">
-                                            <Pagination
-                                                totalItems={filteredData.length}
-                                                itemsPerPage={itemsPerPage}
-                                                currentPage={currentPage}
-                                                onPageChange={handlePageChange}
-                                            />
-                                        </div>
-                                    </>
-                                )}
-
-                            </div>
-
-                        </TabsContent>
-                        <TabsContent value="password">
-                            <Card>
-                                <CardHeader>
-                                    <CardTitle>{Cookies.get('PUKAKP') === 'Tryout Center' ? 'Ajukan Permohonan Try Out' : 'Ajukan Permohonan Ujian AKP'}</CardTitle>
-                                    <CardDescription>
-                                        Dalam hal melaksanakan ujian keahlian di PUKAKP masing -
-                                        masing dari permohonan lemdiklat yang mengajukan, harap
-                                        mengajukan permohonan pelaksanaan kepada tim sekretariat
-                                        untuk diketahui!
-                                    </CardDescription>
-                                </CardHeader>
-                                <CardContent className="space-y-4 -mt-6">
-                                    <form autoComplete="off">
-                                        {/* PUKAKP */}
-
-                                        {/* Tipe Ujian */}
-                                        <div className="flex gap-2 w-full mt-2">
-                                            <div className="w-full">
-                                                <Label htmlFor="type-ujian">Tipe Ujian*</Label>
-                                                <select
-                                                    id="type-ujian"
-                                                    className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
-                                                    required
-                                                    value={typeUjian}
-                                                    onChange={(e) => setTypeUjian(e.target.value)}
-                                                >
-                                                    <option value="0">Pilih Tipe Ujian</option>
-                                                    {dataTypeUjian.map((type) => (
-                                                        <option
-                                                            key={type.IdTypeUjian}
-                                                            value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
-                                                            className="capitalize"
-                                                        >
-                                                            {type.NamaTypeUjian}
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                                                            )}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
                                             </div>
 
-                                            {/* Nama Ujian */}
-
-                                        </div>
-
-                                        <div className="flex gap-2 w-full mt-2">
-                                            <div className="w-full">
-                                                <Label htmlFor="nama-ujian">Nama Ujian*</Label>
-                                                <Input
-                                                    id="nama-ujian"
-                                                    type="text"
-                                                    required
-                                                    value={namaUjian}
-                                                    onChange={(e) => setNamaUjian(e.target.value)}
+                                            {/* Pagination */}
+                                            <div className="mt-4 flex justify-end">
+                                                <Pagination
+                                                    totalItems={filteredData.length}
+                                                    itemsPerPage={itemsPerPage}
+                                                    currentPage={currentPage}
+                                                    onPageChange={handlePageChange}
                                                 />
                                             </div>
+                                        </>
+                                    )}
 
-                                            {/* Tempat Ujian */}
-                                            <div className="w-full">
-                                                <Label htmlFor="tempat-ujian">Tempat Ujian*</Label>
-                                                <Input
-                                                    id="tempat-ujian"
-                                                    type="text"
-                                                    required
-                                                    value={tempatUjian}
-                                                    onChange={(e) => setTempatUjian(e.target.value)}
-                                                />
+                                </div>
+
+                            </TabsContent>
+                            <TabsContent value="password">
+                                <Card>
+                                    <CardHeader>
+                                        <CardTitle>{Cookies.get('PUKAKP') === 'Tryout Center' ? 'Ajukan Permohonan Try Out' : 'Ajukan Permohonan Ujian AKP'}</CardTitle>
+                                        <CardDescription>
+                                            Dalam hal melaksanakan ujian keahlian di PUKAKP masing -
+                                            masing dari permohonan lemdiklat yang mengajukan, harap
+                                            mengajukan permohonan pelaksanaan kepada tim sekretariat
+                                            untuk diketahui!
+                                        </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4 -mt-6">
+                                        <form autoComplete="off">
+                                            {/* PUKAKP */}
+
+                                            {/* Tipe Ujian */}
+                                            <div className="flex gap-2 w-full mt-2">
+                                                <div className="w-full">
+                                                    <Label htmlFor="type-ujian">Tipe Ujian*</Label>
+                                                    <select
+                                                        id="type-ujian"
+                                                        className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
+                                                        required
+                                                        value={typeUjian}
+                                                        onChange={(e) => setTypeUjian(e.target.value)}
+                                                    >
+                                                        <option value="0">Pilih Tipe Ujian</option>
+                                                        {dataTypeUjian.map((type) => (
+                                                            <option
+                                                                key={type.IdTypeUjian}
+                                                                value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
+                                                                className="capitalize"
+                                                            >
+                                                                {type.NamaTypeUjian}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </div>
+
+                                                {/* Nama Ujian */}
+
                                             </div>
-                                        </div>
 
-
-                                        {/* Tanggal Mulai and Tanggal Berakhir */}
-                                        <div className="flex gap-2 w-full mt-2">
-                                            <div className="w-full">
-                                                <Label htmlFor="tanggal-mulai">Tanggal Mulai*</Label>
-                                                <Input
-                                                    id="tanggal-mulai"
-                                                    type="date"
-                                                    required
-                                                    min={new Date().toISOString().split("T")[0]}
-                                                    value={tanggalMulai}
-                                                    onChange={(e) => setTanggalMulai(e.target.value)}
-                                                />
-                                            </div>
-                                            <div className="w-full">
-                                                <Label htmlFor="tanggal-berakhir">
-                                                    Tanggal Berakhir*
-                                                </Label>
-                                                <Input
-                                                    id="tanggal-berakhir"
-                                                    type="date"
-                                                    placeholder="Tanggal Berakhir"
-                                                    required
-                                                    value={tanggalBerakhir}
-                                                    min={tanggalMulai}
-                                                    onChange={(e) => setTanggalBerakhir(e.target.value)}
-                                                />
-                                            </div>
-                                        </div>
-
-                                        {/* Waktu Ujian and Jumlah Peserta */}
-                                        <div className="grid grid-cols-1 gap-4">
-                                            <div className="mt-2">
-                                                <Label htmlFor="jumlah-peserta">Jumlah Peserta*</Label>
-                                                <Input
-                                                    id="jumlah-peserta"
-                                                    type="text"
-                                                    placeholder="Jumlah Peserta"
-                                                    required
-                                                    value={jumlahPeserta}
-                                                    onChange={(e) => setJumlahPeserta(e.target.value)}
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <div className="flex flex-col mt-2">
-                                            <Label htmlFor="tanggal">Waktu Pelaksanaan*</Label>
-                                            <div className="grid grid-cols-3 gap-2">
-                                                <div>
-                                                    <Label htmlFor="tanggal">Tanggal</Label>
+                                            <div className="flex gap-2 w-full mt-2">
+                                                <div className="w-full">
+                                                    <Label htmlFor="nama-ujian">Nama Ujian*</Label>
                                                     <Input
-                                                        id="tanggal"
+                                                        id="nama-ujian"
+                                                        type="text"
+                                                        required
+                                                        value={namaUjian}
+                                                        onChange={(e) => setNamaUjian(e.target.value)}
+                                                    />
+                                                </div>
+
+                                                {/* Tempat Ujian */}
+                                                <div className="w-full">
+                                                    <Label htmlFor="tempat-ujian">Tempat Ujian*</Label>
+                                                    <Input
+                                                        id="tempat-ujian"
+                                                        type="text"
+                                                        required
+                                                        value={tempatUjian}
+                                                        onChange={(e) => setTempatUjian(e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+
+
+                                            {/* Tanggal Mulai and Tanggal Berakhir */}
+                                            <div className="flex gap-2 w-full mt-2">
+                                                <div className="w-full">
+                                                    <Label htmlFor="tanggal-mulai">Tanggal Mulai*</Label>
+                                                    <Input
+                                                        id="tanggal-mulai"
                                                         type="date"
                                                         required
-                                                        value={waktuDate}
-                                                        onChange={(e) => setWaktuDate(e.target.value)}
+                                                        min={new Date().toISOString().split("T")[0]}
+                                                        value={tanggalMulai}
+                                                        onChange={(e) => setTanggalMulai(e.target.value)}
                                                     />
                                                 </div>
-
-                                                <div>
-                                                    <Label htmlFor="jam">Jam</Label>
+                                                <div className="w-full">
+                                                    <Label htmlFor="tanggal-berakhir">
+                                                        Tanggal Berakhir*
+                                                    </Label>
                                                     <Input
-                                                        id="jam"
-                                                        type="time"
+                                                        id="tanggal-berakhir"
+                                                        type="date"
+                                                        placeholder="Tanggal Berakhir"
                                                         required
-                                                        value={waktuTime}
-                                                        onChange={(e) => setWaktuTime(e.target.value)}
+                                                        value={tanggalBerakhir}
+                                                        min={tanggalMulai}
+                                                        onChange={(e) => setTanggalBerakhir(e.target.value)}
                                                     />
-                                                </div>
-
-                                                <div>
-                                                    <Label htmlFor="zona">Zona Waktu</Label>
-                                                    <Select value={waktuZone} onValueChange={setWaktuZone}>
-                                                        <SelectTrigger id="zona">
-                                                            <SelectValue placeholder="Pilih zona waktu" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="WIB">WIB (GMT+7)</SelectItem>
-                                                            <SelectItem value="WITA">WITA (GMT+8)</SelectItem>
-                                                            <SelectItem value="WIT">WIT (GMT+9)</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
                                                 </div>
                                             </div>
-                                        </div>
+
+                                            {/* Waktu Ujian and Jumlah Peserta */}
+                                            <div className="grid grid-cols-1 gap-4">
+                                                <div className="mt-2">
+                                                    <Label htmlFor="jumlah-peserta">Jumlah Peserta*</Label>
+                                                    <Input
+                                                        id="jumlah-peserta"
+                                                        type="text"
+                                                        placeholder="Jumlah Peserta"
+                                                        required
+                                                        value={jumlahPeserta}
+                                                        onChange={(e) => setJumlahPeserta(e.target.value)}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="flex flex-col mt-2">
+                                                <Label htmlFor="tanggal">Waktu Pelaksanaan*</Label>
+                                                <div className="grid grid-cols-3 gap-2">
+                                                    <div>
+                                                        <Label htmlFor="tanggal">Tanggal</Label>
+                                                        <Input
+                                                            id="tanggal"
+                                                            type="date"
+                                                            required
+                                                            value={waktuDate}
+                                                            onChange={(e) => setWaktuDate(e.target.value)}
+                                                        />
+                                                    </div>
+
+                                                    <div>
+                                                        <Label htmlFor="jam">Jam</Label>
+                                                        <Input
+                                                            id="jam"
+                                                            type="time"
+                                                            required
+                                                            value={waktuTime}
+                                                            onChange={(e) => setWaktuTime(e.target.value)}
+                                                        />
+                                                    </div>
+
+                                                    <div>
+                                                        <Label htmlFor="zona">Zona Waktu</Label>
+                                                        <Select value={waktuZone} onValueChange={setWaktuZone}>
+                                                            <SelectTrigger id="zona">
+                                                                <SelectValue placeholder="Pilih zona waktu" />
+                                                            </SelectTrigger>
+                                                            <SelectContent>
+                                                                <SelectItem value="WIB">WIB (GMT+7)</SelectItem>
+                                                                <SelectItem value="WITA">WITA (GMT+8)</SelectItem>
+                                                                <SelectItem value="WIT">WIT (GMT+9)</SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                    </div>
+                                                </div>
+                                            </div>
 
 
-                                        {/* Surat Permohonan */}
-                                        <div className="mt-2">
-                                            <Label htmlFor="surat-permohonan">Surat Permohonan</Label>
-                                            <input
-                                                id="surat-permohonan"
-                                                type="file"
-                                                className="text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                                                required
-                                                onChange={handleFileChange}
-                                            />
-                                        </div>
+                                            {/* Surat Permohonan */}
+                                            <div className="mt-2">
+                                                <Label htmlFor="surat-permohonan">Surat Permohonan</Label>
+                                                <input
+                                                    id="surat-permohonan"
+                                                    type="file"
+                                                    className="text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                                                    required
+                                                    onChange={handleFileChange}
+                                                />
+                                            </div>
 
-                                        <CardFooter className="pt-4 flex justify-end gap-2">
-                                            {isPosting ? (
-                                                <Button>Loading ...</Button>
-                                            ) : (
-                                                <>
-                                                    <Button
-                                                        variant="ghost"
-                                                        type="button"
-                                                        onClick={() => handleCancelAddNewUjian()}
-                                                    >
-                                                        Cancel
-                                                    </Button>{" "}
-                                                    <Button
-                                                        onClick={(e) => handlePostNewUjianKeahlian(e)}
-                                                    >
-                                                        Buat Tryout
-                                                    </Button>
-                                                </>
-                                            )}
-                                        </CardFooter>
-                                    </form>
-                                </CardContent>
-                            </Card>
-                        </TabsContent>
-                    </Tabs>
-                </div>
+                                            <CardFooter className="pt-4 flex justify-end gap-2">
+                                                {isPosting ? (
+                                                    <Button>Loading ...</Button>
+                                                ) : (
+                                                    <>
+                                                        <Button
+                                                            variant="ghost"
+                                                            type="button"
+                                                            onClick={() => handleCancelAddNewUjian()}
+                                                        >
+                                                            Cancel
+                                                        </Button>{" "}
+                                                        <Button
+                                                            onClick={(e) => handlePostNewUjianKeahlian(e)}
+                                                        >
+                                                            Buat Tryout
+                                                        </Button>
+                                                    </>
+                                                )}
+                                            </CardFooter>
+                                        </form>
+                                    </CardContent>
+                                </Card>
+                            </TabsContent>
+                        </Tabs>
+                    </div>
+                }
+
+
             </section>
 
         </section>

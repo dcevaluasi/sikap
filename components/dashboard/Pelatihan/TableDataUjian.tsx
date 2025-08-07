@@ -609,667 +609,668 @@ const TableDataUjian: React.FC = () => {
           countersUjian={countersUjian}
         />
 
-        <div className="px-4 -mt-4">
-          <Tabs defaultValue="account" className="w-full">
-            {usePathname().includes("pukakp") && !isPenguji && (
-              <TabsList className={`grid w-full grid-cols-2`}>
-                <TabsTrigger value="account">
-                  Daftar Pelaksanan Ujian
-                </TabsTrigger>
-                <TabsTrigger value="password">
-                  Buat Pelaksanaan Ujian Baru
-                </TabsTrigger>
-              </TabsList>
-            )}
+        {
+          isFetchingDataUjian ? <div className="my-32 w-full flex items-center justify-center">
+            <HashLoader color="#338CF5" size={50} />
+          </div> : <div className="px-4 -mt-4">
+            <Tabs defaultValue="account" className="w-full">
+              {usePathname().includes("pukakp") && !isPenguji && (
+                <TabsList className={`grid w-full grid-cols-2`}>
+                  <TabsTrigger value="account">
+                    Daftar Pelaksanan Ujian
+                  </TabsTrigger>
+                  <TabsTrigger value="password">
+                    Buat Pelaksanaan Ujian Baru
+                  </TabsTrigger>
+                </TabsList>
+              )}
 
-            <TabsContent value="account">
-              <div className="flex flex-col gap-1">
-                <div className="mb-1">
-                  <div className="flex w-full gap-1 items-center">
-                    <Input
-                      type="text"
-                      placeholder="Cari berdasarkan Program Ujian atau Nama Ujian"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full text-sm"
-                    />
+              <TabsContent value="account">
+                <div className="flex flex-col gap-1">
+                  <div className="mb-1">
+                    <div className="flex w-full gap-1 items-center">
+                      <Input
+                        type="text"
+                        placeholder="Cari berdasarkan Program Ujian atau Nama Ujian"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full text-sm"
+                      />
 
-                    <Select
-                      value={selectedTahun.toString()} onValueChange={(val) => setSelectedTahun(parseInt(val))}
-                    >
-                      <SelectTrigger className="w-fit text-base py-5">
-                        <SelectValue placeholder="Tahun Pelaksanaan" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {years.map((year) => (
-                          <SelectItem key={year} value={year.toString()} className='text-gray-300'>
-                            {year}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      <Select
+                        value={selectedTahun.toString()} onValueChange={(val) => setSelectedTahun(parseInt(val))}
+                      >
+                        <SelectTrigger className="w-fit text-base py-5">
+                          <SelectValue placeholder="Tahun Pelaksanaan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {years.map((year) => (
+                            <SelectItem key={year} value={year.toString()} className='text-gray-300'>
+                              {year}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
 
+                    </div>
                   </div>
-                </div>
-                {filteredData.length === 0 && isFetching ? (
-                  <div className="mt-32 w-full flex items-center justify-center">
-                    <HashLoader color="#338CF5" size={50} />
-                  </div>
-                ) : filteredData.length === 0 ? (
-                  <EmptyData />
-                ) : (
-                  <>
-                    <div className="overflow-x-auto rounded-lg border">
-                      <table className="min-w-full text-sm text-left">
-                        <thead className="bg-gray-100 text-gray-700">
-                          <tr>
-                            <th className="p-4 text-center">No</th>
-                            <th className="p-4 text-center">Nama Ujian</th>
-                            <th className="p-4 text-center">Tempat</th>
-                            <th className="p-4 text-center">Waktu</th>
+                  {filteredData.length === 0 ? (
+                    <EmptyData />
+                  ) : (
+                    <>
+                      <div className="overflow-x-auto rounded-lg border">
+                        <table className="min-w-full text-sm text-left">
+                          <thead className="bg-gray-100 text-gray-700">
+                            <tr>
+                              <th className="p-4 text-center">No</th>
+                              <th className="p-4 text-center">Nama Ujian</th>
+                              <th className="p-4 text-center">Tempat</th>
+                              <th className="p-4 text-center">Waktu</th>
 
-                            <th className="p-4 text-center">Penguji</th>
-                            <th className="p-4 text-center">Peserta</th>
-                            <th className="p-4 text-center">Aksi</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {currentPageData.map((ujian, index) => (
-                            <tr
-                              key={index}
-                              className="border-b hover:bg-gray-50 transition-colors"
-                            >
-                              <td className="p-4 text-center font-medium">
-                                {(indexOfFirstItem + index + 1)}
-                              </td>
+                              <th className="p-4 text-center">Penguji</th>
+                              <th className="p-4 text-center">Peserta</th>
+                              <th className="p-4 text-center">Aksi</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {currentPageData.map((ujian, index) => (
+                              <tr
+                                key={index}
+                                className="border-b hover:bg-gray-50 transition-colors"
+                              >
+                                <td className="p-4 text-center font-medium">
+                                  {(indexOfFirstItem + index + 1)}
+                                </td>
 
-                              <td className="p-4 font-medium text-gray-900">
-                                <div>{ujian.NamaUjian}</div>
-                                <div className="text-xs text-gray-500">
-                                  {ujian.TypeUjian} • {ujian.PUKAKP}
-                                </div>
-                              </td>
-                              <td className="p-4 text-center">{ujian.TempatUjian}</td>
-                              <td className="p-4  text-center">
-                                {generateTanggalPelatihan(ujian.TanggalMulaiUjian)} s.d{" "}
-                                {generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}
-                              </td>
-                              <td className="p-4">
-                                {ujian.NamaPengawasUjian ? (
-                                  <div className="flex flex-wrap gap-2">
-                                    {ujian.NamaPengawasUjian.split('|').map((name, index) => (
-                                      <span
-                                        key={index}
-                                        className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full"
-                                      >
-                                        {name.trim()}
-                                      </span>
-                                    ))}
+                                <td className="p-4 font-medium text-gray-900">
+                                  <div>{ujian.NamaUjian}</div>
+                                  <div className="text-xs text-gray-500">
+                                    {ujian.TypeUjian} • {ujian.PUKAKP}
                                   </div>
-                                ) : (
-                                  <span>-</span>
-                                )}
-                              </td>
-
-                              <td className="p-4 text-center">
-                                {ujian.UsersUjian?.length ?? 0}/{ujian.JumlahPesertaUjian - 1}
-                              </td>
-                              <td className="p-4 text-right">
-                                <div className="flex gap-1 justify-end flex-wrap">
-                                  {ujian!.Status == "Aktif" && (
-                                    <Link
-                                      href={`/lembaga/${usePathname().includes("pukakp")
-                                        ? "pukakp"
-                                        : "dpkakp"
-                                        }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
-                                        }/${ujian!.IdTypeUjian}`}
-                                      className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm w-full justify-center"
-                                    >
-                                      <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
-                                      Peserta Ujian
-                                    </Link>
-                                  )}
-
-                                  {ujian!.FilePermohonan != null &&
-                                    ujian!.Status == "Aktif" ? (
-                                    <Link
-                                      target="_blank"
-                                      href={ujian!.FilePermohonan!}
-                                      className="bg-gray-500 w-full text-white rounded-md  shadow-sm  h-9 px-4 py-2 flex text-sm items-center justify-center"
-                                    >
-                                      <FiFile className="h-4 w-4 mr-1" /> File
-                                      Permohonan
-                                    </Link>
+                                </td>
+                                <td className="p-4 text-center">{ujian.TempatUjian}</td>
+                                <td className="p-4  text-center">
+                                  {generateTanggalPelatihan(ujian.TanggalMulaiUjian)} s.d{" "}
+                                  {generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}
+                                </td>
+                                <td className="p-4">
+                                  {ujian.NamaPengawasUjian ? (
+                                    <div className="flex flex-wrap gap-2">
+                                      {ujian.NamaPengawasUjian.split('|').map((name, index) => (
+                                        <span
+                                          key={index}
+                                          className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full"
+                                        >
+                                          {name.trim()}
+                                        </span>
+                                      ))}
+                                    </div>
                                   ) : (
-                                    <></>
+                                    <span>-</span>
                                   )}
+                                </td>
 
-                                  {ujian!.Status == "Draft" &&
-                                    !usePathname().includes("dpkakp") ? (
-                                    <Button
-                                      onClick={() => {
-                                        handleKirimPermohonan(ujian!.IdUjian);
-                                      }}
-                                      variant="outline"
-                                      className="bg-indigo-600 w-full text-neutral-100 hover:text-neutral-100 hover:bg-indigo-600"
-                                    >
-                                      <BiPaperPlane className="h-4 w-4 text-neutral-100 mr-1" />{" "}
-                                      Kirim Permohonan
-                                    </Button>
-                                  ) : (
-                                    <></>
-                                  )}
-
-                                  {usePathname().includes("pukakp") &&
-                                    ujian!.Status == "Draft" ? (
-                                    <Button
-                                      onClick={() => {
-                                        handleFetchingDataUjianById(ujian!.IdUjian);
-                                      }}
-                                      variant="outline"
-                                      className="bg-yellow-300 w-full text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
-                                    >
-                                      <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" />{" "}
-                                      Edit Ujian
-                                    </Button>
-                                  ) : (
-                                    <></>
-                                  )}
-
-                                  <DeleteAction
-                                    idUjian={ujian.IdUjian.toString()}
-                                    status={ujian.Status}
-                                    refetchUjian={refetchUjian}
-                                  />
-
-                                  {usePathname().includes("pukakp") &&
-                                    ujian!.IsSelesai == "" ? (
-                                    <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
-
-                                      <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                          <AlertDialogTitle>
-                                            Apakah kamu yakin menutup ujian ini?
-                                          </AlertDialogTitle>
-                                          <AlertDialogDescription>
-                                            Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
-                                          </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                          {
-                                            !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
-
-                                              <AlertDialogAction
-                                                onClick={() => handleCloseExam()}
-                                                className="bg-gray-700"
-                                              >
-                                                Tutup
-                                              </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
-                                          }
-
-                                        </AlertDialogFooter>
-                                      </AlertDialogContent>
-                                    </AlertDialog>
-                                  ) : (
-                                    <></>
-                                  )}
-
-                                  {usePathname().includes("dpkakp") &&
-                                    (ujian!.Status == 'Pending') && (
-                                      <Button
-                                        onClick={(e) => {
-                                          setSelectedId(ujian!.IdUjian);
-                                          setSelectedSuratPermohonan(
-                                            ujian!.FilePermohonan
-                                          );
-                                          setOpenFormValidasiPelaksanaanUjian(
-                                            !openFormValidasiPelaksanaanUjian
-                                          );
-                                        }}
-                                        variant="outline"
-                                        className="bg-green-400 hover:bg-green-400 hover:text-white text-white rounded-md w-full"
+                                <td className="p-4 text-center">
+                                  {ujian.UsersUjian?.length ?? 0}/{ujian.JumlahPesertaUjian - 1}
+                                </td>
+                                <td className="p-4 text-right">
+                                  <div className="flex gap-1 justify-end flex-wrap">
+                                    {ujian!.Status == "Aktif" && (
+                                      <Link
+                                        href={`/lembaga/${usePathname().includes("pukakp")
+                                          ? "pukakp"
+                                          : "dpkakp"
+                                          }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
+                                          }/${ujian!.IdTypeUjian}`}
+                                        className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm w-full justify-center"
                                       >
-                                        <RiVerifiedBadgeFill className="h-4 w-4 mr-1" />{" "}
-                                        Verifikasi
-                                      </Button>
+                                        <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
+                                        Peserta Ujian
+                                      </Link>
                                     )}
 
-                                  {ujian!.Status === "Aktif" && (
-                                    <AlertDialog>
-                                      <AlertDialogTrigger asChild>
-                                        <Button
-                                          variant="outline"
-                                          className="bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full"
-                                        >
-                                          <IoMdClock className="h-4 w-4 text-lg " />{" "}
-                                          Waktu Ujian
-                                        </Button>
-                                      </AlertDialogTrigger>
-                                      <AlertDialogContent className="max-w-2xl">
-                                        <AlertDialogHeader>
-                                          <div className="flex flex-col w-full items-center justify-center">
-                                            <AlertDialogTitle className="text-center leading-none">
-                                              Daftar Waktu Pelaksanaan{" "}
-                                              {ujian!.TypeUjian} di {ujian!.PUKAKP}
+                                    {ujian!.FilePermohonan != null &&
+                                      ujian!.Status == "Aktif" ? (
+                                      <Link
+                                        target="_blank"
+                                        href={ujian!.FilePermohonan!}
+                                        className="bg-gray-500 w-full text-white rounded-md  shadow-sm  h-9 px-4 py-2 flex text-sm items-center justify-center"
+                                      >
+                                        <FiFile className="h-4 w-4 mr-1" /> File
+                                        Permohonan
+                                      </Link>
+                                    ) : (
+                                      <></>
+                                    )}
+
+                                    {ujian!.Status == "Draft" &&
+                                      !usePathname().includes("dpkakp") ? (
+                                      <Button
+                                        onClick={() => {
+                                          handleKirimPermohonan(ujian!.IdUjian);
+                                        }}
+                                        variant="outline"
+                                        className="bg-indigo-600 w-full text-neutral-100 hover:text-neutral-100 hover:bg-indigo-600"
+                                      >
+                                        <BiPaperPlane className="h-4 w-4 text-neutral-100 mr-1" />{" "}
+                                        Kirim Permohonan
+                                      </Button>
+                                    ) : (
+                                      <></>
+                                    )}
+
+                                    {usePathname().includes("pukakp") &&
+                                      ujian!.Status == "Draft" ? (
+                                      <Button
+                                        onClick={() => {
+                                          handleFetchingDataUjianById(ujian!.IdUjian);
+                                        }}
+                                        variant="outline"
+                                        className="bg-yellow-300 w-full text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
+                                      >
+                                        <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" />{" "}
+                                        Edit Ujian
+                                      </Button>
+                                    ) : (
+                                      <></>
+                                    )}
+
+                                    <DeleteAction
+                                      idUjian={ujian.IdUjian.toString()}
+                                      status={ujian.Status}
+                                      refetchUjian={refetchUjian}
+                                    />
+
+                                    {usePathname().includes("pukakp") &&
+                                      ujian!.IsSelesai == "" ? (
+                                      <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
+
+                                        <AlertDialogContent>
+                                          <AlertDialogHeader>
+                                            <AlertDialogTitle>
+                                              Apakah kamu yakin menutup ujian ini?
                                             </AlertDialogTitle>
                                             <AlertDialogDescription>
-                                              Berikut merupakan waktu pelaksanaan dari
-                                              setiap fungsi dan bagian!
+                                              Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
                                             </AlertDialogDescription>
-                                          </div>
-                                        </AlertDialogHeader>
-                                        <JadwalUjianKeahlianAKP data={dataUjian} ujian={ujian} />
-                                        <AlertDialogFooter>
-                                          <AlertDialogCancel className="bg-gray-900 w-full text-white hover:bg-gray-800 hover:text-white">
-                                            Tutup
-                                          </AlertDialogCancel>
-                                        </AlertDialogFooter>
-                                      </AlertDialogContent>
-                                    </AlertDialog>
-                                  )}
+                                          </AlertDialogHeader>
+                                          <AlertDialogFooter>
+                                            {
+                                              !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
 
-                                  {usePathname().includes("dpkakp") &&
-                                    ujian!.Status == "Aktif" &&
-                                    ujian!.NamaPengawasUjian == "" && (
-                                      <Button
-                                        onClick={(e) => {
-                                          setSelectedId(ujian!.IdUjian);
-                                          setStatus(ujian!.Status);
-                                          setIsOpenFormUjianKeahlian(
-                                            !isOpenFormUjianKeahlian
-                                          );
-                                        }}
-                                        variant="outline"
-                                        className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200 w-full"
-                                      >
-                                        <TbEditCircle className="h-5 w-5 mr-1" />
-                                        Pilih Penguji
-                                      </Button>
+                                                <AlertDialogAction
+                                                  onClick={() => handleCloseExam()}
+                                                  className="bg-gray-700"
+                                                >
+                                                  Tutup
+                                                </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
+                                            }
+
+                                          </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                      </AlertDialog>
+                                    ) : (
+                                      <></>
                                     )}
 
-                                  {
-                                    ujian!.Status === "Aktif" && ujian!.IsSelesai == "" && isTodayBetween(ujian!.TanggalMulaiUjian, ujian!.TanggalBerakhirUjian) && (
-                                      <Button
-                                        onClick={(e) => {
-                                          setSelectedIdUjian(ujian!.IdUjian);
-                                          setOpenFormRemedial(!openFormRemedial);
-                                        }}
-                                        variant="outline"
-                                        className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md w-full"
-                                      >
-                                        <IoReload className="h-4 w-4 mr-1" /> Remedial
-                                      </Button>
+                                    {usePathname().includes("dpkakp") &&
+                                      (ujian!.Status == 'Pending') && (
+                                        <Button
+                                          onClick={(e) => {
+                                            setSelectedId(ujian!.IdUjian);
+                                            setSelectedSuratPermohonan(
+                                              ujian!.FilePermohonan
+                                            );
+                                            setOpenFormValidasiPelaksanaanUjian(
+                                              !openFormValidasiPelaksanaanUjian
+                                            );
+                                          }}
+                                          variant="outline"
+                                          className="bg-green-400 hover:bg-green-400 hover:text-white text-white rounded-md w-full"
+                                        >
+                                          <RiVerifiedBadgeFill className="h-4 w-4 mr-1" />{" "}
+                                          Verifikasi
+                                        </Button>
+                                      )}
+
+                                    {ujian!.Status === "Aktif" && (
+                                      <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                          <Button
+                                            variant="outline"
+                                            className="bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full"
+                                          >
+                                            <IoMdClock className="h-4 w-4 text-lg " />{" "}
+                                            Waktu Ujian
+                                          </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent className="max-w-2xl">
+                                          <AlertDialogHeader>
+                                            <div className="flex flex-col w-full items-center justify-center">
+                                              <AlertDialogTitle className="text-center leading-none">
+                                                Daftar Waktu Pelaksanaan{" "}
+                                                {ujian!.TypeUjian} di {ujian!.PUKAKP}
+                                              </AlertDialogTitle>
+                                              <AlertDialogDescription>
+                                                Berikut merupakan waktu pelaksanaan dari
+                                                setiap fungsi dan bagian!
+                                              </AlertDialogDescription>
+                                            </div>
+                                          </AlertDialogHeader>
+                                          <JadwalUjianKeahlianAKP data={dataUjian} ujian={ujian} />
+                                          <AlertDialogFooter>
+                                            <AlertDialogCancel className="bg-gray-900 w-full text-white hover:bg-gray-800 hover:text-white">
+                                              Tutup
+                                            </AlertDialogCancel>
+                                          </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                      </AlertDialog>
                                     )}
 
-                                  {usePathname().includes("pukakp") &&
-                                    ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
-                                      <Button
-                                        onClick={(e) => {
-                                          setSelectedIdUjian(ujian!.IdUjian);
-                                          setOpenFormCloseExam(!openFormRemedial);
-                                        }}
-                                        variant="outline"
-                                        className="bg-teal-600 hover:bg-teal-700 hover:text-white text-white rounded-md w-full"
-                                      >
-                                        <BiSolidLockAlt className="h-4 w-4 mr-1" /> Tutup Ujian
-                                      </Button>
-                                    )}
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                                    {usePathname().includes("dpkakp") &&
+                                      ujian!.Status == "Aktif" &&
+                                      ujian!.NamaPengawasUjian == "" && (
+                                        <Button
+                                          onClick={(e) => {
+                                            setSelectedId(ujian!.IdUjian);
+                                            setStatus(ujian!.Status);
+                                            setIsOpenFormUjianKeahlian(
+                                              !isOpenFormUjianKeahlian
+                                            );
+                                          }}
+                                          variant="outline"
+                                          className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200 w-full"
+                                        >
+                                          <TbEditCircle className="h-5 w-5 mr-1" />
+                                          Pilih Penguji
+                                        </Button>
+                                      )}
 
-                    {/* Pagination */}
-                    <div className="mt-4 flex justify-end">
-                      <Pagination
-                        totalItems={filteredData.length}
-                        itemsPerPage={itemsPerPage}
-                        currentPage={currentPage}
-                        onPageChange={handlePageChange}
-                      />
-                    </div>
-                  </>
-                )}
+                                    {
+                                      ujian!.Status === "Aktif" && ujian!.IsSelesai == "" && isTodayBetween(ujian!.TanggalMulaiUjian, ujian!.TanggalBerakhirUjian) && (
+                                        <Button
+                                          onClick={(e) => {
+                                            setSelectedIdUjian(ujian!.IdUjian);
+                                            setOpenFormRemedial(!openFormRemedial);
+                                          }}
+                                          variant="outline"
+                                          className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md w-full"
+                                        >
+                                          <IoReload className="h-4 w-4 mr-1" /> Remedial
+                                        </Button>
+                                      )}
 
-              </div>
+                                    {usePathname().includes("pukakp") &&
+                                      ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
+                                        <Button
+                                          onClick={(e) => {
+                                            setSelectedIdUjian(ujian!.IdUjian);
+                                            setOpenFormCloseExam(!openFormRemedial);
+                                          }}
+                                          variant="outline"
+                                          className="bg-teal-600 hover:bg-teal-700 hover:text-white text-white rounded-md w-full"
+                                        >
+                                          <BiSolidLockAlt className="h-4 w-4 mr-1" /> Tutup Ujian
+                                        </Button>
+                                      )}
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
 
-            </TabsContent>
-            <TabsContent value="password">
-              <Card>
-                <CardHeader>
-                  <CardTitle>{Cookies.get('PUKAKP') === 'Tryout Center' ? 'Ajukan Permohonan Try Out' : 'Ajukan Permohonan Ujian AKP'}</CardTitle>
-                  <CardDescription>
-                    Dalam hal melaksanakan ujian keahlian di PUKAKP masing -
-                    masing dari permohonan lemdiklat yang mengajukan, harap
-                    mengajukan permohonan pelaksanaan kepada tim sekretariat
-                    untuk diketahui!
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4 -mt-6">
-                  <form autoComplete="off">
-                    {/* PUKAKP */}
-
-                    {/* Tipe Ujian */}
-                    <div className="flex gap-2 w-full mt-2">
-                      <div className="w-full">
-                        <label
-                          className="block text-gray-800 text-sm font-medium mb-1"
-                          htmlFor="name"
-                        >
-                          PUKAKP <span className="text-red-600">*</span>
-                        </label>
-                        <input
-                          id="name"
-                          type="text"
-                          className="form-input w-full text-black border-gray-300 rounded-md py-2 text-sm"
-                          placeholder="Tempat Ujian"
-                          required
-                          value={Cookies.get("PUKAKP")}
-                          onChange={(e) => setPukakp(e.target.value)}
+                      {/* Pagination */}
+                      <div className="mt-4 flex justify-end">
+                        <Pagination
+                          totalItems={filteredData.length}
+                          itemsPerPage={itemsPerPage}
+                          currentPage={currentPage}
+                          onPageChange={handlePageChange}
                         />
                       </div>
-                      <div className="w-full">
-                        <Label htmlFor="type-ujian">Tipe Ujian*</Label>
-                        <select
-                          id="type-ujian"
-                          className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
-                          required
-                          value={typeUjian}
-                          onChange={(e) => setTypeUjian(e.target.value)}
-                        >
-                          <option value="0">Pilih Tipe Ujian</option>
-                          {dataTypeUjian.map((type) => (
-                            <option
-                              key={type.IdTypeUjian}
-                              value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
-                              className="capitalize"
-                            >
-                              {type.NamaTypeUjian}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                    </>
+                  )}
 
-                      {/* Nama Ujian */}
+                </div>
 
-                    </div>
+              </TabsContent>
+              <TabsContent value="password">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{Cookies.get('PUKAKP') === 'Tryout Center' ? 'Ajukan Permohonan Try Out' : 'Ajukan Permohonan Ujian AKP'}</CardTitle>
+                    <CardDescription>
+                      Dalam hal melaksanakan ujian keahlian di PUKAKP masing -
+                      masing dari permohonan lemdiklat yang mengajukan, harap
+                      mengajukan permohonan pelaksanaan kepada tim sekretariat
+                      untuk diketahui!
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4 -mt-6">
+                    <form autoComplete="off">
+                      {/* PUKAKP */}
 
-                    <div className="flex gap-2 w-full mt-2">
-                      <div className="w-full">
-                        <Label htmlFor="nama-ujian">Nama Ujian*</Label>
-                        <Input
-                          id="nama-ujian"
-                          type="text"
-                          required
-                          value={namaUjian}
-                          onChange={(e) => setNamaUjian(e.target.value)}
-                        />
-                      </div>
-
-                      {/* Tempat Ujian */}
-                      <div className="w-full">
-                        <Label htmlFor="tempat-ujian">Tempat Ujian*</Label>
-                        <Input
-                          id="tempat-ujian"
-                          type="text"
-                          required
-                          value={tempatUjian}
-                          onChange={(e) => setTempatUjian(e.target.value)}
-                        />
-                      </div>
-                    </div>
-
-
-                    {/* Tanggal Mulai and Tanggal Berakhir */}
-                    <div className="flex gap-2 w-full mt-2">
-                      <div className="w-full">
-                        <Label htmlFor="tanggal-mulai">Tanggal Mulai*</Label>
-                        <Input
-                          id="tanggal-mulai"
-                          type="date"
-                          required
-                          min={new Date().toISOString().split("T")[0]}
-                          value={tanggalMulai}
-                          onChange={(e) => setTanggalMulai(e.target.value)}
-                        />
-                      </div>
-                      <div className="w-full">
-                        <Label htmlFor="tanggal-berakhir">
-                          Tanggal Berakhir*
-                        </Label>
-                        <Input
-                          id="tanggal-berakhir"
-                          type="date"
-                          placeholder="Tanggal Berakhir"
-                          required
-                          value={tanggalBerakhir}
-                          min={tanggalMulai}
-                          onChange={(e) => setTanggalBerakhir(e.target.value)}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Waktu Ujian and Jumlah Peserta */}
-                    <div className="grid grid-cols-1 gap-4">
-                      <div className="mt-2">
-                        <Label htmlFor="jumlah-peserta">Jumlah Peserta*</Label>
-                        <Input
-                          id="jumlah-peserta"
-                          type="text"
-                          placeholder="Jumlah Peserta"
-                          required
-                          value={jumlahPeserta}
-                          onChange={(e) => setJumlahPeserta(e.target.value)}
-                        />
-                      </div>
-                    </div>
-
-                    {
-                      Cookies.get('PUKAKP') !== 'Tryout Center' && <div className="mt-2">
-                        <Label htmlFor="surat-permohonan">
-                          Jenis Pelaksanaan Ujian
-                        </Label>
-                        <Select
-                          value={selectedTypeUjian}
-                          onValueChange={(value: string) =>
-                            setSelectedTypeUjian(value)
-                          }
-                        >
-                          <SelectTrigger className="w-full text-base py-5">
-                            <SelectValue placeholder="Pilih Tipe Pelaksanaan" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="Klasikal">Klasikal</SelectItem>
-                            <SelectItem value="Rewarding">Rewarding</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    }
-
-
-                    {selectedTypeUjian == "Klasikal" ? (
-                      <div className="grid grid-cols-3 gap-2">
-                        <div className="mt-2">
-                          <Label htmlFor="waktuF1B1">Waktu F1B1*</Label>
-                          <Input
-                            id="waktuF1B1"
+                      {/* Tipe Ujian */}
+                      <div className="flex gap-2 w-full mt-2">
+                        <div className="w-full">
+                          <label
+                            className="block text-gray-800 text-sm font-medium mb-1"
+                            htmlFor="name"
+                          >
+                            PUKAKP <span className="text-red-600">*</span>
+                          </label>
+                          <input
+                            id="name"
                             type="text"
+                            className="form-input w-full text-black border-gray-300 rounded-md py-2 text-sm"
+                            placeholder="Tempat Ujian"
                             required
-                            value={waktuF1B1}
-                            onChange={(e) => setWaktuF1B1(e.target.value)}
+                            value={Cookies.get("PUKAKP")}
+                            onChange={(e) => setPukakp(e.target.value)}
                           />
                         </div>
-                        <div className="mt-2">
-                          <Label htmlFor="waktuF1B2">Waktu F1B2*</Label>
+                        <div className="w-full">
+                          <Label htmlFor="type-ujian">Tipe Ujian*</Label>
+                          <select
+                            id="type-ujian"
+                            className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
+                            required
+                            value={typeUjian}
+                            onChange={(e) => setTypeUjian(e.target.value)}
+                          >
+                            <option value="0">Pilih Tipe Ujian</option>
+                            {dataTypeUjian.map((type) => (
+                              <option
+                                key={type.IdTypeUjian}
+                                value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
+                                className="capitalize"
+                              >
+                                {type.NamaTypeUjian}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+
+                        {/* Nama Ujian */}
+
+                      </div>
+
+                      <div className="flex gap-2 w-full mt-2">
+                        <div className="w-full">
+                          <Label htmlFor="nama-ujian">Nama Ujian*</Label>
                           <Input
-                            id="waktuF1B2"
+                            id="nama-ujian"
                             type="text"
                             required
-                            value={waktuF1B2}
-                            onChange={(e) => setWaktuF1B2(e.target.value)}
+                            value={namaUjian}
+                            onChange={(e) => setNamaUjian(e.target.value)}
                           />
                         </div>
-                        <div className="mt-2">
-                          <Label htmlFor="waktuF1B3">Waktu F1B3*</Label>
+
+                        {/* Tempat Ujian */}
+                        <div className="w-full">
+                          <Label htmlFor="tempat-ujian">Tempat Ujian*</Label>
                           <Input
-                            id="waktuF1B3"
+                            id="tempat-ujian"
                             type="text"
                             required
-                            value={waktuF1B3}
-                            onChange={(e) => setWaktuF1B3(e.target.value)}
-                          />
-                        </div>
-                        <div className="mt-2">
-                          <Label htmlFor="waktuF2B1">Waktu F2B1*</Label>
-                          <Input
-                            id="waktuF2B1"
-                            type="text"
-                            required
-                            value={waktuF2B1}
-                            onChange={(e) => setWaktuF2B1(e.target.value)}
-                          />
-                        </div>
-                        <div className="mt-2">
-                          <Label htmlFor="waktuF3B1">Waktu F3B1*</Label>
-                          <Input
-                            id="waktuF3B1"
-                            type="text"
-                            required
-                            value={waktuF3B1}
-                            onChange={(e) => setWaktuF3B1(e.target.value)}
-                          />
-                        </div>
-                        <div className="mt-2">
-                          <Label htmlFor="waktuF3B2">Waktu F3B2*</Label>
-                          <Input
-                            id="waktuF3B2"
-                            type="text"
-                            required
-                            value={waktuF3B2}
-                            onChange={(e) => setWaktuF3B2(e.target.value)}
+                            value={tempatUjian}
+                            onChange={(e) => setTempatUjian(e.target.value)}
                           />
                         </div>
                       </div>
-                    ) : selectedTypeUjian == "Rewarding" ? (
-                      <div className="grid grid-cols-3 gap-2">
-                        <div className="mt-2">
-                          <Label htmlFor="waktuF1">Waktu F1*</Label>
+
+
+                      {/* Tanggal Mulai and Tanggal Berakhir */}
+                      <div className="flex gap-2 w-full mt-2">
+                        <div className="w-full">
+                          <Label htmlFor="tanggal-mulai">Tanggal Mulai*</Label>
                           <Input
-                            id="waktuF1"
-                            type="text"
-                            required
-                            value={waktuF1}
-                            onChange={(e) => setWaktuF1(e.target.value)}
-                          />
-                        </div>
-                        <div className="mt-2">
-                          <Label htmlFor="waktuF2">Waktu F2*</Label>
-                          <Input
-                            id="waktuF2"
-                            type="text"
-                            required
-                            value={waktuF2}
-                            onChange={(e) => setWaktuF2(e.target.value)}
-                          />
-                        </div>
-                        <div className="mt-2">
-                          <Label htmlFor="waktuF3">Waktu F3*</Label>
-                          <Input
-                            id="waktuF3"
-                            type="text"
-                            placeholder=""
-                            required
-                            value={waktuF3}
-                            onChange={(e) => setWaktuF3(e.target.value)}
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="mt-2 grid grid-cols-3 gap-2">
-                        <div>
-                          <Label htmlFor="tanggal">Tanggal</Label>
-                          <Input
-                            id="tanggal"
+                            id="tanggal-mulai"
                             type="date"
                             required
-                            value={waktuDate}
-                            onChange={(e) => setWaktuDate(e.target.value)}
+                            min={new Date().toISOString().split("T")[0]}
+                            value={tanggalMulai}
+                            onChange={(e) => setTanggalMulai(e.target.value)}
                           />
                         </div>
-
-                        <div>
-                          <Label htmlFor="jam">Jam</Label>
+                        <div className="w-full">
+                          <Label htmlFor="tanggal-berakhir">
+                            Tanggal Berakhir*
+                          </Label>
                           <Input
-                            id="jam"
-                            type="time"
+                            id="tanggal-berakhir"
+                            type="date"
+                            placeholder="Tanggal Berakhir"
                             required
-                            value={waktuTime}
-                            onChange={(e) => setWaktuTime(e.target.value)}
+                            value={tanggalBerakhir}
+                            min={tanggalMulai}
+                            onChange={(e) => setTanggalBerakhir(e.target.value)}
                           />
                         </div>
+                      </div>
 
-                        <div>
-                          <Label htmlFor="zona">Zona Waktu</Label>
-                          <Select value={waktuZone} onValueChange={setWaktuZone}>
-                            <SelectTrigger id="zona">
-                              <SelectValue placeholder="Pilih zona waktu" />
+                      {/* Waktu Ujian and Jumlah Peserta */}
+                      <div className="grid grid-cols-1 gap-4">
+                        <div className="mt-2">
+                          <Label htmlFor="jumlah-peserta">Jumlah Peserta*</Label>
+                          <Input
+                            id="jumlah-peserta"
+                            type="text"
+                            placeholder="Jumlah Peserta"
+                            required
+                            value={jumlahPeserta}
+                            onChange={(e) => setJumlahPeserta(e.target.value)}
+                          />
+                        </div>
+                      </div>
+
+                      {
+                        Cookies.get('PUKAKP') !== 'Tryout Center' && <div className="mt-2">
+                          <Label htmlFor="surat-permohonan">
+                            Jenis Pelaksanaan Ujian
+                          </Label>
+                          <Select
+                            value={selectedTypeUjian}
+                            onValueChange={(value: string) =>
+                              setSelectedTypeUjian(value)
+                            }
+                          >
+                            <SelectTrigger className="w-full text-base py-5">
+                              <SelectValue placeholder="Pilih Tipe Pelaksanaan" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="WIB">WIB (GMT+7)</SelectItem>
-                              <SelectItem value="WITA">WITA (GMT+8)</SelectItem>
-                              <SelectItem value="WIT">WIT (GMT+9)</SelectItem>
+                              <SelectItem value="Klasikal">Klasikal</SelectItem>
+                              <SelectItem value="Rewarding">Rewarding</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
+                      }
+
+
+                      {selectedTypeUjian == "Klasikal" ? (
+                        <div className="grid grid-cols-3 gap-2">
+                          <div className="mt-2">
+                            <Label htmlFor="waktuF1B1">Waktu F1B1*</Label>
+                            <Input
+                              id="waktuF1B1"
+                              type="text"
+                              required
+                              value={waktuF1B1}
+                              onChange={(e) => setWaktuF1B1(e.target.value)}
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <Label htmlFor="waktuF1B2">Waktu F1B2*</Label>
+                            <Input
+                              id="waktuF1B2"
+                              type="text"
+                              required
+                              value={waktuF1B2}
+                              onChange={(e) => setWaktuF1B2(e.target.value)}
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <Label htmlFor="waktuF1B3">Waktu F1B3*</Label>
+                            <Input
+                              id="waktuF1B3"
+                              type="text"
+                              required
+                              value={waktuF1B3}
+                              onChange={(e) => setWaktuF1B3(e.target.value)}
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <Label htmlFor="waktuF2B1">Waktu F2B1*</Label>
+                            <Input
+                              id="waktuF2B1"
+                              type="text"
+                              required
+                              value={waktuF2B1}
+                              onChange={(e) => setWaktuF2B1(e.target.value)}
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <Label htmlFor="waktuF3B1">Waktu F3B1*</Label>
+                            <Input
+                              id="waktuF3B1"
+                              type="text"
+                              required
+                              value={waktuF3B1}
+                              onChange={(e) => setWaktuF3B1(e.target.value)}
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <Label htmlFor="waktuF3B2">Waktu F3B2*</Label>
+                            <Input
+                              id="waktuF3B2"
+                              type="text"
+                              required
+                              value={waktuF3B2}
+                              onChange={(e) => setWaktuF3B2(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      ) : selectedTypeUjian == "Rewarding" ? (
+                        <div className="grid grid-cols-3 gap-2">
+                          <div className="mt-2">
+                            <Label htmlFor="waktuF1">Waktu F1*</Label>
+                            <Input
+                              id="waktuF1"
+                              type="text"
+                              required
+                              value={waktuF1}
+                              onChange={(e) => setWaktuF1(e.target.value)}
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <Label htmlFor="waktuF2">Waktu F2*</Label>
+                            <Input
+                              id="waktuF2"
+                              type="text"
+                              required
+                              value={waktuF2}
+                              onChange={(e) => setWaktuF2(e.target.value)}
+                            />
+                          </div>
+                          <div className="mt-2">
+                            <Label htmlFor="waktuF3">Waktu F3*</Label>
+                            <Input
+                              id="waktuF3"
+                              type="text"
+                              placeholder=""
+                              required
+                              value={waktuF3}
+                              onChange={(e) => setWaktuF3(e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="mt-2 grid grid-cols-3 gap-2">
+                          <div>
+                            <Label htmlFor="tanggal">Tanggal</Label>
+                            <Input
+                              id="tanggal"
+                              type="date"
+                              required
+                              value={waktuDate}
+                              onChange={(e) => setWaktuDate(e.target.value)}
+                            />
+                          </div>
+
+                          <div>
+                            <Label htmlFor="jam">Jam</Label>
+                            <Input
+                              id="jam"
+                              type="time"
+                              required
+                              value={waktuTime}
+                              onChange={(e) => setWaktuTime(e.target.value)}
+                            />
+                          </div>
+
+                          <div>
+                            <Label htmlFor="zona">Zona Waktu</Label>
+                            <Select value={waktuZone} onValueChange={setWaktuZone}>
+                              <SelectTrigger id="zona">
+                                <SelectValue placeholder="Pilih zona waktu" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="WIB">WIB (GMT+7)</SelectItem>
+                                <SelectItem value="WITA">WITA (GMT+8)</SelectItem>
+                                <SelectItem value="WIT">WIT (GMT+9)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+
+                      )}
+                      <p className="text-xs">
+                        *Format Penginputan : 2025-01-09 10:15:00
+                        (+0700/+0800/+0900) (WIB/WITA/WIT)
+                      </p>
+
+                      {/* Surat Permohonan */}
+                      <div className="mt-2">
+                        <Label htmlFor="surat-permohonan">Surat Permohonan</Label>
+                        <input
+                          id="surat-permohonan"
+                          type="file"
+                          className="text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
+                          required
+                          onChange={handleFileChange}
+                        />
                       </div>
 
-                    )}
-                    <p className="text-xs">
-                      *Format Penginputan : 2025-01-09 10:15:00
-                      (+0700/+0800/+0900) (WIB/WITA/WIT)
-                    </p>
+                      <CardFooter className="pt-4 flex justify-end gap-2">
+                        {isPosting ? (
+                          <Button>Loading ...</Button>
+                        ) : (
+                          <>
+                            <Button
+                              variant="ghost"
+                              type="button"
+                              onClick={() => handleCancelAddNewUjian()}
+                            >
+                              Cancel
+                            </Button>{" "}
+                            <Button
+                              onClick={(e) => handlePostNewUjianKeahlian(e)}
+                            >
+                              Save Draft
+                            </Button>
+                          </>
+                        )}
+                      </CardFooter>
+                    </form>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+        }
 
-                    {/* Surat Permohonan */}
-                    <div className="mt-2">
-                      <Label htmlFor="surat-permohonan">Surat Permohonan</Label>
-                      <input
-                        id="surat-permohonan"
-                        type="file"
-                        className="text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                        required
-                        onChange={handleFileChange}
-                      />
-                    </div>
-
-                    <CardFooter className="pt-4 flex justify-end gap-2">
-                      {isPosting ? (
-                        <Button>Loading ...</Button>
-                      ) : (
-                        <>
-                          <Button
-                            variant="ghost"
-                            type="button"
-                            onClick={() => handleCancelAddNewUjian()}
-                          >
-                            Cancel
-                          </Button>{" "}
-                          <Button
-                            onClick={(e) => handlePostNewUjianKeahlian(e)}
-                          >
-                            Save Draft
-                          </Button>
-                        </>
-                      )}
-                    </CardFooter>
-                  </form>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        </div>
       </section>
 
       <VerifikasiAction
