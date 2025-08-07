@@ -84,6 +84,7 @@ import StatusUjianKeahlianAKP from "../Dashboard/StatusUjianKeahlianAKP";
 import RemedialAction from "../Dashboard/Actions/RemedialAction";
 import VerifikasiAction from "../Dashboard/Actions/VerifikasiAction";
 import DeleteAction from "../Dashboard/Actions/DeleteAction";
+import { InformationAction } from "../Dashboard/Actions/InformationAction";
 
 const TableDataUjian: React.FC = () => {
   /** Fetching Ujian AKP **/
@@ -667,7 +668,7 @@ const TableDataUjian: React.FC = () => {
                               <th className="p-4 text-center">Tempat</th>
                               <th className="p-4 text-center">Waktu</th>
 
-                              <th className="p-4 text-center">Penguji</th>
+
                               <th className="p-4 text-center">Peserta</th>
                               <th className="p-4 text-center">Aksi</th>
                             </tr>
@@ -693,28 +694,15 @@ const TableDataUjian: React.FC = () => {
                                   {generateTanggalPelatihan(ujian.TanggalMulaiUjian)} s.d{" "}
                                   {generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}
                                 </td>
-                                <td className="p-4">
-                                  {ujian.NamaPengawasUjian ? (
-                                    <div className="flex flex-wrap gap-2">
-                                      {ujian.NamaPengawasUjian.split('|').map((name, index) => (
-                                        <span
-                                          key={index}
-                                          className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full"
-                                        >
-                                          {name.trim()}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  ) : (
-                                    <span>-</span>
-                                  )}
-                                </td>
+
 
                                 <td className="p-4 text-center">
                                   {ujian.UsersUjian?.length ?? 0}/{ujian.JumlahPesertaUjian - 1}
                                 </td>
                                 <td className="p-4 text-right">
                                   <div className="flex gap-1 justify-end flex-wrap">
+                                    <InformationAction ujian={ujian} data={dataUjian} />
+
                                     {ujian!.Status == "Aktif" && (
                                       <Link
                                         href={`/lembaga/${usePathname().includes("pukakp")
@@ -729,19 +717,7 @@ const TableDataUjian: React.FC = () => {
                                       </Link>
                                     )}
 
-                                    {ujian!.FilePermohonan != null &&
-                                      ujian!.Status == "Aktif" ? (
-                                      <Link
-                                        target="_blank"
-                                        href={ujian!.FilePermohonan!}
-                                        className="bg-gray-500 w-full text-white rounded-md  shadow-sm  h-9 px-4 py-2 flex text-sm items-center justify-center"
-                                      >
-                                        <FiFile className="h-4 w-4 mr-1" /> File
-                                        Permohonan
-                                      </Link>
-                                    ) : (
-                                      <></>
-                                    )}
+
 
                                     {ujian!.Status == "Draft" &&
                                       !usePathname().includes("dpkakp") ? (

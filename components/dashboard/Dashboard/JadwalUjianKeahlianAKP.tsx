@@ -1,25 +1,37 @@
-import React from "react";
-import { Ujian } from "@/types/ujian-keahlian-akp";
+import React from "react"
+import { Ujian } from "@/types/ujian-keahlian-akp"
 
-export const JadwalUjianKeahlianAKP = ({ data, ujian }: { data: Ujian[]; ujian: Ujian }) => {
-    if (data.length === 0) return null;
+export const JadwalUjianKeahlianAKP = ({
+    data,
+    ujian,
+}: {
+    data: Ujian[]
+    ujian: Ujian
+}) => {
+    if (data.length === 0) return null
 
-    let scheduleItems;
+    let scheduleItems
 
-    if (data[0]?.TypeUjian.includes("Rewarding") || data[0]?.TypeUjian.includes('TRYOUT')) {
+    if (
+        ujian?.TypeUjian.includes("Rewarding") ||
+        ujian?.TypeUjian.toLowerCase().includes("tryout")
+    ) {
         scheduleItems = [
             { label: "F1", time: ujian?.WaktuF1 },
             { label: "F2", time: ujian?.WaktuF2 },
             { label: "F3", time: ujian?.WaktuF3 },
-        ];
-    } else if (data[0]?.TypeUjian == "ANKAPIN II" || data[0]?.TypeUjian == "ATKAPIN II") {
+        ]
+    } else if (
+        ujian?.TypeUjian === "ANKAPIN II" ||
+        ujian?.TypeUjian === "ATKAPIN II"
+    ) {
         scheduleItems = [
             { label: "F1B1", time: ujian?.WaktuF1B1 },
             { label: "F1B2", time: ujian?.WaktuF1B2 },
             { label: "F2", time: ujian?.WaktuF2B1 },
             { label: "F3B1", time: ujian?.WaktuF3B1 },
             { label: "F3B2", time: ujian?.WaktuF3B2 },
-        ];
+        ]
     } else {
         scheduleItems = [
             { label: "F1B1", time: ujian?.WaktuF1B1 },
@@ -28,21 +40,24 @@ export const JadwalUjianKeahlianAKP = ({ data, ujian }: { data: Ujian[]; ujian: 
             { label: "F2", time: ujian?.WaktuF2B1 },
             { label: "F3B1", time: ujian?.WaktuF3B1 },
             { label: "F3B2", time: ujian?.WaktuF3B2 },
-        ];
+        ]
     }
 
     return (
-        <div className="w-full text-sm grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {scheduleItems.map(({ label, time }) => (
-                <React.Fragment key={label}>
-                    <div key={label} className="border border-gray-200 p-2 text-center">
-                        <span className="font-bold block border-b border-b-gray-200 py-1 mb-1">
-                            {label}
-                        </span>
-                        {time != "" ? time : "-"}
+                <div
+                    key={label}
+                    className="rounded-lg border border-zinc-200 shadow-sm bg-white px-4 py-3 text-center"
+                >
+                    <div className="text-xs uppercase tracking-wide text-zinc-500 mb-1">
+                        {label}
                     </div>
-                </React.Fragment>
+                    <div className="text-sm font-medium text-zinc-800">
+                        {time?.trim() ? time : "-"}
+                    </div>
+                </div>
             ))}
         </div>
-    );
+    )
 }

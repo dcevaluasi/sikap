@@ -76,7 +76,6 @@ import EmptyData from "@/components/micro-components/EmptyData";
 import { HashLoader } from "react-spinners";
 import { generatedYears } from "@/utils/globals";
 import Pagination from "@/components/Pagination";
-import { JadwalUjianKeahlianAKP } from "../Dashboard/JadwalUjianKeahlianAKP";
 import { useFetchTypeUjianKeahlianAKP } from "@/hooks/ujian/useFetchTypeUjianKeahlianAKP";
 import { useFetchPengujiKeahlianAKP } from "@/hooks/penguji/useFetchPengujiKeahlianAKP";
 import { useFetchUjianKeahlianAKP } from "@/hooks/ujian/useFetchUjianKeahlianAKP";
@@ -739,7 +738,7 @@ const TableDataTryout: React.FC = () => {
                                                                                             </AlertDialogDescription>
                                                                                         </div>
                                                                                     </AlertDialogHeader>
-                                                                                    <JadwalUjianKeahlianAKP data={dataUjian} ujian={ujian} />
+
                                                                                     <AlertDialogFooter>
                                                                                         <AlertDialogCancel className="bg-gray-900 w-full text-white hover:bg-gray-800 hover:text-white">
                                                                                             Tutup
