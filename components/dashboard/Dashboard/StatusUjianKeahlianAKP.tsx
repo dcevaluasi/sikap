@@ -103,9 +103,14 @@ const StatusUjianKeahlianAKP: React.FC<Props> = ({
                         <>
                             {pathname.includes("pukakp") &&
                                 renderButton("Draft", countersUjian.draft, "Draft")}
-                            {renderButton("Pending", countersUjian.notVerified, "Pending")}
-                            {pathname.includes("dpkakp") &&
-                                renderButton("Pilih Penguji", countersUjian.pilihPenguji, "Pilih Penguji")}
+                            {
+                                !pathname.includes('tryout') && <>
+                                    {renderButton("Pending", countersUjian.notVerified, "Pending")}
+                                    {pathname.includes("dpkakp") &&
+                                        renderButton("Pilih Penguji", countersUjian.pilihPenguji, "Pilih Penguji")}
+                                </>
+                            }
+
                             {renderButton("Akan Dilaksanakan", countersUjian.willDo, "Akan Dilaksanakan")}
                             {renderButton("Sedang Berlangsung", countersUjian.doing, "Sedang Berlangsung")}
                             {renderButton("Telah Selesai", countersUjian.finished, "Telah Selesai")}

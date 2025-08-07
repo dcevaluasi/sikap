@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios, { AxiosResponse } from 'axios'
 import Cookies from 'js-cookie'
 import { dpkakpBaseUrl } from '@/constants/urls'
-import { Ujian } from '@/types/ujian-keahlian-akp'
+import { TypeUjian, Ujian } from '@/types/ujian-keahlian-akp'
 import { isTodayBefore, isTodayBetween } from '@/lib/utils'
 
 type ViewType = 'admin' | 'penguji'
@@ -10,6 +10,9 @@ type ViewType = 'admin' | 'penguji'
 export const useFetchUjianKeahlianAKP = (
   view: ViewType = 'admin',
   pathPukakp?: boolean,
+  options?: {
+    includeTryout?: boolean // true = only TRYOUT, false = exclude TRYOUT, undefined = all
+  },
 ) => {
   const [data, setData] = useState<Ujian[]>([])
   const [isFetching, setIsFetching] = useState(false)
@@ -42,6 +45,7 @@ export const useFetchUjianKeahlianAKP = (
 
       let filteredData: Ujian[] = []
 
+      // View-based filtering
       if (view === 'admin') {
         filteredData =
           pukakpCookie !==
@@ -54,13 +58,24 @@ export const useFetchUjianKeahlianAKP = (
         )
       }
 
+      // 🔍 Tryout filter logic
+      if (options?.includeTryout === true) {
+        filteredData = filteredData.filter((item: Ujian) =>
+          item.TypeUjian?.toLowerCase().includes('tryout'),
+        )
+      } else if (options?.includeTryout === false) {
+        filteredData = filteredData.filter(
+          (item: Ujian) => !item.TypeUjian?.toLowerCase().includes('tryout'),
+        )
+      }
+
       const sortedData = filteredData.sort((a, b) => {
         if (a.Status === 'Pending' && b.Status !== 'Pending') return -1
         if (a.Status !== 'Pending' && b.Status === 'Pending') return 1
         return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
       })
 
-      // Shared counters
+      // Counters
       setCountVerified(
         filteredData.filter((item) => item.Status === 'Aktif').length,
       )
@@ -79,14 +94,12 @@ export const useFetchUjianKeahlianAKP = (
         setCounterFinished(
           filteredData.filter((item) => item.IsSelesai === '1').length,
         )
-
         setCounterWillDo(
           filteredData.filter(
             (item) =>
               isTodayBefore(item.TanggalMulaiUjian) && item.IsSelesai === '',
           ).length,
         )
-
         setCounterDoing(
           filteredData.filter(
             (item) =>
@@ -98,19 +111,15 @@ export const useFetchUjianKeahlianAKP = (
         )
       }
 
-      // Set final data
+      // Final set data
       if (pathPukakp) {
         setData(sortedData)
       } else {
-        const fallbackSorted = (view === 'admin' ? allData : filteredData).sort(
-          (a, b) => {
-            if (a.Status === 'Pending' && b.Status !== 'Pending') return -1
-            if (a.Status !== 'Pending' && b.Status === 'Pending') return 1
-            return (
-              new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
-            )
-          },
-        )
+        const fallbackSorted = filteredData.sort((a, b) => {
+          if (a.Status === 'Pending' && b.Status !== 'Pending') return -1
+          if (a.Status !== 'Pending' && b.Status === 'Pending') return 1
+          return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
+        })
         setData(fallbackSorted)
       }
     } catch (err) {

@@ -89,7 +89,7 @@ const TableDataUjian: React.FC = () => {
   /** Fetching Ujian AKP **/
   const {
     data: dataUjian, isFetching: isFetchingDataUjian, counters: countersUjian, error: errorFetchingUjian, refetch: refetchUjian,
-  } = useFetchUjianKeahlianAKP('admin', true)
+  } = useFetchUjianKeahlianAKP('admin', true, { includeTryout: false })
 
   /** Fetching Type Ujian AKP **/
   const { dataTypeUjian, isFetching: isFetchingTypeUjian, error: errorFetchingTypeUjian, refetch: refetchTypeUjian } = useFetchTypeUjianKeahlianAKP();
