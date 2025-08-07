@@ -923,6 +923,27 @@ const TableDataUjian: React.FC = () => {
     }
   };
 
+  const [waktuDate, setWaktuDate] = React.useState('');
+  const [waktuTime, setWaktuTime] = React.useState('');
+  const [waktuZone, setWaktuZone] = React.useState('WIB');
+
+  React.useEffect(() => {
+    if (waktuDate && waktuTime && waktuZone) {
+      const zoneMap: { [key: string]: string } = {
+        WIB: '+0700',
+        WITA: '+0800',
+        WIT: '+0900',
+      };
+
+      const timeWithSeconds = waktuTime.length === 5 ? `${waktuTime}:00` : waktuTime;
+
+      const formatted = `${waktuDate} ${timeWithSeconds} ${zoneMap[waktuZone]} ${waktuZone}`;
+      setWaktuF1(formatted);
+      setWaktuF2(formatted);
+      setWaktuF3(formatted);
+    }
+  }, [waktuDate, waktuTime, waktuZone]);
+
 
 
   return (
@@ -1513,7 +1534,7 @@ const TableDataUjian: React.FC = () => {
             <TabsContent value="password">
               <Card>
                 <CardHeader>
-                  <CardTitle>Ajukan Permohonan Ujian AKP</CardTitle>
+                  <CardTitle>{Cookies.get('PUKAKP') === 'Tryout Center' ? 'Ajukan Permohonan Try Out' : 'Ajukan Permohonan Ujian AKP'}</CardTitle>
                   <CardDescription>
                     Dalam hal melaksanakan ujian keahlian di PUKAKP masing -
                     masing dari permohonan lemdiklat yang mengajukan, harap
@@ -1524,74 +1545,81 @@ const TableDataUjian: React.FC = () => {
                 <CardContent className="space-y-4 -mt-6">
                   <form autoComplete="off">
                     {/* PUKAKP */}
-                    <div className="mt-2 w-full">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
-                      >
-                        PUKAKP <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        id="name"
-                        type="text"
-                        className="form-input w-full text-black border-gray-300 rounded-md py-2 text-sm"
-                        placeholder="Tempat Ujian"
-                        required
-                        value={Cookies.get("PUKAKP")}
-                        onChange={(e) => setPukakp(e.target.value)}
-                      />
-                    </div>
+
                     {/* Tipe Ujian */}
+                    <div className="flex gap-2 w-full mt-2">
+                      <div className="w-full">
+                        <label
+                          className="block text-gray-800 text-sm font-medium mb-1"
+                          htmlFor="name"
+                        >
+                          PUKAKP <span className="text-red-600">*</span>
+                        </label>
+                        <input
+                          id="name"
+                          type="text"
+                          className="form-input w-full text-black border-gray-300 rounded-md py-2 text-sm"
+                          placeholder="Tempat Ujian"
+                          required
+                          value={Cookies.get("PUKAKP")}
+                          onChange={(e) => setPukakp(e.target.value)}
+                        />
+                      </div>
+                      <div className="w-full">
+                        <Label htmlFor="type-ujian">Tipe Ujian*</Label>
+                        <select
+                          id="type-ujian"
+                          className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
+                          required
+                          value={typeUjian}
+                          onChange={(e) => setTypeUjian(e.target.value)}
+                        >
+                          <option value="0">Pilih Tipe Ujian</option>
+                          {dataTypeUjian.map((type) => (
+                            <option
+                              key={type.IdTypeUjian}
+                              value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
+                              className="capitalize"
+                            >
+                              {type.NamaTypeUjian}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
 
-                    <div className="mt-2">
-                      <Label htmlFor="type-ujian">Tipe Ujian*</Label>
-                      <select
-                        id="type-ujian"
-                        className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
-                        required
-                        value={typeUjian}
-                        onChange={(e) => setTypeUjian(e.target.value)}
-                      >
-                        <option value="0">Pilih Tipe Ujian</option>
-                        {dataTypeUjian.map((type) => (
-                          <option
-                            key={type.IdTypeUjian}
-                            value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
-                            className="capitalize"
-                          >
-                            {type.NamaTypeUjian}
-                          </option>
-                        ))}
-                      </select>
+                      {/* Nama Ujian */}
+
                     </div>
 
-                    {/* Nama Ujian */}
-                    <div className="mt-2">
-                      <Label htmlFor="nama-ujian">Nama Ujian*</Label>
-                      <Input
-                        id="nama-ujian"
-                        type="text"
-                        required
-                        value={namaUjian}
-                        onChange={(e) => setNamaUjian(e.target.value)}
-                      />
+                    <div className="flex gap-2 w-full mt-2">
+                      <div className="w-full">
+                        <Label htmlFor="nama-ujian">Nama Ujian*</Label>
+                        <Input
+                          id="nama-ujian"
+                          type="text"
+                          required
+                          value={namaUjian}
+                          onChange={(e) => setNamaUjian(e.target.value)}
+                        />
+                      </div>
+
+                      {/* Tempat Ujian */}
+                      <div className="w-full">
+                        <Label htmlFor="tempat-ujian">Tempat Ujian*</Label>
+                        <Input
+                          id="tempat-ujian"
+                          type="text"
+                          required
+                          value={tempatUjian}
+                          onChange={(e) => setTempatUjian(e.target.value)}
+                        />
+                      </div>
                     </div>
 
-                    {/* Tempat Ujian */}
-                    <div className="mt-2">
-                      <Label htmlFor="tempat-ujian">Tempat Ujian*</Label>
-                      <Input
-                        id="tempat-ujian"
-                        type="text"
-                        required
-                        value={tempatUjian}
-                        onChange={(e) => setTempatUjian(e.target.value)}
-                      />
-                    </div>
 
                     {/* Tanggal Mulai and Tanggal Berakhir */}
-                    <div className="grid grid-cols-2 gap-4 mt-1">
-                      <div className="">
+                    <div className="flex gap-2 w-full mt-2">
+                      <div className="w-full">
                         <Label htmlFor="tanggal-mulai">Tanggal Mulai*</Label>
                         <Input
                           id="tanggal-mulai"
@@ -1602,7 +1630,7 @@ const TableDataUjian: React.FC = () => {
                           onChange={(e) => setTanggalMulai(e.target.value)}
                         />
                       </div>
-                      <div className="">
+                      <div className="w-full">
                         <Label htmlFor="tanggal-berakhir">
                           Tanggal Berakhir*
                         </Label>
@@ -1633,25 +1661,28 @@ const TableDataUjian: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="mt-2">
-                      <Label htmlFor="surat-permohonan">
-                        Jenis Pelaksanaan Ujian
-                      </Label>
-                      <Select
-                        value={selectedTypeUjian}
-                        onValueChange={(value: string) =>
-                          setSelectedTypeUjian(value)
-                        }
-                      >
-                        <SelectTrigger className="w-full text-base py-5">
-                          <SelectValue placeholder="Pilih Tipe Pelaksanaan" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Klasikal">Klasikal</SelectItem>
-                          <SelectItem value="Rewarding">Rewarding</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
+                    {
+                      Cookies.get('PUKAKP') !== 'Tryout Center' && <div className="mt-2">
+                        <Label htmlFor="surat-permohonan">
+                          Jenis Pelaksanaan Ujian
+                        </Label>
+                        <Select
+                          value={selectedTypeUjian}
+                          onValueChange={(value: string) =>
+                            setSelectedTypeUjian(value)
+                          }
+                        >
+                          <SelectTrigger className="w-full text-base py-5">
+                            <SelectValue placeholder="Pilih Tipe Pelaksanaan" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Klasikal">Klasikal</SelectItem>
+                            <SelectItem value="Rewarding">Rewarding</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    }
+
 
                     {selectedTypeUjian == "Klasikal" ? (
                       <div className="grid grid-cols-3 gap-2">
@@ -1751,7 +1782,44 @@ const TableDataUjian: React.FC = () => {
                         </div>
                       </div>
                     ) : (
-                      <></>
+                      <div className="mt-2 grid grid-cols-3 gap-2">
+                        <div>
+                          <Label htmlFor="tanggal">Tanggal</Label>
+                          <Input
+                            id="tanggal"
+                            type="date"
+                            required
+                            value={waktuDate}
+                            onChange={(e) => setWaktuDate(e.target.value)}
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="jam">Jam</Label>
+                          <Input
+                            id="jam"
+                            type="time"
+                            required
+                            value={waktuTime}
+                            onChange={(e) => setWaktuTime(e.target.value)}
+                          />
+                        </div>
+
+                        <div>
+                          <Label htmlFor="zona">Zona Waktu</Label>
+                          <Select value={waktuZone} onValueChange={setWaktuZone}>
+                            <SelectTrigger id="zona">
+                              <SelectValue placeholder="Pilih zona waktu" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="WIB">WIB (GMT+7)</SelectItem>
+                              <SelectItem value="WITA">WITA (GMT+8)</SelectItem>
+                              <SelectItem value="WIT">WIT (GMT+9)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+
                     )}
                     <p className="text-xs">
                       *Format Penginputan : 2025-01-09 10:15:00

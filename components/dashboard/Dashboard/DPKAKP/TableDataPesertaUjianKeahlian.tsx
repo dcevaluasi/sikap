@@ -494,6 +494,27 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
     },
     {
+      accessorKey: "Nama",
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className="p-0 !text-left w-[270px] flex items-center justify-start text-gray-900 font-semibold"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Kode Tryout
+          <TbSchool className="ml-1 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="ml-0 text-left capitalize">
+          <p className="text-base font-semibold tracking-tight leading-none">
+            {row.original.CodeAksesUsersBagian[0].KodeAkses}
+          </p>
+
+        </div>
+      ),
+    },
+    {
       accessorKey: "NomorUjian",
       header: ({ column }) => (
         <Button
