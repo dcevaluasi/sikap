@@ -232,7 +232,7 @@ const TableDataTryout: React.FC = () => {
         formData.append("TanggalBerakhirUjian", tanggalBerakhir);
         formData.append("WaktuUjian", waktuUjian);
         formData.append("JumlahPesertaUjian", (parseInt(jumlahPeserta) + 1).toString());
-        formData.append("Status", "Draft");
+        formData.append("Status", "Aktif");
         if (filePermohonan != null) {
             formData.append("filePermohonan", filePermohonan!);
         }
@@ -322,43 +322,7 @@ const TableDataTryout: React.FC = () => {
         }
     };
 
-    const handleKirimPermohonan = async (id: number) => {
-        setIsValidating(true);
 
-        try {
-            const response = await axios.put(
-                `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${id}`,
-                {
-                    status: "Pending",
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-                    },
-                }
-            );
-            console.log(response);
-            Toast.fire({
-                icon: "success",
-                title: `Berhasil mengirimkan permohonan pelaksanaan ujian keahlian!`,
-            });
-            refetchUjian();
-            setStatus("Tidak Aktif");
-            setSelectedId(0);
-            setSelectedSuratPermohonan("");
-            setOpenFormValidasiPelaksanaanUjian(false);
-            setIsValidating(false);
-        } catch (error) {
-            console.error(error);
-            Toast.fire({
-                icon: "error",
-                title: `Gagal mengirimkan permohonan pelaksanaan ujian keahlian!`,
-            });
-            refetchUjian();
-            setOpenFormValidasiPelaksanaanUjian(false);
-            setIsValidating(false);
-        }
-    };
 
     const filteredData = dataUjian.filter((ujian: Ujian) => {
         const matchesSearchQuery =
@@ -668,7 +632,7 @@ const TableDataTryout: React.FC = () => {
                                                         <th className="p-4 text-center">Tempat</th>
                                                         <th className="p-4 text-center">Waktu</th>
 
-                                                        <th className="p-4 text-center">Penguji</th>
+
                                                         <th className="p-4 text-center">Peserta</th>
                                                         <th className="p-4 text-center">Aksi</th>
                                                     </tr>
@@ -694,7 +658,7 @@ const TableDataTryout: React.FC = () => {
                                                                 {generateTanggalPelatihan(ujian.TanggalMulaiUjian)} s.d{" "}
                                                                 {generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}
                                                             </td>
-                                                            <td className="p-4">{ujian.NamaPengawasUjian || "-"}</td>
+
                                                             <td className="p-4 text-center">
                                                                 {ujian.UsersUjian?.length ?? 0}/{ujian.JumlahPesertaUjian - 1}
                                                             </td>
@@ -710,55 +674,10 @@ const TableDataTryout: React.FC = () => {
                                                                             className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm w-full justify-center"
                                                                         >
                                                                             <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
-                                                                            Peserta Ujian
+                                                                            Peserta Tryout
                                                                         </Link>
                                                                     )}
 
-                                                                    {ujian!.FilePermohonan != null &&
-                                                                        ujian!.Status == "Aktif" ? (
-                                                                        <Link
-                                                                            target="_blank"
-                                                                            href={ujian!.FilePermohonan!}
-                                                                            className="bg-gray-500 w-full text-white rounded-md  shadow-sm  h-9 px-4 py-2 flex text-sm items-center justify-center"
-                                                                        >
-                                                                            <FiFile className="h-4 w-4 mr-1" /> File
-                                                                            Permohonan
-                                                                        </Link>
-                                                                    ) : (
-                                                                        <></>
-                                                                    )}
-
-                                                                    {ujian!.Status == "Draft" &&
-                                                                        !usePathname().includes("dpkakp") ? (
-                                                                        <Button
-                                                                            onClick={() => {
-                                                                                handleKirimPermohonan(ujian!.IdUjian);
-                                                                            }}
-                                                                            variant="outline"
-                                                                            className="bg-indigo-600 w-full text-neutral-100 hover:text-neutral-100 hover:bg-indigo-600"
-                                                                        >
-                                                                            <BiPaperPlane className="h-4 w-4 text-neutral-100 mr-1" />{" "}
-                                                                            Kirim Permohonan
-                                                                        </Button>
-                                                                    ) : (
-                                                                        <></>
-                                                                    )}
-
-                                                                    {usePathname().includes("pukakp") &&
-                                                                        ujian!.Status == "Draft" ? (
-                                                                        <Button
-                                                                            onClick={() => {
-                                                                                handleFetchingDataUjianById(ujian!.IdUjian);
-                                                                            }}
-                                                                            variant="outline"
-                                                                            className="bg-yellow-300 w-full text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
-                                                                        >
-                                                                            <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" />{" "}
-                                                                            Edit Ujian
-                                                                        </Button>
-                                                                    ) : (
-                                                                        <></>
-                                                                    )}
 
                                                                     <DeleteAction
                                                                         idUjian={ujian.IdUjian.toString()}
@@ -766,57 +685,36 @@ const TableDataTryout: React.FC = () => {
                                                                         refetchUjian={refetchUjian}
                                                                     />
 
-                                                                    {usePathname().includes("pukakp") &&
-                                                                        ujian!.IsSelesai == "" ? (
-                                                                        <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
+                                                                    {
+                                                                        ujian!.IsSelesai == "" && (
+                                                                            <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
 
-                                                                            <AlertDialogContent>
-                                                                                <AlertDialogHeader>
-                                                                                    <AlertDialogTitle>
-                                                                                        Apakah kamu yakin menutup ujian ini?
-                                                                                    </AlertDialogTitle>
-                                                                                    <AlertDialogDescription>
-                                                                                        Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
-                                                                                    </AlertDialogDescription>
-                                                                                </AlertDialogHeader>
-                                                                                <AlertDialogFooter>
-                                                                                    {
-                                                                                        !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
+                                                                                <AlertDialogContent>
+                                                                                    <AlertDialogHeader>
+                                                                                        <AlertDialogTitle>
+                                                                                            Apakah kamu yakin menutup ujian ini?
+                                                                                        </AlertDialogTitle>
+                                                                                        <AlertDialogDescription>
+                                                                                            Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
+                                                                                        </AlertDialogDescription>
+                                                                                    </AlertDialogHeader>
+                                                                                    <AlertDialogFooter>
+                                                                                        {
+                                                                                            !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
 
-                                                                                            <AlertDialogAction
-                                                                                                onClick={() => handleCloseExam()}
-                                                                                                className="bg-gray-700"
-                                                                                            >
-                                                                                                Tutup
-                                                                                            </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
-                                                                                    }
+                                                                                                <AlertDialogAction
+                                                                                                    onClick={() => handleCloseExam()}
+                                                                                                    className="bg-gray-700"
+                                                                                                >
+                                                                                                    Tutup
+                                                                                                </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
+                                                                                        }
 
-                                                                                </AlertDialogFooter>
-                                                                            </AlertDialogContent>
-                                                                        </AlertDialog>
-                                                                    ) : (
-                                                                        <></>
-                                                                    )}
-
-                                                                    {usePathname().includes("dpkakp") &&
-                                                                        (ujian!.Status == 'Pending') && (
-                                                                            <Button
-                                                                                onClick={(e) => {
-                                                                                    setSelectedId(ujian!.IdUjian);
-                                                                                    setSelectedSuratPermohonan(
-                                                                                        ujian!.FilePermohonan
-                                                                                    );
-                                                                                    setOpenFormValidasiPelaksanaanUjian(
-                                                                                        !openFormValidasiPelaksanaanUjian
-                                                                                    );
-                                                                                }}
-                                                                                variant="outline"
-                                                                                className="bg-green-400 hover:bg-green-400 hover:text-white text-white rounded-md w-full"
-                                                                            >
-                                                                                <RiVerifiedBadgeFill className="h-4 w-4 mr-1" />{" "}
-                                                                                Verifikasi
-                                                                            </Button>
+                                                                                    </AlertDialogFooter>
+                                                                                </AlertDialogContent>
+                                                                            </AlertDialog>
                                                                         )}
+
 
                                                                     {ujian!.Status === "Aktif" && (
                                                                         <AlertDialog>
@@ -852,39 +750,6 @@ const TableDataTryout: React.FC = () => {
                                                                         </AlertDialog>
                                                                     )}
 
-                                                                    {usePathname().includes("dpkakp") &&
-                                                                        ujian!.Status == "Aktif" &&
-                                                                        ujian!.NamaPengawasUjian == "" && (
-                                                                            <Button
-                                                                                onClick={(e) => {
-                                                                                    setSelectedId(ujian!.IdUjian);
-                                                                                    setStatus(ujian!.Status);
-                                                                                    setIsOpenFormUjianKeahlian(
-                                                                                        !isOpenFormUjianKeahlian
-                                                                                    );
-                                                                                }}
-                                                                                variant="outline"
-                                                                                className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200 w-full"
-                                                                            >
-                                                                                <TbEditCircle className="h-5 w-5 mr-1" />
-                                                                                Pilih Penguji
-                                                                            </Button>
-                                                                        )}
-
-                                                                    {
-                                                                        ujian!.Status === "Aktif" && ujian!.IsSelesai == "" && isTodayBetween(ujian!.TanggalMulaiUjian, ujian!.TanggalBerakhirUjian) && (
-                                                                            <Button
-                                                                                onClick={(e) => {
-                                                                                    setSelectedIdUjian(ujian!.IdUjian);
-                                                                                    setOpenFormRemedial(!openFormRemedial);
-                                                                                }}
-                                                                                variant="outline"
-                                                                                className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md w-full"
-                                                                            >
-                                                                                <IoReload className="h-4 w-4 mr-1" /> Remedial
-                                                                            </Button>
-                                                                        )}
-
                                                                     {usePathname().includes("pukakp") &&
                                                                         ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
                                                                             <Button
@@ -895,7 +760,7 @@ const TableDataTryout: React.FC = () => {
                                                                                 variant="outline"
                                                                                 className="bg-teal-600 hover:bg-teal-700 hover:text-white text-white rounded-md w-full"
                                                                             >
-                                                                                <BiSolidLockAlt className="h-4 w-4 mr-1" /> Tutup Ujian
+                                                                                <BiSolidLockAlt className="h-4 w-4 mr-1" /> Tutup Tryout
                                                                             </Button>
                                                                         )}
                                                                 </div>
@@ -938,23 +803,6 @@ const TableDataTryout: React.FC = () => {
 
                                         {/* Tipe Ujian */}
                                         <div className="flex gap-2 w-full mt-2">
-                                            <div className="w-full">
-                                                <label
-                                                    className="block text-gray-800 text-sm font-medium mb-1"
-                                                    htmlFor="name"
-                                                >
-                                                    PUKAKP <span className="text-red-600">*</span>
-                                                </label>
-                                                <input
-                                                    id="name"
-                                                    type="text"
-                                                    className="form-input w-full text-black border-gray-300 rounded-md py-2 text-sm"
-                                                    placeholder="Tempat Ujian"
-                                                    required
-                                                    value={Cookies.get("PUKAKP")}
-                                                    onChange={(e) => setPukakp(e.target.value)}
-                                                />
-                                            </div>
                                             <div className="w-full">
                                                 <Label htmlFor="type-ujian">Tipe Ujian*</Label>
                                                 <select
@@ -1051,128 +899,9 @@ const TableDataTryout: React.FC = () => {
                                             </div>
                                         </div>
 
-                                        {
-                                            Cookies.get('PUKAKP') !== 'Tryout Center' && <div className="mt-2">
-                                                <Label htmlFor="surat-permohonan">
-                                                    Jenis Pelaksanaan Ujian
-                                                </Label>
-                                                <Select
-                                                    value={selectedTypeUjian}
-                                                    onValueChange={(value: string) =>
-                                                        setSelectedTypeUjian(value)
-                                                    }
-                                                >
-                                                    <SelectTrigger className="w-full text-base py-5">
-                                                        <SelectValue placeholder="Pilih Tipe Pelaksanaan" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="Klasikal">Klasikal</SelectItem>
-                                                        <SelectItem value="Rewarding">Rewarding</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
-                                        }
-
-
-                                        {selectedTypeUjian == "Klasikal" ? (
+                                        <div className="flex flex-col mt-2">
+                                            <Label htmlFor="tanggal">Waktu Pelaksanaan*</Label>
                                             <div className="grid grid-cols-3 gap-2">
-                                                <div className="mt-2">
-                                                    <Label htmlFor="waktuF1B1">Waktu F1B1*</Label>
-                                                    <Input
-                                                        id="waktuF1B1"
-                                                        type="text"
-                                                        required
-                                                        value={waktuF1B1}
-                                                        onChange={(e) => setWaktuF1B1(e.target.value)}
-                                                    />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <Label htmlFor="waktuF1B2">Waktu F1B2*</Label>
-                                                    <Input
-                                                        id="waktuF1B2"
-                                                        type="text"
-                                                        required
-                                                        value={waktuF1B2}
-                                                        onChange={(e) => setWaktuF1B2(e.target.value)}
-                                                    />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <Label htmlFor="waktuF1B3">Waktu F1B3*</Label>
-                                                    <Input
-                                                        id="waktuF1B3"
-                                                        type="text"
-                                                        required
-                                                        value={waktuF1B3}
-                                                        onChange={(e) => setWaktuF1B3(e.target.value)}
-                                                    />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <Label htmlFor="waktuF2B1">Waktu F2B1*</Label>
-                                                    <Input
-                                                        id="waktuF2B1"
-                                                        type="text"
-                                                        required
-                                                        value={waktuF2B1}
-                                                        onChange={(e) => setWaktuF2B1(e.target.value)}
-                                                    />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <Label htmlFor="waktuF3B1">Waktu F3B1*</Label>
-                                                    <Input
-                                                        id="waktuF3B1"
-                                                        type="text"
-                                                        required
-                                                        value={waktuF3B1}
-                                                        onChange={(e) => setWaktuF3B1(e.target.value)}
-                                                    />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <Label htmlFor="waktuF3B2">Waktu F3B2*</Label>
-                                                    <Input
-                                                        id="waktuF3B2"
-                                                        type="text"
-                                                        required
-                                                        value={waktuF3B2}
-                                                        onChange={(e) => setWaktuF3B2(e.target.value)}
-                                                    />
-                                                </div>
-                                            </div>
-                                        ) : selectedTypeUjian == "Rewarding" ? (
-                                            <div className="grid grid-cols-3 gap-2">
-                                                <div className="mt-2">
-                                                    <Label htmlFor="waktuF1">Waktu F1*</Label>
-                                                    <Input
-                                                        id="waktuF1"
-                                                        type="text"
-                                                        required
-                                                        value={waktuF1}
-                                                        onChange={(e) => setWaktuF1(e.target.value)}
-                                                    />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <Label htmlFor="waktuF2">Waktu F2*</Label>
-                                                    <Input
-                                                        id="waktuF2"
-                                                        type="text"
-                                                        required
-                                                        value={waktuF2}
-                                                        onChange={(e) => setWaktuF2(e.target.value)}
-                                                    />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <Label htmlFor="waktuF3">Waktu F3*</Label>
-                                                    <Input
-                                                        id="waktuF3"
-                                                        type="text"
-                                                        placeholder=""
-                                                        required
-                                                        value={waktuF3}
-                                                        onChange={(e) => setWaktuF3(e.target.value)}
-                                                    />
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="mt-2 grid grid-cols-3 gap-2">
                                                 <div>
                                                     <Label htmlFor="tanggal">Tanggal</Label>
                                                     <Input
@@ -1209,12 +938,8 @@ const TableDataTryout: React.FC = () => {
                                                     </Select>
                                                 </div>
                                             </div>
+                                        </div>
 
-                                        )}
-                                        <p className="text-xs">
-                                            *Format Penginputan : 2025-01-09 10:15:00
-                                            (+0700/+0800/+0900) (WIB/WITA/WIT)
-                                        </p>
 
                                         {/* Surat Permohonan */}
                                         <div className="mt-2">
@@ -1243,7 +968,7 @@ const TableDataTryout: React.FC = () => {
                                                     <Button
                                                         onClick={(e) => handlePostNewUjianKeahlian(e)}
                                                     >
-                                                        Save Draft
+                                                        Buat Tryout
                                                     </Button>
                                                 </>
                                             )}
@@ -1256,341 +981,6 @@ const TableDataTryout: React.FC = () => {
                 </div>
             </section>
 
-            <VerifikasiAction
-                open={openFormValidasiPelaksanaanUjian}
-                setOpen={setOpenFormValidasiPelaksanaanUjian}
-                selectedId={selectedId}
-                setSelectedId={setSelectedId}
-                selectedSuratPermohonan={selectedSuratPermohonan}
-                setSelectedSuratPermohonan={setSelectedSuratPermohonan}
-                refetchUjian={refetchUjian}
-            />
-
-            <RemedialAction
-                open={openFormRemedial}
-                setOpen={setOpenFormRemedial}
-                selectedIdUjian={selectedIdUjian}
-                setSelectedIdUjian={setSelectedIdUjian}
-                refetchUjian={refetchUjian}
-            />
-
-            <AlertDialog open={isOpenFormUjianKeahlian}>
-                <AlertDialogContent className="max-w-xl">
-                    <AlertDialogHeader className="gap-0 flex flex-col">
-                        <AlertDialogTitle className="flex items-center gap-2 text-2xl">
-                            {" "}
-                            <FaBookOpen className="h-4 w-4" />
-                            {status == "Aktif"
-                                ? " Tetapkan Penguji dan Fasilitator"
-                                : " Edit Pelaksanaan Ujian Keahlian"}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription className="-mt-6">
-                            {status == "Aktif"
-                                ? "Tugaskan penguji dan fasilitator pusat dalam pelaksanaan ujian keahlian awak kapal perikanan untuk ANKAPIN dan ATKAPIN tingkat I, II, atau tingkat III."
-                                : "Tambah data baru pelaksanaan ujian keahlian awak kapal perikanan untuk ANKAPIN dan ATKAPIN tingkat I, II, atau tingkat III."}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <fieldset>
-                        {usePathname().includes("pukakp") ? (
-                            <form autoComplete="off">
-                                <div className="flex flex-wrap -mx-3 mb-1">
-                                    <div className="flex px-3 gap-2 mb-2 w-full">
-                                        <div className="w-full">
-                                            <label
-                                                className="block text-gray-800 text-sm font-medium mb-1"
-                                                htmlFor="name"
-                                            >
-                                                Tipe Ujian <span className="text-red-600">*</span>
-                                            </label>
-                                            <select
-                                                id="type-ujian"
-                                                className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
-                                                required
-                                                value={typeUjian}
-                                                onChange={(e) => setTypeUjian(e.target.value)}
-                                            >
-                                                <option value="0">Pilih Tipe Ujian</option>
-                                                {dataTypeUjian.map((type) => (
-                                                    <option
-                                                        key={type.IdTypeUjian}
-                                                        value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
-                                                        className="capitalize"
-                                                        selected={type.NamaTypeUjian == typeUjian}
-                                                    >
-                                                        {type.NamaTypeUjian}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-
-                                        <div className="w-full">
-                                            <label
-                                                className="block text-gray-800 text-sm font-medium mb-1"
-                                                htmlFor="name"
-                                            >
-                                                Nama Ujian <span className="text-red-600">*</span>
-                                            </label>
-                                            <input
-                                                id="name"
-                                                type="text"
-                                                className="form-input w-full text-black border-gray-300 rounded-md"
-                                                placeholder="Nama Ujian"
-                                                required
-                                                value={namaUjian}
-                                                onChange={(e) => setNamaUjian(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-wrap -mx-3 mb-1">
-                                    <div className="flex px-3 gap-2 mb-2 w-full">
-                                        <div className="w-full">
-                                            <label
-                                                className="block text-gray-800 text-sm font-medium mb-1"
-                                                htmlFor="name"
-                                            >
-                                                Tempat Ujian <span className="text-red-600">*</span>
-                                            </label>
-                                            <input
-                                                id="name"
-                                                type="text"
-                                                className="form-input w-full text-black border-gray-300 rounded-md"
-                                                placeholder="Tempat Ujian"
-                                                required
-                                                value={tempatUjian}
-                                                onChange={(e) => setTempatUjian(e.target.value)}
-                                            />
-                                        </div>
-
-                                        <div className="w-full">
-                                            <label
-                                                className="block text-gray-800 text-sm font-medium mb-1"
-                                                htmlFor="name"
-                                            >
-                                                PUKAKP <span className="text-red-600">*</span>
-                                            </label>
-                                            <input
-                                                id="name"
-                                                type="text"
-                                                className="form-input w-full text-black border-gray-300 rounded-md"
-                                                placeholder="Tempat Ujian"
-                                                required
-                                                value={Cookies.get("PUKAKP")}
-                                                onChange={(e) => setPukakp(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-wrap -mx-3 mb-1">
-                                    <div className="flex px-3 gap-2 mb-2 w-full">
-                                        <div className="w-full">
-                                            <label
-                                                className="block text-gray-800 text-sm font-medium mb-1"
-                                                htmlFor="name"
-                                            >
-                                                Tanggal Mulai <span className="text-red-600">*</span>
-                                            </label>
-                                            <input
-                                                id="name"
-                                                type="date"
-                                                className="form-input w-full text-black border-gray-300 rounded-md"
-                                                placeholder="Tanggal Mulai"
-                                                required
-                                                min={new Date().toISOString().split("T")[0]}
-                                                value={tanggalMulai}
-                                                onChange={(e) => setTanggalMulai(e.target.value)}
-                                            />
-                                        </div>
-
-                                        <div className="w-full">
-                                            <label
-                                                className="block text-gray-800 text-sm font-medium mb-1"
-                                                htmlFor="name"
-                                            >
-                                                Tanggal Berakhir <span className="text-red-600">*</span>
-                                            </label>
-                                            <input
-                                                id="tanggalBerakhir"
-                                                type="date"
-                                                className="form-input w-full text-black border-gray-300 rounded-md"
-                                                placeholder="Tanggal Berakhir"
-                                                required
-                                                value={tanggalBerakhir}
-                                                min={tanggalMulai}
-                                                onChange={(e) => setTanggalBerakhir(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex flex-wrap -mx-3 mb-1">
-                                    <div className="flex px-3 gap-2 mb-2 w-full">
-                                        <div className="w-full">
-                                            <label
-                                                className="block text-gray-800 text-sm font-medium mb-1"
-                                                htmlFor="name"
-                                            >
-                                                Waktu Ujian per Materi{" "}
-                                                <span className="text-red-600">*</span>
-                                            </label>
-                                            <input
-                                                id="name"
-                                                type="number"
-                                                className="form-input w-full text-black border-gray-300 rounded-md"
-                                                placeholder="Waktu Ujian"
-                                                required
-                                                value={waktuUjian}
-                                                onChange={(e) => setWaktuUjian(e.target.value)}
-                                            />
-                                        </div>
-
-                                        <div className="w-full">
-                                            <label
-                                                className="block text-gray-800 text-sm font-medium mb-1"
-                                                htmlFor="name"
-                                            >
-                                                Jumlah Peserta <span className="text-red-600">*</span>
-                                            </label>
-                                            <input
-                                                id="name"
-                                                type="text"
-                                                className="form-input w-full text-black border-gray-300 rounded-md"
-                                                placeholder="Jumlah Peserta"
-                                                required
-                                                value={jumlahPeserta}
-                                                onChange={(e) => setJumlahPeserta(e.target.value)}
-                                            />
-                                        </div>
-                                    </div>
-                                    {/* <div className="w-full mx-3">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Surat Permohonan <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      type="file"
-                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                      required
-                      onChange={handleFileChange}
-                    />
-                  </div> */}
-                                </div>
-
-                                <AlertDialogFooter className="mt-3">
-                                    <AlertDialogCancel
-                                        onClick={(e) =>
-                                            setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian)
-                                        }
-                                    >
-                                        Cancel
-                                    </AlertDialogCancel>
-                                    <AlertDialogAction
-                                        onClick={(e) => handleEditUjianKeahlian(e)}
-                                    >
-                                        Edit
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </form>
-                        ) : (
-                            <form autoComplete="off">
-                                <div className="flex flex-wrap -mx-3 mb-1">
-                                    <div className="w-full px-3 mb-2">
-                                        <label
-                                            className="block text-gray-800 text-sm font-medium mb-1"
-                                            htmlFor="jumlahPenguji"
-                                        >
-                                            Jumlah Penguji <span className="text-red-600">*</span>
-                                        </label>
-                                        <Select
-                                            onValueChange={(value) => setJumlahPenguji(Number(value))}
-                                            value={jumlahPenguji.toString()}
-                                        >
-                                            <SelectTrigger className="w-full py-5">
-                                                <SelectValue placeholder="Pilih Jumlah Penguji" />
-                                            </SelectTrigger>
-                                            <SelectContent side="bottom" className="z-[999999]">
-                                                {[1, 2, 3].map((num) => (
-                                                    <SelectItem key={num} value={num.toString()}>
-                                                        {num}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                    {[...Array(jumlahPenguji)].map((_, index) => (
-                                        <div key={index} className="w-full px-3 mb-2">
-                                            <label
-                                                className="block text-gray-800 text-sm font-medium mb-1"
-                                                htmlFor={`penguji-${index}`}
-                                            >
-                                                Nama Penguji {index + 1}{" "}
-                                                <span className="text-red-600">*</span>
-                                            </label>
-                                            <Select
-                                                onValueChange={(value) =>
-                                                    handlePengujiChange(index, value)
-                                                }
-                                                value={`${pengujiData[index].nama}|${pengujiData[index].id}`}
-                                            >
-                                                <SelectTrigger className="w-full py-5">
-                                                    <SelectValue placeholder="Pilih Penguji" />
-                                                </SelectTrigger>
-                                                <SelectContent side="bottom" className="z-[999999]">
-                                                    {dataPenguji!.map((penguji) => (
-                                                        <SelectItem
-                                                            key={penguji.IdUsersDpkakp}
-                                                            value={`${penguji.NamaUsersDpkakp}|${penguji.IdUsersDpkakp}`}
-                                                            className="capitalize"
-                                                        >
-                                                            {penguji.NamaUsersDpkakp}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
-                                    ))}
-
-                                    <div className="w-full px-3 mb-2">
-                                        <label
-                                            className="block text-gray-800 text-sm font-medium mb-1"
-                                            htmlFor="fasilitator"
-                                        >
-                                            Nama Fasilitator <span className="text-red-600">*</span>
-                                        </label>
-                                        <Input
-                                            id="fasilitator"
-                                            type="text"
-                                            className="w-full text-black border-gray-300 text-sm rounded-md h-fit"
-                                            placeholder="Nama Fasilitator"
-                                            required
-                                            value={namaVasilitator}
-                                            onChange={(e) => setNamaVasilitator(e.target.value)}
-                                        />
-                                    </div>
-                                </div>
-
-                                <AlertDialogFooter className="mt-3">
-                                    <AlertDialogCancel
-                                        onClick={() => {
-                                            handleCancelAddNewUjian();
-                                            setIsOpenFormUjianKeahlian(false);
-                                        }}
-                                    >
-                                        Cancel
-                                    </AlertDialogCancel>
-                                    <AlertDialogAction onClick={handleUpdateNewUjianKeahlian}>
-                                        Upload
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </form>
-                        )}
-                    </fieldset>
-                </AlertDialogContent>
-            </AlertDialog>
         </section>
     );
 };

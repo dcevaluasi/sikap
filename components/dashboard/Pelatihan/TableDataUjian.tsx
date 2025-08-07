@@ -694,7 +694,23 @@ const TableDataUjian: React.FC = () => {
                                 {generateTanggalPelatihan(ujian.TanggalMulaiUjian)} s.d{" "}
                                 {generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}
                               </td>
-                              <td className="p-4">{ujian.NamaPengawasUjian || "-"}</td>
+                              <td className="p-4">
+                                {ujian.NamaPengawasUjian ? (
+                                  <div className="flex flex-wrap gap-2">
+                                    {ujian.NamaPengawasUjian.split('|').map((name, index) => (
+                                      <span
+                                        key={index}
+                                        className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-1 rounded-full"
+                                      >
+                                        {name.trim()}
+                                      </span>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <span>-</span>
+                                )}
+                              </td>
+
                               <td className="p-4 text-center">
                                 {ujian.UsersUjian?.length ?? 0}/{ujian.JumlahPesertaUjian - 1}
                               </td>

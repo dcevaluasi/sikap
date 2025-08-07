@@ -999,7 +999,7 @@ const TableDataPesertaUjianKeahlian = () => {
                       className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer"
                     >
                       <FaMapPin />
-                      Sematkan Soal Ujian
+                      Distribusikan Soal
                     </div>
                     <AlertDialog
                       open={handleOpenFormSematkan}
