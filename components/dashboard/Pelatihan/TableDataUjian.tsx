@@ -30,47 +30,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  ArrowUpDown,
-  Edit3Icon,
-  Fullscreen,
-  LucideClipboardEdit,
-  LucideNewspaper,
-  LucidePrinter,
-  Search,
   Trash,
   X,
 } from "lucide-react";
 import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
 import {
-  TbBook,
-  TbBookFilled,
-  TbBroadcast,
-  TbBuildingCommunity,
-  TbCalendarCheck,
-  TbCalendarDot,
-  TbCalendarExclamation,
-  TbCalendarSearch,
-  TbCalendarStats,
-  TbChartBubble,
-  TbChartDonut,
-  TbDatabase,
-  TbDatabaseEdit,
   TbEditCircle,
-  TbFileCertificate,
-  TbFileDigit,
-  TbFishChristianity,
-  TbMoneybag,
-  TbQrcode,
-  TbSchool,
-  TbTargetArrow,
 } from "react-icons/tb";
 import {
-  IoIosBook,
-  IoIosInformationCircle,
-  IoMdBook,
   IoMdClock,
-  IoMdGlobe,
-  IoMdSchool,
 } from "react-icons/io";
 import { FiEdit2, FiFile, FiUploadCloud } from "react-icons/fi";
 import {
@@ -85,7 +53,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { MdOutlinePayments, MdOutlinePodcasts, MdOutlineSaveAlt } from "react-icons/md";
+
 import Toast from "@/components/toast";
 import Image from "next/image";
 import axios, { AxiosResponse } from "axios";
@@ -93,25 +61,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { PelatihanMasyarakat } from "@/types/product";
 import {
   FaBookOpen,
-  FaRupiahSign,
-  FaUserPen,
-  FaUserTag,
 } from "react-icons/fa6";
 import { Input } from "@/components/ui/input";
 
-import { convertDate } from "@/utils";
 import Cookies from "js-cookie";
-import { LemdiklatDetailInfo } from "@/types/lemdiklat";
-import { Progress } from "@/components/ui/progress";
-import { GiBookmarklet } from "react-icons/gi";
 import Link from "next/link";
 import { dpkakpBaseUrl } from "@/constants/urls";
-import { wilayahPukakp } from "@/constants/dpkakp";
-
-import { UserInformationDPKAKP } from "@/types/dpkakp";
 import { generateTanggalPelatihan } from "@/utils/text";
-import { FaEdit } from "react-icons/fa";
-import { DewanPenguji } from "@/types/dewanPenguji";
 import { TypeUjian, Ujian } from "@/types/ujian-keahlian-akp";
 import { BiPaperPlane, BiSolidLockAlt } from "react-icons/bi";
 import { IoReload } from "react-icons/io5";
@@ -119,36 +75,39 @@ import { formatIndonesianDate, isTodayAfter, isTodayBefore, isTodayBetween, isTo
 import EmptyData from "@/components/micro-components/EmptyData";
 import { HashLoader } from "react-spinners";
 import { generatedYears } from "@/utils/globals";
+import Pagination from "@/components/Pagination";
+import { JadwalUjianKeahlianAKP } from "../Dashboard/JadwalUjianKeahlianAKP";
+import { useFetchTypeUjianKeahlianAKP } from "@/hooks/ujian/useFetchTypeUjianKeahlianAKP";
+import { useFetchPengujiKeahlianAKP } from "@/hooks/penguji/useFetchPengujiKeahlianAKP";
+import { useFetchUjianKeahlianAKP } from "@/hooks/ujian/useFetchUjianKeahlianAKP";
+import StatusUjianKeahlianAKP from "../Dashboard/StatusUjianKeahlianAKP";
+import RemedialAction from "../Dashboard/Actions/RemedialAction";
+import VerifikasiAction from "../Dashboard/Actions/VerifikasiAction";
+import DeleteAction from "../Dashboard/Actions/DeleteAction";
 
 const TableDataUjian: React.FC = () => {
+  /** Fetching Ujian AKP **/
+  const {
+    data: dataUjian, isFetching: isFetchingDataUjian, counters: countersUjian, error: errorFetchingUjian, refetch: refetchUjian,
+  } = useFetchUjianKeahlianAKP('admin', true)
+
+  /** Fetching Type Ujian AKP **/
+  const { dataTypeUjian, isFetching: isFetchingTypeUjian, error: errorFetchingTypeUjian, refetch: refetchTypeUjian } = useFetchTypeUjianKeahlianAKP();
+
+  /** Fetching Penguji Ujian AKP **/
+  const { dataPenguji, isFetching: isFetchingPenguji, error: errorFetchingPenguji, refetch: refetchPenguji } = useFetchPengujiKeahlianAKP();
+
   // ================== UTILS ==================
   const [selectedTahun, setSelectedTahun] = React.useState<number>(new Date().getFullYear())
   const years = generatedYears()
 
-  // ================== STATE VARIABLES ==================
-  const [data, setData] = React.useState<Ujian[]>([]);
-
-
-  const [counterFinished, setCounterFinished] = React.useState<number>(0);
-  const [counterWillDo, setCounterWillDo] = React.useState<number>(0);
-  const [counterDoing, setCounterDoing] = React.useState<number>(0);
-
-  const [countVerified, setCountVerified] = React.useState<number>(0);
-  const [countNotVerified, setCountNotVerified] = React.useState<number>(0);
-  const [countDraft, setCountDraft] = React.useState<number>(0);
-  const [countPilihPenguji, setCountPilihPenguji] = React.useState<number>(0);
-  const [dataTypeUjian, setDataTypeUjian] = React.useState<TypeUjian[]>([]);
-  const [dpkakpData, setDpkakpData] =
-    React.useState<UserInformationDPKAKP | null>(null);
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
   const [isPosting, setIsPosting] = React.useState<boolean>(false);
   const [isOpenFormUjianKeahlian, setIsOpenFormUjianKeahlian] =
     React.useState<boolean>(false);
   const [selectedId, setSelectedId] = React.useState<number>(0);
   const [filePermohonan, setFilePermohonan] = React.useState<File | null>(null);
-  const [dataPenguji, setDataPenguji] = React.useState<DewanPenguji[] | null>(
-    []
-  );
+
   const [waktuRemedial, setWaktuRemedial] = React.useState<string>("");
   const [openFormRemedial, setOpenFormRemedial] =
     React.useState<boolean>(false);
@@ -170,207 +129,6 @@ const TableDataUjian: React.FC = () => {
   // ================== PATH & COOKIE VARIABLES ==================
   const pathPukakp = usePathname().includes("pukakp");
   const isPenguji = Cookies.get("IsPUKAKP") == "penguji";
-  const idUsersDpkakp = Cookies.get("IdUsersDpkakp");
-
-  // ================== DATA FETCHING ==================
-  const fetchInformationDPKAKP = async () => {
-    try {
-      const response = await axios.get(
-        `${dpkakpBaseUrl}/adminPusat/getAdminPusat`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-      setDpkakpData(response.data.data);
-    } catch (error) {
-      console.error("DPKAKP INFO: ", error);
-    }
-  };
-
-  const handleFetchingUjianKeahlianData = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminPusat/GetUjian`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-
-      console.log({ response })
-
-      const pukakpCookie = Cookies.get("PUKAKP");
-      const filteredData =
-        pukakpCookie != "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan"
-          ? response.data.data.filter(
-            (item: any) => item.PUKAKP === pukakpCookie
-          )
-          : response.data.data;
-
-      const sortedData = filteredData.sort((a: any, b: any) => {
-        if (a.Status === "Pending" && b.Status !== "Pending") return -1;
-        if (a.Status !== "Pending" && b.Status === "Pending") return 1;
-        return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime();
-      });
-
-      const verifiedCount = filteredData.filter(
-        (item: any) => item.Status === "Aktif"
-      ).length;
-
-      const notVerifiedCount = filteredData.filter(
-        (item: any) => item.Status === "Pending"
-      ).length;
-      const draft = filteredData.filter(
-        (item: any) => item.Status === "Draft"
-      ).length;
-      const pilihPenguji = filteredData.filter(
-        (item: any) => item.NamaPengawasUjian == ""
-      ).length;
-
-      const finishedCount = filteredData.filter(
-        (item: any) => item.IsSelesai === "1"
-      ).length;
-      setCounterFinished(finishedCount);
-
-      const willDoCount = filteredData.filter(
-        (item: any) => isTodayBefore(item.TanggalMulaiUjian) && item.IsSelesai === ""
-      ).length;
-      setCounterWillDo(willDoCount);
-
-      const doingCount = filteredData.filter(
-        (item: any) => isTodayBetween(item.TanggalMulaiUjian, item.TanggalBerakhirUjian) && item.IsSelesai !== "1"
-      ).length;
-      setCounterDoing(doingCount);
-
-      setCountVerified(verifiedCount);
-      setCountNotVerified(notVerifiedCount);
-      setCountDraft(draft);
-      setCountPilihPenguji(pilihPenguji);
-
-      if (pathPukakp) {
-        setData(sortedData);
-      } else {
-        const sortedOriginalData = response.data.data.sort((a: any, b: any) => {
-          if (a.Status === "Pending" && b.Status !== "Pending") return -1;
-          if (a.Status !== "Pending" && b.Status === "Pending") return 1;
-          return (
-            new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
-          );
-        });
-        setData(sortedOriginalData);
-      }
-
-      setIsFetching(false);
-    } catch (error) {
-      setIsFetching(false);
-      throw error;
-    }
-  };
-
-  const handleFetchingUjianKeahlianDataPenguji = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminPusat/GetUjian`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-
-
-
-      const pukakpCookie = Cookies.get("PUKAKP");
-      const filteredData = response.data.data.filter((item: any) =>
-        item.NamaPengawasUjian.includes(Cookies.get("NamaUsersDpkakp"))
-      );
-
-      const sortedData = filteredData.sort((a: any, b: any) => {
-        if (a.Status === "Pending" && b.Status !== "Pending") return -1;
-        if (a.Status !== "Pending" && b.Status === "Pending") return 1;
-        return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime();
-      });
-
-      const verifiedCount = filteredData.filter(
-        (item: any) => item.Status === "Aktif"
-      ).length;
-      const notVerifiedCount = filteredData.filter(
-        (item: any) => item.Status === "Pending"
-      ).length;
-      const draft = filteredData.filter(
-        (item: any) => item.Status === "Draft"
-      ).length;
-      const pilihPenguji = filteredData.filter(
-        (item: any) => item.NamaPengawasUjian == ""
-      ).length;
-
-      setCountVerified(verifiedCount);
-      setCountNotVerified(notVerifiedCount);
-      setCountDraft(draft);
-      setCountPilihPenguji(pilihPenguji);
-
-      if (pathPukakp) {
-        setData(sortedData);
-      } else {
-        const sortedOriginalData = filteredData.sort((a: any, b: any) => {
-          if (a.Status === "Pending" && b.Status !== "Pending") return -1;
-          if (a.Status !== "Pending" && b.Status === "Pending") return 1;
-          return (
-            new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
-          );
-        });
-        setData(sortedOriginalData);
-      }
-
-      setIsFetching(false);
-    } catch (error) {
-      setIsFetching(false);
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  const handleFetchingTypeUjianKeahlianData = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminPusat/getTypeUjian`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-      setDataTypeUjian(response.data.data);
-      setIsFetching(false);
-    } catch (error) {
-      setIsFetching(false);
-      throw error;
-    }
-  };
-
-  const handleGetDataPenguji = async () => {
-    setIsFetching(true);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminpusat/getDataPenguji`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-      setDataPenguji(response.data.data);
-      setIsFetching(false);
-    } catch (error) {
-      setIsFetching(false);
-      throw error;
-    }
-  };
 
   // ================== Penguji Setting (DPKAKP/Sekretariat DPKAKP)
   const [jumlahPenguji, setJumlahPenguji] = React.useState<number>(1);
@@ -508,7 +266,7 @@ const TableDataUjian: React.FC = () => {
         icon: "success",
         title: `Berhasil menambahkan data pelaksanaan ujian keahlian baru!`,
       });
-      handleFetchingUjianKeahlianData();
+      refetchUjian();
       setIsPosting(false);
       handleClearNewUjianKeahlian();
       setStatus("");
@@ -518,7 +276,7 @@ const TableDataUjian: React.FC = () => {
         icon: "error",
         title: `Gagal menambahkan data pelaksanaan ujian keahlian baru!`,
       });
-      handleFetchingUjianKeahlianData();
+      refetchUjian();
       handleClearNewUjianKeahlian();
       setIsPosting(true);
       setStatus("");
@@ -547,7 +305,7 @@ const TableDataUjian: React.FC = () => {
         icon: "success",
         title: `Berhasil mengupdate data pelaksanaan ujian keahlian baru!`,
       });
-      handleFetchingUjianKeahlianData();
+      refetchUjian();
       setIsOpenFormUjianKeahlian(false);
       setIsPosting(false);
       setStatus("");
@@ -557,88 +315,10 @@ const TableDataUjian: React.FC = () => {
         icon: "error",
         title: `Gagal mengupdate data pelaksanaan ujian keahlian baru!`,
       });
-      handleFetchingUjianKeahlianData();
+      refetchUjian();
       setIsOpenFormUjianKeahlian(false);
       setIsPosting(true);
       setStatus("");
-    }
-  };
-
-  const handleRemedial = async (e: any) => {
-    setIsProcessingRemedial(true);
-    try {
-      const response = await axios.post(
-        `${dpkakpBaseUrl}/adminPusat/getRemedial`,
-        {
-          id_ujian: selectedIdUjian.toString(),
-          waktu_code_ujian: waktuRemedial,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      console.log(response);
-      Toast.fire({
-        icon: "success",
-        title: "Yeayyy!",
-        text: `Berhasil mengatur jadwal remedial!`,
-      });
-      handleFetchingUjianKeahlianData();
-      setSelectedIdUjian(0);
-      setOpenFormRemedial(false);
-      setIsProcessingRemedial(false);
-    } catch (error) {
-      console.error(error);
-      Toast.fire({
-        icon: "error",
-        title: "Oopsss!",
-        text: `Gagal mengatur jadwal remedial!`,
-      });
-      handleFetchingUjianKeahlianData();
-      setSelectedIdUjian(0);
-      setOpenFormRemedial(false);
-      setIsProcessingRemedial(false);
-    }
-  };
-
-  const handleValidasiPelaksaanUjian = async (e: any) => {
-    setIsValidating(true);
-
-    try {
-      const response = await axios.put(
-        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedId}`,
-        {
-          status: status,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-      console.log(response);
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil memvalidasi pelaksanaan ujian keahlian!`,
-      });
-      handleFetchingUjianKeahlianData();
-      setStatus("Tidak Aktif");
-      setSelectedId(0);
-      setSelectedSuratPermohonan("");
-      setOpenFormValidasiPelaksanaanUjian(false);
-      setIsValidating(false);
-    } catch (error) {
-      console.error(error);
-      Toast.fire({
-        icon: "error",
-        title: `Gagal memvalidasi pelaksanaan ujian keahlian!`,
-      });
-      handleFetchingUjianKeahlianData();
-      setOpenFormValidasiPelaksanaanUjian(false);
-      setIsValidating(false);
     }
   };
 
@@ -662,7 +342,7 @@ const TableDataUjian: React.FC = () => {
         icon: "success",
         title: `Berhasil mengirimkan permohonan pelaksanaan ujian keahlian!`,
       });
-      handleFetchingUjianKeahlianData();
+      refetchUjian();
       setStatus("Tidak Aktif");
       setSelectedId(0);
       setSelectedSuratPermohonan("");
@@ -674,13 +354,13 @@ const TableDataUjian: React.FC = () => {
         icon: "error",
         title: `Gagal mengirimkan permohonan pelaksanaan ujian keahlian!`,
       });
-      handleFetchingUjianKeahlianData();
+      refetchUjian();
       setOpenFormValidasiPelaksanaanUjian(false);
       setIsValidating(false);
     }
   };
 
-  const filteredData = data.filter((ujian) => {
+  const filteredData = dataUjian.filter((ujian: Ujian) => {
     const matchesSearchQuery =
       ujian.TypeUjian.toLowerCase().includes(searchQuery.toLowerCase()) ||
       ujian.NamaUjian.toLowerCase().includes(searchQuery.toLowerCase());
@@ -775,7 +455,7 @@ const TableDataUjian: React.FC = () => {
         icon: "success",
         title: `Berhasil mengupdate data pelaksanaan ujian keahlian baru!`,
       });
-      handleFetchingUjianKeahlianData();
+      refetchUjian();
       setIsPosting(false);
       handleCancelAddNewUjian();
       handleClearNewUjianKeahlian();
@@ -786,50 +466,10 @@ const TableDataUjian: React.FC = () => {
         icon: "error",
         title: `Gagal mengupdate data pelaksanaan ujian keahlian baru!`,
       });
-      handleFetchingUjianKeahlianData();
+      refetchUjian();
       setIsPosting(true);
       setIsOpenFormUjianKeahlian(false);
       setStatus("");
-    }
-  };
-
-  // ================== EFFECTS ==================
-  React.useEffect(() => {
-    fetchInformationDPKAKP();
-    if (isPenguji) {
-      handleFetchingUjianKeahlianDataPenguji();
-    } else {
-      handleFetchingUjianKeahlianData();
-      handleGetDataPenguji();
-      handleFetchingTypeUjianKeahlianData();
-    }
-  }, [isPenguji]);
-
-  // DELETE UJIAN
-  const handleDeleteUjian = async () => {
-    try {
-      const response = await axios.delete(
-        `${dpkakpBaseUrl}/adminPusat/deleteUjians?id=${selectedIdUjian}`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-      console.log(response);
-      Toast.fire({
-        icon: "success",
-        title:
-          "Berhasil menghapus draft pengajuan permohonan pelaksanaan ujian!",
-      });
-      handleFetchingUjianKeahlianData();
-    } catch (error) {
-      Toast.fire({
-        icon: "error",
-        title:
-          "Ups, gagal menghapus draft pengajuan permohonan pelaksanaan ujian!",
-      });
-      handleFetchingUjianKeahlianData();
     }
   };
 
@@ -908,7 +548,7 @@ const TableDataUjian: React.FC = () => {
         title: 'Yeayyy!',
         text: `Berhasil menutup ujian!`,
       });
-      handleFetchingUjianKeahlianData();
+      refetchUjian();
       setOpenFormCloseExam(false);
       setIsPosting(false);
     } catch (error) {
@@ -917,7 +557,7 @@ const TableDataUjian: React.FC = () => {
         icon: "error",
         title: `Gagal menutup ujian, harap cek internet atau admin pusat!`,
       });
-      handleFetchingUjianKeahlianData();
+      refetchUjian();
       setOpenFormCloseExam(false);
       setIsPosting(false);
     }
@@ -944,6 +584,15 @@ const TableDataUjian: React.FC = () => {
     }
   }, [waktuDate, waktuTime, waktuZone]);
 
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const itemsPerPage = 10;
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentPageData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
 
   return (
@@ -952,201 +601,13 @@ const TableDataUjian: React.FC = () => {
         aria-label="main content"
         className="flex h-full flex-col flex-auto w-full border-l scrollbar-hide -mt-4"
       >
-        <nav className="bg-gray-100 flex p-4">
-          <section
-            aria-labelledby="ticket-statistics-tabs-label"
-            className="pb-2 -mt-5"
-          >
-            {isPenguji ? (
-              <ul className="flex">
-                <li>
-                  <button
-                    onClick={() => setSelectedStatusFilter("All")}
-                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "All"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
-                  >
-                    <p className="font-semibold text-lg">{data!.length}</p>
-                    <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "All"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
-                    >
-                      All
-                    </p>
-                  </button>
-                </li>
-              </ul>
-            ) : (
-              <ul className="flex">
-                <li>
-                  <button
-                    onClick={() => setSelectedStatusFilter("All")}
-                    className={`focus:outline-none p-2 rounded-l-md border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "All"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
-                  >
-                    <p className="font-semibold text-lg">{data!.length}</p>
-                    <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "All"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
-                    >
-                      All
-                    </p>
-                  </button>
-                </li>
-                {usePathname().includes("pukakp") && (
-                  <li>
-                    <button
-                      onClick={() => setSelectedStatusFilter("Draft")}
-                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "Draft"
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-black"
-                        }`}
-                    >
-                      <p className="font-semibold text-lg">{countDraft}</p>
-                      <p
-                        className={`uppercase text-sm ${selectedStatusFilter === "Draft"
-                          ? "text-white font-bold"
-                          : "text-gray-600"
-                          }`}
-                      >
-                        Draft
-                      </p>
-                    </button>
-                  </li>
-                )}
-
-                <li>
-                  <button
-                    onClick={() => setSelectedStatusFilter("Pending")}
-                    className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-24 ${selectedStatusFilter === "Pending"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
-                  >
-                    <p className="font-semibold text-lg">{countNotVerified}</p>
-                    <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "Pending"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
-                    >
-                      Pending
-                    </p>
-                  </button>
-                </li>
-                {usePathname().includes("dpkakp") && (
-                  <li>
-                    <button
-                      onClick={() => setSelectedStatusFilter("Pilih Penguji")}
-                      className={`focus:outline-none p-2 border border-r-0 flex flex-col items-center w-32 ${selectedStatusFilter === "Pilih Penguji"
-                        ? "bg-blue-500 text-white"
-                        : "bg-white text-black"
-                        }`}
-                    >
-                      <p className="font-semibold text-lg">
-                        {countPilihPenguji}
-                      </p>
-                      <p
-                        className={`uppercase text-sm ${selectedStatusFilter === "Pilih Penguji"
-                          ? "text-white font-bold"
-                          : "text-gray-600"
-                          }`}
-                      >
-                        Pilih Penguji
-                      </p>
-                    </button>
-                  </li>
-                )}
-
-                {/* <li>
-                  <button
-                    onClick={() => setSelectedStatusFilter("Aktif")}
-                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-24 ${selectedStatusFilter === "Aktif"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
-                  >
-                    <p className="font-semibold text-lg">{countVerified}</p>
-                    <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "Aktif"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
-                    >
-                      Disetujui
-                    </p>
-                  </button>
-                </li> */}
-                <li>
-                  <button
-                    onClick={() => setSelectedStatusFilter("Akan Dilaksanakan")}
-                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-fit ${selectedStatusFilter === "Akan Dilaksanakan"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
-                  >
-                    <p className="font-semibold text-lg">{counterWillDo}</p>
-                    <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "Akan Dilaksanakan"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
-                    >
-                      Akan Dilaksanakan
-                    </p>
-                  </button>
-
-                </li>
-                <li>
-                  <button
-                    onClick={() => setSelectedStatusFilter("Sedang Berlangsung")}
-                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-fit ${selectedStatusFilter === "Sedang Berlangsung"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
-                  >
-                    <p className="font-semibold text-lg">{counterDoing}</p>
-                    <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "Sedang Berlangsung"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
-                    >
-                      Sedang Berlangsung
-                    </p>
-                  </button>
-
-                </li>
-                <li>
-                  <button
-                    onClick={() => setSelectedStatusFilter("Telah Selesai")}
-                    className={`focus:outline-none p-2 rounded-r-md border flex flex-col items-center w-fit ${selectedStatusFilter === "Telah Selesai"
-                      ? "bg-blue-500 text-white"
-                      : "bg-white text-black"
-                      }`}
-                  >
-                    <p className="font-semibold text-lg">{counterFinished}</p>
-                    <p
-                      className={`uppercase text-sm ${selectedStatusFilter === "Telah Selesai"
-                        ? "text-white font-bold"
-                        : "text-gray-600"
-                        }`}
-                    >
-                      Telah Selesai
-                    </p>
-                  </button>
-                </li>
-              </ul>
-            )}
-          </section>
-        </nav>
+        <StatusUjianKeahlianAKP
+          isPenguji={isPenguji}
+          selectedStatusFilter={selectedStatusFilter}
+          setSelectedStatusFilter={setSelectedStatusFilter}
+          data={dataUjian}
+          countersUjian={countersUjian}
+        />
 
         <div className="px-4 -mt-4">
           <Tabs defaultValue="account" className="w-full">
@@ -1190,344 +651,273 @@ const TableDataUjian: React.FC = () => {
 
                   </div>
                 </div>
-                {filteredData.length == 0 && isFetching ? (
+                {filteredData.length === 0 && isFetching ? (
                   <div className="mt-32 w-full flex items-center justify-center">
                     <HashLoader color="#338CF5" size={50} />
                   </div>
-                ) : filteredData.length == 0 ? <EmptyData /> : (
-                  filteredData.map((ujian, index) => (
-                    <Card className="relative" key={index}>
-                      {ujian!.Status == "Pending" && (
-                        <div className="w-fit absolute top-5 right-5 text-[0.65rem] px-2 py-1 rounded-md bg-yellow-400 text-white flex gap-1 items-center animate-pulse">
-                          {usePathname().includes("dpkakp") ? 'Segera Verifikasi' : 'Menunggu Verifikasi'}
-                        </div>
-                      )}
-                      {
-                        ujian!.IsSelesai == '1' && <Button
+                ) : filteredData.length === 0 ? (
+                  <EmptyData />
+                ) : (
+                  <>
+                    <div className="overflow-x-auto rounded-lg border">
+                      <table className="min-w-full text-sm text-left">
+                        <thead className="bg-gray-100 text-gray-700">
+                          <tr>
+                            <th className="p-4 text-center">No</th>
+                            <th className="p-4 text-center">Nama Ujian</th>
+                            <th className="p-4 text-center">Tempat</th>
+                            <th className="p-4 text-center">Waktu</th>
 
-                          variant="outline"
-                          className="bg-gray-600 hover:bg-gray-700 hover:text-white text-white  absolute top-5 right-5 rounded-full animate-pulse duration-700"
-                        >
-                          <BiSolidLockAlt className="h-4 w-4 mr-1" /> Telah Selesai
-                        </Button>
-                      }
+                            <th className="p-4 text-center">Penguji</th>
+                            <th className="p-4 text-center">Peserta</th>
+                            <th className="p-4 text-center">Aksi</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {currentPageData.map((ujian, index) => (
+                            <tr
+                              key={index}
+                              className="border-b hover:bg-gray-50 transition-colors"
+                            >
+                              <td className="p-4 text-center font-medium">
+                                {(indexOfFirstItem + index + 1)}
+                              </td>
 
-                      {
-                        (isTodayBetween(ujian!.TanggalMulaiUjian, ujian.TanggalBerakhirUjian) && ujian!.IsSelesai != '1') && <Button
-
-                          variant="outline"
-                          className="bg-teal-500 hover:bg-teal-600 hover:text-white text-white  absolute top-5 right-5 rounded-full animate-pulse duration-700"
-                        >
-                          <MdOutlinePodcasts className="h-4 w-4 mr-1" /> Sedang Berlangsung
-                        </Button>
-                      }
-
-                      <CardHeader>
-                        {/* <EventBadge ujian={ujian!} /> */}
-                        <CardTitle>{ujian!.NamaUjian}</CardTitle>
-                        <CardDescription>
-                          {" "}
-                          {ujian!.TypeUjian} • {ujian!.PUKAKP}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-2 relative">
-
-                        <div className="ml-0 text-left capitalize -mt-6">
-                          <div className="ml-0 text-left mt-1 text-neutral-500 ">
-                            <p className="text-sm ">
-                              <span className="flex items-center gap-1 leading-[105%]">
-                                <TbTargetArrow className="text-lg" />
-                                <span>
-                                  Tempat Pelaksanaan : {ujian!.TempatUjian}
-                                </span>
-                              </span>
-                              <span className="flex items-center gap-1 leading-[105%]">
-                                <TbCalendarCheck className="text-lg" />
-                                <span>
-                                  Waktu Pelaksanaan :{" "}
-                                  {generateTanggalPelatihan(
-                                    ujian!.TanggalMulaiUjian
-                                  )}{" "}
-                                  s.d{" "}
-                                  {generateTanggalPelatihan(
-                                    ujian!.TanggalBerakhirUjian
+                              <td className="p-4 font-medium text-gray-900">
+                                <div>{ujian.NamaUjian}</div>
+                                <div className="text-xs text-gray-500">
+                                  {ujian.TypeUjian} • {ujian.PUKAKP}
+                                </div>
+                              </td>
+                              <td className="p-4 text-center">{ujian.TempatUjian}</td>
+                              <td className="p-4  text-center">
+                                {generateTanggalPelatihan(ujian.TanggalMulaiUjian)} s.d{" "}
+                                {generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}
+                              </td>
+                              <td className="p-4">{ujian.NamaPengawasUjian || "-"}</td>
+                              <td className="p-4 text-center">
+                                {ujian.UsersUjian?.length ?? 0}/{ujian.JumlahPesertaUjian - 1}
+                              </td>
+                              <td className="p-4 text-right">
+                                <div className="flex gap-1 justify-end flex-wrap">
+                                  {ujian!.Status == "Aktif" && (
+                                    <Link
+                                      href={`/lembaga/${usePathname().includes("pukakp")
+                                        ? "pukakp"
+                                        : "dpkakp"
+                                        }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
+                                        }/${ujian!.IdTypeUjian}`}
+                                      className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm w-full justify-center"
+                                    >
+                                      <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
+                                      Peserta Ujian
+                                    </Link>
                                   )}
-                                </span>
-                              </span>
-                              {ujian!.NamaPengawasUjian != "" && (
-                                <span className="flex items-center gap-1 ml-[0.125rem] leading-[105%]">
-                                  <FaUserPen className="text-base" />
-                                  <span>
-                                    Penguji : {ujian!.NamaPengawasUjian}
-                                  </span>
-                                </span>
-                              )}
-                              {ujian!.NamaVasilitatorUjian != "" && (
-                                <span className="flex items-center gap-1 ml-[0.125rem] leading-[105%]">
-                                  <FaUserTag className="text-base" />
-                                  <span>
-                                    Fasilitator : {ujian!.NamaVasilitatorUjian}
-                                  </span>
-                                </span>
-                              )}
-                              {ujian!.UsersUjian != null && (
-                                <span className="flex items-center gap-1 leading-[105%]">
-                                  <HiUserGroup className="text-base" />
-                                  <span>
-                                    Jumlah peserta ujian :{" "}
-                                    {ujian!.UsersUjian.length}/
-                                    {ujian!.JumlahPesertaUjian == 0
-                                      ? 0
-                                      : ujian!.JumlahPesertaUjian - 1}
-                                  </span>
-                                </span>
-                              )}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                      <CardFooter>
-                        <div className="flex items-center justify-center gap-1 flex-wrap  -mt-2">
 
-                          {ujian!.Status == "Aktif" && (
-                            <Link
-                              href={`/lembaga/${usePathname().includes("pukakp")
-                                ? "pukakp"
-                                : "dpkakp"
-                                }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
-                                }/${ujian!.IdTypeUjian}`}
-                              className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm"
-                            >
-                              <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
-                              Peserta Ujian
-                            </Link>
-                          )}
+                                  {ujian!.FilePermohonan != null &&
+                                    ujian!.Status == "Aktif" ? (
+                                    <Link
+                                      target="_blank"
+                                      href={ujian!.FilePermohonan!}
+                                      className="bg-gray-500 w-full text-white rounded-md  shadow-sm  h-9 px-4 py-2 flex text-sm items-center justify-center"
+                                    >
+                                      <FiFile className="h-4 w-4 mr-1" /> File
+                                      Permohonan
+                                    </Link>
+                                  ) : (
+                                    <></>
+                                  )}
 
-                          {ujian!.FilePermohonan != null &&
-                            ujian!.Status == "Aktif" ? (
-                            <Link
-                              target="_blank"
-                              href={ujian!.FilePermohonan!}
-                              className="bg-gray-500 text-white rounded-md  shadow-sm  h-9 px-4 py-2 flex text-sm items-center"
-                            >
-                              <FiFile className="h-4 w-4 mr-1" /> File
-                              Permohonan
-                            </Link>
-                          ) : (
-                            <></>
-                          )}
+                                  {ujian!.Status == "Draft" &&
+                                    !usePathname().includes("dpkakp") ? (
+                                    <Button
+                                      onClick={() => {
+                                        handleKirimPermohonan(ujian!.IdUjian);
+                                      }}
+                                      variant="outline"
+                                      className="bg-indigo-600 w-full text-neutral-100 hover:text-neutral-100 hover:bg-indigo-600"
+                                    >
+                                      <BiPaperPlane className="h-4 w-4 text-neutral-100 mr-1" />{" "}
+                                      Kirim Permohonan
+                                    </Button>
+                                  ) : (
+                                    <></>
+                                  )}
 
-                          {ujian!.Status == "Draft" &&
-                            !usePathname().includes("dpkakp") ? (
-                            <Button
-                              onClick={() => {
-                                handleKirimPermohonan(ujian!.IdUjian);
-                              }}
-                              variant="outline"
-                              className="bg-indigo-600 text-neutral-100 hover:text-neutral-100 hover:bg-indigo-600"
-                            >
-                              <BiPaperPlane className="h-4 w-4 text-neutral-100 mr-1" />{" "}
-                              Kirim Permohonan
-                            </Button>
-                          ) : (
-                            <></>
-                          )}
+                                  {usePathname().includes("pukakp") &&
+                                    ujian!.Status == "Draft" ? (
+                                    <Button
+                                      onClick={() => {
+                                        handleFetchingDataUjianById(ujian!.IdUjian);
+                                      }}
+                                      variant="outline"
+                                      className="bg-yellow-300 w-full text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
+                                    >
+                                      <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" />{" "}
+                                      Edit Ujian
+                                    </Button>
+                                  ) : (
+                                    <></>
+                                  )}
 
-                          {usePathname().includes("pukakp") &&
-                            ujian!.Status == "Draft" ? (
-                            <Button
-                              onClick={() => {
-                                handleFetchingDataUjianById(ujian!.IdUjian);
-                              }}
-                              variant="outline"
-                              className="bg-yellow-300 text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
-                            >
-                              <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" />{" "}
-                              Edit Ujian
-                            </Button>
-                          ) : (
-                            <></>
-                          )}
+                                  <DeleteAction
+                                    idUjian={ujian.IdUjian.toString()}
+                                    status={ujian.Status}
+                                    refetchUjian={refetchUjian}
+                                  />
 
-                          {usePathname().includes("pukakp") &&
-                            ujian!.Status == "Draft" ? (
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button
-                                  onClick={() =>
-                                    setSelectedIdUjian(ujian!.IdUjian)
-                                  }
-                                  variant="outline"
-                                  className="bg-rose-600 text-white hover:text-white hover:bg-rose-600"
-                                >
-                                  <Trash className="h-4 w-4 text-white mr-1" />{" "}
-                                  Hapus Ujian
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>
-                                    Apakah kamu yakin menghapus ujian ini?
-                                  </AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Penghapusan data ini akan dilakukan secara
-                                    permanen, sehingga anda tidak dapat kembali
-                                    melakukan undo terkait tindakan ini!
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel>Batal</AlertDialogCancel>
-                                  <AlertDialogAction
-                                    onClick={() => handleDeleteUjian()}
-                                    className="bg-rose-600"
-                                  >
-                                    Hapus
-                                  </AlertDialogAction>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          ) : (
-                            <></>
-                          )}
+                                  {usePathname().includes("pukakp") &&
+                                    ujian!.IsSelesai == "" ? (
+                                    <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
 
-                          {usePathname().includes("pukakp") &&
-                            ujian!.IsSelesai == "" ? (
-                            <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
+                                      <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                          <AlertDialogTitle>
+                                            Apakah kamu yakin menutup ujian ini?
+                                          </AlertDialogTitle>
+                                          <AlertDialogDescription>
+                                            Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
+                                          </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                          {
+                                            !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
 
-                              <AlertDialogContent>
-                                <AlertDialogHeader>
-                                  <AlertDialogTitle>
-                                    Apakah kamu yakin menutup ujian ini?
-                                  </AlertDialogTitle>
-                                  <AlertDialogDescription>
-                                    Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
-                                  </AlertDialogDescription>
-                                </AlertDialogHeader>
-                                <AlertDialogFooter>
-                                  {
-                                    !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
+                                              <AlertDialogAction
+                                                onClick={() => handleCloseExam()}
+                                                className="bg-gray-700"
+                                              >
+                                                Tutup
+                                              </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
+                                          }
 
-                                      <AlertDialogAction
-                                        onClick={() => handleCloseExam()}
-                                        className="bg-gray-700"
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog>
+                                  ) : (
+                                    <></>
+                                  )}
+
+                                  {usePathname().includes("dpkakp") &&
+                                    (ujian!.Status == 'Pending') && (
+                                      <Button
+                                        onClick={(e) => {
+                                          setSelectedId(ujian!.IdUjian);
+                                          setSelectedSuratPermohonan(
+                                            ujian!.FilePermohonan
+                                          );
+                                          setOpenFormValidasiPelaksanaanUjian(
+                                            !openFormValidasiPelaksanaanUjian
+                                          );
+                                        }}
+                                        variant="outline"
+                                        className="bg-green-400 hover:bg-green-400 hover:text-white text-white rounded-md w-full"
                                       >
-                                        Tutup
-                                      </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
-                                  }
+                                        <RiVerifiedBadgeFill className="h-4 w-4 mr-1" />{" "}
+                                        Verifikasi
+                                      </Button>
+                                    )}
 
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          ) : (
-                            <></>
-                          )}
+                                  {ujian!.Status === "Aktif" && (
+                                    <AlertDialog>
+                                      <AlertDialogTrigger asChild>
+                                        <Button
+                                          variant="outline"
+                                          className="bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full"
+                                        >
+                                          <IoMdClock className="h-4 w-4 text-lg " />{" "}
+                                          Waktu Ujian
+                                        </Button>
+                                      </AlertDialogTrigger>
+                                      <AlertDialogContent className="max-w-2xl">
+                                        <AlertDialogHeader>
+                                          <div className="flex flex-col w-full items-center justify-center">
+                                            <AlertDialogTitle className="text-center leading-none">
+                                              Daftar Waktu Pelaksanaan{" "}
+                                              {ujian!.TypeUjian} di {ujian!.PUKAKP}
+                                            </AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                              Berikut merupakan waktu pelaksanaan dari
+                                              setiap fungsi dan bagian!
+                                            </AlertDialogDescription>
+                                          </div>
+                                        </AlertDialogHeader>
+                                        <JadwalUjianKeahlianAKP data={dataUjian} ujian={ujian} />
+                                        <AlertDialogFooter>
+                                          <AlertDialogCancel className="bg-gray-900 w-full text-white hover:bg-gray-800 hover:text-white">
+                                            Tutup
+                                          </AlertDialogCancel>
+                                        </AlertDialogFooter>
+                                      </AlertDialogContent>
+                                    </AlertDialog>
+                                  )}
 
-                          {usePathname().includes("dpkakp") &&
-                            ujian!.Status != "Aktif" && (
-                              <Button
-                                onClick={(e) => {
-                                  setSelectedId(ujian!.IdUjian);
-                                  setSelectedSuratPermohonan(
-                                    ujian!.FilePermohonan
-                                  );
-                                  setOpenFormValidasiPelaksanaanUjian(
-                                    !openFormValidasiPelaksanaanUjian
-                                  );
-                                }}
-                                variant="outline"
-                                className="bg-green-400 hover:bg-green-400 hover:text-white text-white rounded-md"
-                              >
-                                <RiVerifiedBadgeFill className="h-4 w-4 mr-1" />{" "}
-                                Verifikasi
-                              </Button>
-                            )}
+                                  {usePathname().includes("dpkakp") &&
+                                    ujian!.Status == "Aktif" &&
+                                    ujian!.NamaPengawasUjian == "" && (
+                                      <Button
+                                        onClick={(e) => {
+                                          setSelectedId(ujian!.IdUjian);
+                                          setStatus(ujian!.Status);
+                                          setIsOpenFormUjianKeahlian(
+                                            !isOpenFormUjianKeahlian
+                                          );
+                                        }}
+                                        variant="outline"
+                                        className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200 w-full"
+                                      >
+                                        <TbEditCircle className="h-5 w-5 mr-1" />
+                                        Pilih Penguji
+                                      </Button>
+                                    )}
 
-                          {ujian!.Status === "Aktif" && (
-                            <AlertDialog>
-                              <AlertDialogTrigger asChild>
-                                <Button
-                                  variant="outline"
-                                  className="bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-fit"
-                                >
-                                  <IoMdClock className="h-4 w-4 text-lg " />{" "}
-                                  Waktu Ujian
-                                </Button>
-                              </AlertDialogTrigger>
-                              <AlertDialogContent className="max-w-2xl">
-                                <AlertDialogHeader>
-                                  <div className="flex flex-col w-full items-center justify-center">
-                                    <AlertDialogTitle className="text-center leading-none">
-                                      Daftar Waktu Pelaksanaan{" "}
-                                      {ujian!.TypeUjian} di {ujian!.PUKAKP}
-                                    </AlertDialogTitle>
-                                    <AlertDialogDescription>
-                                      Berikut merupakan waktu pelaksanaan dari
-                                      setiap fungsi dan bagian!
-                                    </AlertDialogDescription>
-                                  </div>
-                                </AlertDialogHeader>
-                                <ExamSchedule data={data} ujian={ujian} />
-                                <AlertDialogFooter>
-                                  <AlertDialogCancel className="bg-gray-900 w-full text-white hover:bg-gray-800 hover:text-white">
-                                    Tutup
-                                  </AlertDialogCancel>
-                                </AlertDialogFooter>
-                              </AlertDialogContent>
-                            </AlertDialog>
-                          )}
+                                  {
+                                    ujian!.Status === "Aktif" && ujian!.IsSelesai == "" && isTodayBetween(ujian!.TanggalMulaiUjian, ujian!.TanggalBerakhirUjian) && (
+                                      <Button
+                                        onClick={(e) => {
+                                          setSelectedIdUjian(ujian!.IdUjian);
+                                          setOpenFormRemedial(!openFormRemedial);
+                                        }}
+                                        variant="outline"
+                                        className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md w-full"
+                                      >
+                                        <IoReload className="h-4 w-4 mr-1" /> Remedial
+                                      </Button>
+                                    )}
 
-                          {usePathname().includes("dpkakp") &&
-                            ujian!.Status == "Aktif" &&
-                            ujian!.NamaPengawasUjian == "" && (
-                              <Button
-                                onClick={(e) => {
-                                  setSelectedId(ujian!.IdUjian);
-                                  setStatus(ujian!.Status);
-                                  setIsOpenFormUjianKeahlian(
-                                    !isOpenFormUjianKeahlian
-                                  );
-                                }}
-                                variant="outline"
-                                className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200"
-                              >
-                                <TbEditCircle className="h-5 w-5 mr-1" />
-                                Pilih Penguji
-                              </Button>
-                            )}
+                                  {usePathname().includes("pukakp") &&
+                                    ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
+                                      <Button
+                                        onClick={(e) => {
+                                          setSelectedIdUjian(ujian!.IdUjian);
+                                          setOpenFormCloseExam(!openFormRemedial);
+                                        }}
+                                        variant="outline"
+                                        className="bg-teal-600 hover:bg-teal-700 hover:text-white text-white rounded-md w-full"
+                                      >
+                                        <BiSolidLockAlt className="h-4 w-4 mr-1" /> Tutup Ujian
+                                      </Button>
+                                    )}
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
 
-                          {
-                            ujian!.Status === "Aktif" && ujian!.IsSelesai == "" && isTodayBetween(ujian!.TanggalMulaiUjian, ujian!.TanggalBerakhirUjian) && (
-                              <Button
-                                onClick={(e) => {
-                                  setSelectedIdUjian(ujian!.IdUjian);
-
-                                  setOpenFormRemedial(!openFormRemedial);
-                                }}
-                                variant="outline"
-                                className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md"
-                              >
-                                <IoReload className="h-4 w-4 mr-1" /> Remedial
-                              </Button>
-                            )}
-
-                          {usePathname().includes("pukakp") &&
-                            ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
-                              <Button
-                                onClick={(e) => {
-                                  setSelectedIdUjian(ujian!.IdUjian);
-                                  setOpenFormCloseExam(!openFormRemedial);
-                                }}
-                                variant="outline"
-                                className="bg-teal-600 hover:bg-teal-700 hover:text-white text-white rounded-md"
-                              >
-                                <BiSolidLockAlt className="h-4 w-4 mr-1" /> Tutup Ujian
-                              </Button>
-                            )}
-                        </div>
-                      </CardFooter>
-                    </Card>
-                  ))
+                    {/* Pagination */}
+                    <div className="mt-4 flex justify-end">
+                      <Pagination
+                        totalItems={filteredData.length}
+                        itemsPerPage={itemsPerPage}
+                        currentPage={currentPage}
+                        onPageChange={handlePageChange}
+                      />
+                    </div>
+                  </>
                 )}
+
               </div>
 
             </TabsContent>
@@ -1865,147 +1255,24 @@ const TableDataUjian: React.FC = () => {
           </Tabs>
         </div>
       </section>
-      <AlertDialog
+
+      <VerifikasiAction
         open={openFormValidasiPelaksanaanUjian}
-        onOpenChange={setOpenFormValidasiPelaksanaanUjian}
-      >
-        <AlertDialogContent className="max-w-md">
-          <>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Validasi Pelaksaan Ujian</AlertDialogTitle>
-              <AlertDialogDescription className="-mt-2">
-                Proses validasi diperlukan untuk melihat permohonan pelaksanaan
-                serta membuat akses PUKAKP melakukan import data peserta pada
-                aplikasi untuk persiapan ujian.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <fieldset>
-              <div className="flex gap-2  mb-1 w-full">
-                <div className="w-full">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="noSertifikat"
-                  >
-                    Status Pelaksanaan <span className="text-red-600">*</span>
-                  </label>
-                  <div className="flex w-full gap-2">
-                    <select
-                      name=""
-                      id=""
-                      onChange={(e) => setStatus(e.target.value)}
-                      className="w-full overflow-hidden rounded-lg border border-gray-300"
-                    >
-                      <option value={""}>Pilih Status</option>
-                      <option
-                        onClick={(e) => setStatus("Aktif")}
-                        value={"Aktif"}
-                      >
-                        Valid
-                      </option>
-                      <option
-                        onClick={(e) => setStatus("Pending")}
-                        value={"Tidak Aktif"}
-                      >
-                        Tidak Valid
-                      </option>
-                    </select>
-                    <Link
-                      target="_blank"
-                      href={selectedSuratPermohonan}
-                      className="border border-gray-300 rounded-md bg-white shadow-sm w-14 flex items-center justify-center h-12"
-                    >
-                      <FiFile className="h-4 w-4 text-gray-800 text-xl" />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </fieldset>
+        setOpen={setOpenFormValidasiPelaksanaanUjian}
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
+        selectedSuratPermohonan={selectedSuratPermohonan}
+        setSelectedSuratPermohonan={setSelectedSuratPermohonan}
+        refetchUjian={refetchUjian}
+      />
 
-            <p className="text-gray-700 text-xs mt-1">
-              *Periksa terlebih dahulu surat permohonan pada tombol surat
-              sebelum melakukan validasi
-            </p>
-          </>
-          <AlertDialogFooter>
-            {!isValidating && (
-              <AlertDialogCancel
-                onClick={(e) =>
-                  setOpenFormValidasiPelaksanaanUjian(
-                    !openFormValidasiPelaksanaanUjian
-                  )
-                }
-              >
-                Cancel
-              </AlertDialogCancel>
-            )}
-            <AlertDialogAction onClick={(e) => handleValidasiPelaksaanUjian(e)}>
-              {isValidating ? (
-                <span>Validating...</span>
-              ) : (
-                <span>Validasi</span>
-              )}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog open={openFormRemedial} onOpenChange={setOpenFormRemedial}>
-        <AlertDialogContent className="max-w-md">
-          <>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Remedial Pelaksaan Ujian</AlertDialogTitle>
-              <AlertDialogDescription className="-mt-2">
-                Proses ini mengharuskan PUKAKP untuk menginput waktu pelaksanaan
-                remedial, kode akses peserta ujian sebelumnya dapat diakses
-                kembali jika memang peserta bersangkutan mendapatkan remedial.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <fieldset>
-              <div className="flex gap-2  mb-1 w-full">
-                <div className="w-full">
-                  <label
-                    className="block text-gray-800 text-sm font-medium mb-1"
-                    htmlFor="noSertifikat"
-                  >
-                    Waktu Remedial <span className="text-red-600">*</span>
-                  </label>
-                  <Input
-                    id="waktuRemedial"
-                    type="text"
-                    required
-                    value={waktuRemedial}
-                    onChange={(e) => setWaktuRemedial(e.target.value)}
-                  />
-                </div>
-              </div>
-            </fieldset>
-
-            <p className="text-gray-700 text-xs">
-              *Hanya mengganti tanggal dan waktu saja!
-            </p>
-            <p className="text-rose-500 text-xs -mt-3">
-              *Pastikan rekapitulasi penilaian sebelumnya telah didownload
-              karena nilai remedi ini akan menimpa nilai awal
-            </p>
-          </>
-          <AlertDialogFooter>
-            {!isProcessingRemedial && (
-              <AlertDialogCancel
-                onClick={(e) => setOpenFormRemedial(!openFormRemedial)}
-              >
-                Cancel
-              </AlertDialogCancel>
-            )}
-            <AlertDialogAction onClick={(e) => handleRemedial(e)}>
-              {isProcessingRemedial ? (
-                <span>Processing...</span>
-              ) : (
-                <span>Lakukan Remedial</span>
-              )}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <RemedialAction
+        open={openFormRemedial}
+        setOpen={setOpenFormRemedial}
+        selectedIdUjian={selectedIdUjian}
+        setSelectedIdUjian={setSelectedIdUjian}
+        refetchUjian={refetchUjian}
+      />
 
       <AlertDialog open={isOpenFormUjianKeahlian}>
         <AlertDialogContent className="max-w-xl">
@@ -2330,111 +1597,4 @@ const TableDataUjian: React.FC = () => {
 
 export default TableDataUjian;
 
-function EventBadge({ ujian }: { ujian: Ujian }) {
-  const [isOngoing, setIsOngoing] = useState(false);
 
-  // Check if all fields are empty strings ("")
-  const isEmpty = Object.values(ujian).every(
-    (value) => typeof value !== "string" || value.trim() === ""
-  );
-
-  if (isEmpty) return null; // Return nothing if all fields are empty
-
-  const parseDate = (dateString: string): Date => {
-    // Menghapus bagian 'WIB' dan mengganti spasi sebelum zona waktu
-    const formattedDateString = dateString
-      .replace(" WIB", "")
-      .replace(" ", "T");
-
-    // Parse string waktu yang sudah diformat
-    return new Date(formattedDateString);
-  };
-
-  React.useEffect(() => {
-    const checkTime = () => {
-      const now = new Date();
-
-      // Cek setiap waktu ujian
-      const ongoing = Object.values(ujian).some((timeString) => {
-        if (typeof timeString !== "string" || timeString.trim() === "")
-          return false;
-
-        // Menggunakan fungsi parseDate
-        const eventTime = parseDate(timeString);
-
-        if (isNaN(eventTime.getTime())) {
-          console.warn("Invalid date:", timeString);
-          return false;
-        }
-
-        // Menambahkan waktu 2 jam
-        const twoHoursLater = new Date(
-          eventTime.getTime() + 2 * 60 * 60 * 1000
-        );
-
-        // Memeriksa apakah waktu sekarang berada dalam rentang 2 jam
-        return now >= eventTime && now <= twoHoursLater;
-      });
-
-      setIsOngoing(ongoing);
-    };
-
-    checkTime();
-    const interval = setInterval(checkTime, 1000);
-
-    return () => clearInterval(interval);
-  }, [ujian]);
-  return isOngoing ? (
-    <span className="bg-green-500 text-white px-3 py-1 rounded-lg text-sm">
-      Sedang Berlangsung
-    </span>
-  ) : null;
-}
-
-function ExamSchedule({ data, ujian }: { data: Ujian[]; ujian: Ujian }) {
-  if (data.length === 0) return null;
-
-
-  let scheduleItems;
-
-  if (data[0]?.TypeUjian.includes("Rewarding") || data[0]?.TypeUjian.includes('TRYOUT')) {
-    scheduleItems = [
-      { label: "F1", time: ujian?.WaktuF1 },
-      { label: "F2", time: ujian?.WaktuF2 },
-      { label: "F3", time: ujian?.WaktuF3 },
-    ];
-  } else if (data[0]?.TypeUjian == "ANKAPIN II" || data[0]?.TypeUjian == "ATKAPIN II") {
-    scheduleItems = [
-      { label: "F1B1", time: ujian?.WaktuF1B1 },
-      { label: "F1B2", time: ujian?.WaktuF1B2 },
-      { label: "F2", time: ujian?.WaktuF2B1 },
-      { label: "F3B1", time: ujian?.WaktuF3B1 },
-      { label: "F3B2", time: ujian?.WaktuF3B2 },
-    ];
-  } else {
-    scheduleItems = [
-      { label: "F1B1", time: ujian?.WaktuF1B1 },
-      { label: "F1B2", time: ujian?.WaktuF1B2 },
-      { label: "F1B3", time: ujian?.WaktuF1B3 },
-      { label: "F2", time: ujian?.WaktuF2B1 },
-      { label: "F3B1", time: ujian?.WaktuF3B1 },
-      { label: "F3B2", time: ujian?.WaktuF3B2 },
-    ];
-  }
-
-
-  return (
-    <div className="w-full text-sm grid grid-cols-3 gap-4">
-      {scheduleItems.map(({ label, time }) => (
-        <React.Fragment key={label}>
-          <div key={label} className="border border-gray-200 p-2 text-center">
-            <span className="font-bold block border-b border-b-gray-200 py-1 mb-1">
-              {label}
-            </span>
-            {time != "" ? time : "-"}
-          </div>
-        </React.Fragment>
-      ))}
-    </div>
-  );
-}
