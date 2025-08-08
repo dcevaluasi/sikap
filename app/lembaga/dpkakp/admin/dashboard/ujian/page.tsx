@@ -16,7 +16,7 @@ export default function Page() {
     <>
       <LayoutAdmin>
         <div className="">
-        
+
 
           <div className="flex flex-col">
             <div className="flex flex-row gap-2 items-center">
@@ -30,9 +30,7 @@ export default function Page() {
                     Pelaksaan Ujian Keahlian AKP
                   </h1>
                   <p className="font-medium text-gray-400 text-base">
-                    Upload Bank Soal Untuk Sesuai Program Keahlian Yang Diujikan
-                    Pada Pelaksanaan Ujian Keahlian Awak Kapal Perikanan Yang
-                    Diselenggarakan!
+                    Monitoring Pelaksaan Ujian Keahlian Awak kapal Perikanan!
                   </p>
                 </div>
               </header>

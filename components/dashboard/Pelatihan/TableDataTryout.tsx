@@ -811,15 +811,19 @@ const TableDataTryout: React.FC = () => {
                                                         onChange={(e) => setTypeUjian(e.target.value)}
                                                     >
                                                         <option value="0">Pilih Tipe Ujian</option>
-                                                        {dataTypeUjian.map((type) => (
-                                                            <option
-                                                                key={type.IdTypeUjian}
-                                                                value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
-                                                                className="capitalize"
-                                                            >
-                                                                {type.NamaTypeUjian}
-                                                            </option>
-                                                        ))}
+                                                        {dataTypeUjian
+                                                            .filter((type) =>
+                                                                type.NamaTypeUjian.toLowerCase().includes("tryout")
+                                                            )
+                                                            .map((type) => (
+                                                                <option
+                                                                    key={type.IdTypeUjian}
+                                                                    value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
+                                                                    className="capitalize"
+                                                                >
+                                                                    {type.NamaTypeUjian}
+                                                                </option>
+                                                            ))}
                                                     </select>
                                                 </div>
 

@@ -26,12 +26,10 @@ export default function Page() {
                 <LucideFileSignature className="text-3xl" />
                 <div className="flex flex-col">
                   <h1 id="page-caption" className="font-semibold text-lg">
-                    Pelaksaan Ujian Keahlian AKP
+                    Pelaksaan Tryout
                   </h1>
                   <p className="font-medium text-gray-400 text-base">
-                    Upload Bank Soal Untuk Sesuai Program Keahlian Yang Diujikan
-                    Pada Pelaksanaan Ujian Keahlian Awak Kapal Perikanan Yang
-                    Diselenggarakan!
+                    Monitoring Pelaksaan Tryout Ujian Keahlian Awak kapal Perikanan!
                   </p>
                 </div>
               </header>

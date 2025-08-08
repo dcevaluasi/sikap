@@ -4,8 +4,6 @@ import * as XLSX from "xlsx";
 import "jspdf-autotable";
 import { useReactToPrint } from "react-to-print";
 
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@/components/ui/label"
 import {
   Sheet,
   SheetClose,
@@ -58,11 +56,9 @@ import {
   TbSchool,
   TbTargetArrow,
 } from "react-icons/tb";
-import { IoIosInformationCircle, IoMdCloseCircle } from "react-icons/io";
 import { FiUploadCloud } from "react-icons/fi";
 
 import { usePathname, useRouter } from "next/navigation";
-import { Pelatihan, PelatihanMasyarakat, UserPelatihan } from "@/types/product";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { extractLastSegment, extractSecondLastSegment } from "@/utils";
 import {
@@ -88,7 +84,6 @@ import { getIdUjianKeahlianInPathPesertaUjian } from "@/components/utils/dpkakp/
 import { BsFileExcel, BsPersonVcard } from "react-icons/bs";
 import { JawabanUserStore, Ujian, UsersUjian } from "@/types/ujian-keahlian-akp";
 import { HashLoader } from "react-spinners";
-import autoTable from "jspdf-autotable";
 import Image from "next/image";
 import { generateTanggalPelatihan, shortenName } from "@/utils/text";
 import {
@@ -112,10 +107,8 @@ import {
   roundUpScore,
 } from "@/components/utils/dpkakp/scoring";
 import getDocument from "@/firebase/firestore/getData";
-import { DocumentData } from "firebase/firestore";
 import EmptyData from "@/components/micro-components/EmptyData";
-import { jsPDF } from 'jspdf';
-import domtoimage from 'dom-to-image';
+import { CodeAccessAction } from "../Actions/CodeAccessAction";
 
 const TableDataPesertaUjianKeahlian = () => {
   const pathname = usePathname();
@@ -349,107 +342,11 @@ const TableDataPesertaUjianKeahlian = () => {
               Kompre
             </Button>
 
-
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="bg-rose-600 text-white hover:text-white hover:bg-rose-600 w-full"
-                >
-                  <Trash className="h-4 w-4 " /> Hapus Data
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Apakah kamu yakin menghapus ujian ini?
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Penghapusan data ini akan dilakukan secara permanen,
-                    sehingga anda tidak dapat kembali melakukan undo terkait
-                    tindakan ini!
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Batal</AlertDialogCancel>
-                  <AlertDialogAction className="bg-rose-600">
-                    Hapus
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={`bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full ${pathname.includes('dpkakp') || Cookies.get('PUKAKP') == 'PUKAKP III (Politeknik KP Dumai) - Pelaksan Ujian Keahlian Awak Kapal Perikanan' || Cookies.get('PUKAKP') == 'PUKAKP VII (BPPP Banyuwangi) - Pelaksan Ujian Keahlian Awak Kapal Perikanan' || Cookies.get('PUKAKP') == 'PUKAKP XII (Poltiteknik KP Bone) - Pelaksan Ujian Keahlian Awak Kapal Perikanan' ? 'flex' : 'hidden'}`}
-                >
-                  <PiKeyFill className="h-4 w-4 text-lg " /> Kode Akses
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent className='max-w-2xl'>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Daftar Kode Akses Ujian Keahlian
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Berikut merupakan kode akses untuk dapat melakukan proses
-                    ujian keahlian awak kapal perikanan, gunakan kode akses
-                    sesuai fungsi yang dikerjakan!
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <table className="w-full text-sm">
-                  {dataUjian!.length > 0 ? (
-                    <thead>
-                      {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
-                        <tr>
-                          <th className="border border-gray-200">F1</th>
-                          <th className="border border-gray-200">F2</th>
-                          <th className="border border-gray-200">F3</th>
-                        </tr>
-                      ) : (
-                        <tr>
-                          <th className="border border-gray-200">F1B1</th>
-                          <th className="border border-gray-200">F1B2</th>
-                          <th className="border border-gray-200">F1B3</th>
-                          <th className="border border-gray-200">F2B1</th>
-                          <th className="border border-gray-200">F3B1</th>
-                          <th className="border border-gray-200">F3B2</th>
-                        </tr>
-                      )}
-                    </thead>
-                  ) : (
-                    <></>
-                  )}
-
-                  <tbody>
-                    <tr>
-                      {row.original.CodeAksesUsersBagian.map(
-                        (codeAccess, index) => (
-                          <td
-                            key={index}
-                            className="border text-center border-gray-200"
-                          >
-                            <div className="flex gap-5 justify-center flex-col items-center">
-
-                              <Switch id="airplane-mode" checked={codeAccess.IsUse == 'true' ? true : false} onCheckedChange={() => handleSwitchCodeAccessIsUse(codeAccess.KodeAkses, codeAccess.IsUse)} />
-                              <Label htmlFor="airplane-mode">{codeAccess.KodeAkses}</Label>
-                            </div>
-                          </td>
-                        )
-                      )}
-
-                    </tr>
-                  </tbody>
-                </table>
-                <AlertDialogFooter>
-                  <AlertDialogCancel className="bg-gray-900 text-white hover:bg-gray-800 hover:text-white">
-                    Tutup
-                  </AlertDialogCancel>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <CodeAccessAction
+              dataUjian={dataUjian}
+              row={row}
+              handleSwitchCodeAccessIsUse={handleSwitchCodeAccessIsUse}
+            />
           </div>
         </div>
       ),
@@ -2312,91 +2209,49 @@ const TableDataPesertaUjianKeahlian = () => {
             )}
 
             <AlertDialog open={isOpenFormUjianKeahlian}>
-              <AlertDialogContent className="max-w-xl">
-                <AlertDialogHeader className="gap-0 flex flex-col">
-                  <AlertDialogTitle className="flex items-center gap-2 text-2xl">
-                    {" "}
-                    <FaBookOpen className="h-4 w-4" />
-                    Masukkan Nilai Komprehensif <br /><span className='capitalize'>{selectedNamaPeserta}</span>
+              <AlertDialogContent className="max-w-2xl w-full rounded-xl border border-zinc-200 bg-white shadow-xl p-0 overflow-hidden">
+
+                {/* Header */}
+                <AlertDialogHeader className="p-6 border-b border-zinc-100 bg-white">
+                  <AlertDialogTitle className="text-2xl font-semibold flex items-center gap-3 text-neutral-700">
+                    <FaBookOpen className="h-5 w-5 text-neutral-500" />
+                    Masukkan Nilai Komprehensif
                   </AlertDialogTitle>
-                  <AlertDialogDescription className="-mt-6">
-                    Sebagai kelengkapan penilaian dari pelaksanaan ujian
-                    keahlaian Awak Kapal Perikanan ini, diharap sebagai penguji
-                    dapat memasukkan nilai yang didapatkan peserta dari proses
-                    komprehensif!
+                  <AlertDialogDescription className="mt-2 text-sm text-neutral-500 leading-relaxed">
+                    Untuk peserta:{" "}
+                    <span className="font-medium capitalize text-neutral-700">
+                      {selectedNamaPeserta}
+                    </span>
+                    <br />
+                    Silakan input nilai komprehensif yang diperoleh peserta sebagai bagian dari penilaian ujian keahlian.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
-                <fieldset>
-                  <form autoComplete="off">
-                    <div className="grid grid-cols-3  gap-2 mb-1">
-                      <div className="flex  gap-2 mb-2 w-full">
-                        <div className="w-full">
-                          <label
-                            className="block text-gray-800 text-sm font-medium mb-1"
-                            htmlFor="name"
-                          >
-                            Nilai F1 <span className="text-red-600">*</span>
-                          </label>
-                          <input
-                            id="name"
-                            type="text"
-                            className="form-input w-full text-black border-gray-300 rounded-md"
-                            placeholder="Masukkan nilai"
-                            required
-                            value={nilaiKomprehensif}
-                            onChange={(e) =>
-                              setNilaiKomprehensif(e.target.value)
-                            }
-                          />
-                        </div>
-                      </div>
-                      <div className="flex  gap-2 mb-2 w-full">
-                        <div className="w-full">
-                          <label
-                            className="block text-gray-800 text-sm font-medium mb-1"
-                            htmlFor="name"
-                          >
-                            Nilai F2 <span className="text-red-600">*</span>
-                          </label>
-                          <input
-                            id="name"
-                            type="text"
-                            className="form-input w-full text-black border-gray-300 rounded-md"
-                            placeholder="Masukkan nilai"
-                            required
-                            value={nilaiKomprehensif2}
-                            onChange={(e) =>
-                              setNilaiKomprehensif2(e.target.value)
-                            }
-                          />
-                        </div>
-                      </div>
-                      <div className="flex gap-2 mb-2 w-full">
-                        <div className="w-full">
-                          <label
-                            className="block text-gray-800 text-sm font-medium mb-1"
-                            htmlFor="name"
-                          >
-                            Nilai F3 <span className="text-red-600">*</span>
-                          </label>
-                          <input
-                            id="name"
-                            type="text"
-                            className="form-input w-full text-black border-gray-300 rounded-md"
-                            placeholder="Masukkan nilai"
-                            required
-                            value={nilaiKomprehensif3}
-                            onChange={(e) =>
-                              setNilaiKomprehensif3(e.target.value)
-                            }
-                          />
-                        </div>
-                      </div>
+
+                {/* Form */}
+                <div className="px-6 py-5 bg-neutral-50">
+                  <form autoComplete="off" className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <InputField
+                        label="Nilai F1"
+                        value={nilaiKomprehensif}
+                        onChange={(e) => setNilaiKomprehensif(e.target.value)}
+                      />
+                      <InputField
+                        label="Nilai F2"
+                        value={nilaiKomprehensif2}
+                        onChange={(e) => setNilaiKomprehensif2(e.target.value)}
+                      />
+                      <InputField
+                        label="Nilai F3"
+                        value={nilaiKomprehensif3}
+                        onChange={(e) => setNilaiKomprehensif3(e.target.value)}
+                      />
                     </div>
 
-                    <AlertDialogFooter className="mt-3">
+                    {/* Footer */}
+                    <AlertDialogFooter className="flex justify-end gap-1 pt-4 border-t border-zinc-100">
                       <AlertDialogCancel
-                        onClick={(e) => {
+                        onClick={() => {
                           setIsOpenFormUjianKeahlian(false);
                           if (isEditing) {
                             setNilaiKomprehensif("");
@@ -2405,21 +2260,23 @@ const TableDataPesertaUjianKeahlian = () => {
                           }
                           setEditing(false);
                         }}
+                        className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-4 py-2 rounded-md transition"
                       >
-                        Cancel
+                        Batal
                       </AlertDialogCancel>
                       <AlertDialogAction
-                        onClick={(e) => {
-                          handleUploadNilaiKomprehensif(e);
-                        }}
+                        onClick={(e) => handleUploadNilaiKomprehensif(e)}
+                        className="bg-neutral-800 hover:bg-neutral-900 text-white px-4 py-2 rounded-md transition"
                       >
-                        {isEditing ? "Edit" : "Upload"}
+                        {isEditing ? "Perbarui" : "Upload"}
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </form>
-                </fieldset>
+                </div>
               </AlertDialogContent>
             </AlertDialog>
+
+
           </>
         </>
       ) : (
@@ -2429,5 +2286,30 @@ const TableDataPesertaUjianKeahlian = () => {
     </div >
   );
 };
+
+const InputField = ({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => (
+  <div className="flex flex-col">
+    <label className="text-sm font-medium text-neutral-700 mb-1">
+      {label} <span className="text-red-500">*</span>
+    </label>
+    <input
+      type="text"
+      value={value}
+      onChange={onChange}
+      placeholder="Masukkan nilai"
+      required
+      className="w-full px-3 py-2 text-sm border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-neutral-400 focus:border-transparent transition"
+    />
+  </div>
+);
+
 
 export default TableDataPesertaUjianKeahlian;
