@@ -188,7 +188,7 @@ export default function LayoutAdmin({ children }: { children: React.ReactNode })
               <NavItem
                 href="/lembaga/dpkakp/admin/dashboard/penguji"
                 icon={<HiMiniUserGroup className="w-5 h-5" />}
-                label="Tim Penguji"
+                label="Database Penguji"
                 active={pathname.includes("/penguji")}
               />
             </>
