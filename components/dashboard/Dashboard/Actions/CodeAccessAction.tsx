@@ -53,25 +53,26 @@ export const CodeAccessAction: React.FC<CodeAccessActionProps> = ({
                     <table className="w-full text-sm border border-gray-200 rounded-md">
                         {dataUjian?.length > 0 && (
                             <thead className="bg-zinc-100 text-zinc-700">
-                                {
-                                    dataUjian[0].TypeUjian.includes("TRYOUT") ? <tr>
+                                {dataUjian[0].TypeUjian.includes("TRYOUT") ? (
+                                    <tr>
                                         <th className="border px-3 py-2">Kode Tryout</th>
-                                    </tr> : dataUjian[0].TypeUjian.includes("Rewarding") ? (
-                                        <tr>
-                                            <th className="border px-3 py-2">F1</th>
-                                            <th className="border px-3 py-2">F2</th>
-                                            <th className="border px-3 py-2">F3</th>
-                                        </tr>
-                                    ) : (
-                                        <tr>
-                                            <th className="border px-3 py-2">F1B1</th>
-                                            <th className="border px-3 py-2">F1B2</th>
-                                            <th className="border px-3 py-2">F1B3</th>
-                                            <th className="border px-3 py-2">F2B1</th>
-                                            <th className="border px-3 py-2">F3B1</th>
-                                            <th className="border px-3 py-2">F3B2</th>
-                                        </tr>
-                                    )}
+                                    </tr>
+                                ) : dataUjian[0].TypeUjian.includes("Rewarding") ? (
+                                    <tr>
+                                        <th className="border px-3 py-2">F1</th>
+                                        <th className="border px-3 py-2">F2</th>
+                                        <th className="border px-3 py-2">F3</th>
+                                    </tr>
+                                ) : (
+                                    <tr>
+                                        <th className="border px-3 py-2">F1B1</th>
+                                        <th className="border px-3 py-2">F1B2</th>
+                                        <th className="border px-3 py-2">F1B3</th>
+                                        <th className="border px-3 py-2">F2B1</th>
+                                        <th className="border px-3 py-2">F3B1</th>
+                                        <th className="border px-3 py-2">F3B2</th>
+                                    </tr>
+                                )}
                             </thead>
                         )}
 
