@@ -111,6 +111,8 @@ import EmptyData from "@/components/micro-components/EmptyData";
 import { CodeAccessAction } from "../Actions/CodeAccessAction";
 import HistoryJawabanuserUjian from "./HistoryJawabanUserUjian";
 import HeaderDPAKP from "./HeaderDPKAKP";
+import KartuUserUjian from "./KartuUserUjian";
+import ImportAction from "../Actions/ImportAction";
 
 const TableDataPesertaUjianKeahlian = () => {
   const pathname = usePathname();
@@ -714,69 +716,6 @@ const TableDataPesertaUjianKeahlian = () => {
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
       {data != null ? (
         <>
-          <AlertDialog open={isOpenFormPeserta}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle className="flex items-center gap-2">
-                  {" "}
-                  <HiMiniUserGroup className="h-4 w-4" />
-                  Import Peserta Ujian
-                </AlertDialogTitle>
-                <AlertDialogDescription className="-mt-2">
-                  Import peserta yang akan mengikuti ujian keahlian!
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <fieldset>
-                <form autoComplete="off">
-                  <div className="flex flex-wrap -mx-3 mb-1">
-                    <div className="w-full px-3">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="email"
-                      >
-                        Data By Name By Address <span>*</span>
-                      </label>
-                      <div className="flex gap-1">
-                        <input
-                          type="file"
-                          className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                          required
-                          onChange={handleFileChange}
-                        />
-                        <Link
-                          target="_blank"
-                          href={
-                            "https://docs.google.com/spreadsheets/d/1lhIr6CeFYx-szSYPATb2aHsi9xNaxFhy/edit?usp=sharing&ouid=112666838213779179844&rtpof=true&sd=true"
-                          }
-                          className="btn text-white bg-green-600 hover:bg-green-700 py-0 w-[250px] px-0 text-sm"
-                        >
-                          <PiMicrosoftExcelLogoFill />
-                          Unduh Template
-                        </Link>
-                      </div>
-                      <p className="text-gray-700 text-xs mt-1">
-                        *Download terlebih dahulu template lalu isi file excel
-                        dan upload
-                      </p>
-                    </div>
-                  </div>
-
-                  <AlertDialogFooter className="mt-3 pt-3 border-t border-t-gray-300">
-                    <AlertDialogCancel
-                      onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
-                    >
-                      Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={(e) => handleUploadImportPesertaPelatihan(e)}
-                    >
-                      Upload
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </form>
-              </fieldset>
-            </AlertDialogContent>
-          </AlertDialog>
 
           <>
             <div className="flex w-full items-center justify-between mb-2">
@@ -971,19 +910,14 @@ const TableDataPesertaUjianKeahlian = () => {
               </div>
             </div>
 
-            {/* List Data Pelatihan */}
-
             {!showKartuUjian && !showRekapitulasiNilai && (
               <div>
-                <div id="chartOne" className="-ml-5"></div>
-                <>
-                  <TableData
-                    isLoading={false}
-                    columns={columns}
-                    table={table}
-                    type={"long"}
-                  />
-                </>
+                <TableData
+                  isLoading={false}
+                  columns={columns}
+                  table={table}
+                  type={"long"}
+                />
               </div>
             )}
 
@@ -993,277 +927,13 @@ const TableDataPesertaUjianKeahlian = () => {
                 <div className="grid grid-cols-1 gap-2">
                   {dataUjian.length != 0 &&
                     data!.map((peserta, index) => (
-                      <div className="flex w-full gap-2">
-                        <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
-                          <HeaderDPAKP />
-
-                          <div
-                            className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border ${dataUjian[0]!.TypeUjian.includes("ATKAPIN")
-                              ? "border-rose-500 bg-rose-500 text-rose-600"
-                              : "border-blue-500 bg-blue-500 text-blue-600"
-                              } bg-opacity-20 font-medium  mt-5 text-lg`}
-                          >
-                            KARTU PESERTA UJIAN {dataUjian[0]!.TypeUjian}
-                          </div>
-
-                          <div className="ml-0 text-left capitalize w-full mt-2">
-                            <p className="text-base font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
-                              Nama{"   "}: {"          "}
-                              <span className="font-normal">
-                                {peserta.Nama}
-                              </span>
-                            </p>
-                            <p className="text-base font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
-                              NIK{"     "}: {"          "}{" "}
-                              <span className="font-normal">{peserta.Nik}</span>
-                            </p>
-                            <p className="text-base font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
-                              Tempat, Tanggal Lahir{"   "}: {"          "}{" "}
-                              <span className="font-normal">
-                                {peserta.TempatLahir}, {peserta.TanggalLahir}
-                              </span>
-                            </p>
-                            <p className="text-base font-semibold tracking-tight leading-none border-b py-2 border-b-gray-200">
-                              Asal Sekolah/Instansi{"   "}: {"          "}{" "}
-                              <span className="font-normal">
-                                {peserta.Instansi}
-                              </span>
-                            </p>
-                          </div>
-
-                          <div className="flex flex-col gap">
-                            <div
-                              className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border border-gray-300 bg-neutral-200 bg-opacity-20 font-medium  mt-5 text-base uppercase`}
-                            >
-                              <p className="text-sm">Nomor Ujian{"     "}:</p>
-                              <p className="font-semibold">
-                                {peserta!.NomorUjian!}
-                              </p>
-                            </div>
-                          </div>
-
-                          {dataPukakp != null ? (
-                            <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
-                              <div className="flex flex-col gap-1 capitalize">
-                                <p className="capitalize text-base">
-                                  {dataUjian[0]!.TempatUjian},{" "}
-                                  {generateTanggalPelatihan(
-                                    dataUjian[0]!.TanggalMulaiUjian
-                                  )}
-                                </p>
-                                <p className="font-semibold text-base">
-                                  Ketua PUKAKP
-                                </p>
-                                <p className="text-xs">
-                                  {dataUjian[0]!.PUKAKP}
-                                </p>
-
-                                <p className="text-base border-b-black border-b mt-14">
-                                  {dataPukakp.KetuaPukakp}
-                                </p>
-                                <p className="text-base ">
-                                  NIP. {dataPukakp.NipKetua}
-                                </p>
-                              </div>
-                              <div className="w-35 h-40 rounded-md border border-gray-300"></div>
-                            </div>
-                          ) : (
-                            <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
-                              <div className="flex flex-col gap-1 capitalize">
-                                <p className="capitalize text-base">
-                                  {dataUjian[0]!.TempatUjian},{" "}
-                                  {generateTanggalPelatihan(
-                                    dataUjian[0]!.TanggalMulaiUjian
-                                  )}
-                                </p>
-                                <p className="font-semibold text-base">
-                                  Ketua PUKAKP
-                                </p>
-                                <p className="text-xs">
-                                  {dataUjian[0]!.PUKAKP}
-                                </p>
-
-                                <p className="text-base border-b-black border-b mt-14">
-                                  Nama
-                                </p>
-                                <p className="text-base ">NIP</p>
-                              </div>
-                              <div className="w-35 h-40 rounded-md border border-gray-300"></div>
-                            </div>
-                          )}
-                        </div>
-                        <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
-                          {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT')
-                            ? peserta!.CodeAksesUsersBagian!.length != 0 && (
-                              <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
-                                <div className="flex flex-shrink-0 bg-neutral-500 text-white">
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                    <span>F1</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                    <span>F2</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                    <span>F3</span>
-                                  </div>
-                                </div>
-                                <div className="overflow-auto">
-                                  <div className="flex flex-shrink-0">
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span className="text-2xl">
-                                        {peserta!.CodeAksesUsersBagian[0]!
-                                          .KodeAkses || ""}
-                                      </span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span className="text-2xl">
-                                        {peserta!.CodeAksesUsersBagian[1]!
-                                          .KodeAkses || ""}
-                                      </span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span className="text-2xl">
-                                        {peserta!.CodeAksesUsersBagian[2]!
-                                          .KodeAkses || ""}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            )
-                            : peserta!.CodeAksesUsersBagian!.length != 0 && (
-                              <div className="flex flex-col w-full border-t border-r border-gray-400 mt-6 rounded-md">
-                                <div className="flex flex-shrink-0 bg-neutral-500 text-white">
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                    <span>F1B1</span>
-                                  </div>
-                                  <div
-                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center`}
-                                  >
-                                    <span>F1B2</span>
-                                  </div>
-                                  <div
-                                    className={`${dataUjian[0]!.TypeUjian ==
-                                      "ANKAPIN II" ||
-                                      dataUjian[0]!.TypeUjian == "ATKAPIN II"
-                                      ? "hidden"
-                                      : "flex"
-                                      } flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center`}
-                                  >
-                                    <span>F1B3</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                    <span>F2B1</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                    <span>F3B1</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                    <span>F3B2</span>
-                                  </div>
-                                </div>
-                                <div className="overflow-auto">
-                                  <div className="flex flex-shrink-0">
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>
-                                        {peserta!.CodeAksesUsersBagian[0]!
-                                          .KodeAkses || ""}
-                                      </span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>
-                                        {peserta!.CodeAksesUsersBagian[1]!
-                                          .KodeAkses || ""}
-                                      </span>
-                                    </div>
-                                    <div
-                                      className={`${dataUjian[0]!.TypeUjian ==
-                                        "ANKAPIN II" ||
-                                        dataUjian[0]!.TypeUjian ==
-                                        "ATKAPIN II"
-                                        ? "hidden"
-                                        : "flex"
-                                        } items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center`}
-                                    >
-                                      <span>
-                                        {peserta!.CodeAksesUsersBagian[2]!
-                                          .KodeAkses || ""}
-                                      </span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>
-                                        {peserta!.CodeAksesUsersBagian[3]!
-                                          .KodeAkses || ""}
-                                      </span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>
-                                        {peserta!.CodeAksesUsersBagian[4]!
-                                          .KodeAkses || ""}
-                                      </span>
-                                    </div>
-                                    <div className="flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center">
-                                      <span>
-                                        {peserta!.CodeAksesUsersBagian[5]!
-                                          .KodeAkses || ""}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-
-                          {dataPukakp != null ? (
-                            <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
-                              <div className="flex flex-col gap-1 capitalize">
-                                <p className="capitalize text-base">
-                                  {dataUjian[0]!.TempatUjian},{" "}
-                                  {generateTanggalPelatihan(
-                                    dataUjian[0]!.TanggalMulaiUjian
-                                  )}
-                                </p>
-                                <p className="font-semibold text-base">
-                                  Ketua PUKAKP
-                                </p>
-                                <p className="text-xs">
-                                  {dataUjian[0]!.PUKAKP}
-                                </p>
-
-                                <p className="text-base border-b-black border-b mt-14">
-                                  {dataPukakp.KetuaPukakp}
-                                </p>
-                                <p className="text-base ">
-                                  NIP. {dataPukakp.NipKetua}
-                                </p>
-                              </div>
-                              <div className="w-35 h-40 rounded-md "></div>
-                            </div>
-                          ) : (
-                            <div className="flex items-center justify-between w-full mb-5 mt-6 gap-8">
-                              <div className="flex flex-col gap-1 capitalize">
-                                <p className="capitalize text-base">
-                                  {dataUjian[0]!.TempatUjian},{" "}
-                                  {generateTanggalPelatihan(
-                                    dataUjian[0]!.TanggalMulaiUjian
-                                  )}
-                                </p>
-                                <p className="font-semibold text-base">
-                                  Ketua PUKAKP
-                                </p>
-                                <p className="text-base">
-                                  {dataUjian[0]!.PUKAKP}
-                                </p>
-
-                                <p className="text-base border-b-black border-b mt-14">
-                                  Nama
-                                </p>
-                                <p className="text-base ">NIP</p>
-                              </div>
-                              <div className="w-35 h-40 rounded-md "></div>
-                            </div>
-                          )}
-                        </div>
-                      </div>
+                      <KartuUserUjian
+                        key={index}
+                        peserta={peserta}
+                        dataUjian={dataUjian}
+                        dataPukakp={dataPukakp}
+                        generateTanggalPelatihan={generateTanggalPelatihan}
+                      />
                     ))}
                 </div>
               </div>
@@ -2075,6 +1745,13 @@ const TableDataPesertaUjianKeahlian = () => {
         <></>
       )
       }
+
+      <ImportAction
+        isOpen={isOpenFormPeserta}
+        onClose={() => setIsOpenFormPeserta(false)}
+        onUpload={handleUploadImportPesertaPelatihan}
+        onFileChange={handleFileChange}
+      />
     </div >
   );
 };
