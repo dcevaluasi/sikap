@@ -690,10 +690,10 @@ const TableDataTryout: React.FC = () => {
                                                                                     <AlertDialogContent>
                                                                                         <AlertDialogHeader>
                                                                                             <AlertDialogTitle>
-                                                                                                Apakah kamu yakin menutup ujian ini?
+                                                                                                Apakah kamu yakin menutup tryout ini?
                                                                                             </AlertDialogTitle>
                                                                                             <AlertDialogDescription>
-                                                                                                Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
+                                                                                                Menutup tryout, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan tryout, harap diperiksa kembali nilai peserta sebelum yakin menutup tryout ini!
                                                                                             </AlertDialogDescription>
                                                                                         </AlertDialogHeader>
                                                                                         <AlertDialogFooter>

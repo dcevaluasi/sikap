@@ -757,37 +757,37 @@ const TableDataUjian: React.FC = () => {
                                       refetchUjian={refetchUjian}
                                     />
 
-                                    {usePathname().includes("pukakp") &&
+                                    {
                                       ujian!.IsSelesai == "" ? (
-                                      <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
+                                        <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
 
-                                        <AlertDialogContent>
-                                          <AlertDialogHeader>
-                                            <AlertDialogTitle>
-                                              Apakah kamu yakin menutup ujian ini?
-                                            </AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                              Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
-                                            </AlertDialogDescription>
-                                          </AlertDialogHeader>
-                                          <AlertDialogFooter>
-                                            {
-                                              !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
+                                          <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                              <AlertDialogTitle>
+                                                Apakah kamu yakin menutup ujian ini?
+                                              </AlertDialogTitle>
+                                              <AlertDialogDescription>
+                                                Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
+                                              </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                              {
+                                                !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
 
-                                                <AlertDialogAction
-                                                  onClick={() => handleCloseExam()}
-                                                  className="bg-gray-700"
-                                                >
-                                                  Tutup
-                                                </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
-                                            }
+                                                  <AlertDialogAction
+                                                    onClick={() => handleCloseExam()}
+                                                    className="bg-gray-700"
+                                                  >
+                                                    Tutup
+                                                  </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
+                                              }
 
-                                          </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                      </AlertDialog>
-                                    ) : (
-                                      <></>
-                                    )}
+                                            </AlertDialogFooter>
+                                          </AlertDialogContent>
+                                        </AlertDialog>
+                                      ) : (
+                                        <></>
+                                      )}
 
                                     {usePathname().includes("dpkakp") &&
                                       (ujian!.Status == 'Pending') && (
