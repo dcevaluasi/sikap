@@ -74,6 +74,7 @@ export function InformationAction({ ujian, data }: InformationActionProps) {
                     <CardSection title="Informasi Umum">
                         <TwoColumn label="Nama Ujian" value={ujian.NamaUjian} />
                         <TwoColumn label="Jenis Ujian" value={ujian.TypeUjian} />
+                        <TwoColumn label="PUKAKP" value={ujian.PUKAKP} />
                         <TwoColumn
                             label="Tanggal"
                             value={`${generateTanggalPelatihan(ujian.TanggalMulaiUjian)} s.d ${generateTanggalPelatihan(
