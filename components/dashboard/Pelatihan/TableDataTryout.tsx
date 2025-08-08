@@ -748,7 +748,7 @@ const TableDataTryout: React.FC = () => {
                                                                             </AlertDialog>
                                                                         )}
 
-                                                                        {usePathname().includes("pukakp") &&
+                                                                        {
                                                                             ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
                                                                                 <Button
                                                                                     onClick={(e) => {

@@ -876,7 +876,7 @@ const TableDataUjian: React.FC = () => {
                                         </Button>
                                       )}
 
-                                    {usePathname().includes("pukakp") &&
+                                    {
                                       ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
                                         <Button
                                           onClick={(e) => {
