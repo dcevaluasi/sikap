@@ -129,7 +129,7 @@ export function InformationAction({ ujian, data }: InformationActionProps) {
                             label="Diperbarui Pada"
                             value={dayjs(ujian.UpdateAt).format("DD MMM YYYY HH:mm")}
                         />
-                        <TwoColumn label="Selesai?" value={ujian.IsSelesai === "true" ? "✅ Ya" : "❌ Belum"} />
+                        <TwoColumn label="Selesai?" value={ujian.IsSelesai === "1" ? "✅ Ya" : "❌ Belum"} />
                     </CardSection>
                 </div>
             </AlertDialogContent>
