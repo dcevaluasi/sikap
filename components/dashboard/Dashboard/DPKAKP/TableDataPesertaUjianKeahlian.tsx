@@ -109,6 +109,8 @@ import {
 import getDocument from "@/firebase/firestore/getData";
 import EmptyData from "@/components/micro-components/EmptyData";
 import { CodeAccessAction } from "../Actions/CodeAccessAction";
+import HistoryJawabanuserUjian from "./HistoryJawabanUserUjian";
+import HeaderDPAKP from "./HeaderDPKAKP";
 
 const TableDataPesertaUjianKeahlian = () => {
   const pathname = usePathname();
@@ -302,7 +304,8 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className={`w-full text-gray-900 font-semibold flex`}
+          className={`w-full text-gray-900 font-semibold ${dataUjian.length != 0 && (
+            dataUjian[0].IsSelesai == "1" ? 'hidden' : 'flex')}`}
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Actions
@@ -311,7 +314,8 @@ const TableDataPesertaUjianKeahlian = () => {
       ),
       cell: ({ row }) => (
         <div
-          className={`w-full flex  flex-col gap-2`}
+          className={`w-full ${dataUjian.length != 0 && (
+            dataUjian[0].IsSelesai == "1" ? 'hidden' : 'flex')}  flex-col gap-2`}
         >
           <div className="flex  w-full items-center justify-center gap-1">
 
@@ -341,12 +345,12 @@ const TableDataPesertaUjianKeahlian = () => {
               {row.original.NilaiKomprensifF1 != 0 ? "Edit" : "Input"} Nilai
               Kompre
             </Button>
-
             <CodeAccessAction
               dataUjian={dataUjian}
               row={row}
-              handleSwitchCodeAccessIsUse={handleSwitchCodeAccessIsUse}
-            />
+              handleSwitchCodeAccessIsUse={handleSwitchCodeAccessIsUse} />
+
+
           </div>
         </div>
       ),
@@ -704,7 +708,7 @@ const TableDataPesertaUjianKeahlian = () => {
   console.log({ falseCount })
 
 
-
+  const [hideValue, setHideValue] = React.useState<boolean>(false)
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
@@ -806,7 +810,7 @@ const TableDataPesertaUjianKeahlian = () => {
                 )}
               </div>
               <div className="w-full flex justify-end gap-2">
-                {pathname.includes("pukakp") ? (
+                {(
                   !showRekapitulasiNilai &&
                   dataUjian.length != 0 &&
                   (dataUjian[0]!.UsersUjian.length != 0 ? (
@@ -830,8 +834,6 @@ const TableDataPesertaUjianKeahlian = () => {
                   ) : (
                     <></>
                   ))
-                ) : (
-                  <></>
                 )}
 
                 {dataUjian.length != 0 &&
@@ -859,9 +861,9 @@ const TableDataPesertaUjianKeahlian = () => {
                   Refresh Data
                 </div>
 
-                {((pathname.includes("dpkakp") && !isPenguji) || (Cookies.get('PUKAKP') == 'PUKAKP III (Politeknik KP Dumai) - Pelaksan Ujian Keahlian Awak Kapal Perikanan' || Cookies.get('PUKAKP') == 'PUKAKP VII (BPPP Banyuwangi) - Pelaksan Ujian Keahlian Awak Kapal Perikanan' || Cookies.get('PUKAKP') == 'PUKAKP XII (Poltiteknik KP Bone) - Pelaksan Ujian Keahlian Awak Kapal Perikanan')) && (
+                {((pathname.includes("dpkakp") && !isPenguji)) && (
                   <>
-                    {showRekapitulasiNilai ? (
+                    {showRekapitulasiNilai && (
                       <>
 
                         <div
@@ -880,7 +882,8 @@ const TableDataPesertaUjianKeahlian = () => {
                           <PiMicrosoftExcelLogoFill />
                           Export Excel Hasil Rekap{" "}
                         </div></>
-                    ) : (
+                    )}
+                    {(!showKartuUjian && !showRekapitulasiNilai) && (
                       <>
 
                         <div
@@ -891,13 +894,20 @@ const TableDataPesertaUjianKeahlian = () => {
                           Rekapitulasi Nilai Ujian
                         </div></>
                     )}
-                    <div
-                      onClick={() => setHandleOpenFormSematkan(true)}
-                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-white p-1.5 cursor-pointer"
-                    >
-                      <FaMapPin />
-                      Distribusikan Soal
-                    </div>
+                    {dataUjian.length != 0 && (
+                      dataUjian[0].UsersUjian.length != 0 && (
+                        dataUjian[0].UsersUjian[0].CodeAksesUsersBagian.length == 0 && (
+                          <div
+                            onClick={() => setHandleOpenFormSematkan(true)}
+                            className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                          >
+                            <FaMapPin />
+                            Distribusikan Soal
+                          </div>
+                        )
+                      )
+                    )}
+
                     <AlertDialog
                       open={handleOpenFormSematkan}
                       onOpenChange={setHandleOpenFormSematkan}
@@ -966,7 +976,6 @@ const TableDataPesertaUjianKeahlian = () => {
             {!showKartuUjian && !showRekapitulasiNilai && (
               <div>
                 <div id="chartOne" className="-ml-5"></div>
-
                 <>
                   <TableData
                     isLoading={false}
@@ -974,32 +983,6 @@ const TableDataPesertaUjianKeahlian = () => {
                     table={table}
                     type={"long"}
                   />
-                  {/* <div className="flex items-center justify-end space-x-2 py-4">
-                    <div className="text-muted-foreground flex-1 text-sm">
-                      {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                      {table.getFilteredRowModel().rows.length} row(s) selected.
-                    </div>
-                    <div className="space-x-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="font-inter"
-                        onClick={() => table.previousPage()}
-                        disabled={!table.getCanPreviousPage()}
-                      >
-                        Previous
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="font-inter"
-                        onClick={() => table.nextPage()}
-                        disabled={!table.getCanNextPage()}
-                      >
-                        Next
-                      </Button>
-                    </div>
-                  </div> */}
                 </>
               </div>
             )}
@@ -1012,45 +995,7 @@ const TableDataPesertaUjianKeahlian = () => {
                     data!.map((peserta, index) => (
                       <div className="flex w-full gap-2">
                         <div className="w-full border border-gray-300 rounded-lg p-6 flex flex-col items-center justify-center">
-                          <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2 w-full">
-                            <Image
-                              className="block w-16 h-16 "
-                              src={"/logo-kkp.png"}
-                              width={0}
-                              height={0}
-                              alt="DPKAKP Logo"
-                            />
-                            <div className="flex flex-col gap-1 items-center justify-center text-center">
-                              <h1 className="font-normal text-gray-800 text-sm md:text-lg leading-[110%] mb-5 mt-2">
-                                KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN
-                                PENYULUHAN DAN PENGEMBANGAN <br /> SUMBER DAYA
-                                MANUSIA KELAUTAN DAN PERIKANAN <br />
-                                <span className="font-bold">
-                                  DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
-                                </span>
-                              </h1>
-                              <p className="font-jakarta max-w-[42rem] leading-[95%] text-gray-600 text-[0.75rem]  -mt-5">
-                                GEDUNG MINA BAHARI III Lt.5, JALAN MEDAN MERDEKA
-                                TIMUR NOMOR 16 JAKARTA 10110 <br /> KOTAK POS
-                                4130 JKP 10041 TELEPON (021) 3519070 (LACAK),
-                                FAKSIMILE (021) 3513287 <br /> LAMAN
-                                <span className="text-blue-500 underline ">
-                                  https://elaut-bppsdm.go.id/lembaga/dpkakp
-                                </span>{" "}
-                                SUREL{" "}
-                                <span className="text-blue-500 underline">
-                                  dpkakp@kkp.go.id
-                                </span>
-                              </p>
-                            </div>
-                            <Image
-                              className="block w-16 h-16 "
-                              src={"/lembaga/logo/logo-sertifikasi-akp.png"}
-                              width={0}
-                              height={0}
-                              alt="DPKAKP Logo"
-                            />
-                          </div>
+                          <HeaderDPAKP />
 
                           <div
                             className={`flex items-center justify-center w-fit rounded-md px-2 py-2 border ${dataUjian[0]!.TypeUjian.includes("ATKAPIN")
@@ -1326,129 +1271,14 @@ const TableDataPesertaUjianKeahlian = () => {
 
             {showRekapitulasiNilai && (
               <div className="border border-gray-300">
-                <Sheet onOpenChange={setIsShowHistoryUserAnswers} open={isShowHistoryUserAnswers}>
-
-                  <SheetContent className="overflow-y-scroll h-full w-[800px]  !sm:max-w-4xl ">
-                    <SheetHeader>
-                      <div className="flex items-center justify-between w-full mb-2">
-                        <div className="flex flex-col gap-0">
-                          <SheetTitle className='leading-none'>History Jawaban</SheetTitle>
-                          <SheetDescription>
-                            Lihat history jawaban peserta ujian berapa soal yang berhasil dijawab!
-                          </SheetDescription>
-                        </div>
-                        {
-                          dataAnswer.length != 0 && <Button type="button" onClick={() => setIsShowHistoryUserAnswers(false)} className="mt-2 bg-white hover:bg-gray-300 border-gray-300 border text-black" >Close</Button>
-                        }
-
-                      </div>
-
-
-
-
-                    </SheetHeader>
-
-
-
-                    {
-                      isFetchingHistoryUserAnswers ? <div className="mt-32 w-full flex items-center justify-center">
-                        <HashLoader color="#338CF5" size={50} />
-                      </div> :
-                        dataAnswer.length == 0 ? <EmptyData type='soal' /> : <>
-                          <ul className="flex mb-2 w-full">
-                            <li className="w-full">
-                              <button
-                                className={`focus:outline-none p-2 rounded-l-md border  flex flex-col items-center w-full ${"bg-white text-black"}`}
-                              >
-                                <p className="font-semibold text-lg text-green-500">{trueCount}</p>
-                                <p className={`uppercase text-sm ${"text-gray-600"}`}>
-                                  Total Jawaban Benar
-                                </p>
-                              </button>
-                            </li>
-                            <li className="w-full">
-                              <button
-                                className={`focus:outline-none p-2  border  flex flex-col items-center w-full ${"bg-white text-black"}`}
-                              >
-                                <p className="font-semibold text-lg text-rose-500">
-                                  {falseCount}
-                                </p>
-                                <p className={`uppercase text-sm ${"text-gray-600"}`}>
-                                  Total Jawaban Salah
-                                </p>
-                              </button>
-                            </li>
-
-                          </ul>
-                          {
-                            !pathname.includes("pukakp") ? <div className="grid grid-cols-4 gap-0">
-
-                              <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
-                                No
-                              </div>
-                              <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
-                                Soal
-                              </div>
-                              <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
-                                Jawaban Benar
-                              </div>
-                              <div className="border border-gray-300 font-bold text-black h-fit w-full text-center">
-                                Jawaban User
-                              </div>
-                              {
-                                dataAnswer.map((data, index) => (
-                                  <>
-                                    <SheetDescription className='text-black font-semibold w-full border border-gray-300 p-2 text-center'>
-                                      {index + 1}
-                                    </SheetDescription>
-                                    <SheetDescription className='text-black font-semibold border border-gray-300 p-2'>
-                                      {data.soal}
-                                    </SheetDescription>
-                                    <SheetDescription className='border border-gray-300 p-2'>
-                                      <span >{data.jawaban_benar} </span>
-                                    </SheetDescription>
-                                    <SheetDescription className={`border border-gray-300 p-2 ${data.isCorrect ? 'text-green-500' : 'text-rose-500'}`}>
-                                      {data.jawaban_pengguna}
-                                    </SheetDescription>
-                                  </>
-                                ))
-                              }
-
-                            </div> : <div className='w-full flex items-center justify-center my-32'>
-
-                              <div className="pt-12 md:pt-20 flex flex-col items-center">
-                                <Image
-                                  src={"/illustrations/not-found.png"}
-                                  alt="Not Found"
-                                  width={400} // Specify an actual width
-                                  height={400} // Specify an actual height
-                                  className="w-[400px]"
-                                />
-                                <div className="max-w-3xl mx-auto text-center pb-5 md:pb-8 -mt-2">
-                                  <h1 className="text-3xl font-calsans leading-[110%] text-black">
-                                    Akses Ditutup
-                                  </h1>
-                                  <div className="text-gray-600 text-sm text-center max-w-md">
-                                    Oopssss Akses Rincian Jawaban dan Soal Peserta Hanya Dapat Diakses oleh Tim Sekretariat DPKAKP
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          }
-
-                        </>
-                    }
-
-                    {
-                      !isFetchingHistoryUserAnswers && <SheetFooter >
-                        <SheetClose asChild>
-                          <Button type="button" onClick={() => setIsShowHistoryUserAnswers(false)} className="mt-2" >Close</Button>
-                        </SheetClose>
-                      </SheetFooter>
-                    }
-
-                  </SheetContent>
-                </Sheet>
+                <HistoryJawabanuserUjian
+                  isOpen={isShowHistoryUserAnswers}
+                  onOpenChange={setIsShowHistoryUserAnswers}
+                  dataAnswer={dataAnswer}
+                  trueCount={trueCount}
+                  falseCount={falseCount}
+                  isFetching={isFetchingHistoryUserAnswers}
+                />
                 <div className="" ref={printRefRekapitulasiNilai}>
                   {" "}
                   <div
@@ -1458,45 +1288,7 @@ const TableDataPesertaUjianKeahlian = () => {
                     {dataUjian.length != 0 && (
                       <div className="flex w-full gap-2">
                         <div className="w-full rounded-lg p-6 flex flex-col items-center justify-center">
-                          <div className="flex flex-row gap-2 items-center justify-center pb-4 border-b border-b-gray-600  md:px-0 -mt-2 w-full">
-                            <Image
-                              className="block w-16 h-16 "
-                              src={"/logo-kkp.png"}
-                              width={0}
-                              height={0}
-                              alt="DPKAKP Logo"
-                            />
-                            <div className="flex flex-col gap-1 items-center justify-center text-center">
-                              <h1 className="font-normal text-gray-800 text-sm md:text-lg leading-[110%] mb-5 mt-2">
-                                KEMENTERIAN KELAUTAN DAN PERIKANAN <br /> BADAN
-                                PENYULUHAN DAN PENGEMBANGAN <br /> SUMBER DAYA
-                                MANUSIA KELAUTAN DAN PERIKANAN <br />
-                                <span className="font-bold">
-                                  DEWAN PENGUJI KEAHLIAN AWAK KAPAL PERIKANAN
-                                </span>
-                              </h1>
-                              <p className="font-jakarta max-w-[42rem] leading-[95%] text-gray-600 text-sm  -mt-5">
-                                GEDUNG MINA BAHARI III Lt.5, JALAN MEDAN MERDEKA
-                                TIMUR NOMOR 16 JAKARTA 10110 <br /> KOTAK POS
-                                4130 JKP 10041 TELEPON (021) 3519070 (LACAK),
-                                FAKSIMILE (021) 3513287 <br /> LAMAN
-                                <span className="text-blue-500 underline ">
-                                  https://elaut-bppsdm.go.id/lembaga/dpkakp
-                                </span>{" "}
-                                SUREL{" "}
-                                <span className="text-blue-500 underline">
-                                  dpkakp@kkp.go.id
-                                </span>
-                              </p>
-                            </div>
-                            <Image
-                              className="block w-16 h-16 "
-                              src={"/lembaga/logo/logo-sertifikasi-akp.png"}
-                              width={0}
-                              height={0}
-                              alt="DPKAKP Logo"
-                            />
-                          </div>
+                          <HeaderDPAKP />
 
                           <div
                             className={`flex items-center justify-center w-fit rounded-md px-2 py-2 bg-opacity-20 font-bold text-black  mt-5 text-lg leading-none text-center`}

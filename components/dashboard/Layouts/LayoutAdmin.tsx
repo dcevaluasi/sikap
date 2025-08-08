@@ -5,6 +5,7 @@ import { dpkakpBaseUrl } from "@/constants/urls";
 import { UserInformationDPKAKP } from "@/types/dpkakp";
 import axios from "axios";
 import Cookies from "js-cookie";
+import { LucideClipboardPen } from "lucide-react";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -17,6 +18,10 @@ import {
   FaUserFriends,
   FaChalkboardTeacher,
 } from "react-icons/fa";
+import { HiMiniUserGroup } from "react-icons/hi2";
+import { IoGridOutline } from "react-icons/io5";
+import { MdOutlineComputer } from "react-icons/md";
+import { TbDatabaseEdit } from "react-icons/tb";
 
 export default function LayoutAdmin({ children }: { children: React.ReactNode }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -94,8 +99,8 @@ export default function LayoutAdmin({ children }: { children: React.ReactNode })
     <a
       href={href}
       className={`flex items-center gap-3 px-6 py-3 text-sm font-medium border-l-4 transition-all duration-150 ${active
-          ? "bg-blue-800 text-white border-blue-400"
-          : "text-blue-200 hover:bg-blue-800 hover:text-white border-transparent"
+        ? "bg-blue-800 text-white border-blue-400"
+        : "text-blue-200 hover:bg-blue-800 hover:text-white border-transparent"
         }`}
     >
       {icon}
@@ -132,7 +137,7 @@ export default function LayoutAdmin({ children }: { children: React.ReactNode })
             <li>
               <NavItem
                 href="/lembaga/pukakp/admin/dashboard/ujian"
-                icon={<FaHome className="w-5 h-5" />}
+                icon={<MdOutlineComputer className="w-5 h-5" />}
                 label="Pelaksanaan Ujian"
                 active={pathname.includes("/ujian")}
               />
@@ -143,12 +148,12 @@ export default function LayoutAdmin({ children }: { children: React.ReactNode })
                 <button
                   onClick={() => setIsPelaksanaanOpen(!isPelaksanaanOpen)}
                   className={`flex items-center justify-between px-6 py-3 w-full text-sm font-medium border-l-4 transition-all duration-150 ${pathname.includes("/ujian") || pathname.includes("/tryout")
-                      ? "bg-blue-800 text-white border-blue-400"
-                      : "text-blue-200 hover:bg-blue-800 hover:text-white border-transparent"
+                    ? "bg-blue-800 text-white border-blue-400"
+                    : "text-blue-200 hover:bg-blue-800 hover:text-white border-transparent"
                     }`}
                 >
                   <div className="flex items-center gap-3">
-                    <FaHome className="w-5 h-5" />
+                    <IoGridOutline className="w-5 h-5" />
                     {!isCollapsed && <span>Pelaksanaan Ujian</span>}
                   </div>
                   {!isCollapsed && (
@@ -162,13 +167,13 @@ export default function LayoutAdmin({ children }: { children: React.ReactNode })
                 <div className="ml-12 flex flex-col space-y-1">
                   <NavItem
                     href="/lembaga/dpkakp/admin/dashboard/ujian"
-                    icon={<FaQuestionCircle className="w-4 h-4" />}
+                    icon={<MdOutlineComputer className="w-5 h-5" />}
                     label="Ujian"
                     active={pathname.includes("/ujian") && !pathname.includes("/tryout")}
                   />
                   <NavItem
                     href="/lembaga/dpkakp/admin/dashboard/tryout"
-                    icon={<FaQuestionCircle className="w-4 h-4" />}
+                    icon={<LucideClipboardPen className="w-5 h-5" />}
                     label="Tryout"
                     active={pathname.includes("/tryout")}
                   />
@@ -176,13 +181,13 @@ export default function LayoutAdmin({ children }: { children: React.ReactNode })
               )}
               <NavItem
                 href="/lembaga/dpkakp/admin/dashboard/bank-soal"
-                icon={<FaChalkboardTeacher className="w-5 h-5" />}
+                icon={<TbDatabaseEdit className="w-5 h-5" />}
                 label="Bank Soal Ujian"
                 active={pathname.includes("/bank-soal")}
               />
               <NavItem
                 href="/lembaga/dpkakp/admin/dashboard/penguji"
-                icon={<FaUserFriends className="w-5 h-5" />}
+                icon={<HiMiniUserGroup className="w-5 h-5" />}
                 label="Tim Penguji"
                 active={pathname.includes("/penguji")}
               />
