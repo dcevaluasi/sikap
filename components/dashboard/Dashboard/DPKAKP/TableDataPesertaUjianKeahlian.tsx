@@ -894,7 +894,7 @@ const TableDataPesertaUjianKeahlian = () => {
 
                 {dataUjian.length > 0 &&
                   dataUjian != null &&
-                  pathname.includes("pukakp") ? (
+                  (pathname.includes("pukakp") || Cookies.get('PUKAKP') == "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan") ? (
                   dataUjian[0].UsersUjian.length > 0 ? (
                     <></>
                   ) : (
