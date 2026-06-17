@@ -92,7 +92,7 @@ export const JadwalUjianKeahlianAKP = ({
 
         try {
             await axios.put(
-                `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${ujian.IdUjian}`,
+                `${dpkakpBaseUrl}/adminPusat/updateWaktuUjian?id=${ujian.IdUjian}`,
                 body,
                 {
                     headers: {
