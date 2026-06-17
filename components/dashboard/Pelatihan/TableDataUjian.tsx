@@ -701,7 +701,7 @@ const TableDataUjian: React.FC = () => {
                                 </td>
                                 <td className="p-4 text-right">
                                   <div className="flex gap-1 justify-end flex-wrap">
-                                    <InformationAction ujian={ujian} data={dataUjian} />
+                                    <InformationAction ujian={ujian} data={dataUjian} onUpdated={refetchUjian} />
 
                                     {ujian!.Status == "Aktif" && (
                                       <Link
@@ -833,7 +833,7 @@ const TableDataUjian: React.FC = () => {
                                               </AlertDialogDescription>
                                             </div>
                                           </AlertDialogHeader>
-                                          <JadwalUjianKeahlianAKP data={dataUjian} ujian={ujian} />
+                                          <JadwalUjianKeahlianAKP data={dataUjian} ujian={ujian} onUpdated={refetchUjian} />
                                           <AlertDialogFooter>
                                             <AlertDialogCancel className="bg-gray-900 w-full text-white hover:bg-gray-800 hover:text-white">
                                               Tutup

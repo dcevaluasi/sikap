@@ -30,7 +30,7 @@ export default function Page() {
                     Pelaksaan Ujian Keahlian AKP
                   </h1>
                   <p className="font-medium text-gray-400 text-base">
-                    Monitoring Pelaksaan Ujian Keahlian Awak kapal Perikanan!
+                    Monitoring Pelaksaan Ujian Keahlian Awak kapal Perikanan! testing
                   </p>
                 </div>
               </header>

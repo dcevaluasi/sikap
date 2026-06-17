@@ -29,9 +29,10 @@ import { IoInformation } from "react-icons/io5"
 interface InformationActionProps {
     ujian: Ujian
     data: Ujian[]
+    onUpdated?: () => void
 }
 
-export function InformationAction({ ujian, data }: InformationActionProps) {
+export function InformationAction({ ujian, data, onUpdated }: InformationActionProps) {
     const pengawas = ujian.NamaPengawasUjian?.split("|") || []
     const fasilitator = ujian.NamaVasilitatorUjian?.split("|") || []
     const [open, setOpen] = React.useState(false)
@@ -93,7 +94,7 @@ export function InformationAction({ ujian, data }: InformationActionProps) {
                     </CardSection>
 
                     <CardSection title="Jadwal Ujian">
-                        <JadwalUjianKeahlianAKP data={data} ujian={ujian} />
+                        <JadwalUjianKeahlianAKP data={data} ujian={ujian} onUpdated={onUpdated} />
                     </CardSection>
 
                     <CardSection title="Status & Berkas">
