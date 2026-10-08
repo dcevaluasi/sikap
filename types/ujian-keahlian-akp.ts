@@ -53,6 +53,7 @@ export type Bagian = {
   CreateAt: string
   UpdateAt: string
   PaketBagian: PaketBagianDetail[]
+  SoalUjianBagian?: SoalUjianBagian[]
 }
 
 export type FungsiUjian = {

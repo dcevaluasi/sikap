@@ -121,98 +121,49 @@ function SkeletonTabs() {
   );
 }
 
-// ─── Card ─────────────────────────────────────────────────────────────────────
 
-function ProgramCard({
-  bankSoal,
-  cfg,
-  onImport,
-}: {
-  bankSoal: TypeUjian;
-  cfg: (typeof GROUP_CONFIG)[keyof typeof GROUP_CONFIG];
-  onImport: (id: string) => void;
-}) {
-  const roman = extractRoman(bankSoal.NamaTypeUjian);
-  const totalBagian = bankSoal.Fungsi.reduce((acc, f) => acc + f.Bagian.length, 0);
+
+// ─── Component for fetching Total Soal per Bagian ────────────────────────────
+
+function BagianSoalCount({ idBagian, cfg }: { idBagian: number; cfg: any }) {
+  const [soalCount, setSoalCount] = React.useState<number | null>(null);
+
+  React.useEffect(() => {
+    let isMounted = true;
+    const fetchCount = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_DPKAKP_UJIAN_URL}/adminPusat/getBagian?id=${idBagian}`,
+          { headers: { Authorization: `Bearer ${Cookies.get("XSRF095")}` } }
+        );
+        if (isMounted) {
+          const soalList = response.data?.data?.[0]?.SoalUjianBagian || [];
+          setSoalCount(soalList.length);
+        }
+      } catch (error) {
+        if (isMounted) setSoalCount(0);
+      }
+    };
+    fetchCount();
+    return () => {
+      isMounted = false;
+    };
+  }, [idBagian]);
+
+  if (soalCount === null) {
+    return <span className="text-gray-400 text-xs animate-pulse">Memuat...</span>;
+  }
 
   return (
-    <div
-      className={`bg-white rounded-2xl border shadow-sm hover:shadow-md
-        transition-all duration-300 overflow-hidden group ${cfg.accentBorder}`}
+    <span
+      className={`inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-bold ${
+        soalCount > 0
+          ? `${cfg.badgeBg} ring-1 ring-inset ${cfg.accentBorder}`
+          : "bg-gray-100 text-gray-500"
+      }`}
     >
-      {/* Accent bar */}
-      <div className={`h-1.5 w-full ${cfg.cardTop}`} />
-
-      <div className="p-5">
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-4">
-          {/* Roman numeral badge */}
-          <div
-            className={`flex-shrink-0 w-11 h-11 rounded-xl ${cfg.numBg}
-              flex items-center justify-center shadow-sm`}
-          >
-            <span className="text-white font-black text-base leading-none">{roman}</span>
-          </div>
-
-          <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-gray-800 text-sm leading-snug">
-              {bankSoal.NamaTypeUjian}
-            </h3>
-            <p className="text-xs text-gray-400 mt-0.5 leading-tight truncate">
-              {replaceProgramName(bankSoal.NamaTypeUjian)}
-            </p>
-          </div>
-
-          <span
-            className={`flex-shrink-0 text-[10px] font-semibold px-2 py-1 rounded-full ${cfg.badgeBg}`}
-          >
-            {totalBagian} bagian
-          </span>
-        </div>
-
-        {/* Fungsi → Bagian */}
-        <div className="space-y-3">
-          {bankSoal.Fungsi.map((fungsi, fi) => (
-            <div key={fi} className="space-y-1.5">
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
-                {fi + 1}. {fungsi.NamaFungsi}
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {fungsi.Bagian.map((bagian, bi) => (
-                  <Link
-                    key={bi}
-                    href={`/lembaga/dpkakp/admin/dashboard/bank-soal/${bankSoal.IdTypeUjian}/${bagian.IdBagian}`}
-                    className={`
-                      inline-flex items-center gap-1.5 px-3 py-1.5
-                      text-xs font-medium rounded-xl border
-                      transition-all duration-200 shadow-sm hover:shadow
-                      ${cfg.linkClass}
-                    `}
-                  >
-                    <TbDatabase className="w-3 h-3 flex-shrink-0" />
-                    {bagian.NamaBagian}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Import button */}
-        <button
-          onClick={() => onImport(bankSoal.IdTypeUjian.toString())}
-          className={`
-            mt-4 w-full flex items-center justify-center gap-2
-            px-4 py-2.5 rounded-xl text-xs font-semibold
-            transition-all duration-200 shadow-sm hover:shadow-md
-            ${cfg.uploadClass}
-          `}
-        >
-          <LucideUploadCloud className="w-4 h-4" />
-          Import Bank Soal
-        </button>
-      </div>
-    </div>
+      {soalCount} Soal
+    </span>
   );
 }
 
@@ -417,16 +368,143 @@ const TableDataTipeUjianKeahlian: React.FC = () => {
                   </span>
                 </div>
 
-                {/* Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-                  {items.map((bankSoal) => (
-                    <ProgramCard
-                      key={bankSoal.IdTypeUjian}
-                      bankSoal={bankSoal}
-                      cfg={cfg}
-                      onImport={openImport}
-                    />
-                  ))}
+                {/* Table View */}
+                <div className="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm whitespace-nowrap md:whitespace-normal border-collapse">
+                      <thead className="bg-gray-50/80 text-gray-500 font-semibold border-b border-gray-200">
+                        <tr>
+                          <th className="px-6 py-4 w-[25%] border-r border-gray-200">Program (Tipe Ujian)</th>
+                          <th className="px-6 py-4 w-[25%] border-r border-gray-200">Fungsi</th>
+                          <th className="px-6 py-4 w-[25%] border-r border-gray-200">Bagian</th>
+                          <th className="px-6 py-4 text-center border-r border-gray-200">Total Soal</th>
+                          <th className="px-6 py-4 text-right">Aksi</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {items.map((typeUjian) => {
+                          const roman = extractRoman(typeUjian.NamaTypeUjian);
+                          // Calculate rowSpan for the typeUjian cell
+                          const typeUjianRowSpan =
+                            typeUjian.Fungsi.reduce(
+                              (acc, f) => acc + (f.Bagian.length || 1),
+                              0
+                            ) || 1;
+
+                          const fungsiList = typeUjian.Fungsi.length > 0 ? typeUjian.Fungsi : [null];
+
+                          return fungsiList.flatMap((fungsi, fIndex) => {
+                            const bagianList = fungsi?.Bagian?.length ? fungsi.Bagian : [null];
+                            const fungsiRowSpan = bagianList.length;
+
+                            return bagianList.map((bagian, bIndex) => {
+                              const isFirstTypeUjianRow = fIndex === 0 && bIndex === 0;
+                              const isFirstFungsiRow = bIndex === 0;
+                              
+
+                              return (
+                                <tr
+                                  key={`${typeUjian.IdTypeUjian}-${fungsi?.IdFungsi || fIndex}-${bagian?.IdBagian || bIndex}`}
+                                  className="hover:bg-gray-50/40 transition-colors"
+                                >
+                                  {isFirstTypeUjianRow && (
+                                    <td
+                                      rowSpan={typeUjianRowSpan}
+                                      className="px-6 py-5 align-top border-r border-gray-200"
+                                    >
+                                      <div className="flex flex-col gap-3">
+                                        <div className="flex items-center gap-3">
+                                          <div
+                                            className={`flex-shrink-0 w-10 h-10 rounded-xl ${cfg.numBg} flex items-center justify-center shadow-sm`}
+                                          >
+                                            <span className="text-white font-black text-sm">
+                                              {roman}
+                                            </span>
+                                          </div>
+                                          <div className="flex-1 min-w-0">
+                                            <h3 className="font-bold text-gray-900 text-sm leading-snug">
+                                              {typeUjian.NamaTypeUjian}
+                                            </h3>
+                                          </div>
+                                        </div>
+                                        <p className="text-xs text-gray-500 leading-relaxed">
+                                          {replaceProgramName(typeUjian.NamaTypeUjian)}
+                                        </p>
+                                        <button
+                                          onClick={() => openImport(typeUjian.IdTypeUjian.toString())}
+                                          className={`mt-1 inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all shadow-sm w-fit ${cfg.uploadClass}`}
+                                        >
+                                          <LucideUploadCloud className="w-4 h-4" /> Import Bank Soal
+                                        </button>
+                                      </div>
+                                    </td>
+                                  )}
+
+                                  {isFirstFungsiRow && (
+                                    <td
+                                      rowSpan={fungsiRowSpan}
+                                      className="px-6 py-5 align-top border-r border-gray-200"
+                                    >
+                                      {fungsi ? (
+                                        <div className="flex flex-col gap-1.5">
+                                          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                            Fungsi {fIndex + 1}
+                                          </span>
+                                          <span className="text-sm font-semibold text-gray-700 leading-snug">
+                                            {fungsi.NamaFungsi}
+                                          </span>
+                                        </div>
+                                      ) : (
+                                        <span className="text-gray-400 italic text-xs">
+                                          Belum ada fungsi
+                                        </span>
+                                      )}
+                                    </td>
+                                  )}
+
+                                  <td className="px-6 py-4 align-middle border-r border-gray-200">
+                                    {bagian ? (
+                                      <div className="flex items-center gap-2.5">
+                                        <div className={`p-1.5 rounded-lg ${cfg.iconBg}`}>
+                                          <TbDatabase className={`w-4 h-4 ${cfg.iconColor}`} />
+                                        </div>
+                                        <span className="text-sm font-medium text-gray-700">
+                                          {bagian.NamaBagian}
+                                        </span>
+                                      </div>
+                                    ) : (
+                                      <span className="text-gray-400 italic text-xs">
+                                        Belum ada bagian
+                                      </span>
+                                    )}
+                                  </td>
+
+                                  <td className="px-6 py-4 align-middle text-center border-r border-gray-200">
+                                    {bagian ? (
+                                      <BagianSoalCount idBagian={bagian.IdBagian} cfg={cfg} />
+                                    ) : (
+                                      "-"
+                                    )}
+                                  </td>
+
+                                  <td className="px-6 py-4 align-middle text-right">
+                                    {bagian && (
+                                      <Link
+                                        href={`/lembaga/dpkakp/admin/dashboard/bank-soal/${typeUjian.IdTypeUjian}/${bagian.IdBagian}`}
+                                        className={`inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-xl border transition-all hover:shadow-sm ${cfg.linkClass}`}
+                                      >
+                                        Lihat Soal
+                                      </Link>
+                                    )}
+                                  </td>
+                                </tr>
+                              );
+                            });
+                          });
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </TabsContent>
             );

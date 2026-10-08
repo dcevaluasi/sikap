@@ -196,6 +196,11 @@ const BankSoalUjianKeahlian: React.FC = () => {
                       Bagian: <strong className="text-gray-700">{dataBagian.NamaBagian}</strong>
                     </span>
                   )}
+                  {dataBagian?.SoalUjianBagian && (
+                    <span className="inline-flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-100">
+                      Total Soal: <strong className="text-blue-700">{dataBagian.SoalUjianBagian.length}</strong>
+                    </span>
+                  )}
                 </div>
 
                 <p className="text-xs text-gray-400 mt-3">

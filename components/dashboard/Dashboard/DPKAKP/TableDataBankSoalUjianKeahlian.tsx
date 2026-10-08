@@ -96,8 +96,11 @@ const TableDataBankSoalUjianKeahlian = () => {
   const [countReal, setCountReal] = React.useState<number>(0);
   const [countNotClassified, setCountNotClassified] = React.useState<number>(0);
 
+  const [activeFilter, setActiveFilter] = React.useState<"all" | "duplicates" | "images" | "unclassified">("all");
+
   const handleFetchingBagianUjian = async () => {
     setIsFetching(true);
+    setActiveFilter("all");
     try {
       const response: AxiosResponse = await axios.get(
         `${dpkakpBaseUrl}/adminPusat/getBagian?id=${getIdUjianKeahlianInBankSoal(
@@ -318,50 +321,46 @@ const TableDataBankSoalUjianKeahlian = () => {
         );
       },
       cell: ({ row }) => (
-        <>
+        <div className="flex items-center gap-2 w-full justify-center">
           <Button
-            // onClick={() => {
-            //   handleFetchingDataUjianById(ujian!.IdUjian);
-            // }}
             variant="outline"
-            className="bg-yellow-300 w-full text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
+            className="bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100 hover:text-amber-800 h-8 px-3 text-xs"
           >
-            <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" /> Edit Soal
+            <FiEdit2 className="h-3.5 w-3.5 mr-1.5" /> Edit
           </Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button
-                // onClick={() => setSelectedIdUjian(ujian!.IdUjian)}
                 variant="outline"
-                className="bg-rose-600 w-full text-white hover:text-white hover:bg-rose-600"
+                className="bg-rose-50 border-rose-200 text-rose-700 hover:bg-rose-100 hover:text-rose-800 h-8 px-3 text-xs"
               >
-                <Trash className="h-4 w-4 text-white mr-1" /> Hapus Soal
+                <FiTrash className="h-3.5 w-3.5 mr-1.5" /> Hapus
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>
+                <AlertDialogTitle className="text-gray-900">
                   Apakah kamu yakin menghapus soal ini?
                 </AlertDialogTitle>
-                <AlertDialogDescription>
+                <AlertDialogDescription className="text-gray-600">
                   Penghapusan data ini akan dilakukan secara permanen, sehingga
                   anda tidak dapat kembali melakukan undo terkait tindakan ini!
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Batal</AlertDialogCancel>
+                <AlertDialogCancel className="border-gray-200">Batal</AlertDialogCancel>
                 <AlertDialogAction
                   onClick={() =>
                     handleDeleteSoal(row.original.IdSoalUjianBagian)
                   }
-                  className="bg-rose-600"
+                  className="bg-rose-600 hover:bg-rose-700 text-white"
                 >
                   Hapus
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
-        </>
+        </div>
       ),
     },
     {
@@ -440,7 +439,11 @@ const TableDataBankSoalUjianKeahlian = () => {
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize w-[200px]`}>
           {
-            row.original.GambarSoal != "" ? <Link href={row.original.GambarSoal!} className='text-blue-500 underline'>{row.original.GambarSoal}</Link> : <p>-</p>
+            row.original.GambarSoal != "" ? (
+              <Link href={row.original.GambarSoal!} target="_blank" className='inline-flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors'>
+                <TbFileCertificate className="w-4 h-4" /> Lihat Gambar
+              </Link>
+            ) : <p className="text-gray-400 italic text-sm">Tidak ada</p>
           }
         </div>
       ),
@@ -462,7 +465,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+          <p className="text-sm text-gray-700 font-normal tracking-tight leading-none">
             {row.original?.JawabanBenar}
           </p>
         </div>
@@ -485,7 +488,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize w-1/3`}>
-          <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+          <p className="text-sm text-gray-700 font-normal tracking-tight leading-none">
             {row.original?.Jawaban[1]?.NameJawaban}
           </p>
         </div>
@@ -508,7 +511,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+          <p className="text-sm text-gray-700 font-normal tracking-tight leading-none">
             {row.original?.Jawaban[2]?.NameJawaban}
           </p>
         </div>
@@ -531,7 +534,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+          <p className="text-sm text-gray-700 font-normal tracking-tight leading-none">
             {row.original?.Jawaban[3]?.NameJawaban}
           </p>
         </div>
@@ -554,7 +557,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       },
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left capitalize`}>
-          <p className="text-sm text-gray-400 font-normal tracking-tight leading-none">
+          <p className="text-sm text-gray-700 font-normal tracking-tight leading-none">
             {row.original?.Jawaban[4]?.NameJawaban}
           </p>
         </div>
@@ -637,34 +640,22 @@ const TableDataBankSoalUjianKeahlian = () => {
   }, []);
 
   const handleShowDuplicates = () => {
-    setIsFetching(true); // Start loading state
-
+    setIsFetching(true);
+    setActiveFilter("duplicates");
     setTimeout(() => {
-      setData(duplicateData); // Set duplicate data after 3 seconds
-      setIsFetching(false); // Stop loading state
-    }, 3000);
+      setData(duplicateData);
+      setIsFetching(false);
+    }, 400);
   };
 
   const handleShowNotClassified = () => {
-    setIsFetching(true); // Start loading state
-    handleFetchingBagianUjianNotClassifiedMateri()
-
-    setTimeout(() => {
-
-      setIsFetching(false); // Stop loading state
-    }, 3000);
-
-
+    setActiveFilter("unclassified");
+    handleFetchingBagianUjianNotClassifiedMateri();
   };
 
   const handleShowImage = () => {
-    setIsFetching(true); // Start loading state
-    handleFetchingBagianUjianGambar()
-    setTimeout(() => {
-      setIsFetching(false); // Stop loading state
-    }, 3000);
-
-
+    setActiveFilter("images");
+    handleFetchingBagianUjianGambar();
   };
 
 
@@ -762,146 +753,134 @@ const TableDataBankSoalUjianKeahlian = () => {
               </SelectContent>
             </Select> */}
             <>
-              <div className="flex w-full items-center justify-between">
-                <ul className="flex">
+              <div className="flex w-full flex-col lg:flex-row items-center justify-between gap-4 mb-6 mt-4">
+                <div className="flex overflow-x-auto gap-3 pb-2 w-full lg:w-auto scrollbar-hide">
+                  <button
+                    onClick={() => handleFetchingBagianUjian()}
+                    className={`focus:outline-none p-4 rounded-xl border flex flex-col items-start w-36 transition-all duration-200 ${activeFilter === "all" ? "bg-blue-50 border-blue-300 shadow-sm ring-1 ring-blue-300" : "bg-white hover:bg-gray-50 border-gray-200"}`}
+                  >
+                    <p className={`font-bold text-2xl ${activeFilter === "all" ? "text-blue-700" : "text-gray-700"}`}>{countReal}</p>
+                    <p className={`text-xs font-medium mt-1 ${activeFilter === "all" ? "text-blue-600" : "text-gray-500"}`}>
+                      Total Soal
+                    </p>
+                  </button>
+                  <button
+                    onClick={() => handleShowDuplicates()}
+                    className={`focus:outline-none p-4 rounded-xl border flex flex-col items-start w-36 transition-all duration-200 ${activeFilter === "duplicates" ? "bg-amber-50 border-amber-300 shadow-sm ring-1 ring-amber-300" : "bg-white hover:bg-gray-50 border-gray-200"}`}
+                  >
+                    <p className={`font-bold text-2xl ${activeFilter === "duplicates" ? "text-amber-700" : "text-gray-700"}`}>
+                      {countSoalDuplikasi}
+                    </p>
+                    <p className={`text-xs font-medium mt-1 ${activeFilter === "duplicates" ? "text-amber-600" : "text-gray-500"}`}>
+                      Soal Duplikat
+                    </p>
+                  </button>
+                  <button
+                    onClick={() => handleShowImage()}
+                    className={`focus:outline-none p-4 rounded-xl border flex flex-col items-start w-36 transition-all duration-200 ${activeFilter === "images" ? "bg-emerald-50 border-emerald-300 shadow-sm ring-1 ring-emerald-300" : "bg-white hover:bg-gray-50 border-gray-200"}`}
+                  >
+                    <p className={`font-bold text-2xl ${activeFilter === "images" ? "text-emerald-700" : "text-gray-700"}`}>
+                      {countSoalBergambar}
+                    </p>
+                    <p className={`text-xs font-medium mt-1 ${activeFilter === "images" ? "text-emerald-600" : "text-gray-500"}`}>
+                      Soal Gambar
+                    </p>
+                  </button>
+                  <button
+                    onClick={() => handleShowNotClassified()}
+                    className={`focus:outline-none p-4 rounded-xl border flex flex-col items-start w-40 transition-all duration-200 ${activeFilter === "unclassified" ? "bg-rose-50 border-rose-300 shadow-sm ring-1 ring-rose-300" : "bg-white hover:bg-gray-50 border-gray-200"}`}
+                  >
+                    <p className={`font-bold text-2xl ${activeFilter === "unclassified" ? "text-rose-700" : "text-gray-700"}`}>
+                      {countNotClassified}
+                    </p>
+                    <p className={`text-xs font-medium mt-1 ${activeFilter === "unclassified" ? "text-rose-600" : "text-gray-500"}`}>
+                      Belum Diklasifikasi
+                    </p>
+                  </button>
+                </div>
 
-                  <li>
-                    <button
-                      onClick={() => handleFetchingBagianUjian()}
-                      className={`focus:outline-none p-2 rounded-l-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
-                    >
-                      <p className="font-semibold text-lg">{countReal}</p>
-                      <p className={`uppercase text-sm ${"text-gray-600"}`}>
-                        Total Soal
-                      </p>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => handleShowDuplicates()}
-                      className={`focus:outline-none p-2  border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
-                    >
-                      <p className="font-semibold text-lg">
-                        {countSoalDuplikasi}
-                      </p>
-                      <p className={`uppercase text-sm ${"text-gray-600"}`}>
-                        Soal Duplikat
-                      </p>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => handleShowImage()}
-                      className={`focus:outline-none p-2 rounded-r-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
-                    >
-                      <p className="font-semibold text-lg">
-                        {countSoalBergambar}
-                      </p>
-                      <p className={`uppercase text-sm ${"text-gray-600"}`}>
-                        Soal Gambar
-                      </p>
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => handleShowNotClassified()}
-                      className={`focus:outline-none p-2 rounded-r-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
-                    >
-                      <p className="font-semibold text-lg">
-                        {countNotClassified}
-                      </p>
-                      <p className={`uppercase text-sm ${"text-gray-600"}`}>
-                        Belum Diklasifikasi Materi
-                      </p>
-                    </button>
-                  </li>
-                </ul>
-
-                <ul className="flex">
+                <div className="flex w-full lg:w-auto">
                   {
                     dataKomposisiSoal ?
                       <AlertDialog>
-                        <AlertDialogTrigger asChild><li>
+                        <AlertDialogTrigger asChild>
                           <button
-                            className={`focus:outline-none p-2 rounded-l-md border  flex flex-col items-center w-fit ${"bg-white text-black"}`}
+                            className="focus:outline-none px-5 py-4 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 flex items-center gap-3 transition-colors shadow-sm w-full lg:w-auto justify-center"
                           >
-                            <p className="font-semibold text-xl text-gray-600"><FaBookOpen className="h-6 w-6" /></p>
-                            <p className={`uppercase text-sm ${"text-gray-600"}`}>
-                              Komposisi Soal
-                            </p>
+                            <div className="p-2 bg-indigo-100 rounded-lg text-indigo-600">
+                              <FaBookOpen className="h-5 w-5" />
+                            </div>
+                            <div className="text-left">
+                              <p className="font-semibold text-sm text-indigo-900">
+                                Komposisi Soal
+                              </p>
+                              <p className="text-xs text-indigo-700">Lihat sebaran materi</p>
+                            </div>
                           </button>
-                        </li></AlertDialogTrigger>
+                        </AlertDialogTrigger>
                         <AlertDialogContent className='max-w-3xl'>
                           <AlertDialogHeader>
                             <div className="flex flex-col gap-2">
-                              <AlertDialogTitle className="flex items-center gap-2">
-                                {" "}
-                                <FaBookOpen className="h-4 w-4" />
+                              <AlertDialogTitle className="flex items-center gap-2 text-indigo-900">
+                                <FaBookOpen className="h-5 w-5 text-indigo-600" />
                                 Komposisi Materi Fungsi Bagian
                               </AlertDialogTitle>
-                              <AlertDialogDescription className="-mt-2">
-                                Daftarkan komposisi materi ujian keahlian awak kapal perikanan fungsi bagian!
+                              <AlertDialogDescription className="-mt-1 text-gray-600">
+                                Rincian komposisi materi ujian keahlian awak kapal perikanan fungsi bagian.
                               </AlertDialogDescription>
                             </div>
-
                           </AlertDialogHeader>
-                          <fieldset>
-                            <form autoComplete="off">
-                              <div className="overflow-x-auto !text-sm">
-                                <table className="min-w-full border border-gray-300">
-                                  <thead className="bg-gray-100">
-                                    <tr>
-                                      <th className="border p-1">No</th>
-                                      <th className="border p-1">Nama Materi</th>
-                                      <th className="border p-1">Jumlah Soal</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                    {dataKomposisiSoal!.map((item: any, index: number) => (
-                                      <tr key={index} className="odd:bg-white even:bg-gray-50">
-                                        <td className="border p-1 text-center">{index + 1}</td>
-                                        <td className="border p-1">{item.name}</td>
-                                        <td className="border p-1 capitalize">{item.count}</td>
-
-                                      </tr>
-                                    ))}
-                                  </tbody>
-                                </table>
-                              </div>
-
-                              <AlertDialogFooter className="mt-3">
-                                <AlertDialogCancel
-
-                                >
-                                  Close
-                                </AlertDialogCancel>
-
-                              </AlertDialogFooter>
-                            </form>
-                          </fieldset>
+                          <div className="mt-4 max-h-[60vh] overflow-y-auto">
+                            <table className="w-full text-sm text-left text-gray-600 border border-gray-200 rounded-lg overflow-hidden">
+                              <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b">
+                                <tr>
+                                  <th className="px-4 py-3 border-r w-16 text-center">No</th>
+                                  <th className="px-4 py-3 border-r">Nama Materi</th>
+                                  <th className="px-4 py-3 text-center">Jumlah Soal</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {dataKomposisiSoal!.map((item: any, index: number) => (
+                                  <tr key={index} className="bg-white border-b hover:bg-gray-50">
+                                    <td className="px-4 py-3 border-r text-center font-medium">{index + 1}</td>
+                                    <td className="px-4 py-3 border-r">{item.name}</td>
+                                    <td className="px-4 py-3 text-center font-semibold text-indigo-600">{item.count}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                          <AlertDialogFooter className="mt-6 border-t pt-4">
+                            <AlertDialogCancel className="w-full sm:w-auto">
+                              Tutup
+                            </AlertDialogCancel>
+                          </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog> : <></>
                   }
-
-
-                </ul>
+                </div>
               </div>
 
-              <div className="flex w-full items-center justify-between">
-                <div className="flex gap-2 w-full">
-                  <Input
-                    placeholder="Cari Soal..."
-                    value={
-                      (table.getColumn("Soal")?.getFilterValue() as string) ?? ""
-                    }
-                    onChange={(event) =>
-                      table.getColumn("Soal")?.setFilterValue(event.target.value)
-                    }
-                    className="max-w-sm text-sm"
-                  />
+              <div className="flex w-full items-center justify-between mb-4">
+                <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                  <div className="relative w-full sm:w-72">
+                    <Input
+                      placeholder="Cari Soal..."
+                      value={
+                        (table.getColumn("Soal")?.getFilterValue() as string) ?? ""
+                      }
+                      onChange={(event) =>
+                        table.getColumn("Soal")?.setFilterValue(event.target.value)
+                      }
+                      className="w-full text-sm pl-9 rounded-lg border-gray-300"
+                    />
+                    <svg className="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                  </div>
                   {
-                    dataKomposisiSoal ? <Select onValueChange={(value) => table.getColumn("Materi")?.setFilterValue(value)}>
-                      <SelectTrigger className="w-[180px] py-[1.2rem]">
+                    dataKomposisiSoal ? <Select 
+                      onValueChange={(value) => table.getColumn("Materi")?.setFilterValue(value === "A" ? undefined : value)}
+                    >
+                      <SelectTrigger className="w-full sm:w-[220px] rounded-lg border-gray-300 h-10">
                         <SelectValue placeholder="Filter By Materi Ujian" />
                       </SelectTrigger>
                       <SelectContent>
@@ -917,8 +896,8 @@ const TableDataBankSoalUjianKeahlian = () => {
                       </SelectContent>
                     </Select> : <></>
                   }
-
                 </div>
+              </div>
 
                 <div className="w-full flex justify-end gap-2">
 
@@ -955,7 +934,6 @@ const TableDataBankSoalUjianKeahlian = () => {
                     </AlertDialogContent>
                   </AlertDialog> */}
                 </div>
-              </div>
               {
                 isFetching ? <div className="mt-32 w-full flex items-center justify-center">
                   <HashLoader color="#338CF5" size={50} />
