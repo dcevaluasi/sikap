@@ -598,10 +598,10 @@ const TableDataUjian: React.FC = () => {
 
 
   return (
-    <section className="rounded-sm   pb-5 shadow-default  h-full scrollbar-hide">
+    <section className="h-full w-full">
       <section
         aria-label="main content"
-        className="flex h-full flex-col flex-auto w-full border-l scrollbar-hide -mt-4"
+        className="flex flex-col w-full h-full"
       >
         <StatusUjianKeahlianAKP
           isPenguji={isPenguji}
@@ -628,26 +628,26 @@ const TableDataUjian: React.FC = () => {
               )}
 
               <TabsContent value="account">
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-4">
                   <div className="mb-1">
-                    <div className="flex w-full gap-1 items-center">
+                    <div className="flex w-full gap-3 items-center">
                       <Input
                         type="text"
                         placeholder="Cari berdasarkan Program Ujian atau Nama Ujian"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full text-sm"
+                        className="w-full text-sm border-blue-200 focus:border-blue-500 focus:ring-blue-500 rounded-xl shadow-sm"
                       />
 
                       <Select
                         value={selectedTahun.toString()} onValueChange={(val) => setSelectedTahun(parseInt(val))}
                       >
-                        <SelectTrigger className="w-fit text-base py-5">
+                        <SelectTrigger className="w-fit text-base py-5 border-blue-200 focus:border-blue-500 focus:ring-blue-500 rounded-xl shadow-sm bg-white">
                           <SelectValue placeholder="Tahun Pelaksanaan" />
                         </SelectTrigger>
                         <SelectContent>
                           {years.map((year) => (
-                            <SelectItem key={year} value={year.toString()} className='text-gray-300'>
+                            <SelectItem key={year} value={year.toString()} className='text-gray-700 focus:bg-blue-50 focus:text-blue-700'>
                               {year}
                             </SelectItem>
                           ))}
@@ -660,48 +660,50 @@ const TableDataUjian: React.FC = () => {
                     <EmptyData />
                   ) : (
                     <>
-                      <div className="overflow-x-auto rounded-lg border">
-                        <table className="min-w-full text-sm text-left">
-                          <thead className="bg-gray-100 text-gray-700">
+                      <div className="overflow-x-auto rounded-2xl border border-blue-100 shadow-[0_4px_20px_-4px_rgba(59,130,246,0.1)] bg-white">
+                        <table className="min-w-full text-sm text-left border-collapse">
+                          <thead className="bg-gradient-to-r from-blue-50 to-blue-100/50 text-blue-900 border-b border-blue-200">
                             <tr>
-                              <th className="p-4 text-center">No</th>
-                              <th className="p-4 text-center">Nama Ujian</th>
-                              <th className="p-4 text-center">Tempat</th>
-                              <th className="p-4 text-center">Waktu</th>
-
-
-                              <th className="p-4 text-center">Peserta</th>
-                              <th className="p-4 text-center">Aksi</th>
+                              <th className="p-4 text-center font-semibold whitespace-nowrap">No</th>
+                              <th className="p-4 font-semibold whitespace-nowrap">Nama Ujian</th>
+                              <th className="p-4 text-center font-semibold whitespace-nowrap">Tempat</th>
+                              <th className="p-4 text-center font-semibold whitespace-nowrap">Waktu</th>
+                              <th className="p-4 text-center font-semibold whitespace-nowrap">Peserta</th>
+                              <th className="p-4 text-center font-semibold whitespace-nowrap">Aksi</th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <tbody className="divide-y divide-blue-50">
                             {currentPageData.map((ujian, index) => (
                               <tr
                                 key={index}
-                                className="border-b hover:bg-gray-50 transition-colors"
+                                className="hover:bg-blue-50/40 transition-colors duration-200"
                               >
-                                <td className="p-4 text-center font-medium">
+                                <td className="p-4 text-center font-medium text-slate-600">
                                   {(indexOfFirstItem + index + 1)}
                                 </td>
 
-                                <td className="p-4 font-medium text-gray-900">
-                                  <div>{ujian.NamaUjian}</div>
-                                  <div className="text-xs text-gray-500">
-                                    {ujian.TypeUjian} • {ujian.PUKAKP}
+                                <td className="p-4">
+                                  <div className="font-semibold text-slate-800">{ujian.NamaUjian}</div>
+                                  <div className="text-xs text-blue-600/80 font-medium mt-0.5">
+                                    {ujian.TypeUjian} <span className="text-slate-300 mx-1">•</span> {ujian.PUKAKP}
                                   </div>
                                 </td>
-                                <td className="p-4 text-center">{ujian.TempatUjian}</td>
-                                <td className="p-4  text-center">
-                                  {generateTanggalPelatihan(ujian.TanggalMulaiUjian)} s.d{" "}
-                                  {generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}
+                                <td className="p-4 text-center text-slate-700">{ujian.TempatUjian}</td>
+                                <td className="p-4 text-center text-slate-700">
+                                  <div className="flex flex-col items-center justify-center text-xs space-y-1">
+                                    <span className="bg-slate-100 px-2 py-1 rounded text-slate-600 font-medium border border-slate-200">{generateTanggalPelatihan(ujian.TanggalMulaiUjian)}</span>
+                                    <span className="text-slate-400">s.d</span>
+                                    <span className="bg-slate-100 px-2 py-1 rounded text-slate-600 font-medium border border-slate-200">{generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}</span>
+                                  </div>
                                 </td>
-
 
                                 <td className="p-4 text-center">
-                                  {ujian.UsersUjian?.length ?? 0}/{ujian.JumlahPesertaUjian - 1}
+                                  <div className="inline-flex items-center justify-center bg-blue-100 text-blue-700 font-semibold px-3 py-1 rounded-full text-xs border border-blue-200">
+                                    {ujian.UsersUjian?.length ?? 0} / {ujian.JumlahPesertaUjian - 1}
+                                  </div>
                                 </td>
-                                <td className="p-4 text-right">
-                                  <div className="flex gap-1 justify-end flex-wrap">
+                                <td className="p-4 text-right align-middle">
+                                  <div className="flex gap-2 justify-end items-center flex-wrap">
                                     <InformationAction ujian={ujian} data={dataUjian} onUpdated={refetchUjian} />
 
                                     {ujian!.Status == "Aktif" && (
@@ -711,14 +713,12 @@ const TableDataUjian: React.FC = () => {
                                           : "dpkakp"
                                           }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
                                           }/${ujian!.IdTypeUjian}`}
-                                        className="bg-blue-500 rounded-md   shadow-sm  h-9 px-4 py-2 text-white flex items-center text-sm w-full justify-center"
+                                        className="bg-blue-600 hover:bg-blue-700 transition-all rounded-lg shadow-sm hover:shadow h-8 px-3 text-white flex items-center text-xs font-medium w-fit justify-center border border-transparent hover:border-blue-500"
                                       >
-                                        <HiUserGroup className="h-4 w-4 text-white mr-1" />{" "}
-                                        Peserta Ujian
+                                        <HiUserGroup className="h-4 w-4 mr-1.5 opacity-90" />
+                                        Peserta
                                       </Link>
                                     )}
-
-
 
                                     {ujian!.Status == "Draft" &&
                                       !usePathname().includes("dpkakp") ? (
@@ -727,10 +727,10 @@ const TableDataUjian: React.FC = () => {
                                           handleKirimPermohonan(ujian!.IdUjian);
                                         }}
                                         variant="outline"
-                                        className="bg-indigo-600 w-full text-neutral-100 hover:text-neutral-100 hover:bg-indigo-600"
+                                        className="bg-indigo-600 hover:bg-indigo-700 transition-all shadow-sm hover:shadow h-8 px-3 text-xs w-fit text-white border-transparent hover:border-indigo-500"
                                       >
-                                        <BiPaperPlane className="h-4 w-4 text-neutral-100 mr-1" />{" "}
-                                        Kirim Permohonan
+                                        <BiPaperPlane className="h-4 w-4 mr-1.5 opacity-90" />
+                                        Kirim
                                       </Button>
                                     ) : (
                                       <></>
@@ -743,10 +743,10 @@ const TableDataUjian: React.FC = () => {
                                           handleFetchingDataUjianById(ujian!.IdUjian);
                                         }}
                                         variant="outline"
-                                        className="bg-yellow-300 w-full text-neutral-800 hover:text-neutral-800 hover:bg-yellow-300"
+                                        className="bg-blue-100 hover:bg-blue-200 transition-all shadow-sm h-8 px-3 text-xs w-fit text-blue-700 border-blue-200 hover:border-blue-300"
                                       >
-                                        <FiEdit2 className="h-4 w-4 text-neutral-800 mr-1" />{" "}
-                                        Edit Ujian
+                                        <FiEdit2 className="h-4 w-4 mr-1.5 opacity-90" />
+                                        Edit
                                       </Button>
                                     ) : (
                                       <></>
@@ -761,28 +761,29 @@ const TableDataUjian: React.FC = () => {
                                     {
                                       ujian!.IsSelesai == "" ? (
                                         <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
-
                                           <AlertDialogContent>
                                             <AlertDialogHeader>
-                                              <AlertDialogTitle>
+                                              <AlertDialogTitle className="text-slate-800">
                                                 Apakah kamu yakin menutup ujian ini?
                                               </AlertDialogTitle>
-                                              <AlertDialogDescription>
-                                                Menutup ujian, berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian, harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
+                                              <AlertDialogDescription className="text-slate-600">
+                                                Menutup ujian berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian. Harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
                                               </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
                                               {
-                                                !isPosting ? <><AlertDialogCancel>Batal</AlertDialogCancel>
-
-                                                  <AlertDialogAction
-                                                    onClick={() => handleCloseExam()}
-                                                    className="bg-gray-700"
-                                                  >
-                                                    Tutup
-                                                  </AlertDialogAction></> : <Button className='w-full'>Loading....</Button>
+                                                !isPosting ? (
+                                                  <>
+                                                    <AlertDialogCancel className="hover:bg-slate-100">Batal</AlertDialogCancel>
+                                                    <AlertDialogAction
+                                                      onClick={() => handleCloseExam()}
+                                                      className="bg-rose-600 hover:bg-rose-700 text-white"
+                                                    >
+                                                      Tutup
+                                                    </AlertDialogAction>
+                                                  </>
+                                                ) : <Button className='w-full' disabled>Loading....</Button>
                                               }
-
                                             </AlertDialogFooter>
                                           </AlertDialogContent>
                                         </AlertDialog>
@@ -803,9 +804,9 @@ const TableDataUjian: React.FC = () => {
                                             );
                                           }}
                                           variant="outline"
-                                          className="bg-green-400 hover:bg-green-400 hover:text-white text-white rounded-md w-full"
+                                          className="bg-sky-500 hover:bg-sky-600 transition-all shadow-sm hover:shadow h-8 px-3 text-xs text-white rounded-lg w-fit border-transparent hover:border-sky-400"
                                         >
-                                          <RiVerifiedBadgeFill className="h-4 w-4 mr-1" />{" "}
+                                          <RiVerifiedBadgeFill className="h-4 w-4 mr-1.5 opacity-90" />
                                           Verifikasi
                                         </Button>
                                       )}
@@ -815,20 +816,20 @@ const TableDataUjian: React.FC = () => {
                                         <AlertDialogTrigger asChild>
                                           <Button
                                             variant="outline"
-                                            className="bg-indigo-600 text-white hover:text-white hover:bg-indigo-600 w-full"
+                                            className="bg-indigo-50 hover:bg-indigo-100 transition-all shadow-sm hover:shadow h-8 px-3 text-xs text-indigo-700 border-indigo-200 hover:border-indigo-300 w-fit rounded-lg"
                                           >
-                                            <IoMdClock className="h-4 w-4 text-lg " />{" "}
-                                            Waktu Ujian
+                                            <IoMdClock className="h-4 w-4 mr-1.5 opacity-90" />
+                                            Waktu
                                           </Button>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent className="max-w-2xl">
                                           <AlertDialogHeader>
                                             <div className="flex flex-col w-full items-center justify-center">
-                                              <AlertDialogTitle className="text-center leading-none">
+                                              <AlertDialogTitle className="text-center leading-none text-slate-800">
                                                 Daftar Waktu Pelaksanaan{" "}
-                                                {ujian!.TypeUjian} di {ujian!.PUKAKP}
+                                                <span className="text-blue-600">{ujian!.TypeUjian}</span> di {ujian!.PUKAKP}
                                               </AlertDialogTitle>
-                                              <AlertDialogDescription>
+                                              <AlertDialogDescription className="text-slate-600 mt-2">
                                                 Berikut merupakan waktu pelaksanaan dari
                                                 setiap fungsi dan bagian!
                                               </AlertDialogDescription>
@@ -836,7 +837,7 @@ const TableDataUjian: React.FC = () => {
                                           </AlertDialogHeader>
                                           <JadwalUjianKeahlianAKP data={dataUjian} ujian={ujian} onUpdated={refetchUjian} />
                                           <AlertDialogFooter>
-                                            <AlertDialogCancel className="bg-gray-900 w-full text-white hover:bg-gray-800 hover:text-white">
+                                            <AlertDialogCancel className="bg-slate-900 w-full text-white hover:bg-slate-800 hover:text-white transition-colors">
                                               Tutup
                                             </AlertDialogCancel>
                                           </AlertDialogFooter>
@@ -856,10 +857,10 @@ const TableDataUjian: React.FC = () => {
                                             );
                                           }}
                                           variant="outline"
-                                          className="bg-teal-600 hover:bg-teal-600 text-neutral-200 rounded-md hover:text-neutral-200 w-full"
+                                          className="bg-cyan-600 hover:bg-cyan-700 transition-all shadow-sm hover:shadow h-8 px-3 text-xs text-white rounded-lg w-fit border-transparent hover:border-cyan-500"
                                         >
-                                          <TbEditCircle className="h-5 w-5 mr-1" />
-                                          Pilih Penguji
+                                          <TbEditCircle className="h-4 w-4 mr-1.5 opacity-90" />
+                                          Penguji
                                         </Button>
                                       )}
 
@@ -871,9 +872,10 @@ const TableDataUjian: React.FC = () => {
                                             setOpenFormRemedial(!openFormRemedial);
                                           }}
                                           variant="outline"
-                                          className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md w-full"
+                                          className="bg-slate-700 hover:bg-slate-800 transition-all shadow-sm hover:shadow h-8 px-3 text-xs text-white rounded-lg w-fit border-transparent"
                                         >
-                                          <IoReload className="h-4 w-4 mr-1" /> Remedial
+                                          <IoReload className="h-4 w-4 mr-1.5 opacity-90" />
+                                          Remedial
                                         </Button>
                                       )}
 
@@ -885,9 +887,10 @@ const TableDataUjian: React.FC = () => {
                                             setOpenFormCloseExam(!openFormRemedial);
                                           }}
                                           variant="outline"
-                                          className="bg-teal-600 hover:bg-teal-700 hover:text-white text-white rounded-md w-full"
+                                          className="bg-rose-500 hover:bg-rose-600 transition-all shadow-sm hover:shadow h-8 px-3 text-xs text-white rounded-lg w-fit border-transparent hover:border-rose-400"
                                         >
-                                          <BiSolidLockAlt className="h-4 w-4 mr-1" /> Tutup Ujian
+                                          <BiSolidLockAlt className="h-4 w-4 mr-1.5 opacity-90" />
+                                          Tutup
                                         </Button>
                                       )}
                                   </div>

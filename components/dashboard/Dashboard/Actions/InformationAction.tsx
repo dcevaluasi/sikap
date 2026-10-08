@@ -43,9 +43,9 @@ export function InformationAction({ ujian, data, onUpdated }: InformationActionP
 
                 <Button
                     variant="outline"
-                    className="bg-gray-800 hover:bg-gray-800 hover:text-white text-white rounded-md w-full"
+                    className="bg-slate-100 hover:bg-slate-200 transition-all shadow-sm h-8 px-3 text-xs w-fit text-slate-700 border-slate-200 hover:border-slate-300 rounded-lg"
                 >
-                    <IoInformation className="h-4 w-4 mr-1" /> Informasi Ujian
+                    <IoInformation className="h-4 w-4 mr-1.5 opacity-90" /> Detail
                 </Button>
             </AlertDialogTrigger>
 
