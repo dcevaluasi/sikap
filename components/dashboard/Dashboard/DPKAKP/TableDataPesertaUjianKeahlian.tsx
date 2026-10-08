@@ -107,7 +107,6 @@ import {
   roundUpScore,
 } from "@/components/utils/dpkakp/scoring";
 import getDocument from "@/firebase/firestore/getData";
-import EmptyData from "@/components/micro-components/EmptyData";
 import { CodeAccessAction } from "../Actions/CodeAccessAction";
 import HistoryJawabanuserUjian from "./HistoryJawabanUserUjian";
 import HeaderDPAKP from "./HeaderDPKAKP";
@@ -290,71 +289,15 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="text-gray-900 font-semibold"
+          className="text-gray-500 font-semibold text-[11px] uppercase tracking-wider hover:bg-transparent h-8 px-2"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           No
-          <ArrowUpDown className="ml-1 h-4 w-4" />
+          <ArrowUpDown className="ml-1 h-3 w-3" />
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="text-center uppercase">{row.index + 1}</div>
-      ),
-    },
-    {
-      accessorKey: "Nik",
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          className={`w-full text-gray-900 font-semibold ${dataUjian.length != 0 && (
-            dataUjian[0].IsSelesai == "1" ? 'hidden' : 'flex')}`}
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Actions
-          <TbDatabaseEdit className="ml-1 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => (
-        <div
-          className={`w-full ${dataUjian.length != 0 && (
-            dataUjian[0].IsSelesai == "1" ? 'hidden' : 'flex')}  flex-col gap-2`}
-        >
-          <div className="flex  w-full items-center justify-center gap-1">
-
-            <Button
-              onClick={(e) => {
-                setSelectedIdPeserta(row.original.IdUserUjian);
-                setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
-                setSelectedNamaPeserta(row.original.Nama)
-                if (row.original.NilaiKomprensifF1 != 0) {
-                  setEditing(true);
-                  setNilaiKomprehensif(
-                    row.original.NilaiKomprensifF1.toString()
-                  );
-                  setNilaiKomprehensif2(
-                    row.original.NilaiKomprensifF2.toString()
-                  );
-                  setNilaiKomprehensif3(
-                    row.original.NilaiKomprensifF3.toString()
-                  );
-
-                }
-              }}
-              variant="outline"
-              className="bg-neutral-950 hover:bg-neutral-950 text-neutral-200 rounded-md hover:text-neutral-200"
-            >
-              <TbEditCircle className="h-5 w-5 mr-1" />
-              {row.original.NilaiKomprensifF1 != 0 ? "Edit" : "Input"} Nilai
-              Kompre
-            </Button>
-            <CodeAccessAction
-              dataUjian={dataUjian}
-              row={row}
-              handleSwitchCodeAccessIsUse={handleSwitchCodeAccessIsUse} />
-
-
-          </div>
-        </div>
+        <div className="text-center text-[12px] font-medium text-gray-500">{row.index + 1}</div>
       ),
     },
     {
@@ -362,62 +305,98 @@ const TableDataPesertaUjianKeahlian = () => {
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="p-0 !text-left w-[270px] flex items-center justify-start text-gray-900 font-semibold"
+          className="p-0 !text-left flex items-center justify-start text-gray-500 font-semibold text-[11px] uppercase tracking-wider hover:bg-transparent h-8"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Nama
-          <TbSchool className="ml-1 h-4 w-4" />
+          Nama & Identitas
+          <TbSchool className="ml-1.5 h-3.5 w-3.5" />
         </Button>
       ),
       cell: ({ row }) => (
-        <div className="ml-0 text-left capitalize">
-          <p className="text-base font-semibold tracking-tight leading-none">
+        <div className="flex flex-col justify-center py-1 max-w-[450px]">
+          <p className="text-[13px] font-bold text-gray-900 leading-tight capitalize truncate">
             {row.getValue("Nama")}
           </p>
-          <div className="ml-0 text-left capitalize mt-1">
-            <p className="text-xs font-medium capitalize">
-              <span className="flex items-center gap-1 leading-[105%]">
-                <BsPersonVcard className="text-sm" />
-                <span>NIK : {row.original.Nik}</span>
-              </span>
-              <span className="flex items-center gap-1 leading-[105%]">
-                <TbTargetArrow className="text-base" />
-                <span>
-                  TTL : {row.original.TempatLahir} {row.original.TanggalLahir}
-                </span>
-              </span>
-
-              <span className="flex items-center gap-1 leading-[105%]">
-                <HiUserGroup className="text-base" />
-                <span>Instansi : {row.original.Instansi}</span>
-              </span>
-            </p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-0.5 text-[11px] text-gray-500 leading-none">
+            <span className="flex items-center gap-1">
+              <BsPersonVcard className="text-gray-400" />
+              {row.original.Nik}
+            </span>
+            <span className="flex items-center gap-1">
+              <TbTargetArrow className="text-gray-400" />
+              <span className="capitalize">{row.original.TempatLahir}, {row.original.TanggalLahir}</span>
+            </span>
+            <span className="flex items-center gap-1">
+              <HiUserGroup className="text-gray-400" />
+              <span className="truncate max-w-[150px] capitalize">{row.original.Instansi}</span>
+            </span>
           </div>
         </div>
       ),
     },
-
     {
       accessorKey: "NomorUjian",
       header: ({ column }) => (
         <Button
           variant="ghost"
-          className="text-black font-semibold w-full  p-0 justify-center items-center"
+          className="text-gray-500 font-semibold text-[11px] uppercase tracking-wider hover:bg-transparent w-full justify-center p-0 h-8"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          <p className="leading-[105%]">Nomor Ujian</p>
-          <HiMiniUserGroup className="ml-2 h-4 w-4" />
+          Nomor Ujian
+          <HiMiniUserGroup className="ml-1.5 h-3.5 w-3.5" />
         </Button>
       ),
       cell: ({ row }) => (
-        <div className=" capitalize w-full flex items-center justify-center">
-          <p className="text-sm font-normal tracking-tight leading-none">
+        <div className="flex items-center justify-center">
+          <div className="inline-flex items-center justify-center px-2 py-1 rounded-md bg-blue-50 border border-blue-100 text-blue-700 font-bold text-[11px] tracking-wide uppercase shadow-sm">
             {row.getValue("NomorUjian")}
-          </p>
+          </div>
         </div>
       ),
     },
+    {
+      accessorKey: "Nik", // Using Nik as generic accessor for actions
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          className={`w-full text-gray-500 font-semibold text-[11px] uppercase tracking-wider hover:bg-transparent justify-end h-8 ${dataUjian.length !== 0 && dataUjian[0].IsSelesai === "1" ? "hidden" : "flex"
+            }`}
+        >
+          Aksi
+          <TbDatabaseEdit className="ml-1.5 h-3.5 w-3.5" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div
+          className={`w-full ${dataUjian.length !== 0 && dataUjian[0].IsSelesai === "1" ? "hidden" : "flex"
+            } items-center justify-end gap-1.5`}
+        >
+          <button
+            onClick={(e) => {
+              setSelectedIdPeserta(row.original.IdUserUjian);
+              setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian);
+              setSelectedNamaPeserta(row.original.Nama);
+              if (row.original.NilaiKomprensifF1 !== 0) {
+                setEditing(true);
+                setNilaiKomprehensif(row.original.NilaiKomprensifF1.toString());
+                setNilaiKomprehensif2(row.original.NilaiKomprensifF2.toString());
+                setNilaiKomprehensif3(row.original.NilaiKomprensifF3.toString());
+              }
+            }}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] font-semibold rounded-md border border-gray-200 bg-white text-gray-700 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all shadow-sm whitespace-nowrap"
+          >
+            <TbEditCircle className="h-3.5 w-3.5 text-blue-500" />
+            {row.original.NilaiKomprensifF1 !== 0 ? "Edit Nilai" : "Input Nilai"}
+          </button>
 
+          <CodeAccessAction
+            dataUjian={dataUjian}
+            row={row}
+            handleSwitchCodeAccessIsUse={handleSwitchCodeAccessIsUse}
+          />
+        </div>
+      ),
+    },
   ];
 
   const table = useReactTable({
@@ -705,832 +684,781 @@ const TableDataPesertaUjianKeahlian = () => {
   const trueCount = dataAnswer.filter(item => item.isCorrect === true).length;
   const falseCount = dataAnswer.filter(item => item.isCorrect === false).length;
 
-  console.log({ dataAnswer })
-  console.log({ trueCount })
-  console.log({ falseCount })
-
-
-  const [hideValue, setHideValue] = React.useState<boolean>(false)
-
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default  sm:px-7.5 xl:col-span-8">
-      {data != null ? (
-        <>
+    <div className="flex flex-col gap-6">
 
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 sm:p-7.5 xl:col-span-8">
+        {data != null ? (
           <>
-            <div className="flex w-full items-center justify-between mb-2">
-              {!showRekapitulasiNilai && !showKartuUjian && (
-                <Input
-                  placeholder="Cari Peserta..."
-                  value={
-                    (table.getColumn("Nama")?.getFilterValue() as string) ?? ""
-                  }
-                  onChange={(event: any) =>
-                    table.getColumn("Nama")?.setFilterValue(event.target.value)
-                  }
-                  className="max-w-sm text-sm"
-                />
-              )}
+            <>
+              <div className="flex flex-col md:flex-row w-full md:items-center justify-between mb-6 gap-4">
+                <div className="w-full md:w-auto">
+                  {!showRekapitulasiNilai && !showKartuUjian && (
+                    <Input
+                      placeholder="Cari Peserta..."
+                      value={(table.getColumn("Nama")?.getFilterValue() as string) ?? ""}
+                      onChange={(event: any) => table.getColumn("Nama")?.setFilterValue(event.target.value)}
+                      className="max-w-sm text-sm border-gray-200 focus:ring-blue-500 rounded-xl"
+                    />
+                  )}
+                </div>
 
-              <div className="w-fit flex gap-2">
-                {showKartuUjian || showRekapitulasiNilai ? (
-                  <div
-                    onClick={() => {
-                      setShowKartuUjian(false);
-                      setShowRekapitulasiNilai(false);
-                    }}
-                    className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                  >
-                    <IoArrowBackSharp />
-                    Kembali
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </div>
-              <div className="w-full flex justify-end gap-2">
-                {(
-                  !showRekapitulasiNilai &&
-                  dataUjian.length != 0 &&
-                  (dataUjian[0]!.UsersUjian.length != 0 ? (
+                <div className="flex flex-wrap items-center justify-end gap-2">
+                  {showKartuUjian || showRekapitulasiNilai ? (
+                    <div
+                      onClick={() => {
+                        setShowKartuUjian(false);
+                        setShowRekapitulasiNilai(false);
+                      }}
+                      className="inline-flex gap-2 px-4 py-2 text-xs font-semibold items-center rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm cursor-pointer"
+                    >
+                      <IoArrowBackSharp className="w-4 h-4" />
+                      Kembali
+                    </div>
+                  ) : null}
+
+                  {!showRekapitulasiNilai && dataUjian.length !== 0 && dataUjian[0]?.UsersUjian.length !== 0 ? (
                     showKartuUjian ? (
                       <div
                         onClick={handlePrint}
-                        className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                        className="inline-flex gap-2 px-4 py-2 text-xs font-semibold items-center rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm cursor-pointer"
                       >
-                        <IoPrintOutline />
+                        <IoPrintOutline className="w-4 h-4" />
                         Print Kartu Ujian Peserta
                       </div>
                     ) : (
                       <div
                         onClick={() => setShowKartuUjian(true)}
-                        className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                        className="inline-flex gap-2 px-4 py-2 text-xs font-semibold items-center rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm cursor-pointer"
                       >
-                        <PiFilePdf />
+                        <PiFilePdf className="w-4 h-4" />
                         Generate Kartu Ujian Peserta
                       </div>
                     )
-                  ) : (
-                    <></>
-                  ))
-                )}
+                  ) : null}
 
-                {dataUjian.length != 0 &&
-                  dataUjian[0]!.UsersUjian.length != 0 && (
+                  {dataUjian.length !== 0 && dataUjian[0]?.UsersUjian.length !== 0 && showKartuUjian && (
+                    <div
+                      onClick={() => exportToExcel()}
+                      className="inline-flex gap-2 px-4 py-2 text-xs font-semibold items-center rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm cursor-pointer"
+                    >
+                      <PiMicrosoftExcelLogoFill className="w-4 h-4" />
+                      Export Kode
+                    </div>
+                  )}
+
+                  <div
+                    onClick={() => handleFetchingUjianKeahlianData()}
+                    className="inline-flex gap-2 px-4 py-2 text-xs font-semibold items-center rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm cursor-pointer"
+                  >
+                    <IoRefreshOutline className="w-4 h-4" />
+                    Refresh Data
+                  </div>
+
+                  {pathname.includes("dpkakp") && !isPenguji && (
                     <>
-                      {" "}
+                      {showRekapitulasiNilai && (
+                        <>
+                          <div
+                            onClick={() => handleDownloadRekapitulasiNilai()}
+                            className="inline-flex gap-2 px-4 py-2 text-xs font-semibold items-center rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm cursor-pointer"
+                          >
+                            <BiEditAlt className="w-4 h-4" />
+                            Download Rekapitulasi
+                          </div>
+                          <div
+                            onClick={() => exportToExcelFinalScoring({ dataUjian, data })}
+                            className="inline-flex gap-2 px-4 py-2 text-xs font-semibold items-center rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm cursor-pointer"
+                          >
+                            <PiMicrosoftExcelLogoFill className="w-4 h-4" />
+                            Export Excel Hasil Rekap
+                          </div>
+                        </>
+                      )}
 
-                      {!showKartuUjian ?
-                        <></>
-                        : <div
-                          onClick={() => exportToExcel()}
-                          className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
+                      {!showKartuUjian && !showRekapitulasiNilai && (
+                        <div
+                          onClick={() => setShowRekapitulasiNilai(true)}
+                          className="inline-flex gap-2 px-4 py-2 text-xs font-semibold items-center rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:text-blue-600 transition-all shadow-sm cursor-pointer"
                         >
-                          <PiMicrosoftExcelLogoFill />
-                          Export Kode
-                        </div>}
+                          <BiEditAlt className="w-4 h-4" />
+                          Rekapitulasi Nilai Ujian
+                        </div>
+                      )}
+
+                      {dataUjian.length !== 0 &&
+                        dataUjian[0]?.UsersUjian.length !== 0 &&
+                        dataUjian[0]?.UsersUjian[0]?.CodeAksesUsersBagian.length === 0 && (
+                          <div
+                            onClick={() => setHandleOpenFormSematkan(true)}
+                            className="inline-flex gap-2 px-4 py-2 text-xs font-bold items-center rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-sm cursor-pointer"
+                          >
+                            <FaMapPin className="w-4 h-4" />
+                            Distribusikan Soal
+                          </div>
+                        )}
+
+                      <AlertDialog
+                        open={handleOpenFormSematkan}
+                        onOpenChange={setHandleOpenFormSematkan}
+                      >
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Apakah anda yakin akan menyematkan soal ujian?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Pastikan jumlah anggota mu sudah sesuai dengan data
+                              peserta ujian yang sudah didaftarkan dan merupakan
+                              anggota yang sah tercantum dalam Surat Keputusan
+                              Dewan sebagai peserta yang mengikuti ujian keahlian
+                              awak kapal Perikanan!
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            {isLoadingSematkanSoal ? (
+                              <AlertDialogAction className="bg-gray-900">
+                                Loading ...
+                              </AlertDialogAction>
+                            ) : (
+                              <>
+                                <AlertDialogCancel
+                                  onClick={() => setHandleOpenFormSematkan(false)}
+                                >
+                                  Batal
+                                </AlertDialogCancel>
+                                <AlertDialogAction
+                                  onClick={(e) =>
+                                    handleSematkanSoalUjianKeahlianToPeserta(e)
+                                  }
+                                  className="bg-gray-900"
+                                >
+                                  Sematkan
+                                </AlertDialogAction>
+                              </>
+                            )}
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </>
                   )}
 
-                <div
-                  onClick={() => handleFetchingUjianKeahlianData()}
-                  className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                >
-                  <IoRefreshOutline />
-                  Refresh Data
-                </div>
-
-                {((pathname.includes("dpkakp") && !isPenguji)) && (
-                  <>
-                    {showRekapitulasiNilai && (
-                      <>
-
-                        <div
-                          onClick={() => handleDownloadRekapitulasiNilai()}
-                          className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                        >
-                          <BiEditAlt />
-                          Download Rekapitulasi
-                        </div>
-                        <div
-                          onClick={() =>
-                            exportToExcelFinalScoring({ dataUjian, data })
-                          }
-                          className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                        >
-                          <PiMicrosoftExcelLogoFill />
-                          Export Excel Hasil Rekap{" "}
-                        </div></>
+                  {dataUjian.length > 0 && dataUjian[0] !== null &&
+                    (pathname.includes("pukakp") || Cookies.get('PUKAKP') === "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan") &&
+                    dataUjian[0]?.UsersUjian.length === 0 && (
+                      <div
+                        onClick={() => setIsOpenFormPeserta(!isOpenFormPeserta)}
+                        className="inline-flex gap-2 px-4 py-2 text-xs font-bold items-center rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition-all shadow-sm cursor-pointer"
+                      >
+                        <FiUploadCloud className="w-4 h-4" />
+                        Tambah Peserta Ujian
+                      </div>
                     )}
-                    {(!showKartuUjian && !showRekapitulasiNilai) && (
-                      <>
-
-                        <div
-                          onClick={() => setShowRekapitulasiNilai(true)}
-                          className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                        >
-                          <BiEditAlt />
-                          Rekapitulasi Nilai Ujian
-                        </div></>
-                    )}
-                    {dataUjian.length != 0 && (
-                      dataUjian[0].UsersUjian.length != 0 && (
-                        dataUjian[0].UsersUjian[0].CodeAksesUsersBagian.length == 0 && (
-                          <div
-                            onClick={() => setHandleOpenFormSematkan(true)}
-                            className="flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer w-fit"
-                          >
-                            <FaMapPin />
-                            Distribusikan Soal
-                          </div>
-                        )
-                      )
-                    )}
-
-                    <AlertDialog
-                      open={handleOpenFormSematkan}
-                      onOpenChange={setHandleOpenFormSematkan}
-                    >
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            Apakah anda yakin akan menyematkan soal ujian?
-                          </AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Pastikan jumlah anggota mu sudah sesuai dengan data
-                            peserta ujian yang sudah didaftarkan dan merupakan
-                            anggota yang sah tercantum dalam Surat Keputusan
-                            Dewan sebagai peserta yang mengikuti ujian keahlian
-                            awak kapal Perikanan!
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          {isLoadingSematkanSoal ? (
-                            <AlertDialogAction className="bg-gray-900">
-                              Loading ...
-                            </AlertDialogAction>
-                          ) : (
-                            <>
-                              <AlertDialogCancel
-                                onClick={() => setHandleOpenFormSematkan(false)}
-                              >
-                                Batal
-                              </AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={(e) =>
-                                  handleSematkanSoalUjianKeahlianToPeserta(e)
-                                }
-                                className="bg-gray-900"
-                              >
-                                Sematkan
-                              </AlertDialogAction>
-                            </>
-                          )}
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </>
-                )}
-
-                {dataUjian.length > 0 &&
-                  dataUjian != null &&
-                  (pathname.includes("pukakp") || Cookies.get('PUKAKP') == "DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan") ? (
-                  dataUjian[0].UsersUjian.length > 0 ? (
-                    <></>
-                  ) : (
-                    <div
-                      onClick={(e) => setIsOpenFormPeserta(!isOpenFormPeserta)}
-                      className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer"
-                    >
-                      <FiUploadCloud />
-                      Tambah Peserta Ujian
-                    </div>
-                  )
-                ) : null}
-              </div>
-            </div>
-
-            {!showKartuUjian && !showRekapitulasiNilai && (
-              <div>
-                <TableData
-                  isLoading={false}
-                  columns={columns}
-                  table={table}
-                  type={"long"}
-                />
-              </div>
-            )}
-
-            {showKartuUjian && (
-              <div className="" ref={printRef}>
-                {" "}
-                <div className="grid grid-cols-1 gap-2">
-                  {dataUjian.length != 0 &&
-                    data!.map((peserta, index) => (
-                      <KartuUserUjian
-                        key={index}
-                        peserta={peserta}
-                        dataUjian={dataUjian}
-                        dataPukakp={dataPukakp}
-                        generateTanggalPelatihan={generateTanggalPelatihan}
-                      />
-                    ))}
                 </div>
               </div>
-            )}
 
-            {showRekapitulasiNilai && (
-              <div className="border border-gray-300">
-                <HistoryJawabanuserUjian
-                  isOpen={isShowHistoryUserAnswers}
-                  onOpenChange={setIsShowHistoryUserAnswers}
-                  dataAnswer={dataAnswer}
-                  trueCount={trueCount}
-                  falseCount={falseCount}
-                  isFetching={isFetchingHistoryUserAnswers}
-                />
-                <div className="" ref={printRefRekapitulasiNilai}>
+              {!showKartuUjian && !showRekapitulasiNilai && (
+                <div>
+                  <TableData
+                    isLoading={false}
+                    columns={columns}
+                    table={table}
+                    type={"long"}
+                  />
+                </div>
+              )}
+
+              {showKartuUjian && (
+                <div className="" ref={printRef}>
                   {" "}
-                  <div
-                    className="grid grid-cols-1 gap-2 w-full h-feull"
-                    ref={printRefRekapitulasiNilaiPage}
-                  >
-                    {dataUjian.length != 0 && (
-                      <div className="flex w-full gap-2">
-                        <div className="w-full rounded-lg p-6 flex flex-col items-center justify-center">
-                          <HeaderDPAKP />
+                  <div className="grid grid-cols-1 gap-2">
+                    {dataUjian.length != 0 &&
+                      data!.map((peserta, index) => (
+                        <KartuUserUjian
+                          key={index}
+                          peserta={peserta}
+                          dataUjian={dataUjian}
+                          dataPukakp={dataPukakp}
+                          generateTanggalPelatihan={generateTanggalPelatihan}
+                        />
+                      ))}
+                  </div>
+                </div>
+              )}
 
-                          <div
-                            className={`flex items-center justify-center w-fit rounded-md px-2 py-2 bg-opacity-20 font-bold text-black  mt-5 text-lg leading-none text-center`}
-                          >
-                            DAFTAR NILAI HASIL UJIAN KEAHLIAN AWAK KAPAL
-                            PERIKANAN
-                            <br />
-                            TINGKAT SERTIFIKAT :{dataUjian[0]!.TypeUjian}
-                          </div>
+              {showRekapitulasiNilai && (
+                <div className="border border-gray-300">
+                  <HistoryJawabanuserUjian
+                    isOpen={isShowHistoryUserAnswers}
+                    onOpenChange={setIsShowHistoryUserAnswers}
+                    dataAnswer={dataAnswer}
+                    trueCount={trueCount}
+                    falseCount={falseCount}
+                    isFetching={isFetchingHistoryUserAnswers}
+                  />
+                  <div className="" ref={printRefRekapitulasiNilai}>
+                    {" "}
+                    <div
+                      className="grid grid-cols-1 gap-2 w-full h-feull"
+                      ref={printRefRekapitulasiNilaiPage}
+                    >
+                      {dataUjian.length != 0 && (
+                        <div className="flex w-full gap-2">
+                          <div className="w-full rounded-lg p-6 flex flex-col items-center justify-center">
+                            <HeaderDPAKP />
 
-                          <div className="ml-0 text-left capitalize w-full mt-2">
-                            <p className="text-sm font-semibold tracking-tight leading-none  py-2">
-                              Tanggal Pelaksanaan{"   "}: {"          "}
-                              <span className="font-normal">
-                                {generateTanggalPelatihan(
-                                  dataUjian[0]!.TanggalMulaiUjian
-                                )}{" "}
-                                -{" "}
-                                {generateTanggalPelatihan(
-                                  dataUjian[0]!.TanggalBerakhirUjian
-                                )}
-                              </span>
-                            </p>
-                            <p className="text-sm font-semibold tracking-tight leading-none ">
-                              Lokasi Pelaksanaan{"     "}: {"          "}{" "}
-                              <span className="font-normal">
-                                {dataUjian[0]!.TempatUjian}
-                              </span>
-                            </p>
-                          </div>
-
-                          <div className="flex flex-col w-full border border-gray-400 mt-6 rounded-md">
-                            {/* Table Header */}
-                            <div className="flex  text-white text-sm">
-                              <div className="flex items-center flex-grow !w-0 h-10 border-b border-gray-400 bg-[#338BF6] justify-center py-6">
-                                <span>No</span>
-                              </div>
-                              <div className="flex items-center flex-grow w-0 h-10 px-4 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
-                                <span className="">Nomor Ujian</span>
-                              </div>
-                              <div className="flex items-center flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
-                                <span className="">Nama</span>
-                              </div>
-                              <div className="flex items-center flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
-                                <span className="">Asal</span>
-                              </div>
-                              {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
-                                <>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
-                                    <span className="">F1</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6">
-                                    <span className="">F2</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
-                                    <span className="">F3</span>
-                                  </div>
-                                </>
-                              ) : (
-                                <>
-                                  {" "}
-                                  <div className="flex items-center flex-grow  h-10 border-b border-l border-gray-400 bg-[#EA8F02] w-1 justify-center text-center leading-none py-6">
-                                    <span className="">F1B1</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
-                                    <span className="">F1B2</span>
-                                  </div>
-                                  <div
-                                    className={`${dataUjian[0]!.TypeUjian == "ANKAPIN II" ||
-                                      dataUjian[0]!.TypeUjian == "ATKAPIN II"
-                                      ? "hidden"
-                                      : "flex"
-                                      } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6`}
-                                  >
-                                    <span className="">F1B3</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
-                                    <span className="">Total F1</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6">
-                                    <span className="">F2</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
-                                    <span className="">F3B1</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
-                                    <span className="">F3B2</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400  bg-[#0796A6] justify-center text-center leading-none py-6">
-                                    <span className="">Total F3</span>
-                                  </div>{" "}
-                                </>
-                              )}
-                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">Nilai Kumulatif</span>
-                              </div>
-                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">K.F1</span>
-                              </div>
-                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">K.F2</span>
-                              </div>
-                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">K.F3</span>
-                              </div>
-                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">Nilai Kumulatif Kompre</span>
-                              </div>
-                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">Nilai Final</span>
-                              </div>
-                              <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
-                                <span className="">HASIL</span>
-                              </div>
+                            <div
+                              className={`flex items-center justify-center w-fit rounded-md px-2 py-2 bg-opacity-20 font-bold text-black  mt-5 text-lg leading-none text-center`}
+                            >
+                              DAFTAR NILAI HASIL UJIAN KEAHLIAN AWAK KAPAL
+                              PERIKANAN
+                              <br />
+                              TINGKAT SERTIFIKAT :{dataUjian[0]!.TypeUjian}
                             </div>
 
-                            {/* Table Rows */}
-                            <div className="overflow-auto">
-                              {data!.map((pesertaUjian: UsersUjian, index) => (
-                                <div key={index} className={`flex text-sm ${index % 25 == 1 ? 'page-break' : ''}`}>
-                                  <div className="flex items-center flex-grow !w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
-                                    <span>{index + 1}</span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 px-4 border-b border-l border-gray-400 justify-center py-7">
-                                    <span>
-                                      {pesertaUjian?.NomorUjian || "-"}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center justify-start text-left flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400  py-7 capitalize leading-none">
-                                    <span>{shortenName(pesertaUjian?.Nama) || "-"}</span>
-                                  </div>
-                                  <div className="flex items-center justify-start text-left flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400  py-7 capitalize leading-none">
-                                    <span>{pesertaUjian?.Instansi || "-"}</span>
-                                  </div>
-                                  {dataUjian[0]!.TypeUjian.includes(
-                                    "Rewarding"
-                                  ) || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
-                                    <>
-                                      <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-black"
-                                          } ${(pesertaUjian?.NilaiF1B1 == 0)
-                                          && 'bg-rose-500 !text-white font-semibold'
-                                          }`}
-                                        onClick={() => {
-                                          setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F1')
-                                        }}
-                                      >
-                                        <span>
-                                          {pesertaUjian?.NilaiF1B1 || 0}
-                                        </span>
-                                      </div>
-                                      <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-black"
-                                          } ${(pesertaUjian?.NilaiF2B1 == 0)
-                                          && 'bg-rose-500 !text-white font-semibold'
-                                          }`}
-                                        onClick={() => {
-                                          setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F2')
-                                        }}
-                                      >
-                                        <span>
-                                          {pesertaUjian?.NilaiF2B1 || 0}
-                                        </span>
-                                      </div>
-                                      <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF3B1 || 0) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-black"
-                                          } ${(pesertaUjian?.NilaiF3B1 == 0)
-                                          && 'bg-rose-500 !text-white font-semibold'
-                                          }`}
-                                        onClick={() => {
-                                          setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F3')
-                                        }}
-                                      >
-                                        <span>
-                                          {pesertaUjian?.NilaiF3B1 || 0}
-                                        </span>
-                                      </div>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <div
-                                        className={`flex items-center  hover:bg-blue-500 hover:text-white duration-700 cursor-pointer flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-black"
-                                          } ${(pesertaUjian?.NilaiF1B1 == 0)
-                                          && 'bg-rose-500 !text-white font-semibold'
-                                          }`}
-                                        onClick={() => {
-                                          setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F1B1')
-                                        }}
-                                      >
-                                        <span>
-                                          {pesertaUjian?.NilaiF1B1 || 0}
-                                        </span>
-                                      </div>
+                            <div className="ml-0 text-left capitalize w-full mt-2">
+                              <p className="text-sm font-semibold tracking-tight leading-none  py-2">
+                                Tanggal Pelaksanaan{"   "}: {"          "}
+                                <span className="font-normal">
+                                  {generateTanggalPelatihan(
+                                    dataUjian[0]!.TanggalMulaiUjian
+                                  )}{" "}
+                                  -{" "}
+                                  {generateTanggalPelatihan(
+                                    dataUjian[0]!.TanggalBerakhirUjian
+                                  )}
+                                </span>
+                              </p>
+                              <p className="text-sm font-semibold tracking-tight leading-none ">
+                                Lokasi Pelaksanaan{"     "}: {"          "}{" "}
+                                <span className="font-normal">
+                                  {dataUjian[0]!.TempatUjian}
+                                </span>
+                              </p>
+                            </div>
 
+                            <div className="flex flex-col w-full border border-gray-400 mt-6 rounded-md">
+                              {/* Table Header */}
+                              <div className="flex  text-white text-sm">
+                                <div className="flex items-center flex-grow !w-0 h-10 border-b border-gray-400 bg-[#338BF6] justify-center py-6">
+                                  <span>No</span>
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 px-4 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
+                                  <span className="">Nomor Ujian</span>
+                                </div>
+                                <div className="flex items-center flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
+                                  <span className="">Nama</span>
+                                </div>
+                                <div className="flex items-center flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
+                                  <span className="">Asal</span>
+                                </div>
+                                {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
+                                  <>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
+                                      <span className="">F1</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6">
+                                      <span className="">F2</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
+                                      <span className="">F3</span>
+                                    </div>
+                                  </>
+                                ) : (
+                                  <>
+                                    {" "}
+                                    <div className="flex items-center flex-grow  h-10 border-b border-l border-gray-400 bg-[#EA8F02] w-1 justify-center text-center leading-none py-6">
+                                      <span className="">F1B1</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
+                                      <span className="">F1B2</span>
+                                    </div>
+                                    <div
+                                      className={`${dataUjian[0]!.TypeUjian == "ANKAPIN II" ||
+                                        dataUjian[0]!.TypeUjian == "ATKAPIN II"
+                                        ? "hidden"
+                                        : "flex"
+                                        } items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6`}
+                                    >
+                                      <span className="">F1B3</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
+                                      <span className="">Total F1</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#625BF9] justify-center text-center leading-none py-6">
+                                      <span className="">F2</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
+                                      <span className="">F3B1</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#0796A6] justify-center text-center leading-none py-6">
+                                      <span className="">F3B2</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400  bg-[#0796A6] justify-center text-center leading-none py-6">
+                                      <span className="">Total F3</span>
+                                    </div>{" "}
+                                  </>
+                                )}
+                                <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                                  <span className="">Nilai Kumulatif</span>
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                                  <span className="">K.F1</span>
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                                  <span className="">K.F2</span>
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                                  <span className="">K.F3</span>
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                                  <span className="">Nilai Kumulatif Kompre</span>
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                                  <span className="">Nilai Final</span>
+                                </div>
+                                <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#595959] justify-center text-center leading-none py-6">
+                                  <span className="">HASIL</span>
+                                </div>
+                              </div>
 
-                                      <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b hover:bg-blue-500 hover:text-white duration-700 cursor-pointer border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B2 || 0) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-black"
-                                          } ${(pesertaUjian?.NilaiF1B2 == 0)
-                                          && 'bg-rose-500 !text-white font-semibold'
-                                          }`}
-                                        onClick={() => {
-                                          setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F1B2')
-                                        }}
-                                      >
-                                        <span>
-                                          {pesertaUjian?.NilaiF1B2 || 0}
-                                        </span>
-                                      </div>
-                                      <div
-                                        className={`${dataUjian[0]!.TypeUjian ==
-                                          "ANKAPIN II" ||
-                                          dataUjian[0]!.TypeUjian ==
-                                          "ATKAPIN II"
-                                          ? "hidden"
-                                          : "flex"
-                                          } items-center flex-grow w-0 h-10 border-b border-l hover:bg-blue-500 hover:text-white duration-700 cursor-pointer border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B3 || 0) <
+                              {/* Table Rows */}
+                              <div className="overflow-auto">
+                                {data!.map((pesertaUjian: UsersUjian, index) => (
+                                  <div key={index} className={`flex text-sm ${index % 25 == 1 ? 'page-break' : ''}`}>
+                                    <div className="flex items-center flex-grow !w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>{index + 1}</span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 px-4 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>
+                                        {pesertaUjian?.NomorUjian || "-"}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center justify-start text-left flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400  py-7 capitalize leading-none">
+                                      <span>{shortenName(pesertaUjian?.Nama) || "-"}</span>
+                                    </div>
+                                    <div className="flex items-center justify-start text-left flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400  py-7 capitalize leading-none">
+                                      <span>{pesertaUjian?.Instansi || "-"}</span>
+                                    </div>
+                                    {dataUjian[0]!.TypeUjian.includes(
+                                      "Rewarding"
+                                    ) || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
+                                      <>
+                                        <div
+                                          className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
                                             EXAM_THRESHOLD
                                             ? "text-rose-500"
                                             : "text-black"
-                                          } ${(pesertaUjian?.NilaiF1B3 == 0)
-                                          && 'bg-rose-500 !text-white font-semibold'
-                                          }`}
-                                        onClick={() => {
-                                          setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F1B3')
-                                        }}
-                                      >
-                                        <span>
-                                          {pesertaUjian?.NilaiF1B3 || 0}
-                                        </span>
-                                      </div>
-                                      <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${(() => {
-                                          const isAnkapinOrAtkapin =
-                                            dataUjian[0]?.TypeUjian ===
-                                            "ANKAPIN II" ||
-                                            dataUjian[0]?.TypeUjian ===
-                                            "ATKAPIN II";
-
-                                          // Hitung rata-rata nilai berdasarkan tipe ujian
-                                          const averageScore =
-                                            isAnkapinOrAtkapin
-                                              ? ((pesertaUjian?.NilaiF1B1 ||
-                                                0) +
-                                                (pesertaUjian?.NilaiF1B2 ||
-                                                  0)) /
-                                              2
-                                              : ((pesertaUjian?.NilaiF1B1 ||
-                                                0) +
-                                                (pesertaUjian?.NilaiF1B2 ||
-                                                  0) +
-                                                (pesertaUjian?.NilaiF1B3 ||
-                                                  0)) /
-                                              3;
-
-                                          return averageScore < EXAM_THRESHOLD
+                                            } ${(pesertaUjian?.NilaiF1B1 == 0)
+                                            && 'bg-rose-500 !text-white font-semibold'
+                                            }`}
+                                          onClick={() => {
+                                            setIsShowHistoryUserAnswers(true)
+                                            fetchData(pesertaUjian?.IdUserUjian, 'F1')
+                                          }}
+                                        >
+                                          <span>
+                                            {pesertaUjian?.NilaiF1B1 || 0}
+                                          </span>
+                                        </div>
+                                        <div
+                                          className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) <
+                                            EXAM_THRESHOLD
                                             ? "text-rose-500"
-                                            : "text-green-500";
-                                        })()}`}
-                                      >
-                                        <span>
-                                          {(() => {
+                                            : "text-black"
+                                            } ${(pesertaUjian?.NilaiF2B1 == 0)
+                                            && 'bg-rose-500 !text-white font-semibold'
+                                            }`}
+                                          onClick={() => {
+                                            setIsShowHistoryUserAnswers(true)
+                                            fetchData(pesertaUjian?.IdUserUjian, 'F2')
+                                          }}
+                                        >
+                                          <span>
+                                            {pesertaUjian?.NilaiF2B1 || 0}
+                                          </span>
+                                        </div>
+                                        <div
+                                          className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF3B1 || 0) <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-black"
+                                            } ${(pesertaUjian?.NilaiF3B1 == 0)
+                                            && 'bg-rose-500 !text-white font-semibold'
+                                            }`}
+                                          onClick={() => {
+                                            setIsShowHistoryUserAnswers(true)
+                                            fetchData(pesertaUjian?.IdUserUjian, 'F3')
+                                          }}
+                                        >
+                                          <span>
+                                            {pesertaUjian?.NilaiF3B1 || 0}
+                                          </span>
+                                        </div>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <div
+                                          className={`flex items-center  hover:bg-blue-500 hover:text-white duration-700 cursor-pointer flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-black"
+                                            } ${(pesertaUjian?.NilaiF1B1 == 0)
+                                            && 'bg-rose-500 !text-white font-semibold'
+                                            }`}
+                                          onClick={() => {
+                                            setIsShowHistoryUserAnswers(true)
+                                            fetchData(pesertaUjian?.IdUserUjian, 'F1B1')
+                                          }}
+                                        >
+                                          <span>
+                                            {pesertaUjian?.NilaiF1B1 || 0}
+                                          </span>
+                                        </div>
+
+
+                                        <div
+                                          className={`flex items-center flex-grow w-0 h-10 border-b hover:bg-blue-500 hover:text-white duration-700 cursor-pointer border-l border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B2 || 0) <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-black"
+                                            } ${(pesertaUjian?.NilaiF1B2 == 0)
+                                            && 'bg-rose-500 !text-white font-semibold'
+                                            }`}
+                                          onClick={() => {
+                                            setIsShowHistoryUserAnswers(true)
+                                            fetchData(pesertaUjian?.IdUserUjian, 'F1B2')
+                                          }}
+                                        >
+                                          <span>
+                                            {pesertaUjian?.NilaiF1B2 || 0}
+                                          </span>
+                                        </div>
+                                        <div
+                                          className={`${dataUjian[0]!.TypeUjian ==
+                                            "ANKAPIN II" ||
+                                            dataUjian[0]!.TypeUjian ==
+                                            "ATKAPIN II"
+                                            ? "hidden"
+                                            : "flex"
+                                            } items-center flex-grow w-0 h-10 border-b border-l hover:bg-blue-500 hover:text-white duration-700 cursor-pointer border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF1B3 || 0) <
+                                              EXAM_THRESHOLD
+                                              ? "text-rose-500"
+                                              : "text-black"
+                                            } ${(pesertaUjian?.NilaiF1B3 == 0)
+                                            && 'bg-rose-500 !text-white font-semibold'
+                                            }`}
+                                          onClick={() => {
+                                            setIsShowHistoryUserAnswers(true)
+                                            fetchData(pesertaUjian?.IdUserUjian, 'F1B3')
+                                          }}
+                                        >
+                                          <span>
+                                            {pesertaUjian?.NilaiF1B3 || 0}
+                                          </span>
+                                        </div>
+                                        <div
+                                          className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${(() => {
                                             const isAnkapinOrAtkapin =
                                               dataUjian[0]?.TypeUjian ===
                                               "ANKAPIN II" ||
                                               dataUjian[0]?.TypeUjian ===
                                               "ATKAPIN II";
 
-                                            return isAnkapinOrAtkapin
-                                              ? (
-                                                ((pesertaUjian?.NilaiF1B1 ||
+                                            // Hitung rata-rata nilai berdasarkan tipe ujian
+                                            const averageScore =
+                                              isAnkapinOrAtkapin
+                                                ? ((pesertaUjian?.NilaiF1B1 ||
                                                   0) +
                                                   (pesertaUjian?.NilaiF1B2 ||
                                                     0)) /
                                                 2
-                                              ).toFixed(2)
-                                              : (
-                                                ((pesertaUjian?.NilaiF1B1 ||
+                                                : ((pesertaUjian?.NilaiF1B1 ||
                                                   0) +
                                                   (pesertaUjian?.NilaiF1B2 ||
                                                     0) +
                                                   (pesertaUjian?.NilaiF1B3 ||
                                                     0)) /
-                                                3
-                                              ).toFixed(2);
-                                          })()}
-                                        </span>
-                                      </div>
+                                                3;
 
-                                      <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l hover:bg-blue-500 hover:text-white duration-700 cursor-pointer font-bold border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-green-500"
-                                          } ${(pesertaUjian?.NilaiF2B1 == 0)
-                                          && 'bg-rose-500 !text-white font-semibold'
-                                          }`}
-                                        onClick={() => {
-                                          setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F2B1')
-                                        }}
-                                      >
-                                        <span>
-                                          {pesertaUjian?.NilaiF2B1 || 0}
-                                        </span>
-                                      </div>
-                                      <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center hover:bg-blue-500 hover:text-white duration-700 cursor-pointer py-7 ${(pesertaUjian?.NilaiF3B1 || 0) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-black"
-                                          } ${(pesertaUjian?.NilaiF3B1 == 0)
-                                          && 'bg-rose-500 !text-white font-semibold'
-                                          }`}
-                                        onClick={() => {
-                                          setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F3B1')
-                                        }}
-                                      >
-                                        <span>
-                                          {pesertaUjian?.NilaiF3B1 || 0}
-                                        </span>
-                                      </div>
-                                      <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center hover:bg-blue-500 hover:text-white duration-700 cursor-pointer py-7 ${(pesertaUjian?.NilaiF3B2 || 0) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-black"
-                                          } ${(pesertaUjian?.NilaiF3B2 == 0)
-                                          && 'bg-rose-500 !text-white font-semibold'
-                                          }`}
-                                        onClick={() => {
-                                          setIsShowHistoryUserAnswers(true)
-                                          fetchData(pesertaUjian?.IdUserUjian, 'F3B2')
-                                        }}
-                                      >
-                                        <span>
-                                          {pesertaUjian?.NilaiF3B2 || 0}
-                                        </span>
-                                      </div>
-                                      <div
-                                        className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${((pesertaUjian?.NilaiF3B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B2 || 0)) /
-                                          2 <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-green-500"
-                                          } `}
-                                      >
-                                        <span>
-                                          {(
-                                            ((pesertaUjian?.NilaiF3B1 || 0) +
-                                              (pesertaUjian?.NilaiF3B2 || 0)) /
-                                            2
-                                          ).toFixed(2)}
-                                        </span>
-                                      </div>
-                                    </>
-                                  )}
-                                  <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
-                                      "Rewarding"
-                                    ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
-                                      ? (((pesertaUjian?.NilaiF1B1 || 0) +
-                                        (pesertaUjian?.NilaiF2B1 || 0) +
-                                        (pesertaUjian?.NilaiF3B1 || 0)) /
-                                        3) <
-                                        EXAM_THRESHOLD
-                                        ? "text-rose-500"
-                                        : "text-green-500"
-                                      : dataUjian[0]!.TypeUjian ==
-                                        "ANKAPIN II" ||
-                                        dataUjian[0].TypeUjian == "ATKAPIN II"
-                                        ? roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
-                                          (pesertaUjian?.NilaiF1B2 || 0) +
-                                          (pesertaUjian?.NilaiF2B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B2 || 0)) /
-                                          5) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-green-500"
-                                        : roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
-                                          (pesertaUjian?.NilaiF1B2 || 0) +
-                                          (pesertaUjian?.NilaiF1B3 || 0) +
-                                          (pesertaUjian?.NilaiF2B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B1 || 0) +
-                                          (pesertaUjian?.NilaiF3B2 || 0)) /
-                                          6) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-green-500"
-                                      }`}
-                                  >
-                                    <span>
-                                      {dataUjian[0]!.TypeUjian.includes(
+                                            return averageScore < EXAM_THRESHOLD
+                                              ? "text-rose-500"
+                                              : "text-green-500";
+                                          })()}`}
+                                        >
+                                          <span>
+                                            {(() => {
+                                              const isAnkapinOrAtkapin =
+                                                dataUjian[0]?.TypeUjian ===
+                                                "ANKAPIN II" ||
+                                                dataUjian[0]?.TypeUjian ===
+                                                "ATKAPIN II";
+
+                                              return isAnkapinOrAtkapin
+                                                ? (
+                                                  ((pesertaUjian?.NilaiF1B1 ||
+                                                    0) +
+                                                    (pesertaUjian?.NilaiF1B2 ||
+                                                      0)) /
+                                                  2
+                                                ).toFixed(2)
+                                                : (
+                                                  ((pesertaUjian?.NilaiF1B1 ||
+                                                    0) +
+                                                    (pesertaUjian?.NilaiF1B2 ||
+                                                      0) +
+                                                    (pesertaUjian?.NilaiF1B3 ||
+                                                      0)) /
+                                                  3
+                                                ).toFixed(2);
+                                            })()}
+                                          </span>
+                                        </div>
+
+                                        <div
+                                          className={`flex items-center flex-grow w-0 h-10 border-b border-l hover:bg-blue-500 hover:text-white duration-700 cursor-pointer font-bold border-gray-400 justify-center py-7 ${(pesertaUjian?.NilaiF2B1 || 0) <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-green-500"
+                                            } ${(pesertaUjian?.NilaiF2B1 == 0)
+                                            && 'bg-rose-500 !text-white font-semibold'
+                                            }`}
+                                          onClick={() => {
+                                            setIsShowHistoryUserAnswers(true)
+                                            fetchData(pesertaUjian?.IdUserUjian, 'F2B1')
+                                          }}
+                                        >
+                                          <span>
+                                            {pesertaUjian?.NilaiF2B1 || 0}
+                                          </span>
+                                        </div>
+                                        <div
+                                          className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center hover:bg-blue-500 hover:text-white duration-700 cursor-pointer py-7 ${(pesertaUjian?.NilaiF3B1 || 0) <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-black"
+                                            } ${(pesertaUjian?.NilaiF3B1 == 0)
+                                            && 'bg-rose-500 !text-white font-semibold'
+                                            }`}
+                                          onClick={() => {
+                                            setIsShowHistoryUserAnswers(true)
+                                            fetchData(pesertaUjian?.IdUserUjian, 'F3B1')
+                                          }}
+                                        >
+                                          <span>
+                                            {pesertaUjian?.NilaiF3B1 || 0}
+                                          </span>
+                                        </div>
+                                        <div
+                                          className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center hover:bg-blue-500 hover:text-white duration-700 cursor-pointer py-7 ${(pesertaUjian?.NilaiF3B2 || 0) <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-black"
+                                            } ${(pesertaUjian?.NilaiF3B2 == 0)
+                                            && 'bg-rose-500 !text-white font-semibold'
+                                            }`}
+                                          onClick={() => {
+                                            setIsShowHistoryUserAnswers(true)
+                                            fetchData(pesertaUjian?.IdUserUjian, 'F3B2')
+                                          }}
+                                        >
+                                          <span>
+                                            {pesertaUjian?.NilaiF3B2 || 0}
+                                          </span>
+                                        </div>
+                                        <div
+                                          className={`flex items-center flex-grow w-0 h-10 border-b border-l font-bold border-gray-400 justify-center py-7 ${((pesertaUjian?.NilaiF3B1 || 0) +
+                                            (pesertaUjian?.NilaiF3B2 || 0)) /
+                                            2 <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-green-500"
+                                            } `}
+                                        >
+                                          <span>
+                                            {(
+                                              ((pesertaUjian?.NilaiF3B1 || 0) +
+                                                (pesertaUjian?.NilaiF3B2 || 0)) /
+                                              2
+                                            ).toFixed(2)}
+                                          </span>
+                                        </div>
+                                      </>
+                                    )}
+                                    <div
+                                      className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
                                       ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
-                                        ? (
-                                          roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
-                                            (pesertaUjian?.NilaiF2B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B1 || 0)) /
-                                            3)
-                                        ).toFixed(2)
+                                        ? (((pesertaUjian?.NilaiF1B1 || 0) +
+                                          (pesertaUjian?.NilaiF2B1 || 0) +
+                                          (pesertaUjian?.NilaiF3B1 || 0)) /
+                                          3) <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-green-500"
                                         : dataUjian[0]!.TypeUjian ==
                                           "ANKAPIN II" ||
                                           dataUjian[0].TypeUjian == "ATKAPIN II"
+                                          ? roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF1B2 || 0) +
+                                            (pesertaUjian?.NilaiF2B1 || 0) +
+                                            (pesertaUjian?.NilaiF3B1 || 0) +
+                                            (pesertaUjian?.NilaiF3B2 || 0)) /
+                                            5) <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-green-500"
+                                          : roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF1B2 || 0) +
+                                            (pesertaUjian?.NilaiF1B3 || 0) +
+                                            (pesertaUjian?.NilaiF2B1 || 0) +
+                                            (pesertaUjian?.NilaiF3B1 || 0) +
+                                            (pesertaUjian?.NilaiF3B2 || 0)) /
+                                            6) <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-green-500"
+                                        }`}
+                                    >
+                                      <span>
+                                        {dataUjian[0]!.TypeUjian.includes(
+                                          "Rewarding"
+                                        ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                           ? (
-                                            roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
-                                              (pesertaUjian?.NilaiF1B2 || 0)) /
-                                              2 +
+                                            roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF2B1 || 0) +
-                                              ((pesertaUjian?.NilaiF3B1 || 0) +
-                                                (pesertaUjian?.NilaiF3B2 ||
-                                                  0)) /
-                                              2) /
+                                              (pesertaUjian?.NilaiF3B1 || 0)) /
                                               3)
                                           ).toFixed(2)
-                                          : (
-                                            roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
-                                              (pesertaUjian?.NilaiF1B2 || 0) +
-                                              (pesertaUjian?.NilaiF1B3 || 0)) /
-                                              3 +
-                                              (pesertaUjian?.NilaiF2B1 || 0) +
-                                              ((pesertaUjian?.NilaiF3B1 || 0) +
-                                                (pesertaUjian?.NilaiF3B2 ||
-                                                  0)) /
-                                              2) /
-                                              3)
-                                          ).toFixed(2)}
-                                    </span>
-                                  </div>
+                                          : dataUjian[0]!.TypeUjian ==
+                                            "ANKAPIN II" ||
+                                            dataUjian[0].TypeUjian == "ATKAPIN II"
+                                            ? (
+                                              roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
+                                                (pesertaUjian?.NilaiF1B2 || 0)) /
+                                                2 +
+                                                (pesertaUjian?.NilaiF2B1 || 0) +
+                                                ((pesertaUjian?.NilaiF3B1 || 0) +
+                                                  (pesertaUjian?.NilaiF3B2 ||
+                                                    0)) /
+                                                2) /
+                                                3)
+                                            ).toFixed(2)
+                                            : (
+                                              roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
+                                                (pesertaUjian?.NilaiF1B2 || 0) +
+                                                (pesertaUjian?.NilaiF1B3 || 0)) /
+                                                3 +
+                                                (pesertaUjian?.NilaiF2B1 || 0) +
+                                                ((pesertaUjian?.NilaiF3B1 || 0) +
+                                                  (pesertaUjian?.NilaiF3B2 ||
+                                                    0)) /
+                                                2) /
+                                                3)
+                                            ).toFixed(2)}
+                                      </span>
+                                    </div>
 
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
-                                    <span>
-                                      {pesertaUjian?.NilaiKomprensifF1 || 0}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
-                                    <span>
-                                      {pesertaUjian?.NilaiKomprensifF2 || 0}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
-                                    <span>
-                                      {pesertaUjian?.NilaiKomprensifF3 || 0}
-                                    </span>
-                                  </div>
-                                  <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${(pesertaUjian?.NilaiKomprensifF1 +
-                                      pesertaUjian?.NilaiKomprensifF2 +
-                                      pesertaUjian?.NilaiKomprensifF3) /
-                                      3 >
-                                      EXAM_THRESHOLD
-                                      ? "text-green-500"
-                                      : "text-rose-500"
-                                      }`}
-                                  >
-                                    <span>
-                                      {((
-                                        (pesertaUjian?.NilaiKomprensifF1 +
-                                          pesertaUjian?.NilaiKomprensifF2 +
-                                          pesertaUjian?.NilaiKomprensifF3) /
-                                        3
-                                      ).toFixed(2)) || 0}
-                                    </span>
-                                  </div>
-                                  <div
-                                    className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
-                                      "Rewarding"
-                                    ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
-                                      ? roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
-                                        (pesertaUjian?.NilaiF2B1 || 0) +
-                                        (pesertaUjian?.NilaiF3B1 || 0)) /
-                                        3) *
-                                        THEORY_WEIGHT +
-                                        ((pesertaUjian?.NilaiKomprensifF1 +
-                                          pesertaUjian?.NilaiKomprensifF2 +
-                                          pesertaUjian?.NilaiKomprensifF3) /
-                                          3) *
-                                        PRACTICE_WEIGHT) <
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>
+                                        {pesertaUjian?.NilaiKomprensifF1 || 0}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>
+                                        {pesertaUjian?.NilaiKomprensifF2 || 0}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7">
+                                      <span>
+                                        {pesertaUjian?.NilaiKomprensifF3 || 0}
+                                      </span>
+                                    </div>
+                                    <div
+                                      className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${(pesertaUjian?.NilaiKomprensifF1 +
+                                        pesertaUjian?.NilaiKomprensifF2 +
+                                        pesertaUjian?.NilaiKomprensifF3) /
+                                        3 >
                                         EXAM_THRESHOLD
-                                        ? "text-rose-500"
-                                        : "text-green-500"
-                                      : dataUjian[0]!.TypeUjian ==
-                                        "ANKAPIN II" ||
-                                        dataUjian[0].TypeUjian == "ATKAPIN II"
-                                        ? roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
-                                          (pesertaUjian?.NilaiF1B2 || 0)) /
-                                          2 +
-                                          (pesertaUjian?.NilaiF2B1 || 0) +
-                                          ((pesertaUjian?.NilaiF3B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B2 || 0)) /
-                                          2) /
-                                          3) *
-                                          THEORY_WEIGHT +
-                                          ((pesertaUjian?.NilaiKomprensifF1 +
+                                        ? "text-green-500"
+                                        : "text-rose-500"
+                                        }`}
+                                    >
+                                      <span>
+                                        {((
+                                          (pesertaUjian?.NilaiKomprensifF1 +
                                             pesertaUjian?.NilaiKomprensifF2 +
                                             pesertaUjian?.NilaiKomprensifF3) /
-                                            3) *
-                                          PRACTICE_WEIGHT) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-green-500"
-                                        : roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
-                                          (pesertaUjian?.NilaiF1B2 || 0) +
-                                          (pesertaUjian?.NilaiF1B3 || 0)) /
-                                          3 +
-                                          (pesertaUjian?.NilaiF2B1 || 0) +
-                                          ((pesertaUjian?.NilaiF3B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B2 || 0)) /
-                                          2) /
-                                          3) *
-                                          THEORY_WEIGHT +
-                                          ((pesertaUjian?.NilaiKomprensifF1 +
-                                            pesertaUjian?.NilaiKomprensifF2 +
-                                            pesertaUjian?.NilaiKomprensifF3) /
-                                            3) *
-                                          PRACTICE_WEIGHT) <
-                                          EXAM_THRESHOLD
-                                          ? "text-rose-500"
-                                          : "text-green-500"
-                                      }`}
-                                  >
-                                    <span>
-                                      {dataUjian[0]!.TypeUjian.includes(
+                                          3
+                                        ).toFixed(2)) || 0}
+                                      </span>
+                                    </div>
+                                    <div
+                                      className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
                                       ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
-                                        ? (
-                                          roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
+                                        ? roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
+                                          (pesertaUjian?.NilaiF2B1 || 0) +
+                                          (pesertaUjian?.NilaiF3B1 || 0)) /
+                                          3) *
+                                          THEORY_WEIGHT +
+                                          ((pesertaUjian?.NilaiKomprensifF1 +
+                                            pesertaUjian?.NilaiKomprensifF2 +
+                                            pesertaUjian?.NilaiKomprensifF3) /
+                                            3) *
+                                          PRACTICE_WEIGHT) <
+                                          EXAM_THRESHOLD
+                                          ? "text-rose-500"
+                                          : "text-green-500"
+                                        : dataUjian[0]!.TypeUjian ==
+                                          "ANKAPIN II" ||
+                                          dataUjian[0].TypeUjian == "ATKAPIN II"
+                                          ? roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF1B2 || 0)) /
+                                            2 +
                                             (pesertaUjian?.NilaiF2B1 || 0) +
-                                            (pesertaUjian?.NilaiF3B1 || 0)) /
+                                            ((pesertaUjian?.NilaiF3B1 || 0) +
+                                              (pesertaUjian?.NilaiF3B2 || 0)) /
+                                            2) /
                                             3) *
                                             THEORY_WEIGHT +
                                             ((pesertaUjian?.NilaiKomprensifF1 +
                                               pesertaUjian?.NilaiKomprensifF2 +
                                               pesertaUjian?.NilaiKomprensifF3) /
                                               3) *
-                                            PRACTICE_WEIGHT
-                                          )).toFixed(2)
-                                        : dataUjian[0]!.TypeUjian ==
-                                          "ANKAPIN II" ||
-                                          dataUjian[0].TypeUjian == "ATKAPIN II"
+                                            PRACTICE_WEIGHT) <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-green-500"
+                                          : roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
+                                            (pesertaUjian?.NilaiF1B2 || 0) +
+                                            (pesertaUjian?.NilaiF1B3 || 0)) /
+                                            3 +
+                                            (pesertaUjian?.NilaiF2B1 || 0) +
+                                            ((pesertaUjian?.NilaiF3B1 || 0) +
+                                              (pesertaUjian?.NilaiF3B2 || 0)) /
+                                            2) /
+                                            3) *
+                                            THEORY_WEIGHT +
+                                            ((pesertaUjian?.NilaiKomprensifF1 +
+                                              pesertaUjian?.NilaiKomprensifF2 +
+                                              pesertaUjian?.NilaiKomprensifF3) /
+                                              3) *
+                                            PRACTICE_WEIGHT) <
+                                            EXAM_THRESHOLD
+                                            ? "text-rose-500"
+                                            : "text-green-500"
+                                        }`}
+                                    >
+                                      <span>
+                                        {dataUjian[0]!.TypeUjian.includes(
+                                          "Rewarding"
+                                        ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                           ? (
-                                            roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
-                                              (pesertaUjian?.NilaiF1B2 || 0)) /
-                                              2 +
+                                            roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF2B1 || 0) +
-                                              ((pesertaUjian?.NilaiF3B1 || 0) +
-                                                (pesertaUjian?.NilaiF3B2 ||
-                                                  0)) /
-                                              2) /
+                                              (pesertaUjian?.NilaiF3B1 || 0)) /
                                               3) *
                                               THEORY_WEIGHT +
                                               ((pesertaUjian?.NilaiKomprensifF1 +
@@ -1539,219 +1467,240 @@ const TableDataPesertaUjianKeahlian = () => {
                                                 3) *
                                               PRACTICE_WEIGHT
                                             )).toFixed(2)
-                                          : (
-                                            roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
-                                              (pesertaUjian?.NilaiF1B2 || 0) +
-                                              (pesertaUjian?.NilaiF1B3 || 0)) /
-                                              3 +
-                                              (pesertaUjian?.NilaiF2B1 || 0) +
-                                              ((pesertaUjian?.NilaiF3B1 || 0) +
-                                                (pesertaUjian?.NilaiF3B2 ||
-                                                  0)) /
-                                              2) /
-                                              3) *
-                                              THEORY_WEIGHT +
-                                              ((pesertaUjian?.NilaiKomprensifF1 +
-                                                pesertaUjian?.NilaiKomprensifF2 +
-                                                pesertaUjian?.NilaiKomprensifF3) /
+                                          : dataUjian[0]!.TypeUjian ==
+                                            "ANKAPIN II" ||
+                                            dataUjian[0].TypeUjian == "ATKAPIN II"
+                                            ? (
+                                              roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
+                                                (pesertaUjian?.NilaiF1B2 || 0)) /
+                                                2 +
+                                                (pesertaUjian?.NilaiF2B1 || 0) +
+                                                ((pesertaUjian?.NilaiF3B1 || 0) +
+                                                  (pesertaUjian?.NilaiF3B2 ||
+                                                    0)) /
+                                                2) /
                                                 3) *
-                                              PRACTICE_WEIGHT)
-                                          ).toFixed(2)}
-                                    </span>
+                                                THEORY_WEIGHT +
+                                                ((pesertaUjian?.NilaiKomprensifF1 +
+                                                  pesertaUjian?.NilaiKomprensifF2 +
+                                                  pesertaUjian?.NilaiKomprensifF3) /
+                                                  3) *
+                                                PRACTICE_WEIGHT
+                                              )).toFixed(2)
+                                            : (
+                                              roundUpScore(((((pesertaUjian?.NilaiF1B1 || 0) +
+                                                (pesertaUjian?.NilaiF1B2 || 0) +
+                                                (pesertaUjian?.NilaiF1B3 || 0)) /
+                                                3 +
+                                                (pesertaUjian?.NilaiF2B1 || 0) +
+                                                ((pesertaUjian?.NilaiF3B1 || 0) +
+                                                  (pesertaUjian?.NilaiF3B2 ||
+                                                    0)) /
+                                                2) /
+                                                3) *
+                                                THEORY_WEIGHT +
+                                                ((pesertaUjian?.NilaiKomprensifF1 +
+                                                  pesertaUjian?.NilaiKomprensifF2 +
+                                                  pesertaUjian?.NilaiKomprensifF3) /
+                                                  3) *
+                                                PRACTICE_WEIGHT)
+                                            ).toFixed(2)}
+                                      </span>
+                                    </div>
+                                    <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 font-bold justify-center py-7 text-center">
+                                      <span
+                                        className={`  ${checkLulus(
+                                          pesertaUjian,
+                                          dataUjian[0]
+                                        ) == "TIDAK LULUS"
+                                          ? "text-rose-500"
+                                          : "text-green-500"
+                                          }`}
+                                      >
+                                        {checkLulus(pesertaUjian, dataUjian[0])}
+                                      </span>
+                                    </div>
                                   </div>
-                                  <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 font-bold justify-center py-7 text-center">
-                                    <span
-                                      className={`  ${checkLulus(
-                                        pesertaUjian,
-                                        dataUjian[0]
-                                      ) == "TIDAK LULUS"
-                                        ? "text-rose-500"
-                                        : "text-green-500"
-                                        }`}
-                                    >
-                                      {checkLulus(pesertaUjian, dataUjian[0])}
-                                    </span>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div className="flex w-full items-start justify-between mt-2">
-                            <div className="ml-0 text-left capitalize w-full ">
-                              <p className="text-sm font-semibold tracking-tight leading-none  py-2">
-                                Hasil: {"          "}
-                              </p>
-                              <p className="text-sm font-semibold tracking-tight  ">
-                                Jumlah Peserta{"     "}: {"          "}{" "}
-                                <span className="font-normal">
-                                  {data!.length} Orang
-                                </span>
-                              </p>
-                              <p className="text-sm font-semibold tracking-tight  ">
-                                Lulus (L){"     "}: {"          "}{" "}
-                                <span className="font-normal">
-                                  {countLulus(data, dataUjian[0]).lulus} Orang
-                                </span>
-                              </p>
-                              <p className="text-sm font-semibold tracking-tight  ">
-                                Tidak Lulus (TL){"     "}: {"          "}{" "}
-                                <span className="font-normal">
-                                  {countLulus(data, dataUjian[0]).tidakLulus}{" "}
-                                  Orang
-                                </span>
-                              </p>
+                                ))}
+                              </div>
                             </div>
 
-                            <div className="w-full flex items-end justify-end">
-                              <p className="capitalize text-sm">
-                                {dataUjian[0]!.TempatUjian},{" "}
-                                {generateTanggalPelatihan(
-                                  dataUjian[0]!.TanggalMulaiUjian
-                                )}
-                              </p>
-                            </div>
-                          </div>
-
-                          {dataPukakp != null ? (
-                            <div className="flex w-full items-center justify-center flex-col">
-                              <div className="flex items-center justify-around w-full mb-5 mt-6 gap-8">
-                                <div className="flex flex-col gap-1  capitalize text-center items-center justify-center">
-                                  <p className="font-semibold text-sm">
-                                    Ketua, PUKAKP
-                                  </p>
-                                  <p className="text-xs -mt-1">
-                                    {dataUjian[0]!.PUKAKP}
-                                  </p>
-                                  <p className="text-sm border-b-black border-b  pb-5 mt-14 w-2/3">
-                                    {dataPukakp?.KetuaPukakp}
-                                  </p>
-                                  <p className="text-sm ">
-                                    NIP. {dataPukakp?.NipKetua}
-                                  </p>
-                                </div>
-
-                                <div className="flex flex-col gap-1 capitalize text-center items-center justify-center">
-                                  <p className="font-semibold text-sm">
-                                    Sekretaris, PUKAKP
-                                  </p>
-                                  <p className="text-xs -mt-1">
-                                    {dataUjian[0]!.PUKAKP}
-                                  </p>
-                                  <p className="text-sm border-b-black border-b mt-14 pb-5 w-2/3">
-                                    {dataPukakp?.SesPukakp}
-                                  </p>
-                                  <p className="text-sm ">
-                                    NIP. {dataPukakp?.NipSes}
-                                  </p>
-                                </div>
+                            <div className="flex w-full items-start justify-between mt-2">
+                              <div className="ml-0 text-left capitalize w-full ">
+                                <p className="text-sm font-semibold tracking-tight leading-none  py-2">
+                                  Hasil: {"          "}
+                                </p>
+                                <p className="text-sm font-semibold tracking-tight  ">
+                                  Jumlah Peserta{"     "}: {"          "}{" "}
+                                  <span className="font-normal">
+                                    {data!.length} Orang
+                                  </span>
+                                </p>
+                                <p className="text-sm font-semibold tracking-tight  ">
+                                  Lulus (L){"     "}: {"          "}{" "}
+                                  <span className="font-normal">
+                                    {countLulus(data, dataUjian[0]).lulus} Orang
+                                  </span>
+                                </p>
+                                <p className="text-sm font-semibold tracking-tight  ">
+                                  Tidak Lulus (TL){"     "}: {"          "}{" "}
+                                  <span className="font-normal">
+                                    {countLulus(data, dataUjian[0]).tidakLulus}{" "}
+                                    Orang
+                                  </span>
+                                </p>
                               </div>
 
-                              <div className="flex flex-col gap-1 capitalize text-center w-1/5">
-                                <p className="font-semibold text-sm leading-none">
-                                  Mengetahui,
-                                </p>
-                                <p className="font-semibold text-sm leading-none">
-                                  Ketua DPKAKP,
-                                </p>
-                                <p className="text-sm border-b-black border-b mt-14 pb-5">
-                                  Achmad Subijakto, A.Pi., MP.
+                              <div className="w-full flex items-end justify-end">
+                                <p className="capitalize text-sm">
+                                  {dataUjian[0]!.TempatUjian},{" "}
+                                  {generateTanggalPelatihan(
+                                    dataUjian[0]!.TanggalMulaiUjian
+                                  )}
                                 </p>
                               </div>
                             </div>
-                          ) : (
-                            <></>
-                          )}
+
+                            {dataPukakp != null ? (
+                              <div className="flex w-full items-center justify-center flex-col">
+                                <div className="flex items-center justify-around w-full mb-5 mt-6 gap-8">
+                                  <div className="flex flex-col gap-1  capitalize text-center items-center justify-center">
+                                    <p className="font-semibold text-sm">
+                                      Ketua, PUKAKP
+                                    </p>
+                                    <p className="text-xs -mt-1">
+                                      {dataUjian[0]!.PUKAKP}
+                                    </p>
+                                    <p className="text-sm border-b-black border-b  pb-5 mt-14 w-2/3">
+                                      {dataPukakp?.KetuaPukakp}
+                                    </p>
+                                    <p className="text-sm ">
+                                      NIP. {dataPukakp?.NipKetua}
+                                    </p>
+                                  </div>
+
+                                  <div className="flex flex-col gap-1 capitalize text-center items-center justify-center">
+                                    <p className="font-semibold text-sm">
+                                      Sekretaris, PUKAKP
+                                    </p>
+                                    <p className="text-xs -mt-1">
+                                      {dataUjian[0]!.PUKAKP}
+                                    </p>
+                                    <p className="text-sm border-b-black border-b mt-14 pb-5 w-2/3">
+                                      {dataPukakp?.SesPukakp}
+                                    </p>
+                                    <p className="text-sm ">
+                                      NIP. {dataPukakp?.NipSes}
+                                    </p>
+                                  </div>
+                                </div>
+
+                                <div className="flex flex-col gap-1 capitalize text-center w-1/5">
+                                  <p className="font-semibold text-sm leading-none">
+                                    Mengetahui,
+                                  </p>
+                                  <p className="font-semibold text-sm leading-none">
+                                    Ketua DPKAKP,
+                                  </p>
+                                  <p className="text-sm border-b-black border-b mt-14 pb-5">
+                                    Achmad Subijakto, A.Pi., MP.
+                                  </p>
+                                </div>
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <AlertDialog open={isOpenFormUjianKeahlian}>
-              <AlertDialogContent className="max-w-2xl w-full rounded-xl border border-zinc-200 bg-white shadow-xl p-0 overflow-hidden">
+              <AlertDialog open={isOpenFormUjianKeahlian}>
+                <AlertDialogContent className="max-w-2xl w-full rounded-xl border border-zinc-200 bg-white shadow-xl p-0 overflow-hidden">
 
-                {/* Header */}
-                <AlertDialogHeader className="p-6 border-b border-zinc-100 bg-white">
-                  <AlertDialogTitle className="text-2xl font-semibold flex items-center gap-3 text-neutral-700">
-                    <FaBookOpen className="h-5 w-5 text-neutral-500" />
-                    Masukkan Nilai Komprehensif
-                  </AlertDialogTitle>
-                  <AlertDialogDescription className="mt-2 text-sm text-neutral-500 leading-relaxed">
-                    Untuk peserta:{" "}
-                    <span className="font-medium capitalize text-neutral-700">
-                      {selectedNamaPeserta}
-                    </span>
-                    <br />
-                    Silakan input nilai komprehensif yang diperoleh peserta sebagai bagian dari penilaian ujian keahlian.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
+                  {/* Header */}
+                  <AlertDialogHeader className="p-6 border-b border-zinc-100 bg-white">
+                    <AlertDialogTitle className="text-2xl font-semibold flex items-center gap-3 text-neutral-700">
+                      <FaBookOpen className="h-5 w-5 text-neutral-500" />
+                      Masukkan Nilai Komprehensif
+                    </AlertDialogTitle>
+                    <AlertDialogDescription className="mt-2 text-sm text-neutral-500 leading-relaxed">
+                      Untuk peserta:{" "}
+                      <span className="font-medium capitalize text-neutral-700">
+                        {selectedNamaPeserta}
+                      </span>
+                      <br />
+                      Silakan input nilai komprehensif yang diperoleh peserta sebagai bagian dari penilaian ujian keahlian.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
 
-                {/* Form */}
-                <div className="px-6 py-5 bg-neutral-50">
-                  <form autoComplete="off" className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <InputField
-                        label="Nilai F1"
-                        value={nilaiKomprehensif}
-                        onChange={(e) => setNilaiKomprehensif(e.target.value)}
-                      />
-                      <InputField
-                        label="Nilai F2"
-                        value={nilaiKomprehensif2}
-                        onChange={(e) => setNilaiKomprehensif2(e.target.value)}
-                      />
-                      <InputField
-                        label="Nilai F3"
-                        value={nilaiKomprehensif3}
-                        onChange={(e) => setNilaiKomprehensif3(e.target.value)}
-                      />
-                    </div>
+                  {/* Form */}
+                  <div className="px-6 py-5 bg-neutral-50">
+                    <form autoComplete="off" className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <InputField
+                          label="Nilai F1"
+                          value={nilaiKomprehensif}
+                          onChange={(e) => setNilaiKomprehensif(e.target.value)}
+                        />
+                        <InputField
+                          label="Nilai F2"
+                          value={nilaiKomprehensif2}
+                          onChange={(e) => setNilaiKomprehensif2(e.target.value)}
+                        />
+                        <InputField
+                          label="Nilai F3"
+                          value={nilaiKomprehensif3}
+                          onChange={(e) => setNilaiKomprehensif3(e.target.value)}
+                        />
+                      </div>
 
-                    {/* Footer */}
-                    <AlertDialogFooter className="flex justify-end gap-1 pt-4 border-t border-zinc-100">
-                      <AlertDialogCancel
-                        onClick={() => {
-                          setIsOpenFormUjianKeahlian(false);
-                          if (isEditing) {
-                            setNilaiKomprehensif("");
-                            setNilaiKomprehensif2("");
-                            setNilaiKomprehensif3("");
-                          }
-                          setEditing(false);
-                        }}
-                        className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-4 py-2 rounded-md transition"
-                      >
-                        Batal
-                      </AlertDialogCancel>
-                      <AlertDialogAction
-                        onClick={(e) => handleUploadNilaiKomprehensif(e)}
-                        className="bg-neutral-800 hover:bg-neutral-900 text-white px-4 py-2 rounded-md transition"
-                      >
-                        {isEditing ? "Perbarui" : "Upload"}
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </form>
-                </div>
-              </AlertDialogContent>
-            </AlertDialog>
+                      {/* Footer */}
+                      <AlertDialogFooter className="flex justify-end gap-1 pt-4 border-t border-zinc-100">
+                        <AlertDialogCancel
+                          onClick={() => {
+                            setIsOpenFormUjianKeahlian(false);
+                            if (isEditing) {
+                              setNilaiKomprehensif("");
+                              setNilaiKomprehensif2("");
+                              setNilaiKomprehensif3("");
+                            }
+                            setEditing(false);
+                          }}
+                          className="bg-neutral-100 hover:bg-neutral-200 text-neutral-700 px-4 py-2 rounded-md transition"
+                        >
+                          Batal
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={(e) => handleUploadNilaiKomprehensif(e)}
+                          className="bg-neutral-800 hover:bg-neutral-900 text-white px-4 py-2 rounded-md transition"
+                        >
+                          {isEditing ? "Perbarui" : "Upload"}
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </form>
+                  </div>
+                </AlertDialogContent>
+              </AlertDialog>
 
 
+            </>
           </>
-        </>
-      ) : (
-        <></>
-      )
-      }
+        ) : (
+          <></>
+        )
+        }
 
-      <ImportAction
-        isOpen={isOpenFormPeserta}
-        onClose={() => setIsOpenFormPeserta(false)}
-        onUpload={handleUploadImportPesertaPelatihan}
-        onFileChange={handleFileChange}
-      />
+        <ImportAction
+          isOpen={isOpenFormPeserta}
+          onClose={() => setIsOpenFormPeserta(false)}
+          onUpload={handleUploadImportPesertaPelatihan}
+          onFileChange={handleFileChange}
+        />
+      </div>
     </div >
   );
 };
