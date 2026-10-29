@@ -109,6 +109,12 @@ const KartuUserUjian: React.FC<Props> = ({
                                         <span className="text-2xl">{bagian.KodeAkses}</span>
                                     </div>
                                 ))}
+                                {isRewarding ? <div
+
+                                    className={`flex items-center flex-grow w-0 h-10 px-2 border-b border-l border-gray-400 justify-center `}
+                                >
+                                    <span className="text-2xl"></span>
+                                </div> : <></>}
                             </div>
                         </div>
                     </div>
