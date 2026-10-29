@@ -64,7 +64,7 @@ const VALUES = [
   },
 ];
 
-const GALLERY = [1, 2, 3, 4, 6, 7, 8, 9].map((n) => `/dpkakp/image${n}.jpg`);
+const GALLERY = [2, 3, 7, 8].map((n) => `/dpkakp/image${n}.jpg`);
 const GALLERY_ALT = "Pelaksanaan Ujian ANKAPIN & ATKAPIN";
 
 const MAKLUMAT =

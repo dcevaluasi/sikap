@@ -213,16 +213,8 @@ export default function HeroDPKAKP() {
       </div>
 
       {/* Content */}
-      <div ref={contentRef} className="mx-auto w-full max-w-5xl px-5 pb-28 pt-28 text-center will-change-transform sm:px-6 md:pt-32">
-        <div {...enter(0)}>
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-xs font-medium text-blue-50 backdrop-blur-md sm:text-sm">
-            <span className="relative flex h-2 w-2" aria-hidden="true">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-300 opacity-75 motion-reduce:animate-none" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-teal-300" />
-            </span>
-            Dewan Penguji Keahlian Awak Kapal Perikanan
-          </span>
-        </div>
+      <div ref={contentRef} className="mx-auto w-full max-w-5xl px-5 pb-28 pt-16 text-center will-change-transform sm:px-6 md:pt-16">
+
 
         <div {...enter(120)} className={cn(enter(120).className, "mt-8 flex justify-center")}>
           <div className="group relative">

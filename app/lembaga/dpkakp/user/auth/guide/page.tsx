@@ -255,14 +255,7 @@ export default function GuidePage() {
         <div className="absolute bottom-10 right-[10%] h-64 w-64 rounded-full bg-teal-400/15 blur-[100px]" />
       </div>
 
-      {/* Back to access page */}
-      <Link
-        href={AUTH_ROUTE}
-        {...enter(0, "absolute left-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-3.5 py-2 text-xs font-medium text-blue-50 backdrop-blur-md transition-colors hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 sm:left-6 sm:top-6 sm:text-sm")}
-      >
-        <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-        Ganti kode
-      </Link>
+
 
       <section className="relative z-10 flex min-h-[100svh] items-center justify-center px-4 pb-12 pt-20">
         <div className="w-full max-w-3xl space-y-7">
