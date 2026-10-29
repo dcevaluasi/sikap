@@ -1,12 +1,12 @@
-import { 
-    AlertDialog, 
-    AlertDialogTrigger, 
-    AlertDialogContent, 
-    AlertDialogHeader, 
-    AlertDialogTitle, 
-    AlertDialogDescription, 
-    AlertDialogFooter, 
-    AlertDialogCancel 
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel
 } from "@/components/ui/alert-dialog";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -37,10 +37,10 @@ export const CodeAccessAction: React.FC<CodeAccessActionProps> = ({
         if (!dataUjian || dataUjian.length === 0) return [];
         const type = dataUjian[0].TypeUjian;
         if (type.includes("TRYOUT")) return ["Kode Tryout"];
-        if (type.includes("Rewarding")) return ["F1", "F2", "F3"];
+        if (type.includes("Rewarding") || type.includes("Updating")) return ["F1", "F2", "F3"];
         return ["F1B1", "F1B2", "F1B3", "F2B1", "F3B1", "F3B2"];
     };
-    
+
     const labels = getLabels();
     const codes = dataUjian?.length > 0 && dataUjian[0].TypeUjian.includes("TRYOUT")
         ? row.original.CodeAksesUsersBagian.slice(0, 1)
@@ -76,13 +76,13 @@ export const CodeAccessAction: React.FC<CodeAccessActionProps> = ({
                 <div className="p-6 bg-white">
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                         {codes.map((codeAccess, index) => (
-                            <div 
-                                key={index} 
+                            <div
+                                key={index}
                                 className="flex flex-col items-center justify-between p-5 rounded-xl border border-gray-100 bg-white shadow-sm hover:shadow-md hover:border-gray-200 transition-all gap-5 relative overflow-hidden group"
                             >
                                 {/* Top Status Indicator Bar */}
                                 <div className={`absolute top-0 left-0 w-full h-1.5 transition-colors ${codeAccess.IsUse === "true" ? "bg-green-500" : "bg-gray-200"}`} />
-                                
+
                                 <div className="flex flex-col items-center gap-2 mt-1">
                                     <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest bg-gray-50 px-2 py-0.5 rounded-full border border-gray-100">
                                         {labels[index] || `Bagian ${index + 1}`}
@@ -94,7 +94,7 @@ export const CodeAccessAction: React.FC<CodeAccessActionProps> = ({
                                         </span>
                                     </div>
                                 </div>
-                                
+
                                 <div className="flex flex-col items-center gap-2 w-full pt-4 border-t border-gray-50">
                                     <div className="flex items-center gap-3">
                                         <Switch
@@ -103,8 +103,8 @@ export const CodeAccessAction: React.FC<CodeAccessActionProps> = ({
                                             onCheckedChange={() => handleSwitchCodeAccessIsUse(codeAccess.KodeAkses, codeAccess.IsUse)}
                                             className={codeAccess.IsUse === "true" ? "data-[state=checked]:bg-green-500" : ""}
                                         />
-                                        <Label 
-                                            htmlFor={`access-${index}`} 
+                                        <Label
+                                            htmlFor={`access-${index}`}
                                             className={`text-xs font-bold uppercase tracking-wide cursor-pointer ${codeAccess.IsUse === "true" ? "text-green-600" : "text-gray-400"}`}
                                         >
                                             {codeAccess.IsUse === "true" ? "Aktif" : "Nonaktif"}

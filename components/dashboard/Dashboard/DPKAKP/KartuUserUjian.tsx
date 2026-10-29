@@ -17,7 +17,7 @@ const KartuUserUjian: React.FC<Props> = ({
     generateTanggalPelatihan,
 }) => {
     const type = dataUjian[0]?.TypeUjian || "";
-    const isRewarding = type.includes("Rewarding") || type.includes("TRYOUT");
+    const isRewarding = type.includes("Rewarding") || type.includes("Updating") || type.includes("Updating") || type.includes("TRYOUT");
     const isShortType = type === "ANKAPIN II" || type === "ATKAPIN II";
 
     const aksesBagian = peserta?.CodeAksesUsersBagian || [];

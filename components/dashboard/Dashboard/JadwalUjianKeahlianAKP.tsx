@@ -34,7 +34,7 @@ export const JadwalUjianKeahlianAKP = ({
     let scheduleItems: ScheduleItem[]
 
     if (
-        ujian?.TypeUjian.includes("Rewarding") ||
+        ujian?.TypeUjian.includes("Rewarding") || ujian?.TypeUjian.includes("Updating") ||
         ujian?.TypeUjian.toLowerCase().includes("tryout")
     ) {
         scheduleItems = [

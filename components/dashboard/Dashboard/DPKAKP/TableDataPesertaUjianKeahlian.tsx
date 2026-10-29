@@ -953,7 +953,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                 <div className="flex items-center flex-grow !w-10 h-10 px-2 border-b border-l border-gray-400 bg-[#338BF6] justify-center text-center leading-none py-6">
                                   <span className="">Asal</span>
                                 </div>
-                                {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
+                                {dataUjian[0]!.TypeUjian.includes("Rewarding") || dataUjian[0]!.TypeUjian.includes("Updating") || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
                                   <>
                                     <div className="flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 bg-[#EA8F02] justify-center text-center leading-none py-6">
                                       <span className="">F1</span>
@@ -1043,7 +1043,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     </div>
                                     {dataUjian[0]!.TypeUjian.includes(
                                       "Rewarding"
-                                    ) || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
+                                    ) || dataUjian[0]!.TypeUjian.includes("Updating") || dataUjian[0]!.TypeUjian.includes('TRYOUT') ? (
                                       <>
                                         <div
                                           className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 hover:bg-blue-500 hover:text-white duration-700 cursor-pointer justify-center py-7 ${(pesertaUjian?.NilaiF1B1 || 0) <
@@ -1289,7 +1289,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     <div
                                       className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7 bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
-                                      ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
+                                      ) || dataUjian[0]!.TypeUjian.includes("Updating") || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                         ? (((pesertaUjian?.NilaiF1B1 || 0) +
                                           (pesertaUjian?.NilaiF2B1 || 0) +
                                           (pesertaUjian?.NilaiF3B1 || 0)) /
@@ -1324,7 +1324,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                       <span>
                                         {dataUjian[0]!.TypeUjian.includes(
                                           "Rewarding"
-                                        ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
+                                        ) || dataUjian[0]!.TypeUjian.includes("Updating") || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                           ? (
                                             roundUpScore(((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF2B1 || 0) +
@@ -1397,7 +1397,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                     <div
                                       className={`flex items-center flex-grow w-0 h-10 border-b border-l border-gray-400 justify-center py-7  bg-neutral-200 font-bold ${dataUjian[0]!.TypeUjian.includes(
                                         "Rewarding"
-                                      ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
+                                      ) || dataUjian[0]!.TypeUjian.includes("Updating") || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                         ? roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
                                           (pesertaUjian?.NilaiF2B1 || 0) +
                                           (pesertaUjian?.NilaiF3B1 || 0)) /
@@ -1454,7 +1454,7 @@ const TableDataPesertaUjianKeahlian = () => {
                                       <span>
                                         {dataUjian[0]!.TypeUjian.includes(
                                           "Rewarding"
-                                        ) || dataUjian[0]!.TypeUjian.includes('TRYOUT')
+                                        ) || dataUjian[0]!.TypeUjian.includes("Updating") || dataUjian[0]!.TypeUjian.includes('TRYOUT')
                                           ? (
                                             roundUpScore((((pesertaUjian?.NilaiF1B1 || 0) +
                                               (pesertaUjian?.NilaiF2B1 || 0) +

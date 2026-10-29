@@ -1062,7 +1062,7 @@ const TableDataUjian: React.FC = () => {
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="Klasikal">Klasikal</SelectItem>
-                              <SelectItem value="Rewarding">Rewarding</SelectItem>
+                              <SelectItem value="Rewarding/Updating">Rewarding/Updating</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -1132,7 +1132,7 @@ const TableDataUjian: React.FC = () => {
                             />
                           </div>
                         </div>
-                      ) : selectedTypeUjian == "Rewarding" ? (
+                      ) : selectedTypeUjian == "Rewarding/Updating" ? (
                         <div className="grid grid-cols-3 gap-2">
                           <div className="mt-2">
                             <Label htmlFor="waktuF1">Waktu F1*</Label>
