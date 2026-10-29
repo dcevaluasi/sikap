@@ -250,15 +250,6 @@ export default function HeroDPKAKP() {
           <span className="text-blue-100/90">Keahlian Awak Kapal Perikanan</span>
         </h2>
 
-        <div {...enter(480)} className={cn(enter(480).className, "mx-auto mt-6 flex max-w-2xl items-start gap-3 rounded-2xl border border-white/10 bg-white/5 p-4 text-left backdrop-blur-md")}>
-          <ScrollText className="mt-0.5 h-5 w-5 shrink-0 text-blue-300" aria-hidden="true" />
-          <p className="text-sm leading-relaxed text-blue-50/85">
-            Berdasarkan <span className="font-semibold text-white">Permen KP 33 Tahun 2021</span>{" "}
-            tentang Logbook Penangkapan Ikan, Pemantauan di atas Kapal Penangkap Ikan dan Kapal
-            Pengangkut Ikan, Inspeksi, Pengujian, dan Penandaan Kapal Perikanan, serta Tata Kelola
-            Pengawasan Kapal Perikanan.
-          </p>
-        </div>
 
         {/* Primary CTA */}
         <div {...enter(600)} className={cn(enter(600).className, "mt-8 flex justify-center")}>
@@ -276,36 +267,7 @@ export default function HeroDPKAKP() {
           </Link>
         </div>
 
-        {/* Video tutorials */}
-        <div {...enter(720)} className={cn(enter(720).className, "mx-auto mt-6 grid max-w-2xl gap-3 sm:grid-cols-2")}>
-          {VIDEOS.map((v) => (
-            <button
-              key={v.id}
-              type="button"
-              onClick={() => setVideo(v)}
-              className="group flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 p-2 pr-4 text-left backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300/40 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70"
-            >
-              <span className="relative h-14 w-24 shrink-0 overflow-hidden rounded-xl bg-black/40">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`https://i.ytimg.com/vi/${v.id}/mqdefault.jpg`}
-                  alt=""
-                  loading="lazy"
-                  className="h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-110"
-                />
-                <span className="absolute inset-0 flex items-center justify-center">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-blue-700 shadow-lg transition-transform group-hover:scale-110">
-                    <Play className="ml-0.5 h-4 w-4 fill-current" aria-hidden="true" />
-                  </span>
-                </span>
-              </span>
-              <span className="min-w-0">
-                <span className="block truncate text-sm font-semibold text-white">{v.title}</span>
-                <span className="block truncate text-xs text-blue-100/70">{v.hint}</span>
-              </span>
-            </button>
-          ))}
-        </div>
+
       </div>
 
       {/* Slide indicators */}
