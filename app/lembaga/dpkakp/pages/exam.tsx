@@ -294,13 +294,17 @@ function GlassCard({
       {...rest}
       onPointerMove={handlePointerMove}
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 shadow-2xl shadow-blue-950/50 backdrop-blur-xl",
+        "group relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.06] shadow-2xl shadow-blue-950/60 backdrop-blur-xl transition-colors duration-300 hover:border-blue-300/30",
         className
       )}
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(380px_circle_at_var(--x,50%)_var(--y,0%),rgba(147,197,253,0.22),transparent_65%)]"
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(420px_circle_at_var(--x,50%)_var(--y,0%),rgba(96,165,250,0.18),transparent_60%)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-blue-500/20 blur-3xl"
       />
       <div className="relative">{children}</div>
     </div>
@@ -356,7 +360,7 @@ function TimerBadge({
         <div
           className={cn(
             "h-full rounded-full transition-[width] duration-1000 ease-linear motion-reduce:transition-none",
-            tone === "danger" ? "bg-rose-400" : tone === "warn" ? "bg-amber-400" : "bg-blue-400"
+            tone === "danger" ? "bg-rose-400" : tone === "warn" ? "bg-amber-400" : "bg-gradient-to-r from-blue-400 to-cyan-300"
           )}
           style={{ width: `${pct}%` }}
         />
@@ -661,7 +665,7 @@ function ReviewDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="max-h-[92vh] gap-0 overflow-y-auto border-white/10 bg-white/5 p-0 text-white backdrop-blur-2xl sm:max-w-lg">
+      <AlertDialogContent className="sm:rounded-3xl max-h-[92vh] gap-0 overflow-y-auto border-white/10 bg-white/5 p-0 text-white backdrop-blur-2xl sm:max-w-lg">
         <div className="space-y-5 p-5 sm:p-6">
           <AlertDialogHeader className="flex-row items-start gap-4 space-y-0 text-left">
             <span
@@ -786,7 +790,7 @@ function ReviewDialog({
         <AlertDialogFooter className="sticky bottom-0 gap-2 border-t border-white/10 bg-blue-950/70 p-4 backdrop-blur-xl sm:space-x-0">
           <AlertDialogCancel
             disabled={submitting}
-            className="mt-0 h-11 rounded-xl border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
+            className="mt-0 h-11 rounded-full border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
           >
             Kembali mengerjakan
           </AlertDialogCancel>
@@ -796,7 +800,7 @@ function ReviewDialog({
                 e.preventDefault();
                 onJump(unanswered[0]);
               }}
-              className="h-11 gap-2 rounded-xl bg-blue-500 text-white hover:bg-blue-400"
+              className="h-11 gap-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30 hover:opacity-90"
             >
               Ke soal no. {unanswered[0] + 1}
               <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -808,7 +812,7 @@ function ReviewDialog({
                 e.preventDefault(); // keep the dialog open while sending
                 onConfirm();
               }}
-              className="h-11 gap-2 rounded-xl bg-emerald-500 text-white hover:bg-emerald-400 disabled:opacity-50"
+              className="h-11 gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/30 hover:opacity-90 disabled:opacity-50"
             >
               {submitting ? (
                 <>
@@ -868,6 +872,8 @@ export default function Exam() {
   const touchStart = React.useRef<{ x: number; y: number } | null>(null);
   const away = React.useRef(false);
   const shieldTimer = React.useRef<ReturnType<typeof setTimeout>>();
+  const bgRef = React.useRef<HTMLDivElement>(null);
+  const glowRef = React.useRef<HTMLDivElement>(null);
 
   /* ---------------------------------------------------------------- */
   /*  Derived values                                                    */
@@ -1152,6 +1158,37 @@ export default function Exam() {
   }, [loadState]);
 
   /* ---------------------------------------------------------------- */
+  /*  Pointer parallax on background & glow (DOM only, no re-renders)   */
+  /* ---------------------------------------------------------------- */
+  React.useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let frame = 0;
+    let mx = 0;
+    let my = 0;
+    const render = () => {
+      frame = 0;
+      if (bgRef.current) {
+        bgRef.current.style.transform = `translate3d(${mx * -16}px, ${my * -16}px, 0) scale(1.08)`;
+      }
+      if (glowRef.current) {
+        glowRef.current.style.transform = `translate3d(${mx * 40}px, ${my * 40}px, 0)`;
+      }
+    };
+    const onPointer = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      mx = e.clientX / window.innerWidth - 0.5;
+      my = e.clientY / window.innerHeight - 0.5;
+      if (!frame) frame = requestAnimationFrame(render);
+    };
+    render();
+    window.addEventListener("pointermove", onPointer);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("pointermove", onPointer);
+    };
+  }, []);
+
+  /* ---------------------------------------------------------------- */
   /*  Actions                                                           */
   /* ---------------------------------------------------------------- */
   const goTo = (target: number) => {
@@ -1383,8 +1420,8 @@ export default function Exam() {
       aria-pressed={isFlagged}
       aria-label={compact ? (isFlagged ? "Hapus tanda ragu-ragu" : "Tandai ragu-ragu") : undefined}
       className={cn(
-        "inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl border font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70",
-        compact ? "h-11 w-11" : "h-9 px-3 text-xs",
+        "inline-flex shrink-0 items-center justify-center gap-1.5 border font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70",
+        compact ? "h-11 w-11 rounded-full" : "h-9 rounded-full px-3.5 text-xs",
         isFlagged
           ? "border-amber-300/50 bg-amber-400/15 text-amber-100"
           : "border-white/15 bg-white/5 text-blue-100/80 hover:bg-white/10"
@@ -1408,7 +1445,7 @@ export default function Exam() {
         onMouseDown={keepFocus}
         disabled={idx === 0}
         aria-label="Soal sebelumnya"
-        className="h-11 gap-2 rounded-xl border-white/20 bg-transparent px-3 text-white hover:bg-white/10 hover:text-white disabled:opacity-40 sm:flex-1 sm:px-5 lg:flex-none"
+        className="h-11 gap-2 rounded-full border-white/20 bg-white/5 px-3 text-white backdrop-blur-md hover:bg-white/10 hover:text-white disabled:opacity-40 sm:flex-1 sm:px-5 lg:flex-none"
       >
         <ArrowLeft className="h-4 w-4" aria-hidden="true" />
         <span className="hidden sm:inline">Sebelumnya</span>
@@ -1418,8 +1455,12 @@ export default function Exam() {
           type="button"
           onClick={() => setShowSubmit(true)}
           onMouseDown={keepFocus}
-          className="h-11 flex-1 gap-2 rounded-xl bg-emerald-500 px-5 text-white shadow-lg shadow-emerald-500/30 hover:bg-emerald-400 lg:flex-none"
+          className="group relative h-11 flex-1 gap-2 overflow-hidden rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-6 text-white shadow-xl shadow-emerald-500/30 transition-all hover:-translate-y-0.5 hover:shadow-teal-400/40 lg:flex-none"
         >
+          <span
+            aria-hidden="true"
+            className="absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-white/30 blur-md transition-all duration-700 group-hover:left-[120%]"
+          />
           <Send className="h-4 w-4" aria-hidden="true" />
           Periksa &amp; kirim
         </Button>
@@ -1428,10 +1469,14 @@ export default function Exam() {
           type="button"
           onClick={() => goTo(idx + 1)}
           onMouseDown={keepFocus}
-          className="h-11 flex-1 gap-2 rounded-xl bg-blue-500 px-5 text-white shadow-lg shadow-blue-500/30 hover:bg-blue-400 lg:flex-none"
+          className="group relative h-11 flex-1 gap-2 overflow-hidden rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 px-6 text-white shadow-xl shadow-blue-500/40 transition-all hover:-translate-y-0.5 hover:shadow-cyan-400/40 lg:flex-none"
         >
+          <span
+            aria-hidden="true"
+            className="absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-white/30 blur-md transition-all duration-700 group-hover:left-[120%]"
+          />
           Selanjutnya
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
         </Button>
       )}
     </div>
@@ -1472,7 +1517,7 @@ export default function Exam() {
           <div
             className={cn(
               "h-full rounded-full transition-[width,background-color] duration-300 motion-reduce:transition-none",
-              allAnswered ? "bg-emerald-400" : "bg-blue-400"
+              allAnswered ? "bg-emerald-400" : "bg-gradient-to-r from-blue-400 to-cyan-300"
             )}
             style={{ width: `${progress}%` }}
           />
@@ -1504,10 +1549,10 @@ export default function Exam() {
         onClick={openReview}
         disabled={submitting}
         className={cn(
-          "h-11 w-full gap-2 rounded-xl text-white shadow-lg",
+          "h-11 w-full gap-2 rounded-full text-white shadow-xl transition-all hover:-translate-y-0.5",
           allAnswered
-            ? "bg-emerald-500 shadow-emerald-500/30 hover:bg-emerald-400"
-            : "bg-blue-500 shadow-blue-500/30 hover:bg-blue-400"
+            ? "bg-gradient-to-r from-emerald-500 to-teal-500 shadow-emerald-500/30"
+            : "bg-gradient-to-r from-blue-500 to-cyan-500 shadow-blue-500/40 hover:shadow-cyan-400/40"
         )}
       >
         <Send className="h-4 w-4" aria-hidden="true" />
@@ -1524,16 +1569,24 @@ export default function Exam() {
       {/* Printing the page gives a blank sheet */}
       <style>{"@media print { body { display: none !important; } }"}</style>
 
-      <div className="fixed inset-0" aria-hidden="true">
-        <Image src="/dpkakp/image3.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-950/90 via-blue-950/80 to-blue-950/90" />
+      {/* Background: photo with pointer parallax, tint, grid, glow (same as landing hero) */}
+      <div className="fixed inset-0 overflow-hidden" aria-hidden="true">
+        <div ref={bgRef} className="absolute inset-0 will-change-transform">
+          <Image src="/dpkakp/image3.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-blue-950/90 via-blue-950/80 to-darkDPKAKP" />
+        <div className="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(white_1px,transparent_1px),linear-gradient(90deg,white_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+        <div ref={glowRef} className="absolute inset-0 will-change-transform">
+          <div className="absolute left-1/3 top-1/4 h-[30rem] w-[30rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-[120px]" />
+          <div className="absolute bottom-10 right-[10%] h-64 w-64 rounded-full bg-teal-400/10 blur-[100px]" />
+        </div>
       </div>
 
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-5 px-4 pb-28 pt-4 lg:pb-8 lg:pt-6">
         <h1 className="sr-only">Ujian Keahlian Awak Kapal Perikanan</h1>
 
         {/* Institution header (desktop) */}
-        <header className="hidden items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 backdrop-blur-xl lg:flex">
+        <header className="hidden items-center justify-between gap-4 rounded-3xl border border-white/10 bg-white/[0.06] px-5 py-3 shadow-2xl shadow-blue-950/50 backdrop-blur-xl animate-in fade-in-0 slide-in-from-top-4 duration-700 motion-reduce:animate-none lg:flex">
           <div className="flex items-center gap-3">
             <Image src="/logo-kkp-white.png" width={56} height={56} alt="Logo KKP" className="h-12 w-auto" />
             <p className="font-jakarta text-xs leading-snug text-blue-100/90">
@@ -1557,13 +1610,13 @@ export default function Exam() {
 
         {/* Top bar (mobile / tablet) */}
         {data && (
-          <div className="sticky top-3 z-30 flex items-center gap-2 rounded-2xl border border-white/15 bg-blue-950/80 p-2 shadow-lg shadow-blue-950/40 backdrop-blur-xl lg:hidden">
+          <div className="sticky top-3 z-30 flex items-center gap-2 rounded-full border border-white/15 bg-blue-950/80 p-2 shadow-lg shadow-blue-950/40 backdrop-blur-xl lg:hidden">
             <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
               <SheetTrigger asChild>
                 <Button
                   type="button"
                   aria-label="Buka daftar soal"
-                  className="h-10 gap-2 rounded-xl bg-blue-500 px-3 text-sm text-white hover:bg-blue-400"
+                  className="h-10 gap-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 px-3.5 text-sm text-white shadow-lg shadow-blue-500/30 hover:opacity-90"
                 >
                   <LayoutGrid className="h-4 w-4" aria-hidden="true" />
                   <span className="tabular-nums">
@@ -1600,7 +1653,7 @@ export default function Exam() {
                 <div
                   className={cn(
                     "h-full rounded-full transition-[width] duration-300 motion-reduce:transition-none",
-                    allAnswered ? "bg-emerald-400" : "bg-blue-400"
+                    allAnswered ? "bg-emerald-400" : "bg-gradient-to-r from-blue-400 to-cyan-300"
                   )}
                   style={{ width: `${progress}%` }}
                 />
@@ -1636,7 +1689,7 @@ export default function Exam() {
             <Button
               type="button"
               onClick={loadExam}
-              className="mt-4 h-11 gap-2 rounded-xl bg-blue-500 px-5 text-white hover:bg-blue-400"
+              className="mt-4 h-11 gap-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 px-6 text-white shadow-xl shadow-blue-500/40 hover:opacity-90"
             >
               <RefreshCw className="h-4 w-4" aria-hidden="true" />
               Coba lagi
@@ -1669,7 +1722,7 @@ export default function Exam() {
                     size="sm"
                     onClick={openReview}
                     onMouseDown={keepFocus}
-                    className="h-9 gap-1.5 rounded-lg bg-emerald-500 text-white hover:bg-emerald-400"
+                    className="h-9 gap-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-4 text-white shadow-lg shadow-emerald-500/30 hover:opacity-90"
                   >
                     <Send className="h-3.5 w-3.5" aria-hidden="true" />
                     Kirim sekarang
@@ -1686,7 +1739,11 @@ export default function Exam() {
               >
                 <div className="mb-4 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
-                    <span className="rounded-full border border-blue-300/30 bg-blue-400/10 px-3 py-1 font-jakarta text-xs font-semibold text-blue-100">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 font-jakarta text-xs font-semibold text-blue-50 backdrop-blur-md">
+                      <span className="relative flex h-2 w-2" aria-hidden="true">
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-300 opacity-75 motion-reduce:animate-none" />
+                        <span className="relative inline-flex h-2 w-2 rounded-full bg-teal-300" />
+                      </span>
                       Soal <span className="tabular-nums">{idx + 1}</span> dari{" "}
                       <span className="tabular-nums">{total}</span>
                     </span>
@@ -1745,18 +1802,20 @@ export default function Exam() {
                         onClick={() => selectAnswer(jawaban)}
                         onMouseDown={keepFocus}
                         className={cn(
-                          "flex w-full items-start gap-3 rounded-xl border p-3.5 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 motion-reduce:transition-none sm:p-4",
+                          "flex w-full items-start gap-3 rounded-2xl border p-3.5 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 motion-reduce:transition-none sm:p-4",
                           selected
-                            ? "border-blue-400 bg-blue-500/25 shadow-lg shadow-blue-500/10"
+                            ? "border-cyan-300/70 bg-gradient-to-r from-blue-500/25 to-cyan-500/10 shadow-lg shadow-cyan-500/10"
                             : chosen
                               ? "border-white/10 bg-white/[0.03] opacity-80 hover:border-white/30 hover:bg-white/10 hover:opacity-100"
-                              : "border-white/15 bg-white/5 hover:border-white/30 hover:bg-white/10 active:scale-[0.99]"
+                              : "border-white/10 bg-white/[0.04] hover:-translate-y-0.5 hover:border-blue-300/40 hover:bg-white/10 active:scale-[0.99]"
                         )}
                       >
                         <span
                           className={cn(
-                            "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-mono text-sm font-semibold transition-colors",
-                            selected ? "bg-blue-500 text-white" : "bg-white/10 text-blue-100"
+                            "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl font-mono text-sm font-semibold transition-all",
+                            selected
+                              ? "bg-gradient-to-br from-blue-500 to-cyan-400 text-white shadow-lg shadow-blue-500/30"
+                              : "bg-white/10 text-cyan-100"
                           )}
                         >
                           {LETTERS[i] ?? i + 1}
@@ -1771,7 +1830,7 @@ export default function Exam() {
                         </span>
                         {selected && (
                           <Check
-                            className="mt-2 h-5 w-5 shrink-0 text-blue-300 animate-in zoom-in-50 duration-200 motion-reduce:animate-none"
+                            className="mt-2 h-5 w-5 shrink-0 text-cyan-300 animate-in zoom-in-50 duration-200 motion-reduce:animate-none"
                             aria-hidden="true"
                           />
                         )}
@@ -1848,7 +1907,7 @@ export default function Exam() {
 
       {/* Left the tab / app */}
       <AlertDialog open={leaveWarning && !expired}>
-        <AlertDialogContent className="border-rose-400/30 bg-blue-950 text-white sm:max-w-md">
+        <AlertDialogContent className="sm:rounded-3xl border-rose-400/30 bg-blue-950 text-white sm:max-w-md">
           <AlertDialogHeader className="items-center text-center sm:text-center">
             <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-500/15 text-rose-300" aria-hidden="true">
               <ShieldAlert className="h-7 w-7" />
@@ -1867,7 +1926,7 @@ export default function Exam() {
           <AlertDialogFooter>
             <AlertDialogAction
               onClick={() => setLeaveWarning(false)}
-              className="h-11 w-full rounded-xl bg-blue-500 text-white hover:bg-blue-400"
+              className="h-11 w-full rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30 hover:opacity-90"
             >
               Saya mengerti, kembali ke ujian
             </AlertDialogAction>
@@ -1877,7 +1936,7 @@ export default function Exam() {
 
       {/* Time is up: answers are sent automatically */}
       <AlertDialog open={expired}>
-        <AlertDialogContent className="border-white/15 bg-blue-950 text-white sm:max-w-md">
+        <AlertDialogContent className="sm:rounded-3xl border-white/15 bg-blue-950 text-white sm:max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle className="font-calsans text-2xl font-normal">
               Waktu ujian habis
@@ -1899,7 +1958,7 @@ export default function Exam() {
                   e.preventDefault();
                   submitExam(true);
                 }}
-                className="h-11 gap-2 rounded-xl bg-blue-500 text-white hover:bg-blue-400"
+                className="h-11 gap-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-lg shadow-blue-500/30 hover:opacity-90"
               >
                 <RefreshCw className="h-4 w-4" aria-hidden="true" />
                 Kirim ulang
