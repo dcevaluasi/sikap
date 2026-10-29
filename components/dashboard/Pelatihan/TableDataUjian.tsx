@@ -1,46 +1,44 @@
-import React, { ReactElement, useState } from "react";
-import TableData from "../Tables/TableData";
-import {
-  RiRadioButtonLine,
-  RiShipLine,
-  RiVerifiedBadgeFill,
-} from "react-icons/ri";
+"use client";
 
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import axios, { AxiosResponse } from "axios";
+import Cookies from "js-cookie";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Building2,
+  CalendarClock,
+  CalendarDays,
+  Check,
+  ChevronLeft,
+  ClipboardPlus,
+  FileText,
+  Loader2,
+  Lock,
+  MapPin,
+  Pencil,
+  Plus,
+  RotateCcw,
+  Search,
+  SearchX,
+  Send,
+  ShieldCheck,
+  UploadCloud,
+  UserCog,
+  Users,
+  X,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Trash,
-  X,
-} from "lucide-react";
-import { HiMiniUserGroup, HiUserGroup } from "react-icons/hi2";
-import {
-  TbEditCircle,
-} from "react-icons/tb";
-import {
-  IoMdClock,
-} from "react-icons/io";
-import { FiEdit2, FiFile, FiUploadCloud } from "react-icons/fi";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -50,1209 +48,1837 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { useParams, usePathname, useRouter } from "next/navigation";
 
 import Toast from "@/components/toast";
-import Image from "next/image";
-import axios, { AxiosResponse } from "axios";
-import { Checkbox } from "@/components/ui/checkbox";
-import { PelatihanMasyarakat } from "@/types/product";
-import {
-  FaBookOpen,
-} from "react-icons/fa6";
-import { Input } from "@/components/ui/input";
-
-import Cookies from "js-cookie";
-import Link from "next/link";
+import EmptyData from "@/components/micro-components/EmptyData";
+import Pagination from "@/components/Pagination";
 import { dpkakpBaseUrl } from "@/constants/urls";
 import { generateTanggalPelatihan } from "@/utils/text";
-import { TypeUjian, Ujian } from "@/types/ujian-keahlian-akp";
-import { BiPaperPlane, BiSolidLockAlt } from "react-icons/bi";
-import { IoReload } from "react-icons/io5";
-import { formatIndonesianDate, isTodayAfter, isTodayBefore, isTodayBetween, isTodaySameAs } from "@/lib/utils";
-import EmptyData from "@/components/micro-components/EmptyData";
-import { HashLoader } from "react-spinners";
 import { generatedYears } from "@/utils/globals";
-import Pagination from "@/components/Pagination";
-import { JadwalUjianKeahlianAKP } from "../Dashboard/JadwalUjianKeahlianAKP";
+import { Ujian } from "@/types/ujian-keahlian-akp";
+import {
+  cn,
+  isTodayAfter,
+  isTodayBefore,
+  isTodayBetween,
+} from "@/lib/utils";
+
 import { useFetchTypeUjianKeahlianAKP } from "@/hooks/ujian/useFetchTypeUjianKeahlianAKP";
 import { useFetchPengujiKeahlianAKP } from "@/hooks/penguji/useFetchPengujiKeahlianAKP";
 import { useFetchUjianKeahlianAKP } from "@/hooks/ujian/useFetchUjianKeahlianAKP";
+
+import { JadwalUjianKeahlianAKP } from "../Dashboard/JadwalUjianKeahlianAKP";
 import StatusUjianKeahlianAKP from "../Dashboard/StatusUjianKeahlianAKP";
 import RemedialAction from "../Dashboard/Actions/RemedialAction";
 import VerifikasiAction from "../Dashboard/Actions/VerifikasiAction";
 import DeleteAction from "../Dashboard/Actions/DeleteAction";
 import { InformationAction } from "../Dashboard/Actions/InformationAction";
 
+/* ========================================================================== */
+/*  Types & constants                                                          */
+/* ========================================================================== */
+
+type UjianHook = ReturnType<typeof useFetchUjianKeahlianAKP>;
+type DataUjian = UjianHook["data"];
+type RefetchUjian = UjianHook["refetch"];
+
+type Jenis = "" | "Klasikal" | "Rewarding/Updating";
+
+interface CreateForm {
+  typeUjian: string; // "Nama,Id"
+  namaUjian: string;
+  tempatUjian: string;
+  tanggalMulai: string;
+  tanggalBerakhir: string;
+  jumlahPeserta: string;
+  jenis: Jenis;
+}
+
+const INITIAL_FORM: CreateForm = {
+  typeUjian: "",
+  namaUjian: "",
+  tempatUjian: "",
+  tanggalMulai: "",
+  tanggalBerakhir: "",
+  jumlahPeserta: "",
+  jenis: "",
+};
+
+const INITIAL_EDIT = {
+  typeUjian: "",
+  namaUjian: "",
+  tempatUjian: "",
+  tanggalMulai: "",
+  tanggalBerakhir: "",
+};
+type EditForm = typeof INITIAL_EDIT;
+
+const ZONES = { WIB: "+0700", WITA: "+0800", WIT: "+0900" } as const;
+type Zone = keyof typeof ZONES;
+
+type WaktuKey =
+  | "F1"
+  | "F2"
+  | "F3"
+  | "F1B1"
+  | "F1B2"
+  | "F1B3"
+  | "F2B1"
+  | "F3B1"
+  | "F3B2";
+type WaktuState = Record<WaktuKey, string>;
+
+const WAKTU_KEYS: WaktuKey[] = [
+  "F1",
+  "F2",
+  "F3",
+  "F1B1",
+  "F1B2",
+  "F1B3",
+  "F2B1",
+  "F3B1",
+  "F3B2",
+];
+
+const emptyWaktu = (value = ""): WaktuState =>
+  Object.fromEntries(WAKTU_KEYS.map((k) => [k, value])) as WaktuState;
+
+const KLASIKAL_FIELDS: { key: WaktuKey; label: string }[] = [
+  { key: "F1B1", label: "Fungsi 1, Bagian 1" },
+  { key: "F1B2", label: "Fungsi 1, Bagian 2" },
+  { key: "F1B3", label: "Fungsi 1, Bagian 3" },
+  { key: "F2B1", label: "Fungsi 2, Bagian 1" },
+  { key: "F3B1", label: "Fungsi 3, Bagian 1" },
+  { key: "F3B2", label: "Fungsi 3, Bagian 2" },
+];
+
+const REWARDING_FIELDS: { key: WaktuKey; label: string }[] = [
+  { key: "F1", label: "Fungsi 1" },
+  { key: "F2", label: "Fungsi 2" },
+  { key: "F3", label: "Fungsi 3" },
+];
+
+const JENIS_OPTIONS: { value: Exclude<Jenis, "">; title: string; desc: string }[] =
+  [
+    {
+      value: "Klasikal",
+      title: "Klasikal",
+      desc: "Waktu diatur terpisah untuk tiap fungsi dan bagian (F1B1 sampai F3B2).",
+    },
+    {
+      value: "Rewarding/Updating",
+      title: "Rewarding/Updating",
+      desc: "Waktu diatur per fungsi (F1, F2, dan F3).",
+    },
+  ];
+
+const STEPS = [
+  { title: "Informasi", desc: "Data dasar ujian" },
+  { title: "Jadwal", desc: "Tanggal dan waktu" },
+  { title: "Lampiran", desc: "Surat dan ringkasan" },
+];
+
+/* Button presets so every action in the app reads as primary / secondary / destructive */
+const btnBase = "h-8 gap-1.5 rounded-lg px-3 text-xs font-medium shadow-sm";
+const btnPrimary = `${btnBase} bg-blue-600 text-white hover:bg-blue-700`;
+const btnDanger = `${btnBase} bg-rose-600 text-white hover:bg-rose-700`;
+const btnSoft = `${btnBase} bg-background hover:bg-muted`;
+const inputCls = "h-10 rounded-lg";
+
+/* ========================================================================== */
+/*  Pure helpers                                                               */
+/* ========================================================================== */
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/** "2025-01-09 10:15:00 +0700 WIB" for the current moment (default for time fields). */
+const getFormattedDateTime = () => {
+  const now = new Date();
+  const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+  const time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+  const offset = now.getTimezoneOffset();
+  const tz =
+    offset === -480 ? "+0800 WITA" : offset === -540 ? "+0900 WIT" : "+0700 WIB";
+  return `${date} ${time} ${tz}`;
+};
+
+const WAKTU_REGEX =
+  /^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2})(?::\d{2})?\s+[+-]\d{4}\s+(WIB|WITA|WIT)$/;
+
+const parseWaktu = (value: string) => {
+  const m = WAKTU_REGEX.exec((value || "").trim());
+  return m
+    ? { date: m[1], time: m[2], zone: m[3] as Zone }
+    : { date: "", time: "", zone: "WIB" as Zone };
+};
+
+const composeWaktu = (date: string, time: string, zone: Zone) =>
+  date && time ? `${date} ${time}:00 ${ZONES[zone]} ${zone}` : "";
+
+const todayLocal = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+
+const parseDateOnly = (value: string): Date | null => {
+  const [y, m, d] = String(value ?? "")
+    .slice(0, 10)
+    .split("-")
+    .map(Number);
+  if (!y || !m || !d) return null;
+  return new Date(y, m - 1, d);
+};
+
+const dayCount = (start: string, end: string) => {
+  const a = parseDateOnly(start);
+  const b = parseDateOnly(end);
+  if (!a || !b) return 0;
+  return Math.round((b.getTime() - a.getTime()) / 86400000) + 1;
+};
+
+const formatBytes = (bytes: number) => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+};
+
+type Tone = "slate" | "amber" | "blue" | "indigo" | "emerald" | "rose";
+
+const TONE: Record<Tone, { badge: string; dot: string; tile: string }> = {
+  slate: {
+    badge:
+      "bg-slate-100 text-slate-700 ring-slate-500/20 dark:bg-slate-500/10 dark:text-slate-300 dark:ring-slate-400/20",
+    dot: "bg-slate-400",
+    tile: "bg-slate-500",
+  },
+  amber: {
+    badge:
+      "bg-amber-50 text-amber-800 ring-amber-600/20 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-400/20",
+    dot: "bg-amber-500",
+    tile: "bg-amber-500",
+  },
+  blue: {
+    badge:
+      "bg-blue-50 text-blue-700 ring-blue-600/20 dark:bg-blue-500/10 dark:text-blue-300 dark:ring-blue-400/20",
+    dot: "bg-blue-500",
+    tile: "bg-blue-600",
+  },
+  indigo: {
+    badge:
+      "bg-indigo-50 text-indigo-700 ring-indigo-600/20 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-400/20",
+    dot: "bg-indigo-500",
+    tile: "bg-indigo-600",
+  },
+  emerald: {
+    badge:
+      "bg-emerald-50 text-emerald-700 ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-400/20",
+    dot: "bg-emerald-500",
+    tile: "bg-emerald-600",
+  },
+  rose: {
+    badge:
+      "bg-rose-50 text-rose-700 ring-rose-600/20 dark:bg-rose-500/10 dark:text-rose-300 dark:ring-rose-400/20",
+    dot: "bg-rose-500",
+    tile: "bg-rose-600",
+  },
+};
+
+/** One human-readable state per exam, derived from Status + dates + IsSelesai. */
+const getExamState = (u: Ujian): { label: string; tone: Tone; live?: boolean } => {
+  if (u.Status === "Draft") return { label: "Draft", tone: "slate" };
+  if (u.Status === "Pending")
+    return { label: "Menunggu verifikasi", tone: "amber" };
+  if (u.Status === "Aktif") {
+    if (u.IsSelesai === "1") return { label: "Selesai", tone: "emerald" };
+    if (isTodayBetween(u.TanggalMulaiUjian, u.TanggalBerakhirUjian))
+      return { label: "Sedang berlangsung", tone: "blue", live: true };
+    if (isTodayAfter(u.TanggalBerakhirUjian))
+      return { label: "Perlu ditutup", tone: "rose" };
+    return { label: "Akan dilaksanakan", tone: "indigo" };
+  }
+  return { label: u.Status, tone: "slate" };
+};
+
+/* ========================================================================== */
+/*  Small presentational components                                            */
+/* ========================================================================== */
+
+function StatusBadge({ label, tone, live }: { label: string; tone: Tone; live?: boolean }) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ring-1 ring-inset",
+        TONE[tone].badge
+      )}
+    >
+      <span className="relative flex h-2 w-2">
+        {live && (
+          <span
+            className={cn(
+              "absolute inline-flex h-full w-full animate-ping rounded-full opacity-60 motion-reduce:animate-none",
+              TONE[tone].dot
+            )}
+          />
+        )}
+        <span className={cn("relative inline-flex h-2 w-2 rounded-full", TONE[tone].dot)} />
+      </span>
+      {label}
+    </span>
+  );
+}
+
+function Field({
+  label,
+  htmlFor,
+  required,
+  hint,
+  className,
+  children,
+}: {
+  label: string;
+  htmlFor?: string;
+  required?: boolean;
+  hint?: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={cn("space-y-1.5", className)}>
+      <Label htmlFor={htmlFor} className="text-sm font-medium">
+        {label}
+        {required && <span className="ml-0.5 text-rose-500">*</span>}
+      </Label>
+      {children}
+      {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
+    </div>
+  );
+}
+
+function TypeUjianSelect({
+  id,
+  value,
+  onChange,
+  options,
+  contentClassName,
+}: {
+  id?: string;
+  value: string;
+  onChange: (v: string) => void;
+  options: { IdTypeUjian: string | number; NamaTypeUjian: string }[];
+  contentClassName?: string;
+}) {
+  return (
+    <Select value={value} onValueChange={onChange}>
+      <SelectTrigger id={id} className={cn(inputCls, "w-full")}>
+        <SelectValue placeholder="Pilih tipe ujian" />
+      </SelectTrigger>
+      <SelectContent className={contentClassName}>
+        {options.map((t) => (
+          <SelectItem
+            key={t.IdTypeUjian}
+            value={`${t.NamaTypeUjian},${t.IdTypeUjian}`}
+            className="capitalize"
+          >
+            {t.NamaTypeUjian}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  );
+}
+
+/**
+ * Date + time + zone picker that outputs the exact string the API expects
+ * ("2025-01-09 10:15:00 +0700 WIB"), so nobody has to type it by hand.
+ */
+function WaktuField({
+  id,
+  label,
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const [draft, setDraft] = React.useState(() => parseWaktu(value));
+
+  // Sync when the parent sets a full value (defaults, reset, "samakan semua")
+  React.useEffect(() => {
+    if (value) setDraft(parseWaktu(value));
+  }, [value]);
+
+  const update = (patch: Partial<typeof draft>) => {
+    const next = { ...draft, ...patch };
+    setDraft(next);
+    onChange(composeWaktu(next.date, next.time, next.zone));
+  };
+
+  return (
+    <div className="space-y-2 rounded-xl border bg-background p-3.5">
+      <Label htmlFor={`${id}-date`} className="text-sm font-medium">
+        {label}
+      </Label>
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_auto] gap-2">
+        <Input
+          id={`${id}-date`}
+          type="date"
+          className={inputCls}
+          value={draft.date}
+          onChange={(e) => update({ date: e.target.value })}
+        />
+        <Input
+          id={`${id}-time`}
+          type="time"
+          aria-label={`${label}, jam`}
+          className={cn(inputCls, "w-[7.5rem]")}
+          value={draft.time}
+          onChange={(e) => update({ time: e.target.value })}
+        />
+        <Select value={draft.zone} onValueChange={(z) => update({ zone: z as Zone })}>
+          <SelectTrigger aria-label={`${label}, zona waktu`} className={cn(inputCls, "w-[5.5rem]")}>
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {(Object.keys(ZONES) as Zone[]).map((z) => (
+              <SelectItem key={z} value={z}>
+                {z}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  );
+}
+
+function FileDropzone({
+  file,
+  onChange,
+}: {
+  file: File | null;
+  onChange: (f: File | null) => void;
+}) {
+  const [dragging, setDragging] = React.useState(false);
+
+  if (file) {
+    return (
+      <div className="flex items-center gap-3 rounded-xl border bg-background p-3.5">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-300">
+          <FileText className="h-5 w-5" />
+        </div>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium">{file.name}</p>
+          <p className="text-xs text-muted-foreground">{formatBytes(file.size)}</p>
+        </div>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-muted-foreground hover:text-rose-600"
+          aria-label="Hapus file"
+          onClick={() => onChange(null)}
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <label
+      htmlFor="surat-permohonan"
+      onDragOver={(e) => {
+        e.preventDefault();
+        setDragging(true);
+      }}
+      onDragLeave={() => setDragging(false)}
+      onDrop={(e) => {
+        e.preventDefault();
+        setDragging(false);
+        onChange(e.dataTransfer.files?.[0] ?? null);
+      }}
+      className={cn(
+        "flex cursor-pointer flex-col items-center gap-2 rounded-xl border-2 border-dashed px-6 py-8 text-center transition-colors focus-within:ring-2 focus-within:ring-blue-500",
+        dragging
+          ? "border-blue-500 bg-blue-50 dark:bg-blue-500/10"
+          : "hover:border-blue-400 hover:bg-muted/40"
+      )}
+    >
+      <UploadCloud className="h-8 w-8 text-muted-foreground" />
+      <span className="text-sm font-medium">
+        Pilih file atau seret ke sini
+      </span>
+      <span className="text-xs text-muted-foreground">
+        Unggah surat permohonan dari lemdiklat
+      </span>
+      <input
+        id="surat-permohonan"
+        type="file"
+        className="sr-only"
+        onChange={(e) => onChange(e.target.files?.[0] ?? null)}
+      />
+    </label>
+  );
+}
+
+function Stepper({ current }: { current: number }) {
+  return (
+    <ol className="mt-5 flex items-center" aria-label="Langkah pengisian">
+      {STEPS.map((s, i) => {
+        const done = i < current;
+        const active = i === current;
+        return (
+          <li
+            key={s.title}
+            className={cn("flex items-center", i < STEPS.length - 1 && "flex-1")}
+            aria-current={active ? "step" : undefined}
+          >
+            <div className="flex items-center gap-2.5">
+              <span
+                className={cn(
+                  "flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-colors",
+                  done && "bg-blue-600 text-white",
+                  active && "bg-blue-600 text-white ring-4 ring-blue-600/20",
+                  !done && !active && "bg-muted text-muted-foreground"
+                )}
+              >
+                {done ? <Check className="h-4 w-4" /> : i + 1}
+              </span>
+              <span className="hidden sm:block">
+                <span
+                  className={cn(
+                    "block text-sm font-medium leading-tight",
+                    !active && !done && "text-muted-foreground"
+                  )}
+                >
+                  {s.title}
+                </span>
+                <span className="block text-xs text-muted-foreground">{s.desc}</span>
+              </span>
+            </div>
+            {i < STEPS.length - 1 && (
+              <span
+                className={cn(
+                  "mx-3 h-px flex-1 transition-colors",
+                  done ? "bg-blue-600" : "bg-border"
+                )}
+              />
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+function ConfirmDialog({
+  open,
+  onOpenChange,
+  title,
+  description,
+  confirmLabel,
+  tone = "primary",
+  loading,
+  icon,
+  onConfirm,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  title: string;
+  description: React.ReactNode;
+  confirmLabel: string;
+  tone?: "primary" | "danger";
+  loading?: boolean;
+  icon: React.ReactNode;
+  onConfirm: () => void;
+}) {
+  return (
+    <AlertDialog open={open} onOpenChange={(o) => !loading && onOpenChange(o)}>
+      <AlertDialogContent className="max-w-md rounded-2xl">
+        <AlertDialogHeader>
+          <div
+            className={cn(
+              "mx-auto mb-1 flex h-11 w-11 items-center justify-center rounded-full sm:mx-0",
+              tone === "danger"
+                ? "bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300"
+                : "bg-blue-100 text-blue-600 dark:bg-blue-500/15 dark:text-blue-300"
+            )}
+          >
+            {icon}
+          </div>
+          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogDescription>{description}</AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={loading}>Batal</AlertDialogCancel>
+          <AlertDialogAction
+            disabled={loading}
+            onClick={(e) => {
+              e.preventDefault(); // keep the dialog open while the request runs
+              onConfirm();
+            }}
+            className={cn(
+              "text-white",
+              tone === "danger"
+                ? "bg-rose-600 hover:bg-rose-700"
+                : "bg-blue-600 hover:bg-blue-700"
+            )}
+          >
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            {confirmLabel}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
+
+function DialogHeading({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <AlertDialogHeader className="flex-row items-start gap-3 space-y-0 text-left">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white">
+        {icon}
+      </div>
+      <div className="space-y-1">
+        <AlertDialogTitle className="text-lg">{title}</AlertDialogTitle>
+        <AlertDialogDescription>{description}</AlertDialogDescription>
+      </div>
+    </AlertDialogHeader>
+  );
+}
+
+function ListSkeleton() {
+  return (
+    <div className="space-y-3" aria-busy="true" aria-label="Memuat data ujian">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} className="animate-pulse rounded-2xl border bg-card p-5 motion-reduce:animate-none">
+          <div className="flex gap-4">
+            <div className="hidden h-16 w-16 rounded-xl bg-muted sm:block" />
+            <div className="flex-1 space-y-3">
+              <div className="h-5 w-24 rounded-full bg-muted" />
+              <div className="h-5 w-2/3 rounded bg-muted" />
+              <div className="h-4 w-1/2 rounded bg-muted" />
+            </div>
+            <div className="hidden h-16 w-48 rounded-xl bg-muted lg:block" />
+          </div>
+          <div className="mt-5 flex gap-2 border-t pt-4">
+            <div className="h-8 w-24 rounded-lg bg-muted" />
+            <div className="h-8 w-20 rounded-lg bg-muted" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ========================================================================== */
+/*  Exam card (one row of the list)                                            */
+/* ========================================================================== */
+
+interface ExamCardProps {
+  ujian: Ujian;
+  dataUjian: DataUjian;
+  refetchUjian: RefetchUjian;
+  pathKey: "pukakp" | "dpkakp";
+  isPukakpPath: boolean;
+  isDpkakpPath: boolean;
+  editLoading: boolean;
+  onSend: (u: Ujian) => void;
+  onEdit: (u: Ujian) => void;
+  onVerify: (u: Ujian) => void;
+  onAssign: (u: Ujian) => void;
+  onSchedule: (u: Ujian) => void;
+  onRemedial: (u: Ujian) => void;
+  onClose: (u: Ujian) => void;
+}
+
+function ExamCard({
+  ujian,
+  dataUjian,
+  refetchUjian,
+  pathKey,
+  isPukakpPath,
+  isDpkakpPath,
+  editLoading,
+  onSend,
+  onEdit,
+  onVerify,
+  onAssign,
+  onSchedule,
+  onRemedial,
+  onClose,
+}: ExamCardProps) {
+  const state = getExamState(ujian);
+  const start = parseDateOnly(ujian.TanggalMulaiUjian);
+
+  const isAktif = ujian.Status === "Aktif";
+  const isDraft = ujian.Status === "Draft";
+  const isDone = ujian.IsSelesai === "1";
+  const isLive =
+    isAktif && !isDone && isTodayBetween(ujian.TanggalMulaiUjian, ujian.TanggalBerakhirUjian);
+  const needsClose = isAktif && !isDone && isTodayAfter(ujian.TanggalBerakhirUjian);
+  const needsPenguji = isDpkakpPath && isAktif && !ujian.NamaPengawasUjian;
+
+  const capacity = Math.max(Number(ujian.JumlahPesertaUjian) - 1, 0);
+  const filled = ujian.UsersUjian?.length ?? 0;
+  const pct = capacity > 0 ? Math.min(100, Math.round((filled / capacity) * 100)) : 0;
+  const isFull = capacity > 0 && filled >= capacity;
+
+  const penguji = String(ujian.NamaPengawasUjian ?? "")
+    .split("|")
+    .filter(Boolean);
+
+  const sameDay =
+    String(ujian.TanggalMulaiUjian).slice(0, 10) ===
+    String(ujian.TanggalBerakhirUjian).slice(0, 10);
+
+  return (
+    <article className="rounded-2xl border bg-card p-4 shadow-sm transition-colors hover:border-blue-300 dark:hover:border-blue-500/50 sm:p-5">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+        {/* Start-date tile: the quickest way to scan the list by time */}
+        <div
+          className={cn(
+            "hidden h-[4.5rem] w-16 shrink-0 flex-col items-center justify-center rounded-xl text-white sm:flex",
+            TONE[state.tone].tile
+          )}
+          aria-hidden="true"
+        >
+          <span className="text-xs font-medium capitalize opacity-90">
+            {start ? start.toLocaleDateString("id-ID", { month: "short" }) : "-"}
+          </span>
+          <span className="text-2xl font-bold leading-none tabular-nums">
+            {start ? start.getDate() : "-"}
+          </span>
+          <span className="mt-0.5 text-[10px] tabular-nums opacity-80">
+            {start ? start.getFullYear() : ""}
+          </span>
+        </div>
+
+        <div className="min-w-0 flex-1 space-y-2.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <StatusBadge label={state.label} tone={state.tone} live={state.live} />
+            <span className="rounded-md bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-500/10 dark:text-blue-300">
+              {ujian.TypeUjian}
+            </span>
+          </div>
+
+          <h3 className="text-base font-semibold leading-snug text-foreground">
+            {ujian.NamaUjian}
+          </h3>
+
+          <ul className="grid gap-x-6 gap-y-1.5 text-sm text-muted-foreground sm:grid-cols-2">
+            <li className="flex items-center gap-2">
+              <Building2 className="h-4 w-4 shrink-0" />
+              <span className="truncate">{ujian.PUKAKP}</span>
+            </li>
+            <li className="flex items-center gap-2">
+              <MapPin className="h-4 w-4 shrink-0" />
+              <span className="truncate">{ujian.TempatUjian}</span>
+            </li>
+            <li className="flex items-center gap-2 sm:col-span-2">
+              <CalendarDays className="h-4 w-4 shrink-0" />
+              <span>
+                {generateTanggalPelatihan(ujian.TanggalMulaiUjian)}
+                {!sameDay && <> s.d {generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}</>}
+              </span>
+            </li>
+            {isAktif && (
+              <li className="flex items-center gap-2 sm:col-span-2">
+                <UserCog className="h-4 w-4 shrink-0" />
+                {penguji.length > 0 ? (
+                  <span>Penguji: {penguji.join(", ")}</span>
+                ) : (
+                  <span className="text-amber-700 dark:text-amber-400">
+                    Penguji belum ditetapkan
+                  </span>
+                )}
+              </li>
+            )}
+          </ul>
+        </div>
+
+        {/* Participants */}
+        <div className="w-full shrink-0 rounded-xl bg-muted/50 p-3 lg:w-52">
+          <div className="flex items-center justify-between text-xs">
+            <span className="flex items-center gap-1.5 text-muted-foreground">
+              <Users className="h-3.5 w-3.5" />
+              Peserta
+            </span>
+            <span className="font-semibold tabular-nums text-foreground">
+              {filled} / {capacity}
+            </span>
+          </div>
+          <div
+            className="mt-2 h-1.5 overflow-hidden rounded-full bg-border"
+            role="progressbar"
+            aria-valuenow={filled}
+            aria-valuemin={0}
+            aria-valuemax={capacity}
+            aria-label="Jumlah peserta terdaftar"
+          >
+            <div
+              className={cn(
+                "h-full rounded-full transition-all",
+                isFull ? "bg-emerald-500" : "bg-blue-500"
+              )}
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+          {capacity > 0 && (
+            <p className="mt-1.5 text-[11px] text-muted-foreground">
+              {isFull ? "Kuota terpenuhi" : `${capacity - filled} slot tersisa`}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Actions: solid = next step, outline = secondary, right side = utilities */}
+      <div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-4">
+        {isAktif && (
+          <Button asChild size="sm" className={btnPrimary}>
+            <Link
+              href={`/lembaga/${pathKey}/admin/dashboard/ujian/peserta-ujian/${ujian.IdUjian}/${ujian.IdTypeUjian}`}
+            >
+              <Users className="h-4 w-4" />
+              Peserta
+            </Link>
+          </Button>
+        )}
+
+        {isDraft && !isDpkakpPath && (
+          <Button size="sm" className={btnPrimary} onClick={() => onSend(ujian)}>
+            <Send className="h-4 w-4" />
+            Kirim permohonan
+          </Button>
+        )}
+
+        {isDpkakpPath && ujian.Status === "Pending" && (
+          <Button size="sm" className={btnPrimary} onClick={() => onVerify(ujian)}>
+            <ShieldCheck className="h-4 w-4" />
+            Verifikasi
+          </Button>
+        )}
+
+        {isPukakpPath && isDraft && (
+          <Button
+            size="sm"
+            variant="outline"
+            className={btnSoft}
+            disabled={editLoading}
+            onClick={() => onEdit(ujian)}
+          >
+            {editLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Pencil className="h-4 w-4" />
+            )}
+            Edit
+          </Button>
+        )}
+
+        {needsPenguji && (
+          <Button size="sm" variant="outline" className={btnSoft} onClick={() => onAssign(ujian)}>
+            <UserCog className="h-4 w-4" />
+            Tetapkan penguji
+          </Button>
+        )}
+
+        {isAktif && (
+          <Button size="sm" variant="outline" className={btnSoft} onClick={() => onSchedule(ujian)}>
+            <CalendarClock className="h-4 w-4" />
+            Waktu
+          </Button>
+        )}
+
+        {isLive && (
+          <Button size="sm" variant="outline" className={btnSoft} onClick={() => onRemedial(ujian)}>
+            <RotateCcw className="h-4 w-4" />
+            Remedial
+          </Button>
+        )}
+
+        {needsClose && (
+          <Button size="sm" className={btnDanger} onClick={() => onClose(ujian)}>
+            <Lock className="h-4 w-4" />
+            Tutup ujian
+          </Button>
+        )}
+
+        <div className="ml-auto flex items-center gap-2">
+          <InformationAction ujian={ujian} data={dataUjian} onUpdated={refetchUjian} />
+          <DeleteAction
+            idUjian={ujian.IdUjian.toString()}
+            status={ujian.Status}
+            refetchUjian={refetchUjian}
+          />
+        </div>
+      </div>
+    </article>
+  );
+}
+
+/* ========================================================================== */
+/*  Main component                                                             */
+/* ========================================================================== */
+
 const TableDataUjian: React.FC = () => {
-  /** Fetching Ujian AKP **/
+  /* ---------- Data ---------- */
   const {
-    data: dataUjian, isFetching: isFetchingDataUjian, counters: countersUjian, error: errorFetchingUjian, refetch: refetchUjian,
-  } = useFetchUjianKeahlianAKP('admin', true, { includeTryout: false })
+    data: dataUjian,
+    isFetching: isFetchingDataUjian,
+    counters: countersUjian,
+    refetch: refetchUjian,
+  } = useFetchUjianKeahlianAKP("admin", true, { includeTryout: false });
+  const { dataTypeUjian } = useFetchTypeUjianKeahlianAKP();
+  const { dataPenguji } = useFetchPengujiKeahlianAKP();
 
-  /** Fetching Type Ujian AKP **/
-  const { dataTypeUjian, isFetching: isFetchingTypeUjian, error: errorFetchingTypeUjian, refetch: refetchTypeUjian } = useFetchTypeUjianKeahlianAKP();
-
-  /** Fetching Penguji Ujian AKP **/
-  const { dataPenguji, isFetching: isFetchingPenguji, error: errorFetchingPenguji, refetch: refetchPenguji } = useFetchPengujiKeahlianAKP();
-
-  // ================== UTILS ==================
-  const [selectedTahun, setSelectedTahun] = React.useState<number>(new Date().getFullYear())
-  const years = generatedYears()
-
-  const [isFetching, setIsFetching] = React.useState<boolean>(false);
-  const [isPosting, setIsPosting] = React.useState<boolean>(false);
-  const [isOpenFormUjianKeahlian, setIsOpenFormUjianKeahlian] =
-    React.useState<boolean>(false);
-  const [selectedId, setSelectedId] = React.useState<number>(0);
-  const [filePermohonan, setFilePermohonan] = React.useState<File | null>(null);
-
-  const [waktuRemedial, setWaktuRemedial] = React.useState<string>("");
-  const [openFormRemedial, setOpenFormRemedial] =
-    React.useState<boolean>(false);
-  const [isProcessingRemedial, setIsProcessingRemedial] =
-    React.useState<boolean>(false);
-  const [
-    openFormValidasiPelaksanaanUjian,
-    setOpenFormValidasiPelaksanaanUjian,
-  ] = React.useState<boolean>(false);
-  const [isValidating, setIsValidating] = React.useState<boolean>(false);
-  const [selectedSuratPermohonan, setSelectedSuratPermohonan] =
-    React.useState<string>("");
-  const [selectedStatusFilter, setSelectedStatusFilter] =
-    React.useState<string>("All");
-  const [searchQuery, setSearchQuery] = React.useState<string>("");
-  const [selectedIdUjian, setSelectedIdUjian] = React.useState<number>(0);
-  const [selectedUjian, setSelectedUjian] = React.useState<Ujian | null>(null);
-
-  // ================== PATH & COOKIE VARIABLES ==================
-  const pathPukakp = usePathname().includes("pukakp");
+  /* ---------- Route & role (read once, never inside loops) ---------- */
+  const pathname = usePathname() ?? "";
+  const isPukakpPath = pathname.includes("pukakp");
+  const isDpkakpPath = pathname.includes("dpkakp");
+  const pathKey: "pukakp" | "dpkakp" = isPukakpPath ? "pukakp" : "dpkakp";
   const isPenguji = Cookies.get("IsPUKAKP") == "penguji";
+  const canCreate = isPukakpPath && !isPenguji;
 
-  // ================== Penguji Setting (DPKAKP/Sekretariat DPKAKP)
-  const [jumlahPenguji, setJumlahPenguji] = React.useState<number>(1);
+  const [pukakpName, setPukakpName] = React.useState("");
+  const isTryout = pukakpName === "Tryout Center";
 
+  /* ---------- View, filters, paging ---------- */
+  const [view, setView] = React.useState<"list" | "create">("list");
+  const [searchQuery, setSearchQuery] = React.useState("");
+  const [selectedStatusFilter, setSelectedStatusFilter] = React.useState("All");
+  const [selectedTahun, setSelectedTahun] = React.useState("all");
+  const years = generatedYears();
+
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const itemsPerPage = 10;
+
+  /* ---------- Create form (wizard) ---------- */
+  const [step, setStep] = React.useState(0);
+  const [form, setForm] = React.useState<CreateForm>(INITIAL_FORM);
+  const [waktu, setWaktu] = React.useState<WaktuState>(emptyWaktu());
+  const [filePermohonan, setFilePermohonan] = React.useState<File | null>(null);
+  const [isPosting, setIsPosting] = React.useState(false);
+
+  const setField = <K extends keyof CreateForm>(key: K, value: CreateForm[K]) =>
+    setForm((p) => ({ ...p, [key]: value }));
+  const setWaktuKey = (key: WaktuKey, value: string) =>
+    setWaktu((p) => ({ ...p, [key]: value }));
+
+  /* ---------- Edit dialog (PUKAKP, Draft only) ---------- */
+  const [editOpen, setEditOpen] = React.useState(false);
+  const [editId, setEditId] = React.useState(0);
+  const [editLoadingId, setEditLoadingId] = React.useState<number | null>(null);
+  const [editForm, setEditForm] = React.useState<EditForm>(INITIAL_EDIT);
+  const setEdit = <K extends keyof EditForm>(key: K, value: string) =>
+    setEditForm((p) => ({ ...p, [key]: value }));
+
+  /* ---------- Assign examiners dialog (DPKAKP) ---------- */
+  const [assignOpen, setAssignOpen] = React.useState(false);
+  const [assignId, setAssignId] = React.useState(0);
+  const [jumlahPenguji, setJumlahPenguji] = React.useState(1);
   const [pengujiData, setPengujiData] = React.useState(
     Array.from({ length: 3 }, () => ({ nama: "", id: "" }))
   );
+  const [namaVasilitator, setNamaVasilitator] = React.useState("");
 
-  const handlePengujiChange = (index: number, value: any) => {
-    const [nama, id] = value.split("|");
-    const newPengujiData = [...pengujiData];
-    newPengujiData[index] = { nama, id };
-    setPengujiData(newPengujiData);
+  /* ---------- Other dialogs ---------- */
+  const [sendTargetId, setSendTargetId] = React.useState<number | null>(null);
+  const [isSending, setIsSending] = React.useState(false);
+  const [closeTargetId, setCloseTargetId] = React.useState<number | null>(null);
+  const [isClosing, setIsClosing] = React.useState(false);
+  const [timeTargetId, setTimeTargetId] = React.useState<number | null>(null);
+
+  const [openFormValidasiPelaksanaanUjian, setOpenFormValidasiPelaksanaanUjian] =
+    React.useState(false);
+  const [selectedId, setSelectedId] = React.useState(0);
+  const [selectedSuratPermohonan, setSelectedSuratPermohonan] = React.useState("");
+
+  const [openFormRemedial, setOpenFormRemedial] = React.useState(false);
+  const [selectedIdUjian, setSelectedIdUjian] = React.useState(0);
+
+  const authHeaders = () => ({ Authorization: `Bearer ${Cookies.get("XSRF095")}` });
+
+  /* ---------- Effects ---------- */
+  React.useEffect(() => {
+    setPukakpName(Cookies.get("PUKAKP") ?? "");
+    setWaktu(emptyWaktu(getFormattedDateTime()));
+  }, []);
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedStatusFilter, selectedTahun]);
+
+  /* ---------- Derived data ---------- */
+  const filteredData = React.useMemo(
+    () =>
+      dataUjian.filter((ujian: Ujian) => {
+        const q = searchQuery.trim().toLowerCase();
+        const matchesSearch =
+          !q ||
+          ujian.TypeUjian.toLowerCase().includes(q) ||
+          ujian.NamaUjian.toLowerCase().includes(q);
+
+        const matchesYear =
+          selectedTahun === "all" ||
+          String(ujian.TanggalMulaiUjian).slice(0, 4) === selectedTahun;
+
+        let matchesStatus: boolean;
+        if (selectedStatusFilter == "Pilih Penguji") {
+          matchesStatus = ujian.NamaPengawasUjian === "";
+        } else if (selectedStatusFilter == "Telah Selesai") {
+          matchesStatus = ujian.IsSelesai === "1";
+        } else if (selectedStatusFilter == "Akan Dilaksanakan") {
+          matchesStatus = isTodayBefore(ujian.TanggalMulaiUjian) && ujian.IsSelesai == "";
+        } else if (selectedStatusFilter == "Sedang Berlangsung") {
+          matchesStatus =
+            isTodayBetween(ujian.TanggalMulaiUjian, ujian.TanggalBerakhirUjian) &&
+            ujian.IsSelesai !== "1";
+        } else {
+          matchesStatus =
+            selectedStatusFilter === "All" || ujian.Status === selectedStatusFilter;
+        }
+
+        return matchesSearch && matchesYear && matchesStatus;
+      }),
+    [dataUjian, searchQuery, selectedStatusFilter, selectedTahun]
+  );
+
+  const totalPages = Math.max(1, Math.ceil(filteredData.length / itemsPerPage));
+  const page = Math.min(currentPage, totalPages);
+  const indexOfFirstItem = (page - 1) * itemsPerPage;
+  const currentPageData = filteredData.slice(
+    indexOfFirstItem,
+    indexOfFirstItem + itemsPerPage
+  );
+
+  const hasActiveFilter =
+    searchQuery.trim() !== "" || selectedStatusFilter !== "All" || selectedTahun !== "all";
+  const resetFilters = () => {
+    setSearchQuery("");
+    setSelectedStatusFilter("All");
+    setSelectedTahun("all");
   };
 
-  const generateIdPengujiString = () => {
-    return pengujiData
-      .map((penguji) => penguji.id)
-      .filter((id) => id)
-      .join(",");
+  const sendTarget = dataUjian.find((u: Ujian) => u.IdUjian === sendTargetId);
+  const closeTarget = dataUjian.find((u: Ujian) => u.IdUjian === closeTargetId);
+  const timeTarget = dataUjian.find((u: Ujian) => u.IdUjian === timeTargetId);
+
+  /* ---------- Helpers that need component data ---------- */
+  const resolveTypeUjian = (value: string) => {
+    const [name, id] = value.split(",");
+    if (id) return { name, id };
+    const found = dataTypeUjian.find((t) => t.NamaTypeUjian === name);
+    return { name, id: found ? String(found.IdTypeUjian) : "" };
   };
 
-  const generateNamaPengujiString = () => {
-    return pengujiData
-      .map((penguji) => penguji.nama)
-      .filter((nama) => nama)
-      .join("|");
-  };
-
-  // =============================================================
-
-  const [idTypeUjian, setIdTypeUjian] = React.useState<string>("");
-  const [typeUjian, setTypeUjian] = React.useState<string>("");
-  const [namaUjian, setNamaUjian] = React.useState<string>("");
-  const [tempatUjian, setTempatUjian] = React.useState<string>("");
-  const [pukakp, setPukakp] = React.useState<string>("");
-  const [namaPengawas, setNamaPengawas] = React.useState<string>("");
-  const [idPengawas, setIdPengawas] = React.useState<string>("");
-  const [namaVasilitator, setNamaVasilitator] = React.useState<string>("");
-  const [tanggalMulai, setTanggalMulai] = React.useState<string>("");
-  const [tanggalBerakhir, setTanggalBerakhir] = React.useState<string>("");
-  const [waktuUjian, setWaktuUjian] = React.useState<string>("");
-  const [jumlahPeserta, setJumlahPeserta] = React.useState<string>("");
-  const [status, setStatus] = React.useState<string>("");
-
-  const [selectedTypeUjian, setSelectedTypeUjian] = React.useState<string>("");
-
-  const [waktuF1, setWaktuF1] = React.useState<string>("");
-  const [waktuF2, setWaktuF2] = React.useState<string>("");
-  const [waktuF3, setWaktuF3] = React.useState<string>("");
-
-  const [waktuF1B1, setWaktuF1B1] = React.useState<string>("");
-  const [waktuF1B2, setWaktuF1B2] = React.useState<string>("");
-  const [waktuF1B3, setWaktuF1B3] = React.useState<string>("");
-  const [waktuF2B1, setWaktuF2B1] = React.useState<string>("");
-  const [waktuF3B1, setWaktuF3B1] = React.useState<string>("");
-  const [waktuF3B2, setWaktuF3B2] = React.useState<string>("");
-
-  /*======= HANDLING CLEAR STATE VARIABLES UJIAN ======== */
-  const handleClearNewUjianKeahlian = async () => {
-    setWaktuF1("");
-    setWaktuF2("");
-    setWaktuF3("");
-    setWaktuF1B1("");
-    setWaktuF1B2("");
-    setWaktuF1B3("");
-    setWaktuF2B1("");
-    setWaktuF3B1("");
-    setWaktuF3B2("");
-    setIdTypeUjian("");
-    setSelectedTypeUjian("");
-    setTypeUjian("");
-    setNamaUjian("");
-    setTempatUjian("");
-    setPukakp("");
-    setNamaPengawas("");
-    setNamaVasilitator("");
-    setTanggalMulai("");
-    setTanggalBerakhir("");
-    setWaktuUjian("");
-    setJumlahPeserta("");
-    setIdPengawas("");
-    setStatus("");
+  const resetCreateForm = () => {
+    setForm(INITIAL_FORM);
+    setWaktu(emptyWaktu(getFormattedDateTime()));
     setFilePermohonan(null);
+    setStep(0);
   };
 
-  /*=============== HANDLING POSTING UJIAN ============== */
-  const handlePostNewUjianKeahlian = async (e: any) => {
+  /* ---------- Create: validation per step ---------- */
+  const waktuKeysNeeded: WaktuKey[] =
+    form.jenis === "Klasikal"
+      ? KLASIKAL_FIELDS.map((f) => f.key)
+      : REWARDING_FIELDS.map((f) => f.key);
+
+  const participants = Number(form.jumlahPeserta);
+  const missingByStep: string[][] = [
+    [
+      !form.typeUjian && "Tipe ujian",
+      !form.namaUjian.trim() && "Nama ujian",
+      !form.tempatUjian.trim() && "Tempat ujian",
+      !(Number.isInteger(participants) && participants >= 1) && "Jumlah peserta",
+    ].filter(Boolean) as string[],
+    [
+      !form.tanggalMulai && "Tanggal mulai",
+      !form.tanggalBerakhir && "Tanggal berakhir",
+      waktuKeysNeeded.some((k) => !waktu[k]) && "Waktu pelaksanaan",
+    ].filter(Boolean) as string[],
+    [],
+  ];
+  const missing = missingByStep[step];
+  const durasi = dayCount(form.tanggalMulai, form.tanggalBerakhir);
+
+  /* ---------- Create: submit ---------- */
+  const handlePostNewUjianKeahlian = async () => {
+    if (isPosting) return;
     setIsPosting(true);
-    const [nameTypeUjianValue, idTypeUjianValue] = typeUjian.split(",");
+    const { name, id } = resolveTypeUjian(form.typeUjian);
 
     const formData = new FormData();
-    formData.append("IdTypeUjian", idTypeUjianValue);
-    formData.append("TypeUjian", nameTypeUjianValue);
-    formData.append("NamaUjian", namaUjian);
-    formData.append("TempatUjian", tempatUjian);
-    formData.append("PUKAKP", Cookies.get("PUKAKP")!);
-    formData.append("NamaPengawas", namaPengawas);
-    formData.append("NamaVasilitator", namaVasilitator);
-    formData.append("TanggalMulaiUjian", tanggalMulai);
-    formData.append("TanggalBerakhirUjian", tanggalBerakhir);
-    formData.append("WaktuUjian", waktuUjian);
-    formData.append("JumlahPesertaUjian", (parseInt(jumlahPeserta) + 1).toString());
+    formData.append("IdTypeUjian", id);
+    formData.append("TypeUjian", name);
+    formData.append("NamaUjian", form.namaUjian.trim());
+    formData.append("TempatUjian", form.tempatUjian.trim());
+    formData.append("PUKAKP", Cookies.get("PUKAKP") ?? "");
+    formData.append("NamaPengawas", "");
+    formData.append("NamaVasilitator", "");
+    formData.append("TanggalMulaiUjian", form.tanggalMulai);
+    formData.append("TanggalBerakhirUjian", form.tanggalBerakhir);
+    formData.append("WaktuUjian", "");
+    formData.append("JumlahPesertaUjian", (parseInt(form.jumlahPeserta, 10) + 1).toString());
     formData.append("Status", "Draft");
-    if (filePermohonan != null) {
-      formData.append("filePermohonan", filePermohonan!);
-    }
+    if (filePermohonan != null) formData.append("filePermohonan", filePermohonan);
 
-    if (selectedTypeUjian == "Klasikal") {
-      formData.append("WaktuF1B1", waktuF1B1);
-      formData.append("WaktuF1B2", waktuF1B2);
-      formData.append("WaktuF1B3", waktuF1B3);
-      formData.append("WaktuF2B1", waktuF2B1);
-      formData.append("WaktuF3B1", waktuF3B1);
-      formData.append("WaktuF3B2", waktuF3B2);
+    if (form.jenis === "Klasikal") {
+      formData.append("WaktuF1B1", waktu.F1B1);
+      formData.append("WaktuF1B2", waktu.F1B2);
+      formData.append("WaktuF1B3", waktu.F1B3);
+      formData.append("WaktuF2B1", waktu.F2B1);
+      formData.append("WaktuF3B1", waktu.F3B1);
+      formData.append("WaktuF3B2", waktu.F3B2);
     } else {
-      formData.append("waktuF1", waktuF1);
-      formData.append("waktuF2", waktuF2);
-      formData.append("waktuF3", waktuF3);
+      formData.append("waktuF1", waktu.F1);
+      formData.append("waktuF2", waktu.F2);
+      formData.append("waktuF3", waktu.F3);
     }
 
     try {
-      const response = await axios.post(
-        `${dpkakpBaseUrl}/adminPusat/createUjian`,
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      console.log(response);
+      await axios.post(`${dpkakpBaseUrl}/adminPusat/createUjian`, formData, {
+        headers: { ...authHeaders(), "Content-Type": "multipart/form-data" },
+      });
       Toast.fire({
         icon: "success",
         title: `Berhasil menambahkan data pelaksanaan ujian keahlian baru!`,
       });
       refetchUjian();
-      setIsPosting(false);
-      handleClearNewUjianKeahlian();
-      setStatus("");
+      resetCreateForm();
+      setView("list");
     } catch (error) {
       console.error(error);
+      // Keep what the user typed so they can fix it and try again.
       Toast.fire({
         icon: "error",
         title: `Gagal menambahkan data pelaksanaan ujian keahlian baru!`,
       });
-      refetchUjian();
-      handleClearNewUjianKeahlian();
-      setIsPosting(true);
-      setStatus("");
+    } finally {
+      setIsPosting(false);
     }
   };
 
-  const handleUpdateNewUjianKeahlian = async (e: any) => {
-    setIsPosting(true);
+  const handleWizardSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (missing.length > 0 || isPosting) return;
+    if (step < STEPS.length - 1) setStep(step + 1);
+    else handlePostNewUjianKeahlian();
+  };
 
+  /* ---------- Edit ---------- */
+  const handleOpenEdit = async (u: Ujian) => {
+    setEditLoadingId(u.IdUjian);
     try {
-      const response = await axios.put(
-        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedId}`,
-        {
-          nama_pengawas_ujian: generateNamaPengujiString(),
-          id_users_dpkakp: generateIdPengujiString(),
-          nama_vasilitator_ujian: namaVasilitator,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
+      const response: AxiosResponse = await axios.get(
+        `${dpkakpBaseUrl}/adminPusat/GetUjian?id=${u.IdUjian}`,
+        { headers: authHeaders() }
       );
-      console.log(response);
+      const d = response.data.data[0];
+      const found = dataTypeUjian.find((t) => t.NamaTypeUjian === d.TypeUjian);
+      setEditId(u.IdUjian);
+      setEditForm({
+        typeUjian: `${d.TypeUjian},${found?.IdTypeUjian ?? d.IdTypeUjian ?? ""}`,
+        namaUjian: d.NamaUjian ?? "",
+        tempatUjian: d.TempatUjian ?? "",
+        tanggalMulai: String(d.TanggalMulaiUjian ?? "").slice(0, 10),
+        tanggalBerakhir: String(d.TanggalBerakhirUjian ?? "").slice(0, 10),
+      });
+      setEditOpen(true);
+    } catch (error) {
+      console.error("ERROR FETCHING UJIAN : ", error);
+      Toast.fire({ icon: "error", title: "Gagal memuat data ujian, coba lagi." });
+    } finally {
+      setEditLoadingId(null);
+    }
+  };
+
+  const editValid =
+    !!editForm.typeUjian &&
+    !!editForm.namaUjian.trim() &&
+    !!editForm.tempatUjian.trim() &&
+    !!editForm.tanggalMulai &&
+    !!editForm.tanggalBerakhir;
+
+  const handleEditUjianKeahlian = async () => {
+    if (!editValid || isPosting) return;
+    setIsPosting(true);
+    const { name, id } = resolveTypeUjian(editForm.typeUjian);
+    try {
+      await axios.put(
+        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${editId}`,
+        {
+          nama_ujian: editForm.namaUjian.trim(),
+          tempat_ujian: editForm.tempatUjian.trim(),
+          pukakp: Cookies.get("PUKAKP") ?? "",
+          tanggal_mulai_ujian: editForm.tanggalMulai,
+          tanggal_berakhir_ujian: editForm.tanggalBerakhir,
+          status: "Draft",
+          type_ujian: name,
+          id_type_ujian: id,
+        },
+        { headers: authHeaders() }
+      );
       Toast.fire({
         icon: "success",
         title: `Berhasil mengupdate data pelaksanaan ujian keahlian baru!`,
       });
       refetchUjian();
-      setIsOpenFormUjianKeahlian(false);
-      setIsPosting(false);
-      setStatus("");
+      setEditOpen(false);
     } catch (error) {
       console.error(error);
       Toast.fire({
         icon: "error",
         title: `Gagal mengupdate data pelaksanaan ujian keahlian baru!`,
       });
-      refetchUjian();
-      setIsOpenFormUjianKeahlian(false);
-      setIsPosting(true);
-      setStatus("");
+    } finally {
+      setIsPosting(false);
     }
   };
 
-  const handleKirimPermohonan = async (id: number) => {
-    setIsValidating(true);
+  /* ---------- Assign examiners ---------- */
+  const activePenguji = pengujiData.slice(0, jumlahPenguji);
+  const assignValid = activePenguji.every((p) => p.id) && !!namaVasilitator.trim();
 
+  const handlePengujiChange = (index: number, value: string) => {
+    const [nama, id] = value.split("|");
+    setPengujiData((prev) => prev.map((p, i) => (i === index ? { nama, id } : p)));
+  };
+
+  const resetAssignForm = () => {
+    setJumlahPenguji(1);
+    setPengujiData(Array.from({ length: 3 }, () => ({ nama: "", id: "" })));
+    setNamaVasilitator("");
+  };
+
+  const handleAssignPenguji = async () => {
+    if (!assignValid || isPosting) return;
+    setIsPosting(true);
     try {
-      const response = await axios.put(
-        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${id}`,
+      await axios.put(
+        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${assignId}`,
         {
-          status: "Pending",
+          nama_pengawas_ujian: activePenguji.map((p) => p.nama).filter(Boolean).join("|"),
+          id_users_dpkakp: activePenguji.map((p) => p.id).filter(Boolean).join(","),
+          nama_vasilitator_ujian: namaVasilitator.trim(),
         },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
+        { headers: authHeaders() }
       );
-      console.log(response);
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil mengupdate data pelaksanaan ujian keahlian baru!`,
+      });
+      refetchUjian();
+      setAssignOpen(false);
+      resetAssignForm();
+    } catch (error) {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: `Gagal mengupdate data pelaksanaan ujian keahlian baru!`,
+      });
+    } finally {
+      setIsPosting(false);
+    }
+  };
+
+  /* ---------- Send request / close exam ---------- */
+  const handleKirimPermohonan = async () => {
+    if (!sendTarget) return;
+    setIsSending(true);
+    try {
+      await axios.put(
+        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${sendTarget.IdUjian}`,
+        { status: "Pending" },
+        { headers: authHeaders() }
+      );
       Toast.fire({
         icon: "success",
         title: `Berhasil mengirimkan permohonan pelaksanaan ujian keahlian!`,
       });
       refetchUjian();
-      setStatus("Tidak Aktif");
-      setSelectedId(0);
-      setSelectedSuratPermohonan("");
-      setOpenFormValidasiPelaksanaanUjian(false);
-      setIsValidating(false);
+      setSendTargetId(null);
     } catch (error) {
       console.error(error);
       Toast.fire({
         icon: "error",
         title: `Gagal mengirimkan permohonan pelaksanaan ujian keahlian!`,
       });
-      refetchUjian();
-      setOpenFormValidasiPelaksanaanUjian(false);
-      setIsValidating(false);
+    } finally {
+      setIsSending(false);
     }
   };
 
-  const filteredData = dataUjian.filter((ujian: Ujian) => {
-    const matchesSearchQuery =
-      ujian.TypeUjian.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      ujian.NamaUjian.toLowerCase().includes(searchQuery.toLowerCase());
-
-    let matchesStatus;
-    if (selectedStatusFilter == "Pilih Penguji") {
-      matchesStatus = ujian.NamaPengawasUjian === "";
-    } else if (selectedStatusFilter == "Telah Selesai") {
-      matchesStatus = ujian.IsSelesai === "1";
-    } else if (selectedStatusFilter == "Akan Dilaksanakan") {
-      matchesStatus = isTodayBefore(ujian.TanggalMulaiUjian) && ujian.IsSelesai == "";
-    } else if (selectedStatusFilter == 'Sedang Berlangsung') {
-      matchesStatus = isTodayBetween(ujian.TanggalMulaiUjian, ujian.TanggalBerakhirUjian) && ujian.IsSelesai !== "1"
-    } else {
-      matchesStatus =
-        selectedStatusFilter === "All" || ujian.Status === selectedStatusFilter;
-    }
-
-
-    const pathname = usePathname();
-
-
-    return matchesSearchQuery && matchesStatus;
-  });
-
-
-  // CANCEL ADD NEW UJIAN
-  const handleCancelAddNewUjian = () => {
-    setTypeUjian("");
-    setNamaUjian("");
-    setTempatUjian("");
-    setTanggalMulai("");
-    setTanggalBerakhir("");
-    setWaktuUjian("");
-    setJumlahPeserta("");
-    setFilePermohonan(null);
-    setSelectedIdUjian(0);
-  };
-
-  const handleFetchingDataUjianById = async (idUjian: number) => {
-    setSelectedIdUjian(idUjian);
-    try {
-      const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminPusat/GetUjian?id=${idUjian}`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-
-      console.log({ response });
-      setSelectedUjian(response.data.data[0]);
-      setTypeUjian(response.data.data[0].TypeUjian);
-      setNamaUjian(response.data.data[0].NamaUjian);
-      setTempatUjian(response.data.data[0].TempatUjian);
-      setTanggalMulai(response.data.data[0].TanggalMulaiUjian);
-      setTanggalBerakhir(response.data.data[0].TanggalBerakhirUjian);
-      setWaktuUjian(response.data.data[0].WaktuUjian);
-      setJumlahPeserta(response.data.data[0].JumlahPesertaUjian);
-      setIsOpenFormUjianKeahlian(true);
-    } catch (error) {
-      console.error("ERROR FETCHING UJIAN : ", error);
-      setIsFetching(false);
-      setIsOpenFormUjianKeahlian(false);
-      handleCancelAddNewUjian();
-      throw error;
-    }
-  };
-
-  const handleEditUjianKeahlian = async (e: any) => {
-    try {
-      const response = await axios.put(
-        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedIdUjian}`,
-        {
-          nama_ujian: namaUjian,
-          tempat_ujian: tempatUjian,
-          pukakp: pukakp,
-          tanggal_mulai_ujian: tanggalMulai,
-          tanggal_berakhir_ujian: tanggalBerakhir,
-          status: "Draft",
-          type_ujian: typeUjian,
-          id_type_ujian: idTypeUjian,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
-      );
-      console.log(response);
-      Toast.fire({
-        icon: "success",
-        title: `Berhasil mengupdate data pelaksanaan ujian keahlian baru!`,
-      });
-      refetchUjian();
-      setIsPosting(false);
-      handleCancelAddNewUjian();
-      handleClearNewUjianKeahlian();
-      setIsOpenFormUjianKeahlian(false);
-    } catch (error) {
-      console.error(error);
-      Toast.fire({
-        icon: "error",
-        title: `Gagal mengupdate data pelaksanaan ujian keahlian baru!`,
-      });
-      refetchUjian();
-      setIsPosting(true);
-      setIsOpenFormUjianKeahlian(false);
-      setStatus("");
-    }
-  };
-
-  React.useEffect(() => {
-    // Function to get formatted date-time with timezone offset and name
-    const getFormattedDateTime = () => {
-      const now = new Date();
-      const options: Intl.DateTimeFormatOptions = {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: false,
-      };
-
-      // Get the formatted date: `yyyy-MM-dd`
-      const formattedDate = now
-        .toLocaleString("en-GB", options)
-        .replace(/(\d{2})\/(\d{2})\/(\d{4})/, "$3-$2-$1") // Change from `dd/MM/yyyy` to `yyyy-MM-dd`
-        .replace(/,/g, ""); // Remove any commas if present
-
-      const timezoneOffset = now.getTimezoneOffset(); // Get timezone offset in minutes
-      let timezone = "";
-
-      if (timezoneOffset === -420) {
-        timezone = "+0700 WIB"; // UTC+07:00 (WIB)
-      } else if (timezoneOffset === -480) {
-        timezone = "+0800 WITA"; // UTC+08:00 (WITA)
-      } else if (timezoneOffset === -540) {
-        timezone = "+0900 WIT"; // UTC+09:00 (WIT)
-      }
-
-      return `${formattedDate} ${timezone}`;
-    };
-
-    // Set the formatted date-time for all the input fields when the component mounts
-    const formattedDateTime = getFormattedDateTime();
-    setWaktuF1(formattedDateTime);
-    setWaktuF2(formattedDateTime);
-    setWaktuF3(formattedDateTime);
-    setWaktuF1B1(formattedDateTime);
-    setWaktuF1B2(formattedDateTime);
-    setWaktuF1B3(formattedDateTime);
-    setWaktuF2B1(formattedDateTime);
-    setWaktuF3B1(formattedDateTime);
-    setWaktuF3B2(formattedDateTime);
-    setWaktuRemedial(formattedDateTime);
-  }, []);
-
-  const handleFileChange = (e: any) => {
-    setFilePermohonan(e.target.files[0]);
-  };
-
-  const [openFormCloseExam, setOpenFormCloseExam] =
-    React.useState<boolean>(false);
   const handleCloseExam = async () => {
-    setIsPosting(true);
-    setOpenFormCloseExam(true)
+    if (!closeTarget) return;
+    setIsClosing(true);
     try {
-      const response = await axios.put(
-        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${selectedIdUjian}`,
-        {
-          is_selesai: '1'
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("XSRF095")}`,
-          },
-        }
+      await axios.put(
+        `${dpkakpBaseUrl}/adminPusat/updateUjian?id=${closeTarget.IdUjian}`,
+        { is_selesai: "1" },
+        { headers: authHeaders() }
       );
-      console.log(response);
       Toast.fire({
         icon: "success",
-        title: 'Yeayyy!',
+        title: "Yeayyy!",
         text: `Berhasil menutup ujian!`,
       });
       refetchUjian();
-      setOpenFormCloseExam(false);
-      setIsPosting(false);
+      setCloseTargetId(null);
     } catch (error) {
       console.error(error);
       Toast.fire({
         icon: "error",
         title: `Gagal menutup ujian, harap cek internet atau admin pusat!`,
       });
-      refetchUjian();
-      setOpenFormCloseExam(false);
-      setIsPosting(false);
+    } finally {
+      setIsClosing(false);
     }
   };
 
-  const [waktuDate, setWaktuDate] = React.useState('');
-  const [waktuTime, setWaktuTime] = React.useState('');
-  const [waktuZone, setWaktuZone] = React.useState('WIB');
-
-  React.useEffect(() => {
-    if (waktuDate && waktuTime && waktuZone) {
-      const zoneMap: { [key: string]: string } = {
-        WIB: '+0700',
-        WITA: '+0800',
-        WIT: '+0900',
-      };
-
-      const timeWithSeconds = waktuTime.length === 5 ? `${waktuTime}:00` : waktuTime;
-
-      const formatted = `${waktuDate} ${timeWithSeconds} ${zoneMap[waktuZone]} ${waktuZone}`;
-      setWaktuF1(formatted);
-      setWaktuF2(formatted);
-      setWaktuF3(formatted);
-    }
-  }, [waktuDate, waktuTime, waktuZone]);
-
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const itemsPerPage = 10;
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentPageData = filteredData.slice(indexOfFirstItem, indexOfLastItem);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  /* ---------- Card callbacks ---------- */
+  const onVerify = (u: Ujian) => {
+    setSelectedId(u.IdUjian);
+    setSelectedSuratPermohonan(u.FilePermohonan);
+    setOpenFormValidasiPelaksanaanUjian(true);
+  };
+  const onAssign = (u: Ujian) => {
+    setAssignId(u.IdUjian);
+    setAssignOpen(true);
+  };
+  const onRemedial = (u: Ujian) => {
+    setSelectedIdUjian(u.IdUjian);
+    setOpenFormRemedial(true);
   };
 
-
+  /* ====================================================================== */
+  /*  Render                                                                 */
+  /* ====================================================================== */
   return (
     <section className="h-full w-full">
-      <section
-        aria-label="main content"
-        className="flex flex-col w-full h-full"
-      >
-        <StatusUjianKeahlianAKP
-          isPenguji={isPenguji}
-          selectedStatusFilter={selectedStatusFilter}
-          setSelectedStatusFilter={setSelectedStatusFilter}
-          data={dataUjian}
-          countersUjian={countersUjian}
-        />
+      <div className="flex h-full w-full flex-col">
+        {view === "list" && (
+          <StatusUjianKeahlianAKP
+            isPenguji={isPenguji}
+            selectedStatusFilter={selectedStatusFilter}
+            setSelectedStatusFilter={setSelectedStatusFilter}
+            data={dataUjian}
+            countersUjian={countersUjian}
+          />
+        )}
 
-        {
-          isFetchingDataUjian ? <div className="my-32 w-full flex items-center justify-center">
-            <HashLoader color="#338CF5" size={50} />
-          </div> : <div className="px-4 -mt-4">
-            <Tabs defaultValue="account" className="w-full">
-              {usePathname().includes("pukakp") && !isPenguji && (
-                <TabsList className={`grid w-full grid-cols-2`}>
-                  <TabsTrigger value="account">
-                    Daftar Pelaksanan Ujian
-                  </TabsTrigger>
-                  <TabsTrigger value="password">
-                    Buat Pelaksanaan Ujian Baru
-                  </TabsTrigger>
-                </TabsList>
-              )}
+        <div className="space-y-5 px-4 pb-10 pt-2">
+          {view === "list" ? (
+            <>
+              {/* Header */}
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold tracking-tight text-foreground">
+                    Pelaksanaan Ujian Keahlian
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    Pantau jadwal, peserta, dan status setiap pelaksanaan ujian.
+                  </p>
+                </div>
+                {canCreate && (
+                  <Button
+                    onClick={() => setView("create")}
+                    className="h-10 gap-2 rounded-xl bg-blue-600 px-4 text-white shadow-sm hover:bg-blue-700"
+                  >
+                    <Plus className="h-4 w-4" />
+                    Ajukan ujian baru
+                  </Button>
+                )}
+              </div>
 
-              <TabsContent value="account">
-                <div className="flex flex-col gap-4">
-                  <div className="mb-1">
-                    <div className="flex w-full gap-3 items-center">
-                      <Input
-                        type="text"
-                        placeholder="Cari berdasarkan Program Ujian atau Nama Ujian"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full text-sm border-blue-200 focus:border-blue-500 focus:ring-blue-500 rounded-xl shadow-sm"
-                      />
-
-                      <Select
-                        value={selectedTahun.toString()} onValueChange={(val) => setSelectedTahun(parseInt(val))}
-                      >
-                        <SelectTrigger className="w-fit text-base py-5 border-blue-200 focus:border-blue-500 focus:ring-blue-500 rounded-xl shadow-sm bg-white">
-                          <SelectValue placeholder="Tahun Pelaksanaan" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {years.map((year) => (
-                            <SelectItem key={year} value={year.toString()} className='text-gray-700 focus:bg-blue-50 focus:text-blue-700'>
-                              {year}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-
-                    </div>
-                  </div>
-                  {filteredData.length === 0 ? (
-                    <EmptyData />
-                  ) : (
-                    <>
-                      <div className="overflow-x-auto rounded-2xl border border-blue-100 shadow-[0_4px_20px_-4px_rgba(59,130,246,0.1)] bg-white">
-                        <table className="min-w-full text-sm text-left border-collapse">
-                          <thead className="bg-gradient-to-r from-blue-50 to-blue-100/50 text-blue-900 border-b border-blue-200">
-                            <tr>
-                              <th className="p-4 text-center font-semibold whitespace-nowrap">No</th>
-                              <th className="p-4 font-semibold whitespace-nowrap">Nama Ujian</th>
-                              <th className="p-4 text-center font-semibold whitespace-nowrap">Tempat</th>
-                              <th className="p-4 text-center font-semibold whitespace-nowrap">Waktu</th>
-                              <th className="p-4 text-center font-semibold whitespace-nowrap">Peserta</th>
-                              <th className="p-4 text-center font-semibold whitespace-nowrap">Aksi</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-blue-50">
-                            {currentPageData.map((ujian, index) => (
-                              <tr
-                                key={index}
-                                className="hover:bg-blue-50/40 transition-colors duration-200"
-                              >
-                                <td className="p-4 text-center font-medium text-slate-600">
-                                  {(indexOfFirstItem + index + 1)}
-                                </td>
-
-                                <td className="p-4">
-                                  <div className="font-semibold text-slate-800">{ujian.NamaUjian}</div>
-                                  <div className="text-xs text-blue-600/80 font-medium mt-0.5">
-                                    {ujian.TypeUjian} <span className="text-slate-300 mx-1">•</span> {ujian.PUKAKP}
-                                  </div>
-                                </td>
-                                <td className="p-4 text-center text-slate-700">{ujian.TempatUjian}</td>
-                                <td className="p-4 text-center text-slate-700">
-                                  <div className="flex flex-col items-center justify-center text-xs space-y-1">
-                                    <span className="bg-slate-100 px-2 py-1 rounded text-slate-600 font-medium border border-slate-200">{generateTanggalPelatihan(ujian.TanggalMulaiUjian)}</span>
-                                    <span className="text-slate-400">s.d</span>
-                                    <span className="bg-slate-100 px-2 py-1 rounded text-slate-600 font-medium border border-slate-200">{generateTanggalPelatihan(ujian.TanggalBerakhirUjian)}</span>
-                                  </div>
-                                </td>
-
-                                <td className="p-4 text-center">
-                                  <div className="inline-flex items-center justify-center bg-blue-100 text-blue-700 font-semibold px-3 py-1 rounded-full text-xs border border-blue-200">
-                                    {ujian.UsersUjian?.length ?? 0} / {ujian.JumlahPesertaUjian - 1}
-                                  </div>
-                                </td>
-                                <td className="p-4 text-right align-middle">
-                                  <div className="flex gap-2 justify-end items-center flex-wrap">
-                                    <InformationAction ujian={ujian} data={dataUjian} onUpdated={refetchUjian} />
-
-                                    {ujian!.Status == "Aktif" && (
-                                      <Link
-                                        href={`/lembaga/${usePathname().includes("pukakp")
-                                          ? "pukakp"
-                                          : "dpkakp"
-                                          }/admin/dashboard/ujian/peserta-ujian/${ujian!.IdUjian
-                                          }/${ujian!.IdTypeUjian}`}
-                                        className="bg-blue-600 hover:bg-blue-700 transition-all rounded-lg shadow-sm hover:shadow h-8 px-3 text-white flex items-center text-xs font-medium w-fit justify-center border border-transparent hover:border-blue-500"
-                                      >
-                                        <HiUserGroup className="h-4 w-4 mr-1.5 opacity-90" />
-                                        Peserta
-                                      </Link>
-                                    )}
-
-                                    {ujian!.Status == "Draft" &&
-                                      !usePathname().includes("dpkakp") ? (
-                                      <Button
-                                        onClick={() => {
-                                          handleKirimPermohonan(ujian!.IdUjian);
-                                        }}
-                                        variant="outline"
-                                        className="bg-indigo-600 hover:bg-indigo-700 transition-all shadow-sm hover:shadow h-8 px-3 text-xs w-fit text-white border-transparent hover:border-indigo-500"
-                                      >
-                                        <BiPaperPlane className="h-4 w-4 mr-1.5 opacity-90" />
-                                        Kirim
-                                      </Button>
-                                    ) : (
-                                      <></>
-                                    )}
-
-                                    {usePathname().includes("pukakp") &&
-                                      ujian!.Status == "Draft" ? (
-                                      <Button
-                                        onClick={() => {
-                                          handleFetchingDataUjianById(ujian!.IdUjian);
-                                        }}
-                                        variant="outline"
-                                        className="bg-blue-100 hover:bg-blue-200 transition-all shadow-sm h-8 px-3 text-xs w-fit text-blue-700 border-blue-200 hover:border-blue-300"
-                                      >
-                                        <FiEdit2 className="h-4 w-4 mr-1.5 opacity-90" />
-                                        Edit
-                                      </Button>
-                                    ) : (
-                                      <></>
-                                    )}
-
-                                    <DeleteAction
-                                      idUjian={ujian.IdUjian.toString()}
-                                      status={ujian.Status}
-                                      refetchUjian={refetchUjian}
-                                    />
-
-                                    {
-                                      ujian!.IsSelesai == "" ? (
-                                        <AlertDialog open={openFormCloseExam} onOpenChange={setOpenFormCloseExam}>
-                                          <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                              <AlertDialogTitle className="text-slate-800">
-                                                Apakah kamu yakin menutup ujian ini?
-                                              </AlertDialogTitle>
-                                              <AlertDialogDescription className="text-slate-600">
-                                                Menutup ujian berarti sudah selesai melaksanakan seluruh rangkaian pelaksanaan ujian. Harap diperiksa kembali nilai peserta sebelum yakin menutup ujian ini!
-                                              </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                              {
-                                                !isPosting ? (
-                                                  <>
-                                                    <AlertDialogCancel className="hover:bg-slate-100">Batal</AlertDialogCancel>
-                                                    <AlertDialogAction
-                                                      onClick={() => handleCloseExam()}
-                                                      className="bg-rose-600 hover:bg-rose-700 text-white"
-                                                    >
-                                                      Tutup
-                                                    </AlertDialogAction>
-                                                  </>
-                                                ) : <Button className='w-full' disabled>Loading....</Button>
-                                              }
-                                            </AlertDialogFooter>
-                                          </AlertDialogContent>
-                                        </AlertDialog>
-                                      ) : (
-                                        <></>
-                                      )}
-
-                                    {usePathname().includes("dpkakp") &&
-                                      (ujian!.Status == 'Pending') && (
-                                        <Button
-                                          onClick={(e) => {
-                                            setSelectedId(ujian!.IdUjian);
-                                            setSelectedSuratPermohonan(
-                                              ujian!.FilePermohonan
-                                            );
-                                            setOpenFormValidasiPelaksanaanUjian(
-                                              !openFormValidasiPelaksanaanUjian
-                                            );
-                                          }}
-                                          variant="outline"
-                                          className="bg-sky-500 hover:bg-sky-600 transition-all shadow-sm hover:shadow h-8 px-3 text-xs text-white rounded-lg w-fit border-transparent hover:border-sky-400"
-                                        >
-                                          <RiVerifiedBadgeFill className="h-4 w-4 mr-1.5 opacity-90" />
-                                          Verifikasi
-                                        </Button>
-                                      )}
-
-                                    {ujian!.Status === "Aktif" && (
-                                      <AlertDialog>
-                                        <AlertDialogTrigger asChild>
-                                          <Button
-                                            variant="outline"
-                                            className="bg-indigo-50 hover:bg-indigo-100 transition-all shadow-sm hover:shadow h-8 px-3 text-xs text-indigo-700 border-indigo-200 hover:border-indigo-300 w-fit rounded-lg"
-                                          >
-                                            <IoMdClock className="h-4 w-4 mr-1.5 opacity-90" />
-                                            Waktu
-                                          </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent className="max-w-2xl">
-                                          <AlertDialogHeader>
-                                            <div className="flex flex-col w-full items-center justify-center">
-                                              <AlertDialogTitle className="text-center leading-none text-slate-800">
-                                                Daftar Waktu Pelaksanaan{" "}
-                                                <span className="text-blue-600">{ujian!.TypeUjian}</span> di {ujian!.PUKAKP}
-                                              </AlertDialogTitle>
-                                              <AlertDialogDescription className="text-slate-600 mt-2">
-                                                Berikut merupakan waktu pelaksanaan dari
-                                                setiap fungsi dan bagian!
-                                              </AlertDialogDescription>
-                                            </div>
-                                          </AlertDialogHeader>
-                                          <JadwalUjianKeahlianAKP data={dataUjian} ujian={ujian} onUpdated={refetchUjian} />
-                                          <AlertDialogFooter>
-                                            <AlertDialogCancel className="bg-slate-900 w-full text-white hover:bg-slate-800 hover:text-white transition-colors">
-                                              Tutup
-                                            </AlertDialogCancel>
-                                          </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                      </AlertDialog>
-                                    )}
-
-                                    {usePathname().includes("dpkakp") &&
-                                      ujian!.Status == "Aktif" &&
-                                      ujian!.NamaPengawasUjian == "" && (
-                                        <Button
-                                          onClick={(e) => {
-                                            setSelectedId(ujian!.IdUjian);
-                                            setStatus(ujian!.Status);
-                                            setIsOpenFormUjianKeahlian(
-                                              !isOpenFormUjianKeahlian
-                                            );
-                                          }}
-                                          variant="outline"
-                                          className="bg-cyan-600 hover:bg-cyan-700 transition-all shadow-sm hover:shadow h-8 px-3 text-xs text-white rounded-lg w-fit border-transparent hover:border-cyan-500"
-                                        >
-                                          <TbEditCircle className="h-4 w-4 mr-1.5 opacity-90" />
-                                          Penguji
-                                        </Button>
-                                      )}
-
-                                    {
-                                      ujian!.Status === "Aktif" && ujian!.IsSelesai == "" && isTodayBetween(ujian!.TanggalMulaiUjian, ujian!.TanggalBerakhirUjian) && (
-                                        <Button
-                                          onClick={(e) => {
-                                            setSelectedIdUjian(ujian!.IdUjian);
-                                            setOpenFormRemedial(!openFormRemedial);
-                                          }}
-                                          variant="outline"
-                                          className="bg-slate-700 hover:bg-slate-800 transition-all shadow-sm hover:shadow h-8 px-3 text-xs text-white rounded-lg w-fit border-transparent"
-                                        >
-                                          <IoReload className="h-4 w-4 mr-1.5 opacity-90" />
-                                          Remedial
-                                        </Button>
-                                      )}
-
-                                    {
-                                      ujian!.IsSelesai === "" && isTodayAfter(ujian!.TanggalBerakhirUjian) && (
-                                        <Button
-                                          onClick={(e) => {
-                                            setSelectedIdUjian(ujian!.IdUjian);
-                                            setOpenFormCloseExam(!openFormRemedial);
-                                          }}
-                                          variant="outline"
-                                          className="bg-rose-500 hover:bg-rose-600 transition-all shadow-sm hover:shadow h-8 px-3 text-xs text-white rounded-lg w-fit border-transparent hover:border-rose-400"
-                                        >
-                                          <BiSolidLockAlt className="h-4 w-4 mr-1.5 opacity-90" />
-                                          Tutup
-                                        </Button>
-                                      )}
-                                  </div>
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-
-                      {/* Pagination */}
-                      <div className="mt-4 flex justify-end">
-                        <Pagination
-                          totalItems={filteredData.length}
-                          itemsPerPage={itemsPerPage}
-                          currentPage={currentPage}
-                          onPageChange={handlePageChange}
-                        />
-                      </div>
-                    </>
+              {/* Toolbar */}
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <div className="relative flex-1">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    placeholder="Cari berdasarkan program ujian atau nama ujian"
+                    aria-label="Cari ujian"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="h-10 rounded-xl pl-9 pr-9 [&::-webkit-search-cancel-button]:hidden"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      aria-label="Hapus pencarian"
+                      onClick={() => setSearchQuery("")}
+                      className="absolute right-2.5 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
                   )}
-
                 </div>
 
-              </TabsContent>
-              <TabsContent value="password">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>{Cookies.get('PUKAKP') === 'Tryout Center' ? 'Ajukan Permohonan Try Out' : 'Ajukan Permohonan Ujian AKP'}</CardTitle>
-                    <CardDescription>
-                      Dalam hal melaksanakan ujian keahlian di PUKAKP masing -
-                      masing dari permohonan lemdiklat yang mengajukan, harap
-                      mengajukan permohonan pelaksanaan kepada tim sekretariat
-                      untuk diketahui!
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4 -mt-6">
-                    <form autoComplete="off">
-                      {/* PUKAKP */}
+                <Select value={selectedTahun} onValueChange={setSelectedTahun}>
+                  <SelectTrigger
+                    aria-label="Tahun pelaksanaan"
+                    className="h-10 w-full rounded-xl bg-background sm:w-44"
+                  >
+                    <SelectValue placeholder="Tahun pelaksanaan" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Semua tahun</SelectItem>
+                    {years.map((year: number | string) => (
+                      <SelectItem key={year} value={String(year)}>
+                        {year}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-                      {/* Tipe Ujian */}
-                      <div className="flex gap-2 w-full mt-2">
-                        <div className="w-full">
-                          <label
-                            className="block text-gray-800 text-sm font-medium mb-1"
-                            htmlFor="name"
-                          >
-                            PUKAKP <span className="text-red-600">*</span>
-                          </label>
-                          <input
-                            id="name"
-                            type="text"
-                            className="form-input w-full text-black border-gray-300 rounded-md py-2 text-sm"
-                            placeholder="Tempat Ujian"
-                            required
-                            value={Cookies.get("PUKAKP")}
-                            onChange={(e) => setPukakp(e.target.value)}
-                          />
-                        </div>
-                        <div className="w-full">
-                          <Label htmlFor="type-ujian">Tipe Ujian*</Label>
-                          <select
+              {/* Result summary + active filters */}
+              {!(isFetchingDataUjian && dataUjian.length === 0) && (
+                <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                  <span>
+                    <span className="font-semibold tabular-nums text-foreground">
+                      {filteredData.length}
+                    </span>{" "}
+                    ujian ditemukan
+                  </span>
+                  {selectedStatusFilter !== "All" && (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedStatusFilter("All")}
+                      className="inline-flex items-center gap-1 rounded-full border bg-background px-2.5 py-1 text-xs font-medium text-foreground hover:bg-muted"
+                      aria-label={`Hapus filter ${selectedStatusFilter}`}
+                    >
+                      {selectedStatusFilter}
+                      <X className="h-3 w-3" />
+                    </button>
+                  )}
+                  {isFetchingDataUjian && (
+                    <span className="inline-flex items-center gap-1.5 text-xs">
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      Memperbarui
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* List */}
+              {isFetchingDataUjian && dataUjian.length === 0 ? (
+                <ListSkeleton />
+              ) : dataUjian.length === 0 ? (
+                <EmptyData />
+              ) : filteredData.length === 0 ? (
+                <div className="flex flex-col items-center rounded-2xl border border-dashed bg-card/50 px-6 py-14 text-center">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                    <SearchX className="h-6 w-6" />
+                  </div>
+                  <h3 className="mt-4 text-base font-semibold">Tidak ada ujian yang cocok</h3>
+                  <p className="mt-1 max-w-sm text-sm text-muted-foreground">
+                    Ubah kata kunci, tahun, atau status untuk melihat ujian lainnya.
+                  </p>
+                  {hasActiveFilter && (
+                    <Button variant="outline" className="mt-5 rounded-lg" onClick={resetFilters}>
+                      Atur ulang filter
+                    </Button>
+                  )}
+                </div>
+              ) : (
+                <>
+                  <div
+                    className={cn(
+                      "space-y-3 transition-opacity",
+                      isFetchingDataUjian && "opacity-60"
+                    )}
+                  >
+                    {currentPageData.map((ujian: Ujian) => (
+                      <ExamCard
+                        key={ujian.IdUjian}
+                        ujian={ujian}
+                        dataUjian={dataUjian}
+                        refetchUjian={refetchUjian}
+                        pathKey={pathKey}
+                        isPukakpPath={isPukakpPath}
+                        isDpkakpPath={isDpkakpPath}
+                        editLoading={editLoadingId === ujian.IdUjian}
+                        onSend={(u) => setSendTargetId(u.IdUjian)}
+                        onEdit={handleOpenEdit}
+                        onVerify={onVerify}
+                        onAssign={onAssign}
+                        onSchedule={(u) => setTimeTargetId(u.IdUjian)}
+                        onRemedial={onRemedial}
+                        onClose={(u) => setCloseTargetId(u.IdUjian)}
+                      />
+                    ))}
+                  </div>
+
+                  <div className="flex flex-col items-center justify-between gap-3 pt-2 sm:flex-row">
+                    <p className="text-sm text-muted-foreground">
+                      Menampilkan{" "}
+                      <span className="font-medium tabular-nums text-foreground">
+                        {indexOfFirstItem + 1} sampai{" "}
+                        {indexOfFirstItem + currentPageData.length}
+                      </span>{" "}
+                      dari {filteredData.length} ujian
+                    </p>
+                    <Pagination
+                      totalItems={filteredData.length}
+                      itemsPerPage={itemsPerPage}
+                      currentPage={page}
+                      onPageChange={setCurrentPage}
+                    />
+                  </div>
+                </>
+              )}
+            </>
+          ) : (
+            /* ------------------------- Create wizard ------------------------- */
+            <div className="mx-auto w-full max-w-3xl space-y-5">
+              <button
+                type="button"
+                onClick={() => setView("list")}
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Kembali ke daftar ujian
+              </button>
+
+              <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
+                <div className="border-b p-5 sm:p-6">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white">
+                      <ClipboardPlus className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-semibold tracking-tight">
+                        {isTryout ? "Ajukan Permohonan Try Out" : "Ajukan Permohonan Ujian AKP"}
+                      </h2>
+                      <p className="mt-1 max-w-xl text-sm text-muted-foreground">
+                        Untuk ujian keahlian di PUKAKP dari permohonan lemdiklat, ajukan
+                        permohonan pelaksanaan kepada tim sekretariat agar dapat
+                        diketahui.
+                      </p>
+                    </div>
+                  </div>
+                  <Stepper current={step} />
+                </div>
+
+                <form autoComplete="off" onSubmit={handleWizardSubmit}>
+                  <div className="min-h-[18rem] space-y-5 p-5 sm:p-6">
+                    {/* Step 1: information */}
+                    {step === 0 && (
+                      <div className="grid gap-4 sm:grid-cols-2">
+                        <Field label="PUKAKP" htmlFor="pukakp" className="sm:col-span-2">
+                          <div className="relative">
+                            <Building2 className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                            <Input
+                              id="pukakp"
+                              readOnly
+                              value={pukakpName}
+                              className={cn(inputCls, "bg-muted/50 pl-9")}
+                            />
+                          </div>
+                        </Field>
+
+                        <Field label="Tipe ujian" htmlFor="type-ujian" required>
+                          <TypeUjianSelect
                             id="type-ujian"
-                            className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
-                            required
-                            value={typeUjian}
-                            onChange={(e) => setTypeUjian(e.target.value)}
-                          >
-                            <option value="0">Pilih Tipe Ujian</option>
-                            {dataTypeUjian.map((type) => (
-                              <option
-                                key={type.IdTypeUjian}
-                                value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
-                                className="capitalize"
-                              >
-                                {type.NamaTypeUjian}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                            value={form.typeUjian}
+                            onChange={(v) => setField("typeUjian", v)}
+                            options={dataTypeUjian}
+                          />
+                        </Field>
 
-                        {/* Nama Ujian */}
-
-                      </div>
-
-                      <div className="flex gap-2 w-full mt-2">
-                        <div className="w-full">
-                          <Label htmlFor="nama-ujian">Nama Ujian*</Label>
+                        <Field label="Nama ujian" htmlFor="nama-ujian" required>
                           <Input
                             id="nama-ujian"
-                            type="text"
-                            required
-                            value={namaUjian}
-                            onChange={(e) => setNamaUjian(e.target.value)}
+                            className={inputCls}
+                            value={form.namaUjian}
+                            onChange={(e) => setField("namaUjian", e.target.value)}
                           />
-                        </div>
+                        </Field>
 
-                        {/* Tempat Ujian */}
-                        <div className="w-full">
-                          <Label htmlFor="tempat-ujian">Tempat Ujian*</Label>
+                        <Field label="Tempat ujian" htmlFor="tempat-ujian" required>
                           <Input
                             id="tempat-ujian"
-                            type="text"
-                            required
-                            value={tempatUjian}
-                            onChange={(e) => setTempatUjian(e.target.value)}
+                            className={inputCls}
+                            value={form.tempatUjian}
+                            onChange={(e) => setField("tempatUjian", e.target.value)}
                           />
-                        </div>
-                      </div>
+                        </Field>
 
-
-                      {/* Tanggal Mulai and Tanggal Berakhir */}
-                      <div className="flex gap-2 w-full mt-2">
-                        <div className="w-full">
-                          <Label htmlFor="tanggal-mulai">Tanggal Mulai*</Label>
-                          <Input
-                            id="tanggal-mulai"
-                            type="date"
-                            required
-                            min={new Date().toISOString().split("T")[0]}
-                            value={tanggalMulai}
-                            onChange={(e) => setTanggalMulai(e.target.value)}
-                          />
-                        </div>
-                        <div className="w-full">
-                          <Label htmlFor="tanggal-berakhir">
-                            Tanggal Berakhir*
-                          </Label>
-                          <Input
-                            id="tanggal-berakhir"
-                            type="date"
-                            placeholder="Tanggal Berakhir"
-                            required
-                            value={tanggalBerakhir}
-                            min={tanggalMulai}
-                            onChange={(e) => setTanggalBerakhir(e.target.value)}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Waktu Ujian and Jumlah Peserta */}
-                      <div className="grid grid-cols-1 gap-4">
-                        <div className="mt-2">
-                          <Label htmlFor="jumlah-peserta">Jumlah Peserta*</Label>
+                        <Field label="Jumlah peserta" htmlFor="jumlah-peserta" required>
                           <Input
                             id="jumlah-peserta"
-                            type="text"
-                            placeholder="Jumlah Peserta"
-                            required
-                            value={jumlahPeserta}
-                            onChange={(e) => setJumlahPeserta(e.target.value)}
+                            type="number"
+                            inputMode="numeric"
+                            min={1}
+                            className={inputCls}
+                            value={form.jumlahPeserta}
+                            onChange={(e) => setField("jumlahPeserta", e.target.value)}
                           />
-                        </div>
+                        </Field>
                       </div>
+                    )}
 
-                      {
-                        Cookies.get('PUKAKP') !== 'Tryout Center' && <div className="mt-2">
-                          <Label htmlFor="surat-permohonan">
-                            Jenis Pelaksanaan Ujian
-                          </Label>
-                          <Select
-                            value={selectedTypeUjian}
-                            onValueChange={(value: string) =>
-                              setSelectedTypeUjian(value)
-                            }
-                          >
-                            <SelectTrigger className="w-full text-base py-5">
-                              <SelectValue placeholder="Pilih Tipe Pelaksanaan" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Klasikal">Klasikal</SelectItem>
-                              <SelectItem value="Rewarding/Updating">Rewarding/Updating</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      }
-
-
-                      {selectedTypeUjian == "Klasikal" ? (
-                        <div className="grid grid-cols-3 gap-2">
-                          <div className="mt-2">
-                            <Label htmlFor="waktuF1B1">Waktu F1B1*</Label>
+                    {/* Step 2: schedule */}
+                    {step === 1 && (
+                      <>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <Field label="Tanggal mulai" htmlFor="tanggal-mulai" required>
                             <Input
-                              id="waktuF1B1"
-                              type="text"
-                              required
-                              value={waktuF1B1}
-                              onChange={(e) => setWaktuF1B1(e.target.value)}
-                            />
-                          </div>
-                          <div className="mt-2">
-                            <Label htmlFor="waktuF1B2">Waktu F1B2*</Label>
-                            <Input
-                              id="waktuF1B2"
-                              type="text"
-                              required
-                              value={waktuF1B2}
-                              onChange={(e) => setWaktuF1B2(e.target.value)}
-                            />
-                          </div>
-                          <div className="mt-2">
-                            <Label htmlFor="waktuF1B3">Waktu F1B3*</Label>
-                            <Input
-                              id="waktuF1B3"
-                              type="text"
-                              required
-                              value={waktuF1B3}
-                              onChange={(e) => setWaktuF1B3(e.target.value)}
-                            />
-                          </div>
-                          <div className="mt-2">
-                            <Label htmlFor="waktuF2B1">Waktu F2B1*</Label>
-                            <Input
-                              id="waktuF2B1"
-                              type="text"
-                              required
-                              value={waktuF2B1}
-                              onChange={(e) => setWaktuF2B1(e.target.value)}
-                            />
-                          </div>
-                          <div className="mt-2">
-                            <Label htmlFor="waktuF3B1">Waktu F3B1*</Label>
-                            <Input
-                              id="waktuF3B1"
-                              type="text"
-                              required
-                              value={waktuF3B1}
-                              onChange={(e) => setWaktuF3B1(e.target.value)}
-                            />
-                          </div>
-                          <div className="mt-2">
-                            <Label htmlFor="waktuF3B2">Waktu F3B2*</Label>
-                            <Input
-                              id="waktuF3B2"
-                              type="text"
-                              required
-                              value={waktuF3B2}
-                              onChange={(e) => setWaktuF3B2(e.target.value)}
-                            />
-                          </div>
-                        </div>
-                      ) : selectedTypeUjian == "Rewarding/Updating" ? (
-                        <div className="grid grid-cols-3 gap-2">
-                          <div className="mt-2">
-                            <Label htmlFor="waktuF1">Waktu F1*</Label>
-                            <Input
-                              id="waktuF1"
-                              type="text"
-                              required
-                              value={waktuF1}
-                              onChange={(e) => setWaktuF1(e.target.value)}
-                            />
-                          </div>
-                          <div className="mt-2">
-                            <Label htmlFor="waktuF2">Waktu F2*</Label>
-                            <Input
-                              id="waktuF2"
-                              type="text"
-                              required
-                              value={waktuF2}
-                              onChange={(e) => setWaktuF2(e.target.value)}
-                            />
-                          </div>
-                          <div className="mt-2">
-                            <Label htmlFor="waktuF3">Waktu F3*</Label>
-                            <Input
-                              id="waktuF3"
-                              type="text"
-                              placeholder=""
-                              required
-                              value={waktuF3}
-                              onChange={(e) => setWaktuF3(e.target.value)}
-                            />
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="mt-2 grid grid-cols-3 gap-2">
-                          <div>
-                            <Label htmlFor="tanggal">Tanggal</Label>
-                            <Input
-                              id="tanggal"
+                              id="tanggal-mulai"
                               type="date"
-                              required
-                              value={waktuDate}
-                              onChange={(e) => setWaktuDate(e.target.value)}
+                              className={inputCls}
+                              min={todayLocal()}
+                              value={form.tanggalMulai}
+                              onChange={(e) => {
+                                const v = e.target.value;
+                                setForm((p) => ({
+                                  ...p,
+                                  tanggalMulai: v,
+                                  tanggalBerakhir:
+                                    p.tanggalBerakhir && v > p.tanggalBerakhir
+                                      ? ""
+                                      : p.tanggalBerakhir,
+                                }));
+                              }}
                             />
-                          </div>
-
-                          <div>
-                            <Label htmlFor="jam">Jam</Label>
+                          </Field>
+                          <Field
+                            label="Tanggal berakhir"
+                            htmlFor="tanggal-berakhir"
+                            required
+                            hint={durasi > 0 ? `Durasi ${durasi} hari` : undefined}
+                          >
                             <Input
-                              id="jam"
-                              type="time"
-                              required
-                              value={waktuTime}
-                              onChange={(e) => setWaktuTime(e.target.value)}
+                              id="tanggal-berakhir"
+                              type="date"
+                              className={inputCls}
+                              min={form.tanggalMulai || todayLocal()}
+                              value={form.tanggalBerakhir}
+                              onChange={(e) => setField("tanggalBerakhir", e.target.value)}
                             />
-                          </div>
-
-                          <div>
-                            <Label htmlFor="zona">Zona Waktu</Label>
-                            <Select value={waktuZone} onValueChange={setWaktuZone}>
-                              <SelectTrigger id="zona">
-                                <SelectValue placeholder="Pilih zona waktu" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="WIB">WIB (GMT+7)</SelectItem>
-                                <SelectItem value="WITA">WITA (GMT+8)</SelectItem>
-                                <SelectItem value="WIT">WIT (GMT+9)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
+                          </Field>
                         </div>
 
-                      )}
-                      <p className="text-xs">
-                        *Format Penginputan : 2025-01-09 10:15:00
-                        (+0700/+0800/+0900) (WIB/WITA/WIT)
-                      </p>
-
-                      {/* Surat Permohonan */}
-                      <div className="mt-2">
-                        <Label htmlFor="surat-permohonan">Surat Permohonan</Label>
-                        <input
-                          id="surat-permohonan"
-                          type="file"
-                          className="text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                          required
-                          onChange={handleFileChange}
-                        />
-                      </div>
-
-                      <CardFooter className="pt-4 flex justify-end gap-2">
-                        {isPosting ? (
-                          <Button>Loading ...</Button>
-                        ) : (
-                          <>
-                            <Button
-                              variant="ghost"
-                              type="button"
-                              onClick={() => handleCancelAddNewUjian()}
-                            >
-                              Cancel
-                            </Button>{" "}
-                            <Button
-                              onClick={(e) => handlePostNewUjianKeahlian(e)}
-                            >
-                              Save Draft
-                            </Button>
-                          </>
+                        {!isTryout && (
+                          <div className="space-y-2">
+                            <Label className="text-sm font-medium">Jenis pelaksanaan</Label>
+                            <div role="radiogroup" aria-label="Jenis pelaksanaan" className="grid gap-3 sm:grid-cols-2">
+                              {JENIS_OPTIONS.map((o) => {
+                                const active = form.jenis === o.value;
+                                return (
+                                  <button
+                                    key={o.value}
+                                    type="button"
+                                    role="radio"
+                                    aria-checked={active}
+                                    onClick={() => setField("jenis", active ? "" : o.value)}
+                                    className={cn(
+                                      "flex items-start gap-3 rounded-xl border p-4 text-left transition-colors",
+                                      active
+                                        ? "border-blue-500 bg-blue-50/60 ring-1 ring-blue-500 dark:bg-blue-500/10"
+                                        : "hover:border-blue-300 hover:bg-muted/40"
+                                    )}
+                                  >
+                                    <span
+                                      className={cn(
+                                        "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border",
+                                        active
+                                          ? "border-blue-600 bg-blue-600 text-white"
+                                          : "border-muted-foreground/40"
+                                      )}
+                                    >
+                                      {active && <Check className="h-3 w-3" />}
+                                    </span>
+                                    <span>
+                                      <span className="block text-sm font-semibold">{o.title}</span>
+                                      <span className="mt-0.5 block text-xs text-muted-foreground">
+                                        {o.desc}
+                                      </span>
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                            {!form.jenis && (
+                              <p className="text-xs text-muted-foreground">
+                                Belum memilih? Satu waktu yang sama dipakai untuk semua fungsi.
+                              </p>
+                            )}
+                          </div>
                         )}
-                      </CardFooter>
-                    </form>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
-        }
 
-      </section>
+                        <div className="space-y-3">
+                          <div className="flex flex-wrap items-end justify-between gap-2">
+                            <div>
+                              <h3 className="text-sm font-semibold">Waktu pelaksanaan</h3>
+                              <p className="text-xs text-muted-foreground">
+                                Pilih tanggal, jam, dan zona waktu. Format penulisan disusun otomatis.
+                              </p>
+                            </div>
+                            {form.jenis !== "" && (
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 text-xs text-blue-700 hover:bg-blue-50 hover:text-blue-800 dark:text-blue-300 dark:hover:bg-blue-500/10"
+                                onClick={() =>
+                                  form.jenis === "Klasikal"
+                                    ? setWaktu(emptyWaktu(waktu.F1B1))
+                                    : setWaktu((p) => ({ ...p, F2: p.F1, F3: p.F1 }))
+                                }
+                              >
+                                Samakan dengan waktu pertama
+                              </Button>
+                            )}
+                          </div>
 
+                          {form.jenis === "Klasikal" ? (
+                            <div className="grid gap-3 sm:grid-cols-2">
+                              {KLASIKAL_FIELDS.map((f) => (
+                                <WaktuField
+                                  key={f.key}
+                                  id={`waktu-${f.key}`}
+                                  label={f.label}
+                                  value={waktu[f.key]}
+                                  onChange={(v) => setWaktuKey(f.key, v)}
+                                />
+                              ))}
+                            </div>
+                          ) : form.jenis === "Rewarding/Updating" ? (
+                            <div className="grid gap-3 sm:grid-cols-2">
+                              {REWARDING_FIELDS.map((f) => (
+                                <WaktuField
+                                  key={f.key}
+                                  id={`waktu-${f.key}`}
+                                  label={f.label}
+                                  value={waktu[f.key]}
+                                  onChange={(v) => setWaktuKey(f.key, v)}
+                                />
+                              ))}
+                            </div>
+                          ) : (
+                            <WaktuField
+                              id="waktu-semua"
+                              label="Waktu semua fungsi"
+                              value={waktu.F1}
+                              onChange={(v) => setWaktu((p) => ({ ...p, F1: v, F2: v, F3: v }))}
+                            />
+                          )}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Step 3: attachment + review */}
+                    {step === 2 && (
+                      <>
+                        <Field
+                          label="Surat permohonan"
+                          hint="Disarankan dilampirkan agar proses verifikasi lebih cepat."
+                        >
+                          <FileDropzone file={filePermohonan} onChange={setFilePermohonan} />
+                        </Field>
+
+                        <div className="rounded-xl border bg-muted/30 p-4">
+                          <h3 className="text-sm font-semibold">Periksa kembali sebelum disimpan</h3>
+                          <dl className="mt-3 grid gap-x-6 gap-y-3 text-sm sm:grid-cols-2">
+                            {(
+                              [
+                                ["PUKAKP", pukakpName || "-"],
+                                ["Tipe ujian", form.typeUjian.split(",")[0] || "-"],
+                                ["Nama ujian", form.namaUjian || "-"],
+                                ["Tempat ujian", form.tempatUjian || "-"],
+                                ["Jumlah peserta", form.jumlahPeserta || "-"],
+                                [
+                                  "Tanggal",
+                                  form.tanggalMulai
+                                    ? `${generateTanggalPelatihan(form.tanggalMulai)}${form.tanggalBerakhir &&
+                                      form.tanggalBerakhir !== form.tanggalMulai
+                                      ? ` s.d ${generateTanggalPelatihan(form.tanggalBerakhir)}`
+                                      : ""
+                                    }`
+                                    : "-",
+                                ],
+                                ["Jenis pelaksanaan", form.jenis || "Satu waktu untuk semua fungsi"],
+                                [
+                                  "Surat permohonan",
+                                  filePermohonan ? filePermohonan.name : "Belum dilampirkan",
+                                ],
+                              ] as [string, string][]
+                            ).map(([k, v]) => (
+                              <div key={k} className="min-w-0">
+                                <dt className="text-xs text-muted-foreground">{k}</dt>
+                                <dd className="truncate font-medium text-foreground" title={v}>
+                                  {v}
+                                </dd>
+                              </div>
+                            ))}
+                          </dl>
+                        </div>
+                      </>
+                    )}
+                  </div>
+
+                  <div className="space-y-3 border-t bg-muted/30 px-5 py-4 sm:px-6">
+                    {missing.length > 0 && (
+                      <p className="text-xs text-amber-700 dark:text-amber-400" role="status">
+                        Lengkapi dulu: {missing.join(", ")}
+                      </p>
+                    )}
+                    <div className="flex items-center justify-between gap-3">
+                      {step === 0 ? (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          onClick={() => {
+                            resetCreateForm();
+                            setView("list");
+                          }}
+                        >
+                          Batal
+                        </Button>
+                      ) : (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          disabled={isPosting}
+                          onClick={() => setStep(step - 1)}
+                        >
+                          Kembali
+                        </Button>
+                      )}
+
+                      <Button
+                        type="submit"
+                        disabled={missing.length > 0 || isPosting}
+                        className="min-w-36 bg-blue-600 text-white hover:bg-blue-700"
+                      >
+                        {isPosting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {step < STEPS.length - 1 ? "Lanjut" : "Simpan sebagai draft"}
+                      </Button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ---------------------------- Shared dialogs ---------------------------- */}
       <VerifikasiAction
         open={openFormValidasiPelaksanaanUjian}
         setOpen={setOpenFormValidasiPelaksanaanUjian}
@@ -1271,321 +1897,258 @@ const TableDataUjian: React.FC = () => {
         refetchUjian={refetchUjian}
       />
 
-      <AlertDialog open={isOpenFormUjianKeahlian}>
-        <AlertDialogContent className="max-w-xl">
-          <AlertDialogHeader className="gap-0 flex flex-col">
-            <AlertDialogTitle className="flex items-center gap-2 text-2xl">
-              {" "}
-              <FaBookOpen className="h-4 w-4" />
-              {status == "Aktif"
-                ? " Tetapkan Penguji dan Fasilitator"
-                : " Edit Pelaksanaan Ujian Keahlian"}
+      {/* Send request */}
+      <ConfirmDialog
+        open={sendTargetId !== null}
+        onOpenChange={(o) => !o && setSendTargetId(null)}
+        icon={<Send className="h-5 w-5" />}
+        title="Kirim permohonan ke sekretariat?"
+        description={
+          <>
+            Permohonan <span className="font-medium text-foreground">{sendTarget?.NamaUjian}</span>{" "}
+            akan dikirim untuk diverifikasi. Pastikan data dan surat permohonan sudah benar,
+            karena data tidak dapat diedit selama menunggu verifikasi.
+          </>
+        }
+        confirmLabel="Kirim permohonan"
+        loading={isSending}
+        onConfirm={handleKirimPermohonan}
+      />
+
+      {/* Close exam */}
+      <ConfirmDialog
+        open={closeTargetId !== null}
+        onOpenChange={(o) => !o && setCloseTargetId(null)}
+        icon={<Lock className="h-5 w-5" />}
+        tone="danger"
+        title="Tutup ujian ini?"
+        description={
+          <>
+            Menutup <span className="font-medium text-foreground">{closeTarget?.NamaUjian}</span>{" "}
+            berarti seluruh rangkaian pelaksanaan ujian sudah selesai. Periksa kembali nilai
+            peserta sebelum menutup.
+          </>
+        }
+        confirmLabel="Tutup ujian"
+        loading={isClosing}
+        onConfirm={handleCloseExam}
+      />
+
+      {/* Exam schedule */}
+      <AlertDialog open={timeTargetId !== null} onOpenChange={(o) => !o && setTimeTargetId(null)}>
+        <AlertDialogContent className="max-w-2xl rounded-2xl">
+          <AlertDialogHeader className="items-center text-center">
+            <AlertDialogTitle className="leading-snug">
+              Daftar waktu pelaksanaan{" "}
+              <span className="text-blue-600 dark:text-blue-400">{timeTarget?.TypeUjian}</span>{" "}
+              di {timeTarget?.PUKAKP}
             </AlertDialogTitle>
-            <AlertDialogDescription className="-mt-6">
-              {status == "Aktif"
-                ? "Tugaskan penguji dan fasilitator pusat dalam pelaksanaan ujian keahlian awak kapal perikanan untuk ANKAPIN dan ATKAPIN tingkat I, II, atau tingkat III."
-                : "Tambah data baru pelaksanaan ujian keahlian awak kapal perikanan untuk ANKAPIN dan ATKAPIN tingkat I, II, atau tingkat III."}
+            <AlertDialogDescription>
+              Waktu pelaksanaan setiap fungsi dan bagian.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <fieldset>
-            {usePathname().includes("pukakp") ? (
-              <form autoComplete="off">
-                <div className="flex flex-wrap -mx-3 mb-1">
-                  <div className="flex px-3 gap-2 mb-2 w-full">
-                    <div className="w-full">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
-                      >
-                        Tipe Ujian <span className="text-red-600">*</span>
-                      </label>
-                      <select
-                        id="type-ujian"
-                        className="form-input w-full text-black text-sm border-gray-300 rounded-md py-2"
-                        required
-                        value={typeUjian}
-                        onChange={(e) => setTypeUjian(e.target.value)}
-                      >
-                        <option value="0">Pilih Tipe Ujian</option>
-                        {dataTypeUjian.map((type) => (
-                          <option
-                            key={type.IdTypeUjian}
-                            value={`${type.NamaTypeUjian},${type.IdTypeUjian}`}
+          {timeTarget && (
+            <JadwalUjianKeahlianAKP data={dataUjian} ujian={timeTarget} onUpdated={refetchUjian} />
+          )}
+          <AlertDialogFooter>
+            <AlertDialogCancel className="w-full bg-slate-900 text-white hover:bg-slate-800 hover:text-white dark:bg-slate-100 dark:text-slate-900 dark:hover:bg-slate-200 dark:hover:text-slate-900">
+              Tutup
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Edit exam (PUKAKP) */}
+      <AlertDialog open={editOpen} onOpenChange={(o) => !isPosting && setEditOpen(o)}>
+        <AlertDialogContent className="max-w-xl rounded-2xl">
+          <DialogHeading
+            icon={<Pencil className="h-5 w-5" />}
+            title="Edit pelaksanaan ujian"
+            description="Perbarui data pelaksanaan ujian keahlian awak kapal perikanan sebelum permohonan dikirim."
+          />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Tipe ujian" htmlFor="edit-type-ujian" required>
+              <TypeUjianSelect
+                id="edit-type-ujian"
+                value={editForm.typeUjian}
+                onChange={(v) => setEdit("typeUjian", v)}
+                options={dataTypeUjian}
+                contentClassName="z-[999999]"
+              />
+            </Field>
+            <Field label="Nama ujian" htmlFor="edit-nama-ujian" required>
+              <Input
+                id="edit-nama-ujian"
+                className={inputCls}
+                value={editForm.namaUjian}
+                onChange={(e) => setEdit("namaUjian", e.target.value)}
+              />
+            </Field>
+            <Field label="Tempat ujian" htmlFor="edit-tempat-ujian" required>
+              <Input
+                id="edit-tempat-ujian"
+                className={inputCls}
+                value={editForm.tempatUjian}
+                onChange={(e) => setEdit("tempatUjian", e.target.value)}
+              />
+            </Field>
+            <Field label="PUKAKP" htmlFor="edit-pukakp">
+              <Input
+                id="edit-pukakp"
+                readOnly
+                className={cn(inputCls, "bg-muted/50")}
+                value={pukakpName}
+              />
+            </Field>
+            <Field label="Tanggal mulai" htmlFor="edit-tanggal-mulai" required>
+              <Input
+                id="edit-tanggal-mulai"
+                type="date"
+                className={inputCls}
+                value={editForm.tanggalMulai}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setEditForm((p) => ({
+                    ...p,
+                    tanggalMulai: v,
+                    tanggalBerakhir: p.tanggalBerakhir && v > p.tanggalBerakhir ? "" : p.tanggalBerakhir,
+                  }));
+                }}
+              />
+            </Field>
+            <Field label="Tanggal berakhir" htmlFor="edit-tanggal-berakhir" required>
+              <Input
+                id="edit-tanggal-berakhir"
+                type="date"
+                className={inputCls}
+                min={editForm.tanggalMulai}
+                value={editForm.tanggalBerakhir}
+                onChange={(e) => setEdit("tanggalBerakhir", e.target.value)}
+              />
+            </Field>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPosting}>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={!editValid || isPosting}
+              onClick={(e) => {
+                e.preventDefault();
+                handleEditUjianKeahlian();
+              }}
+              className="bg-blue-600 text-white hover:bg-blue-700"
+            >
+              {isPosting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Simpan perubahan
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Assign examiners (DPKAKP) */}
+      <AlertDialog
+        open={assignOpen}
+        onOpenChange={(o) => {
+          if (isPosting) return;
+          setAssignOpen(o);
+          if (!o) resetAssignForm();
+        }}
+      >
+        <AlertDialogContent className="max-w-xl rounded-2xl">
+          <DialogHeading
+            icon={<UserCog className="h-5 w-5" />}
+            title="Tetapkan penguji dan fasilitator"
+            description="Tugaskan penguji dan fasilitator pusat dalam pelaksanaan ujian keahlian awak kapal perikanan untuk ANKAPIN dan ATKAPIN tingkat I, II, atau tingkat III."
+          />
+          <div className="space-y-4">
+            <div className="space-y-1.5">
+              <Label className="text-sm font-medium">
+                Jumlah penguji<span className="ml-0.5 text-rose-500">*</span>
+              </Label>
+              <div
+                role="radiogroup"
+                aria-label="Jumlah penguji"
+                className="flex w-fit rounded-lg border bg-muted/40 p-1"
+              >
+                {[1, 2, 3].map((n) => (
+                  <button
+                    key={n}
+                    type="button"
+                    role="radio"
+                    aria-checked={jumlahPenguji === n}
+                    onClick={() => setJumlahPenguji(n)}
+                    className={cn(
+                      "h-8 w-14 rounded-md text-sm font-medium transition-colors",
+                      jumlahPenguji === n
+                        ? "bg-background text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {n}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {activePenguji.map((p, index) => {
+              const takenByOthers = activePenguji
+                .filter((_, i) => i !== index)
+                .map((o) => o.id);
+              return (
+                <Field
+                  key={index}
+                  label={`Nama penguji ${index + 1}`}
+                  htmlFor={`penguji-${index}`}
+                  required
+                >
+                  <Select
+                    value={p.id ? `${p.nama}|${p.id}` : ""}
+                    onValueChange={(value) => handlePengujiChange(index, value)}
+                  >
+                    <SelectTrigger id={`penguji-${index}`} className={cn(inputCls, "w-full")}>
+                      <SelectValue placeholder="Pilih penguji" />
+                    </SelectTrigger>
+                    <SelectContent side="bottom" className="z-[999999]">
+                      {(dataPenguji ?? [])
+                        .filter((x) => !takenByOthers.includes(String(x.IdUsersDpkakp)))
+                        .map((x) => (
+                          <SelectItem
+                            key={x.IdUsersDpkakp}
+                            value={`${x.NamaUsersDpkakp}|${x.IdUsersDpkakp}`}
                             className="capitalize"
-                            selected={type.NamaTypeUjian == typeUjian}
                           >
-                            {type.NamaTypeUjian}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div className="w-full">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
-                      >
-                        Nama Ujian <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        id="name"
-                        type="text"
-                        className="form-input w-full text-black border-gray-300 rounded-md"
-                        placeholder="Nama Ujian"
-                        required
-                        value={namaUjian}
-                        onChange={(e) => setNamaUjian(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap -mx-3 mb-1">
-                  <div className="flex px-3 gap-2 mb-2 w-full">
-                    <div className="w-full">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
-                      >
-                        Tempat Ujian <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        id="name"
-                        type="text"
-                        className="form-input w-full text-black border-gray-300 rounded-md"
-                        placeholder="Tempat Ujian"
-                        required
-                        value={tempatUjian}
-                        onChange={(e) => setTempatUjian(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="w-full">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
-                      >
-                        PUKAKP <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        id="name"
-                        type="text"
-                        className="form-input w-full text-black border-gray-300 rounded-md"
-                        placeholder="Tempat Ujian"
-                        required
-                        value={Cookies.get("PUKAKP")}
-                        onChange={(e) => setPukakp(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap -mx-3 mb-1">
-                  <div className="flex px-3 gap-2 mb-2 w-full">
-                    <div className="w-full">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
-                      >
-                        Tanggal Mulai <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        id="name"
-                        type="date"
-                        className="form-input w-full text-black border-gray-300 rounded-md"
-                        placeholder="Tanggal Mulai"
-                        required
-                        min={new Date().toISOString().split("T")[0]}
-                        value={tanggalMulai}
-                        onChange={(e) => setTanggalMulai(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="w-full">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
-                      >
-                        Tanggal Berakhir <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        id="tanggalBerakhir"
-                        type="date"
-                        className="form-input w-full text-black border-gray-300 rounded-md"
-                        placeholder="Tanggal Berakhir"
-                        required
-                        value={tanggalBerakhir}
-                        min={tanggalMulai}
-                        onChange={(e) => setTanggalBerakhir(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap -mx-3 mb-1">
-                  <div className="flex px-3 gap-2 mb-2 w-full">
-                    <div className="w-full">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
-                      >
-                        Waktu Ujian per Materi{" "}
-                        <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        id="name"
-                        type="number"
-                        className="form-input w-full text-black border-gray-300 rounded-md"
-                        placeholder="Waktu Ujian"
-                        required
-                        value={waktuUjian}
-                        onChange={(e) => setWaktuUjian(e.target.value)}
-                      />
-                    </div>
-
-                    <div className="w-full">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor="name"
-                      >
-                        Jumlah Peserta <span className="text-red-600">*</span>
-                      </label>
-                      <input
-                        id="name"
-                        type="text"
-                        className="form-input w-full text-black border-gray-300 rounded-md"
-                        placeholder="Jumlah Peserta"
-                        required
-                        value={jumlahPeserta}
-                        onChange={(e) => setJumlahPeserta(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                  {/* <div className="w-full mx-3">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="name"
-                    >
-                      Surat Permohonan <span className="text-red-600">*</span>
-                    </label>
-                    <input
-                      type="file"
-                      className=" text-black h-10 text-base flex items-center cursor-pointer w-full border border-neutral-200 rounded-md"
-                      required
-                      onChange={handleFileChange}
-                    />
-                  </div> */}
-                </div>
-
-                <AlertDialogFooter className="mt-3">
-                  <AlertDialogCancel
-                    onClick={(e) =>
-                      setIsOpenFormUjianKeahlian(!isOpenFormUjianKeahlian)
-                    }
-                  >
-                    Cancel
-                  </AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={(e) => handleEditUjianKeahlian(e)}
-                  >
-                    Edit
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </form>
-            ) : (
-              <form autoComplete="off">
-                <div className="flex flex-wrap -mx-3 mb-1">
-                  <div className="w-full px-3 mb-2">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="jumlahPenguji"
-                    >
-                      Jumlah Penguji <span className="text-red-600">*</span>
-                    </label>
-                    <Select
-                      onValueChange={(value) => setJumlahPenguji(Number(value))}
-                      value={jumlahPenguji.toString()}
-                    >
-                      <SelectTrigger className="w-full py-5">
-                        <SelectValue placeholder="Pilih Jumlah Penguji" />
-                      </SelectTrigger>
-                      <SelectContent side="bottom" className="z-[999999]">
-                        {[1, 2, 3].map((num) => (
-                          <SelectItem key={num} value={num.toString()}>
-                            {num}
+                            {x.NamaUsersDpkakp}
                           </SelectItem>
                         ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  {[...Array(jumlahPenguji)].map((_, index) => (
-                    <div key={index} className="w-full px-3 mb-2">
-                      <label
-                        className="block text-gray-800 text-sm font-medium mb-1"
-                        htmlFor={`penguji-${index}`}
-                      >
-                        Nama Penguji {index + 1}{" "}
-                        <span className="text-red-600">*</span>
-                      </label>
-                      <Select
-                        onValueChange={(value) =>
-                          handlePengujiChange(index, value)
-                        }
-                        value={`${pengujiData[index].nama}|${pengujiData[index].id}`}
-                      >
-                        <SelectTrigger className="w-full py-5">
-                          <SelectValue placeholder="Pilih Penguji" />
-                        </SelectTrigger>
-                        <SelectContent side="bottom" className="z-[999999]">
-                          {dataPenguji!.map((penguji) => (
-                            <SelectItem
-                              key={penguji.IdUsersDpkakp}
-                              value={`${penguji.NamaUsersDpkakp}|${penguji.IdUsersDpkakp}`}
-                              className="capitalize"
-                            >
-                              {penguji.NamaUsersDpkakp}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              );
+            })}
 
-                  <div className="w-full px-3 mb-2">
-                    <label
-                      className="block text-gray-800 text-sm font-medium mb-1"
-                      htmlFor="fasilitator"
-                    >
-                      Nama Fasilitator <span className="text-red-600">*</span>
-                    </label>
-                    <Input
-                      id="fasilitator"
-                      type="text"
-                      className="w-full text-black border-gray-300 text-sm rounded-md h-fit"
-                      placeholder="Nama Fasilitator"
-                      required
-                      value={namaVasilitator}
-                      onChange={(e) => setNamaVasilitator(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <AlertDialogFooter className="mt-3">
-                  <AlertDialogCancel
-                    onClick={() => {
-                      handleCancelAddNewUjian();
-                      setIsOpenFormUjianKeahlian(false);
-                    }}
-                  >
-                    Cancel
-                  </AlertDialogCancel>
-                  <AlertDialogAction onClick={handleUpdateNewUjianKeahlian}>
-                    Upload
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </form>
-            )}
-          </fieldset>
+            <Field label="Nama fasilitator" htmlFor="fasilitator" required>
+              <Input
+                id="fasilitator"
+                className={inputCls}
+                placeholder="Nama fasilitator"
+                value={namaVasilitator}
+                onChange={(e) => setNamaVasilitator(e.target.value)}
+              />
+            </Field>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPosting}>Batal</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={!assignValid || isPosting}
+              onClick={(e) => {
+                e.preventDefault();
+                handleAssignPenguji();
+              }}
+              className="bg-blue-600 text-white hover:bg-blue-700"
+            >
+              {isPosting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Simpan penugasan
+            </AlertDialogAction>
+          </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </section>
@@ -1593,5 +2156,3 @@ const TableDataUjian: React.FC = () => {
 };
 
 export default TableDataUjian;
-
-
