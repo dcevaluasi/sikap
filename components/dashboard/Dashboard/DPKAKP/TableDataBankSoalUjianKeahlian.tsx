@@ -81,8 +81,10 @@ import { SelectValue } from "@radix-ui/react-select";
 import { Input } from "@/components/ui/input";
 import { FiEdit2, FiTrash, FiUploadCloud } from "react-icons/fi";
 import { countDistinctMateri } from "@/lib/utils";
+
 import { FaBookOpen } from "react-icons/fa6";
 import { HashLoader } from "react-spinners";
+import { downloadBankSoalExcel, findTipeUjianName, formatMateriLabel } from "@/utils/export-bank-soal";
 
 const TableDataBankSoalUjianKeahlian = () => {
   const pathname = usePathname();
@@ -180,14 +182,18 @@ const TableDataBankSoalUjianKeahlian = () => {
         }
       );
 
+      // FIX: data[0] is an object, the list of soal lives in data[0].SoalUjianBagian
       const allData = response.data?.data ?? [];
-      const firstGroup = Array.isArray(allData) && allData.length > 0 ? allData[0] : [];
+      const firstGroup = Array.isArray(allData) && allData.length > 0 ? allData[0] : null;
+      const soalList: SoalUjianBagian[] = firstGroup?.SoalUjianBagian ?? [];
 
-      const filtered = firstGroup.filter((item: SoalUjianBagian) => item.GambarSoal !== '');
+      const filtered = soalList.filter(
+        (item: SoalUjianBagian) => item.GambarSoal && item.GambarSoal.trim() !== ""
+      );
 
       setData(filtered);
     } catch (error) {
-      console.error("Error fetching bagian ujian not classified materi:", error);
+      console.error("Error fetching bagian ujian with images:", error);
     } finally {
       setIsFetching(false);
     }
@@ -207,11 +213,14 @@ const TableDataBankSoalUjianKeahlian = () => {
         }
       );
 
+      // FIX: data[0] is an object, the list of soal lives in data[0].SoalUjianBagian
+      const soalList: SoalUjianBagian[] =
+        response.data?.data?.[0]?.SoalUjianBagian ?? [];
 
-      setData(response.data!.data[0]!.filter((item: SoalUjianBagian) => item.Materi === ''));
+      setData(soalList.filter((item: SoalUjianBagian) => item.Materi === ''));
       setIsFetching(false);
     } catch (error) {
-      console.error("Error posting tipe ujian:", error);
+      console.error("Error fetching bagian ujian not classified materi:", error);
       setIsFetching(false);
       throw error;
     }
@@ -280,6 +289,37 @@ const TableDataBankSoalUjianKeahlian = () => {
         title: "Ups, gagal menghapus butir soal ujian!",
       });
       handleFetchingBagianUjian();
+    }
+  };
+
+  // Download ALL soal as Excel (ignores the active table filter)
+  const handleDownloadExcel = () => {
+    const allSoal: SoalUjianBagian[] = dataBagian?.SoalUjianBagian ?? [];
+
+    if (allSoal.length === 0) {
+      Toast.fire({
+        icon: "error",
+        title: "Tidak ada soal untuk diunduh!",
+      });
+      return;
+    }
+
+    try {
+      // file name: "<tipe ujian>_<bagian>.xlsx", e.g. "ANKAPIN I (Updating)_F1.xlsx"
+      downloadBankSoalExcel(allSoal, {
+        tipeUjian: findTipeUjianName(dataBagian),
+        bagian: dataBagian?.NamaBagian,
+      });
+      Toast.fire({
+        icon: "success",
+        title: `Berhasil mengunduh ${allSoal.length} soal!`,
+      });
+    } catch (error) {
+      console.error({ error });
+      Toast.fire({
+        icon: "error",
+        title: "Ups, gagal mengunduh soal!",
+      });
     }
   };
 
@@ -381,7 +421,7 @@ const TableDataBankSoalUjianKeahlian = () => {
       cell: ({ row }) => (
         <div className={`${"ml-0"} text-left flex flex-col gap-1`}>
           <p className="text-base font-semibold tracking-tight leading-none">
-            {row.original.Materi}
+            {formatMateriLabel(row.original.Materi)}
           </p>
         </div>
       ),
@@ -799,7 +839,24 @@ const TableDataBankSoalUjianKeahlian = () => {
                   </button>
                 </div>
 
-                <div className="flex w-full lg:w-auto">
+                <div className="flex w-full lg:w-auto gap-3">
+                  {/* Download all soal as Excel */}
+                  <button
+                    onClick={handleDownloadExcel}
+                    disabled={isFetching || countReal === 0}
+                    className="focus:outline-none px-5 py-4 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 flex items-center gap-3 transition-colors shadow-sm w-full lg:w-auto justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
+                      <PiMicrosoftExcelLogoFill className="h-5 w-5" />
+                    </div>
+                    <div className="text-left">
+                      <p className="font-semibold text-sm text-emerald-900">
+                        Unduh Soal
+                      </p>
+                      <p className="text-xs text-emerald-700">Export semua ke Excel</p>
+                    </div>
+                  </button>
+
                   {
                     dataKomposisiSoal ?
                       <AlertDialog>
@@ -843,7 +900,7 @@ const TableDataBankSoalUjianKeahlian = () => {
                                 {dataKomposisiSoal!.map((item: any, index: number) => (
                                   <tr key={index} className="bg-white border-b hover:bg-gray-50">
                                     <td className="px-4 py-3 border-r text-center font-medium">{index + 1}</td>
-                                    <td className="px-4 py-3 border-r">{item.name}</td>
+                                    <td className="px-4 py-3 border-r">{formatMateriLabel(item.name)}</td>
                                     <td className="px-4 py-3 text-center font-semibold text-indigo-600">{item.count}</td>
                                   </tr>
                                 ))}
@@ -877,7 +934,7 @@ const TableDataBankSoalUjianKeahlian = () => {
                     <svg className="w-4 h-4 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
                   </div>
                   {
-                    dataKomposisiSoal ? <Select 
+                    dataKomposisiSoal ? <Select
                       onValueChange={(value) => table.getColumn("Materi")?.setFilterValue(value === "A" ? undefined : value)}
                     >
                       <SelectTrigger className="w-full sm:w-[220px] rounded-lg border-gray-300 h-10">
@@ -889,7 +946,7 @@ const TableDataBankSoalUjianKeahlian = () => {
                           <SelectItem value={"A"}>Semua Materi</SelectItem>
                           {
                             dataKomposisiSoal.map((item: any, index: number) => (
-                              <SelectItem value={item.name} key={index}>{item.name}</SelectItem>
+                              <SelectItem value={item.name} key={index}>{formatMateriLabel(item.name)}</SelectItem>
                             ))
                           }
                         </SelectGroup>
@@ -899,9 +956,9 @@ const TableDataBankSoalUjianKeahlian = () => {
                 </div>
               </div>
 
-                <div className="w-full flex justify-end gap-2">
+              <div className="w-full flex justify-end gap-2">
 
-                  {/* <AlertDialog>
+                {/* <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <div className="inline-flex gap-2 px-3 text-sm items-center rounded-md bg-whiter p-1.5  cursor-pointer">
                         <FiTrash />
@@ -933,7 +990,7 @@ const TableDataBankSoalUjianKeahlian = () => {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog> */}
-                </div>
+              </div>
               {
                 isFetching ? <div className="mt-32 w-full flex items-center justify-center">
                   <HashLoader color="#338CF5" size={50} />
