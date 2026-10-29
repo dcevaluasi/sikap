@@ -6,7 +6,7 @@ export const metadata = {
   title: "SIKAP - Sistem Informasi Ujian Keahlian Awak Kapal Perikanan",
   description:
     "Dewan yang menyelenggarakan Ujian Keahlian Awak Kapal Perikanan untuk mendapatkan Sertifikat Keahlian Awak Kapal Perikanan sesuai dengan standar Kompetensi Nasional dan Internasional.",
-  icons: ["/dpkakp/logo.png"],
+  icons: ["/lembaga/logo/logo-sertifikasi-akp-blue.png"],
   keywords: [
     "DPKAKP",
     "Permen-KP 33 Tahun 2021",
@@ -57,7 +57,7 @@ export const metadata = {
   ],
 
   publisher: "Kementrian Kelautan dan Perikanan",
-  url: "/dpkakp/logo.png",
+  url: "/lembaga/logo/logo-sertifikasi-akp-blue.png",
   referrer: "origin-when-cross-origin",
   type: "website",
   robots: "index, follow",
@@ -66,15 +66,15 @@ export const metadata = {
     description:
       "Dewan yang menyelenggarakan Ujian Keahlian Awak Kapal Perikanan untuk mendapatkan Sertifikat Keahlian Awak Kapal Perikanan sesuai dengan standar Kompetensi Nasional dan Internasional.",
     type: "website",
-    url: "/dpkakp/logo.png",
-    image: "/dpkakp/logo.png",
+    url: "/lembaga/logo/logo-sertifikasi-akp-blue.png",
+    image: "/lembaga/logo/logo-sertifikasi-akp-blue.png",
   },
   twitter: {
     card: "summary_large_image",
     title: "SIKAP - Sistem Informasi Ujian Keahlian Awak Kapal Perikanan",
     description:
       "Dewan yang menyelenggarakan Ujian Keahlian Awak Kapal Perikanan untuk mendapatkan Sertifikat Keahlian Awak Kapal Perikanan sesuai dengan standar Kompetensi Nasional dan Internasional.",
-    image: "/dpkakp/logo.png",
+    image: "/lembaga/logo/logo-sertifikasi-akp-blue.png",
   },
 };
 

@@ -389,7 +389,7 @@ function FormAsesorPage() {
   const handlePostFormPengujiDPKAKP = async (e: any) => {
     e.preventDefault();
     try {
-    } catch (error) {}
+    } catch (error) { }
   };
 
   React.useEffect(() => {
@@ -400,7 +400,7 @@ function FormAsesorPage() {
     <main className="bg-darkDPKAKP w-full h-full pb-24 flex items-center justify-center relative">
       <Image
         className="absolute w-[300px] opacity-10 z-10"
-        src={"/dpkakp/logo.png"}
+        src={"/lembaga/logo/logo-sertifikasi-akp-blue.png"}
         width={0}
         height={0}
         alt="DPKAKP Logo"
@@ -416,7 +416,7 @@ function FormAsesorPage() {
           </Link>
           <Image
             className=" w-[80px] my-2 z-10"
-            src={"/dpkakp/logo.png"}
+            src={"/lembaga/logo/logo-sertifikasi-akp-blue.png"}
             width={0}
             height={0}
             alt="DPKAKP Logo"
@@ -436,16 +436,15 @@ function FormAsesorPage() {
               {currentPage == 1
                 ? "Data Diri"
                 : currentPage == 2
-                ? "Data Pekerjaan"
-                : "Data Sertifikasi "}
+                  ? "Data Pekerjaan"
+                  : "Data Sertifikasi "}
             </p>
             <p className="text-white text-sm">{currentPage}/3</p>
           </div>
         </div>
         <div
-          className={`${
-            currentPage == 2 && "h-screen"
-          } flex flex-col gap-3 w-full h-full  max-w-md mx-auto z-50`}
+          className={`${currentPage == 2 && "h-screen"
+            } flex flex-col gap-3 w-full h-full  max-w-md mx-auto z-50`}
         >
           {currentPage == 1 && (
             <>

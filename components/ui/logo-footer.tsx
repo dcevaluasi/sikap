@@ -6,7 +6,7 @@ export default function LogoFooter() {
   const pathname = usePathname();
   const getLogoHeader = () => {
     return pathname.includes("dpkakp")
-      ? "/dpkakp/logo.png"
+      ? "/lembaga/logo/logo-sertifikasi-akp-blue.png"
       : "/logo-kkp-white.png";
   };
   const getSizeLogoHeader = () => {
