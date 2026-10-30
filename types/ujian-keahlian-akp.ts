@@ -1,3 +1,5 @@
+import { NumberDomain } from "recharts/types/util/types"
+
 // GET ADMIN PUSAT DPKAKP
 export type AdminPusatDPKAKP = {
   IdAdminPusat: number
@@ -118,10 +120,12 @@ export type UsersUjian = {
   NilaiF2B1: number
   NilaiF3B1: number
   NilaiF3B2: number
+  NilaiF4B1: NumberDomain
   NilaiKomprensif: number
   NilaiKomprensifF1: number
   NilaiKomprensifF2: number
   NilaiKomprensifF3: number
+  NilaiKomprensifF4: number
   CreteAt: string
   Status: string
   UpdateAt: string
