@@ -1,151 +1,99 @@
-import { useState, useEffect } from 'react'
-import axios, { AxiosResponse } from 'axios'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import axios from 'axios'
 import Cookies from 'js-cookie'
 import { dpkakpBaseUrl } from '@/constants/urls'
-import { TypeUjian, Ujian } from '@/types/ujian-keahlian-akp'
+import { Ujian } from '@/types/ujian-keahlian-akp'
 import { isTodayBefore, isTodayBetween } from '@/lib/utils'
 
 type ViewType = 'admin' | 'penguji'
 
+const DPKAKP_PUSAT = 'DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan'
+
+const sortUjian = (list: Ujian[]): Ujian[] =>
+  list
+    .map((item) => ({ item, t: new Date(item.CreateAt).getTime() || 0 }))
+    .sort((a, b) => {
+      const pa = a.item.Status === 'Pending' ? 0 : 1
+      const pb = b.item.Status === 'Pending' ? 0 : 1
+      return pa - pb || b.t - a.t
+    })
+    .map((x) => x.item)
+
 export const useFetchUjianKeahlianAKP = (
   view: ViewType = 'admin',
-  pathPukakp?: boolean,
-  options?: {
-    includeTryout?: boolean // true = only TRYOUT, false = exclude TRYOUT, undefined = all
-  },
+  _pathPukakp?: boolean, // dipertahankan agar kompatibel; hasilnya sama saja
+  options?: { includeTryout?: boolean },
 ) => {
   const [data, setData] = useState<Ujian[]>([])
   const [isFetching, setIsFetching] = useState(false)
   const [error, setError] = useState<Error | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
+  const includeTryout = options?.includeTryout
 
-  const [countVerified, setCountVerified] = useState(0)
-  const [countNotVerified, setCountNotVerified] = useState(0)
-  const [countDraft, setCountDraft] = useState(0)
-  const [countPilihPenguji, setCountPilihPenguji] = useState(0)
+  const fetchData = useCallback(async () => {
+    abortRef.current?.abort()
+    const controller = new AbortController()
+    abortRef.current = controller
 
-  const [counterFinished, setCounterFinished] = useState(0)
-  const [counterWillDo, setCounterWillDo] = useState(0)
-  const [counterDoing, setCounterDoing] = useState(0)
-
-  const fetchData = async () => {
     setIsFetching(true)
+    setError(null)
     try {
-      const response: AxiosResponse = await axios.get(
-        `${dpkakpBaseUrl}/adminPusat/GetUjian`,
-        {
-          headers: {
-            Authorization: `Bearer ${Cookies.get('XSRF095')}`,
-          },
-        },
-      )
-
-      const allData: Ujian[] = response.data.data
-      const pukakpCookie = Cookies.get('PUKAKP')
-      const namaPenguji = Cookies.get('NamaUsersDpkakp')
-
-      let filteredData: Ujian[] = []
-
-      // View-based filtering
-      if (view === 'admin') {
-        filteredData =
-          pukakpCookie !==
-          'DPKAKP - Dewan Penguji Keahlian Awak Kapal Perikanan'
-            ? allData.filter((item) => item.PUKAKP === pukakpCookie)
-            : allData
-      } else {
-        filteredData = allData.filter((item) =>
-          item.NamaPengawasUjian.includes(namaPenguji ?? ''),
-        )
-      }
-
-      // 🔍 Tryout filter logic
-      if (options?.includeTryout === true) {
-        filteredData = filteredData.filter((item: Ujian) =>
-          item.TypeUjian?.toLowerCase().includes('tryout'),
-        )
-      } else if (options?.includeTryout === false) {
-        filteredData = filteredData.filter(
-          (item: Ujian) => !item.TypeUjian?.toLowerCase().includes('tryout'),
-        )
-      }
-
-      const sortedData = filteredData.sort((a, b) => {
-        if (a.Status === 'Pending' && b.Status !== 'Pending') return -1
-        if (a.Status !== 'Pending' && b.Status === 'Pending') return 1
-        return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
+      const res = await axios.get(`${dpkakpBaseUrl}/adminPusat/GetUjian`, {
+        headers: { Authorization: `Bearer ${Cookies.get('XSRF095')}` },
+        signal: controller.signal,
       })
 
-      // Counters
-      setCountVerified(
-        filteredData.filter((item) => item.Status === 'Aktif').length,
-      )
-      setCountNotVerified(
-        filteredData.filter((item) => item.Status === 'Pending').length,
-      )
-      setCountDraft(
-        filteredData.filter((item) => item.Status === 'Draft').length,
-      )
-      setCountPilihPenguji(
-        filteredData.filter((item) => item.NamaPengawasUjian === '').length,
-      )
+      const allData: Ujian[] = res.data?.data ?? []
+      const pukakp = Cookies.get('PUKAKP')
+      const namaPenguji = Cookies.get('NamaUsersDpkakp') ?? ''
+      const isPusat = pukakp === DPKAKP_PUSAT
 
-      // Only for admin view
-      if (view === 'admin') {
-        setCounterFinished(
-          filteredData.filter((item) => item.IsSelesai === '1').length,
-        )
-        setCounterWillDo(
-          filteredData.filter(
-            (item) =>
-              isTodayBefore(item.TanggalMulaiUjian) && item.IsSelesai === '',
-          ).length,
-        )
-        setCounterDoing(
-          filteredData.filter(
-            (item) =>
-              isTodayBetween(
-                item.TanggalMulaiUjian,
-                item.TanggalBerakhirUjian,
-              ) && item.IsSelesai !== '1',
-          ).length,
-        )
-      }
+      // Satu kali loop untuk semua filter
+      const filtered = allData.filter((item) => {
+        if (view === 'admin') {
+          if (!isPusat && item.PUKAKP !== pukakp) return false
+        } else if (!(item.NamaPengawasUjian ?? '').includes(namaPenguji)) {
+          return false
+        }
+        if (includeTryout !== undefined) {
+          const isTryout = (item.TypeUjian ?? '').toLowerCase().includes('tryout')
+          if (isTryout !== includeTryout) return false
+        }
+        return true
+      })
 
-      // Final set data
-      if (pathPukakp) {
-        setData(sortedData)
-      } else {
-        const fallbackSorted = filteredData.sort((a, b) => {
-          if (a.Status === 'Pending' && b.Status !== 'Pending') return -1
-          if (a.Status !== 'Pending' && b.Status === 'Pending') return 1
-          return new Date(b.CreateAt).getTime() - new Date(a.CreateAt).getTime()
-        })
-        setData(fallbackSorted)
-      }
+      if (!controller.signal.aborted) setData(sortUjian(filtered))
     } catch (err) {
-      setError(err as Error)
+      if (!axios.isCancel(err)) setError(err as Error)
     } finally {
-      setIsFetching(false)
+      if (!controller.signal.aborted) setIsFetching(false)
     }
-  }
+  }, [view, includeTryout])
 
   useEffect(() => {
     fetchData()
-  }, [])
+    return () => abortRef.current?.abort()
+  }, [fetchData])
 
-  return {
-    data,
-    isFetching,
-    error,
-    refetch: fetchData,
-    counters: {
-      verified: countVerified,
-      notVerified: countNotVerified,
-      draft: countDraft,
-      pilihPenguji: countPilihPenguji,
-      finished: counterFinished,
-      willDo: counterWillDo,
-      doing: counterDoing,
-    },
-  }
+  // Semua counter dalam satu loop, dihitung ulang hanya saat data berubah
+  const counters = useMemo(() => {
+    const c = { verified: 0, notVerified: 0, draft: 0, pilihPenguji: 0, finished: 0, willDo: 0, doing: 0 }
+    for (const item of data) {
+      if (item.Status === 'Aktif') c.verified++
+      else if (item.Status === 'Pending') c.notVerified++
+      else if (item.Status === 'Draft') c.draft++
+      if (item.NamaPengawasUjian === '') c.pilihPenguji++
+
+      if (view === 'admin') {
+        if (item.IsSelesai === '1') c.finished++
+        else {
+          if (item.IsSelesai === '' && isTodayBefore(item.TanggalMulaiUjian)) c.willDo++
+          if (isTodayBetween(item.TanggalMulaiUjian, item.TanggalBerakhirUjian)) c.doing++
+        }
+      }
+    }
+    return c
+  }, [data, view])
+
+  return { data, isFetching, error, refetch: fetchData, counters }
 }
